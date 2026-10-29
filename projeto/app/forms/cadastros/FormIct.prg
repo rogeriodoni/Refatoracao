@@ -28,6 +28,7 @@ DEFINE CLASS FormIct AS FormBase
     *-- Propriedades do form
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    this_lEmLookup      = .F.   && guarda de reentrancia dos lookups (regra #47)
 
     *====================================================================
     * Init - APENAS DODEFAULT (FormBase chama InicializarForm)
@@ -854,6 +855,13 @@ DEFINE CLASS FormIct AS FormBase
         BINDEVENT(loc_oCnt.txt_4c_Destino,  "DblClick",  THIS, "DestinoDblClick")
         BINDEVENT(loc_oCnt.txt_4c_DDestino, "KeyPress", THIS, "DDestinoKeyPress")
         BINDEVENT(loc_oCnt.txt_4c_DDestino, "DblClick",  THIS, "DDestinoDblClick")
+        *-- LostFocus: o legado valida esses campos no Valid (ao SAIR do campo).
+        BINDEVENT(loc_oCnt.txt_4c_CFOP,      "LostFocus", THIS, "CFOPLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_DCFOP,     "LostFocus", THIS, "DCFOPLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_Origem,    "LostFocus", THIS, "OrigemLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_DOrigem,   "LostFocus", THIS, "DOrigemLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_Destino,   "LostFocus", THIS, "DestinoLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_DDestino,  "LostFocus", THIS, "DDestinoLostFocus")
         BINDEVENT(loc_oCnt.txt_4c_Movs,     "KeyPress", THIS, "ValidarMovs")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
@@ -1422,8 +1430,14 @@ DEFINE CLASS FormIct AS FormBase
     * CFOPKeyPress / CFOPDblClick - F4 ou duplo-clique em CFOP (codigo)
     *====================================================================
     PROCEDURE CFOPKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupCFOP()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1453,7 +1467,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Codigos",    "", "C" + CHR(243) + "digo")
             loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCFOP")
                 loc_cCodigo    = ALLTRIM(cursor_4c_BuscaCFOP.Codigos)
@@ -1475,8 +1494,14 @@ DEFINE CLASS FormIct AS FormBase
     * Ativo apenas em INCLUIR quando CFOP estiver vazio (When legado)
     *====================================================================
     PROCEDURE DCFOPKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupDCFOP()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1511,7 +1536,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
             loc_oBusca.mAddColuna("Codigos",    "", "C" + CHR(243) + "digo")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCFOP")
                 loc_cCodigo    = ALLTRIM(cursor_4c_BuscaCFOP.Codigos)
@@ -1532,8 +1562,14 @@ DEFINE CLASS FormIct AS FormBase
     * OrigemKeyPress / OrigemDblClick - F4 ou duplo-clique em Origem (codigo UF)
     *====================================================================
     PROCEDURE OrigemKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupOrigem()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1563,7 +1599,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Estados", "", "UF")
             loc_oBusca.mAddColuna("Descrs",  "", "Estado")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUF")
                 loc_cEstado    = ALLTRIM(cursor_4c_BuscaUF.Estados)
@@ -1585,8 +1626,14 @@ DEFINE CLASS FormIct AS FormBase
     * Ativo apenas em INCLUIR quando Origem estiver vazio (When legado)
     *====================================================================
     PROCEDURE DOrigemKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupDOrigem()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1621,7 +1668,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Descrs",  "", "Estado")
             loc_oBusca.mAddColuna("Estados", "", "UF")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUF")
                 loc_cEstado    = ALLTRIM(cursor_4c_BuscaUF.Estados)
@@ -1642,8 +1694,14 @@ DEFINE CLASS FormIct AS FormBase
     * DestinoKeyPress / DestinoDblClick - F4 ou duplo-clique em Destino (codigo UF)
     *====================================================================
     PROCEDURE DestinoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupDestino()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1673,7 +1731,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Estados", "", "UF")
             loc_oBusca.mAddColuna("Descrs",  "", "Estado")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUF")
                 loc_cEstado    = ALLTRIM(cursor_4c_BuscaUF.Estados)
@@ -1695,8 +1758,14 @@ DEFINE CLASS FormIct AS FormBase
     * Ativo apenas em INCLUIR quando Destino estiver vazio (When legado)
     *====================================================================
     PROCEDURE DDestinoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 28
+            *-- F1 chama o MESMO funil: save/restore em vez de set/clear,
+            *-- para nao liberar a flag cedo se vier de dentro do LostFocus.
+            loc_lEmLookupAnt    = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupDDestino()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
@@ -1731,7 +1800,12 @@ DEFINE CLASS FormIct AS FormBase
         IF VARTYPE(loc_oBusca) = "O"
             loc_oBusca.mAddColuna("Descrs",  "", "Estado")
             loc_oBusca.mAddColuna("Estados", "", "UF")
-            loc_oBusca.Show()
+            *-- Legado: o picker so abre quando o match exato NAO resolveu
+            *-- (If Not loLista.plAchouRegistro ... Show()). Chamar Show()
+            *-- sempre fazia o dialogo subir mesmo com o codigo ja valido.
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUF")
                 loc_cEstado    = ALLTRIM(cursor_4c_BuscaUF.Estados)
@@ -1769,5 +1843,187 @@ DEFINE CLASS FormIct AS FormBase
         ENDIF
     ENDPROC
 
+
+    *==========================================================================
+    * Lookups por LostFocus - transcricao do Valid do SIGCDICT legado
+    *==========================================================================
+    * O legado valida esses campos no Valid, ou seja AO SAIR do campo:
+    *
+    *   PROCEDURE Valid        && GetCFOP
+    *   If Not Empty(This.Value)
+    *       loLista = CreateObject('fwBuscaExt', ..., 'SigCdCfo', ..., This.Value, ...)
+    *       If Not loLista.plAchouRegistro
+    *           loLista.Show()
+    *       EndIf
+    *       GetCFOP.Value  = crListaRemota.Codigos
+    *       GetdCFOP.Value = crListaRemota.Descricaos
+    *   Else
+    *       This.Value = ''
+    *   EndIf
+    *
+    * A migracao ligou os lookups SO em KeyPress (F1) e DblClick, entao
+    * digitar o codigo e sair do campo nao fazia nada.
+    *
+    * Guarda de reentrancia (regra #47): o picker eh MODAL, tira o foco do
+    * campo e faz o proprio LostFocus disparar de novo - sem ela abrem dois
+    * dialogos. O wrapper libera a flag DEPOIS do corpo, para sobreviver aos
+    * RETURN antecipados do Exec.
+    *==========================================================================
+
+    PROCEDURE CFOPLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CFOPLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CFOPLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_CFOP.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (C.F.O.P.)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_CFOP.Value, "")))
+            loc_oCnt.txt_4c_CFOP.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupCFOP()
+    ENDPROC
+
+    PROCEDURE DCFOPLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DCFOPLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DCFOPLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_DCFOP.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (Descricao do C.F.O.P.)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_DCFOP.Value, "")))
+            loc_oCnt.txt_4c_DCFOP.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupDCFOP()
+    ENDPROC
+
+    PROCEDURE OrigemLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.OrigemLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE OrigemLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_Origem.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (Estado Origem)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_Origem.Value, "")))
+            loc_oCnt.txt_4c_Origem.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupOrigem()
+    ENDPROC
+
+    PROCEDURE DOrigemLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DOrigemLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DOrigemLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_DOrigem.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (Descricao do Estado Origem)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_DOrigem.Value, "")))
+            loc_oCnt.txt_4c_DOrigem.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupDOrigem()
+    ENDPROC
+
+    PROCEDURE DestinoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DestinoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DestinoLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_Destino.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (Estado Destino)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_Destino.Value, "")))
+            loc_oCnt.txt_4c_Destino.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupDestino()
+    ENDPROC
+
+    PROCEDURE DDestinoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DDestinoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DDestinoLostFocusExec()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Container1
+        IF VARTYPE(loc_oCnt) != "O"
+            RETURN
+        ENDIF
+        IF loc_oCnt.txt_4c_DDestino.ReadOnly
+            RETURN
+        ENDIF
+        *-- Campo vazio: o legado so limpa e nao abre lista (Descricao do Estado Destino)
+        IF EMPTY(ALLTRIM(NVL(loc_oCnt.txt_4c_DDestino.Value, "")))
+            loc_oCnt.txt_4c_DDestino.Value = ""
+            RETURN
+        ENDIF
+        THIS.AbrirLookupDDestino()
+    ENDPROC
 ENDDEFINE
 
