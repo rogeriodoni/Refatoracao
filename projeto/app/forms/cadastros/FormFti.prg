@@ -1828,7 +1828,7 @@ DEFINE CLASS FormFti AS FormBase
     * CarregarItensNaGrade - Carrega SigPrFto nos cursores csGrade e csCusto
     *==========================================================================
     PROTECTED PROCEDURE CarregarItensNaGrade(par_cCodigo)
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cCgrus, loc_cCpros, loc_cDesc, loc_nOrdem
         loc_lResultado = .F.
 
         TRY
@@ -1845,41 +1845,57 @@ DEFINE CLASS FormFti AS FormBase
                 SELECT cursor_4c_Itens
                 GO TOP
                 SCAN
-                    IF !EMPTY(ALLTRIM(cursor_4c_Itens.cgrus))
-                        INSERT INTO csGrade (Cgrus, CPros, Dgrus, Coefs, Ordem) ;
-                            VALUES (ALLTRIM(cursor_4c_Itens.cgrus), ;
-                                    ALLTRIM(cursor_4c_Itens.cpros), ;
-                                    "", ;
-                                    cursor_4c_Itens.coefs, ;
-                                    cursor_4c_Itens.ordem)
-                        IF USED("CrSigCdGrp")
-                            SELECT CrSigCdGrp
-                            IF SEEK(ALLTRIM(cursor_4c_Itens.cgrus), "CrSigCdGrp", "Cgrus")
-                                SELECT csGrade
-                                GO BOTTOM
-                                REPLACE Dgrus WITH ALLTRIM(CrSigCdGrp.Dgrus)
+                    *-- A descricao eh resolvida ANTES do INSERT, como no legado
+                    *-- (Scatter Memvar + Seek + m.Dgrus = CrSigCdGrp.Dgrus).
+                    *-- Inserir com "" e voltar na linha com GO BOTTOM grava no
+                    *-- registro ERRADO: csGrade tem INDEX ON CPros ativo, entao
+                    *-- GO BOTTOM vai para o maior CPros, nao para a linha
+                    *-- recem-inserida (medido no VFP9 em 2026-10-29).
+                    loc_cCgrus = ALLTRIM(NVL(cursor_4c_Itens.cgrus, ""))
+                    loc_cCpros = ALLTRIM(NVL(cursor_4c_Itens.cpros, ""))
+                    loc_nOrdem = NVL(cursor_4c_Itens.ordem, 0)
+                    loc_cDesc  = ""
+
+                    DO CASE
+                        CASE !EMPTY(loc_cCgrus)
+                            IF USED("CrSigCdGrp") AND SEEK(loc_cCgrus, "CrSigCdGrp", "Cgrus")
+                                loc_cDesc = ALLTRIM(NVL(CrSigCdGrp.Dgrus, ""))
                             ENDIF
-                        ENDIF
-                    ELSE
-                        INSERT INTO csCusto (Cpros, Dpros, Seqs, Coefs) ;
-                            VALUES (ALLTRIM(cursor_4c_Itens.cpros), ;
-                                    "", ;
-                                    cursor_4c_Itens.seqs, ;
-                                    cursor_4c_Itens.coefs)
-                        IF USED("CrSigCdPro")
-                            SELECT CrSigCdPro
-                            IF SEEK(ALLTRIM(cursor_4c_Itens.cpros), "CrSigCdPro", "Cpros")
-                                SELECT csCusto
-                                GO BOTTOM
-                                REPLACE Dpros WITH ALLTRIM(CrSigCdPro.Dpros)
+                            INSERT INTO csGrade (Cgrus, CPros, Dgrus, Coefs, Ordem) ;
+                                VALUES (loc_cCgrus, loc_cCpros, loc_cDesc, ;
+                                        cursor_4c_Itens.coefs, loc_nOrdem)
+
+                        CASE loc_nOrdem <> 0
+                            *-- "Ordem de Feitio" (comentario do legado: Rafael -
+                            *-- 11/01/2017): linha SEM grupo mas com Ordem <> 0
+                            *-- pertence a csGrade, nao a csCusto. O ramo faltava
+                            *-- na migracao e o SalvarItens ja o pressupoe - ele
+                            *-- grava quando (Ordem <> 0 AND Coefs <> 0).
+                            INSERT INTO csGrade (Cgrus, CPros, Dgrus, Coefs, Ordem) ;
+                                VALUES (loc_cCgrus, loc_cCpros, "", ;
+                                        cursor_4c_Itens.coefs, loc_nOrdem)
+
+                        OTHERWISE
+                            IF USED("CrSigCdPro") AND SEEK(loc_cCpros, "CrSigCdPro", "Cpros")
+                                loc_cDesc = ALLTRIM(NVL(CrSigCdPro.Dpros, ""))
                             ENDIF
-                        ENDIF
-                    ENDIF
+                            INSERT INTO csCusto (Cpros, Dpros, Seqs, Coefs) ;
+                                VALUES (loc_cCpros, loc_cDesc, ;
+                                        cursor_4c_Itens.seqs, cursor_4c_Itens.coefs)
+                    ENDCASE
                 ENDSCAN
             ENDIF
 
-            INSERT INTO csGrade (Cgrus) VALUES ("")
-            INSERT INTO csCusto (Cpros) VALUES ("")
+            *-- Linha em branco SO com a grade vazia, como no legado
+            *-- (Select CsGrade / If Reccount() = 0 / Append Blank). Incondicional,
+            *-- traz "uma linha a mais" em ALTERAR sobre feitio que ja tem itens,
+            *-- e o INDEX ON CPros faz essa linha vazia aparecer no TOPO da grade.
+            IF RECCOUNT("csGrade") = 0
+                INSERT INTO csGrade (Cgrus) VALUES ("")
+            ENDIF
+            IF RECCOUNT("csCusto") = 0
+                INSERT INTO csCusto (Cpros) VALUES ("")
+            ENDIF
 
             SELECT csGrade
             GO TOP
