@@ -416,17 +416,27 @@ DEFINE CLASS FormFUN AS FormBase
         * txt_4c_Botao1 - TextBox display desabilitado na Lista
         * Original: Botao1 textbox, top=132, left=438, width=27, height=22 -> comp +29 = 161
         *----------------------------------------------------------------------
+        * txt_4c_Botao1 - LEGENDA vermelha "Fundicao incompleta"
+        * Legado (Pagina.Lista.Botao1): BackColor=255,0,0 / BorderStyle=0 /
+        * BorderColor=36,84,155 / ToolTipText="Fundicao incompleta".
+        * A migracao pintou de BRANCO e tirou borda e tooltip, entao a legenda
+        * aparecia como uma caixinha vazia sem significado nenhum ao lado do
+        * periodo. Ela eh o par do DynamicForeColor da grade.
+        *----------------------------------------------------------------------
         loc_oPagina.AddObject("txt_4c_Botao1", "TextBox")
         WITH loc_oPagina.txt_4c_Botao1
-            .Value     = ""
-            .Top       = 161
-            .Left      = 438
-            .Width     = 27
-            .Height    = 22
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackColor = RGB(255, 255, 255)
-            .Enabled   = .F.
+            .Value       = ""
+            .Top         = 161
+            .Left        = 438
+            .Width       = 27
+            .Height      = 22
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .BorderStyle = 0
+            .BackColor   = RGB(255, 0, 0)
+            .BorderColor = RGB(36, 84, 155)
+            .ToolTipText = "Fundi" + CHR(231) + CHR(227) + "o incompleta"
+            .Enabled     = .F.
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -580,45 +590,93 @@ DEFINE CLASS FormFUN AS FormBase
             .ReadOnly           = .T.
         ENDWITH
 
-        WITH loc_oPagina.grd_4c_Dados.Column1
+        *-- Bind canonico num unico lugar (regra #41): RecordSource ->
+        *-- ControlSource -> Width -> Header1.Caption.
+        THIS.AplicarLayoutGrade()
+
+        BINDEVENT(loc_oPagina.grd_4c_Dados, "DblClick", THIS, "BtnVisualizarClick")
+
+        THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE AplicarLayoutGrade()
+    *==========================================================================
+    * Bind CANONICO da grade da Lista: RecordSource -> ControlSource -> Width
+    * -> Header1.Caption (regra #41). Atribuir RecordSource DEPOIS das colunas
+    * reseta Width para o default e recria os Header - era por isso que a tela
+    * abria com "Header1" nas cinco colunas e larguras iguais.
+    *
+    * Chamado na montagem da tela E depois de cada Buscar(), que recria o
+    * cursor_4c_Dados; antes, o re-bind repetia ControlSource mas esquecia
+    * Width e Caption, entao as legendas nunca voltavam.
+    *
+    * Larguras e legendas vem do pColuna do Init legado:
+    *   Codigos 52 / Datas 75 / Usuars 80 / CodMaqfs 80 / Obss 330
+    *==========================================================================
+        LOCAL loc_oGrd
+
+        IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Dados", 5)
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_Dados")
+            RETURN
+        ENDIF
+
+        loc_oGrd = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
+
+        *-- Buscar() fecha e recria o cursor_4c_Dados com USE IN. Medido no
+        *-- VFP9 em 2026-10-29: fechar o alias que esta no RecordSource ZERA o
+        *-- ColumnCount e DESTROI os objetos Column - depois disso
+        *-- Grid.Column1 responde "Property COLUMN1 is not found" e tocar em
+        *-- .Header1 estoura "Unknown member HEADER1". Por isso o layout eh
+        *-- refeito do zero, e nao apenas reatribuido: assim o metodo pode ser
+        *-- chamado quantas vezes for preciso.
+        loc_oGrd.RecordSource     = ""
+        loc_oGrd.ColumnCount      = 0
+        loc_oGrd.ColumnCount      = 5
+        loc_oGrd.RecordSourceType = 1
+        loc_oGrd.RecordSource     = "cursor_4c_Dados"
+
+        WITH loc_oGrd.Column1
             .ControlSource   = "cursor_4c_Dados.codigos"
             .Width           = 52
             .Alignment       = 2
             .Header1.Caption = "C" + CHR(243) + "digo"
         ENDWITH
 
-        WITH loc_oPagina.grd_4c_Dados.Column2
+        WITH loc_oGrd.Column2
             .ControlSource   = "cursor_4c_Dados.datas"
             .Width           = 75
             .Header1.Caption = "Data"
         ENDWITH
 
-        WITH loc_oPagina.grd_4c_Dados.Column3
+        WITH loc_oGrd.Column3
             .ControlSource   = "cursor_4c_Dados.usuars"
             .Width           = 80
             .Header1.Caption = "Usu" + CHR(225) + "rio"
         ENDWITH
 
-        WITH loc_oPagina.grd_4c_Dados.Column4
+        WITH loc_oGrd.Column4
             .ControlSource   = "cursor_4c_Dados.codmaqfs"
             .Width           = 80
             .Header1.Caption = "M" + CHR(225) + "quina"
         ENDWITH
 
-        WITH loc_oPagina.grd_4c_Dados.Column5
+        WITH loc_oGrd.Column5
             .ControlSource   = "cursor_4c_Dados.obss"
             .Width           = 330
             .Header1.Caption = "Observa" + CHR(231) + CHR(227) + "o"
         ENDWITH
 
-        *-- RecordSource APOS ControlSources: previne autobind por posicao de campo
-        loc_oPagina.grd_4c_Dados.ColumnCount = 5
-        loc_oPagina.grd_4c_Dados.RecordSource     = "cursor_4c_Dados"
-        loc_oPagina.grd_4c_Dados.RecordSourceType = 1
-
-        BINDEVENT(loc_oPagina.grd_4c_Dados, "DblClick", THIS, "BtnVisualizarClick")
-
-        THIS.TornarControlesVisiveis(loc_oPagina)
+        *-- Legado (Init): Grade.SetAll('DynamicForeColor',
+        *--   'iif(crSigCdFun.nTubos = 1,Rgb(255,0,0),Rgb(0,0,0))','Column')
+        *-- Pinta de VERMELHO a linha da fundicao INCOMPLETA - eh o que a
+        *-- legenda vermelha ao lado do periodo (txt_4c_Botao1, ToolTipText
+        *-- "Fundicao incompleta") explica ao usuario. A migracao perdeu as
+        *-- duas pontas: sem o DynamicForeColor nenhuma linha fica vermelha.
+        loc_oGrd.SetAll("DynamicForeColor", ;
+            "IIF(cursor_4c_Dados.ntubos = 1, RGB(255,0,0), RGB(0,0,0))", "Column")
     ENDPROC
 
     *==========================================================================
@@ -953,18 +1011,9 @@ DEFINE CLASS FormFUN AS FormBase
 
                 loc_lSucesso = THIS.this_oBusinessObject.Buscar(loc_cFiltro)
 
-                *-- Re-definir ControlSources apos Buscar() recriar cursor_4c_Dados (autobind por posicao)
-                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Dados", 5) AND USED("cursor_4c_Dados")
-                    LOCAL loc_oGrd
-                    loc_oGrd = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-                    loc_oGrd.ColumnCount = 5
-                    loc_oGrd.RecordSource          = "cursor_4c_Dados"
-                    loc_oGrd.Column1.ControlSource = "cursor_4c_Dados.codigos"
-                    loc_oGrd.Column2.ControlSource = "cursor_4c_Dados.datas"
-                    loc_oGrd.Column3.ControlSource = "cursor_4c_Dados.usuars"
-                    loc_oGrd.Column4.ControlSource = "cursor_4c_Dados.codmaqfs"
-                    loc_oGrd.Column5.ControlSource = "cursor_4c_Dados.obss"
-                ENDIF
+                *-- Buscar() recria o cursor_4c_Dados, o que desfaz o bind da
+                *-- grade: refazer o layout INTEIRO, nao so os ControlSource.
+                THIS.AplicarLayoutGrade()
 
                 *-- Ocultar aguarde
                 THIS.pgf_4c_Paginas.Page1.cmd_4c_BtnAguarde.Visible = .F.
