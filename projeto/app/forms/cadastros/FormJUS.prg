@@ -96,7 +96,6 @@ DEFINE CLASS FormJUS AS FormBase
             .Height     = THIS.Height + 29
             .PageCount  = 2
             .Tabs       = .F.
-            .TabStretch = 1
             .Visible = .T.
         ENDWITH
         THIS.pgf_4c_Paginas.Page1.Caption   = "Lista"

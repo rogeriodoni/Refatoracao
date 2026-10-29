@@ -90,7 +90,6 @@ DEFINE CLASS FormJrn AS FormBase
             .Width      = THIS.Width
             .Height     = THIS.Height + 29
             .Tabs       = .F.
-            .TabStretch = 1
             .Visible    = .T.
         ENDWITH
 
