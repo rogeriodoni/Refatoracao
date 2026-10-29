@@ -1625,6 +1625,13 @@ DEFINE CLASS FormFti AS FormBase
             ENDIF
         ENDIF
 
+        *-- FormParaBO ANTES das validacoes do BO. No legado os campos sao
+        *-- ControlSource de crSigPrFti (live-bound ao cursor), entao a
+        *-- validacao SEMPRE le o valor digitado. Chamado depois, o BO valida
+        *-- o valor ANTIGO: o usuario corrige o campo na tela, manda Confirmar
+        *-- e a mensagem continua, sem edicao que resolva (Erro273).
+        THIS.FormParaBO()
+
         IF !THIS.this_oBusinessObject.ValidarDuplicidade()
             RETURN .F.
         ENDIF
@@ -1638,8 +1645,6 @@ DEFINE CLASS FormFti AS FormBase
         ENDIF
 
         TRY
-            THIS.FormParaBO()
-
             IF THIS.this_oBusinessObject.Salvar()
                 IF THIS.this_oBusinessObject.SalvarItens(THIS.this_oBusinessObject.this_cCodigo)
                     MsgInfo("Feitio salvo com sucesso!", "Salvo")

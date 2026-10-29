@@ -589,21 +589,26 @@ DEFINE CLASS FtiBO AS BusinessBase
                 IF Tot > 0
                     MsgAviso("O Campo Multiplicador Ou Valor n" + CHR(227) + "o podem ser informados" + ;
                              CHR(13) + "em conjunto com grade de custos", "Valida" + CHR(231) + CHR(227) + "o")
-                    USE IN ChkDados
                     loc_lResultado = .F.
-                ENDIF
+                ELSE
+                    *-- O legado so checa csCusto no ELSE (mGravaDados). Sem o
+                    *-- ELSE, com as DUAS grades preenchidas o usuario leva a
+                    *-- MESMA mensagem duas vezes seguidas.
+                    IF USED("ChkDados")
+                        USE IN ChkDados
+                    ENDIF
 
-                SELECT " " AS Agrupar, SUM(1) AS Tot FROM csCusto ;
-                    WHERE Cpros <> ' ' ;
-                    INTO CURSOR ChkDados GROUP BY 1
+                    SELECT " " AS Agrupar, SUM(1) AS Tot FROM csCusto ;
+                        WHERE Cpros <> ' ' ;
+                        INTO CURSOR ChkDados GROUP BY 1
 
-                SELECT ChkDados
-                GO TOP
-                IF Tot > 0
-                    MsgAviso("O Campo Multiplicador Ou Valor n" + CHR(227) + "o podem ser informados" + ;
-                             CHR(13) + "em conjunto com grade de custos", "Valida" + CHR(231) + CHR(227) + "o")
-                    USE IN ChkDados
-                    loc_lResultado = .F.
+                    SELECT ChkDados
+                    GO TOP
+                    IF Tot > 0
+                        MsgAviso("O Campo Multiplicador Ou Valor n" + CHR(227) + "o podem ser informados" + ;
+                                 CHR(13) + "em conjunto com grade de custos", "Valida" + CHR(231) + CHR(227) + "o")
+                        loc_lResultado = .F.
+                    ENDIF
                 ENDIF
 
                 IF USED("ChkDados")
