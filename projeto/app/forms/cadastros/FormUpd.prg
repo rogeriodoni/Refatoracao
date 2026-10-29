@@ -300,6 +300,44 @@ DEFINE CLASS FormUpd AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
 
+        *----------------------------------------------------------------------
+        * cmd_4c_CargaHoraria - abre o Cadastro de Carga Horaria (FormHOR)
+        * Legado: SIGCDUPD.Pagina.Lista.cmdCargas (commandgroup AutoSize,
+        * ButtonCount=1, Top=0 Left=276 85x85) com o botao interno btnCargas
+        * em 5,5 75x75, Picture geral_datas_60.jpg, Caption "\<Carga Horaria".
+        * Top 0 + 29 da compensacao do PageFrame = 29, igual ao cnt_4c_Botoes.
+        *----------------------------------------------------------------------
+        loc_oPagina.AddObject("cnt_4c_CargaHoraria", "Container")
+        WITH loc_oPagina.cnt_4c_CargaHoraria
+            .Top         = 29
+            .Left        = 276
+            .Width       = 85
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_CargaHoraria.AddObject("cmd_4c_CargaHoraria", "CommandButton")
+        WITH loc_oPagina.cnt_4c_CargaHoraria.cmd_4c_CargaHoraria
+            .Caption         = "Carga Hor" + CHR(225) + "ria"
+            .Picture         = gc_4c_CaminhoIcones + "geral_datas_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_CargaHoraria.cmd_4c_CargaHoraria, "Click", THIS, "BtnCargaHorariaClick")
+
         *-- Container Saida - PADRAO CANONICO (prevalece sobre legado per CLAUDE.md regra #10)
         *-- Legado: Grupo_Saida.Left=726, Top=0. Canonico: Left=917, Top=29, Width=90
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
@@ -614,6 +652,50 @@ DEFINE CLASS FormUpd AS FormBase
     *===========================================================================
     PROCEDURE BtnEncerrarClick()
         THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnCargaHorariaClick()
+    *==========================================================================
+    * Transcricao do btnCargas.Valid do SIGCDUPD legado:
+    *
+    *   If Not Used('crSigCdUpd') Or Eof('crSigCdUpd') Or
+    *      Empty(crSigCdUpd.Codigos) Or Empty(crSigCdUpd.UniPrdts)
+    *       MessageBox('Impossivel Acessar o Cadastro de Carga Horaria!!!' ...)
+    *   Else
+    *       Do Form SigCdHor With crSigCdUpd.Codigos, crSigCdUpd.UniPrdts
+    *
+    * Os dois parametros do FormHOR sao OBRIGATORIOS e vem da linha
+    * POSICIONADA na grade - por isso a tela nao tem (nem pode ter) item de
+    * menu proprio.
+    *==========================================================================
+        LOCAL loc_cCodigos, loc_cUniPrdts, loc_oForm, loc_oErro
+
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR BOF("cursor_4c_Dados") ;
+                OR EMPTY(cursor_4c_Dados.codigos) OR EMPTY(cursor_4c_Dados.uniprdts)
+            MsgAviso("Imposs" + CHR(237) + "vel acessar o Cadastro de Carga Hor" + CHR(225) + "ria!" + ;
+                CHR(13) + "Posicione um registro da grade e tente novamente!", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        loc_cCodigos  = ALLTRIM(NVL(cursor_4c_Dados.codigos, ""))
+        loc_cUniPrdts = ALLTRIM(NVL(cursor_4c_Dados.uniprdts, ""))
+
+        loc_oForm = .NULL.
+        TRY
+            GarantirClasse("FormHOR")
+            loc_oForm = CREATEOBJECT("FormHOR", loc_cCodigos, loc_cUniPrdts)
+        CATCH TO loc_oErro
+            MsgErro("Erro ao abrir Carga Hor" + CHR(225) + "ria:" + CHR(13) + loc_oErro.Message, "Erro")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        *-- Show() FORA do TRY (regra #29): com o form modal dentro do TRY,
+        *-- qualquer erro de runtime da tela cairia no CATCH e a derrubaria.
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
     ENDPROC
 
     *===========================================================================

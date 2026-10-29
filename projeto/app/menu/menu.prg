@@ -242,8 +242,6 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Cadastro de Grupos Operacionais (SigCdGpe)"
     DEFINE BAR 106 OF popCadastros PROMPT "Grande Grupo" ;
            MESSAGE "Cadastro de Grande Grupo de Produto (SigCdGpr)"
-    DEFINE BAR 107 OF popCadastros PROMPT "Carga Hor" + CHR(225) + "ria" ;
-           MESSAGE "Cadastro de Carga Hor" + CHR(225) + "ria (SIGCDHOR)"
     DEFINE BAR 108 OF popCadastros PROMPT CHR(205) + "ndices de Comiss" + CHR(227) + "o" ;
            MESSAGE "Cadastro de " + CHR(205) + "ndices de Comiss" + CHR(227) + "o (SigCdCmi)"
     DEFINE BAR 109 OF popCadastros PROMPT "ICMS - Tipo de Tributa" + CHR(231) + CHR(227) + "o" ;
@@ -519,7 +517,16 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 104 OF popCadastros DO AbrirFormgpd
     ON SELECTION BAR 105 OF popCadastros DO AbrirFormGpe
     ON SELECTION BAR 106 OF popCadastros DO AbrirFormgpr
-    ON SELECTION BAR 107 OF popCadastros DO AbrirFormHOR
+    *-- "Carga Horaria" (SIGCDHOR) NAO tem item de menu no legado: eh tela
+    *-- FILHA do Cadastro de Unidade Produtiva. O unico chamador no acervo eh
+    *-- SIGCDUPD.Pagina.Lista.cmdCargas.btnCargas.Valid:
+    *--     Do Form SigCdHor With crSigCdUpd.Codigos, crSigCdUpd.UniPrdts
+    *-- Ela exige pCod (Fase/Setor) e pUni (Unidade Produtiva) OBRIGATORIOS,
+    *-- que vem da linha posicionada na grade do pai. O item de menu daqui era
+    *-- invencao da migracao, e para alimentar os dois parametros inventava
+    *-- tambem dois pickers - o primeiro sobre SigCdGcr SEM filtro, que eh uma
+    *-- tabela de configuracao com ~100 colunas e listava plano de contas.
+    *-- O botao foi devolvido ao FormUpd (BtnCargaHorariaClick).
     ON SELECTION BAR 108 OF popCadastros DO AbrirFormICM
     ON SELECTION BAR 109 OF popCadastros DO AbrirFormIct
     ON SELECTION BAR 110 OF popCadastros DO AbrirFormImp
@@ -9115,88 +9122,6 @@ PROCEDURE AbrirFormGr1()
     ENDIF
 ENDPROC
 
-*------------------------------------------------------------------------------
-* AbrirFormHOR - Abre FormHOR (Carga Horaria) apos selecao de Fase/Setor e UniPrdt
-*------------------------------------------------------------------------------
-PROCEDURE AbrirFormHOR()
-    LOCAL loc_oForm, loc_oErro
-    LOCAL loc_cSetors, loc_cUniPrdts, loc_oLookup
-
-    TRY
-        *-- 1. Seleciona Fase/Setor via SigCdGcr (codigos, descrs)
-        loc_cSetors = ""
-        GarantirClasse("FormBuscaAuxiliar")
-        loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdGcr", "cursor_4c_BuscaGcr", "codigos", "", ;
-            "Selecione a Fase/Setor")
-
-        IF VARTYPE(loc_oLookup) = "O" AND !ISNULL(loc_oLookup)
-            loc_oLookup.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-            loc_oLookup.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oLookup.Show(1)
-
-            IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_BuscaGcr")
-                loc_cSetors = ALLTRIM(cursor_4c_BuscaGcr.codigos)
-            ENDIF
-
-            loc_oLookup = .NULL.
-
-            IF USED("cursor_4c_BuscaGcr")
-                USE IN cursor_4c_BuscaGcr
-            ENDIF
-        ENDIF
-
-        IF !EMPTY(loc_cSetors)
-            *-- 2. Seleciona Unidade Produtiva via SigCdUpd (uniprdts)
-            GarantirClasse("FormBuscaAuxiliar")
-            loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdUpd", "cursor_4c_BuscaUpd", "uniprdts", "", ;
-                "Selecione a Unidade Produtiva")
-
-            IF VARTYPE(loc_oLookup) = "O" AND !ISNULL(loc_oLookup)
-                loc_oLookup.mAddColuna("uniprdts", "", "Unidade Produtiva")
-                loc_oLookup.Show(1)
-
-                IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_BuscaUpd")
-                    loc_cUniPrdts = ALLTRIM(cursor_4c_BuscaUpd.uniprdts)
-                ENDIF
-
-                loc_oLookup = .NULL.
-
-                IF USED("cursor_4c_BuscaUpd")
-                    USE IN cursor_4c_BuscaUpd
-                ENDIF
-            ENDIF
-
-            IF !EMPTY(loc_cUniPrdts)
-                *-- 3. Cria o FormHOR com os parametros selecionados.
-                *--    O Show() dele fica FORA do TRY - ver o bloco no fim.
-                GarantirClasse("FormHOR")
-                loc_oForm = CREATEOBJECT("FormHOR", loc_cSetors, loc_cUniPrdts)
-                IF VARTYPE(loc_oForm) <> "O"
-                    MsgErro("Erro ao criar formul" + CHR(225) + "rio de Carga Hor" + CHR(225) + "ria." + CHR(13) + ;
-                        "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
-                ENDIF
-            ENDIF
-        ENDIF
-    CATCH TO loc_oErro
-        LOCAL lcMsg
-        lcMsg = "Erro ao abrir Carga Hor" + CHR(225) + "ria:" + CHR(13) + CHR(13) + ;
-                "Erro: " + loc_oErro.Message + CHR(13) + ;
-                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
-                "Procedure: " + loc_oErro.Procedure
-        MsgErro(lcMsg, "Erro Detalhado")
-        loc_oForm = .NULL.
-    ENDTRY
-
-    *-- Regra #29: so o Show() da tela de TRABALHO sai do TRY. Os dois
-    *-- loc_oLookup.Show(1) acima continuam dentro dele de proposito: sao
-    *-- pickers curtos do fluxo de selecao, e erro ali DEVE abortar a abertura
-    *-- inteira - que eh justamente o que o CATCH faz.
-    IF VARTYPE(loc_oForm) = "O"
-        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
-    ENDIF
-ENDPROC
 
 *------------------------------------------------------------------------------
 * AbrirFormICD - Abre form de Duplicacao dos Tipo de Tributacao
