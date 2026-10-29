@@ -108,7 +108,7 @@ DEFINE CLASS FormIct AS FormBase
         *-- Cabecalho cinza (cntSombra legado) Top=1+29=30
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 30
+            .Top         = 29   && igual a da pagina Dados (regra #11)
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -455,9 +455,9 @@ DEFINE CLASS FormIct AS FormBase
         *-- Container Salvar/Cancelar (grupo_salva legado) Top=-4+29=25
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 25
-            .Left        = 837
-            .Width       = 161
+            .Top         = 33   && canonico (FormFti/FormFUN): a faixa do cabecalho vai de 29 a 109
+            .Left        = 842
+            .Width       = 160  && 5 + 75 + 75 + 5
             .Height      = 85
             .BackStyle   = 0
             .BorderWidth = 0
@@ -490,7 +490,7 @@ DEFINE CLASS FormIct AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 81
+                .Left            = 80
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Tahoma"
