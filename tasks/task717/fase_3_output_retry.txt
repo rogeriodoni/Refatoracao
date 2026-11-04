@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete and verified. Here's what I did and what it proves.
+
+## Delivered: `projeto/app/forms/operacionais/FormSigOpCts.prg` (16 KB, CRLF, pure ASCII)
+
+The previous run failed because the prompt arrived with no task attached ÔÇö the agent just asked what to do. Nothing was generated. I executed the phase from scratch.
+
+**What SIGOPCTS actually is:** a 300├ù211 modal password dialog, reused by `sigcdepd`/`sigpdmp6`/`sigmvcab` via `Do Form SigOpCts With _Titulo, _Altera, _Arquivo To _Libera`. It reads/writes the `Senhas` column of a cursor **the caller already has open**. Its legacy tree is a flat `form` ÔÇö `cntSombra` plus 7 loose controls, **zero PageFrame**. So there is no Page1/Lista and no Page2/Dados to build; inventing them would violate PILAR 1.
+
+**Phase 3 scope delivered:** visual properties transcribed from the dump, `Init(par_cTitulo, par_lAltera, par_cArquivo)` storing params before `DODEFAULT()`, `InicializarForm` instantiating the `SigOpCtsBO` from phases 1ÔÇô2, `AplicarAlturaPorModo` (the legacy `If _Altera / This.Height = 250`), `ConfigurarPageFrame` (flat background), `ConfigurarCabecalho` (`cntSombra` ÔåÆ `cnt_4c_Sombra` + two labels), `TornarControlesVisiveis`, and the dialog exit contract (`ObterResultado`/`Destroy`/`Unload`).
+
+**Rules that changed the code, not just the comments:**
+- `DataSession = 1` is load-bearing here, not decoration ÔÇö a private session wouldn't see the caller's alias, and the BO's `USED()` would return `.F.` for a cursor that is open on the other side.
+- Header `Width` is `THIS.Width`, labels `THIS.Width - 20` ÔÇö the dump declares the container at 800 and labels at 769 on a 300-wide form. Copying the literals would have thrown the title 500px past the right edge and clipped it (rule #11/#30).
+- `Closable` is **not** declared, because the dump doesn't declare it. Measured: it stays `.T.`, so Alt+F4 still works ÔÇö this dialog has no Encerrar button, so that's the only abort path.
+- Exit uses `Hide`-style ownership: the form caches ZSen in `Destroy` before releasing the BO, and the **caller** calls `Release()` after reading `ObterResultado()`. Transcribing the legacy `Thisform.Release` literally would destroy the object before the caller could read what the dialog exists to produce.
+
+## Verification
+
+I first ran the 4-line smoke test that the session caveat requires ÔÇö `vfp9.exe` **did** execute the script body here (output file written), so the probe results below are real, not inferred from a `.FXP`.
+
+Probe (`automation/ProbeTask717F3.prg`), both modes instantiated with no exception and no error file:
+
+| | consulta | alterar |
+|---|---|---|
+| `VARTYPE` | `O` | `O` |
+| `Width ├ù Height` | 300 ├ù 211 | 300 ├ù **250** |
+| alias adotado | `crSigCdCli` (BO default) | `LocalCli` |
+
+Header measured at `0/0/300/80`, `BackColor = 6579300` = `RGB(100,100,100)`; labels at `18/10/280/29` and `17/10/280/35`, Tahoma 16 bold, `AutoSize = .F.`, all `Visible = .T.`; `Picture` resolves to an existing file. Method visibility is correct (`ObterResultado` public, `InicializarForm`/`ConfigurarCabecalho` protected). Result cache reads `.T.` from the live BO.
+
+Static audits: Phase 3 gate passes on **both** branches (paginated regex and the FLAT branch ÔÇö legacy proven generic-root/no-PageFrame, no invented `pgf_4c_`, `AddObject("cnt_4c_Sombra")` present). Completeness validator: 0 problems. Zero `RETURN` inside `TRY`, zero literal accents, zero `this_X .Value`, and every call resolves against the form, `FormBase`, native Form methods, or `utils/messages.prg`.
+
+## Two things I deliberately left out
+
+I did **not** add a `menu.prg` entry or `GarantirClasse` call. This is a parameterized child dialog that no legacy menu opens ÔÇö adding a menu item would invent a path the legacy doesn't have. When the first caller form (`sigcdepd`/`sigpdmp6`/`sigmvcab`) gets migrated, it needs `CREATEOBJECT("FormSigOpCts", ...)` with `Show()` outside the `TRY`, **not** `DO FORM` ÔÇö the `.prg` header documents that call pattern.
+
+Separately: the working tree was already dirty before I started (988 deleted `.FXP` from earlier pipeline runs, plus artifacts from tasks 702ÔÇô716). My only changes are the form plus the two probe files.

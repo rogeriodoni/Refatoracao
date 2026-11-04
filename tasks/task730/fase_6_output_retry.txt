@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete. Here's what I found and did.
+
+## Diagnosis
+
+Phase 6's artifacts were nearly all already in place from Phase 5 ÔÇö the Contra-Partida block (`Label4`/`Say4`/`Get_GrupoC`/`Get_DgrupoC`/`Say5`/`Get_contaC`/`Get_DcontaC`), the Opera├º├úo block (`Shape1`/`Label2`/`Get_Dope`), all 8 `LostFocus` bindings, the 6 `When` handlers, and a correct Pattern-A picker call via `AbrirLookupCanonico`.
+
+The gate failed on one condition. For an OPERACIONAL form with no PageFrame (layout *flat*), `OrquestradorMigracao.ps1:9330` requires `PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*` ÔÇö and the legacy dump contains `fAcessoContab(`/`fAcessoContas(`, so the "legado sem lookup" escape hatch correctly did **not** apply. The form had zero such methods: the picker was called inline from inside `ResolverCodigoDescricao`, with no per-field entry point.
+
+Reviewing that inline structure surfaced a second, real defect: `AbrirLookupCanonico` opens a **modal** `FormBuscaAuxiliar` from inside a `LostFocus` handler, and there was **no reentrancy guard** ÔÇö rules #37/#47. The modal takes focus, the field's own `LostFocus` re-fires, and a second picker stacks on the first.
+
+## Changes (`FormSigOpEnc.prg`, +130/-ÔÇª lines)
+
+1. **`this_lEmLookup = .F.`** property declared on the class.
+2. **Four funnel methods** ÔÇö `AbrirLookupGrupo`, `AbrirLookupConta`, `AbrirLookupGrupoC`, `AbrirLookupContaC` ÔÇö one per code/description **pair**, mirroring the legacy where one `fAcessoContab`/`fAcessoContas` serves both the code `Valid` and the description `Valid`, deciding by the `'C'`/`'D'` argument. Tables transcribed from the legacy, not guessed: `fAcessoContab` ÔåÆ `SigCdGcr` (`codigos`/`descrs`), `fAcessoContas` ÔåÆ `SigCdCli` (`iclis`/`rclis`) restricted to the block's group. The guard lives here, in the funnel, so it also covers any future F3/DblClick entry; release is RETURN-immune because `ResolverCodigoDescricao` wraps its whole body in TRY/CATCH with no early RETURN.
+3. **The 8 `LostFocus` handlers now delegate** to the matching funnel. The four filter handlers also return early on the guard, so `AplicarFiltro()` doesn't reload the grid underneath an open modal.
+
+I deliberately did **not** add F4/DblClick bindings: `comportamento.json` and the dump confirm the legacy has no `KeyPress` on these eight fields ÔÇö the lookup is in `Valid`, which maps to `LostFocus` per rule #47. Inventing a key binding would violate PILAR 1.
+
+## Verification
+
+- `COMPILE` in VFP9: clean, no `.err`, `.fxp` generated (artifacts removed afterward).
+- Completude validator (`Test-CompletudeCodigo` logic, run standalone): **COMPLETUDE OK** ÔÇö no TODO/stub/empty procedure.
+- Gate conditions now all true: `semPageFrame` Ô£ô, `temBindEvent` (25) Ô£ô, `temMetodoLookup` (4) Ô£ô.
+- Line endings unchanged ÔÇö the file was already LF (`CR=0`) from the prior phases, so no CRLF restoration was needed.
+
+One note for later phases: `FiltroGrupoParaConta`/`FiltroGrupoCParaConta` are declared `PROTECTED PROCEDURE` but return values and are called as expressions. That works in VFP and is only reached internally via `THIS.`, so it's safe as-is ÔÇö but if a later phase ever needs them from outside the class, they'd hit rule #51.

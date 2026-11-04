@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stray accented bytes ÔÇö the file is pure ASCII outside the `CHR()`-encoded string literals, consistent with CLAUDE.md rule #4. The file structure is balanced and syntactically sound.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSIGOPDVM.prg` (Fase 3/8 ÔÇö estrutura base) for the "Diferen├ºas Vendas x Mapa Resumo" dialog:
+
+- **DEFINE CLASS FormSIGOPDVM AS FormBase** with visual properties transcribed literally from the SCX dump (Width=800, Height=200, BorderStyle=2, ControlBox=.F., TitleBar=0, WindowType=1, AutoCenter=.T.).
+- **DataSession = 1** (not 2) ÔÇö this dialog must see the 4 cursors (`crCaixa`/`crCaixaI`/`crCaixaFIN`/`crSigFiMpi`) that its parent screen already opened; a private session would hide them. Documented the translation of the legacy `ThisForm.DataSessionId = pcForm.DataSessionId` line, which has no literal VFP9 equivalent.
+- **Init()** receiving the parent form plus the 4 cursor aliases and Empresa/Data, with a defensive `ResolverContextoDoPai()`/`LerTextoDoPai()`/`LerDataDoPai()` fallback (never crashes if the parent uses different property names).
+- **InicializarForm()** creates `SIGOPDVMBO`, feeds it via `DefinirCursoresOrigem`/`DefinirParametrosComparacao` (already built in Fase 1/2), builds the background and the gray header (`cnt_4c_Sombra` + two labels, captions bound to `THIS.Caption`), and calls `TornarControlesVisiveis()`.
+- **Destroy()** releases the BO, clears the parent reference, and ends with `DODEFAULT()`.
+
+Deliberately **not** included (per the dump, which has no PageFrame at all ÔÇö this is a flat OPERACIONAL dialog, not a CRUD cadastro): PageFrame, Page1/Page2, and the 5 CRUD buttons ÔÇö inventing those would violate PILAR 1. Grid1 (7 columns), Shape1, and the Encerrar button are explicitly deferred to Fase 4, matching the pattern already established in the sibling `FormSigOpCrd.prg`.
+
+Verified brace/block balance (DEFINE CLASS/ENDDEFINE, 9├ùPROCEDURE/ENDPROC, 3├ùWITH/ENDWITH, 28├ùIF/ENDIF, 2├ùFOR/ENDFOR, TRY/ENDTRY) and confirmed no stray accented bytes in the file.

@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No changes made. All 5 SQL-FILTRO-INVENTADO findings for `SigOpDesBO.prg`/`FormSigOpDes.prg` are confirmed false positives (already catalogued in memory from a prior analysis of this exact file):
+
+- `CIDCHAVES` ÔåÆ real PK used in `UPDATE ... WHERE cidchaves` (PILAR 3 architecture, not invented)
+- `EMPS` ÔåÆ reproduces the legacy's pre-filtered global cursor scope (`CarregarCota`)
+- `NASCS` ÔåÆ legitimate move of the legacy's in-memory aniversario eligibility check into SQL
+- `PRECODE` ÔåÆ zero real SQL occurrences; only appears in a comment quoting the legacy line
+- `LISTAEMP` ÔåÆ faithful De Morgan transcription of the legacy's `!listaemp like ...` negation, which the detector's parser doesn't recognize
+
+Applying any of these "fixes" would be a regression (wrong-company quota, year-round birthday discounts, etc.), so no code was touched.

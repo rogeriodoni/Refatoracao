@@ -1,0 +1,26 @@
+=== PROBE Fase 6 - Formsigopcks (task702) ===
+1) CREATEOBJECT -> VARTYPE=O Width=1000 Height=600 Caption=[Cancelamento de Item]
+2) BINDEVENT em txt_4c_Usuario: n=3 [KEYPRESS->USUARIOKEYPRESS][LOSTFOCUS->VALIDARUSUARIODIGITADO][DBLCLICK->USUARIODBLCLICK]
+   BINDEVENT em txt_4c_Senha: n=1 [LOSTFOCUS->VALIDARSENHADIGITADA]
+3) escopos (atributo 2 = Protected; esperado .F. em todos):
+   UsuarioKeyPress            = .F.
+   UsuarioDblClick            = .F.
+   ValidarUsuarioDigitado     = .F.
+   ValidarUsuarioDigitadoExec = .F.
+   AbrirBuscaUsuario          = .F.
+   ValidarSenhaDigitada       = .F.
+   ValidarSenhaDigitadaExec   = .F.
+   AbortarAutorizacao         = .F.
+   FecharDialogo              = .F.
+   ConfigurarBINDEVENTs       = .F.
+   AplicarRegraWhenUsuario    = .F.
+4) usuario.When (Enabled):
+   CANCITEM -> Enabled=.T. / SenhaDoDia=.F.   esperado .T./.F.
+   MAXIMO   -> Enabled=.F. / SenhaDoDia=.T.   esperado .F./.T.
+   MAXIMO   -> usuario.Value=[TESTE] lbl Senha=[Senha Do Dia :]
+5) colunas do picker: VARTYPE=O
+   this_nColunas=2 esperado 2
+   col1=[usuarios/Código]  col2=[ccargs/cargo]
+   CampoCodigo=[usuarios] CampoDescricao=[ccargs] Titulo=[Seleção]
+6) AbortarAutorizacao -> BO.this_lZSen=.F. esperado .F. (Hide sem erro)
+PROBE_FALHAS=0

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Investiguei o estado da task733 (migra├º├úo de `SIGOPETS.SCX` ÔåÆ `Formsigopets.prg`/`sigopetsBO.prg`) antes de executar a Fase 8 ├ás ciegas. As Fases 1-7 j├í tinham entregue **tudo** que a Fase 8 gen├®rica pediria ÔÇö o dump mostrou que este n├úo ├® um form CRUD com Lista/Dados (n├úo h├í `CarregarLista`, `FormParaBO`, grid, nem sequer tabela pr├│pria): ├® um di├ílogo **FILHO** de configura├º├úo de impress├úo, chamado por `SIGMVCAB`, sem grid e sem grava├º├úo em banco.
+
+Confirmei isso objetivamente:
+- Balanceamento de `PROCEDURE/FUNCTION` ├ù `ENDPROC/ENDFUNC`, `TRY/ENDTRY`, `WITH/ENDWITH`, `IF/ENDIF` nos dois arquivos ÔÇö tudo fechado corretamente.
+- Os 28 objetos reais do `mapeamento.json` (task733) est├úo todos presentes no form; s├│ o `Dataenvironment` fica de fora, de prop├│sito documentado (a nova arquitetura usa BO + SQLEXEC).
+- Nenhum TODO/FIXME/stub real no c├│digo.
+- `Inserir/Atualizar/ExecutarExclusao` ficam herdados de `BusinessBase` por decis├úo de projeto justificada (tela n├úo grava nada no SQL Server ÔÇö s├│ SELECT e cursores locais).
+
+O ├║nico gap real: o m├®todo legado `Load` (`=fConfigGeral()`) n├úo tinha o coment├írio de n├úo-port documentado, ao contr├írio do padr├úo j├í estabelecido em `FormSigMvExp`/`FormSigMvMen`/`FormSigMvPdt`/`FormSigMvSbn`/`FormSIGMVTI2`. Adicionei esse bloco de documenta├º├úo no cabe├ºalho de `Formsigopets.prg`, seguindo exatamente a mesma reda├º├úo e justificativa dessas outras migra├º├Áes (o wrapper `fconfiggeral.prg` ├® NO-OP e cham├í-lo sugeriria falsamente que falta inicializa├º├úo).
+
+N├úo adicionei item de menu (`popMovimentos`/`AbrirFormsigopets`) porque isso violaria o contrato real da tela: ela ├® aberta via `Do Form SigOpEtS With ThisForm, ThisForm.DataSessionId` pelo form pai `SigMvCab` (ainda n├úo migrado), e n├úo tem como funcionar sem os cursores que o pai j├í deixa montados.
+
+Removi `.fxp` ├│rf├úos conforme checklist. Nenhuma mudan├ºa de c├│digo foi necess├íria al├®m da documenta├º├úo ÔÇö a Fase 8 j├í estava, de fato, completa.

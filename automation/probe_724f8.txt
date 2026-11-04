@@ -1,0 +1,39 @@
+=== PROBE Fase 8 - FormSigOpDpe (task724) ===
+CK01 antes do CREATEOBJECT
+1) CREATEOBJECT -> VARTYPE=O Width=600 Height=349 Caption=[Tabela de Depreciação da Operação Venda]
+2) escopo dos metodos (existe / PROTECTED)
+   FormParaBO               .T. / .T.   (esperado .T./.T. - herda FormBase)
+   BOParaForm               .T. / .T.   (esperado .T./.T. - herda FormBase)
+   LimparCampos             .T. / .T.   (esperado .T./.T. - herda FormBase)
+   HabilitarCampos          .T. / .F.   (esperado .T./.F. - publico)
+   AtualizarEstadoControles .T. / .F.   (esperado .T./.F. - publico)
+   BtnEncerrarClick         .T. / .F.   (esperado .T./.F. - harness 06b)
+   CarregarLista            .T. / .F.   (esperado .T./.F. - publico)
+2b) estado pos-Init: Grid.ReadOnly=.F. Grid.Enabled=.T. Col1.ReadOnly=.F. Col3.ReadOnly=.F. (esperado .F. .T. .F. .F.)
+3) cursor_4c_Dados: USED=.T. ISREADONLY=.F. RECCOUNT=1 (esperado .T. / .F. / 1 - a linha em branco do inserelinha)
+   RECCOUNT apos INSERT = 3
+CK02 antes de ProbeFormParaBO (RECNO=3 ActiveColumn=0)
+4) FormParaBO = .T.
+   BO.this_cCidChaves = [CHV0000000000000002] (esperado CHV0000000000000002)
+   BO.this_cDopes     = [VENDA] (esperado VENDA)
+   BO.this_nQtddis    = 31 (esperado 31)
+   BO.this_nQtddfs    = 60 (esperado 60)
+   BO.this_nPercs     = 25.75 (esperado 25.75)
+4b) chamada DIRETA de fora recusada (correto): Property FORMPARABO is not found.
+CK03 antes de ProbeBOParaForm (mesma linha)
+5) BOParaForm = .T. (esperado .T.)
+   linha: qtddfs=90 (esperado 90) percs=33.33 (esperado 33.33) cidchaves=[CHV0000000000000002] (intacto)
+CK04 antes de ProbeBOParaForm (OUTRA linha)
+5b) BOParaForm em outra linha = .F. (esperado .F.)
+    qtddfs da linha 1 = 30 (esperado 30 - NAO foi sobrescrito por 999)
+CK05 antes de HabilitarCampos
+6) HabilitarCampos(.F.) -> Grid.ReadOnly=.T. Enabled=.F. Col1=.T. Col2=.T. Col3=.T. Excluir.Enabled=.F. Encerrar.Enabled=.T. (esperado .T. .F. .T. .T. .T. .F. .T.)
+   HabilitarCampos(.T.) -> Grid.ReadOnly=.F. Enabled=.T. Col1=.F. Col3=.F. (esperado .F. .T. .F. .F.)
+   SEM argumento -> retorno=.T. Grid.ReadOnly=.F. Enabled=.T. (esperado .T. / .F. / .T. - PCOUNT, nao VARTYPE)
+CK06 antes de ProbeLimparCampos (linha 1: qtddfs=30 percs=10.50)
+7) LimparCampos = .T. (esperado .T.)
+   qtddis=0 qtddfs=0 percs=0 (esperado 0 0 0)
+   cidchaves=[CHV0000000000000001] dopes=[VENDA] (esperado INTACTOS)
+CK07 antes dos hooks em EOF
+8) EOF -> FormParaBO=.F. BOParaForm=.F. (esperado .F. / .F.)
+=== FIM OK ===

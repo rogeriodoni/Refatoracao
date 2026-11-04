@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCrp.prg` ÔÇö 962 linhas, compila limpo, instancia e passa o gate.
+
+## O que a fase entregou
+
+**Tr├¬s hooks can├┤nicos**, extraindo para m├®todo pr├│prio o c├│digo que j├í existia espalhado nos handlers (PILAR 3, fonte ├║nica ÔÇö n├úo ├® UI nova):
+
+| hook | onde o corpo estava |
+|---|---|
+| `FormParaBO()` | inline no `BtnProcurarClick` |
+| `BOParaForm()` | **triplicado** nos 3 `Validar<Campo>`, cada c├│pia espelhando um par diferente de campos |
+| `LimparCampos()` | defaults do `Init` legado (`Ctod('  /  /  ')`/`0.00`/`''`), agora num funil s├│ |
+
+O `InicializarForm` ganhou um `IF loc_lSucesso` em volta do resto: os hooks tocam o BO, e sem ele a falha do `CREATEOBJECT` daria dois di├ílogos de erro (o real e um derivado que esconde a causa).
+
+## Um defeito real que o probe pegou
+
+Unificar os tr├¬s espelhamentos num `BOParaForm()` que espelha os **tr├¬s** campos **apagava o valor rec├®m-digitado** ÔÇö `ValidarValor` com 777 deixava a tela em `[ / / |0|]`. Causa: `ValidarCriterio*` do `SigOpCrpBO` zera os *outros* crit├®rios e nunca guardava o pr├│prio (no legado n├úo precisa, porque o controle ├® o armazenamento). Corrigi na origem ÔÇö os tr├¬s m├®todos do BO agora guardam o valor de sa├¡da na pr├│pria property, fora do `IF <mudou>`. Medido antes/depois: `777` e `DEPOSITO` preservados.
+
+## Integra├º├úo ÔÇö o di├ílogo nunca abria
+
+`Formsigopind.prg:4215` fazia `DO FORM SigOpCrp WITH ...`, o **├║nico** call site. `DO FORM` procura um `.scx` que n├úo existe no projeto, e o gerador do ├¡ndice s├│ l├¬ `CREATEOBJECT` ÔÇö ent├úo a classe tamb├®m n├úo entrava na carga sob demanda. Convertido para `CREATEOBJECT` com `Show()` fora do `TRY` (regra #29, modal). **H├í 350 `DO FORM` em `projeto\app\`, nenhum deles abre nada** ÔÇö deixei fora do escopo porque cada site precisa do nome real da classe migrada (um deles aponta para classe inexistente).
+
+## Gate da Fase 8
+
+Reprovava com `BtnCancelarClick, FormParaBO, BOParaForm`. `FormParaBO`/`BOParaForm` eram trabalho real e foram feitos; os outros dois n├úo t├¬m referente (o 2┬║ bot├úo do SCX ├® "Encerrar", `Click = Release`; a grade ├® do **pai**). Nenhum dos 14 ramos de exce├º├úo alcan├ºava ÔÇö o mais pr├│ximo, RETORNO-AO-PAI, exige atribui├º├úo a `ThisForm.ParentForm.<x>`, e este di├ílogo **move o ponteiro do cursor do pai** em vez de devolver valor. Adicionei o 15┬║ ramo **NAVEGADOR-DO-PAI** (`Test-LegadoNavegadorDoCursorDoPai`), fail-closed em sete provas somadas.
+
+## Verifica├º├úo
+
+- compila├º├úo: `FXP=SIM ERR=NAO` nos tr├¬s arquivos
+- instancia├º├úo: OK, `Top=50 Left=580` (= 100+1000ÔêÆ520, a f├│rmula do legado), tipos `.Value` = D/N/C
+- navega├º├úo no cursor do pai: VALOR 250 ÔåÆ RECNO 2; HIST "DEPOSITO" ÔåÆ RECNO 3; DATA 28/10 a partir do fim ÔåÆ RECNO 1 e fecha o di├ílogo
+- completude: zero TODO/stub nos tr├¬s arquivos
+- gate: `PASSA`; **controle negativo** com o ramo neutralizado reproduz a mensagem exata de reprova├º├úo
+- **sweep do veredito completo** nos 713 dumps: `passavam_antes=409 ÔåÆ passam_depois=410`, `mudaram=1` (SigOpCrp), **regress├Áes=0**
+
+Duas ressalvas honestas: `BtnProcurarClick` n├úo ├® test├ível headless (termina em `SetFocus`/`Release` sobre form nunca exibido ÔÇö o VFP pendura), ent├úo a busca foi exercitada no BO, que ├® exatamente o que o Click chama depois do `FormParaBO`. E o gate hoje tamb├®m passaria por coincid├¬ncia, porque ele usa `-notmatch` solto e o cabe├ºalho do form *cita* os nomes dispensados ao explicar por que n├úo se aplicam ÔÇö foi por isso que medi tudo tamb├®m no modo `-SemCitacao`, julgando o c├│digo e n├úo a prosa.
+
+O CorretorAutomatico, rodado em c├│pia, fez 4 muta├º├Áes: duas mutilam **coment├írios** (`[INICIALIZAR_DUPLICADO]` apaga uma linha de coment├írio; `[ALIAS_COM_PONTO]` destr├│i um coment├írio que cita `(variavel).campo` de prop├│sito), uma injeta `this_cMensagemErro = ""` j├í herdado de `FormBase:15`, e um `WARN-168` de fundo de REPORT que n├úo se aplica. Nenhuma quebra comportamento, mas as tr├¬s primeiras s├úo defeitos de pattern pr├®-existentes ÔÇö vale um `/propagate-lesson` se voc├¬ quiser que a li├º├úo do `BOParaForm` e esses patterns entrem no CLAUDE.md e no corretor.

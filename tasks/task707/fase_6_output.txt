@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 6/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGOPCOR.prg` (745 ÔåÆ 974 linhas).
+
+## O que foi entregue
+
+**1. Segunda metade dos campos da faixa** (`ConfigurarCampoNota`), com geometria transcrita literalmente do dump:
+
+| objeto migrado | legado | Left | Top | Width | MaxLength | TabIndex |
+|---|---|---|---|---|---|---|
+| `lbl_4c_Label2` | `Say2` ("a") | 416 | 92 | 10 | ÔÇö | 4 |
+| `txt_4c_NotaFim` | `Get_NotaFim` | 426 | 89 | 52 | 6 | 2 |
+
+Juntos com os da Fase 5 formam a linha `Nota : [______] a [______]`. Label criado antes do TextBox que rotula (caixa transparente n├úo bloqueia o clique), `AutoSize = .F.` + `Width` expl├¡cita (regra #23), `ForeColor = RGB(90,90,90)` (regra #12), `.Value = ""` para casar com `cnfis char(6)`.
+
+**2. `ValidarFaixaNotas()`** ÔÇö PUBLIC, espelha os dois TextBox (fonte ├║nica, lidos na hora da a├º├úo) em `this_cNfisDe`/`this_cNfisAte` (os `pcNFisDe`/`pcNFisAte` do `Init` legado) e aplica a guarda do `Ok.Click` do irm├úo `SIGOPCCO`, com a mensagem literal `"Nota Fiscal Inv" + CHR(225) + "lida !!"` ÔÇö a mesma cadeia que a Fase 2 j├í adotou em `SIGOPCORBO.ValidarDados`.
+
+## Lookups: n├úo existem nesta tela ÔÇö medido, n├úo presumido
+
+Os cinco padr├Áes do gate (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso<X>(`, `FormBuscaAuxiliar`) d├úo **0** no dump; o `.sct` tamb├®m foi lido direto e a SE├ç├âO 3 traz c├│digo para apenas cinco m├®todos (Load/Init do form, `When` das colunas 1-2, `KeyPress` do Edit1). Nenhum campo referencia outra tabela. Fabricar `AbrirLookup*` para "preencher a fase" violaria o PILAR 1.
+
+## Verifica├º├úo
+
+- `COMPILE` sem `.ERR`, `.FXP` gerado.
+- `CREATEOBJECT("FormSIGOPCOR")` instanciou; os 4 campos conferidos na inst├óncia com os valores exatos acima, ambos TextBox com `.Value` Caractere.
+- `PEMSTATUS(oForm, "ValidarFaixaNotas", 2) = .F.` ÔåÆ PUBLIC (regra #51).
+- 5 cen├írios: ambos vazios `.F.` / s├│ inicial `.F.` / s├│ final `.F.` / faixa completa `.T.` / faixa invertida `.T.`; as 3 recusas gravaram a mensagem exata no `_dialogs.txt`.
+- Gate da Fase 6 rodado verbatim: `temLayoutFlat = True`. Validador 05d: zero marcadores, zero procedures vazias, zero indicadores de pend├¬ncia. Zero bytes >127. CRLF preservado (CR=LF=974); diff cir├║rgico (+266/ÔêÆ37, s├│ os blocos pretendidos).
+
+## Dois pontos para registro
+
+**TabIndex dos labels divergiu do dump** ÔÇö o VFP9 renumera os irm├úos a cada atribui├º├úo, e estes controles nascem por ├║ltimo: medido, os labels ficaram em 5 e 6 em vez de 3 e 4. A **ordem de navega├º├úo ficou id├¬ntica ├á do legado** (`NotaIni ÔåÆ NotaFim ÔåÆ Grade ÔåÆ Sair`), porque Label n├úo ├® tabul├ível e `cnt_4c_Sombra` s├│ cont├®m Labels. Deixei o coment├írio do m├®todo dizendo o resultado medido, n├úo a inten├º├úo ÔÇö reordenar as atribui├º├Áes para "arrumar" dois n├║meros cosm├®ticos arriscaria a sequ├¬ncia dos controles que recebem foco.
+
+**O `Ok.Click` do grupo Sair chegou vazio no acervo deste form** (confirmado no dump e no `.sct`). A Fase 7 vai precisar dessa decis├úo: a guarda e o fluxo de grava├º├úo v├¬m do irm├úo `SIGOPCCO`, que grava a mesma tabela a partir da mesma grade ÔÇö foi o que a Fase 2 j├í fez no BO e o que `ValidarFaixaNotas` assume. N├úo validei ordem dos limites (`NotaFim < NotaIni`): seria mensagem que o legado nunca exibe.

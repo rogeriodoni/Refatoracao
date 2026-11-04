@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada.
+
+## O que esta fase realmente tinha de trabalho
+
+`SIGOPDPE` ├® um di├ílogo modal **FLAT**: o dump tem 15 objetos e **zero campo de dados** (`analise.json`: `campos: []`, `labels: []`, `lookups: []`). Os ├║nicos controles de entrada s├úo os tr├¬s `Text1` das colunas da grade, j├í entregues na Fase 4. Metade de zero campos ├® zero ÔÇö n├úo havia "primeiros 50% dos TextBoxes/Labels" a acrescentar, e inventar uma Page2 com campos violaria o PILAR 1.
+
+A Fase 4 j├í havia criado `ConfigurarPaginaDados()` com conte├║do real (os 4 `TabIndex`) **e** ligado ele no `InicializarForm` (linha 394) ÔÇö ou seja, a armadilha conhecida do stub `THIS.Refresh()` nunca chamado n├úo se aplicava aqui.
+
+Ent├úo apliquei a Fase 5 ├║til para form FLAT: **auditoria propriedade por propriedade** do dump contra o migrado, via script que extrai os pares `(objeto, propriedade)` da SE├ç├âO 2 e descarta linhas de coment├írio do `.prg` (sen├úo propriedade citada s├│ em coment├írio conta como transcrita).
+
+## Achado ├║nico ÔÇö e real
+
+**`Form.ForeColor = RGB(36, 84, 155)` estava ausente.** O detalhe que torna isso perigoso: o bloco de coment├írio da classe **j├í listava `ForeColor` entre as propriedades "copiadas do dump"** ÔÇö o coment├írio afirmava um valor que o c├│digo n├úo tinha. Quem revisasse por leitura daria por conferido.
+
+Confirmei que `FORECOLOR` ├® propriedade v├ílida de `Form` em `automation/propriedades_baseclasses.txt` (regra #33), ent├úo entra por PILAR 1 ÔÇö diferente de `DoCreate = .T.`, que ├® flag de design-time e segue corretamente fora.
+
+Todo o resto conferiu: cntSombra, os 2 labels (incluindo `ToolTipText` e `Rotation`), grade, 3 Columns + Headers + Text1 (incluindo `ReadOnly` s├│ na Column2), Shape1 e os 2 bot├Áes.
+
+## Verifica├º├úo
+
+- **Compila limpo**: `.FXP` regenerado ap├│s apagado, sem `.ERR`.
+- **Controle negativo feito na mesma rodada**: c├│pia com `IF .T.` solto no fim gerou `.ERR` apontando s├│ as 2 linhas acrescentadas ÔÇö prova que o detector funciona e que as 1836 linhas est├úo limpas. Sem ele, aus├¬ncia de `.ERR` seria indistingu├¡vel de "o VFP nem tentou".
+- Estruturas balanceadas (PROC/IF/TRY/WITH/FOR/CASE/DEFINE), 0 bytes n├úo-ASCII, LF preservado, nenhum marcador de stub, nenhum procedimento vazio.
+- Diff cont├®m **apenas** a mudan├ºa pretendida (+13 linhas).
+
+Duas ressalvas honestas: **n├úo pude provar runtime** ÔÇö `vfp9.exe` nesta m├íquina compilou mas n├úo executa scripts de forma confi├ível, ent├úo instanciar a tela fica para uma sess├úo VFP9 real. E por isso **n├úo afirmei no coment├írio qual filho muda de cor** com o `ForeColor` novo (`Form.ForeColor` ├® o herdado por quem n├úo declara a sua, mas quais controles desta tela mudam n├úo foi medido) ÔÇö o coment├írio diz isso explicitamente em vez de prever um efeito visual.
+
+Registrei duas li├º├Áes: a nova (`coment├írio lista propriedade que o c├│digo n├úo tem`, com a armadilha de contagem `^\s*<Prop>` vs `\.<Prop>` que quase deixou o caso passar) e um refinamento medido na mem├│ria existente do VFP9 ÔÇö nesta variante `COMPILE`-dentro-do-script o `exit=0` sai **mesmo com o alvo quebrado**, logo o ├║nico sinal ├® o par `.FXP`/`.ERR`.
+
+N├úo commitei ÔÇö o `.prg` segue untracked, como nas fases anteriores.

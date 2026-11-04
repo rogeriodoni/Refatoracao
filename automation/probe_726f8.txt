@@ -1,0 +1,26 @@
+=== PROBE Fase 8 - FormSIGOPDVM (task726) ===
+origem: caixa=3 itens=3 fin=1 mapa=2
+1) CREATEOBJECT -> VARTYPE=O Width=800 Height=200 Caption=[Diferenças Vendas x Mapa Resumo]
+2) escopo (existe / PROTECTED):
+   CarregarLista         existe=.T. protected=.F.
+   VincularColunasGrade  existe=.T. protected=.F.
+   AplicarColunasDoDump  existe=.T. protected=.T.
+   BtnEncerrarClick      existe=.T. protected=.F.
+3) cursor [cursor_4c_Dados] USED=.T. RECCOUNT=2  mensagemBO=[]
+   linha 1: Caixas=[001] ValCxs=95 ValItens=90 ValMrs=80 ValNfs=0 | DifMr=15 DifIT=5
+   linha 2: Caixas=[003] ValCxs=30 ValItens=25 ValMrs=0 ValNfs=0 | DifMr=30 DifIT=5
+   ESPERADO: 2 linhas - 001 (95/90/80 | 15/5) e 003 (30/25/0 | 30/5)
+4) grade: RecordSource=[cursor_4c_Dados] ColumnCount=7 ReadOnly=.T.
+   Column1 CS=[cursor_4c_Dados.ValCxs] W=90 Ord=2 Cap=[Valor]
+   Column2 CS=[cursor_4c_Dados.ValItens] W=90 Ord=3 Cap=[Itens]
+   Column3 CS=[cursor_4c_Dados.ValMrs] W=90 Ord=4 Cap=[Mapa]
+   Column4 CS=[cursor_4c_Dados.ValNfs] W=90 Ord=5 Cap=[Não Fiscal]
+   Column5 CS=[cursor_4c_Dados.ValCxs-cursor_4c_Dados.ValMrs] W=90 Ord=6 Cap=[Diferença Mr]
+   Column6 CS=[cursor_4c_Dados.ValCxs-cursor_4c_Dados.ValItens] W=90 Ord=7 Cap=[Diferença IT]
+   Column7 CS=[cursor_4c_Dados.Caixas] W=33 Ord=1 Cap=[Caixa]
+5a) this_lCursorProprio=.T. (esperado .T. - o cursor nao existia antes)
+    apos Release -> USED(cursor_4c_Dados)=.F. (esperado .F.)
+5b) cursor PRE-criado -> this_lCursorProprio=.F. (esperado .F.) RECCOUNT=2 (esperado 2 - o BO fez ZAP e repopulou)
+    apos Release -> USED(cursor_4c_Dados)=.T. (esperado .T. - o cursor eh do PAI, nao se fecha)
+6) sem contexto -> VARTYPE=O RecordSource=[] (esperado vazio) ColumnCount=7 Col1.W=90 Col7.W=33 Col1.Cap=[Valor] Col7.Cap=[Caixa] proprio=.F. avisada=.F.
+PROBE_OK

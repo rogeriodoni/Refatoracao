@@ -730,7 +730,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- Grupo_Salva.Top=8 + 29 = 37, Left=820
         par_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH par_oPagina.cnt_4c_Salva
-            .Top         = 37
+            .Top         = 28
             .Left        = 820
             .Width       = 160
             .Height      = 85

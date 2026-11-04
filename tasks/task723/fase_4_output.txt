@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete. Summary of what was added:
+
+**`SigOpDocBO.prg`** ÔÇö new `Buscar(par_cChave)` method that lists files linked to the fkChaves key (PADR'd to 30 chars per the positional-key rule), populating `cursor_4c_Dados` with pkChaves/fkChaves/Arquivos/ObsArqs/Usuars/Datas (with the no-connection placeholder-cursor fallback matching the CorBO.Buscar convention).
+
+**`FormSigOpDoc.prg`** ÔÇö since this is an OPERACIONAL flat form (no PageFrame, child dialog), the generic "Page1 Lista + 6 CRUD buttons" template didn't apply; instead I added the real legacy block:
+- `ConfigurarGrid()` ÔÇö `grd_4c_Dados`, 1 column bound to `Arquivos`, with RecordMark/DeleteMark off per the OPERACIONAL rule
+- `ConfigurarBotoesArquivos()` ÔÇö the 4 standalone buttons (Inserir/Abrir Arquivo/Excluir/Abrir Diret├│rio) with exact legacy positions, icons and captions, plus the 2 decorative shapes next to them
+- `CarregarLista()` and `AjustarBotoesPorModo()` ÔÇö both public since `TesteAutomatico` calls them directly
+- `BtnInsArqsClick/BtnOpnArqsClick/BtnExcArqsClick/BtnOpnDirsClick` ÔÇö fully functional (GETFILE insert via BO, Shell.Application open, BO.Excluir with confirmation, open containing folder), wired via BINDEVENT
+
+Verified brace/block balance (PROCEDURE/FUNCTION vs ENDPROC/ENDFUNC, IF/ENDIF, WITH/ENDWITH, TRY/ENDTRY) in both files ÔÇö all matched.
+
+Next phase (5/6) will add the remaining fields (observa├º├úo memo, usu├írio/data readonly, image preview) and the grid's `AfterRowColChange` refresh logic that depends on them.

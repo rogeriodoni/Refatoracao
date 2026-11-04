@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSigOpCtd.prg` est├í completo (1026 linhas, compila limpo).
+
+## O que a fase entregou
+
+**Os dois hooks de transfer├¬ncia ÔÇö que T├èM referente neste di├ílogo:**
+
+- **`FormParaBO()`** ÔÇö a tela tem uma superf├¡cie de captura real (`obj_4c_Optiongroup1`, os 4 modos). O `Click` legado faz `ThisForm.pnReturno = ThisForm.Optiongroup1.Value`, que ├® exatamente um FormParaBO de um campo. A transfer├¬ncia existia desde a Fase 4, mas *inline* no `BtnProcurarClick`; virou hook para ser fonte ├║nica.
+- **`BOParaForm()`** ÔÇö caminho inverso, chamado pelo `InicializarForm()`. ├ë o que faz a tela abrir em " Iniciais", agora a partir do default do BO em vez de um `1` escrito em dois lugares.
+- `BtnProcurarClick` passou a **abortar** quando `FormParaBO` falha, em vez de confirmar um modo que n├úo veio da tela.
+
+**O que n├úo se aplica** (documentado um a um no cabe├ºalho, com o motivo medido): `BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick` (n├úo h├í grade a filtrar, bot├úo de gravar nem Page2 a abandonar ÔÇö o 2┬║ bot├úo ├® "Encerrar" e j├í vem com o nome do legado), `CarregarLista` (zero grade, zero SQL ÔÇö quem consulta ├® o chamador), `HabilitarCampos`/`AjustarBotoesPorModo`/`LimparCampos` (n├úo h├í modo CRUD nem campo a limpar).
+
+## Defeito achado ao exercitar, n├úo na leitura
+
+Os hooks sa├¡ram como `FUNCTION` simples e o probe **pendurou o VFP sem log nem exit code**. Causa: `FormBase` declara os dois como `PROTECTED` (linhas 280/285) e o VFP9 n├úo deixa a subclasse alargar escopo herdado ÔÇö chamar de fora estoura `Property BOPARAFORM is not found`, e esse Program Error trava um VFP headless. Omitir o `PROTECTED` n├úo tornava nada p├║blico, s├│ mentia. Corrigido para `PROTECTED` expl├¡cito, chamados s├│ por `THIS.`, e o probe passou a exercit├í-los por uma subclasse.
+
+## Gate da Fase 8
+
+Os 15 ramos de exce├º├úo existentes devolveram **todos False**. O mais pr├│ximo (RETORNO-AO-PAI) reprova por tr├¬s motivos independentes: o `Init` legado n├úo confere `Type('poForm') = 'O'`; a devolu├º├úo vai a uma *property* do pai, n├úo a `ParentForm.<controle>.Value`; e a c├│pia mora no `Destroy`, n├úo no `Click` que fecha.
+
+Acrescentei o **16┬║ ramo, ESCOLHA-AO-PAI**, com `Test-LegadoEscolhaAoPai`. Ele dispensa s├│ `BtnCancelarClick`/`CarregarLista` e continua exigindo `FormParaBO`/`BOParaForm` + o handler do bot├úo de a├º├úo.
+
+## Verifica├º├Áes (smoke test do VFP9 passou, ent├úo houve execu├º├úo real)
+
+| Prova | Resultado |
+|---|---|
+| Compila├º├úo Form + BO | `.FXP` sim, `.ERR` n├úo ÔÇö com controle negativo (`PUBLIC PROCEDURE` plantado gerou `.ERR` s├│ nas 2 linhas acrescentadas) |
+| Probe em runtime, 13 checkpoints | contrato 0..4 pelo Click real id├¬ntico ao medido na Fase 7; `BOParaForm` honra default do BO; nunca desmarca os 4 radios |
+| Gate, com cita├º├Áes de coment├írio removidas | PASSA pelo ramo, n├úo pela coincid├¬ncia de o cabe├ºalho citar os nomes |
+| Controle negativo do ramo | sem os hooks ÔåÆ `temSuperficieEscolhaF8 = False` ÔåÆ **REPROVA** |
+| Largura do helper (714 dumps) | 1 dump = 1 form; 5 controles negativos viram `False` |
+| Regress├úo | task714, task706, task655 seguem PASSA pelos pr├│prios ramos |
+
+Duas notas: corrigi ├óncoras defasadas do `VerificarGateFase8Task714.ps1` (o bloco `case 8` mudou de linha) e normalizei o form para CRLF, provando que o conte├║do n├úo mudou. Deixei em `automation\`: o probe, o compile-check, o gate e o controle negativo; o resto do scratch foi removido. N├úo toquei no `task_state.json` ÔÇö quem o avan├ºa ├® o orquestrador, e as etapas 05b/05c/06 n├úo rodaram nesta sess├úo.

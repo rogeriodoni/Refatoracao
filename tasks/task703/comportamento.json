@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaInt", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCLG",
+      "evento": "Procedure",
+      "linhas": 71,
+      "codigoOriginal": "ThisForm.PgfPagina.PgResultado.GrdLog.RecordSource = ''\n\nPrivate lcUserRede, ldDtIni, ldDtFin, lcHrIni, lcHrFin, lcPrg\nPrivate lcOperacao, lcUserSis, lcParam, lcTrans \n\nWith ThisForm.PgfPagina.PgDados\n\tlcUserRede\t= .GetUserRede.Value\n\tldDtIni\t\t= fDtoSQL(.GetDtIni.Value)\n\tldDtFin\t\t= fDtoSQL(.GetDtFin.Value,'23:59:59')\n\tlcHrIni\t\t= .GetHrIni.Value\n\tlcHrFin\t\t= .GetHrFin.Value\n\tlcPrg\t\t= .GetPrg.Value\n\tlcOperacao\t= .GetOperacao.Value\n\tlcUserSis\t= .GetUserSis.Value\n\tlcParam\t\t= .GetParam.Value\n\tlcTrans ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "Set Date BRITISH \nSet Century on\n\nThisForm.pgfPagina.PgDados.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.pgfPagina.PgDados.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\tEndWith\n\tEndif\n\n\t.PgfPagina.PgResultado.Enabled=.f.\n\t.PgfPagina.PgDados.GetUserRede.SetFocus\n\nEndWith\n* Fim *************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.PgDados.cmdProcessar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If (MessageBox('Confirma o Processamento?', 4+32+256, 'Confirmação!!!') = 6)\n\tThisForm.Processamento\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.PgDados.cmdProcessar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.PgDados.GetPrg",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local lCod, lFan, xObj, xBrow\nIF not IsEmpty(This.value)\n\n\tThisForm.PoDatamgr.SqlExecute([Select Distinct Programas From SigCdPrg Order By Programas],\"crSigCdPrg\")\n\tSELECT crSigCdPrg\n\tLOCATE FOR Programas = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwBuscaInt','crSigCdPrg','Programas',This.Value,'Progamas',.t.)\n\t\txBrow.mAddColuna('Programas','','Programa',.t.)\n\t\txBrow.Show\t\t\n\tENDIF\n\n\tIF LASTKEY()<>27\n\t\tThis.value = crSigCdPrg.Programas\n\t\tThis.refresh\n\tENDIF\n\nENDIF\nRETURN(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.PgDados.GetUserSis",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local lcod, lfan, xobj\nIf not IsEmpty(This.value)\n\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Usuarios','','Usuários',.t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tIf lastkey()<>27\n\t\tThis.value = evaluate(\"crSigCdUsu.Usuarios\")\n\t\tThis.Refresh\n\tendif\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.pgResultado.GrdLog",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.PgfPagina.PgResultado.fwget1.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLG.pgfPagina.pgResultado.cmdBotoes",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.PgfPagina.PgResultado.Enabled=.f.\nThisForm.PgfPagina.ActivePage=1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCLG.pgfPagina.PgDados.GetPrg.Valid",
+      "queryOriginal": "\tThisForm.PoDatamgr.SqlExecute([Select Distinct Programas From SigCdPrg Order By Programas],\"crSigCdPrg\")",
+      "tabelas": "SigCdPrg",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPrg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

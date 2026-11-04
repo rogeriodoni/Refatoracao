@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 executada. `FormSigOpDmp.prg` (349 ÔåÆ 798 linhas) e `SigOpDmpBO.prg` (136 ÔåÆ 201 linhas).
+
+## O que entrou
+
+**`ConfigurarPaginaLista`** ÔÇö os 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, Left 5/80/155/230/305 do `framework_frmcadastro_layout.md`), `cmd_4c_Encerrar` em `cnt_4c_Saida` (can├┤nico da regra #10: 917+5, 75x75, Caption "Encerrar") e a grade `grd_4c_Lista` (Top=117, Left=26, 880x498, `ColumnCount` fora do `WITH`).
+
+**A grade tem UMA coluna.** O `pColuna` do `Init` legado declara s├│ `('Nome','','','Nome do Demonstrativo',150,.t.)` ÔÇö regra #35: a Lista espelha o `pColuna`, n├úo os headers do SCX. As 5 colunas do `layout.json` s├úo da grade da p├ígina **Dados** (`SigCdDpr`), que ├® das Fases 5-6.
+
+**`ConfigurarPaginaDados`** ÔÇö `cmd_4c_Confirmar` e `cmd_4c_Cancelar`, que a Fase 3 havia deixado explicitamente para esta fase.
+
+**M├®todos novos** (todos PUBLIC, regra #3): `CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`, `BtnCancelarClick`, `BtnEncerrarClick`. `AlternarPagina` rep├Áe o modo e chama `AjustarBotoesPorModo` no fim ÔÇö regra #40, sen├úo o usu├írio volta para a Lista com os 5 bot├Áes cinza.
+
+## Dois pontos para sinalizar
+
+**1. Tive de acrescentar `Buscar` ao BO.** A Fase 2 deixou de fora `Buscar`/`CarregarPorCodigo`/`ExecutarExclusao` por "pertencerem ├ás fases seguintes", mas o `Buscar` herdado do `BusinessBase` n├úo serve: ele delega para `this_oDataAccess`, que nunca ├® instanciado (o `Init` chama `DODEFAULT()` sem o nome da tabela), e gravaria em `curSigPrDmo`, n├úo no `cursor_4c_Dados` a que a grade se liga. Sem ele a entrega desta fase n├úo carregaria nada. Transcrevi o `Select * From SigPrDmo` + `Index On nome` do `Init` legado (sem filtro, `ORDER BY nome`). `CarregarPorCodigo` e `ExecutarExclusao` continuam ausentes ÔÇö s├úo das Fases 5-7.
+
+**2. Os 5 bot├Áes CRUD e o Confirmar ficaram sem `BINDEVENT` de prop├│sito.** `BINDEVENT` valida o delegado no *registro*, n├úo no disparo: vincular a m├®todo inexistente aborta o `Init`. Encerrar e Cancelar est├úo vinculados porque os handlers est├úo completos ÔÇö a Fase 7 liga o resto. Deixei registrado no c├│digo que o **Buscar deste form ├® busca-por-exemplo**: o legado tem `PROCEDURE msv_procurar` (`Set Near On` / `Seek` pelo nome digitado), ent├úo a Fase 7 **n├úo** deve abrir `FormBuscaAuxiliar` ali.
+
+## Verifica├º├úo
+
+- **Compila limpo**: `.FXP` gerado para os dois, `.ERR` ausente nos dois.
+- **Instancia e funciona** (probe real, `automation/Probe722F4.prg`): `VARTYPE=O`; z-order da Page1 com a faixa como filho 1 (regra #11); os 6 bot├Áes presentes com `Picture` existente em disco; grade 1 coluna ligada a `cursor_4c_Dados.nome`, header e `ReadOnly` corretos; ida a Dados em INCLUIR desabilita os 5 e habilita Confirmar; `BtnCancelarClick` volta ├á Lista, reabilita os 5 e repinta a grade; nenhum m├®todo chamado de fora ├® PROTECTED.
+- **Um defeito real encontrado e corrigido pelo probe**: `Column1.Width` sa├¡a **45** em vez de 150 ÔÇö o `SetAll` de fonte do `FormatarGridLista` recalcula a largura das colunas (regra #35c). Movi o `Width` para depois dele; agora fica 150 inclusive ap├│s re-bind.
+- `Test-CompletudeCodigo` real: **OK** nos dois arquivos. Zero `RETURN` dentro de `TRY`, zero bytes >127 (acentos via `CHR()`), blocos balanceados, CRLF do Form e LF do BO preservados.
+- Corrigi em `tasks/task722/mapeamento.json` dois nomes errados do gerador (`pgf_4c_1` ÔåÆ `pgf_4c_Paginas`, `Page_4c_2` ÔåÆ `Page2`) ÔÇö sem isso o `ValidarUIFidelity` reportaria ~25 objetos "n├úo encontrados" (Problema 3 do FORMCOR). **Aten├º├úo Fases 5-6**: o mesmo JSON mapeia `Pagina.Dados.Inserir`/`.Excluir` (os bot├Áes de linha da grade de fases) para `cmd_4c_Incluir`/`cmd_4c_Excluir`, que agora colidem com os bot├Áes CRUD da Lista ÔÇö aqueles precisar├úo de nomes pr├│prios.
+
+N├úo consigo provar nesta sess├úo o comportamento **com banco**: `gnConnHandle` n├úo existe no probe, ent├úo o `Buscar` tomou o ramo do cursor vazio (`RECCOUNT=0`). O SQL contra `SigPrDmo` n├úo foi executado de verdade. Deixei como evid├¬ncia `automation/CompileCheck722F4.prg`, `Probe722F4.prg` e as duas sa├¡das; `.FXP` do Form e do BO removidos. A recompila├º├úo do `config.prg` pelo probe deixou `config.FXP` e `functions.FXP` (artefatos rastreados) como modificados.

@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Dos 13 problemas reportados, apenas **4 eram reais** (NULL-CURSOR): os 4 pontos onde `cursor_4c_Cota`/`cursor_4c_Dados` nascem via `CREATE CURSOR` (2 em `FormSigOpDes.prg`, 2 em `SigOpDesBO.prg`) agora envolvem o `CREATE CURSOR` com `SET NULL ON` / `SET NULL OFF`, seguindo o padr├úo j├í estabelecido no projeto (`Formsigreato.prg`, `Formsigatcrp.prg`).
+
+Os outros **9 eram falsos positivos**, confirmados lendo o arquivo completo (o relat├│rio de review s├│ recebeu trechos truncados):
+- 6├ù METODO-INEXISTENTE: todos os m├®todos (`AcessoGradeCota`, `ValorNumerico`, `ValidarPercentualDescontoExec`, `CotaEstourada`, `DescontoEntraNaCota`, `ValidarValorDescontoExec`) est├úo definidos no arquivo, fora da janela mostrada ao reviewer.
+- 2├ù GRID-WITH: `.RecordSource`/`.ColumnCount` ficam num `WITH` que j├í fecha com `ENDWITH` antes do `WITH ...Column1` ÔÇö n├úo ├® o mesmo bloco.
+- 1├ù GRID-HEADER: o caption usa `CHR(231)+CHR(227)` (regra CLAUDE.md #4) e produz "Descri├º├úo" corretamente; o "??" ├® artefato de encoding na leitura do dump legado.
+
+Nenhuma l├│gica de neg├│cio, propriedade visual ou funcionalidade foi alterada.

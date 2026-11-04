@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+That's fine ÔÇö not essential, skipping it.
+
+## Conclusion
+
+Both SQL-FILTRO-INVENTADO findings for `FormSigOpCtf.prg` / `SigOpCtfBO.prg` are **false positives** ÔÇö no code changes applied:
+
+1. **EMPS** ÔÇö `SigOpCtfBO.CarregarCaixaSiTef`'s `WHERE emps = ...` against `SIGFIMPF` is correct (schema confirms `emps char(3)`, not `cemps`) and necessary to scope the lookup to the logged-in company. It replaces a legacy global cursor (`crSigFiMpF`) that's never populated by any SQL in the dump ÔÇö there's no "original WHERE" to diverge from. It's a verbatim copy of the already-reviewed sibling `sigprdftBO.CarregarParametrosOperacao`.
+2. **TABINDEX** ÔÇö pure detector noise. There is no SQL `WHERE` anywhere in the form; `.TabIndex` is only a control tab-order property, never part of a SQL string.
+
+This is an exact recurrence of a previously-documented case ("6a variante" in memory, for the sibling `sigprdftBO`/`Formsigprdft`). I recorded it as a new variant (48a) in memory so future SQL-pass runs on the SiTef family (`SIGOPCTF`/`SIGPRDFT`/`SIGPRTFH`) don't need re-investigation from scratch.

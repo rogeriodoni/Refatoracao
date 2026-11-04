@@ -1,0 +1,59 @@
+=== COMPILACAO ===
+BO.FXP   = .T.
+BO.ERR   = .F.
+FORM.FXP = .T.
+FORM.ERR = .F.
+
+=== INSTANCIACAO ===
+VARTYPE(loForm) = [O]  (esperado O)
+
+--- propriedades do FORM ---
+BaseClass    = [Form]
+Caption      = [Alteração de Câmbio]
+Width/Height = 1000/600
+WindowType   = 1
+DataSession  = 1
+TitleBar     = 0
+ControlBox   = .F.
+Closable     = .F.
+Themes       = .F.
+ControlCount = 1
+
+--- estado recebido do PAI ---
+this_cEscolhaPai      = [ALTERAR]
+this_cCursorCotacao   = [TmpCotProbe]
+this_cCursorCabecalho = [TprMvCabProbe]
+this_dDatas           = [30/10/2026]
+this_lConfirmado      = .F.
+BO VARTYPE            = [O]
+BO.this_cEscolhaPai      = [ALTERAR]
+BO.this_cCursorCotacao   = [TmpCotProbe]
+BO.this_cCursorCabecalho = [TprMvCabProbe]
+
+--- cabecalho (cnt_4c_Sombra) ---
+cnt Top/Left/W/H  = 0/0/1000/80
+cnt BackColor     = 6579300  (RGB(100,100,100)=6579300)
+cnt BackStyle     = 1
+cnt Visible       = .T.
+cnt ControlCount  = 2
+lblSombra Cap/T/L/W/H/Fore/Vis = [Alteração de Câmbio] 18/10/769/40/0/.T.
+lblSombra AutoSize/WordWrap    = .F./.T.
+lblTitulo Cap/T/L/W/H/Fore/Vis = [Alteração de Câmbio] 17/10/769/46/16777215/.T.
+lblTitulo AutoSize/WordWrap    = .F./.T.
+
+--- visibilidade (PEMSTATUS attr 2 = PROTECTED) ---
+ValidarParametros       PROTECTED = .F.  (esperado .F.)
+ResolverContextoPai     PROTECTED = .F.  (esperado .F.)
+TornarControlesVisiveis PROTECTED = .F.  (esperado .F.)
+
+--- chamada externa dos metodos PUBLIC ---
+ValidarParametros()       = .T.
+ResolverContextoPai()     = .T.
+TornarControlesVisiveis() = .T.
+
+--- ordem de criacao (regra #11) ---
+Controls(1).Name = [CNT_4C_SOMBRA]
+
+Release OK
+
+FIM

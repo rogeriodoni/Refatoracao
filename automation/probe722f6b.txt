@@ -1,0 +1,23 @@
+A: inicio
+B01 E/S [t]: .Value=[T] cursor.operas=[T]  (esperado T / T)
+B02 E/S [Q]: .Value=[ ] cursor.operas=[]  (esperado espaco / vazio)
+B03 Ordem 4000: .Value=0 cursor.ordems=0  (esperado 0 / 0)
+B04 Ordem 12 valida: .Value=12 cursor.ordems=55  (esperado 12 / 55 - o valid nao grava o valor valido, o VFP commita a celula)
+B05 em EOF(.T.): nenhuma excecao, .Value=[ ]  (esperado .T. / espaco)
+B06 INCLUIR linha em branco: Nome.RO=.F.  (esperado .F.)
+B07 INCLUIR fase preenchida: Nome.RO=.T.  (esperado .T.)
+B08 PROCURAR: Nome.RO=.F.  (esperado .F.)
+B09 ALTERAR: Nome.RO=.T.  (esperado .T. - o nome e a chave de SigCdDpr)
+B10 RECNO apos AtualizarEstadoCampos=1 EOF=.F.  (esperado 1 / .F.)
+B11 ValidarNomeLostFocus com nome vazio: OK
+B12 guarda de reentrancia: DGrupo=[FICA]  (esperado FICA - handler saiu sem agir)
+B13 revinculo: Cols=5 Col1.W=40 Col4.W=100 Col1.CurCtrl=[TXT_4C_CEL] Col3.Hdr=[Funcionário]  (esperado 5 / 40 / 100 / TXT_4C_CEL / Funcionario)
+B14 Release OK
+
+DIALOGOS SUPRIMIDOS:
+[31/10/2026 13:18:53] FormSigOpDmp: Informe [E]NTRADA / [S]AÍDA / [P]OSIÇÃO ATUAL...
+[31/10/2026 13:18:53] FormSigOpDmp: Entre com um valor entre 1 e 999...
+[31/10/2026 13:18:53] FormSigOpDmp: Informe [E]NTRADA / [S]AÍDA / [P]OSIÇÃO ATUAL...
+[31/10/2026 13:18:53] FormSigOpDmp: O Nome deve ser informado...
+
+Z: fim

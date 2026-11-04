@@ -1,0 +1,154 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaSel", "fCriptografar", "fGravarLog", "fGerPswDiario"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCKS",
+      "evento": "Init",
+      "linhas": 151,
+      "codigoOriginal": "LParameters _Tipo, _Titulo, _Titulo2, _Documento, _Data, _Empresa, _Fpagto, _Valor\n\nIf Type(\"_Documento\")#\"N\"\n\t_Documento = 0\nEndif\nIf Type(\"_Data\")#\"D\"\n\t_Data = Date()\nEndif\nIf Type(\"_Empresa\")#\"C\"\n\t_Empresa = ' '\nEndif\nIf Type(\"_FPagto\")#\"C\"\n\t_FPagto = ' '\nEndif\nIf Type(\"_Valor\")#\"N\"\n\t_Valor = 0\nEndif\n\nThisForm.zsen    = .F.\nThisForm.NroDoc  = _documento\nThisForm.DatDoc  = _Data\nThisForm.Tipo    = _Tipo\nThisform.usulibs = Usuar\nThisForm.Financ  = .f.\nThisForm.CancItem= .f.\nThisForm.Libfpag = .... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDatamgr = CreateObject,Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDatamgr.Release\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS.usuario",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nIf Lastkey() = 27 And Empty(this.Value)\n\tzsen = .f.\n\tThisform.zsen=.F.\n\tThisform.release\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS.usuario",
+      "evento": "Valid",
+      "linhas": 114,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,totite\n\nusual=''\nsd = .t.\nIf IsEmpty( This.Value )\n\tzsen = .f.\n\tThisform.zsen=.F.\n\tThisform.release\n\tReturn .t.\nEndIf\nDo Case\n\tCase ThisForm.Cancitem\n\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;\n\t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.CancItens = \"S\" and not a.Senhas = ']+Space(6)+[']\n\n\tCase ThisForm.Financ\n\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;\n\t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.limites = \"S\" ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,fCriptografar",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS.usuario",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (!crParam.LiblCreds Or (ThisForm.Tipo # 'LIMITE' And ThisForm.tipo # 'LIBPRDZ2' ) ) And ThisForm.Tipo # 'MAXIMO'\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCKS.senha",
+      "evento": "Valid",
+      "linhas": 65,
+      "codigoOriginal": "local senha,resp,lcQuery\n\nsenha = Chr(254)\nlcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + ThisForm.Usuario.Value + [' order by 1]\nThisForm.poDataMgr.SQLExecute(lcQuery, 'TmpUsu')\n\nIf Used('TmpUsu')\n\tsenha=fCriptografar(TmpUsu.senhas)\nEndIf \n\nThisform.zsen=.F.\n\nIf ( Not crparam.LiblCreds Or (ThisForm.Tipo # 'LIMITE' And ThisForm.tipo # 'LIBPRDZ2' ) ) And ThisForm.tipo # 'MAXIMO'\n\n\tIf IsEmpty(This.Value) Or Padr(this.value,10)#Padr(senha,10)\n\t\tif... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCriptografar,fGravarLog,fGerPswDiario",
+        "metodosFormChamados": "SQLExecute,Tipo = 'LIBERAFPG','",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCKS.usuario.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+; \t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.CancItens = \"S\" and not a.Senhas = ']+Space(6)+['] ",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCKS.usuario.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+; \t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.limites = \"S\" ... [TRUNCADO]",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCKS.senha.Valid",
+      "queryOriginal": "lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + ThisForm.Usuario.Value + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cAtivos,Value",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

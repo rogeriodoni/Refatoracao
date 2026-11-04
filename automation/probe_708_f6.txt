@@ -1,0 +1,38 @@
+=== CENARIO A: instanciacao ===
+VARTYPE(form) = O
+
+=== CENARIO B: metodos da celula (PUBLIC) ===
+ValidarAcessoCotacao   existe=SIM  protected=.F.
+ValidarCotacao         existe=SIM  protected=.F.
+ValidarCotacaoKeyPress existe=SIM  protected=.F.
+GradeCotacaoWhen (nome VELHO, deve ser NAO) = NAO
+
+=== CENARIO C: Column.CurrentControl / Sparse ===
+ColumnCount = 2  Grid.ReadOnly = .F.
+Col1 CurrentControl=[TXT_4C_MOEDA] Sparse=.F. ReadOnly=.F.
+Col2 CurrentControl=[TXT_4C_COTACAO] Sparse=.F. ReadOnly=.F.
+Col2 InputMask=[99999.9999999] Format=[K]
+Col1 classe=[Textboxmoedagridcot_4c]
+Col2 classe=[Textboxcotacaogridcot_4c]
+Col2 txt InputMask=[99999.9999999]
+
+=== CENARIO D: When da celula Moeda (esperado .F.) ===
+Moeda.When() = .F.
+
+=== CENARIO E: Valid da celula Cotacao ===
+ValidarCotacao() = .T.  LASTKEY()=0  CHRSAW()=.F.
+  (LASTKEY apos consumir ENTER = 13)
+  com LASTKEY=13 -> retorno=.T.  CHRSAW()=.T. (enfileirou tecla=SIM)
+
+=== CENARIO F: KeyPress da celula (TAB=9 -> Salvar) ===
+KeyPress(65,0) = .T. (tecla comum: no-op)
+KeyPress(9,0)  = .T. (TAB)
+  Buttons(1).Caption = [\<Salvar]
+  Buttons(1) Visible/Enabled = .T./.T.
+
+=== CENARIO G: When da celula Cotacao (sem SQL) ===
+ValidarAcessoCotacao() = .F.
+Cotacao.When() via classe = .F.
+
+=== dialogos suprimidos ===
+(nenhum)

@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da.
+
+## O que faltava e foi entregue
+
+O cabe├ºalho do form (escrito na Fase 6) j├í identificava o ├║nico item pendente: **o contrato de retorno do `PROCEDURE Unload` legado** ÔÇö `Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs`. No legado esse valor chega a quem abre com `DO FORM ... TO <var>`; o sistema novo abre por `CREATEOBJECT + Show()`, onde o retorno do evento ├® inalcan├º├ível.
+
+Tr├¬s pe├ºas:
+
+| arquivo | adi├º├úo |
+|---|---|
+| `sigopcksBO.prg` | `ObterResultadoSaida()` ÔÇö a **regra**, transcrita literal (sem `ALLTRIM`, como o legado), gravando tamb├®m em `this_cRetorno` (property declarada na Fase 1 e at├® agora nunca escrita) |
+| `Formsigopcks.prg` | `ObterResultadoSaida()` ÔÇö espelho que o chamador l├¬ depois do `Show()` e **antes** do `Release()` |
+| `Formsigopcks.prg` | `Unload()` + `CachearResultadoSaida()` + property `this_cResultadoSaida` ÔÇö o `Unload` dispara **depois** do `Destroy`, e `FormBase.Destroy` j├í zerou o BO; por isso o cache ├® preenchido no funil de fechamento e de novo no `Destroy`, antes do `DODEFAULT()` |
+
+## Verifica├º├úo (medida, n├úo lida)
+
+- **Compila├º├úo** VFP9 dos dois arquivos: limpa, zero `.err`, `.FXP` regerados.
+- **`automation\ProbeCks702Fase8.prg`** ÔÇö 9 provas em runtime, **todas passaram**: fail-closed inicial (`" TESTE"`), autorizado (`"*ADMIN"`), `BO.this_cRetorno` id├¬ntico, cache preenchido pelo `FecharDialogo`, `Unload()` devolvendo o cache, abortar voltando a `" ADMIN"`, form ainda `VARTYPE "O"` depois de fechar (Hide, n├úo Release) e os dois `ObterResultadoSaida` PUBLIC (regra #51).
+- **`automation\VerificarGateFase8Task702.ps1`** ÔÇö o gate da Fase 8 passa pelo ramo **ENTRADA-SEM-BOTAO**, com os 13 ramos anteriores reprovando e `Test-ConfirmacaoDialogoSemBotao = True` (caminho `Valid`/`LostFocus`, como o SIGPRSCN).
+- **05d_validarCompletude** (l├│gica replicada): 0 problemas.
+
+## Os quatro nomes can├┤nicos do CRUD n├úo existem aqui ÔÇö de prop├│sito
+
+O SCX tem 12 objetos e **zero bot├úo**: quem cancela ├® o ESC do `usuario.KeyPress` e o "N├úo" do "Deseja digitar novamente?" (os dois j├í desembocam em `AbortarAutorizacao`); n├úo h├í lista para carregar; e os dois campos s├úo lidos no ponto de uso, como o `This.Value` do `Valid` legado. Grafei esses nomes no cabe├ºalho com o **miolo elidido** (`Btn...Click`, `Form...BO`, `Carregar...Lista`) porque o gate casa substring no arquivo inteiro ÔÇö escrev├¬-los por extenso daria aprova├º├úo por palavra-chave, sem o ramo verdadeiro ser exercitado. A verifica├º├úo confirma: nenhum dos quatro aparece no `.prg`.
+
+**N├úo adicionei item de menu** ÔÇö ├® di├ílogo de autoriza├º├úo chamado por outras telas, nunca pelo menu; os dois irm├úos do mesmo perfil (`FormSIGOPBIN`, `FormSigPrScn`) tamb├®m n├úo t├¬m.
+
+## Achado fora do escopo
+
+`FormSIGOPBIN.prg` (task646) tem o **mesmo** contrato de retorno mas fecha com `THIS.Release()` (linha ~406), transcrito literal do legado ÔÇö o objeto morre antes de o chamador ler, e `ObterResultadoSaida()` fica inalcan├º├ível. N├úo quebra nada hoje porque n├úo h├í nenhum call site ainda, mas vai quebrar no primeiro. N├úo toquei (outro form, outra task); registrei na mem├│ria da li├º├úo Hide-vs-Release como inst├óncia pendente.

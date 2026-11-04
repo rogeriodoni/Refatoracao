@@ -692,14 +692,26 @@ DEFINE CLASS FormSIGREVIS AS FormBase
 
     *--------------------------------------------------------------------------
     * LimparCampos - Restaura filtros para valores padrao.
-    *   Datas = DATE() (hoje), codigos/descricoes em branco, opcoes = Todos(3).
+    *   Datas VAZIAS, codigos/descricoes em branco, opcoes = Todos(3).
+    *
+    *   As datas tem de nascer VAZIAS. O SCX legado nao atribui Value nenhum a
+    *   getDatai/getDataf (so Format/MaxLength/geometria) e o btnReport.Click
+    *   trata vazio como a faixa historica INTEIRA:
+    *       ldDtI = Iif(Empty(getDataI.Value), Ctod('01/01/0001'), ...)
+    *       ldDtF = Iif(Empty(getDataF.Value), Ctod('31/12/9999'), ...)
+    *   e o SIGREVISBO.PrepararDados reproduz isso ({^1900-01-01}/{^2099-12-31}).
+    *   Pre-preenchendo com DATE() o filtro default virava "somente HOJE": o
+    *   usuario abria o relatorio, clicava Visualizar e recebia "nenhum registro"
+    *   mesmo com visitas gravadas - sem erro nenhum na tela. Os proprios
+    *   TextBox ja sao criados com .Value = {}; era so este metodo, chamado no
+    *   Init, que os sobrescrevia. ValidarPeriodo ja tolera data vazia.
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
         LOCAL loc_oPg
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page1
-            loc_oPg.txt_4c_Datai.Value   = DATE()
-            loc_oPg.txt_4c_Dataf.Value   = DATE()
+            loc_oPg.txt_4c_Datai.Value   = {}
+            loc_oPg.txt_4c_Dataf.Value   = {}
             loc_oPg.txt_4c_CdRepr.Value  = ""
             loc_oPg.txt_4c_DsRepr.Value  = ""
             loc_oPg.txt_4c_CdConta.Value = ""

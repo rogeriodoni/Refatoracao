@@ -1285,8 +1285,13 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
     ENDPROC
 
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_oErro, lcApagar
-        loc_lSucesso = .F.
+        *-- loc_oDialogoEtq: o dialogo do tipo 5 (Consulta de Etiquetas nao
+        *-- lidas). DECLARADO AQUI, no topo do metodo, e nao dentro do TRY:
+        *-- o Show() dele roda FORA do TRY (ver abaixo) e precisa da
+        *-- referencia viva depois do ENDTRY.
+        LOCAL loc_lSucesso, loc_oErro, lcApagar, loc_oDialogoEtq
+        loc_lSucesso    = .F.
+        loc_oDialogoEtq = .NULL.
 
         IF !USED("CsRelatorio")
             THIS.this_cMensagemErro = "Execute PrepararDados() antes de Visualizar()"
@@ -1342,7 +1347,18 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     THIS.ExecutarReportForm("SigReBlo", "PREVIEW")
 
                 CASE THIS.this_nTipoRel = 5
-                    DO FORM SigOpEtq WITH THIS
+                    *-- Legado (visualizacao): Do Form SigOpEtq With ThisForm.
+                    *-- CREATEOBJECT, nunca DO FORM: no sistema novo os forms
+                    *-- sao DEFINE CLASS em .prg e nao existe .scx em
+                    *-- projeto\, entao o DO FORM estourava
+                    *-- "File 'sigopetq.scx' does not exist" e o dialogo NUNCA
+                    *-- abria - alem de deixar FormSigOpEtq fora do indice de
+                    *-- carga sob demanda, que le CREATEOBJECT/AddObject e nao
+                    *-- DO FORM (um defeito escondia o outro).
+                    *-- THIS eh o "ThisForm" do legado: o dialogo descobre por
+                    *-- ele o alias do cursor da grade (this_cCursorDados).
+                    *-- So a CRIACAO fica aqui; o Show() vai depois do ENDTRY.
+                    loc_oDialogoEtq = CREATEOBJECT("FormSigOpEtq", THIS)
 
                 CASE THIS.this_nTipoRel = 6
                     THIS.ExecutarReportForm("SigReBlb", "PREVIEW")
@@ -1361,6 +1377,20 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
 
+        *-- Show() do dialogo do tipo 5 FORA do TRY (regra CLAUDE.md #29): ele
+        *-- eh MODAL, logo o Show() BLOQUEIA e todo o uso da tela filha vive
+        *-- dentro dessa chamada. Dentro do TRY, qualquer erro de runtime dela
+        *-- cairia no CATCH acima, a referencia LOCAL morreria e a tela filha
+        *-- fecharia sozinha, com este metodo seguindo adiante.
+        *--
+        *-- E ANTES do "USE IN CsRelatorio" logo abaixo: eh esse alias que a
+        *-- grade do dialogo exibe. Fechar o cursor primeiro deixaria a grade
+        *-- VAZIA, sem erro e sem log.
+        IF VARTYPE(loc_oDialogoEtq) = "O"
+            loc_oDialogoEtq.Show()
+        ENDIF
+        loc_oDialogoEtq = .NULL.
+
         IF USED("CsRelatorio")
             USE IN CsRelatorio
         ENDIF
@@ -1376,8 +1406,12 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
     * par_lComPrompt: .T.=abre dialogo de impressora, .F.=imprime silencioso
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir(par_lComPrompt)
-        LOCAL loc_lSucesso, loc_oErro, lcApagar
-        loc_lSucesso = .F.
+        *-- loc_oDialogoEtq: ver o comentario homonimo em Visualizar() - a
+        *-- referencia tem de sobreviver ao ENDTRY porque o Show() roda fora
+        *-- do TRY.
+        LOCAL loc_lSucesso, loc_oErro, lcApagar, loc_oDialogoEtq
+        loc_lSucesso    = .F.
+        loc_oDialogoEtq = .NULL.
 
         IF !USED("CsRelatorio")
             THIS.this_cMensagemErro = "Execute PrepararDados() antes de Imprimir()"
@@ -1464,7 +1498,15 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     ENDIF
 
                 CASE THIS.this_nTipoRel = 5
-                    DO FORM SigOpEtq WITH THIS
+                    *-- Legado (impressao): Do Form SigOpEtq With ThisForm -
+                    *-- o tipo 5 abre o MESMO dialogo de consulta na via de
+                    *-- impressao, sem REPORT FORM proprio (quem imprime eh o
+                    *-- botao Imprimir de dentro dele). Por isso este CASE nao
+                    *-- olha par_lComPrompt: o legado tambem nao olha, e as
+                    *-- duas vias dele (To Printer e To Printer Prompt) tem
+                    *-- aqui a MESMA linha.
+                    *-- CREATEOBJECT, nunca DO FORM: ver Visualizar().
+                    loc_oDialogoEtq = CREATEOBJECT("FormSigOpEtq", THIS)
 
                 CASE THIS.this_nTipoRel = 6
                     IF par_lComPrompt
@@ -1494,6 +1536,13 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
             MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
+
+        *-- Show() FORA do TRY e ANTES do "USE IN CsRelatorio" - ver o
+        *-- comentario equivalente em Visualizar().
+        IF VARTYPE(loc_oDialogoEtq) = "O"
+            loc_oDialogoEtq.Show()
+        ENDIF
+        loc_oDialogoEtq = .NULL.
 
         IF USED("CsRelatorio")
             USE IN CsRelatorio

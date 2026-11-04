@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da.
+
+## O que reprovava o gate
+
+O gate da Fase 4, no ramo **FLAT (OPERACIONAL)**, exige tr├¬s coisas: `AddObject("grd_4c_*")`, `AddObject("cmg_4c_/cmd_4c_*")` e um m├®todo de carga (`CarregarLista|CarregarDados|MontaGrade`). As grades e os bot├Áes j├í existiam da tentativa anterior ÔÇö faltava **s├│ o m├®todo de carga**. Era o ├║nico motivo da reprova├º├úo.
+
+## Entregue
+
+**`FormSigOpDes.prg`** ÔÇö `CarregarLista()` e `MontaGrade()` (ambos PUBLIC, o harness os chama de fora), `VincularGrade()`/`VincularGradeCota()` para o rebind, `AcessoGradeCota()`; carga ligada ao `InicializarForm`; os dois cursores alinhados ├á estrutura real.
+
+**`SigOpDesBO.prg`** ÔÇö `CarregarDescontos()` e `CarregarCota()` (PUBLIC) mais 5 helpers PROTECTED que reproduzem o pipeline de cursores do `Init` legado (`crDesc`, `crTipo`, `localDes`, `crSigCdDes`), incluindo os 8 `DELETE` de elegibilidade e a pr├®-sele├º├úo a partir de `SigMvItd`.
+
+## Defeitos encontrados no caminho e corrigidos
+
+1. **`TratarNulo(citens, "N")`** no `CarregarDoCursor` (Fase 2) ÔÇö o 2┬║ argumento ├® o *valor padr├úo*, n├úo um c├│digo de tipo: coluna num├®rica NULL gravava a string `"N"` numa property num├®rica. 18 sites corrigidos.
+2. **`TornarControlesVisiveis` for├ºava `grd_4c_Cota.Visible = .T.`**, apagando em sil├¬ncio a regra `fChecaAcesso('SIGCDDES','GERENTE')` do legado ÔÇö a cota da empresa apareceria para qualquer usu├írio.
+3. **Conflito de collation** no join `SigOpTdz.codigos` ├ù `SigCdTbd.codigos` (`SQL_Latin1_General_CP1_CI_AS` ├ù `Latin1_General_CI_AS`, medido no `collations_db.tsv`) ÔÇö o SQL Server recusaria a query inteira em runtime, com o `.prg` compilando limpo. Resolvido com `COLLATE DATABASE_DEFAULT`.
+4. **O CorretorAutomatico injetava `ColumnCount` nos m├®todos de rebind**, o que destruiria o CheckBox de sele├º├úo da grade (Erro144). Suprimido pelo opt-out documentado do pr├│prio pattern.
+
+## Verifica├º├úo
+
+- VFP9 **executa** nesta sess├úo (smoke test com arquivo de sa├¡da, exigido antes de qualquer alega├º├úo). Os dois arquivos **compilam limpos**: `.FXP` gerado, nenhum `.ERR`.
+- Teste funcional do motor de elegibilidade em VFP9 real: 11 tipos ÔåÆ **4 (2, 8, 9, 12)**; cen├írio DE/POR ÔåÆ **2, 8, 9**; `APPEND FROM DBF()` casou as colunas por nome mesmo com ordem diferente nos dois cursores.
+- Auditorias: completude **0 problemas** nos dois arquivos, `VerificarFuncoesNaoDefinidas` OK, `VerificarMetodoProtegidoChamadoDeFora` OK, `VerificarPropriedadesInexistentes` OK, `ValidadorSQLSchema` **PASSOU** (13 statements, 683 tabelas).
+
+## O que ficou de fora, e por qu├¬
+
+Duas regras de elegibilidade dependem do cursor de **itens do movimento**, que n├úo faz parte do contrato do `Init` (a Fase 3 recebe o item atual, n├úo a lista): a do **tipo 12 (brinde)**, cujo `valmin` ├® comparado ao total dos *outros* itens, e o segundo ramo do `OR` da regra **jolie**. Deliberadamente **n├úo** filtro esses ÔÇö filtrar com um total arbitr├írio *retiraria* da tela um desconto que o legado concede. O ramo jolie aplicado ├® subconjunto do que o legado apaga. Os tipos 6/7/10 saem, que ├® exatamente o que o legado faz sem cursor de subn├¡vel. Tudo registrado em coment├írio no c├│digo.
+
+Os handlers de toggle do CheckBox da grade, o `CalcTots` e os `Click` de Confirmar/Cancelar seguem nas Fases 7/8, como o cabe├ºalho do arquivo j├í declarava (o `WARN #185` do corretor confirma esse ponto).
+
+Uma ressalva honesta: a auditoria de collation devolveu `OK`, mas testei removendo o `COLLATE` e ela **continuou** devolvendo `OK` ÔÇö o parser dela n├úo acompanha SQL concatenado. Portanto aquele `OK` n├úo ├® evid├¬ncia; a justificativa ├® a medi├º├úo direta no mapa de collations. Gravei isso na mem├│ria, junto com o formato exato exigido pelo opt-out do `ColumnCount`.

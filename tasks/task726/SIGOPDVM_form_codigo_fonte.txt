@@ -1,0 +1,618 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPDVM.SCX
+* Data/Hora: 31/10/2026 19:01:49
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDVM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPDVM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPDVM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPDVM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grid1
+  Parent: SIGOPDVM
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDVM.Grid1.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDVM.Grid1.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGOPDVM
+  Class: shape
+  BaseClass: shape
+
+Objeto: CmdCat
+  Parent: SIGOPDVM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM
+------------------------------------------------------------
+  Height = 200
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Diferenças Vendas x Mapa Resumo"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPDVM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 92
+  Left = 94
+  Panel = 1
+  ReadOnly = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 94
+  Width = 611
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 90
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.InputMask = "999,999.99"
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.Width = 90
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999.99"
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.Width = 90
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.InputMask = "999,999.99"
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.Width = 90
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.InputMask = "999,999.99"
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 6
+  Column5.Width = 90
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.InputMask = "999,999.99"
+  Column5.Name = "Column5"
+  Column6.Comment = "999,999.99"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 7
+  Column6.Width = 90
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 1
+  Column7.Width = 33
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Itens"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Mapa"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Não Fiscal"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Diferença Mr"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Diferença IT"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column6.Text1
+------------------------------------------------------------
+  Comment = "999,999.99"
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Caixa"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Grid1.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 698
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDVM.CmdCat
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "CmdCat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDVM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pcForm
+
+ThisForm.DataSessionId = pcForm.DataSessionId
+
+Select crImpressao
+Zap
+
+Select crSigFiMpi
+
+Scan
+
+	Select Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixa ; 
+	       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value ;
+	             And Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;
+	             And Substr(ecfs,1,3) = crSigFiMpi.nCaixa ;
+	       Group By 1 Into Cursor crTotCaixa ReadWrite
+	       
+	Select Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixaI ; 
+	       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value And ;
+	       Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;
+	       And Substr(ecfs,1,3) = crSigFiMpi.nCaixa Group By 1 Into Cursor crTotCaixaI
+
+	Select Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixaFIN ; 
+	       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value And ;
+	       Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;
+	       And Substr(ecfs,1,3) = crSigFiMpi.nCaixa Group By 1 Into Cursor crTotCaixaFIN
+
+	If round(crSigFiMpi.VlContabil,2)+round(crSigFiMpi.iss,2)+Round(crSigFiMpi.Isento, 2) <> round(crTotCaixa.Valos,2) Or round(crTotCaixa.Valos,2) <> round(crTotCaixaI.Valos,2)
+		Insert Into crImpressao (Datas, Emps, Caixas, ValCxs, ValItens, ValMrs) ; 
+		       Values (pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value,;
+		               pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value,;
+		               crSigFiMpi.nCaixa, crTotCaixa.Valos-crTotCaixaFIN.Valos, crTotCaixaI.Valos,;
+		               crSigFiMpi.VlContabil+crSigFiMpi.iss)
+	Endif
+
+EndScan 
+
+Select Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixa ; 
+       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value ;
+             And Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;
+       Group By 1 Into Cursor crTotCaixa ReadWrite
+
+Scan
+	Select  crSigFiMpi
+	Locate for nCaixa = crTotCaixa.cCaixas
+	If Eof()
+		Select Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixaI ; 
+		       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value And ;
+		       Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;
+		       And Substr(ecfs,1,3) = crTotCaixa.cCaixas Group By 1 Into Cursor crTotCaixaI
+
+		Insert Into crImpressao (Datas, Emps, Caixas, ValCxs, ValItens, ValMrs) ; 
+		       Values (pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value,;
+		               pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value,;
+		               crTotCaixa.cCaixas, crTotCaixa.Valos, crTotCaixaI.Valos,0)
+	Endif
+EndScan 			
+
+Select crImpressao
+Index On Caixas Tag Caixas
+Set Order To Caixas
+Go Top
+
+ThisForm.Grid1.RecordSource = 'crImpressao'
+ThisForm.Grid1.Column1.ControlSource =   'crImpressao.ValCxs'
+ThisForm.Grid1.Column2.ControlSource =   'crImpressao.ValItens'
+ThisForm.Grid1.Column3.ControlSource =   'crImpressao.ValMrs'
+ThisForm.Grid1.Column4.ControlSource =   'crImpressao.ValNfs'
+ThisForm.Grid1.Column5.ControlSource =   'crImpressao.ValCxs-crImpressao.ValMrs'
+ThisForm.Grid1.Column6.ControlSource =   'crImpressao.ValCxs-crImpressao.ValItens'
+ThisForm.Grid1.Column7.ControlSource =   'crImpressao.Caixas'
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDVM.CmdCat
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

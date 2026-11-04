@@ -1,0 +1,26 @@
+FASE 2 - SIGOPCORBO.prg
+SMOKE TEST VFP9 (STRTOFILE+QUIT): FALHOU - exit=0, .FXP criado, saida AUSENTE
+  => nesta sessao o vfp9.exe COMPILA mas NAO EXECUTA o script (-T)
+  => NAO ha como provar instanciacao/runtime; so COMPILACAO
+
+COMPILACAO (BO passado direto como script de -T):
+  sigopcorbo.FXP GERADO (05:51:24, posterior ao .prg 05:50:33)
+  SEM ARQUIVO .ERR
+
+CONTROLE NEGATIVO (copia do BO + PUBLIC PROCEDURE no fim, regra 9.1):
+  ctrlnegbo.ERR GERADO, apontando SO as linhas acrescentadas:
+    Error in line 426: Syntax error.
+    Error in line 427: Statement is not valid in a class definition.
+    Error in line 428: Nesting error.
+  => o detector funciona E as 423 linhas do BO compilam limpas
+
+AUDITORIAS ESTATICAS:
+  ValidadorSQLSchema (683 tabelas, 2 statements): PASSOU - 0 coluna invalida
+    inclui Validate-InsertNotNull (gate da regra 22)
+  VerificarFuncoesNaoDefinidas (projeto\app, 1064 .prg): 0 chamada orfa
+  VerificarMetodoProtegidoChamadoDeFora: OK
+  RETURN dentro de TRY/CATCH: 0 (profundidade final 0)
+  Acentos literais em .prg: 0 (todos via CHR())
+  this_X .Value (regra 43): 0
+  TODO/FIXME/HACK/PLACEHOLDER/"nao implement": 0
+  PUBLIC PROCEDURE/FUNCTION em DEFINE CLASS (regra 9.1): 0

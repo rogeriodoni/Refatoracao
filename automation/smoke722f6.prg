@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VIVO", "C:\4c\automation\smoke722f6.txt")
+QUIT

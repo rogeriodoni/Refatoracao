@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is done. Here's what I delivered and verified.
+
+## What was implemented in `FormSIGOPCOR.prg`
+
+The two buttons the legacy actually has (`SIGOPCOR.Sair`, `ButtonCount = 2`) are now wired and functional:
+
+| M├®todo | Origem |
+|---|---|
+| `BtnConfirmarClick` | `Sair.Ok.Click` ÔÇö guarda da faixa + grava├º├úo + `Release` |
+| `BtnCancelarClick` | `Sair.Cancela.Click` ÔÇö `ThisForm.Release` |
+| `BtnEncerrarClick` | alias de sa├¡da que o harness `TesteAutomatico` procura (delega) |
+| `ContarRetificacoesDigitadas` / `GravarRetificacoesDaFaixa` / `GravarOcorrencia` | o `Scan` do `Ok.Click`, decomposto |
+
+Plus the two `BINDEVENT`s in `ConfigurarBotoes` (deliberately deferred by Fase 4 ÔÇö binding to a method that didn't exist yet would abort `Init`).
+
+**No `BtnIncluir/Alterar/Visualizar/Excluir`**, because this legacy has no CRUD bar: I measured the dump ÔÇö no `frmcadastro`, no `Grupo_Op`, no `pcEscolha`, no CRUD-named button, no `<Verbo>.Click`. The gate's carve-out covers exactly this; I also kept those four identifiers out of the comments, since the gate matches names in the whole `.prg` and citing them would make it pass for the wrong reason.
+
+## Two things worth your attention
+
+**1. The legacy `Ok.Click` arrived empty.** Only 5 methods have code in `SIGOPCOR.SCX` (`Load`, `Init`, two `When`s, one `KeyPress`) ÔÇö the same extractor captured `Ok.Click` for the sibling `SIGOPCCO`, so the gap is the legacy's, not the extraction's (the sibling still has a stray `Suspend` in it). So I continued the line Fases 2 and 6 already established: transcribe from the family. The caller (`SIGCDCNF.InserirCarta.Click`) confirmed the role ÔÇö this screen *creates* letters for a range, while `SIGOPCCO` *edits* one note, which is why the sibling's opening `Delete`/`Update` doesn't apply here.
+
+**2. One assumption, stated plainly.** `cnfis` is `char(6)`, so the legacy's `between` is a filter, not an enumeration ÔÇö but grava├º├úo needs concrete values. With the BO exposing no query over `SigMvNfi`, the only source is the two typed limits. So: equal limits ÔåÆ the literal typed value; different and both numeric ÔåÆ one row per note with the typed width preserved; otherwise ÔåÆ **refuses** with the legacy's own message rather than guessing. I left it deliberately narrow.
+
+What I did **not** port: the `SigMvNfi.Correcs` flag update (the sibling keeps it in an atomic T-SQL batch in its BO). `SIGOPCORBO` has no equivalent, and adding SQL to the form would break the layering ÔÇö so it's a documented pendency, not a stub that would report success without setting the flag.
+
+## Verification
+
+Compiles clean with the `.fxp` deleted (no `.ERR`). `Test-CompletudeCodigo` passes on form and BO. `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` and `VerificarLookupEmKeyPress` report nothing for this file. Gate simulation: 3 handlers ÔëÑ the required 2, via the correct route.
+
+A runtime probe (`automation/probe_fase7_sigopcor.prg`, results in `tasks/task707/probe_fase7.txt`) instantiates the form ÔÇö proving both `BINDEVENT`s bind ÔÇö and exercises 9 scenarios. It caught a real defect I'd introduced: called without the validation first, `GravarRetificacoesDaFaixa` read empty limits and wrote rows with a **blank** `cnfis`. I made that dependency explicit with a guard; the probe now confirms 0 rows on that path.
+
+One note on the probe itself: its first "fixed" run still reported failures because VFP ran the probe's own stale `.fxp` (CLAUDE.md #29 ÔÇö it bit the tool, not the form). After deleting it: `000123..000123` ÔåÆ 2 rows literal; `100..102` ÔåÆ 6 rows (100/101/102); `000100..000102` ÔåÆ width preserved; inverted and non-numeric ranges ÔåÆ 0, refused; no retifica├º├úo ÔåÆ nothing written and the screen stays open; and with no DB connection `Salvar` fails, the loop stops, and the form does **not** close ÔÇö no false success.

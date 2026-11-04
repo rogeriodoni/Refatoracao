@@ -1,0 +1,53 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 executada ÔÇö `FormSigOpCrp` (task714)
+
+### O que a fase pedia vs. o que o legado tem
+
+O prompt pede `ConfigurarPaginaDados()` com "metade dos campos da Page2". Este legado **n├úo tem Page2 nem PageFrame** (`SigOpCrp.SCX`: 520x200, `TitleBar=0`, `WindowType=1` ÔÇö di├ílogo modal "Procura") e tem **exatamente 3 campos**, os 3 j├í entregues na Fase 4, porque a superf├¡cie de campos ├® ├║nica. Criar uma Page2 ou um `ConfigurarPaginaDados` vazio violaria o PILAR 1 e a regra de completude ÔÇö ent├úo **n├úo criei nenhum dos dois**.
+
+Confirmei que o gate j├í aceita isso pelo ramo **CAPTURA** (o fix do `Test-LegadoTokenGradeProprioForm`, que reconhece que o `grd_lancamento` do dump ├® a grade do **FormPai**):
+
+```
+temListaEstritaF5 = False   legadoCapturaF5 = True
+campos legado = 3 -> piso 2 | campos migrado = 3
+VEREDITO FASE 5 = True
+```
+Com **controle negativo**: c├│pia do form sem os `AddObject(..., "TextBox")` ÔåÆ `VEREDITO = False`. A primeira vers├úo do negativo renomeava o 1┬║ argumento e passava igual ÔÇö o gate conta a *classe*, n├úo o prefixo `txt_4c_`; sem refaz├¬-lo eu teria "provado" o gate com um harness cego.
+
+### O trabalho que de fato havia: a base de um campo s├úo DUAS fontes
+
+O migrador transcreveu s├│ os overrides do SCX e descartou os defaults da **classe** do framework (`fweditdata`/`fwget`), medidos em `docs/FRAMEWORK_class_codigo_fonte.txt`. Cinco corre├º├Áes:
+
+| # | Corre├º├úo | Origem |
+|---|---|---|
+| 1 | `Format = "K"` em Valor e Hist├│rico (seleciona conte├║do ao entrar) | classe `fwget`. Lan├ºamento **n├úo** leva ÔÇö `fweditdata` n├úo tem Format |
+| 2 | `Themes = .F.` nos 3 | classe. Sem ele, `SpecialEffect=1` e `BorderColor` ÔÇö que o migrador transcreveu corretamente do dump ÔÇö n├úo t├¬m efeito |
+| 3 | `FontName`/`FontSize` Tahoma 8 nos 3 | classe; `AddObject` n├úo herda fonte do Form |
+| 4 | `txt_4c_Lancamento.Height` 21 ÔåÆ **23** | o dump n├úo declara Height; o 21 n├úo tinha referente em lugar nenhum |
+| 5 | `.Value = 0.00` (form) e `this_nValors = 0.00` (BO, 4 sites) | legado: `getValor.Value = 0.00` |
+
+Deliberadamente **fora**: `InputMask` e `MaxLength` (nem dump nem classe declaram ÔÇö campos de *crit├®rio de busca*, nada ├® gravado, logo a regra #19 n├úo se aplica) e `DisabledBackColor/ForeColor` (inalcan├º├íveis ÔÇö o di├ílogo nunca desabilita campo).
+
+### Provado em VFP9 (smoke test verde ÔåÆ runtime, n├úo s├│ compila├º├úo)
+
+`COMPILE` dos dois arquivos: `FXP=SIM / ERR=N├âO`. Controle negativo: c├│pia com `PUBLIC PROCEDURE` gerou `.ERR` apontando **s├│** as linhas acrescentadas ÔÇö prova que o detector funciona *e* que as 678 linhas est├úo limpas.
+
+`CREATEOBJECT` com form pai falso retornou objeto, 520x200, `Top=50 / Left=480` = `(100+900)-520` (a f├│rmula do Init legado), zero erro suprimido:
+
+```
+txt_4c_Lancamento  H=23 Fnt=Tahoma/8 Fmt=[]  Thm=.F. SpE=1 Algn=3
+txt_4c_Valor       H=23 Fnt=Tahoma/8 Fmt=[K] Thm=.F. SpE=1
+txt_4c_Historico   H=23 Fnt=Tahoma/8 Fmt=[K] Thm=.F. SpE=1
+SET DATE=BRITISH / CENTURY=ON -> data exibe 30/10/2026 (regra #9.4 ok)
+BO.this_nValors -> txt.Text = [       0,00]      <- round-trip pelo handler real
+```
+
+O `0.00` era diverg├¬ncia **vis├¡vel**: medido, `.Value = 0.00` exibe `0,00` e `.Value = 0` exibe `0`. Ia escapar ÔÇö `TRANSFORM()` devolve `"0"` para os dois; s├│ a property `.Text` distingue. Virou mem├│ria nova (`feedback_literal_numerico_decimais_eh_dado_visual`), e os dados da classe `fweditdata` foram anexados ├á mem├│ria que j├í existia sobre dump-vs-classe.
+
+Uma afirma├º├úo que **n├úo** medi: que o tema do Windows ignora `SpecialEffect`/`BorderColor` quando `Themes=.T.` ÔÇö n├úo h├í como capturar a tela aqui. Transcrever `Themes=.F.` se justifica de todo modo pelo PILAR 1 (o controle legado *├®* `Themes=.F.`); a explica├º├úo do mecanismo est├í no coment├írio como raz├úo, n├úo como medi├º├úo.
+
+Arquivos: `FormSigOpCrp.prg` (595ÔåÆ678 linhas) e `SigOpCrpBO.prg` (712ÔåÆ716), ambos CRLF preservado (CR=LF conferido por contagem de bytes), diff cir├║rgico, zero caractere acentuado literal, zero `RETURN` em `TRY`.

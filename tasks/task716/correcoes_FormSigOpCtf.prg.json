@@ -1,0 +1,49 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpCtf.prg",
+    "timestamp":  "2026-10-31T03:43:08",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-001-RETURN-NO-TRY",
+                          "Linha":  425,
+                          "Original":  "RETURN .F.",
+                          "Corrigido":  "",
+                          "Descricao":  "Pattern #1 WARNING: 5 RETURN dentro de TRY/CATCH/FINALLY. Medido no VFP9: TODO RETURN executado dentro de TRY...ENDTRY dispara \u0027RETURN/RETRY statement not allowed in TRY/CATCH\u0027 em RUNTIME (o .prg compila limpo) -- vale para RETURN bare e com valor, no TRY, no CATCH e no FINALLY, com ou sem clausula FINALLY, em procedure solta e em metodo de classe. Guarda de early-exit so quebra quando a condicao e atingida (validacao falha, campo vazio, SQLEXEC falha), por isso o caminho feliz passa nos testes. FIX MANUAL (nao automavel por regex, exige entender o escopo): declarar LOCAL loc_lProsseguir = .T.; trocar cada RETURN por loc_lProsseguir = .F.; envolver o codigo seguinte em IF loc_lProsseguir ... ENDIF; deixar o RETURN unico DEPOIS do ENDTRY. NUNCA trocar \u0027RETURN \u003cvalor\u003e\u0027 por \u0027\u003cvar\u003e = \u003cvalor\u003e\u0027 sem envolver o resto do bloco -- isso descarta o early-exit e troca um erro visivel por gravacao errada silenciosa. EXIT e LOOP dentro do TRY sao seguros (medidos). Sites: L425 em CarregarDadosEmpresaSiTef (bloco TRY); L440 em CarregarDadosEmpresaSiTef (bloco CATCH); L1533 em SenhaGotFocus (bloco TRY); L1543 em SenhaGotFocus (bloco TRY); L1551 em SenhaGotFocus (bloco CATCH). Origem: Erro159 (2026-09-16, FormCEP.ValidarEstadosLista ao filtrar pela UF)."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  998,
+                          "Original":  "BINDEVENT(THIS.txt_4c_SENHA,   \"LostFocus\", THIS, \"SenhaLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup SenhaLostFocus. NAO trocado para KeyPress: a escolha do evento eh de desenho, nao de sintaxe. LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  1000,
+                          "Original":  "BINDEVENT(THIS.txt_4c_Digitos, \"LostFocus\", THIS, \"DigitosLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup DigitosLostFocus. NAO trocado para KeyPress: a escolha do evento eh de desenho, nao de sintaxe. LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  1001,
+                          "Original":  "BINDEVENT(THIS.txt_4c_Cartao,  \"LostFocus\", THIS, \"CartaoLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup CartaoLostFocus. NAO trocado para KeyPress: a escolha do evento eh de desenho, nao de sintaxe. LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  1003,
+                          "Original":  "BINDEVENT(THIS.txt_4c_Codigo,  \"LostFocus\", THIS, \"CodSegLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup CodSegLostFocus. NAO trocado para KeyPress: a escolha do evento eh de desenho, nao de sintaxe. LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      }
+                  ],
+    "totalCorrecoes":  6
+}

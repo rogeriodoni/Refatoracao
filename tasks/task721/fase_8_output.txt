@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. I reviewed `Formsigopdiv.prg` (1645 lines) and confirmed every Phase 8 deliverable was already fully implemented from prior work in this session:
+
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö all with real logic delegating to the operational flow (no stubs/MsgAviso placeholders)
+- `FormParaBO()`/`BOParaForm()` ÔÇö cover all 4 BO properties touched from the form (`this_nNops`, `this_cOperacao`, `this_cEmps`, `this_cProduto`)
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()` ÔÇö all implemented against this form's actual state model (Grade/Grade2 + GrupoSalva/GrupoConf, since this OPERACIONAL form has no CRUD PageFrame)
+
+I verified:
+- No TODO/FIXME/stub markers in either `Formsigopdiv.prg` or `sigopdivBO.prg`
+- All VFP9 block keywords balance (44 PROCEDURE/ENDPROC, 43 WITH/ENDWITH, 5 TRY/ENDTRY, 80 IF/ENDIF in the form; 13/13, 10/10, 127/127 in the BO)
+- The BO's `BuscarOP`, `GerarNovaOP`, `ConfirmarGravacao`, `RollbackTransacao` are all PUBLIC (regra #51 ÔÇö forms never call PROTECTED BO methods)
+- Menu wiring (`AbrirFormsigopdivDivisao`/`AbrirFormsigopdivReinicia` in `menu.prg`) and `indice_classes.txt` entries are already in place with `GarantirClasse`
+
+The only gap was the file header comment still labeled "Fase 7/8" ÔÇö I updated it to document the Fase 8 consolidation (what FormParaBO/BOParaForm cover and why Habilitar/Limpar/Carregar/Ajustar diverge from the CRUD template). No functional code changes were needed; this form was already at full parity.

@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da: `C:\4c\projeto\app\classes\SigOpCpoBO.prg` criado (21 KB, 387 linhas, CRLF, ASCII puro).
+
+## O que o form ├® (lido do dump, n├úo presumido)
+
+`SIGOPCPO` **n├úo ├® cadastro** ÔÇö ├® um **di├ílogo modal de SELE├ç├âO** (`WindowType = 1`, `TitleBar = 0`, `ControlBox = .F.`) aberto por um form pai (`Init` legado recebe `LParameters pFrm, pKey`). Lista a composi├º├úo do produto, o usu├írio marca componentes, e no **OK** s├│ as linhas marcadas permanecem na grade; no **Cancelar**, nenhuma. **N├úo grava em tabela alguma** ÔÇö todo `Insert Into`/`Replace`/`Delete` do legado tem destino cursor local (`crGrade`, `crRodape`); o acesso remoto ├® 100% `Select`. Por isso o BO **n├úo sobrescreve** `Inserir()`/`Atualizar()`/`ExecutarExclusao()` (regra #22: lista de colunas vem do schema, nunca de adivinha├º├úo).
+
+## Propriedades: 42 declaradas
+
+`this_cTabela = "SigPrCpo"`, `this_cCampoChave = "cidchaves"` (PK real ÔÇö constraint `sigprcpo_cidchaves`).
+
+Todos os tipos conferidos no **`docs/schema.sql` can├┤nico** lido com `Get-Content -Raw` (UTF-16 ÔÇö regra #14), n├úo no `schema_ascii.sql` da task.
+
+Dois achados que registrei nos coment├írios porque s├úo armadilha de reescrita:
+
+| Propriedade | O migrador tenderia a ler | O legado **realmente** l├¬ |
+|---|---|---|
+| `this_nPcompos` | `SigPrCpo.pcompos` numeric(11,3) | **`b.PVens`** (`SigCdPro.pvens` numeric(11,5)) `AS PCompos` |
+| `this_cMoeds` | `SigPrCpo.moeds` char(3) | **`b.Moevs`** (`SigCdPro.moevs` char(3)) `AS Moeds` |
+
+As colunas pr├│prias de `SigPrCpo` existem e **n├úo s├úo usadas** ÔÇö ler a origem errada mudaria valor unit├írio e total em sil├¬ncio. Mesmo caso de `this_nTotas`: `SigPrCpo.totas` existe mas o legado **sempre recalcula** `(a.Qtds * b.PVens)`.
+
+Tamb├®m preservei o `Where Marcas` dos totais como crit├®rio de neg├│cio (regra #17 ÔÇö linha desmarcada n├úo entra na soma) e o `Custos = 2` do filtro de `SigCdTpc`, ambos transcritos, n├úo inferidos.
+
+## Verifica├º├úo executada
+
+- **Validador de completude (`Test-CompletudeCodigo`)**: rodei os 4 regexes exatos do orquestrador ÔåÆ **0 problemas**. O `Init` conta 56 linhas de c├│digo real. Cuidei de n├úo escrever "n├úo implementado" (falso positivo conhecido do regex `nao implement`).
+- **Compila├º├úo VFP9 real**: `COMPILE` ÔåÆ **sem erros**, `.FXP` gerado. Artefatos de teste e o `.fxp` removidos depois.
+- Zero literais acentuados (CHR() onde necess├írio), zero `RETURN` dentro de `TRY`, zero `PUBLIC` em `DEFINE CLASS`, zero `MESSAGEBOX`, `TRY/ENDTRY` balanceado.
+
+## Ponto de aten├º├úo para a Fase 2
+
+O gate da Fase 2 tem exce├º├úo *fail-closed* para BO somente-leitura, e uma das 4 provas exige que **todo** alvo de `Insert Into` seja cursor declarado no pr├│prio dump. `crRodape` ├® declarado (`Create Cursor` no `Load`), mas **`crGrade` n├úo ├®** ÔÇö ele pertence ao form pai no legado, que aqui s├│ o faz `Zap`. Ent├úo a exce├º├úo provavelmente ser├í reprovada e o gate vai exigir os tokens `Inserir`/`Atualizar`. Deixei o BO preparado para a decis├úo de arquitetura correta: `this_cCursorGrade` ├® propriedade do BO, documentada como "na arquitetura nova ele ├® criado e populado por este BO, e o form pai o l├¬ depois que o di├ílogo fecha" ÔÇö o que resolve a depend├¬ncia do cursor alheio sem inventar INSERT.

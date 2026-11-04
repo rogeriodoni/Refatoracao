@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. Arquivo criado: `C:\4c\projeto\app\classes\SigOpCprBO.prg` (506 linhas, CRLF preservado).
+
+## O que a an├ílise do legado mostrou
+
+`SIGOPCPR` ├® um **di├ílogo modal de c├│pia** aberto por um form pai (`LParameters poForm, pOperacao, pComissao`), com 2 campos e 2 bot├Áes. O achado que define todo o BO: a flag `pComis` faz a **mesma tela** copiar **duas coisas diferentes**:
+
+| `pComis` | Tabelas | Chave do usu├írio | Largura/MaxLength (do Init legado) |
+|---|---|---|---|
+| `.T.` | `SigCmCab` + `SigCmItn` | `cods` char(40) | 290 / 40 |
+| `.F.` | `SigPcOop` + `SigPcOoI` | `processos` char(20) | 150 / 20 |
+
+Colunas conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14). As colunas que o legado **sobrescreve** ap├│s o `Scatter Memvar`/`Insert From Memvar` viraram propriedades ÔÇö e `SigCmItn.pkchaves` / `SigPcOoI.cidchaves` s├úo PK, logo `fUniqueIds()` **por linha** (um valor ├║nico reaproveitado colidiria no ├¡ndice a partir do 2┬║ item). O contador do processo ├® `fGerUniqueKey('SigPcOoP')` (grafia exata = `SIGSYSEQ.valor`), com retorno 0 como sentinela de falha, igual ao legado.
+
+Tamb├®m documentei no cabe├ºalho, para as fases seguintes: a c├│pia escreve em 2 tabelas e a conex├úo nasce com `Transactions = 2` / `@@TRANCOUNT = 1`, ent├úo `BEGIN`/`COMMIT` em `SQLEXEC` separados s├│ aninham ÔÇö da├¡ a property `this_cNomeSavepoint` para o lote T-SQL ├║nico.
+
+## Entregue
+
+Propriedades (par├ómetros do di├ílogo, nomes de tabela, constantes do legado, colunas sobrescritas, origem lida do banco, resultado, cursores, dados do `fGravarLog`), `Init()`, mais os acessores que o form e as fases seguintes consomem: `ConfigurarModalidade`, `ObterTamanhoChave`, `ObterTabelaCabecalho`, `ObterTabelaItens`, `ObterCampoChave`, `ObterChavePrimaria` (PROTECTED), `LimparDados`, `FecharCursor` (com o guard de `Buffering` da regra #52) e `Destroy` com `DODEFAULT()`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa**: `.FXP` gerado, `.ERR` ausente ÔÇö com **controle negativo** (c├│pia do arquivo + `PUBLIC PROCEDURE`, regra #9.1) produzindo `.ERR` **apenas** nas linhas 509-511 acrescentadas, o que prova que o detector funciona e que as 506 linhas do BO est├úo limpas.
+- **Runtime provado** (smoke test do VFP9 passou): `CREATEOBJECT("SigOpCprBO")` devolve objeto; `this_cTabela`/`this_cCampoChave` = `SigPcOop`/`codigos`; altern├óncia de modalidade devolve o par de tabelas e a largura certos (20ÔåÆ`SigPcOop`/`processos`, 40ÔåÆ`SigCmCab`/`cods`); origem truncada em 20; `LimparDados` zera o estado **preservando** origem e modalidade; `ObterChavePrimaria` PROTECTED e os acessores p├║blicos (regra #51). Zero di├ílogos suprimidos.
+- **Gate de completude** (r├®plica de `Test-CompletudeCodigo`): 0 problemas. Zero acentos literais, zero `this_X .Value`, zero `RETURN` dentro de `TRY`, zero `MESSAGEBOX`/`ISEMPTY`/`MostrarAviso`.
+
+N├úo verificado: nada que dependa do SQL Server (as queries entram na Fase 2) ÔÇö o probe rodou com `gnConnHandle = -1`, e `DataAccess.Init` n├úo conecta.

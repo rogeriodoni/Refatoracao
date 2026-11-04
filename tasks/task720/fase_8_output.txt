@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Final file: `C:\4c\projeto\app\forms\operacionais\FormSigOpDet.prg` (1357 lines, CRLF preserved).
+
+## What Fase 8 added
+
+The "ficha" of this screen is the **current grid row** (one `SigMvFtc` row per Caracteristica/Complemento), so the three canonical methods come from it:
+
+| M├®todo | Escopo medido | Trabalho real |
+|---|---|---|
+| `CarregarLista()` | P├ÜBLICO | funil ├║nico: recarrega `cursor_4c_Itens` ÔåÆ re-bind ÔåÆ repinta |
+| `FormParaBO()` | PROTECTED (herdado) | linha corrente ÔåÆ propriedades do BO |
+| `BOParaForm()` | PROTECTED (herdado) | BO ÔåÆ linha corrente |
+| `AjustarBotoesPorModo()` | P├ÜBLICO | `Column.ReadOnly` por modo, depois do `Grid.ReadOnly` (#18) |
+| `VincularGradeDet` / `VincularColunaDet` / `RepintarGradeDet` | PROTECTED | bind em FONTE ├ÜNICA + `GO TOP`/`Refresh` (#21) |
+
+Dois defeitos latentes consertados no caminho:
+
+1. **O bind da grade n├úo sobrevivia a uma recarga.** `SigOpDetBO.CarregarItens()` fecha e recria o alias `cursor_4c_Itens` ÔÇö com a grade j├í bindada isso zera o `ColumnCount` e destr├│i os TextBox das `Column`, deixando um ret├óngulo branco sem erro e sem log. O bind saiu do `ConfigurarGrade` e virou fonte ├║nica reaplicada pelo funil. Medido: depois de `CarregarLista()` chamada de fora, `ColumnCount=3`, larguras `155/155/255`, caption, `CurrentControl` e `Sparse` intactos.
+2. **`FormParaBO` reafirma o contexto** (`empdopnums`/`cpros`) depois do `CarregarDoCursor` ÔÇö s├úo do form, n├úo da linha; uma linha em branco zeraria no BO justamente as chaves que `GravarItens()` usa no `DELETE`/`INSERT`.
+
+Os dois `Valid` de c├®lula passaram a gravar pelo par em vez de `REPLACE` solto ÔÇö comportamento id├¬ntico ao legado, inclusive o `Replace Resps With []` ao escolher Complemento.
+
+## Corre├º├úo de rumo durante a fase
+
+Declarei `FormParaBO`/`BOParaForm` sem modificador e o probe mostrou `PEMSTATUS(...,2) = .T.`: **`FormBase` os declara `PROTECTED`** (linhas 285/280) e VFP9 n├úo deixa a subclasse alargar escopo herdado. Passaram a levar `PROTECTED` expl├¡cito ÔÇö omitir n├úo os tornaria p├║blicos, s├│ esconderia o fato. `CarregarLista`/`AjustarBotoesPorModo` n├úo existem em `FormBase` e s├úo p├║blicos de verdade, como o harness de teste exige (#3).
+
+## Verifica├º├úo
+
+- **Smoke test passou** (o script escreveu em disco), ent├úo o que segue ├® execu├º├úo real, n├úo infer├¬ncia de `.fxp`:
+- `COMPILE` limpo: `.fxp` presente, `.err` ausente ÔÇö com **controle negativo** (c├│pia com `PUBLIC PROCEDURE` injetado) gerando `.ERR` apontando *s├│* as 3 linhas acrescentadas, o que prova que o detector funciona.
+- **Probe de runtime, 19 checkpoints, `exit=0`, zero di├ílogos suprimidos**: instancia, grade bindada, `ALTERAR` ÔåÆ colunas edit├íveis, `VISUALIZAR` ÔåÆ `Column.ReadOnly=.T.` com `Grid.ReadOnly=.F.`, round-trip linhaÔåÆBOÔåÆlinha fechando (`ctits` AZULÔåÆVERDE, `resps` limpo, `ccars`/`ordens` preservados), reload preservando o bind, `Release()` limpo.
+- **Gate `case 8` do orquestrador rodado standalone: `VEREDITO=PASSA`.**
+- `Test-CompletudeCodigo`: nenhum TODO/stub/procedure vazia.
+- Zero acentos literais, zero `this_X .Value` (#43), zero `MESSAGEBOX`/`ISEMPTY`/`.Self`/`Controls("nome")`, zero `RETURN` dentro de `TRY`, e todos os 6 m├®todos do BO chamados pelo form s├úo p├║blicos nos dois n├¡veis da heran├ºa (#51).
+
+Nomes can├┤nicos CRUD que **n├úo** entram, por aus├¬ncia medida no dump e n├úo presumida: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick` (os 4 bot├Áes do legado s├úo `btnSair`, `btnConfirmar`, `cmdInserir`, `cmdExcluir`, j├í entregues), `HabilitarCampos` e `LimparCampos` (n├úo h├í campo fora da grade ÔÇö `analise.json` traz campos/lookups/labels como arrays vazios). A raz├úo de cada um est├í escrita no cabe├ºalho do arquivo.
+
+Os arquivos seguem **untracked** (`??`) ÔÇö n├úo commitei, j├í que voc├¬ n├úo pediu.

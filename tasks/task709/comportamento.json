@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGrvSettings"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCPE",
+      "evento": "Init",
+      "linhas": 112,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQryCFis = [Select * From SigSyCom]\n\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigSyCom', 'Tipos', 'crSigSyCom', '', '', lcQryCFis)\n\t\tEndWith\n\n\t\t.poDataMgr.ReQuery('crSigSyCom')\n\n\t\tSelect crSigSyCom\n\t\tIndex On Tipos Tag PesqTipo\n\t\tGo Top\n\n\t\tIf Not Seek(Padr('Balança',20))\n\t\t\tInsert Into cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmb_Hand,Cmb_Tipo,Get_TpLeChq,Opt_leitor,Chk_BomPara,Chk_Nominal,Chk_Cruzado",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCPE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPE",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPE.Cmb_Tipo",
+      "evento": "InteractiveChange",
+      "linhas": 30,
+      "codigoOriginal": "If Seek(This.value,'crSigSyCom','PesqTipo')\n  Thisform.Refresh\nEndIf\n\nThisForm.Say12.Visible = .f.\nThisForm.Say14.Visible = .f.\nThisForm.Say15.Visible = .f.\nThisForm.Say16.Visible = .f.\nThisForm.Get_TpLeChq.Visible = .f.\nThisForm.Say13.visible = .f.\nThisForm.Opt_leitor.Visible = .f.\nThisForm.Chk_BomPara.Visible = .f.\nThisForm.Chk_Nominal.Visible = .f.\nThisForm.Chk_Cruzado.Visible = .f.\n\nIf CrSigSyCom.Tipos = 'Leitora Cheques' Or CrSigSyCom.Tipos = 'Impressora de Cheque'\n\tThisForm.Say12.Visible =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_TpLeChq,Opt_leitor,Chk_BomPara,Chk_Nominal,Chk_Cruzado",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPE.Chk_Bompara",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPE.cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPE.Ok",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Not ThisForm.poDataMgr.Update('crSigSyCom')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigSyCom)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.Commit() < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')\n\tReturn 0\nEndIf\n\n=fGrvSettings('CrSigSyCom')\n\nThisform.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGrvSettings",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCPE.Init",
+      "queryOriginal": "\t\tlcQryCFis = [Select * From SigSyCom]",
+      "tabelas": "SigSyCom",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyCom"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt", "fGerUniqueKey", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCOP",
+      "evento": "Init",
+      "linhas": 10,
+      "codigoOriginal": "Lparameters poForm, pOperacao\n\nThisForm.ParentForm = poForm\nThisForm.DataSessionId = poForm.DataSessionId\nThisForm.poDatamgr = poForm.poDataMgr\nThisForm.GetOrigem.Value = pOperacao\nThisForm.GetOrigem.Refresh\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOP.GetOrigem",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdOpe','csSigCdOpe','Dopes',This.Value,'Operações',.t.,'Dopes')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Dopes', '', 'Operação', .t.)\n\t\txBrox.Show()\n\tEndIf \n\tThis.Value = Iif( LastKey() # 27, Evaluate('csSigCdOpe.Dopes'), '' )\nElse\n\tIf Lastkey() <> 27\n\t\tMessageBox(\"Operação Deve ser informada !!!\",16,\"\")\n\t\tReturn .f.\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCOP.GetOrigem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCOP.GetDestino",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If NOt Empty(This.Value) And Not Lastkey() = 27\n\tThisForm.poDatamgr.Sqlexecute([Select dopes from SigCdOpe Where Dopes = ']+this.Value+['],'csSigCdOpe')\n\tSelect csSigCdOpe\n\tIf ! Eof()\n\t\tMessageBox('Operação já Cadastrada !!!',16,'')\n\t\tReturn .f.\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCOP.Commandgroup1",
+      "evento": "Click",
+      "linhas": 459,
+      "codigoOriginal": "If Empty(ThisForm.GetOrigem.Value)\n\tMessageBox('Origem Invalida !!!',16,'')\n\tReturn\nEndIf\n\nIf Empty(ThisForm.GetDestino.Value)\n\tMessageBox('Destino Invalido !!!',16,'')\n\tReturn\nEndIf\n\nlcOpeOri = ThisForm.GetOrigem.Value\nlcOpeDes = ThisForm.GetDestino.Value\n\nlnNDopes = fGerUniqueKey(\"SigCdOpe\")\t\nlcProgramas = Padl(lnNDopes, 8, '0')\n\nZap In crSigCdOpe\nZap In crSigOpCdc\nZap In crSigOpCdi\nZap In crSigOpCsn\nZap In crSigOpCrr\nZap In crSigOpDup\nZap In crSigCdPrg\nZap In crSigOpCdd\nZap In crSigMvCxs\nZap ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOP.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Release Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCOP.GetDestino.Valid",
+      "queryOriginal": "\tThisForm.poDatamgr.Sqlexecute([Select dopes from SigCdOpe Where Dopes = ']+this.Value+['],'csSigCdOpe') \tSelect csSigCdOpe",
+      "tabelas": "SigCdOpe",
+      "colunas": "dopes,Value+[],csSigCdOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

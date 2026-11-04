@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpEmb.prg` (276 ÔåÆ 1017 linhas).
+
+## O que foi adicionado
+
+**Grade (`grd_4c_Dados`)** ÔÇö geometria transcrita do dump (`Top=84, Left=84, 380x143`, Verdana 8, `HeaderHeight=22`, `RowHeight=20`, `ScrollBars=2`, `Panel=1`, `RecordMark=.F.`). As 4 colunas com o `ControlSource` do `Init` legado (`Qtds`/`Descs`/`PesoEmbs`/`Pesos`), larguras 52/130/87/87, headers "Qtde"/"Embalagem"/"Peso"/"Peso Total" e os dois `InputMask` do dump.
+
+**Bot├úo (`cmg_4c_Botoes`)** ÔÇö CommandGroup de 1 bot├úo (`Top=-2, Left=567, 85x85`; interno 75x75), `Caption="\<Encerrar"`, `Cancel=.T.`, ├¡cone `cadastro_sair_60.jpg`.
+
+**Comportamento** ÔÇö funil ├║nico `CarregarLista` ÔåÆ `VincularGrade` ÔåÆ `RepintarGrade`; `Valid` da c├®lula Qtde via subclasse `TextBoxQtdeEmb_4c` (regra #46, n├úo `AfterRowColChange`); `When ÔåÆ .F.` nas colunas 2-4 via `TextBoxLeituraEmb_4c`; confirma├º├úo ÔåÆ BO grava ÔåÆ devolve o peso ao pai ÔåÆ fecha.
+
+## Verifica├º├úo executada (VFP9 roda nesta sess├úo ÔÇö smoke test provou)
+
+- **Compila limpo**: `.FXP` gerado, nenhum `.err`.
+- **Instancia**: form `650x239`, grade com 4 colunas bindadas, `CurrentControl`/`Sparse` instalados, bot├úo com ├¡cone existente. Bind **sobrevive** a `CarregarLista()` chamado de fora.
+- **Regra de neg├│cio**: qtd 4 ├ù peso 2,50 ÔåÆ `pesos = 10`; qtd 10 ├ù 0,30 ÔåÆ `3`; total devolvido = **13,00** (s├│ linhas `Qtds > 0`, somando `Qtds * PesoEmbs`), 2 linhas, `RECNO` reposto.
+- **Grava├º├úo**: as 2 linhas antigas do item 7 saem, as 2 novas entram com `cidchaves` distintos e chave posicional de **29 chars**; a linha do item 9 fica intacta; `pai.pesoemb = 13`.
+- **M├®todos p├║blicos** confirmados por `PEMSTATUS(...,2)` (regras #3/#51).
+- Auditorias `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas`: OK.
+
+## Dois pontos que divergem do prompt da fase ÔÇö de prop├│sito
+
+1. **N├úo criei `ConfigurarPaginaLista`/`AlternarPagina` nem 6 bot├Áes CRUD.** O `SIGOEMB` ├® FLAT: a ├írvore do dump ├® `form + cntSombra + cntBotoes(1 bot├úo) + Grade`, sem PageFrame. Cri├í-los exigiria inventar UI (PILAR 1) ou deixar m├®todo vazio (regra de completude). O gate da Fase 4 tem o ramo flat justamente para isso, e ele est├í satisfeito (`OPERACIONAL` + `grd_4c_*` + `cmg_4c_*` + `CarregarLista`). O `AlternarPagina` herdado de `FormBase` j├í ├® in├│cuo sem `pgf_4c_Paginas`.
+
+2. **Falha de grava├º├úo mant├®m o di├ílogo ABERTO** (o legado sempre fazia `Release`, porque n├úo detectava falha nenhuma), e `FecharDialogo` usa **`Hide()`**, n├úo `Release()` ÔÇö sen├úo o chamador n├úo consegue ler o peso depois do `Show()`. O `Release` fica com o chamador, como no `FormBuscaAuxiliar`. Ambas documentadas no c├│digo para n├úo serem "consertadas" num sweep futuro.
+
+Tamb├®m acrescentei em `InicializarForm` o `parentform.pesoemb = 0` do `Init` legado, que faltava da Fase 3 ÔÇö sem ele o pai ficaria com o peso de uma abertura anterior se a tela fosse fechada sem confirmar.

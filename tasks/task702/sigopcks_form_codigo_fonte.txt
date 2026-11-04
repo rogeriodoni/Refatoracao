@@ -1,0 +1,736 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopcks.SCX
+* Data/Hora: 29/10/2026 19:54:25
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCKS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGOPCKS
+  Class: shape
+  BaseClass: shape
+
+Objeto: Frase
+  Parent: SIGOPCKS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCKS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: usuario
+  Parent: SIGOPCKS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPCKS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: senha
+  Parent: SIGOPCKS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Image1
+  Parent: SIGOPCKS
+  Class: image
+  BaseClass: image
+
+Objeto: cntSombra
+  Parent: SIGOPCKS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCKS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCKS.cntSombra
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ""
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  libfpag2 = .F.
+  liblimitador = .F.
+  libope = 
+  libqtmin = .F.
+  movestoque = .F.
+  _memberdata = <VFPData><memberdata name="libope" type="property" display="LibOpe"/></VFPData>
+  Name = "SIGOPCKS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.Shape1
+------------------------------------------------------------
+  Top = 197
+  Left = 247
+  Height = 105
+  Width = 113
+  BorderWidth = 2
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.Frase
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 14
+  WordWrap = .T.
+  Alignment = 2
+  Caption = "Validação de Acesso"
+  Height = 34
+  Left = 12
+  Top = 120
+  Width = 968
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Frase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Caption = "Representante :"
+  Left = 405
+  Top = 221
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.usuario
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Century = 2
+  Alignment = 3
+  Height = 32
+  InputMask = "!!!!!!!!!!"
+  Left = 561
+  TabIndex = 3
+  Top = 217
+  Width = 125
+  ForeColor = 0,0,0
+  Name = "usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Caption = "Senha :"
+  Left = 486
+  Top = 265
+  Visible = .T.
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.senha
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Height = 32
+  InputMask = "!!!!!!!!!!"
+  Left = 561
+  Top = 261
+  Visible = .T.
+  Width = 125
+  PasswordChar = "*"
+  ForeColor = 0,0,0
+  Name = "senha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.Image1
+------------------------------------------------------------
+  Picture = ..\framework\imagens\geral_login_60.jpg
+  Stretch = 1
+  Height = 76
+  Left = 265
+  Top = 212
+  Width = 77
+  Name = "Image1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCKS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 14, 10, 23, 19, 55, 4, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCKS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Tipo, _Titulo, _Titulo2, _Documento, _Data, _Empresa, _Fpagto, _Valor
+
+If Type("_Documento")#"N"
+	_Documento = 0
+Endif
+If Type("_Data")#"D"
+	_Data = Date()
+Endif
+If Type("_Empresa")#"C"
+	_Empresa = ' '
+Endif
+If Type("_FPagto")#"C"
+	_FPagto = ' '
+Endif
+If Type("_Valor")#"N"
+	_Valor = 0
+Endif
+
+ThisForm.zsen    = .F.
+ThisForm.NroDoc  = _documento
+ThisForm.DatDoc  = _Data
+ThisForm.Tipo    = _Tipo
+Thisform.usulibs = Usuar
+ThisForm.Financ  = .f.
+ThisForm.CancItem= .f.
+ThisForm.Libfpag = .f.
+ThisForm.Libfpag2= .f.
+ThisForm.Empresa = _Empresa
+ThisForm.Fpagto  = _Fpagto
+ThisForm.ValFpag = _Valor
+ThisForm.LibOpe  = .f.
+Thisform.LibProducao  = .f.
+ThisForm.Saldoestoque = .f.
+ThisForm.LibValida    = .f.
+ThisForm.LiberaTitulo = .f.
+ThisForm.LibQtMin 	  = .f.
+ThisForm.LibLimitador = .f.
+ThisForm.MovEstoque   = .f.
+
+Thisform.poDatamgr = CreateObject('fSqlConector','SigOpSen')
+
+ThisForm.Podatamgr.Cursorquery('SigCdPam','CrParam',.f.,.f.,[LiblCreds])
+ThisForm.Podatamgr.Cursorquery('SigCdPac','CrParac',.f.,.f.,[SenhDEmps])
+
+Do Case
+	Case _Tipo = 'DTENTREGA'
+		This.Caption = 'Prazo de Entrega'
+		This.Frase.Caption = Alltrim( _titulo ) + ' fora do prazo de entrega!'
+		ThisForm.Financ = .f.
+
+	Case _Tipo = 'CHDEVOLVIDO'
+		This.Caption = 'Cheque Devolvido'
+		This.Frase.Caption = 'A conta ' + Alltrim( _Titulo2 ) + ' possui '
+		If _Titulo = 1
+			This.Frase.Caption = This.Frase.Caption + '1 Cheque Devolvido Pendente!'
+		Else
+			This.Frase.Caption = This.Frase.Caption + Alltrim( Str( _Titulo ) ) + ' Cheques Devolvidos Pendentes!'
+		Endif
+		ThisForm.Financ = .t.
+
+	Case _Tipo = 'LIMITE'
+		This.Caption = 'Limite Excedido'
+		This.Frase.Caption = 'O Limite da conta ' + Alltrim( _Titulo ) + ' foi excedido! '
+		ThisForm.Financ = .t.
+
+	Case _Tipo = 'ALTERAIMPOSTO'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.Financ = .t.
+
+	Case _Tipo = 'CANCITEM'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.CancItem = .t.
+
+	Case _Tipo = 'LIBFPAG'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibFpag = .t.
+
+	Case _Tipo = 'LIBPRDZ' Or _Tipo = 'LIBPRDZ2' Or _Tipo = 'LIBPESO'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibProducao = .t.
+
+	Case _Tipo = 'SDINSUF'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.Saldoestoque = .t.
+
+	Case _Tipo = 'MAXIMO'
+		This.Caption = 'Valor Máximo Excedido :'+_Titulo2
+		This.Frase.Caption = 'Valor da Condição de Pagamento ' + Alltrim( _Titulo ) + ' foi excedido! '
+		ThisForm.Financ = .t.
+
+	Case _Tipo = 'DTVALIDA'
+		This.Caption = 'Validade da Movimentação'
+		This.Frase.Caption = Alltrim( _titulo ) + ' fora da Validade!!!'
+		ThisForm.LibValida = .t.
+
+	Case _Tipo = 'LIBTITULO'
+		This.Caption = 'Liberar Título '
+		This.Frase.Caption = Alltrim( _titulo )
+		ThisForm.LiberaTitulo = .t.
+
+	Case _Tipo = 'LIBERAFPG'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibFpag2 = .t.
+
+	Case _Tipo = 'LIBOPE'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibOpe = .t.
+		
+	Case _Tipo = 'LIBQTMIN'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibQtMin = .T. 		
+
+	Case _Tipo = 'LIBLIMITADOR'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo2 )
+		ThisForm.LibLimitador = .T.
+
+	Case _Tipo = 'MOVESTOQUE'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo )
+		ThisForm.MovEstoque = .T.
+
+	Case _Tipo = 'VALIDACESSO'
+		This.Caption = Alltrim( _Titulo )
+		This.Frase.Caption = Alltrim( _Titulo )
+		ThisForm.MovEstoque = .T.
+Endcase
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+This.Refresh
+This.Frase.Refresh 
+
+If ( crParam.LiblCreds And _Tipo = 'LIMITE' ) Or _Tipo = 'LIBPRDZ2' Or _Tipo = 'MAXIMO'
+	ThisForm.usuario.Value = Usuar
+	ThisForm.Say3.Caption  = 'Senha Do Dia : '
+	ThisForm.Say3.Left = 142
+EndIf
+
+ThisForm.Top  = ThisForm.Top  + 5
+ThisForm.Left = ThisForm.Left + 5
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDatamgr.Release
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCKS.usuario
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If Lastkey() = 27 And Empty(this.Value)
+	zsen = .f.
+	Thisform.zsen=.F.
+	Thisform.release
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,totite
+
+usual=''
+sd = .t.
+If IsEmpty( This.Value )
+	zsen = .f.
+	Thisform.zsen=.F.
+	Thisform.release
+	Return .t.
+EndIf
+Do Case
+	Case ThisForm.Cancitem
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.CancItens = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.Financ
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.limites = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.Libfpag 
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.LibFpags = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.Libfpag2
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.LibFpgs = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case Thisform.LibProducao 
+		If Thisform.Tipo = 'LIBPESO'
+			lcQuery = [Select a.* From SigCdUsu a ]+;
+					  [Where Not a.cAtivos='N' And a.LibPess = "S" and not a.Senhas = ']+Space(6)+[']
+		Else
+			lcQuery = [Select a.* From SigCdUsu a ]+;
+					  [Where Not a.cAtivos='N' And a.LibProds = "S" and not a.Senhas = ']+Space(6)+[']
+		Endif
+
+	Case ThisForm.Saldoestoque 
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.LibSdIns = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case Thisform.LibValida
+		lcQuery = [Select a.* From SigCdUsu a ]+;
+				  [Where Not a.cAtivos='N' And a.LibvOpes = 'S' And not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.LibOpe
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.LibOpes = "S" and not a.Senhas = ']+Space(6)+[']
+				  
+	Case ThisForm.LibQtMin
+		lcQuery = [Select a.* From SigCdUsu a ]+;
+				  [Where Not a.cAtivos='N' And a.LibQtMins = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.LibLimitador
+		lcQuery = [Select a.* From SigCdUsu a ]+;
+				  [Where Not a.cAtivos='N' And a.LibLmPss = "S" and not a.Senhas = ']+Space(6)+[']
+
+	Case ThisForm.movestoque
+		lcQuery = [Select a.* From SigCdUsu a ]+;
+				  [Where Not a.cAtivos='N' And not a.Senhas = ']+Space(6)+[']
+
+	Otherwise
+		lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;
+				  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.AltCots = "S" and not a.Senhas = ']+Space(6)+[']
+EndCase
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpUsu') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpUsu)')
+	Return 0
+EndIf
+
+Select TmpUsu
+index on usuarios tag usuarios
+if !IsEmpty(this.value)
+	select tmpusu
+	set order to usuarios
+	set near on
+	if not seek(this.value)
+		xBrow=CreateObject('fwBuscaSel','tmpusu','usuarios',this.value,'Seleção')
+		xBrowCol=xBrow.AddColuna('usuarios','','Código',.t.,'usuarios')
+		xBrowCol=xBrow.AddColuna('ccargs','','cargo',.F.)
+		xBrow.Show
+	endif
+	set near off
+	select tmpusu
+	this.value = evaluate('usuarios')
+	this.refresh
+	usual=this.value
+endif
+thisform.usulibs = this.value
+If IsEmpty(usual)
+	thisform.zsen=.F.
+	thisform.release
+Else
+	If lastkey()<>27
+		usual = upper(usual)
+		select TmpUsu
+		set order to usuarios
+		seek usual
+		zsen = fCriptografar(TmpUsu.senhas)
+		If IsEmpty(TmpUsu.senhas)
+			zsen = .t.
+			thisform.say3.visible=.f.
+			thisform.senha.visible=.f.
+			thisform.zsen=.t.
+			thisform.release
+		else
+			thisform.say3.visible=.t.
+			thisform.senha.visible=.t.
+		endif
+	else
+		zsen = .f.
+	endif
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (!crParam.LiblCreds Or (ThisForm.Tipo # 'LIMITE' And ThisForm.tipo # 'LIBPRDZ2' ) ) And ThisForm.Tipo # 'MAXIMO'
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCKS.senha
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local senha,resp,lcQuery
+
+senha = Chr(254)
+lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + ThisForm.Usuario.Value + [' order by 1]
+ThisForm.poDataMgr.SQLExecute(lcQuery, 'TmpUsu')
+
+If Used('TmpUsu')
+	senha=fCriptografar(TmpUsu.senhas)
+EndIf 
+
+Thisform.zsen=.F.
+
+If ( Not crparam.LiblCreds Or (ThisForm.Tipo # 'LIMITE' And ThisForm.tipo # 'LIBPRDZ2' ) ) And ThisForm.tipo # 'MAXIMO'
+
+	If IsEmpty(This.Value) Or Padr(this.value,10)#Padr(senha,10)
+		if messagebox('Deseja digitar novamente ? (S/N)',4+256,'Senha Conflitante...' ) = 7
+			thisform.zsen=.F.
+			thisform.release
+		else
+			return 0
+		endif
+	Else
+		If ThisForm.Tipo = 'LIBPRDZ' Or ThisForm.Tipo = 'LIBPRDZ2' Or ThisForm.Tipo = 'LIBPESO' Or ThisForm.Tipo = 'LIBQTMIN'
+		Else
+			If Thisform.Tipo = 'LIBTITULO'
+				=fGravarLog('T', 'SigPgTit', ThisForm.Tipo, ThisForm.Frase.Caption, Usuar )
+			Else
+				If Used('TprMvCab')
+					=fGravarLog('T', TprMvCab.Dopes, Thisform.Tipo, TprMvCab.Emps + '-' + ;
+									AllTrim(TprMvCab.Dopes) + '-' + AllTrim(Str(TprMvCab.Numes,6)) + ;
+									Iif(ThisForm.Tipo = 'LIBERAFPG','('+Alltrim(Thisform.Frase.Caption)+')',' '),Thisform.UsuLibs)
+				Endif
+			Endif
+		Endif
+		Thisform.zsen=.T.
+		Thisform.release
+	EndIf
+Else
+	lnNum = 0
+	If CrParac.SenhDEmps
+		lcSql = [Select nemps From SigCdEmp Where CEmps = ']+ThisForm.Empresa+[']
+		ThisForm.Podatamgr.Sqlexecute(lcSql,'CrEmp')
+		lnNum = CrEmp.nEmps
+
+		lcSql = [Select nfpags From SigOpFp Where Fpags = ']+ThisForm.Fpagto+[']
+		ThisForm.Podatamgr.Sqlexecute(lcSql,'CrfPagto')
+		lnNum = lnNum + CrFPagto.NfPags + ( ThisForm.Valfpag * 100 )
+
+	Endif
+	lcSenha = fGerPswDiario( ThisForm.NroDoc, ThisForm.DatDoc, lnNum )
+	
+	If alltrim(This.Value) # lcSenha
+		if messagebox('Deseja digitar novamente ? (S/N)',4+256,'Senha Conflitante...' ) = 7
+			thisform.zsen=.F.
+			thisform.release
+		else
+			return 0
+		endif
+	Else
+		Thisform.zsen=.T.
+		Thisform.usulibs = lcSenha
+		Thisform.release
+	EndIf
+
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCKS
+RESERVED3 (ClassInfo): cancitem
+datdoc
+empresa
+financ
+fpagto
+liberatitulo
+libfpag
+libfpag2
+liblimitador
+libope
+libproducao
+libqtmin
+libvalida
+movestoque
+nrodoc
+podatamgr
+saldoestoque
+tipo
+usulibs
+valfpag
+zsen
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 12 problemas foram corrigidos. Resumo:
+
+**FormSigOpEnc.prg**
+- 8 handlers `*LostFocus` (Grupo/DGrupo/Conta/DConta/GrupoC/DGrupoC/ContaC/DContaC) agora guardam o ├║ltimo valor validado em `this_cUltimo<X>LostFocusValidado` e saem sem reabrir o lookup quando o valor n├úo mudou; `LimparFiltro()` reseta essas 8 guardas para n├úo bloquear a redigita├º├úo do mesmo c├│digo ap├│s limpar os campos.
+- `ConfigurarGridSaldo`: `.ColumnCount` e `.RecordSource` movidos para fora do `WITH THIS.grd_4c_Dados` (atribui├º├úo expl├¡cita antes do bloco), eliminando o risco de "Unknown member COLUMN1".
+- `Column1.Header1.Caption` corrigido de `"Conta "` (espa├ºo inventado) para `"Conta"`, igual ao legado.
+- `THIS.AbrirLookupCanonico()`: verificado contra `formbase.prg:393` ÔÇö o m├®todo **existe** em `FormBase` com a mesma assinatura/ordem de par├ómetros usada aqui, ent├úo era falso positivo; nenhuma altera├º├úo necess├íria.
+
+**SigOpEncBO.prg**
+- `CREATE CURSOR cursor_4c_PendAud` agora envolvido por `SET NULL ON` / `SET NULL OFF`, como j├í ├® padr├úo no restante do projeto.
+
+Nenhuma propriedade visual foi alterada e nenhuma l├│gica de neg├│cio foi modificada al├®m do exigido pelos achados.

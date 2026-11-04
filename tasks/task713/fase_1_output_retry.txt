@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 1 complete.
+
+## Entregue
+
+`C:\4c\projeto\app\classes\SigOpCrdBO.prg` ÔÇö 253 linhas, CRLF, ASCII puro.
+
+**19 propriedades declaradas**, cobrindo as 6 colunas de `SigOpCrr` (conferidas em `docs/schema.sql` com `Get-Content -Raw`, regra #14) mais o contexto que as fases seguintes v├úo consumir:
+
+| Grupo | Propriedades |
+|---|---|
+| Entidade (6/6 colunas) | `this_cCidchaves` (PK char 20), `this_cDopes`, `this_nFaixais`, `this_nFaixafs`, `this_nPercs`, `this_nMultiplos` |
+| Contexto do form pai | `this_cOperacao`, `this_cDescOperacao`, `this_cEscolha` (PcEscolha) |
+| Marcadores do legado | `this_lHouveInsercao`, `this_lHouveExclusao` (= `lHouveIns`/`lHouveExcl`) |
+| Permiss├úo | `this_lPodeExcluir` (`fChecaAcesso` + modo edit├ível) |
+| Cursores | `this_cCursorDados`, `this_cCursorTemp`, `this_cCursorAux` |
+| Acompanhamento / lote | 3 contadores + `this_cLoteGravacao` |
+
+`Init(par_cOperacao, par_cEscolha)` fixa `this_cTabela = "SigOpCrr"` / `this_cCampoChave = "cidchaves"`, resolve o `PcEscolha` com o mesmo `IIF(EMPTY(...))` ÔåÆ `"INSERIR"` do legado e resolve a permiss├úo do Excluir. Inclui tamb├®m `InicializarValoresPadrao()` (transcri├º├úo do `Insert Into crSigOpCrr (Dopes, CidChaves)` do `inserelinha`) e `ObterChavePrimaria()` ÔÇö ambos hooks PROTECTED da base, conforme a tabela da regra #51.
+
+## Verificado (n├úo inferido)
+
+Smoke test do VFP9 **passou** (`smoke713_out.txt` = `VIVO`, exit 0), ent├úo o resultado de compila├º├úo ├® afirm├ível:
+
+- `COMPILE` ÔåÆ `FXP=SIM`, `ERR=NAO`
+- **Controle negativo**: c├│pia do BO com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` acusando *Syntax error / Nesting error* **apenas nas linhas 255ÔÇô257** (as acrescentadas) ÔÇö o que prova de uma vez que o detector funciona e que as 253 linhas do BO est├úo limpas.
+
+Gates est├íticos, todos zero: `this_X .Value` (#43), n├úo-ASCII (#4), `PUBLIC` em `DEFINE CLASS` (#9.1), `ISEMPTY` (#2), `MESSAGEBOX`, TODO/stub/"n├úo implementado". O ├║nico `RETURN` perto de `TRY` est├í na linha 219, **depois** do `ENDTRY` (217) ÔÇö regra #1 respeitada. `fChecaAcesso`, `fUniqueIds` e `MsgErro` resolvem em `utils/` (regra #13); nenhuma colis├úo com propriedades da `BusinessBase`.
+
+Isso prova **compila├º├úo**, n├úo instancia├º├úo ÔÇö Init de BO sem conex├úo abre di├ílogo e trava headless, ent├úo n├úo forcei runtime nesta fase.
+
+## Duas notas
+
+1. **Causa da falha anterior**: o log mostra o Claude CLI saindo em 7s com uma sauda├º├úo gen├®rica e avisos de regra de permiss├úo ÔÇö o prompt nunca foi executado. N├úo havia defeito de c├│digo a corrigir; o arquivo simplesmente n├úo existia.
+2. O `INSERT` da Fase 2 ter├í de cobrir as **seis** colunas: todas s├úo `NOT NULL` e nenhuma tem `DEFAULT`, inclusive as duas que n├úo aparecem na tela (`dopes`, `cidchaves`) ÔÇö regra #22, com `cidchaves = EscaparSQL(fUniqueIds())` e nunca string vazia.

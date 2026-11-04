@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigOpCotBO.prg",
+    "timestamp":  "2026-10-30T09:11:40",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  210,
+                          "Original":  "cotas, (NVL(cotas, 0) = 1))",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-189-SUCESSO-SEM-GRAVAR",
+                          "Linha":  561,
+                          "Original":  "                    loc_lSucesso = .T.",
+                          "Corrigido":  "(REVISAR MANUAL)",
+                          "Descricao":  "Pattern #189-A: o metodo marca sucesso (.T.) no ramo em que o cursor de detalhe esta VAZIO (guarda na linha 560) — nada eh gravado e mesmo assim o form costuma exibir MsgInfo de sucesso e voltar para a lista. Em modo de INCLUSAO, bloquear ANTES de chamar o BO: contar as linhas do cursor com a coluna-chave preenchida e, se zero, MsgAviso(Informe ao menos um item antes de gravar) + RETURN. Em ALTERAR a lista vazia pode ser legitima (apaga-e-reinsere = remover todos os itens), por isso nao ha auto-fix. Origem: Erro148 (2026-09-08 FormSIGPRLNC)."
+                      },
+                      {
+                          "Tipo":  "WARN-216-FORMAT-INPUTMASK-AUSENTE",
+                          "Linha":  0,
+                          "Original":  "(form inteiro)",
+                          "Corrigido":  "(nao mutado - o valor sai do dump, controle a controle)",
+                          "Descricao":  "Pattern #216 WARNING: o dump do legado declara 2 Format e 0 InputMask nao-vazios, mas este .prg tem 0 e 0 - faltam 2 Format e 0 InputMask. Severidade BAIXA (Format sem \u0027!\u0027 - so seleciona ao entrar). O migrador descarta essas duas propriedades e o defeito so aparece na TELA: no FormCEP o CEP exibia \"07083280\" em vez de \"07083-280\" (InputMask = \"99999-999\") e os campos aceitavam minuscula onde o legado forca MAIUSCULA (Format = \"K!\"). Compila limpo, nenhum outro gate pega. NAO auto-fixado: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -\u003e objeto migrado eh HUMANO porque o PILAR 3 manda renomear (getTipoNomes -\u003e txt_4c_TipoNomes) - casar por nome nunca funciona (regras #30/#39). Conferir no dump e transcrever. Cuidado: \"Format = \u0027\u0027\" / \"InputMask = \u0027\u0027\" no dump sao override VAZIO do Form Designer, nao formatacao - ignorar. Auditoria em lote: automation\\VerificarFormatInputMask.ps1. Skill: secao 243. Origem: Erro197 (FormCEP)."
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

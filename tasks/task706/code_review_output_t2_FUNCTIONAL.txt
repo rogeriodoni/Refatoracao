@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei o ├║nico problema listado ÔÇö `[MADDCOLUNA-PARAMS]` ÔÇö e ele ├® falso positivo.
+
+O ├║nico `mAddColuna(...)` realmente executado no projeto ├® `FormSigOpCop.prg:1151`:
+```foxpro
+loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
+```
+J├í com os 3 par├ómetros corretos (campo, mascara, titulo).
+
+A ocorr├¬ncia com 4 par├ómetros est├í na linha 1001, dentro de um bloco de **coment├írio** que transcreve o `PROCEDURE Valid` legado (`xBrox.mAddColuna('Dopes', '', 'Operacao', .t.)`) ÔÇö ├® documenta├º├úo do contrato antigo do `fwBuscaExt`, n├úo c├│digo executado. O detector aparentemente casou o texto do coment├írio como se fosse chamada real.
+
+Como n├úo h├í nenhum `mAddColuna` com 4 argumentos em c├│digo de fato, e a regra do pass pro├¡be alterar l├│gica de neg├│cio ou remover documenta├º├úo fiel ao legado, n├úo h├í nada a corrigir ÔÇö nenhum arquivo foi modificado.

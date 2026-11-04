@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## Diagn├│stico de por que a tentativa anterior reprovou
+
+Medi o gate da Fase 4 (`OrquestradorMigracao.ps1`, ramo FLAT) contra o form como estava:
+
+| condi├º├úo | antes |
+|---|---|
+| `FormType -eq "OPERACIONAL"` | Ô£à |
+| `AddObject("grd_4c_` | Ô£à |
+| `AddObject("cmd_4c_` | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî **0 ocorr├¬ncias** |
+
+Reprovava **s├│** pelo m├®todo de carga de dados ÔÇö e aqui o gate ├® **leg├¡timo, n├úo falso positivo** (diferente da fam├¡lia [[feedback_gate_fase4_exige_grid_inexistente]]): o legado SIGOPENC **tem** o m├®todo de carga, chamado `MontaTela`, que monta a consulta `SigMvSlc + SigCdCli` e popula a grade. A tentativa anterior entregou grade e bot├Áes mas adiou a carga ("fica para a fase que adicionar os campos do Container1"). O pr├│prio BO j├í documentava a lacuna: *"tem fonte propria (CarregarParametros/**CarregarSaldos, Fase 4**)"*.
+
+## O que implementei
+
+**`SigOpEncBO.CarregarSaldos()`** ÔÇö consulta **transcrita literalmente** do `MontaTela` legado:
+- O **sentinela `'ZYWZYWZYWZ'`** para grupo vazio foi preservado ÔÇö ├® regra de neg├│cio (regra #35a): o filtro ├® aplicado **sempre**, inclusive vazio, e a grade abre vazia *de prop├│sito*. Trocar por "sem WHERE" traria a tabela inteira.
+- **N├úo** acrescentei filtro por `emps` nem por `situas`: o legado *seleciona* essas colunas mas n├úo as usa no `WHERE`.
+- Colunas conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14): `SigMvSlc(emps/grupos/contas/moedas/saldos)` e `SigCdCli(iclis/rclis/situas)` ÔÇö confirmado que `SigMvSlc` ├® movimento e usa **`emps` sem C** (regra #48).
+- `SQLEXEC` em cursor **tempor├írio** + `ZAP` + `APPEND FROM DBF()`, nunca sobre o alias da grade ÔÇö isso preserva `RecordSource`, `ControlSource`, larguras, headers e o **`Check1` que a Column5 recebeu por `AddObject`**.
+- `TABLEREVERT` guardado por `CURSORGETPROP("Buffering")` (regra #52) e fallback sem conex├úo para n├úo derrubar o `Init` em modo teste.
+
+**`FormSigOpEnc.CarregarDados()`** ÔÇö funil ├║nico de recarga: chama o BO, faz `GO TOP` + `Grid.Refresh()` (regra #21a ÔÇö popular cursor n├úo repinta) e reproduz o `CmdProcessa.Enabled = (Reccount > 0)` do `MontaTela`. ├ë **PUBLIC** de prop├│sito (o harness chama de fora ÔÇö regra #3). As fases seguintes, ao criar os campos do `Container1`, chamam este m├®todo nos `Valid` em vez de repetir a consulta.
+
+Tamb├®m corrigi uma **mina pr├®-existente da Fase 3**: um coment├írio come├ºando com `* placeholder (...` casava o regex `^\s*\*\s*PLACEHOLDER\b` do validador `05d_validarCompletude` e reprovaria a etapa por falso positivo. Reescrevi a linha.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: ambos os arquivos, `FXP=SIM ERR=NAO`, zero erros (`.fxp` apagados depois).
+- **Gate Fase 4**: rodei a l├│gica exata do orquestrador ÔåÆ `temLayoutFlat = True`, **GATE = True** (23,67 KB).
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas parseadas, 3 statements, *"PASSOU - Nenhuma coluna invalida detectada"*.
+- **Completude**: rodei os tr├¬s regexes reais do `05d` (TODO/pend├¬ncia/procedure vazia) nos dois arquivos ÔåÆ **zero** achados.
+- `RETURN` s├│ **depois** do `ENDTRY` nos dois m├®todos novos (regra #1).
+
+## Um desvio deliberado, para sua decis├úo
+
+Passei a chamar `CarregarDados()` no fim do `InicializarForm`. O legado **n├úo** chama `MontaTela` no `Init` (a grade nasce com `RecordSource = ''`), ent├úo no legado o bot├úo **Processar** come├ºa *habilitado* e, ao ser clicado sem grupo, responde `"Obrigatorio Informar o Grupo de Filtro!!!"`. No migrado ele come├ºa **cinza** (0 linhas ÔçÆ `Enabled = .F.`, regra do pr├│prio `MontaTela`).
+
+Fiz essa escolha porque nossa grade j├í nasce ligada ao cursor placeholder, o estado visual final ├® o mesmo (grade vazia), o resultado pr├ítico ├® id├¬ntico (n├úo se processa sem grupo) e a alternativa deixaria `CarregarDados` como c├│digo morto nesta fase. Se preferir fidelidade estrita ao PILAR 1 nesse detalhe, basta remover as 4 linhas do `InicializarForm` ÔÇö o m├®todo continua correto e passa a ser acionado apenas pelos `Valid` da Fase 5.
+
+N├úo toquei em mais nada do BO al├®m de inserir `CarregarSaldos()`.

@@ -4208,11 +4208,54 @@ DEFINE CLASS Formsigopind AS FormBase
         ENDTRY
     ENDPROC
 
-    *-- Procura Click -> DO FORM SigOpCrp + refresh grd_4c_Lancamento
+    *-- Procura Click -> abre o dialogo FormSigOpCrp + refresh grd_4c_Lancamento
+    *
+    *  Legado: Do Form SigOpCrp With ThisForm.DataSessionId, ThisForm
+    *
+    *  DUAS correcoes sobre a transcricao literal do legado:
+    *
+    *  1) DO FORM procura um .SCX EM DISCO. Na arquitetura nova os forms sao
+    *     DEFINE CLASS em .prg, e nao existe SigOpCrp.scx em projeto\ - entao o
+    *     DO FORM estourava "File 'sigopcrp.scx' does not exist" e o dialogo de
+    *     Procura NUNCA abria. Tem de ser CREATEOBJECT (mesmo conserto de
+    *     Formepd.BtnOperacaoClick). Agravante: GerarIndiceClasses.ps1 so le
+    *     CREATEOBJECT/NEWOBJECT/AddObject para montar o fecho de dependencias,
+    *     logo com DO FORM a classe tampouco entrava no indice e nao seria
+    *     carregada sob demanda - com o CREATEOBJECT literal abaixo o indice
+    *     passa a trazer FormSigOpCrp (e o SigOpCrpBO) sozinho.
+    *
+    *  2) FormSigOpCrp eh MODAL (WindowType = 1), entao o Show() fica FORA do
+    *     TRY (regra #29): dentro dele, QUALQUER erro de runtime do dialogo
+    *     filho - que vive inteiro dentro da chamada bloqueante - cairia neste
+    *     CATCH, a referencia LOCAL morreria e a tela filha fecharia sozinha a
+    *     cada erro, sem log (o TRY/CATCH tem precedencia sobre ON ERROR).
+    *
+    *  O Refresh/SetFocus da grade continua DEPOIS do Show(), como no legado: o
+    *  dialogo eh modal, logo esta linha so corre quando ele fecha. O proprio
+    *  dialogo tambem repinta a grade a cada Procurar (btnOK.Click legado), o
+    *  que cobre o caso do criterio Valor/Historico, em que a tela permanece
+    *  aberta para o usuario continuar a pesquisa.
     PROCEDURE BtnProcuraHistClick()
-        LOCAL loc_oErro, loc_oPagHist, loc_oGrd
+        LOCAL loc_oErro, loc_oPagHist, loc_oGrd, loc_oDialogo
+        loc_oDialogo = .NULL.
+
         TRY
-            DO FORM SigOpCrp WITH THIS.DataSessionId, THIS
+            *-- Sem GarantirClasse: o nome da classe eh LITERAL, entao o
+            *-- indice_classes.txt ja traz FormSigOpCrp (e o SigOpCrpBO) no
+            *-- fecho de dependencias deste form - GarantirClasse so eh
+            *-- necessario nos Abrir* do menu e quando a classe vem em
+            *-- VARIAVEL, que o gerador do indice nao enxerga.
+            loc_oDialogo = CREATEOBJECT("FormSigOpCrp", THIS.DataSessionId, THIS)
+        CATCH TO loc_oErro
+            loc_oDialogo = .NULL.
+            MsgErro(loc_oErro.Message, "Erro em BtnProcuraHistClick")
+        ENDTRY
+
+        IF VARTYPE(loc_oDialogo) = "O"
+            loc_oDialogo.Show()
+        ENDIF
+
+        TRY
             loc_oPagHist = THIS.pgf_4c_1.Page2
             IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5) AND USED("CrSigMvCcr")
                 loc_oGrd = loc_oPagHist.grd_4c_Lancamento

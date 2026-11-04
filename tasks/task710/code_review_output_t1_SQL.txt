@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: falso positivo ÔÇö nenhuma altera├º├úo aplicada
+
+Investiguei a ├║nica acusa├º├úo deste pass (`[SQL-FILTRO-INVENTADO]` coluna `MARCAS`) e conclu├¡ que **n├úo ├® um filtro inventado** ÔÇö ├® o mesmo padr├úo j├í catalogado 17+ vezes na mem├│ria do projeto (`feedback_sql_filtro_inventado_locate_cursor_local.md`): o detector compara `WHERE` de `SQLEXEC` contra SQL Server com `WHERE` de um `SELECT` **local do VFP** sobre cursor em mem├│ria.
+
+**Onde est├í**: `SigOpCpoBO.prg::AtualizarTotais()`:
+```foxpro
+SELECT SUM(Qtds) AS SomaQtds, SUM(Totas) AS SomaTotas ;
+    FROM (THIS.this_cCursorGrade) WHERE Marcas = .T. ;
+    INTO CURSOR cursor_4c_SomaMarcadas
+```
+`cursor_4c_Grade` ├® cursor local (`CREATE CURSOR`), nunca `SQLEXEC`. A lista "WHERE original usa: I, CPROS, CUSTOS, MATS" vem dos `SQLEXEC` de outro m├®todo (`CarregarComposicao`/`CarregarTipos`), sem rela├º├úo com este agregado local.
+
+**Por que o `Where Marcas` ├® fiel ao legado**: o pr├│prio bloco "CODIGO ORIGINAL" do prompt mostra a linha truncada exatamente antes do `Where`:
+```
+Select [ ] as Agrupar, Sum(Qtds) as Qtds, Sum(Totas) as Totas ;
+  From crGrade ;
+```
+ÔÇö a continua├º├úo (`Where Marcas Group By 1 Into Cursor LocalTot`) existe no legado (`AtuaTotas`), s├│ n├úo foi capturada pelo extrator por estar na linha seguinte com `;` de continua├º├úo. O coment├írio do pr├│prio BO j├í documenta essa transcri├º├úo, e ├® regra #17 do CLAUDE.md (linha desmarcada n├úo entra no total ÔÇö crit├®rio de neg├│cio, n├úo bug).
+
+Remover o filtro somaria todas as linhas (marcadas e desmarcadas), mudando o total exibido e o `Enabled` do bot├úo OK ÔÇö regress├úo real.
+
+Registrei esta ocorr├¬ncia (18┬¬) na mem├│ria do padr├úo j├í conhecido para acelerar a triagem de futuras rodadas deste pass sobre o mesmo tipo de acusa├º├úo. Nenhum arquivo de c├│digo foi alterado.

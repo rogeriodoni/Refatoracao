@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpDet.prg` (43,7 KB, 959 linhas).
+
+## O que eu medi antes de escrever
+
+Os 4 nomes do template (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) **n├úo entram** ÔÇö o `SIGOPDET` n├úo tem barra CRUD, e isso foi medido no dump rodando os helpers reais do `case 7` do orquestrador (extra├¡dos por `sed`, sem dot-source):
+
+| evid├¬ncia | resultado |
+|---|---|
+| estrutural (`frmcadastro` / `Grupo_Op`) | **0 / 0** ÔÇö form ├® `Class: form` puro |
+| nome (`(btn\|cmd\|Command)(Incluir\|Alterar\|Visualizar)`) | **n├úo casa** |
+| `X.Verbo.Click` / `Verbo.Click` | **n├úo casa** |
+| `pcEscolha` | 6 vivas, mas `Test-ModoRecebidoDoChamador = True` (`lParameters ÔÇª pEscolha` ÔåÆ `ThisForm.pcEscolha = pEscolha`) |
+| `nBotoesLegado` / `nHandlers` | **4 / 4** ÔåÆ piso 2 satisfeito |
+
+Os 4 `.Click` do legado j├í tinham handler completo desde a Fase 4 (`btnSair`ÔåÆ`BtnCancelarClick`, `btnConfirmar`ÔåÆ`BtnConfirmarClick`, `cmdInserir`ÔåÆ`BtnInserirDetClick`, `cmdExcluir`ÔåÆ`BtnExcluirDetClick`), com `BINDEVENT` em `Buttons(N)` e os guards de modo/navega├º├úo do dump reproduzidos no BO.
+
+## O que a fase acrescentou
+
+Em vez de inventar bot├úo (PILAR 1) ou criar m├®todo vazio, transcrevi a fidelidade de **comportamento** dos bot├Áes que o dump declara e a Fase 4 n├úo trouxe:
+
+- **Form**: `ShowTips = .T.` ÔÇö sem ele os `ToolTipText` dos 4 bot├Áes (`"[Esc] Encerrar"`, `"Confirmar a Sele├º├úo"`, `"Inserir Composi├º├úo"`) **nunca apareciam**; mais `Themes = .F.` e `KeyPreview = .T.`
+- **`cnt_4c_Botoes`**: `Value=0`, `TabIndex=2`, `SpecialEffect=1`, `BorderColor=RGB(136,189,188)`, `Themes=.F.`
+- **Buttons**: `btnSair` `TabIndex=2`+`SpecialEffect=0`; `btnConfirmar` `TabIndex=1` ÔÇö o legado p├Áe **Confirmar em 1**, logo o Tab entra primeiro nele, n├úo no Cancelar
+- **`cmg_4c_InserirExcluir`**: `Value=1`, `TabIndex=2`; `SpecialEffect=0` nos dois bot├Áes
+
+Deixei de fora **s├│** o `AutoSize = .T.` dos dois CommandGroup, com a raz├úo escrita no pr├│prio bloco: em CommandGroup o AutoSize faz a geometria do bot├úo interno **definir** a altura do grupo (CLAUDE.md #31), e sobrescreveria o `160x85`/`50x90` que o SCX declara e a Fase 4 j├í transcreveu.
+
+Documentei tamb├®m, no cabe├ºalho e junto a `ConfirmarSelecaoDetExec`, a **├║nica diverg├¬ncia deliberada**: o `PROCEDURE validacao` do legado n├úo tem `RETURN`, ent├úo o di├ílogo dele fecha mesmo faltando Caracter├¡stica obrigat├│ria; aqui ele permanece aberto, que ├® a inten├º├úo expl├¡cita do `llOk = .F.` + `Return .f.` do Click legado.
+
+## Verifica├º├úo
+
+- `COMPILE` no VFP9: `.FXP` gerado (15.022 bytes), **nenhum `.ERR`** (apaguei o `.fxp` antes)
+- `Test-CompletudeCodigo` real: `RESULTADO=True` ÔÇö zero TODO/stub/procedure vazia
+- Gate da Fase 7 passa pelos **dois** caminhos: `eventosFaltantes = []` e o carve-out (`legadoSemCrud=True`, `nHandlers=4 ÔëÑ 2`)
+- Balanceamento: `WITH=ENDWITH=13`, `TRY=ENDTRY=3`, `PROCEDURE=ENDPROC=23`
+- Restaurei o **CRLF** (o arquivo estava LF puro desde fases anteriores ÔÇö `CR=959 LF=959` agora), via `.ps1` em arquivo, nunca inline
+
+Duas coisas que n├úo toquei e voc├¬ decide: o **`SigOpDetBO.prg` continua LF puro** (fora do escopo desta fase), e o gate aceita os 4 nomes porque o cabe├ºalho os **cita** para documentar a decis├úo ÔÇö o veredicto n├úo depende disso, j├í que o carve-out passa por m├®rito pr├│prio, mas o log n├úo imprimir├í a mensagem `[i] Fase 7: legado sem bot├úo CRUD algum`.

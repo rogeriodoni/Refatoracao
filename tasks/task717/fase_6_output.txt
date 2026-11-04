@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 executada: `C:\4c\projeto\app\forms\operacionais\FormSigOpCts.prg` (595 ÔåÆ 1234 linhas).
+
+## O que a fase entregou
+
+**Lookups: ZERO, por aus├¬ncia medida no legado.** Os cinco padr├Áes que o pr├│prio gate usa d├úo 0 no dump (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`), e `CreateObject(` tamb├®m. Os tr├¬s campos s├úo **senhas digitadas** ÔÇö n├úo h├í c├│digo a resolver contra tabela. Escrever um `AbrirBusca*` aqui seria inventar consulta (PILAR 1). Mesmo motivo para o `cnt_4c_BotoesAcao` que o prompt pede: o dump n├úo tem um CommandButton nem um CommandGroup ÔÇö o di├ílogo se fecha de dentro dos pr├│prios `Valid`.
+
+**3┬║ campo:** `GetNova2` ÔåÆ `txt_4c_Nova2` (178/106/80/18, `PasswordChar "*"`, `InputMask` de 10), ├║ltimo `AddObject` do bloco por z-order e ordem de tabula├º├úo.
+
+**Os 6 eventos do legado,** divididos pelo crit├®rio de o retorno ser ou n├úo o mecanismo:
+- `Valid` de `senha`, `Valid` de `GetNova2` e os dois `When` ÔåÆ **subclasses de TextBox** (regra #46). `BINDEVENT` descarta o retorno, e aqui o retorno ├ë a regra: `Return ThisForm.Altera` ├® o que impede o foco de entrar no bloco da nova senha em modo consulta, e `Return 0` ├® o que segura o foco para redigitar. Por BINDEVENT os dois virariam no-op silencioso ÔÇö e o usu├írio trocaria a senha sem provar a antiga.
+- `GotFocus`/`LostFocus` (`Set Confirm On/Off`) ÔåÆ BINDEVENT, porque n├úo usam retorno e `CONFIRM` ├® SET global cujo ciclo de vida ├® do form (restaurado tamb├®m no `Destroy`).
+
+**Mensagem do cabe├ºalho:** `AplicarMensagemPorModo` completa o bloco `If _Altera` do `Init` legado cuja outra metade (`Height = 250`) j├í estava em `AplicarAlturaPorModo`.
+
+## Defeito achado pelo probe e corrigido
+
+Com `THIS.Release()` dentro do `Valid` (transcri├º├úo literal do `Thisform.Release`), o objeto morria e o `VARTYPE(loc_oDlg)` virava `X` ÔÇö o `ObterResultado()` que o pr├│prio cabe├ºalho documenta como consumo can├┤nico ficava inalcan├º├ível. Trocado pelo funil `FecharDialogo()` com `Hide()`, igual ao `FormBuscaAuxiliar`; quem libera ├® o chamador. Medido depois: form sobrevive (`O`), `Visible = .F.`, `ObterResultado()`/`Unload()` leg├¡veis, `Release()` do chamador encerra.
+
+## Provado em runtime (smoke test passou)
+
+`COMPILE` de form e BO: `.FXP` sim, `.ERR` n├úo ÔÇö com **controle negativo** (c├│pia com `PUBLIC PROCEDURE`) devolvendo erro s├│ nas 3 linhas injetadas, o que prova que o detector funciona. Probe: geometria exata, 3 subclasses instaladas, 5 m├®todos PUBLIC, `AEVENTS` ÔåÆ `GOTFOCUSÔåÆATIVARCONFIRMSENHA` e `LOSTFOCUSÔåÆRESTAURARCONFIRMSENHA`, `When` `.F.`/`.T.` por modo, Height 211/250, captions id├¬nticas ao legado, `CONFIRM` do chamador (`ON`) preservado, e **grava├º├úo real**: par igual mudou `crTesteCts.Senhas` para `XYZ9`; par diferente deixou intacto com o aviso do legado.
+
+A aus├¬ncia de `fCriptografar` (deliberada e documentada ÔÇö stub gravaria hash errado em sil├¬ncio) aparece como mensagem vis├¡vel ao usu├írio em vez de matar a tela, que ├® o comportamento prescrito.
+
+## Fora do arquivo da fase: 2 corre├º├Áes no gate
+
+O gate media "campos no migrado" por classe **literal** `"TextBox"`, ent├úo um form que usa subclasse ÔÇö exatamente o que a regra #46 manda ÔÇö lia **zero campos** e reprovaria. Alargado para prefixo (`"TextBox\w*"` etc.) em 10 sites do `case 4..8`. Delta medido nos 508 forms: 16 usam subclasse e **7 liam zero campos tendo 1 a 9** (`FormSigOpCfp`, `FormSigOpChb`, `FormSigOpCot`, `FormSigOpCrd`, `FormSigOpCts`, `Formsigprtam`, `FormSIGPRTRF`). As `Validar*` foram declaradas como `PROCEDURE` (equivalente a `FUNCTION` em VFP9 e o estilo can├┤nico do projeto), que ├® o que o gate cobra. `ParseFile` do orquestrador: OK.
+
+Nessa edi├º├úo eu corrompi o orquestrador numa primeira tentativa (round-trip latin-1 num arquivo UTF-8 com BOM, 1.883 bytes perdidos); restaurei da c├│pia e refiz com o encoding correto ÔÇö o diff final tem exatamente as 10 linhas pretendidas, BOM e CRLF intactos. Li├º├úo gravada em mem├│ria.

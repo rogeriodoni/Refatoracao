@@ -1198,15 +1198,27 @@ DEFINE CLASS FormTester AS Custom
                 ?? "PASSOU"
             ELSE
                 *-- Verificar alternativas comuns
-                LOCAL loc_lTemFechar, loc_lTemSair
+                LOCAL loc_lTemFechar, loc_lTemSair, loc_lTemFecharDialogo
                 loc_lTemFechar = PEMSTATUS(THIS.oForm, "BtnFecharClick", 5)
                 loc_lTemSair = PEMSTATUS(THIS.oForm, "BtnSairClick", 5)
 
-                IF loc_lTemFechar OR loc_lTemSair
+                *-- Dialogo filho MODAL (WindowType=1): o SCX legado tem
+                *-- Confirmar/Salvar + Cancelar, e os DOIS fecham por um
+                *-- metodo unico (ex.: FormSigOpChb/Formsigopcks/FormSigOpCoc/
+                *-- FormSIGPRTRF/FormSigOpCot) - nao ha botao chamado
+                *-- "Encerrar"/"Fechar"/"Sair" porque a ACAO de cada botao eh
+                *-- Confirmar ou Cancelar, nao encerrar (nomear o handler pelo
+                *-- objeto legado btnSair violaria a convencao de nomear pela
+                *-- ACAO quando o Click faz mais que so fechar). FecharDialogo
+                *-- e' o nome canonico desse metodo unico no projeto
+                loc_lTemFecharDialogo = PEMSTATUS(THIS.oForm, "FecharDialogo", 5)
+
+                IF loc_lTemFechar OR loc_lTemSair OR loc_lTemFecharDialogo
                     loc_lPassou = .T.
                     loc_cDetalhes = "BtnEncerrarClick nao encontrado, mas existe: " + ;
                         IIF(loc_lTemFechar, "BtnFecharClick ", "") + ;
-                        IIF(loc_lTemSair, "BtnSairClick", "")
+                        IIF(loc_lTemSair, "BtnSairClick ", "") + ;
+                        IIF(loc_lTemFecharDialogo, "FecharDialogo (dialogo filho modal)", "")
                     ?? "PASSOU"
                 ELSE
                     IF THIS.EhFormDespachante()

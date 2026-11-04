@@ -490,7 +490,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Container botoes Confirmar/Cancelar (Grupo_Salva: Top=11+29=40, Left=817)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top           = 40
+            .Top           = 27
             .Left          = 817
             .Width         = 160
             .Height        = 85

@@ -451,7 +451,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- Container botoes Confirmar/Cancelar
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 38
+            .Top         = 27
             .Left        = 819
             .Width       = 160
             .Height      = 85

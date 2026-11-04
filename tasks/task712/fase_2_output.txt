@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 2 conclu├¡da ÔÇö `SigOpCprBO.prg` (1352 linhas, +849)
+
+### M├®todos CRUD acrescentados
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarDoCursor(alias)` | leitura do cursor de origem antes do `Scatter Memvar` (l├¬ `cods`/`pkchaves` ou `processos`/`codigos`, por `TYPE()`) |
+| `CarregarOrigem()` | `Select * From SigCmCab/SigPcOop Where ...` do `CmdCopia.Click` |
+| `ValidarDestino()` | `GetDestino.Valid` (duplicidade, com as mensagens literais) |
+| `ValidarDados()` | `If Empty(GetDestino.Value)` do Click **+** duplicidade do Valid |
+| `ExecutarCopia(destino)` | entrada p├║blica: `NovoRegistro` + `Salvar` (relato de falha pela base, regra #20) |
+| `Inserir()` | **a c├│pia inteira**: origem ÔåÆ chaves novas ÔåÆ lote ÔåÆ `fGravarLog` ÔåÆ `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | delega a `Inserir()` (igual ao BO irm├úo `SigOpCopBO`) |
+| `MontarLoteCopia` / `MontarInsertCopia` / `ObterListaColunas` / `GerarChaveItem` / `ExecutarLoteCopia` | `Scatter Memvar Memo` + `Insert From Memvar` + `Replace` + 2├ù`UpDate` + `Commit` |
+
+O `Scatter Memvar` virou `INSERT ... SELECT` server-side com a lista de colunas do `INFORMATION_SCHEMA` (as duas pontas s├úo a mesma tabela, ent├úo nenhuma coluna NOT NULL fica de fora ÔÇö regra #22), e o lote vai num `SQLEXEC` ├║nico com `SAVE TRANSACTION`/`THROW`, porque a conex├úo nasce com `@@TRANCOUNT = 1` e um `BEGIN/COMMIT` separado s├│ aninharia. `fGerUniqueKey` ├® chamado **antes** do lote (ele d├í `SQLCOMMIT` pr├│prio). `pkchaves`/`cidchaves` dos itens s├úo gerados **por linha**.
+
+Tamb├®m: `ConfigurarModalidade` agora acerta `this_cTabela`/`this_cCampoChave` conforme a modalidade (sen├úo `LogAuditoria` gravaria sempre `SigPcOop`); `this_cCursorContagem` virou `this_cCursorColunas`; 3 propriedades novas para o lote.
+
+### Diverg├¬ncias deliberadas do legado (documentadas no fonte)
+1. **Origem ausente aborta com mensagem** ÔÇö no legado o ramo comiss├úo fica mudo e o de processo faz `Scatter/Append/Gather` sobre cursor vazio, **gravando registro em branco**.
+2. **`TOP 1 + ORDER BY` pela PK, e c├│pia filtrada pela PK da origem** ÔÇö `cods`/`processos` n├úo s├úo ├║nicas; o `Go Top` do legado escolhe linha indefinida e filtrar por elas tentaria gravar a mesma PK nova duas vezes.
+3. **Duplicidade reconsultada no `ValidarDados`** ÔÇö sen├úo a viola├º├úo de PRIMARY KEY chega crua do ODBC.
+4. **`usuars` n├úo ├® sobreposto**: medido que `Replace USUARS With Usuars` ├® no-op (campo ou memvar do `Scatter`, os dois s├úo o valor da origem) ÔÇö mantive o dado igual ao legado em vez de trocar para o usu├írio logado (regra #17).
+
+### Verifica├º├úo feita
+- **Smoke test VFP9 passou** (`exit=0` + arquivo escrito), ent├úo os resultados abaixo s├úo reais.
+- **`COMPILE` limpo**: `.FXP` gerado, `.ERR` ausente ÔÇö com **controle negativo** (c├│pia do BO + `PUBLIC PROCEDURE`) produzindo `.ERR` s├│ nas linhas acrescentadas, o que prova que o detector funciona.
+- **Probe de runtime, 19 checagens**: instancia├º├úo OK; os 7 m├®todos chamados de fora s├úo PUBLIC e os 5 internos PROTECTED (regra #51); modalidade troca tabela/chave/tamanho (20Ôåö40); mensagens do legado saem certas (`Destino Invalido !!!`, `Favor Reinicializar o Processo!!!`); 50 chaves de item ├║nicas de 20 chars; `INSERT`/`SELECT` com 49 = 49 = 49 colunas; override com coluna inexistente devolve SQL vazio + mensagem; nenhum di├ílogo disparado.
+- Est├ítico: 0 acentos literais, 0 `RETURN` dentro de `TRY`, 0 `MESSAGEBOX`, 0 `this_X .Value`, nenhum TODO/stub; CRLF preservado (CR=LF=1352) e diff de 849 inser├º├Áes / 3 remo├º├Áes.
+
+**N├úo provado**: execu├º├úo contra o banco. O SQL Server `192.168.200.10` ├® inalcan├º├ível desta m├íquina, ent├úo o lote `INSERT ... SELECT` e a atomicidade n├úo foram exercitados contra dados reais ÔÇö s├│ a montagem do SQL.

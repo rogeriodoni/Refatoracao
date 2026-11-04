@@ -1,0 +1,17 @@
+PROBE F5 INICIO
+ambiente OK
+CREATEOBJECT -> VARTYPE=O
+Page2 z-order (7): CNT_4C_CABECALHO | CNT_4C_SALVA | LBL_4C_NOME | TXT_4C_NOME | LBL_4C_GRUPO | TXT_4C_GRUPO | TXT_4C_DGRUPO
+Existem? lbl_4c_Nome=.T. txt_4c_Nome=.T. lbl_4c_Grupo=.T. txt_4c_Grupo=.T. txt_4c_DGrupo=.T.
+lbl_4c_Nome: Caption=[Nome : ] Top=178 Left=172 W=39 H=15 AutoSize=.F. Align=0 BackStyle=0 Fore=5921370 Font=Tahoma/8 TabIndex=2 Visible=.T.
+txt_4c_Nome: Top=175 Left=214 W=150 H=23 MaxLength=20 Format=[K] InputMask=[] Font=Tahoma/8 CtrlSrc=[] VType=C TabIndex=4 Visible=.T.
+lbl_4c_Grupo: Caption=[Grupo Sd Inicial : ] Top=203 Left=125 W=86 H=15 AutoSize=.F. Align=0 BackStyle=0 Fore=5921370 Font=Tahoma/8 TabIndex=3 Visible=.T.
+txt_4c_Grupo: Top=198 Left=214 W=80 H=25 MaxLength=10 Format=[K!] InputMask=[] Font=Courier New/9 CtrlSrc=[] VType=C TabIndex=5 Visible=.T.
+txt_4c_DGrupo: Top=198 Left=294 W=271 H=25 MaxLength=20 Format=[K!] InputMask=[] Font=Courier New/9 CtrlSrc=[] VType=C TabIndex=6 Visible=.T.
+Faixa: Top=29 Height=80 fim=109
+Atribuicao: txt_4c_Grupo.Value=[abc] txt_4c_Nome.Value=[demo um]
+Sobreposicao: lbl_4c_Nome fim=211 txt_4c_Nome Left=214 | lbl_4c_Grupo fim=211 txt_4c_Grupo Left=214 | txt_4c_Grupo fim=294 txt_4c_DGrupo Left=294
+AlternarPagina(2): ActivePage=2
+BtnCancelarClick: ActivePage=1 Modo=LISTA Incluir.Enabled=.T.
+Release OK
+PROBE F5 FIM

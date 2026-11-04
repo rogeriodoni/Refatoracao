@@ -439,7 +439,7 @@ DEFINE CLASS FormCrt AS FormBase
             *-- Container botoes Confirmar/Cancelar (original Grupo_Salva Top=17+29=46, Left=619)
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPagina.cnt_4c_BotoesAcao
-                .Top         = 46
+                .Top         = 27
                 .Left        = 619
                 .Width       = 165
                 .Height      = 85

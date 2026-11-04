@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Here's what happened.
+
+## A task721 ├® uma re-execu├º├úo duplicada ÔÇö e as Fases 1ÔÇô3 destru├¡ram a migra├º├úo completa
+
+Comecei implementando a Fase 4 de verdade (m├®todo de carga real no form + `CarregarDivisoesOp` no BO, ~400 linhas transcrevendo `Get_OP.Valid`), e o gate passou. Ao conferir o `git status` antes de encerrar, descobri o problema de fundo:
+
+| | HEAD (task019, `COMPLETED`) | disco (gerado nesta execu├º├úo) |
+|---|---|---|
+| `Formsigopdiv.prg` | **1547** linhas | 761 |
+| `sigopdivBO.prg` | **1571** linhas | 782 |
+| statements SQL | 41 | 15 |
+
+O HEAD j├í era uma migra├º├úo **Fase 7/8 inteira** de `SIGOPDIV`: `BuscarOP` (as 7 etapas do `Get_OP.Valid`), `GerarDivisao` (~500 linhas), `GerarReinicio`, `ConfirmarGravacao`, `RollbackTransacao`, `ExecutarModoAutomatico`, todos os handlers de campo e de grade ÔÇö exatamente o algoritmo que a execu├º├úo anterior desta fase dizia estar "deferindo". O `menu.prg` j├í est├í integrado contra ela (`AbrirFormsigopdivDivisao`/`Reinicia` com `GarantirClasse`).
+
+O `md5sum` da SCX **n├úo** denunciou a duplicata (a c├│pia da task721 ├® uma re-extra├º├úo, md5 diferente da task019). O que denunciou foi comparar HEAD contra o disco. Os dois dumps do legado diferem em 12 linhas, s├│ timestamp e um `Set Step On` deslocado ÔÇö ├® o mesmo form.
+
+**Restaurei** os dois arquivos do HEAD (`git checkout HEAD --`, voltou com CRLF pelo autocrlf, `git diff` vazio) e guardei a vers├úo gerada em `tasks/task721/_versao_gerada_task721/` para reversibilidade. N├úo toquei em `task_state.json` ÔÇö bookkeeping do orquestrador.
+
+Validei o restaurado: gate da Fase 4 `validado = True`, `Test-CompletudeCodigo` OK nos dois arquivos, `ValidadorSQLSchema` com 41 statements e zero coluna inv├ílida, `VerificarColunaEmpresaSQL` ERRO=0.
+
+## Dois pontos que precisam de voc├¬
+
+1. **`Dpros c(40)` vs `c(65)`** ÔÇö ├® o ├║nico delta real entre os dumps. O SCX atual estreitou o cursor de trabalho para 40; o HEAD usa 65, que ├® o que `SigOpPic.dpros char(65)` tem. Estreitar truncaria a descri├º├úo que a gera├º├úo grava de volta, ent├úo **n├úo mexi**. Decis├úo de quem conhece a mudan├ºa no legado.
+
+2. **A task721 segue enfileirada.** As Fases 5ÔÇô8 v├úo sobrescrever os arquivos de novo pelo mesmo caminho. Vale marcar a task como duplicada/SKIP antes do pr├│ximo ciclo.
+
+Uma limita├º├úo a registrar: **o VFP9 n├úo executa nesta m├íquina** ÔÇö o smoke test de 4 linhas com `STRTOFILE` saiu com `exit=0`, criou o `.FXP` e n├úo gerou o arquivo de sa├¡da. Ent├úo n├úo h├í prova de compila├º├úo nem de instancia├º├úo; toda a verifica├º├úo acima ├® est├ítica.
+
+Atualizei a mem├│ria `feedback_task_rerun_sobre_form_ja_migrado` com esta recorr├¬ncia, destacando que o `md5sum` falha como detector e que a compara├º├úo HEAD-x-disco precisa rodar em **toda** fase, n├úo s├│ na 3.

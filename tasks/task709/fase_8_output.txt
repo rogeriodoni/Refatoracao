@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8/8 entregue** em `projeto/app/forms/operacionais/FormSIGOPCPE.prg` (1842 ÔåÆ 2304 linhas).
+
+## O que entrou
+
+| m├®todo | legado correspondente | papel |
+|---|---|---|
+| `CarregarLista()` | bloco de dados do `Init` (`AddCursor`/`ReQuery`/`Index On Tipos Tag PesqTipo`/`Go Top` + semeadura dos 6 tipos) | funil **├║nico** de carga; o `InicializarForm` passou a cham├í-lo em vez de ir direto ao BO |
+| `BOParaForm()` | ÔÇö (circuito da arquitetura em camadas) | properties do BO ÔåÆ os 15 controles + o seletor `Cmb_Tipo`; virou o repintar do `ValidarTipo` |
+| `FormParaBO()` | efeito do `ControlSource` ao perder o foco | tela ÔåÆ linha corrente do cursor (`REPLACE`) ÔåÆ properties do BO; chamado pelo `BtnConfirmarClick` antes de gravar |
+| `BtnCancelarClick()` | `SIGOPCPE.cancela.Click` | o mesmo evento sob o nome do objeto legado, delegando ao `BtnEncerrarClick` |
+
+Mapeamento **completo** nos dois sentidos: 15 controles com `ControlSource` + o seletor. `cidchaves` e `nomeimp` ficam de fora por n├úo terem controle no SCX (quem as cobre ├® o INSERT do BO, regra #22).
+
+## Verificado rodando no VFP9
+
+Compila limpo (form e BO, `.FXP` sim / `.ERR` n├úo) e o probe de runtime instancia a tela e exercita o fluxo ÔÇö `automation\vfp_helpers\probe_task709_fase8_v3.prg`, zero erro capturado em modo teste:
+
+- cursor com **6 linhas**, tag `PESQTIPO` ativa, linha de abertura `Balan├ºa` com o default `9600,n,8,1`;
+- `Cmb_Tipo` abre em **branco** (`ListIndex = 0`) e os 10 controles condicionais escondidos ÔÇö ├® o estado real do legado;
+- `ValidarTipo` reposiciona e acende os 4 controles dos blocos cheque/leitor;
+- **`FormParaBO` prova seu valor**: ap├│s editar a tela, `BO.this_cSettings` continuava `9600,n,8,1` (stale); depois dele, cursor **e** BO carregam os 7 valores editados, e `tipos` n├úo foi tocado;
+- `BOParaForm`: property ÔåÆ controle ÔåÆ cursor (`portas=7`, `settings=19200,n,8,1`);
+- `tpbarras = 0` **preservado** nos dois sentidos (sem promover a 1 ÔÇö regra #45);
+- recarga volta ao dispositivo escolhido, n├úo ao `Go Top`;
+- `FormParaBO` em EOF devolve `.F.` sem escrever; `BtnCancelarClick` libera o form e fecha o cursor.
+
+Gate real da Fase 8, medido com as pr├│prias fun├º├Áes do orquestrador via AST (`automation\VerificarGateFase8Task709.ps1`): **VEREDITO = PASSA**, `AcaoDoLegadoTemHandler = True`, os 4 nomes **declarados** de verdade. Completude, regra #1 (zero `RETURN` em `TRY`) e regra #4 (zero byte n├úo-ASCII): tudo OK.
+
+## Tr├¬s coisas para o seu conhecimento
+
+1. **`FormParaBO`/`BOParaForm` s├úo PROTECTED, e n├úo por escolha** ÔÇö o `FormBase` os declara assim (`formbase.prg:280/285`) e PROTECTED na base prevalece sobre o override. Medi: `PEMSTATUS(oForm, "FormParaBO", 2)` d├í `.T.` mesmo com `FUNCTION` puro. Escrevi `PROTECTED` expl├¡cito para o arquivo n├úo mentir, e corrigi os coment├írios que eu mesmo havia posto dizendo "PUBLIC, chamado de fora pelo harness" ÔÇö era falso. S├│ se alcan├ºam por `THIS.`, que ├® como os chamadores internos os usam. `CarregarLista` e `BtnCancelarClick` **s├úo** p├║blicos (o harness chama esses).
+
+2. **Cinco m├®todos do template n├úo se aplicam e ficaram de fora, documentados no cabe├ºalho**: `BtnBuscarClick` (n├úo h├í bot├úo Buscar ÔÇö os ├║nicos CommandButton do SCX s├úo `Ok` e `cancela`), `BtnSalvarClick` (o bot├úo de gravar chama-se `Ok`/"Confirmar" e o handler ├® o `BtnConfirmarClick` da Fase 7), `HabilitarCampos` (o legado n├úo tem modo somente-leitura ÔÇö o que ele alterna ├® *visibilidade*, e isso ├® o `AplicarVisibilidadePorTipo`), `LimparCampos` (n├úo h├í modo de inclus├úo; zerar campos apagaria configura├º├úo gravada) e `AjustarBotoesPorModo` (n├úo existe `pcEscolha` no dump). O gate n├úo exige nenhum dos cinco.
+
+3. **O item de menu n├úo foi criado.** O bloco "Integra├º├úo" do prompt pede um `BAR` em `popMovimentos` + `AbrirFormSIGOPCPE` com `GarantirClasse`, mas esse bloco ├® repetido em todas as 8 fases e a entrega desta fase ├® o `.prg`. Conferi: as quatro migra├º├Áes irm├ús (task705ÔÇô708: `SigOpCoc`, `SigOpCop`, `SIGOPCOR`, `SigOpCot`) **tamb├®m** n├úo t├¬m entrada no `menu.prg`, e o `GarantirClasseNoMenu.ps1` s├│ conserta `Abrir*` j├í existentes ÔÇö n├úo cria barras. Como mexer num menu compartilhado de 362 entradas ├® mudan├ºa vis├¡vel em todo o app, deixei para sua decis├úo; digo a palavra e adiciono. O `SET PROCEDURE` em `config.prg`, tamb├®m pedido no bloco, est├í **superado** pela carga sob demanda (CLAUDE.md pro├¡be desde 2026-10-28).
+
+Durante o trabalho ca├¡ em duas armadilhas que vale registrar: `LOG()` ├® fun├º├úo intr├¡nseca do VFP9 (meu logger de probe chamado `Log` travou o processo num Program Error silencioso), e um coment├írio meu quebrou linha deixando `* todo` no in├¡cio ÔÇö o que casa o regex de marcador do `Test-CompletudeCodigo` e teria reprovado a fase. Os dois foram corrigidos e revalidados.

@@ -424,6 +424,14 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Cadastro de Visitas de Representantes (SigCdVis)"
     DEFINE BAR 198 OF popCadastros PROMPT "Estoque M" + CHR(225) + "ximo" ;
            MESSAGE "Cadastro de Estoque M" + CHR(225) + "ximo por Produto/Empresa (SigCdMax)"
+    *-- SIGOPDMP.SCX tem Caption = (prompt()), ou seja o titulo da tela E o
+    *-- prompt deste item - o texto literal nao esta no acervo (nao veio menu
+    *-- legado). "de Balanco" vem do consumidor: SigReDdp, o relatorio
+    *-- "Demonstrativo de Balanco", le SigPrDmo/SigCdDpr. O qualificador
+    *-- tambem evita o prompt duplicado com a BAR 130 ("Demonstrativos",
+    *-- SigCdMrr), que e outra tabela.
+    DEFINE BAR 199 OF popCadastros PROMPT "Demonstrativos de Balan" + CHR(231) + "o" ;
+           MESSAGE "Cadastro de Demonstrativos de Balan" + CHR(231) + "o (SigPrDmo)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -616,6 +624,7 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 196 OF popCadastros DO AbrirFormVEN
     ON SELECTION BAR 197 OF popCadastros DO AbrirFormVis
     ON SELECTION BAR 198 OF popCadastros DO AbrirFormsigprcom
+    ON SELECTION BAR 199 OF popCadastros DO AbrirFormSigOpDmp
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -12731,6 +12740,54 @@ PROCEDURE AbrirFormSIGOPCHR()
                      "Procedure: " + loException.Procedure
 
         MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpDmp - Abre Cadastro de Demonstrativos de Balanco (SigPrDmo)
+*
+* GarantirClasse ANTES do CREATEOBJECT: desde 2026-10-28 os Forms e BOs sao
+* carregados SOB DEMANDA (o SET PROCEDURE de todos os ~950 arquivos era
+* quadratico). O GarantirClasse le start\indice_classes.txt e carrega o Form
+* mais o fecho de dependencias dele (SigOpDmpBO, FormBuscaAuxiliar, ...).
+*
+* O Show() fica FORA do TRY (CLAUDE.md regra #29): o form e modal
+* (WindowType = 1), logo o Show() BLOQUEIA e a tela inteira - cada Valid,
+* cada Click - viveria dentro do bloco. Como em VFP9 o TRY/CATCH tem
+* precedencia sobre o ON ERROR em qualquer ponto da pilha, um erro de runtime
+* durante o uso saltaria para o CATCH, abandonaria o TRY, o loForm LOCAL
+* perderia a referencia e o form seria DESTRUIDO - para o usuario, "a tela
+* fecha sozinha e o menu continua".
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpDmp()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("FormSigOpDmp")
+        loForm = CREATEOBJECT("FormSigOpDmp")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario FormSigOpDmp" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Cadastro de Demonstrativos de Balan" + ;
+                     CHR(231) + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
     ENDTRY
 
     IF VARTYPE(loForm) = "O"

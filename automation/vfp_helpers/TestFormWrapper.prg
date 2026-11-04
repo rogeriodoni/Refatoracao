@@ -163,6 +163,15 @@ LOG_Escrever("")
 LOG_Escrever("[ETAPA 2] Criando objeto do formulario...")
 
 TRY
+    *-- Carga SOB DEMANDA (config.prg desde 2026-10-28): classes so entram no
+    *-- SET PROCEDURE quando GarantirClasse() eh chamado antes do CREATEOBJECT
+    *-- (utils\garantirclasse.prg). Sem isto, CREATEOBJECT(par_cFormClass)
+    *-- estoura "Class definition ... is not found" para QUALQUER form sempre
+    *-- que o indice de classes estiver atualizado - nao eh defeito do form
+    *-- em teste. GarantirClasse e no-op seguro quando a carga e completa
+    *-- (gl_4c_CargaSobDemanda = .F.) ou a variavel nao existe.
+    GarantirClasse(par_cFormClass)
+
     loc_oForm = CREATEOBJECT(par_cFormClass)
 
     IF ISNULL(loc_oForm) OR TYPE("loc_oForm") # "O"

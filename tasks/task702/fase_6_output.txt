@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e medida. Resumo:
+
+## O que foi feito em `projeto\app\forms\operacionais\Formsigopcks.prg`
+
+**Campos restantes: nenhum a acrescentar** ÔÇö os 11 objetos do SCX j├í estavam na tela (3 na Fase 3: `cnt_4c_Sombra` + 2 labels; 7 na Fase 5). Conferi objeto a objeto contra a SE├ç├âO 2 do dump. O trabalho real desta fase neste form s├úo os **eventos**.
+
+**Lookup implementado (`AbrirBuscaUsuario`)** ÔÇö o legado usa `fwBuscaSel` sobre o cursor **LOCAL** `tmpusu` (hoje `cursor_4c_Usuar`), n├úo uma tabela. Por isso usei a API `DefinirCursor`/`Mostrar` do `FormBuscaAuxiliar` (cursor pr├®-populado), nunca o `Init` com par├ómetros ÔÇö que montaria um `SELECT * FROM <tabela>` pr├│prio e **perderia o crit├®rio de permiss├úo** (o pool vem de um JOIN `SigCdUsu`├ù`SigCdCrg` cujo WHERE depende do tipo de libera├º├úo e vive no BO). Colunas `C├│digo`/`cargo` reinstaladas com os t├¡tulos do legado.
+
+**Os 4 m├®todos de controle do SCX, todos cobertos:**
+
+| legado | migrado | evento ligado |
+|---|---|---|
+| `usuario.KeyPress` | `UsuarioKeyPress` | `"KeyPress"` (ESC+vazio aborta; F4 = atalho do funil) |
+| `usuario.Valid` | `ValidarUsuarioDigitado` + `...Exec` | `"LostFocus"` (regra #47) |
+| `usuario.When` | `AplicarRegraWhenUsuario` | `.Enabled` ÔÇö BINDEVENT descarta o retorno do delegate, um "When" ligado n├úo bloquearia a entrada |
+| `senha.Valid` | `ValidarSenhaDigitada` + `...Exec` | `"LostFocus"` |
+
+Guardas de reentr├óncia (`this_lEmLookup`, `this_lEmValidacaoSenha`) nos **wrappers**, nunca no corpo ÔÇö os dois caminhos abrem janela modal.
+
+## Duas decis├Áes de escopo que preciso declarar
+
+1. **N├âO criei `cnt_4c_BotoesAcao` (Salvar/Cancelar)**, apesar de o prompt da fase pedir. O SCX tem **zero** bot├úo (`TitleBar=0`, `ControlBox=.F.`, nenhum `CommandButton`/`PROCEDURE *Click`): ├® a fam├¡lia ENTRADA-SEM-BOT├âO, confirma pelo `Valid` do ├║ltimo campo. Cri├í-los violaria o PILAR 1 e a regra "NUNCA inventar", e criaria um segundo caminho de confirma├º├úo concorrendo com o `LostFocus`.
+2. **Implementei tamb├®m `senha.Valid`**, que o cabe├ºalho da Fase 5 atribu├¡a a "Fase 6/7" ÔÇö sem ele o di├ílogo ficaria inerte, e a proibi├º├úo de coment├írio "pr├│xima fase" n├úo me deixaria registrar a pend├¬ncia no arquivo. Cabe├ºalho atualizado: s├│ o contrato de retorno do `Unload` (Fase 8) continua pendente.
+
+Tamb├®m fechei com `Hide()` (`FecharDialogo`), n├úo `Release()`: medido no projeto, `Release()` mata a refer├¬ncia do chamador e este di├ílogo existe para **devolver** se autorizou.
+
+## Verifica├º├úo (medida, n├úo lida)
+
+- Compila├º├úo: `.fxp` gerado para Form e BO, **nenhum `.ERR`**.
+- `automation\ProbeCks702Fase6.prg` ÔåÆ **PROBE_FALHAS=0**: form instancia 1000├ù600 com Caption do `DO CASE`; os 4 BINDEVENTs aparecem em `AEVENTS`; os 11 m├®todos do caminho de BINDEVENT s├úo PUBLIC; o `When` deixa `Enabled=.T.` em CANCITEM e `.F.` em MAXIMO (com usu├írio pr├®-preenchido e r├│tulo "Senha Do Dia :"); o picker monta as 2 colunas certas; abortar deixa `this_lZSen=.F.`.
+- Auditorias: `VerificarLookupEmKeyPress` ERRO=0 AVISO=0; `VerificarFormBuscaAuxiliar` OK; `VerificarPropriedadesInexistentes` OK; `VerificarMetodoProtegidoChamadoDeFora` OK. Zero byte n├úo-ASCII (acentos via `CHR()`), zero TODO/stub, CRLF preservado (1275 pares `0d 0a`, zero `0d 0d`).
+
+Um aviso: `sed -i` no Git Bash **apagou o CRLF do arquivo inteiro** numa edi├º├úo de uma linha ÔÇö detectei e restaurei. Vale evitar `sed -i` nos `.prg` (├® a li├º├úo j├í registrada sobre o Orquestrador).

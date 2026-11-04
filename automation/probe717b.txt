@@ -1,0 +1,12 @@
+=== PROBE 6b - contrato do chamador apos o fechamento ===
+CONFIRM do chamador ANTES de abrir = ON
+CONFIRM com o campo em foco          = ON
+--- depois do Valid que pede fechamento ---
+VARTYPE(form)      = O   (esperado O)
+form.Visible       = .F.  (esperado .F.)
+ObterResultado()   = .F.
+Unload()           = .F.
+CONFIRM restaurado = ON  (esperado ON)
+VARTYPE apos Release do CHAMADOR = X   (esperado X)
+CONFIRM apos Release             = ON
+=== FIM ===

@@ -1,0 +1,1345 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopclg.SCX
+* Data/Hora: 29/10/2026 21:26:48
+* Total de registros: 47
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCLG
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: pgfPagina
+  Parent: SIGOPCLG
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntSombra
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCLG.pgfPagina.PgDados.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCLG.pgfPagina.PgDados.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdProcessar
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getDtIni
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFin
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetUserRede
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetHrIni
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetHrFin
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetPrg
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetUserSis
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOperacao
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetParam
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTrans
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGOPCLG.pgfPagina.PgDados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdLog
+  Parent: SIGOPCLG.pgfPagina.pgResultado
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: fwget1
+  Parent: SIGOPCLG.pgfPagina.pgResultado
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGOPCLG.pgfPagina.pgResultado
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdBotoes
+  Parent: SIGOPCLG.pgfPagina.pgResultado
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Caption = "Consulta do Log"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  Name = "SIGOPCLG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = -24
+  Left = 0
+  Width = 804
+  Height = 635
+  TabIndex = 1
+  Name = "pgfPagina"
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Dados"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.PageOrder = 1
+  Page1.ForeColor = 36,84,155
+  Page1.Name = "PgDados"
+  Page2.FontName = "Verdana"
+  Page2.FontSize = 8
+  Page2.Caption = "Resultado"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.PageOrder = 2
+  Page2.ForeColor = 36,84,155
+  Page2.Name = "pgResultado"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.cmdProcessar
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 642
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 11
+  BorderColor = 136,189,188
+  Name = "cmdProcessar"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "\<Processar"
+  Command1.ToolTipText = "Processar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnProcessar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.getDtIni
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Enabled = .T.
+  Left = 189
+  TabIndex = 2
+  Top = 221
+  Width = 80
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "getDtIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.getDtFin
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Enabled = .T.
+  Left = 290
+  TabIndex = 3
+  Top = 221
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "getDtFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 141
+  Top = 224
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 276
+  Top = 225
+  TabIndex = 21
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Usuário da Rede :"
+  Left = 98
+  Top = 197
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetUserRede
+------------------------------------------------------------
+  Enabled = .T.
+  Height = 23
+  InputMask = ""
+  Left = 189
+  MaxLength = 20
+  TabIndex = 1
+  Top = 194
+  Width = 152
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetUserRede"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetHrIni
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = "R"
+  Height = 23
+  InputMask = "99:99"
+  Left = 189
+  TabIndex = 4
+  Top = 249
+  Width = 51
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetHrIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetHrFin
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = "R"
+  Height = 23
+  InputMask = "99:99"
+  Left = 260
+  TabIndex = 5
+  Top = 249
+  Width = 51
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetHrFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Horário de Acesso :"
+  Left = 90
+  Top = 253
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say5
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 245
+  Top = 253
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetPrg
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 189
+  MaxLength = 20
+  TabIndex = 6
+  Top = 276
+  Width = 152
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetPrg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say6
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Programa :"
+  Left = 131
+  Top = 278
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetUserSis
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 189
+  MaxLength = 20
+  TabIndex = 8
+  Top = 330
+  Width = 152
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetUserSis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say7
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Usuario do Sistema :"
+  Left = 86
+  Top = 333
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say8
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação :"
+  Left = 130
+  Top = 306
+  TabIndex = 19
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetOperacao
+------------------------------------------------------------
+  RowSourceType = 1
+  RowSource = "Liberação,Entrada,Saida,Transação, "
+  Enabled = .T.
+  Height = 24
+  Left = 189
+  Style = 2
+  TabIndex = 7
+  Top = 302
+  Width = 152
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetParam
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 189
+  MaxLength = 10
+  TabIndex = 9
+  Top = 357
+  Width = 82
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetParam"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say9
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Parametros :"
+  Left = 122
+  Top = 360
+  TabIndex = 18
+  ForeColor = 90,90,90
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.GetTrans
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 189
+  MaxLength = 150
+  TabIndex = 10
+  Top = 384
+  Width = 527
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetTrans"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.PgDados.Say10
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Transação :"
+  Left = 127
+  Top = 387
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 307
+  Left = 63
+  Panel = 1
+  ReadOnly = .T.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 168
+  Width = 656
+  GridLineColor = 238,238,238
+  Name = "GrdLog"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 130
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 65
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.BackColor = 255,255,255
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 50
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.BackColor = 255,255,255
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 65
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.BackColor = 255,255,255
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Width = 95
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.BackColor = 255,255,255
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.ControlSource = ""
+  Column6.Width = 130
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.BackColor = 255,255,255
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 7
+  Column7.ControlSource = ""
+  Column7.Width = 85
+  Column7.Movable = .T.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuario Rede"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Hora"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Programa"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário Sistema"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Parametro"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.GrdLog.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.fwget1
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Enabled = .F.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 140
+  MaxLength = 150
+  TabIndex = 4
+  Top = 479
+  Width = 578
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  Name = "fwget1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.Say10
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Transação :"
+  Left = 62
+  Top = 482
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCLG.pgfPagina.pgResultado.cmdBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 698
+  SpecialEffect = 1
+  Top = 7
+  Width = 85
+  TabIndex = 1
+  BorderColor = 136,189,188
+  Name = "cmdBotoes"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[ESC] Sair"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnDados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCLG
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+ThisForm.PgfPagina.PgResultado.GrdLog.RecordSource = ''
+
+Private lcUserRede, ldDtIni, ldDtFin, lcHrIni, lcHrFin, lcPrg
+Private lcOperacao, lcUserSis, lcParam, lcTrans 
+
+With ThisForm.PgfPagina.PgDados
+	lcUserRede	= .GetUserRede.Value
+	ldDtIni		= fDtoSQL(.GetDtIni.Value)
+	ldDtFin		= fDtoSQL(.GetDtFin.Value,'23:59:59')
+	lcHrIni		= .GetHrIni.Value
+	lcHrFin		= .GetHrFin.Value
+	lcPrg		= .GetPrg.Value
+	lcOperacao	= .GetOperacao.Value
+	lcUserSis	= .GetUserSis.Value
+	lcParam		= .GetParam.Value
+	lcTrans 	= .GetTrans.Value
+EndWith
+
+If  IsEmpty(lcUserRede) And ;
+    IsEmpty(ldDtIni)    And ;
+	IsEmpty(ldDtFin)    And ;
+	IsEmpty(lcHrIni)    And ;
+	IsEmpty(lcHrFin)    And ;
+	IsEmpty(lcPrg)      And ;
+	IsEmpty(lcOperacao) And ;
+	IsEmpty(lcUserSis)  And ;
+	IsEmpty(lcParam)    And ;
+	IsEmpty(lcTrans) 
+	MessageBox("Pesquisa não pode ser realizada,"+Chr(13)+"Nenhum Parametro de Seleção foi Preenchido",16,"")
+	Return
+Endif
+
+lcSqlLog = [Select '          'As cOpers,a.* From SigOpLog a Where ]
+		   
+lcWhere = []
+lcWhere = lcWhere + Iif(!IsEmpty(lcUserRede),[ UsuaRedes = ']+lcUserRede+[' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(ldDtIni),Iif(!Empty(lcWhere),[ And ],[])+[ Datars >= ?ldDtIni ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(ldDtFin),Iif(!Empty(lcWhere),[ And ],[])+[ Datars <= ?lddtFin ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcHrIni),Iif(!Empty(lcWhere),[ And ],[])+[ Horas >= ']+Substr(lcHrIni,1,2)+[:]+Substr(lcHrIni,3,2)+[:00' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcHrFin),Iif(!Empty(lcWhere),[ And ],[])+[ Horas <= ']+Substr(lcHrFin,1,2)+[:]+Substr(lcHrFin,3,2)+[:00' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcPrg),Iif(!Empty(lcWhere),[ And ],[])+[ Progs = ']+lcPrg+[' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcOperacao),Iif(!Empty(lcWhere),[ And ],[])+[ Opers ]+Iif(Upper(lcOperacao)="ENTRADA",[= 'E'],Iif(Upper(lcOperacao)="SAIDA",[= 'S'],Iif(Upper(lcOperacao)="LIBERAÇÃO",[= 'L'],[<> 'E' And Opers <> 'S' And Opers <> 'L'])))+[ ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcUserSis),Iif(!Empty(lcWhere),[ And ],[])+[ Usuasis = ']+lcUserSis+[' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcParam),Iif(!Empty(lcWhere),[ And ],[])+[ Parametros Like ']+Alltrim(lcParam)+[%' ],[])
+lcWhere = lcWhere + Iif(!IsEmpty(lcTrans),Iif(!Empty(lcWhere),[ And ],[])+[ Transacaos Like ']+Alltrim(lcTrans)+[%' ],[])
+
+ThisForm.poDatamgr.SqlExecute(lcSqlLog+lcWhere,"crSigOpLog")
+
+Select crSigOpLog
+Replace All cOpers With Iif(Opers='E','Entrada',Iif(Opers='S','Saida',Iif(Opers='L','Liberação','Transação')))
+Go Top
+
+If Eof()
+	MessageBox("Nenhum Registro Encontrado para Seleção",64,"")
+	Return
+Endif
+
+ThisForm.PgfPagina.PgResultado.GrdLog.RecordSource = 'crSigOpLog'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column1.ControlSource = 'crSigOpLog.Usuaredes'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column2.ControlSource = 'crSigOpLog.Datars'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column3.ControlSource = 'crSigOpLog.Horas'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column4.ControlSource = 'crSigOpLog.Progs'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column5.ControlSource = 'crSigOpLog.cOpers'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column6.ControlSource = 'crSigOpLog.Usuasis'
+ThisForm.PgfPagina.PgResultado.GrdLog.Column7.ControlSource = 'crSigOpLog.Parametros'
+ThisForm.PgfPagina.PgResultado.fwget1.ControlSource = 'crSigOpLog.Transacaos'
+
+
+ThisForm.PgfPagina.PgResultado.Enabled=.t.
+ThisForm.PgfPagina.ActivePage = 2
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Set Date BRITISH 
+Set Century on
+
+ThisForm.pgfPagina.PgDados.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.pgfPagina.PgDados.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+		EndWith
+	Endif
+
+	.PgfPagina.PgResultado.Enabled=.f.
+	.PgfPagina.PgDados.GetUserRede.SetFocus
+
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCLG.pgfPagina.PgDados.cmdProcessar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnProcessar.Click
+------------------------------------------------------------
+PROCEDURE btnProcessar.Click
+If (MessageBox('Confirma o Processamento?', 4+32+256, 'Confirmação!!!') = 6)
+	ThisForm.Processamento
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCLG.pgfPagina.PgDados.GetPrg
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod, lFan, xObj, xBrow
+IF not IsEmpty(This.value)
+
+	ThisForm.PoDatamgr.SqlExecute([Select Distinct Programas From SigCdPrg Order By Programas],"crSigCdPrg")
+	SELECT crSigCdPrg
+	LOCATE FOR Programas = This.Value
+	If EOF()
+		xBrow = CreateObject('fwBuscaInt','crSigCdPrg','Programas',This.Value,'Progamas',.t.)
+		xBrow.mAddColuna('Programas','','Programa',.t.)
+		xBrow.Show		
+	ENDIF
+
+	IF LASTKEY()<>27
+		This.value = crSigCdPrg.Programas
+		This.refresh
+	ENDIF
+
+ENDIF
+RETURN(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCLG.pgfPagina.PgDados.GetUserSis
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod, lfan, xobj
+If not IsEmpty(This.value)
+
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Usuarios','','Usuários',.t.)
+		xBrox.Show()
+	EndIf 
+
+	If lastkey()<>27
+		This.value = evaluate("crSigCdUsu.Usuarios")
+		This.Refresh
+	endif
+endif
+return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCLG.pgfPagina.pgResultado.GrdLog
+* Classe: grid (Base: grid)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+ThisForm.PgfPagina.PgResultado.fwget1.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCLG.pgfPagina.pgResultado.cmdBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnDados.Click
+------------------------------------------------------------
+PROCEDURE btnDados.Click
+ThisForm.PgfPagina.PgResultado.Enabled=.f.
+ThisForm.PgfPagina.ActivePage=1
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCLG
+RESERVED3 (ClassInfo): podatamgr
+*carregaarquivos 
+*gerareport 
+*gravarmapas 
+*impmapas 
+*processamento 
+*retornaids 
+*somatudo 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

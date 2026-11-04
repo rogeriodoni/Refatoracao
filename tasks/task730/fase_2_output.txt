@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File is well-formed. Phase 2 is complete.
+
+**Summary of changes to `C:\4c\projeto\app\classes\SigOpEncBO.prg`:**
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps all 86 columns of `SigMvCcr` from a SQL cursor into the BO's `this_*` properties (using `SELECT (alias)` per CLAUDE.md rule #8, `TratarNulo()` for NULL-safety, and `VARTYPE` guard for the `bit` columns `autos`/`concs`).
+- **`Inserir()`** ÔÇö generates a complete `INSERT INTO SigMvCcr` covering every NOT NULL column (rule #22), with PK via `fUniqueIds()` when empty, computed fields (`gruconmoes`, `empdopnums`, `empdopncs`, `pagos`), audit fields (`usualts`/`datalts`), and a call to `RegistrarAuditoria("INSERT")` on success; increments `this_nLancamentosGerados`.
+- **`Atualizar()`** ÔÇö mirrors `Inserir()` as a full `UPDATE SigMvCcr SET ... WHERE cidchaves = ...`, with `RegistrarAuditoria("UPDATE")` on success.
+- Both follow the `sigopaccBO.prg` canonical pattern for this same table (same 86-column list), with SQL built via line-by-line concatenation (never a single long continued line, per the 8192-char line limit), and are declared **not PROTECTED** (per CLAUDE.md rule #51 ÔÇö `Inserir`/`Atualizar` are PUBLIC in `BusinessBase` and an OPERACIONAL form may call them directly).
+- `ObterChavePrimaria()` was already in place from Phase 1.
+
+Next phase (3/8) builds `FormSigOpEnc.prg`.

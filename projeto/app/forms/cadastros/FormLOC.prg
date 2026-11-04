@@ -416,7 +416,7 @@ DEFINE CLASS FormLOC AS FormBase
         *-- Com compensacao PageFrame +29: Top=38 (9+29)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 38
+            .Top         = 27
             .Left        = 842
             .Width       = 160
             .Height      = 85

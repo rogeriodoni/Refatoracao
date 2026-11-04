@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpCot.prg` (1416 ÔåÆ 1826 linhas).
+
+## O que foi entregue
+
+O SCX legado tem **tr├¬s** bot├Áes, cada um com o seu pr├│prio `Click` ÔÇö e os tr├¬s eventos foram transcritos:
+
+| Legado | Migrado | O que faz |
+|---|---|---|
+| `cntBotoes.btnConfirmar.Click` | `BtnConfirmarClick` | marca `this_lConfirmado = .T.` e fecha; n├úo grava nada (o digitado j├í est├í em `valos`) |
+| `cntBotoes.btnSair.Click` | `BtnCancelarClick` | `Set Decimals To 2` + `Replace All Valos With aValos` via `BO.DesfazerCotacoes`, repinta e fecha |
+| `btnCotacao.Click` | `BtnCotacaoClick` | abre `FormSigOpAlC` com moeda/cota├º├úo da **linha corrente** + data base e aplica o retorno com `BO.AplicarCotacaoAutorizada` |
+
+Mais duas pe├ºas que os tr├¬s exigem: `VincularEventosBotoes` (os 3 `BINDEVENT`, chamados no `InicializarForm` depois de `ConfigurarBotoes`) e `FecharDialogo` (fonte ├║nica da sa├¡da).
+
+## Decis├Áes que valem registro
+
+- **Bind por bot├úo, n├úo no `Click` do grupo** ÔÇö o legado tem m├®todos separados por bot├úo; um handler ├║nico no `CommandGroup` teria de desempatar por `.Value`.
+- **Fecha com `Hide()`, n├úo `Release()`** ÔÇö diverg├¬ncia deliberada de PILAR 3, documentada no m├®todo: `Release()` destr├│i o objeto mesmo com refer├¬ncia externa, e o form pai precisa ler `this_lConfirmado` **depois** do `Show()`. O exemplo de CHAMADA no cabe├ºalho foi atualizado para o pai chamar `Release()`.
+- **`Show()` do `FormSigOpAlC` fora do `TRY`** (regra #29) e a **refer├¬ncia ao BO do di├ílogo guardada antes do `Show`**: o `FormSigOpAlC` fecha com `THIS.Release()`, ent├úo ler `loc_oDialogo.this_cRetorno` depois estouraria "is not an object" e a cota├º├úo autorizada ficaria inalcan├º├ível em sil├¬ncio. O BO segue refcount e sobrevive; a leitura tenta os dois canais.
+- **Guard do `When` repetido no `Click`** (`PodeUsarBotaoCotacao`): o modo do pai pode mudar entre a abertura e o clique.
+- **Sem `SET DECIMALS TO 2` no Confirmar** ÔÇö o legado rep├Áe s├│ no `btnSair`; transcrito como est├í (regra #17), com o motivo no coment├írio.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: Form e BO geram `.fxp`, **nenhum `.ERR`**.
+- **Validador de completude** (`Test-CompletudeCodigo`, extra├¡do do orquestrador): OK nos dois arquivos, sem TODO/stub/procedure vazia.
+- **Gate da Fase 7 simulado** com as fun├º├Áes reais do orquestrador: `legadoSemCrud = True` (sem `frmcadastro`/`Grupo_Op`, sem nome CRUD, `pcEscolha viva = 0` ÔÇö as duas ocorr├¬ncias s├úo `ParentForm.pcEscolha`), `nBotoesLegado = 3` ÔåÆ piso 2, `nHandlers = 3` ÔåÆ **aprova**.
+- **Probe instanciando no VFP9** (`automation\ProbeCot708F7.prg`): os 3 handlers existem e s├úo PUBLIC; `AEVENTS` confirma os 3 binds em `CLICK` com os delegates certos; em `PROCURAR` o `BtnCotacaoClick` devolve `.F.` **sem abrir o modal** (o script termina, logo nada bloqueou); retorno `"OK"` muda `valos` 5,1234567 ÔåÆ 7,7777777 e grava `cotusus = CHEFE`; `"CANCELADO"` ├® no-op com mensagem vazia; Cancelar restaura `valos` de `avalos` (9,9999999 ÔåÆ 1,1111111), devolve `SET("Decimals")` a 2 e o objeto **sobrevive** (`VARTYPE = O`), morrendo s├│ no `Release()` do chamador. Zero di├ílogos suprimidos.
+
+Uma observa├º├úo fora do escopo desta fase: o `FormSigOpAlC` fecha com `THIS.Release()` ÔÇö ├® a inst├óncia aberta do problema documentado. O `BtnCotacaoClick` foi escrito para funcionar com ele assim (canal via BO), mas o conserto can├┤nico seria trocar aquele form para `Hide()`; n├úo mexi nele porque a entrega desta fase ├® o `FormSigOpCot.prg`.

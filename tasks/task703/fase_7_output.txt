@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7/8 conclu├¡da em `projeto/app/forms/operacionais/Formsigopclg.prg` (1527 ÔåÆ 1885 linhas).
+
+## N├úo existem BtnIncluir/Alterar/Visualizar/ExcluirClick ÔÇö e isso ├® fiel ao legado
+
+`SIGOPCLG` herda de `form` **puro** (n├úo de `frmcadastro`), n├úo tem `Grupo_Op` nem `pcEscolha`, e nenhum dos seus 3 bot├Áes ├® verbo CRUD. ├ë uma tela de **consulta somente-leitura**. Criar os 4 handlers CRUD exigiria inventar bot├úo (viola o PILAR 1) ou escrever m├®todo vazio (proibido pela regra de completude). Os "eventos principais dos bot├Áes" entregues s├úo os 3 `.Click` que o dump **prova** existirem ÔÇö um handler por BOT├âO, como no legado (cada bot├úo tem o seu pr├│prio `.Click`, n├úo h├í despachante por `.Value` a transcrever):
+
+| legado | handler | a├º├úo |
+|---|---|---|
+| `cmdProcessar.Command1.Click` | `BtnProcessarClick` | confirma├º├úo + `ThisForm.Processamento` |
+| `cmdProcessar.btnSair.Click` | `BtnEncerrarClick` | `ThisForm.Release` |
+| `cmdBotoes.btnDados.Click` | `BtnVoltarClick` | volta aos filtros (**n├úo** fecha a tela, apesar da legenda "Encerrar") |
+
+O `PROCEDURE processamento` ficou repartido: form faz confirma├º├úo, `FormParaBO` (10 filtros), mensagens com o **├¡cone do legado** (16=`MsgErro` sem filtro / 64=`MsgInfo` sem linha), bind e troca de p├ígina; o WHERE din├ómico e o SQLEXEC j├í estavam no BO. Entraram tamb├®m `GrdDadosAfterRowColChange` (o `fwget1.Refresh` do legado ÔÇö sem ele a Transa├º├úo ficaria presa na 1┬¬ linha) e o `PgResultado.Enabled=.f.` do `Init` legado, que ├® o estado inicial do toggle que `BtnVoltarClick` usa.
+
+`DesvincularGradeLog` transcreve a 1┬¬ linha do processamento (`GrdLog.RecordSource = ''`) e n├úo ├® cosm├®tica: `BuscarLog()` faz `USE IN` + `SQLEXEC` no mesmo alias, e SQLEXEC sobre alias ligado a Grid zera o `ColumnCount`. Ordem do sucesso: desvincular ÔåÆ consultar ÔåÆ `VincularGradeLog` ÔåÆ `AlternarPagina(2)` ÔåÆ `RepintarGradeLog` (Refresh em p├ígina oculta n├úo pinta, regra #21).
+
+## Medido no VFP9, n├úo deduzido
+
+`COMPILE` sem `.ERR` (form e BO). Probe de instancia├º├úo (`automation/InstantiateCheckSigopclgF7.prg`) ÔÇö 10 checagens, todas passando:
+
+- **instancia** ÔåÆ prova que os 4 BINDEVENT *bindaram* (delegate inexistente estoura no bind, dentro do `Init`)
+- `ActivePage=1` / `Page2.Enabled=.F.` inicial
+- os 3 handlers + o de grade s├úo **PUBLIC** (`PEMSTATUS(...,2)=.F.`); `FormParaBO` ├® PROTECTED, como a heran├ºa de `FormBase` obriga (regra #51)
+- `FormParaBO` transfere os 10 filtros, datas saem tipo `D`
+- guard de `AlternarPagina(2)` com `QtdeLog=0` **n├úo** troca de p├ígina
+- desvincular preserva `ColumnCount=7`; vincular devolve RecordSource/ControlSource/Width/Caption e o `fwget1`
+- com 2 linhas: p├ígina 2 ativa, `RECNO=1`, e `AfterRowColChange` sincronizou o BO nas duas linhas
+- `BtnVoltarClick` volta aos filtros com a tela **viva**; `BtnProcessarClick` respeita a recusa da confirma├º├úo (grade intacta); `BtnEncerrarClick` libera a tela
+
+Auditorias em verde: fun├º├Áes ├│rf├ús **0**, propriedades inexistentes **0**, m├®todo PROTECTED de BO chamado de fora **0**, lookup em KeyPress **ERRO=0** (os 28 avisos s├úo de `Formsigopcgp`, outro form). Nenhum TODO/stub, nenhum `MESSAGEBOX` direto, nenhum literal acentuado, nenhum `RETURN` dentro de `TRY`.
+
+Fica para a Fase 8: `BOParaForm`/limpeza dos filtros, foco inicial (`GetUserRede.SetFocus`, que no `Init` roda sobre controle ainda invis├¡vel) e revis├úo final de fidelidade.

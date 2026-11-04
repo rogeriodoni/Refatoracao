@@ -1,0 +1,55 @@
+=== PROBE FASE 2 - SigOpClpBO ===
+1) Instanciou BO.......: O
+   cursor contratado...: [cursor_4c_Operacoes]
+   ordem inicial.......: [Num] desc=.F.
+2) DefinirParametrosConsulta(vazio) = .F.  msg=[Grupo e Conta de origem são obrigatórios para a pesquisa de operações.]
+   DefinirParametrosConsulta(ok)    = .T.
+   ObterTituloConsulta.: [Pesquisa Operações da Conta : 10 / 1101 - GAVETA LOJA 001]
+3) CursorPronto.......: .T.  msg=[]
+   ContarOperacoes....: 3
+4) linha alvo RECNO...: 1  Dopes=[PAGAMENTO           ]
+   area ANTES.........: [CURSOR_4C_OUTRO]
+   CarregarLinhaCorrente = .T.
+   area DEPOIS........: [CURSOR_4C_OUTRO]  (deve ser CURSOR_4C_OUTRO)
+   this_cEmps.........: [001]
+   this_cDopes........: [PAGAMENTO]
+   this_cMascNum......: [0000000003]
+   this_cTipo.........: [Destino]
+   this_cMoeda........: [BRL]
+   this_nValos........: 1500.50  tipo=N
+   this_dDatas........: 10/03/2026  tipo=D
+5) ObterChavePrimaria.: [001PAGAMENTO           0000000003]  LEN=33  (esperado 33)
+   chave do INDICE....: [001PAGAMENTO           0000000003]  LEN=33
+   casam?.............: .T.
+6) OrdenarPorData: RECNO antes=1
+   retorno............: .T.
+   RECNO depois.......: 1  (deve ser 1)
+   ORDER()............: [DATAS] desc=.T.
+   this_cOrdemAtual...: [Datas] desc=.T.
+   1a linha (mais NOVA): 25/09/2026 00:00:00 Dopes=[MALOTE]
+7) OrdenarPorNumero...: .T.
+   ORDER()............: [NUM] desc=.F.
+   1a linha...........: Emps=[001] Dopes=[MALOTE] MascNum=[0000000001]
+8) PosicionarNoTopo...: .T.  RECNO=2
+   EOF()..............: .T.
+   CarregarLinhaCorrente (EOF) = .F.
+   props zeradas?.....: Dopes=[] Valos=0 Datas=  /  /    
+9) LimparDados: Dopes=[] Grupo=[10] Conta=[1101] cursor=[cursor_4c_Operacoes]
+10) CarregarDoCursor('nao_existe') = .F.
+    AplicarOrdem('TagInexistente') = .F.  msg=[Índice TagInexistente não existe no cursor de operações.]
+11) Inserir() herdado..: .F.  msg=[Método Inserir() não implementado]
+    Atualizar() herdado: .F.  msg=[Método Atualizar() não implementado]
+12) PEMSTATUS protegido (2=Protected, esperado .F. nos publicos):
+    CarregarDoCursor..........: .F.
+    CarregarLinhaCorrente.....: .F.
+    LimparDados...............: .F.
+    DefinirParametrosConsulta.: .F.
+    ObterTituloConsulta.......: .F.
+    CursorPronto..............: .F.
+    ContarOperacoes...........: .F.
+    PosicionarNoTopo..........: .F.
+    OrdenarPorNumero..........: .F.
+    OrdenarPorData............: .F.
+    AplicarOrdem..............: .F.
+    ObterChavePrimaria (deve .T.): .T.
+=== FIM OK ===

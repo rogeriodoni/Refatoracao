@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada e verificada.
+
+## O que entrou
+
+**`projeto/app/forms/operacionais/FormSigOpEnc.prg`** (596 ÔåÆ 961 linhas)
+
+O bloco **"Filtro"** do `Container1` legado ÔÇö 7 objetos transcritos do dump, em `ConfigurarCamposFiltro()` (`:224`), chamado por `ConfigurarContainerFiltro()`:
+
+| legado | migrado | geometria (dump) | Format / MaxLength |
+|---|---|---|---|
+| `Label1` "Filtro" | `lbl_4c_Filtro` | 2,3,40x17 | ÔÇö (Verdana 10 bold, `RGB(255,0,0)`) |
+| `lbl_grupo` "Grupo :" | `lbl_4c_Grupo` | 7,83,38x15 | ÔÇö (`RGB(90,90,90)`) |
+| `Get_Grupo` | `txt_4c_Grupo` | 3,123,80x25 | `"!"` / 10 |
+| `Get_DGrupo` | `txt_4c_DGrupo` | 3,204,290x25 | ÔÇö / 20 |
+| `Say1` "Conta :" | `lbl_4c_Conta` | 32,83,38x15 | ÔÇö (`RGB(90,90,90)`) |
+| `Get_Conta` | `txt_4c_Conta` | 29,123,80x23 | `"K"` / 10 |
+| `get_Dconta` | `txt_4c_DConta` | 29,204,290x23 | `"K"` / 50 |
+
+Mais o comportamento desses campos: `DGrupoWhen`/`ContaWhen`/`DContaWhen` (`:382`) = os tr├¬s `Procedure When` do legado; `GrupoLostFocus`/`ContaLostFocus`/`DContaLostFocus` (`:416`); o funil ├║nico `AplicarFiltro` (`:445`) = o `ThisForm.MontaTela()` dos `Valid`; e `LimparFiltro` (`:496`) = o `Procedure iniciar`.
+
+**`tasks/task730/mapeamento.json`** tinha dois destinos **colididos** (`Label1`+`Say1` ÔåÆ `lbl_4c_Label1`; `Get_Grupo`+`Get_GrupoC` ÔåÆ `txt_4c_Grupo`) ÔÇö o segundo apontaria o campo da contra-partida para o TextBox do filtro. Descolididos, e mais 10 entradas alinhadas ao nome real do `.prg` (as 5 `Column` apontavam para `Page_4c_1`).
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou, ent├úo deu para provar runtime, n├úo s├│ compila├º├úo:
+
+- **Compila limpo** ÔÇö `.fxp` apagado e recriado, sem `.ERR`. **Controle negativo**: c├│pia com `IF .T.` solto no fim gerou `.ERR` apontando *s├│* as 2 linhas acrescentadas, provando que o detector funciona.
+- **Instancia** ÔÇö `VARTYPE=O`, `ControlCount` 9 no form / 7 no container, geometria igual ao dump controle a controle.
+- **`When` igual ao legado** nos 3 estados: Grupo vazio ÔåÆ s├│ DGrupo digit├ível; Grupo cheio ÔåÆ Conta e DConta abrem; Grupo+Conta ÔåÆ DConta fecha.
+- `AplicarFiltro` leva o par ao BO; `LimparFiltro` zera tela e BO.
+- `Alignment = 3` (default real do VFP9, n├úo o `0` ing├¬nuo); `TabIndex` 1ÔÇô4 em faixa; 6 alvos de `BINDEVENT` todos PUBLIC; **0 acentos literais**; 0 marcadores de pend├¬ncia; `WITH`/`TRY`/`PROCEDURE`/`FUNCTION` balanceados; 43 chamadas resolvidas.
+- Gate da Fase 5, ramo FLAT: **passa**.
+
+## O que ficou de fora, de prop├│sito
+
+Metade restante do `Container1`, para a fase seguinte: bloco **Contra-Partida** (`Label4`/`Say4`/`Get_GrupoC`/`Get_DgrupoC`/`Say5`/`Get_contaC`/`Get_DcontaC`) e bloco **Opera├º├úo** (`Shape1`/`Label2`/`Get_Dope`), mais a resolu├º├úo c├│digoÔåÆdescri├º├úo por lookup (`fAcessoContab`/`fAcessoContas`).
+
+Dois pontos que registrei em coment├írio para a fase 6 n├úo trope├ºar:
+
+1. **`TabIndex` dos r├│tulos** n├úo entrou agora de prop├│sito: o dump declara 9/10/15, e o VFP9 **limita o `TabIndex` ao n├║mero de controles j├í existentes** ÔÇö gravar 15 num container de 7 o reduziria a 7 e renumeraria os getters, trocando a ordem de navega├º├úo. A faixa 1..16 do dump s├│ cabe quando os 17 controles existirem.
+2. **`Get_DGrupo` n├úo tem gancho de recarga**: no legado o `MontaTela()` dele s├│ roda *depois* do `fAcessoContab` resolver descri├º├úo em c├│digo ÔÇö vai junto com o lookup.

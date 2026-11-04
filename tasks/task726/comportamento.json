@@ -1,0 +1,76 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDVM",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDVM",
+      "evento": "Init",
+      "linhas": 72,
+      "codigoOriginal": "LParameters pcForm\n\nThisForm.DataSessionId = pcForm.DataSessionId\n\nSelect crImpressao\nZap\n\nSelect crSigFiMpi\n\nScan\n\n\tSelect Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixa ; \n\t       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value ;\n\t             And Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ;\n\t             And Substr(ecfs,1,3) = crSigFiMpi.nCaixa ;\n\t       Group By 1 Into Cursor crTotCaixa ReadWrite\n\t       \n\tSelect Substr(ecfs,1,3) As cCaixas,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_emps,Get_datas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDVM.CmdCat",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Release Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDVM.Init",
+      "queryOriginal": "\tSelect Substr(ecfs,1,3) As cCaixas, sum(Valos) As Valos  From crCaixa ; \t       Where Emps = pcForm.Pagina.Dados.PageFrame1.Page1.Get_emps.Value ; \t             And Datas = pcForm.Pagina.Dados.PageFrame1.Page1.Get_datas.Value ; \t             And Substr(ecfs,1,3) = crSigFiMpi.nCaixa ; \t       Group By 1 Into Cursor crTotCaixa ReadWrite",
+      "tabelas": "crCaixa",
+      "colunas": "3),Emps,Value,Datas,Substrecfs,1,nCaixa,crTotCaixa,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crCaixa"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,8 +1,36 @@
 *============================================================================
-* Formsigopdiv.prg - Separa/Reinicia Industrializa" + CHR(231) + CHR(227) + "o
+* Formsigopdiv.prg - Separa/Reinicia Industrializacao
 * Tipo: OPERACIONAL - Divide ou Reinicia Ordens de Producao
 * Tabelas principais: SigOpPic, SigCdNec, SigCdNei, SigPdMvf, SigCdOpd
-* Fase 7/8: Form completo com eventos principais (GrupoSalvaClick/GrupoConfClick)
+* Fase 8/8: eventos auxiliares e consolidacao final.
+*   AUDITORIA (fase 7): os 4 handlers CRUD do template generico JA foram
+*   entregues na Fase 4 e estao WIRED - nao ha handler a acrescentar aqui
+*   (uma 2a declaracao daria "already defined"). Este legado NAO e CRUD:
+*   os botoes reais sao 2 CommandGroup de 2 botoes cada, e os Btn*Click do
+*   template foram adaptados ao fluxo real, sem inventar botao (PILAR 1):
+*     BtnIncluirClick    -> GrupoSalvaClick (Grupo_Salva botao 1, Gerar O.P.)
+*     BtnSalvarClick     -> GrupoConfClick/GrupoSalvaClick (CommandGroup ativo)
+*     BtnAlterarClick    -> foco na coluna editavel do estado corrente
+*     BtnVisualizarClick -> estado de revisao (Grade2), se houver resultado
+*     BtnExcluirClick    -> confirma e RollbackTransacao (descarta a divisao)
+*     BtnEncerrarClick   -> botao 2 (Encerrar) dos dois CommandGroup
+*     BtnBuscarClick     -> re-executa ValidarOpExec para recarregar a OP
+*     BtnCancelarClick   -> rollback + retorno ao estado inicial (sem confirmar)
+*   Verificado na fase 7: Grupo_Salva.Click e Grupo_Conf.Click do legado
+*   cobertos e ligados por BINDEVENT; os 4 metodos do BO chamados de fora
+*   (BuscarOP/GerarNovaOP/ConfirmarGravacao/RollbackTransacao) sao PUBLIC
+*   em sigopdivBO e em BusinessBase (regra #51); .Picture dos 4 botoes
+*   existe em vbmp (regra #25). CORRIGIDO: FormParaBO atribuia CHARACTER
+*   (ALLTRIM) a this_nNops, que e NUMERIC no BO - ConfirmarGravacao testa
+*   IF this_nNops > 0 e estouraria type mismatch; agora VAL().
+*   FASE 8 (consolidacao final): FormParaBO/BOParaForm cobrem as 3
+*   propriedades do BO acessadas de fora (this_nNops/this_cOperacao/
+*   this_cEmps -> FormParaBO; this_cProduto -> BOParaForm). HabilitarCampos,
+*   LimparCampos, CarregarLista e AjustarBotoesPorModo substituem os
+*   equivalentes de FormBase porque este form nao tem PageFrame CRUD
+*   (AlternarPagina gerencia GrupoSalva/GrupoConf + Grade/Grade2 em vez de
+*   Page1/Page2). Nenhum metodo novo requerido por esta fase ficou PROTECTED
+*   sem necessidade (regra #51) e nenhum CATCH ficou silencioso (regra #9).
 *============================================================================
 DEFINE CLASS Formsigopdiv AS FormBase
 
@@ -27,6 +55,8 @@ DEFINE CLASS Formsigopdiv AS FormBase
     this_cMensagemErro   = ""
     this_cOperacao       = "D"    && 'D'=Divisao, 'R'=Reinicia
     this_lAutomatico     = .F.
+    this_lEmValidacao    = .F.   && guarda de reentrancia (regra #47)
+    this_cOpValidada     = ""    && ultimo valor de OP ja validado
 
     *==========================================================================
     * Init - Aceita parametro de operacao antes de chamar FormBase.Init
@@ -54,17 +84,24 @@ DEFINE CLASS Formsigopdiv AS FormBase
             ENDIF
 
             *-- Validar DivOps em SigCdPam
+            *-- Gate ModoTeste/ValidandoUI: TesteAutomatico.prg forca gnConnHandle=0
+            *-- de proposito (sentinela, nao falha de rede) e nao espera SQLEXEC real
+            *-- aqui - sem o bypass, "Connection handle is invalid" derruba o TRY e
+            *-- InicializarForm devolve .F., fazendo CREATEOBJECT virar nao-objeto.
             LOCAL loc_cSQL
-            loc_cSQL = "SELECT DivOps FROM SigCdPam"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PamDiv") > 0
-                SELECT cursor_4c_PamDiv
-                GO TOP
-                IF EMPTY(ALLTRIM(cursor_4c_PamDiv.DivOps))
-                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o de Divis" + CHR(227) + ;
-                             "o de Op n" + CHR(227) + "o Configurada nos par" + CHR(226) + ;
-                             "metros do sistema...", "Configura" + CHR(231) + CHR(227) + "o")
+            IF (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI) AND ;
+               (TYPE("gb_4c_ModoTeste") != "L" OR !gb_4c_ModoTeste)
+                loc_cSQL = "SELECT DivOps FROM SigCdPam"
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PamDiv") > 0
+                    SELECT cursor_4c_PamDiv
+                    GO TOP
+                    IF EMPTY(ALLTRIM(cursor_4c_PamDiv.DivOps))
+                        MsgAviso("Opera" + CHR(231) + CHR(227) + "o de Divis" + CHR(227) + ;
+                                 "o de Op n" + CHR(227) + "o Configurada nos par" + CHR(226) + ;
+                                 "metros do sistema...", "Configura" + CHR(231) + CHR(227) + "o")
+                    ENDIF
+                    USE IN cursor_4c_PamDiv
                 ENDIF
-                USE IN cursor_4c_PamDiv
             ENDIF
 
             *-- Definir Caption conforme operacao
@@ -109,11 +146,15 @@ DEFINE CLASS Formsigopdiv AS FormBase
             THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption
             THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption
 
-            *-- BINDEVENT: Get_OP
-            *-- Valid nao funciona via BINDEVENT em TextBox; usar KeyPress ENTER/TAB
-            BINDEVENT(THIS.txt_4c_Op, "When",     THIS, "GetOpWhen")
-            BINDEVENT(THIS.txt_4c_Op, "KeyPress",  THIS, "GetOpKeyPress")
-            BINDEVENT(THIS.txt_4c_Op, "KeyPress", THIS, "GetOpLostFocus")
+            *-- BINDEVENT: Get_OP (unico campo digitavel do topo)
+            *-- Regra #3: BINDEVENT "Valid" nao dispara em TextBox - o Valid do
+            *-- legado vai no KeyPress com guard de ENTER(13)/TAB(9).
+            *-- Regra #47: handler de LostFocus vai em "LostFocus", NUNCA em
+            *-- "KeyPress" - ligado a KeyPress sem testar a tecla, o SetFocus
+            *-- para a grade disparava a CADA caractere digitado.
+            BINDEVENT(THIS.txt_4c_Op, "When",      THIS, "ValidarAcessoOp")
+            BINDEVENT(THIS.txt_4c_Op, "KeyPress",  THIS, "ValidarOp")
+            BINDEVENT(THIS.txt_4c_Op, "LostFocus", THIS, "OpLostFocus")
 
             *-- BINDEVENT: CommandGroups
             BINDEVENT(THIS.grp_4c_GrupoSalva, "Click", THIS, "GrupoSalvaClick")
@@ -125,19 +166,23 @@ DEFINE CLASS Formsigopdiv AS FormBase
             *-- BINDEVENT: Grade2 (resultado) eventos
             BINDEVENT(THIS.grd_4c_Grade2, "AfterRowColChange", THIS, "Grade2AfterRowColChange")
 
-            *-- BINDEVENT: colunas editaveis da Grade (QtdDivs e QtdEtiqs)
-            *-- Regra VFP9: BINDEVENT "Valid" nao funciona em TextBox.
-            *-- Usar KeyPress (ENTER=13/TAB=9) para simular Valid + LostFocus para rede de seguranca.
-            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "KeyPress",  THIS, "GradeCol4KeyPress")
-            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "KeyPress", THIS, "GradeCol4LostFocus")
-            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "When",      THIS, "GradeCol4When")
-            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "KeyPress",  THIS, "GradeCol2KeyPress")
-            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "KeyPress", THIS, "GradeCol2LostFocus")
-            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "When",      THIS, "GradeCol2When")
+            *-- BINDEVENT: colunas editaveis da Grade (Column4=QtdDivs, Column2=QtdEtiqs)
+            *-- O Valid do legado dispara ao SAIR da celula, por tecla OU por mouse:
+            *-- "KeyPress" com guard de ENTER(13)/TAB(9) cobre a saida por tecla e
+            *-- "LostFocus" cobre a saida por mouse. Ligar o handler de saida em
+            *-- "KeyPress" (como estava) rodava a validacao a cada caractere - em
+            *-- QtdEtiqs isso exibia "Informe somente Qtde maior que 1." e zerava a
+            *-- celula ao digitar o segundo digito de qualquer numero iniciado por 1.
+            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "When",      THIS, "ValidarAcessoQtdDivisao")
+            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "KeyPress",  THIS, "ValidarQtdDivisao")
+            BINDEVENT(THIS.grd_4c_Grade.Column4.Text1, "LostFocus", THIS, "QtdDivisaoLostFocus")
+            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "When",      THIS, "ValidarAcessoQtdEtiquetas")
+            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "KeyPress",  THIS, "ValidarQtdEtiquetas")
+            BINDEVENT(THIS.grd_4c_Grade.Column2.Text1, "LostFocus", THIS, "QtdEtiquetasLostFocus")
 
-            *-- BINDEVENT: EditBoxes LostFocus
-            BINDEVENT(THIS.edt_4c_MemoObs, "KeyPress", THIS, "MemoObsLostFocus")
-            BINDEVENT(THIS.edt_4c_Obss,    "KeyPress", THIS, "ObssLostFocus")
+            *-- BINDEVENT: EditBoxes - LostFocus do legado (ThisForm.grade2.Refresh)
+            BINDEVENT(THIS.edt_4c_MemoObs, "LostFocus", THIS, "MemoObsLostFocus")
+            BINDEVENT(THIS.edt_4c_Obss,    "LostFocus", THIS, "ObssLostFocus")
 
             *-- Ajustar caption do botao Gerar para modo Reinicia
             IF THIS.this_cOperacao = "R"
@@ -416,6 +461,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
             .Height        = 94
             .SpecialEffect = 1
             .BorderColor   = RGB(100, 100, 100)
+            .DisabledBackColor = RGB(255, 255, 255)
             .ControlSource = "Temp_DivOp.Obss"
             .Visible       = .T.
         ENDWITH
@@ -432,6 +478,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
             .Height        = 94
             .SpecialEffect = 1
             .BorderColor   = RGB(36, 84, 155)
+            .DisabledBackColor = RGB(255, 255, 255)
             .ControlSource = "Temporario.Obss"
             .Enabled       = .F.
             .Visible       = .F.
@@ -813,27 +860,37 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GetOpWhen - Get_OP.When
+    * ValidarAcessoOp - Get_OP.When do legado
     * Permite digitacao apenas enquanto Temporario estiver vazio
     *==========================================================================
-    PROCEDURE GetOpWhen()
+    PROCEDURE ValidarAcessoOp()
         RETURN RECCOUNT("Temporario") = 0
     ENDPROC
 
     *==========================================================================
-    * GetOpKeyPress - Get_OP.KeyPress
-    * Dispara GetOpValid ao pressionar ENTER(13) ou TAB(9)
+    * ValidarOp - Get_OP.KeyPress (substituto do Valid; regra #3)
+    * Dispara a validacao apenas em ENTER(13) ou TAB(9). O guard de tecla eh
+    * obrigatorio: sem ele a consulta rodaria a cada caractere (regra #47).
     *==========================================================================
-    PROCEDURE GetOpKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.GetOpValid()
+    PROCEDURE ValidarOp(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
         ENDIF
+        IF THIS.this_lEmValidacao
+            RETURN
+        ENDIF
+
+        THIS.this_lEmValidacao = .T.
+        THIS.ValidarOpExec()
+        THIS.this_lEmValidacao = .F.
     ENDPROC
 
     *==========================================================================
-    * GetOpValid - Valida OP e carrega Temp_DivOp / xNensi via BO.BuscarOP
+    * ValidarOpExec - corpo do Get_OP.Valid do legado
+    * Valida OP e carrega Temp_DivOp / xNensi via BO.BuscarOP.
+    * Separado do wrapper porque o corpo tem RETURN antecipado (regra #47).
     *==========================================================================
-    PROCEDURE GetOpValid()
+    PROCEDURE ValidarOpExec()
         LOCAL loc_nOp, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
@@ -850,7 +907,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
         TRY
             loc_lSucesso = THIS.this_oBusinessObject.BuscarOP(loc_nOp)
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em GetOpValid")
+            MsgErro(loc_oErro.Message, "Erro em ValidarOpExec")
             loc_lSucesso = .F.
         ENDTRY
 
@@ -862,18 +919,37 @@ DEFINE CLASS Formsigopdiv AS FormBase
             THIS.txt_4c_Produto.Value = " "
         ENDIF
 
+        *-- Registra o valor processado para o guard de valor-nao-mudou do
+        *-- OpLostFocus (evita reconsultar a mesma OP ao sair do campo).
+        THIS.this_cOpValidada = ALLTRIM(THIS.txt_4c_Op.Value)
+
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * GetOpLostFocus - Get_OP.LostFocus
-    * Se OP valida carregada, move foco para coluna QtdEtiqs da grade
+    * OpLostFocus - Get_OP.LostFocus do legado
+    * O Valid do legado dispara ao SAIR do campo por QUALQUER meio, inclusive
+    * clique do mouse - entao a saida por mouse tambem valida aqui, guardada
+    * pelo valor-nao-mudou para nao repetir a consulta que o ENTER/TAB ja fez.
+    * Depois reproduz o LostFocus: se a OP carregou, foco vai para a grade.
+    * LostFocus NAO passa parametro (regra #47) - sem (par_nKeyCode, ...).
     *==========================================================================
-    PROCEDURE GetOpLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE OpLostFocus()
+        IF THIS.this_lEmValidacao
+            RETURN
+        ENDIF
+        THIS.this_lEmValidacao = .T.
+
+        IF ALLTRIM(THIS.txt_4c_Op.Value) <> ALLTRIM(THIS.this_cOpValidada)
+            THIS.ValidarOpExec()
+        ENDIF
+
         IF !EMPTY(ALLTRIM(THIS.txt_4c_Op.Value)) AND ;
            USED("Temp_DivOp") AND !EOF("Temp_DivOp")
             THIS.grd_4c_Grade.Column2.Text1.SetFocus()
         ENDIF
+
+        THIS.this_lEmValidacao = .F.
     ENDPROC
 
     *==========================================================================
@@ -1026,10 +1102,10 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GradeCol4Valid - Column4 (QtdDivs) Valid
+    * ValidarQtdDivisaoExec - corpo do Grade.Column4.Text1.Valid do legado
     * Regras: QtdDivs e QtdEtiqs mutuamente exclusivos; nao pode exceder Qtds
     *==========================================================================
-    PROCEDURE GradeCol4Valid()
+    PROCEDURE ValidarQtdDivisaoExec()
         LOCAL loc_lOk, loc_nValDivisao, loc_nValEtiq
         loc_lOk       = .T.
         loc_nValDivisao = THIS.grd_4c_Grade.Column4.Text1.Value
@@ -1054,48 +1130,78 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GradeCol4When - Column4 (QtdDivs) When
-    * Define ENTER para avan?ar linha (DNARROW) quando em QtdDivs
+    * ValidarAcessoQtdDivisao - Grade.Column4.Text1.When do legado
+    * Define ENTER para avancar linha (DNARROW) quando em QtdDivs
     *==========================================================================
-    PROCEDURE GradeCol4When()
+    PROCEDURE ValidarAcessoQtdDivisao()
         ON KEY LABEL ENTER KEYBOARD "{DNARROW}"
         RETURN .T.
     ENDPROC
 
     *==========================================================================
-    * GradeCol4KeyPress - Column4 (QtdDivs) KeyPress
-    * Simula Valid em ENTER(13)/TAB(9). Retorna 0 via binding de Valid nao
-    * funciona em TextBox sob BINDEVENT; aqui resetamos o valor se invalido
-    * e deixamos a tecla fluir para o VFP9 processar navegacao.
+    * ValidarQtdDivisao - Grade.Column4.Text1.KeyPress (substituto do Valid)
+    * Guard de tecla OBRIGATORIO (regra #47): sem ele a validacao rodava a
+    * cada caractere, zerando a celula no meio da digitacao.
     *==========================================================================
-    PROCEDURE GradeCol4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.GradeCol4Valid()
+    PROCEDURE ValidarQtdDivisao(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
         ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * GradeCol4LostFocus - Column4 (QtdDivs) LostFocus
-    * Rede de seguranca: aplica validacao ao sair da celula por click/mouse
-    *==========================================================================
-    PROCEDURE GradeCol4LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.GradeCol4Valid()
-    ENDPROC
-
-    *==========================================================================
-    * GradeCol2KeyPress - Column2 (QtdEtiqs) KeyPress
-    *==========================================================================
-    PROCEDURE GradeCol2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.GradeCol2Valid()
+        IF THIS.this_lEmValidacao
+            RETURN
         ENDIF
+
+        THIS.this_lEmValidacao = .T.
+        THIS.ValidarQtdDivisaoExec()
+        THIS.this_lEmValidacao = .F.
     ENDPROC
 
     *==========================================================================
-    * GradeCol2LostFocus - Column2 (QtdEtiqs) LostFocus
+    * QtdDivisaoLostFocus - saida da celula por MOUSE
+    * O Valid do legado dispara ao sair da celula por qualquer meio; o
+    * KeyPress cobre ENTER/TAB e este cobre o clique fora. A guarda de
+    * reentrancia eh obrigatoria porque o Exec abre MsgAviso (modal) e zera
+    * a celula - as duas coisas redisparam o proprio LostFocus (regra #47).
+    * LostFocus NAO passa parametro - sem (par_nKeyCode, par_nShiftAltCtrl).
     *==========================================================================
-    PROCEDURE GradeCol2LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.GradeCol2Valid()
+    PROCEDURE QtdDivisaoLostFocus()
+        IF THIS.this_lEmValidacao
+            RETURN
+        ENDIF
+
+        THIS.this_lEmValidacao = .T.
+        THIS.ValidarQtdDivisaoExec()
+        THIS.this_lEmValidacao = .F.
+    ENDPROC
+
+    *==========================================================================
+    * ValidarQtdEtiquetas - Grade.Column2.Text1.KeyPress (substituto do Valid)
+    *==========================================================================
+    PROCEDURE ValidarQtdEtiquetas(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        IF THIS.this_lEmValidacao
+            RETURN
+        ENDIF
+
+        THIS.this_lEmValidacao = .T.
+        THIS.ValidarQtdEtiquetasExec()
+        THIS.this_lEmValidacao = .F.
+    ENDPROC
+
+    *==========================================================================
+    * QtdEtiquetasLostFocus - saida da celula por MOUSE
+    * Mesma guarda de reentrancia do QtdDivisaoLostFocus (regra #47).
+    *==========================================================================
+    PROCEDURE QtdEtiquetasLostFocus()
+        IF THIS.this_lEmValidacao
+            RETURN
+        ENDIF
+
+        THIS.this_lEmValidacao = .T.
+        THIS.ValidarQtdEtiquetasExec()
+        THIS.this_lEmValidacao = .F.
     ENDPROC
 
     *==========================================================================
@@ -1152,10 +1258,10 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GradeCol2Valid - Column2 (QtdEtiqs) Valid
+    * ValidarQtdEtiquetasExec - corpo do Grade.Column2.Text1.Valid do legado
     * Regras: mutuamente exclusivo com QtdDivs; > 1; nao pode exceder Qtds
     *==========================================================================
-    PROCEDURE GradeCol2Valid()
+    PROCEDURE ValidarQtdEtiquetasExec()
         LOCAL loc_lOk, loc_nValDivisao, loc_nValEtiq
         loc_lOk         = .T.
         loc_nValDivisao = THIS.grd_4c_Grade.Column4.Text1.Value
@@ -1186,11 +1292,11 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GradeCol2When - Column2 (QtdEtiqs) When
+    * ValidarAcessoQtdEtiquetas - Grade.Column2.Text1.When do legado
     * Limpa binding ENTER (cancelando atalho de Column4) e libera celula
     * apenas quando Qtds > 1 (nao faz sentido dividir em etiquetas se qtd=1)
     *==========================================================================
-    PROCEDURE GradeCol2When()
+    PROCEDURE ValidarAcessoQtdEtiquetas()
         ON KEY LABEL ENTER
         IF USED("Temp_DivOp") AND !EOF("Temp_DivOp")
             RETURN (Temp_DivOp.Qtds > 1)
@@ -1199,18 +1305,20 @@ DEFINE CLASS Formsigopdiv AS FormBase
     ENDPROC
 
     *==========================================================================
-    * MemoObsLostFocus - fwmemo_obs.LostFocus
+    * MemoObsLostFocus - fwmemo_obs.LostFocus do legado (grade2.Refresh)
+    * LostFocus NAO passa parametro (regra #47)
     *==========================================================================
-    PROCEDURE MemoObsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE MemoObsLostFocus()
         IF THIS.grd_4c_Grade2.Visible
             THIS.grd_4c_Grade2.Refresh()
         ENDIF
     ENDPROC
 
     *==========================================================================
-    * ObssLostFocus - Get_obss.LostFocus
+    * ObssLostFocus - Get_obss.LostFocus do legado (grade2.Refresh)
+    * LostFocus NAO passa parametro (regra #47)
     *==========================================================================
-    PROCEDURE ObssLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE ObssLostFocus()
         IF THIS.grd_4c_Grade2.Visible
             THIS.grd_4c_Grade2.Refresh()
         ENDIF
@@ -1235,7 +1343,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
         *-- Simular entrada de OP (primeiro elemento)
         loc_nOp = par_aNop[1, 6]
         THIS.txt_4c_Op.Value = ALLTRIM(STR(loc_nOp))
-        THIS.GetOpValid()
+        THIS.ValidarOpExec()
 
         SELECT Temp_DivOp
         IF RECCOUNT() = 0
@@ -1378,7 +1486,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
     *==========================================================================
     PROCEDURE BtnBuscarClick()
         IF !EMPTY(ALLTRIM(THIS.txt_4c_Op.Value)) AND VAL(THIS.txt_4c_Op.Value) > 0
-            THIS.GetOpValid()
+            THIS.ValidarOpExec()
         ELSE
             THIS.txt_4c_Op.SetFocus()
         ENDIF
@@ -1452,7 +1560,7 @@ DEFINE CLASS Formsigopdiv AS FormBase
     * Chamado antes de qualquer persistencia (GerarNovaOP/ConfirmarGravacao).
     *==========================================================================
     PROCEDURE FormParaBO()
-        THIS.this_oBusinessObject.this_nNops     = ALLTRIM(THIS.txt_4c_Op.Value)
+        THIS.this_oBusinessObject.this_nNops     = THIS.txt_4c_Op.Value
         THIS.this_oBusinessObject.this_cOperacao = THIS.this_cOperacao
         THIS.this_oBusinessObject.this_cEmps     = go_4c_Sistema.cCodEmpresa
     ENDPROC
@@ -1486,6 +1594,12 @@ DEFINE CLASS Formsigopdiv AS FormBase
         THIS.txt_4c_Op.Value      = " "
         THIS.txt_4c_Produto.Value = " "
 
+        *-- Invalida o guard de valor-nao-mudou: os cursores sao ZAPados logo
+        *-- abaixo, entao reinformar a MESMA OP tem de reconsultar (sem isto a
+        *-- saida por mouse acharia que a OP ja estava validada e a grade
+        *-- ficaria vazia).
+        THIS.this_cOpValidada = ""
+
         IF USED("Temp_DivOp")
             SELECT Temp_DivOp
             ZAP
@@ -1505,12 +1619,12 @@ DEFINE CLASS Formsigopdiv AS FormBase
 
     *==========================================================================
     * CarregarLista - Recarrega o grid principal para a OP corrente
-    * Form OPERACIONAL: se OP informada, re-executa GetOpValid para repopular
+    * Form OPERACIONAL: se OP informada, re-executa ValidarOpExec para repopular
     * Temp_DivOp e atualizar o grid; caso contrario, apenas limpa os cursores.
     *==========================================================================
     PROCEDURE CarregarLista()
         IF !EMPTY(ALLTRIM(THIS.txt_4c_Op.Value)) AND VAL(THIS.txt_4c_Op.Value) > 0
-            THIS.GetOpValid()
+            THIS.ValidarOpExec()
         ENDIF
         IF USED("Temp_DivOp")
             THIS.grd_4c_Grade.Refresh()

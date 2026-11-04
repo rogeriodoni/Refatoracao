@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGOPCOR.prg` (634 ÔåÆ 745 linhas).
+
+## O que entrou
+
+`ConfigurarCampoNota()` ÔÇö primeira metade dos quatro objetos de campo que o legado tem fora da grade, mais a chamada no fim de `ConfigurarPageFrame()`:
+
+| objeto migrado | legado | geometria transcrita do dump |
+|---|---|---|
+| `lbl_4c_Label1` | `SIGOPCOR.Say1` | Left=322, Top=92, TabIndex=3, Caption `"Nota : "` |
+| `txt_4c_NotaIni` | `SIGOPCOR.Get_NotaIni` | Left=359, Top=89, Width=52, MaxLength=6, TabIndex=1, ForeColor 0,0,0 |
+
+Nomes conferem com `tasks/task707/mapeamento.json`. A segunda metade (`Say2` "a" + `Get_NotaFim`) fica para a Fase 6.
+
+## Decis├Áes que divergem do irm├úo SIGOPCCO (e por qu├¬)
+
+Os dois forms t├¬m esses mesmos objetos no mesmo lugar, mas o `SIGOPCOR.SCX` **n├úo declara m├®todo nenhum** para `Get_NotaIni`/`Get_NotaFim` ÔÇö os cinco ├║nicos m├®todos com c├│digo s├úo `Load` e `Init` do form, o `When` das duas primeiras colunas da grade e o `KeyPress` da coluna de retifica├º├úo. Ent├úo, ao contr├írio do SIGOPCCO:
+
+- **sem `ReadOnly = .T.`** ÔÇö o SIGOPCCO reproduz um `When -> Return .f.` que aqui n├úo existe; esta tela consulta uma *faixa* que o usu├írio digita;
+- **sem v├¡nculo de evento** ÔÇö n├úo h├í `Valid` a reproduzir, e o gancho apontaria para m├®todo inexistente;
+- **sem valor inicial** ÔÇö o `Init` legado atribui s├│ Emp/Serie/EmisDe/EmisAte e deixa `pcNFisDe`/`pcNFisAte` nulos; n├úo h├í o `Get_NotaIni.Value = NFis` do irm├úo.
+- **sem `Format`/`InputMask`** ÔÇö o dump n├úo declara nenhum dos dois (regra #49: n├úo inventar restri├º├úo que o legado n├úo tem). `MaxLength = 6` casa com `SigNfCor.cnfis char(6)`.
+
+Label com `AutoSize = .F.` + `Alignment = 0` + Width=34 expl├¡cita (regra #23 ÔÇö o texto termina em 356, 3px antes do campo), `ForeColor = RGB(90,90,90)` por o dump n├úo declarar (regra #12), criado antes do TextBox para a caixa transparente n├úo bloquear o clique.
+
+## Verifica├º├úo
+
+- **Compila limpo**: `vfp9 -T` gerou `.FXP` sem `.ERR`. Com controle negativo obrigat├│rio ÔÇö uma c├│pia com `PUBLIC PROCEDURE` colado no fim produziu `.ERR` apontando **s├│** as linhas acrescentadas (748/749), o que prova que o detector funciona e que as 745 linhas do form est├úo limpas. Isso prova **compila├º├úo, n├úo instancia├º├úo**: `vfp9.exe` nesta sess├úo compila e sai sem executar o corpo, ent├úo n├úo h├í como provar runtime aqui.
+- Gate da Fase 5 (ramo FLAT): `OPERACIONAL` + zero ocorr├¬ncias de `pgf_4c_` + 3 `.ControlSource =` ÔåÆ satisfeito.
+- Regex de pend├¬ncia do `05d_validarCompletude`: zero achados. Sem TODO/FIXME/stub, sem literal acentuado (arquivo 100% ASCII, acentos via `CHR()`), sem identificador que outros gates casem em texto livre.
+- CRLF preservado (CR=745 = LF=745), igual aos irm├úos `FormSIGOPCCO`/`FormSigOpCcl`; artefatos de teste removidos.

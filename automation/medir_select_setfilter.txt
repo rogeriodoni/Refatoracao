@@ -1,0 +1,7 @@
+=== SELECT SQL local x SET FILTER ativo ===
+COUNT navegacional (respeita filtro) = 3  (esperado 3)
+SCAN FOR Marcas                      = 90  (90 = so TIPO B / 100 = tudo)
+SELECT SUM(..) WHERE Marcas          = 100  (90 = RESPEITA o filtro / 100 = IGNORA)
+SELECT .. GROUP BY 1 (forma legado)  = 100
+
+CONCLUSAO: o SELECT SQL local IGNORA o SET FILTER do alias.

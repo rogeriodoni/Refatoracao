@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 2/8 conclu├¡da**: `C:\4c\projeto\app\classes\SigOpCotBO.prg` completado (118 ÔåÆ 758 linhas, 14 m├®todos).
+
+## O que foi implementado
+
+| M├®todo | Origem no legado (transcri├º├úo literal) |
+|---|---|
+| `CarregarDoCursor(alias)` | leitor ├║nico das **3 fam├¡lias** de cursor: cota├º├úo (`cmoes`/`valos`/`avalos`), `SigCdMoe` (`cmoes`/`dmoes`/`cotas`), `SigCdUsu`+`SigCdCrg` (`usuarios`/`ccargs`/`altcots`), mais `cotusus` do cabe├ºalho |
+| `CarregarPermissaoCargo()` | `Init`: `CursorQuery(SigCdUsu,ÔÇª,Usuar)` + `Seek(Ccargs,crSigCdCrg)` + `AltCots='S'` ÔåÆ **LEFT JOIN** (n├úo INNER: cargo ausente tem de virar `.F.`, que ├® o `Seek` falhando, e n├úo "usu├írio inexistente") |
+| `CarregarMoeda()` / `CarregarPorCodigo()` | `When` da c├®lula: `CursorQuery(SigCdMoe,ÔÇª,TmpCot.CMoes)` |
+| `PodeAlterarCotacao()` | `When` da c├®lula, os **tr├¬s** termos: cargo achado **E** `altcots='S'` **E** `crSigCdMoe.Cotas` |
+| `ObterVisibilidadeBotaoCotacao()` | `Init`: `Visible = Not(cargo AND InList(pcEscolha,ÔÇª))` ÔÇö o **NOT** ├® do legado e est├í documentado: o bot├úo existe para quem *n├úo* pode digitar e precisa de autoriza├º├úo via `SigOpAlC` |
+| `PodeUsarBotaoCotacao()` | `When` do `btnCotacao` |
+| `PrepararCursorCotacao()` | `Load`: `Set Decimals to 5` + `Delete All For Empty(CMoes)` + `Replace All aValos With Valos` + `Go Top` |
+| `DesfazerCotacoes()` | `btnSair.Click`: `Set Decimals To 2` + `Replace All Valos With aValos` |
+| `AplicarCotacaoAutorizada()` | `btnCotacao.Click`: `MLine(retorno,1)='OK'` ÔåÆ `Replace Valos` (sem ALL, linha corrente) + `Replace CotUsus In TprMvCab` |
+| `RegistrarCelulaCorrente()` | `ThisForm.AntValue = This.Value` |
+| `ObterChavePrimaria()` (PROTECTED) | chave `SigCdMoe.cmoes` para o `RegistrarAuditoria` herdado |
+
+Propriedades novas: `this_nAntValue`, `this_cDescricaoMoeda`, `this_cEscolhaPai`, `this_cCursorCotacao`, `this_cCursorCabecalho`, `this_cUsuarioAutorizacao`.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9 real**: `FXP=SIM / ERR=NAO` ÔÇö e o smoke test (`STRTOFILE`+`QUIT`) provou que o vfp9.exe **executa** nesta sess├úo, ent├úo o resultado ├® v├ílido e n├úo s├│ "o `.FXP` apareceu" (`.fxp` apagado depois).
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas, 4 statements, **0 colunas inv├ílidas**. `usuarios`/`ccargs`/`altcots`/`cmoes`/`dmoes`/`cotas`/`cotusus` conferidos no `docs/schema.sql` lido com `Get-Content -Raw` (regra #14).
+- **`Test-CompletudeCodigo`** (4 regex replicados em script avulso, sem dot-source do orquestrador): **0 problemas** ÔÇö nenhum TODO, procedure vazia, `pendente`/`nao implement`, ou stub com `MsgAviso`.
+- **Estrutura**: IF/TRY/WITH/PROCEDURE/CASE todos balanceados em 0; **nenhum `RETURN` dentro de TRY**; nenhum `IFÔÇªTHEN` inline; zero caractere n├úo-ASCII (acentos s├│ via `CHR()`); `LimparDados`/`CarregarDoCursor`/etc. PUBLIC, s├│ `ObterChavePrimaria` PROTECTED (regra #51).
+
+## Uma decis├úo que vale registrar
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()` **n├úo** foram sobrescritos: o di├ílogo n├úo grava em tabela nenhuma ÔÇö ele devolve as cota├º├Áes no cursor de trabalho do form pai, e quem persiste ├® o pai. Conferi as 4 provas de "BO somente-leitura" do gate da Fase 2 no dump: zero `TABLEUPDATE(`, zero `.AddCursor(`, zero alvo remoto de `Insert Into`/`Update`/`Delete From`, e o BO n├úo tem `SQLEXEC` de escrita. Inventar um INSERT aqui violaria a regra #22 (a lista de colunas vem do schema, nunca de adivinha├º├úo).
+
+Dois pontos onde o novo diverge do legado **de prop├│sito**, ambos comentados no c├│digo:
+1. `PrepararCursorCotacao` faz `SET DELETED ON` ÔÇö o legado roda em data session compartilhada e herda isso do `config.prg`; em data session privada o SET volta ao default e as linhas apagadas reapareceriam na grade.
+2. A permiss├úo do cargo vai num `SELECT` com `LEFT JOIN` em vez do par cursor+`Seek`, porque o cursor global `crSigCdCrg` do Fortyus n├úo existe na arquitetura nova.
+
+Fica para a Fase 7/8 do Form: o `GO TOP` + `Grid.Refresh()` depois do `ActivePage` (regra #21/#46) e a abertura do `FormSigOpAlC`, que j├í existe migrado e devolve exatamente o `"OK"+CHR(13)+valor+CHR(13)+usu├írio` que o `AplicarCotacaoAutorizada` consome.

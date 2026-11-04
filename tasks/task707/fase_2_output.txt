@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 2 conclu├¡da. `C:\4c\projeto\app\classes\SIGOPCORBO.prg` passou de 137 para 423 linhas.
+
+## M├®todos acrescentados
+
+| M├®todo | Visibilidade | O que faz |
+|---|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | mapeia as **6** colunas de SigNfCor (cursor `CrSigNfCor` do legado) via `SELECT (alias)` + `TratarNulo` |
+| `ValidarDados()` | PUBLIC | guard `cnfis` n├úo vazio, mensagem `"Nota Fiscal Inv"+CHR(225)+"lida !!"` |
+| `Inserir()` | PUBLIC | INSERT com as 6 colunas + PK `fUniqueIds()` + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PUBLIC | UPDATE das 5 colunas de dados `WHERE cidchaves` + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `cidchaves` + `RegistrarAuditoria("DELETE")` |
+
+`ObterChavePrimaria()` e `LimparDados()` j├í vieram da Fase 1 e n├úo foram tocados.
+
+## Decis├Áes que valem registro
+
+**O `Ok.Click` de SIGOPCOR.SCX chegou VAZIO no acervo.** O dump traz s├│ 5 m├®todos (Load, Init, dois `When`, o `KeyPress` do Edit1) e eu confirmei varrendo o pr├│prio `.sct` ÔÇö n├úo ├® falha da extra├º├úo. Transcrevi o contrato de grava├º├úo do form **irm├úo SIGOPCCO**, que grava a MESMA tabela a partir da MESMA grade `XCorNf`; ├® a premissa que a Fase 1 j├í havia documentado no cabe├ºalho do BO. Cada m├®todo cita o trecho legado de origem, e os coment├írios dizem explicitamente que a fonte ├® o irm├úo, n├úo o SIGOPCOR.
+
+**Implementei `ExecutarExclusao` e `ValidarDados` al├®m da lista da fase**: o default de `BusinessBase` para os dois ├® stub (`ExecutarExclusao` devolve `.F.` com "n├úo implementado"), ent├úo deix├í-los de fora manteria um caminho morto no CRUD. O `DELETE` ├® filtrado pela PK `cidchaves`, n├úo pela chave natural do legado ÔÇö apagar a ocorr├¬ncia carregada e nenhuma outra.
+
+**N├úo validei `cemps`/`cseries`/`noccors`**: s├úo NOT NULL, mas NOT NULL aceita branco/zero, e o legado nunca os critica ÔÇö exigir conte├║do seria inventar restri├º├úo (PILAR 1).
+
+## Verifica├º├úo ÔÇö o que foi provado e o que n├úo
+
+O **smoke test do VFP9 falhou** nesta sess├úo: `vfp9.exe -T` devolve `exit=0`, gera o `.FXP` e **n├úo executa** o corpo. Logo **n├úo h├í como provar instancia├º├úo nem runtime** ÔÇö s├│ compila├º├úo.
+
+- **Compila├º├úo**: `sigopcorbo.FXP` gerado (05:51:24, posterior ao `.prg`), sem `.ERR`.
+- **Controle negativo**: c├│pia do BO com um `PUBLIC PROCEDURE` colado no fim produziu `.ERR` apontando **s├│** as linhas 426-428 que acrescentei ÔÇö prova que o detector funciona *e* que as 423 linhas reais compilam limpas.
+- `ValidadorSQLSchema` (683 tabelas, inclui o gate `Validate-InsertNotNull` da regra #22): **0 coluna inv├ílida**. As 5 NOT NULL de SigNfCor est├úo no INSERT e a tabela n├úo tem DEFAULT em coluna nenhuma.
+- `VerificarFuncoesNaoDefinidas` em `projeto\app` (1064 `.prg`): **0 chamada ├│rf├ú**. Na primeira tentativa rodei com `-Caminho` apontando s├│ para o BO e ele acusou 26 ├│rf├ús ÔÇö era o auditor medindo errado (indexou 1 arquivo, "Funcoes globais: 0"); com o escopo do projeto fecha em zero.
+- `VerificarMetodoProtegidoChamadoDeFora` (regra #51): OK. As visibilidades batem com a base ÔÇö `ValidarDados`/`CarregarDoCursor`/`Inserir`/`Atualizar` PUBLIC, `ObterChavePrimaria`/`ExecutarExclusao` PROTECTED.
+- `RETURN` dentro de TRY/CATCH: 0 ┬À acentos literais: 0 ┬À `this_X .Value`: 0 ┬À TODO/stub: 0 ┬À `PUBLIC PROCEDURE` em `DEFINE CLASS`: 0.
+
+Evid├¬ncia em `tasks\task707\compila_bo_fase2.txt`.

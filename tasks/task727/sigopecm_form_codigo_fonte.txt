@@ -1,0 +1,617 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopecm.SCX
+* Data/Hora: 31/10/2026 20:33:16
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPECM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPECM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPECM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPECM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPECM
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cancela
+  Parent: SIGOPECM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processa
+  Parent: SIGOPECM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPECM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getArqTXT
+  Parent: SIGOPECM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnGetArqO
+  Parent: SIGOPECM
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: chkImagens
+  Parent: SIGOPECM
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape2
+  Parent: SIGOPECM
+  Class: shape
+  BaseClass: shape
+
+Objeto: lblResults
+  Parent: SIGOPECM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 220
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Geração de Arquivo de Exportação Para e-Commerce"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPECM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 565
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 6
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  TabIndex = 5
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  Caption = "Arquivo a Ser Gerado"
+  Left = 105
+  Top = 92
+  TabIndex = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.getArqTXT
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 105
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Arquivo XML a Ser Importado"
+  Top = 109
+  Width = 560
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "getArqTXT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.btnGetArqO
+------------------------------------------------------------
+  Top = 107
+  Left = 666
+  Height = 26
+  Width = 26
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  Picture = ..\framework\imagens\geral_pasta_16.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Seleciona o Arquivo Que Será Processado"
+  SpecialEffect = 2
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnGetArqO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.chkImagens
+------------------------------------------------------------
+  Top = 139
+  Left = 105
+  FontBold = .T.
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Exportar Imagens"
+  Value = 1
+  SpecialEffect = 1
+  TabIndex = 4
+  Name = "chkImagens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.Shape2
+------------------------------------------------------------
+  Top = 163
+  Left = 105
+  Height = 36
+  Width = 590
+  BackStyle = 0
+  BorderStyle = 6
+  BorderWidth = 1
+  Curvature = 12
+  BorderColor = 90,90,90
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPECM.lblResults
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  Caption = ""
+  Height = 15
+  Left = 113
+  Top = 174
+  Width = 573
+  TabIndex = 1
+  Name = "lblResults"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 1, 10, 7, 16, 13, 29, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPECM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcArq, lcChr, lcGru, lcDes, lcUni
+
+If (MessageBox([Confirma a Geração dos Arquivos?], 32+4, [Geração de Arquivos]) <> 6)
+	Return .f.
+EndIf
+
+lcArq = Alltrim(ThisForm.getArqTXT.Value)
+
+If Empty(lcArq)
+	=MessageBox([O Arquivo a Ser Gerado Não Foi Informado!!!], 0+16, [Atenção!!!])
+	ThisForm.btnGetArqO.SetFocus
+	Return .f.
+EndIf
+
+=StrToFile([], lcArq, 0)
+
+If Not File(lcArq)
+	=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])
+	ThisForm.btnGetArqO.SetFocus
+	Return .f.
+EndIf
+
+Select Distinct CGrus From crImagens Into Cursor crGrus Order By CGrus
+
+lcChr = Chr(13) + Chr(10)
+
+lnQtd = Reccount([crGrus])
+lnCnt = 0
+
+ThisForm.lblResults.Caption = [Processando ] + Alltrim(Str(lnQtd, 10)) + [ Grupo] + Iif(lnQtd = 1, [], [s]) + [ / ] + ;
+							  [Produtos Gerados : ] + Alltrim(Str(lnCnt, 10))
+
+Create Cursor crGrupos (Grupo n(8))
+Index On Grupo Tag Grupo
+
+Select crGrus
+Scan
+	lcQuery = [Select CGrus, DGrus, Ids ] + ;
+			    [From SigCdGrp ] + ;
+			   [Where CGrus = '] + crGrus.CGrus + [' And ] + ;
+			   		 [Ids > 0]
+
+	If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalGrupo]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGrupo)])
+		Return .f.
+	EndIf
+	Select LocalGrupo
+	Go Top In LocalGrupo
+	If Not Eof([LocalGrupo])
+		lcGru = Padl(LocalGrupo.Ids, 8, [0])
+		lcDes = Padr(Alltrim(LocalGrupo.DGrus), 40)
+		lcUni = Padr([], 4)
+		
+		* td01 - Tabela de Grupos
+		lcStr = [td01] + ;			&& Tipo - "td01" - Constante - Caracter(4)
+				lcGru + ;			&& ID - Numérico (8)
+				lcDes + ;			&& Descrição - Caracter(40)
+				lcUni + lcChr		&& Unidade - Caracter(4)
+
+		=StrToFile(lcStr, lcArq, .t.)
+
+		If Not Seek(LocalGrupo.Ids, [crGrupos], [Grupo])
+			Insert Into crGrupos (Grupo) Values (LocalGrupo.Ids)
+		EndIf
+
+		Select Distinct CPros ;
+		  From crImagens ;
+		 Where CGrus = crGrus.CGrus ;
+		  Into Cursor crPros ;
+		 Order By CPros
+
+		Select crPros
+		Scan
+			lcQuery = [Select CPros, DPros, CUnis, DtIncs, Situas, PesoMs, Icms, ] + ;
+							 [AliqIpis, ClFiscals, SitTrIcms, Pvens, FigJpgs ] + ;
+					    [From SigCdPro ] + ;
+					   [Where CPros = '] + crPros.Cpros + [']
+
+			If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalProds]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalProds)])
+				Return .f.
+			EndIf
+			Select LocalProds
+			Go Top In LocalProds
+			If Not Eof([LocalProds])
+				lcRef = Padr(Chrtran(LocalProds.Cpros, [ */\:?"'<>|], []), 25)
+				lcDes = Padr(Alltrim(LocalProds.DPros), 60)
+				lcUni = Padr(Alltrim(LocalProds.CUnis), 3)
+				lcDat = Dtoc(Ttod(LocalProds.DtIncs))
+				lcSit = Iif(LocalProds.Situas = 2, [i], [a])
+				lcPes = Strtran(Padl(LocalProds.PesoMs, 8, [0]), [.], [,])
+				lcIpi = Padl(Int(LocalProds.AliqIpis), 2, [0])
+				lcIcm = Padl(Int(LocalProds.Icms), 2, [0])
+				lcClf = Padr(Chrtran(LocalProds.ClFiscals, [ .], []), 8)
+				lcTri = Padr(LocalProds.SitTrIcms, 3)
+				lcVal = Strtran(Padl(LocalProds.PVens, 8, [0]), [.], [,])
+				lcPre = Padr([00000000] + lcVal + [0000^], 400)
+
+				lcGvd = [] && Colocar as coleções
+				
+				lcQuery = [Select b.Descrs, b.Ordens ] + ;
+						    [From SigPrCar a, SigCrRap b ] + ;
+						   [Where a.CPros = '] + LocalProds.CPros + [' And ] + ;
+						   		 [a.Codigos = b.Codigos]
+
+				If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalCaracs]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCaracs)])
+					Return .f.
+				EndIf
+				Select LocalCaracs
+				Scan
+					If Not Empty(LocalCaracs.Ordens)
+						If Not Seek(LocalCaracs.Ordens, [crGrupos], [Grupo])
+							Insert Into crGrupos (Grupo) Values (LocalCaracs.Ordens)
+							lcGr1 = Padl(LocalCaracs.Ordens, 8, [0])
+							lcDe1 = Padr(Alltrim(LocalCaracs.Descrs), 40)
+							lcUn1 = Padr([], 4)
+
+							* td01 - Tabela de Grupos
+							lcStr = [td01] + ;			&& Tipo - "td01" - Constante - Caracter(4)
+									lcGr1 + ;			&& ID - Numérico (8)
+									lcDe1 + ;			&& Descrição - Caracter(40)
+									lcUn1 + lcChr		&& Unidade - Caracter(4)
+
+							=StrToFile(lcStr, lcArq, .t.)
+						EndIf
+						lcGvd = lcGvd + Alltrim(Str(LocalCaracs.Ordens, 8)) + [^]
+					EndIf
+				EndScan
+				lcGvd = Padr(Alltrim(lcGvd), 60)
+
+				* --> Vamos usar o último campo da tabela td03 para isso. O campo se chama "Material/Complemento"... 
+				* as coleções vc envia na td01, como se fossem grupos, e neste campo mencionado vc me envia de quais 
+				* grupos o item faz parte... usa ^ como separador... ex. Anel código 001 faz parte das coleções 
+				* (td01: 1 = Brilhante e 4 = Primavera)... vc adiciona no campo 1^4... qtas necessárias.. 
+				* no campo id_grupo da tabela td03 vc coloca somente a coleção principal do item dai.
+				
+				* td03 - Tabela de Produtos
+				lcStr = [td03] + ;			&& Tipo - "td03" - Constante - Caracter(4)
+						Space(8) + ;		&& RESERVADO - Caracter(8)
+						lcRef + ;			&& Referência - Caracter(25)
+						lcDes + ;			&& Descrição - Caracter(60)
+						lcUni + ;			&& Unidade - Caracter(3)
+						lcGru + ;			&& ID Grupo - Numérico(8)
+						[00000000] + ;		&& ID Subgrupo - Numérico(8)
+						lcDat + ;			&& Data do produto - Data(10)
+						[ ] + ;				&& Alternativo - Caracter(1)
+						[001] + ;			&& Multiplicador - Numérico(3)
+						Padr(lcRef, 20) + ;	&& Nome Foto Sem Extenção - Caracter(20)
+						lcSit + ;			&& Status Produto - a=ativo / i=inativo / e=problema estoque / s=saindo de linha - Caracter(1)
+						[00000000] + ;		&& Desconto Máximo em porcentagem - Numérico(8)
+						[00] + ;			&& Tabela - Caracter(2)
+						lcPes + ;			&& Peso - Numérico(8)
+						[ ] + ;				&& Status Foto - Caracter(1)
+						[ ] + ;				&& Lançamento - Caracter(1)
+						lcIpi + ;			&& % do IPI - Numérico(2)
+						[00000000] + ;		&& Valor IPI - Numérico(8)
+						lcIcm + ;			&& % ICMS - Numérico(2)
+						[00000000] + ;		&& Valor ICMS - Numérico(8)
+						lcClf + ;			&& Classificação Fiscal - Caracter(8)
+						lcTri + ;			&& Situação Tributária - Caracter(3)
+						Space(8) + ;		&& RESERVADO - Caracter(8)
+						[00000000] + ;		&& Estoque - Numérico(8)
+						lcPre + ;			&& Lista (8) + Preço (8) + Qtde Minima (4) + ^ - Caracter(400)
+						Space(20) + ;		&& Código de Barras - Caracter(20)
+						Space(64) + ;		&& RESERVADO - Caracter(64)
+						Space(400) + ;		&& Características dos produtos - O Separador de linhas é o "#13" - Caracter(400)
+						lcGvd + lcChr		&& Material/Complemento - Caracter(60)
+
+				=StrToFile(lcStr, lcArq, .t.)
+
+				lnCnt = lnCnt + 1
+
+				ThisForm.lblResults.Caption = [Processando ] + Alltrim(Str(lnQtd, 10)) + [ Grupo] + Iif(lnQtd = 1, [], [s]) + [ / ] + ;
+											  [Produtos Gerados : ] + Alltrim(Str(lnCnt, 10))
+				
+				* Exportando as Imagens
+				If Not Empty(LocalProds.FigJpgs) And Not IsNull(LocalProds.FigJpgs)
+					lcImg = Alltrim(JustPath(lcArq)) + [\] + Alltrim(lcRef) + [.Jpg]
+					lcFoto=Strconv(Strtran(Strtran(Strtran(LocalProds.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+					=StrToFile(lcFoto, lcImg)
+				EndIf
+			EndIf
+		EndScan
+	EndIf
+EndScan
+
+If (lnCnt > 0)
+	=MessageBox([Arquivo de Produtos Gerado Com Sucesso!!!], 0+64, [Processamento Finalizado])
+Else
+	=MessageBox([Atenção!!! Arquivo Gerado Sem Produtos!!!], 0+48, [Processamento Finalizado])
+EndIf
+
+ThisForm.Cancela.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters oFrm
+
+ThisForm.poObjForm = oFrm
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPECM.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPECM.Processa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Processamento
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPECM.getArqTXT
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPECM.btnGetArqO
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq
+
+lcArq = GetFile([TXT], [Arquivo TXT:], [Criar], 0, [Informe o Nome do Arquivo TXT])
+
+If Not Empty(lcArq)
+	ThisForm.getArqTXT.Value = Alltrim(lcArq)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPECM
+RESERVED3 (ClassInfo): poobjform
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 2/8
+
+Completei `C:\4c\projeto\app\classes\sigopcimBO.prg` com os m├®todos de acesso a dados. Como o SIGOPCIM legado nunca grava em tabela SQL Server (s├│ manipula os cursores locais `Historico`/`CrInvH`, que o Form recebe abertos do `ParentForm`), adaptei o "CRUD" ao comportamento real:
+
+- **Propriedades novas**: `this_cLocal`, `this_cOcorrencia`, `this_mObs`, `this_nPesoReal` (shape da grade Historico/CrInvH), `this_mFigJpgs` (foto do produto), `this_lBarraLocalizada`/`this_lProdutoLocalizado` (flags de resultado, no padr├úo do `SigOpBcbBO`).
+- **`ObterChavePrimaria()`**: CBars, ou CPros quando a barra est├í vazia (mesmo crit├®rio do `Case` em `Excluiitem.Click`).
+- **`CarregarDoCursor()`**: mapeia uma linha de Historico/CrInvH.
+- **`ConsultarBarra()`** e **`ConsultarProduto()`**: replicam os SQLEXEC dos `Valid` de `Get_Barra`/`Get_Produto` (SigOpEtq / SigCdPro LEFT JOIN SigCdLin), com tratamento de "n├úo encontrado" sem erro (regra #50).
+- **`ConsultarInventarioPorBarra/Produto()`**: replicam o fallback SigIvTrH (Emps/Codigos/CBars ou CPros).
+- **`DecodificarEGravarFoto()`**: decodifica a foto Base64 **uma ├║nica vez** (evitando o bug de double-decode documentado na mem├│ria) e grava o JPEG.
+- **Inserir/Atualizar/ExecutarExclusao**: deliberadamente n├úo sobrescritos, com coment├írio explicando a decis├úo (comportamento padr├úo da BusinessBase j├í ├® o correto para essa entidade read-only).
+
+Verifiquei balanceamento de TRY/ENDTRY (5/5) e PROCEDURE-FUNCTION/ENDPROC-ENDFUNC (8/8), e confirmei no `docs/schema.sql` os tipos/colunas de SigOpEtq, SigCdPro, SigCdLin e SigIvTrH usados nas queries. Pr├│xima fase (3/8) deve criar o Form `Formsigopcim.prg`.

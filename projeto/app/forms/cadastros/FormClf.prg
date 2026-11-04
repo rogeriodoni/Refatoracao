@@ -399,7 +399,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- Container de botoes de acao (Grupo_Salva: posicao aprox. Right side)
         loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
         WITH loc_oPagina.cnt_4c_BotoesDados
-            .Top         = 38
+            .Top         = 27
             .Left        = 819
             .Width       = 165
             .Height      = 85

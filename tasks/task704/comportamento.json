@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCLP",
+      "evento": "Init",
+      "linhas": 30,
+      "codigoOriginal": "Lparameters pForm, DatSes\n\nSet DataSession To DatSes\n\nThisForm.ParentForm = pForm\n\nThisForm.Caption = 'Pesquisa Operações da Conta : ' + ;\n\t\t\t\t   Alltrim(ThisForm.ParentForm.Origem.get_grupo.Value) + ' / ' + ;\n\t\t\t\t   Alltrim(ThisForm.ParentForm.Origem.get_Conta.Value) + ' - ' + ;\n\t\t\t\t   Alltrim(ThisForm.ParentForm.Origem.get_dConta.Value)\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThis.fwgrade.RecordSource \t\t\t= 'TmpOper'\nThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_Conta,get_dConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLP.fwgrade.dopes.Header1",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Select TmpOper\nIf Not Eof()\n\tlnRecno = Recno()\nElse\n\tlnRecno = 0\nEndIf\n\nSet Order To Num\nThisForm.fwgrade.Refresh\n\nIf (lnRecno <> 0)\n\tGo lnRecno\nElse\n\tGo Top\nEndIf\nThisForm.fwgrade.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLP.fwgrade.datas.Header1",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Select TmpOper\nIf Not Eof()\n\tlnRecno = Recno()\nElse\n\tlnRecno = 0\nEndIf\n\nSet Order To Datas Descending\nThisForm.fwgrade.Refresh\n\nIf (lnRecno <> 0)\n\tGo lnRecno\nElse\n\tGo Top\nEndIf\nThisForm.fwgrade.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLP.fwgrade.valos.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf (nKeyCode = 9)\n\tThisForm.grp_operacao.cmd_sair.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "cmd_sair",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCLP.grp_operacao",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.ParentForm.Origem.get_grupo.SetFocus\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

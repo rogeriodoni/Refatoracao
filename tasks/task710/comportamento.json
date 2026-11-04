@@ -1,0 +1,316 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Select [ ] as Agrupar, Sum(Qtds) as Qtds, Sum(Totas) as Totas ;\n  From crGrade ;\n Where Marcas ;\n Group By 1 ;\n  Into Cursor LocalTot\nGo Top In LocalTot\n\nThisForm.grdRodape.Column3.Text1.Value = LocalTot.Totas\nThisForm.grdRodape.Column3.Refresh\n\nThisForm.cntBotoes.btnConfirmar.Enabled = (LocalTot.Qtds > 0)\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Procedure",
+      "linhas": 57,
+      "codigoOriginal": "With ThisForm.grdItens\n\t.ColumnCount \t   = 8\n\t.RecordSource \t   = [crGrade]\n\t.DeleteMark \t   = .f.\n\t.RecordMark \t   = .f.\n\t.ReadOnly \t\t   = .t.\n\t.Scrollbars \t   = 2\n\t.AllowHeaderSizing = .f.\n\t.AllowRowSizing    = .f.\n\n\t.Column1.ControlSource   = [crGrade.Marcas]\n\t.Column1.Sparse    \t\t = .f.\n\t.Column1.Check1.AutoSize = .t.\n\t.Column2.ControlSource   = [crGrade.Mats]\n\t.Column3.ControlSource   = [crGrade.DPros]\n\t.Column4.ControlSource   = [crGrade.Qtds]\n\t.Column4.InputMask \t     = [99999.999]\n\t.Colu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Procedure",
+      "linhas": 73,
+      "codigoOriginal": "Local lcQuery\n\nZap In crGrade\nZap In crRodape\n\nlcQuery = [Select a.CPros, a.Mats, b.DPros, a.Qtds, a.UniCompos, b.PVens as PCompos, b.Moevs as Moeds, ] + ;\n\t\t\t\t [(a.Qtds * b.PVens) as Totas, a.Etiqs, b.Reffs, b.FigJpgs, a.Tipos ] + ;\n\t\t    [From SigPrCpo a, SigCdPro b ] + ;\n\t\t   [Where a.CPros = '] + ThisForm.lpKey + [' And ] + ;\n\t\t   \t\t [a.Mats = b.CPros ] + ;\n\t\t   [Order By a.Mats]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCompo]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,AddItem,Value = Iif,Enabled =",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crRodape (Descrs c(100), Usuars c(10), Totas n(12,2))\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO",
+      "evento": "Init",
+      "linhas": 40,
+      "codigoOriginal": "LParameters pFrm, pKey\n\nWith ThisForm\n\t.ParentForm = pFrm\n\t.ParentForm.Enabled = .f.\n\t.poDataMgr = .ParentForm.ParentForm.poDataMgr\n\t\n\t.LockScreen = .t.\n\n\t.lpKey = Padr(Iif(Type([pKey])=[C], pKey, []), 14)\n\n\t.poDataMgr.CursorQuery([SigCdPro], [LocalPro], [Cpros], .lpKey, [DPros])\n\tIf Not Used([LocalPro])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalPro)])\n\t\t.Release\n\tEndIf\n\tSelect LocalPro\n\tGo Top In LocalPro\n\tIf Eof([LocalPro])\n\t\t=MessageBox([O Pr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdItens",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArq\n\nlcArq = Sys(2023) + [\\] + Sys(2015) + [.jpg]\n\nClear Resources\nThisForm.ImgFigJpg.Picture = []\nThisForm.ImgFigJpg.Visible = .f.\n\nIf Not Empty(crGrade.FigJpgs) And Not IsNull(crGrade.FigJpgs) ;\n\tAnd (StrToFile(Strconv(Strtran(Strtran(Strtran(crGrade.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14), lcArq) > 0)\n\tThisForm.ImgFigJpg.Picture = (lcArq)\n\tThisForm.ImgFigJpg.Visible = .t.\nEndIf\n\nThisForm.AtuaTotas\n\n=DoD... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Picture =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdItens.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdItens.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace Marcas With Not Marcas In crGrade\nThisForm.grdItens.Column1.Refresh\nThisForm.grdItens.Refresh\n\nThisForm.AtuaTotas\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdItens.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tReplace Marcas With Not Marcas In crGrade\n\tThisForm.grdItens.Column1.Refresh\n\tThisForm.grdItens.Refresh\n\t\n\tThisForm.AtuaTotas\n\t\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdItens.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdRodape.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grdItens.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdRodape.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = This.Tag",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.grdRodape.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.cmbTipos",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "Select crGrade\nSet Filter To Tipos = ThisForm.cmbTipos.Value In crGrade\nGo Top In crGrade\nThisForm.grdItens.Refresh\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.cntBotoes",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select crGrade\nSet Filter To\nGo Top In crGrade\n\nSelect crGrade\nScan\n\tIf Not Marcas\n\t\tDelete In crGrade\n\tEndIf\nEndScan\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.cntBotoes",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crGrade\nSet Filter To\nGo Top In crGrade\n\nSelect crGrade\nScan\n\tDelete In crGrade\nEndScan\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPO.ImgFigJpg",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Local lcArq\n\nlcArq = Sys(2023) + [\\] + Sys(2015) + [.jpg]\n\nSelect crGrade\nIf Not Empty(crGrade.FigJpgs) And Not IsNull(crGrade.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(crGrade.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t=StrToFile(lcFoto, lcArq)\nEndIf\n\nIf File(lcArq)\n\tDo Form SigOpZom With lcArq, [Produto : ] + crGrade.Mats + [ - ] + crGrade.DPros, ;\n\t\t\t\t\t\t [Ref. Fornecedor : ] + crGrade.Reffs\nEndIf\n* Fim *************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCPO.Procedure",
+      "queryOriginal": "Select [ ] as Agrupar, Sum(Qtds) as Qtds, Sum(Totas) as Totas ; From crGrade ; Where Marcas ; Group By 1 ; Into Cursor LocalTot",
+      "tabelas": "crGrade",
+      "colunas": "Marcas,LocalTot",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crGrade"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

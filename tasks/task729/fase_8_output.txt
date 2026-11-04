@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpEmp.prg` ÔÇö 735 ÔåÆ 879 linhas.
+
+## O que a fase entregou
+
+**Dois defeitos reais, ambos medidos no VFP9 (n├úo lidos do c├│digo):**
+
+**1. `ConfigurarOrdemTabulacao()` ÔÇö novo.** O Tab andava na ordem de cria├º├úo dos `AddObject`, n├úo na do legado: o **Encerrar vinha antes da grade**, e a grade (o conte├║do da tela) ca├¡a em ├║ltimo. Os valores do dump n├úo podem ser transcritos ao p├® da letra ÔÇö o VFP aplica o `TabIndex` no instante em que cria cada objeto e descarta em sil├¬ncio valor acima da contagem existente. Simulando o load (`automation\medir_tabindex_729.prg`), s├│ o `2` da grade sobrevive; 11/81/84 s├úo descartados:
+
+| | ordem |
+|---|---|
+| migrado sem o passe | cnt=1, NGrupo=2, NConta=3, **Ok=4, Grade=5** |
+| legado (load simulado) | cnt=1, **Grade=2, Ok=3**, NGrupo=4, NConta=5 |
+| migrado com o passe | id├¬ntico ao legado |
+
+Shape n├úo tem `TabIndex` (medido) ÔÇö fica fora da sequ├¬ncia, com guard `PEMSTATUS` no pr├│prio controle.
+
+**2. `InicializarForm` ÔÇö bypass de `gb_4c_ValidandoUI` reposicionado.** Estava com `RETURN .T.` no **topo** do m├®todo, pulando `THIS.Picture` e **toda** a montagem visual: a etapa de UI Fidelity instanciaria um form vazio e nenhuma diferen├ºa seria corrig├¡vel. Agora cerca apenas `CarregarLista()`, o ├║nico trecho que depende de SQL. Medido: sob `ValidandoUI = .T.` o form agora vem com `ControlCount = 6` e `Picture` preenchido.
+
+**3. Consolida├º├úo** ÔÇö tabela de disposi├º├úo dos 7 (e s├│ 7) m├®todos do SCX no cabe├ºalho, incluindo o `Load (=fConfigGeral())` como **n├úo portado**, com a raz├úo e os 5 forms irm├úos que tomaram a mesma decis├úo.
+
+## Sobre os m├®todos que a fase pedia e n├úo foram criados
+
+`BtnSalvarClick`/`BtnCancelarClick`/`BtnBuscarClick`/`FormParaBO`/`HabilitarCampos`/`AjustarBotoesPorModo` **n├úo** foram escritos: o dump tem exatamente 1 `commandbutton` (`ok`, Click = `ThisForm.Release()`), nenhum `commandgroup`, e os dois ├║nicos TextBox t├¬m `When / Return .f.`. Cri├í-los seria inventar bot├úo (PILAR 1) ou gerar m├®todo vazio (regra de completude). Confirmei que isso n├úo ├® desculpa para passar no gate: rodei os predicados do `case 8` standalone (sem dot-source do orquestrador) e o ramo **VISUALIZADOR** se aplica de fato ÔÇö `semCrudLegadoF8`, `legadoSemSalvar`, `Test-LegadoSomenteLeitura`, superf├¡cie e `.ReadOnly` todos `True` ÔÇö, que dispensa os tr├¬s nomes can├┤nicos e mant├®m `CarregarLista` (declarado). O cabe├ºalho cita esses nomes em coment├írio, o que *tamb├®m* satisfaria o check por substring do gate, mas a dispensa real ├® independente disso.
+
+## Verifica├º├Áes
+- Probe de instancia├º├úo: **PROBE_OK, 0 falhas** (`automation\probe_emp729_f8.txt`) ÔÇö form instancia com e sem `ValidandoUI`, grade com 7 colunas/headers/larguras/`ControlSource`/Courier New do dump, visores `ReadOnly` + `TabStop = .F.`, escopos corretos (`CarregarLista`/`CmdOkClick`/`GradeAfterRowColChange` PUBLIC).
+- Validador de completude (l├│gica do `05d`): OK no form e no BO.
+- Zero acentos literais, zero `RETURN` dentro de `TRY`, zero `this_* .Value`, zero `PUBLIC PROCEDURE`.
+
+Duas notas honestas: no probe o `USED(cursor_4c_Empenhado)` l├¬ `.F.` porque o form ├® `DataSession = 2` e o cursor vive na sess├úo privada; e o `vfp_err_emp729.txt` registra *"Produto n├úo informado"* vindo da execu├º├úo sem form pai ÔÇö comportamento esperado para um di├ílogo filho instanciado sem pai.
+
+Houve um incidente no caminho: um `while s///` em Perl cujo texto de substitui├º├úo continha a pr├│pria ├óncora entrou em loop e o arquivo acabou zerado. Restaurei do backup que eu havia tirado antes da primeira edi├º├úo (md5 id├¬ntico ao original) e reapliquei tudo com substitui├º├Áes ├║nicas e contagem verificada ÔÇö nada do trabalho das fases anteriores foi perdido.

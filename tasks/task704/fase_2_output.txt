@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 2 conclu├¡da. `C:\4c\projeto\app\classes\SigOpClpBO.prg` (676 linhas) compila limpo e foi verificado em execu├º├úo headless no VFP9.
+
+## O que entrou
+
+| M├®todo | Papel |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | l├¬ as **7** colunas da linha corrente (`Emps`, `Dopes`, `MascNum`, `Tipo`, `Moeda`, `Valos`, `Datas`) |
+| `CarregarLinhaCorrente()` | atalho sobre o cursor da grade |
+| `LimparDados()` | zera as 7 propriedades de linha (preserva os par├ómetros da consulta) |
+| `ObterChavePrimaria()` | chave composta `Emps + Dopes + MascNum` (PROTECTED, como na base) |
+| `DefinirParametrosConsulta()` / `ObterTituloConsulta()` | recebe Grupo/Conta/Descri├º├úo do pai e monta o Caption do legado |
+| `CursorPronto()` / `ContarOperacoes()` / `PosicionarNoTopo()` | contrato do cursor recebido do `FormSigOpCcl` |
+| `OrdenarPorNumero()` / `OrdenarPorData()` / `AplicarOrdem()` | os dois `Header1.Click` do legado |
+
+## Desvio do pedido literal da fase ÔÇö e por qu├¬
+
+A fase pedia `Inserir()` com INSERT, `Atualizar()` com UPDATE e `RegistrarAuditoria()`. **N├úo implementei esses tr├¬s, de prop├│sito**: o `SigOpClp.SCX` n├úo tem uma linha de grava├º├úo (conferi no dump ÔÇö zero `TABLEUPDATE(`, zero `.AddCursor(`, zero `Insert Into`/`Update`/`Delete From`). ├ë o di├ílogo **filho** que exibe o cursor que o `SigOpCclBO` montou; n├úo tem tabela pr├│pria. Escrever INSERT/UPDATE aqui exigiria adivinhar colunas ÔÇö o que a regra #22 pro├¡be. `BusinessBase.Inserir()/Atualizar()` j├í recusam e reportam, que ├® o comportamento certo. `ObterChavePrimaria()` esse sim sobrescrevi, porque a linha da grade tem identidade real.
+
+Conferi que o gate da Fase 2 aceita isso: a exce├º├úo `$boSomenteLeitura` existe no `OrquestradorMigracao.ps1:7800` e as 4 provas passam neste dump.
+
+## Verifica├º├úo executada (`tasks/task704/logs/probe_f2.txt`)
+
+Instanciei o BO contra um cursor sint├®tico com a estrutura exata do pai e exercitei tudo:
+
+- chave prim├íria deu **LEN=33** (3+20+10) e bate **`==`** com a chave do ├¡ndice ÔÇö o `PADR` nas partes ├® o que faz isso funcionar (regra #42; `ALLTRIM` daria 19 e nunca casaria);
+- `Datas` chegou como `D` via `ConverterParaData` (sem `TTOD`, regra #16);
+- `OrdenarPorData` deixou `ORDER()=DATAS`, `DESCENDING()=.T.`, 1┬¬ linha = a data **mais nova** ÔÇö e **restaurou o RECNO** (1 ÔåÆ 1), como o legado;
+- `CarregarDoCursor` **devolveu a ├írea de trabalho** do chamador (`CURSOR_4C_OUTRO` antes e depois) ÔÇö importa porque a data session ├® compartilhada;
+- em EOF, alias inexistente e TAG inexistente: retorna `.F.` sem estourar, zerando as propriedades;
+- `PEMSTATUS(...,2)` confirma os 11 m├®todos cham├íveis de fora como p├║blicos e s├│ `ObterChavePrimaria` protegido (regra #51).
+
+Ajustei tamb├®m duas frases do cabe├ºalho da Fase 1 que a Fase 2 superou (dizia que `ObterChavePrimaria()` n├úo se aplicava). O arquivo est├í todo em CRLF e nenhum padr├úo do `Test-CompletudeCodigo` aparece nele.

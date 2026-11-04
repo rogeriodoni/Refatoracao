@@ -1,0 +1,1237 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopcim.SCX
+* Data/Hora: 29/10/2026 18:01:48
+* Total de registros: 34
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCIM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: ShpFigura
+  Parent: SIGOPCIM
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape2
+  Parent: SIGOPCIM
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape3
+  Parent: SIGOPCIM
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGOPCIM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCIM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCIM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: ImgJpg
+  Parent: SIGOPCIM
+  Class: image
+  BaseClass: image
+
+Objeto: lbl_descricao
+  Parent: SIGOPCIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descricao
+  Parent: SIGOPCIM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: SIGOPCIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Barra
+  Parent: SIGOPCIM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_produto
+  Parent: SIGOPCIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Produto
+  Parent: SIGOPCIM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_peso_medio
+  Parent: SIGOPCIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Peso
+  Parent: SIGOPCIM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGOPCIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Linha
+  Parent: SIGOPCIM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGOPCIM
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCIM.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCIM.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCIM.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCIM.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCIM.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCIM.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCIM.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: fwmemo1
+  Parent: SIGOPCIM.Grade.Column4
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCIM.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCIM.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Excluiitem
+  Parent: SIGOPCIM
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Saída
+  Parent: SIGOPCIM
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 320
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Consulta Imagem"
+  ControlBox = .F.
+  Closable = .F.
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCIM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.ShpFigura
+------------------------------------------------------------
+  Top = 86
+  Left = 402
+  Height = 128
+  Width = 208
+  BackStyle = 1
+  Visible = .T.
+  SpecialEffect = 0
+  ZOrderSet = 0
+  Name = "ShpFigura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Shape2
+------------------------------------------------------------
+  Top = 7
+  Left = 625
+  Height = 79
+  Width = 159
+  BackStyle = 0
+  BorderStyle = 0
+  Visible = .F.
+  SpecialEffect = 1
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Shape3
+------------------------------------------------------------
+  Top = 7
+  Left = 707
+  Height = 79
+  Width = 77
+  BackStyle = 0
+  BorderStyle = 0
+  Visible = .F.
+  SpecialEffect = 1
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.ImgJpg
+------------------------------------------------------------
+  Stretch = 1
+  Height = 121
+  Left = 405
+  Top = 90
+  Visible = .F.
+  Width = 201
+  Name = "ImgJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.lbl_descricao
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Descrição :"
+  Height = 15
+  Left = 34
+  Top = 146
+  Width = 55
+  TabIndex = 11
+  Name = "lbl_descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Get_Descricao
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 23
+  Left = 94
+  MaxLength = 40
+  SpecialEffect = 0
+  TabIndex = 3
+  Top = 142
+  Width = 290
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Get_Descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Barra :"
+  Height = 15
+  Left = 54
+  Top = 96
+  Width = 35
+  TabIndex = 9
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Get_Barra
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 0
+  Height = 23
+  InputMask = "99999999999999"
+  Left = 94
+  SpecialEffect = 0
+  TabIndex = 1
+  Top = 92
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Get_Barra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.lbl_produto
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Produto :"
+  Height = 15
+  Left = 42
+  Top = 121
+  Width = 47
+  TabIndex = 10
+  Name = "lbl_produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Get_Produto
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 23
+  Left = 94
+  MaxLength = 14
+  SpecialEffect = 0
+  TabIndex = 2
+  Top = 117
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.lbl_peso_medio
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Peso :"
+  Left = 57
+  Top = 171
+  Width = 32
+  TabIndex = 12
+  Name = "lbl_peso_medio"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Get_Peso
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 23
+  Left = 94
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 4
+  Top = 167
+  Width = 52
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Get_Peso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Linha :"
+  Height = 15
+  Left = 55
+  Top = 196
+  Width = 34
+  TabIndex = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Get_Linha
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 23
+  Left = 94
+  MaxLength = 40
+  SpecialEffect = 0
+  TabIndex = 5
+  Top = 192
+  Width = 290
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Get_Linha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 88
+  Left = 14
+  Panel = 1
+  ReadOnly = .T.
+  RecordSource = "historico"
+  RowHeight = 17
+  ScrollBars = 0
+  TabIndex = 6
+  Top = 219
+  Width = 632
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "Historico.cBars"
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .T.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "Historico.Localis"
+  Column2.Width = 75
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "Historico.Ocors"
+  Column3.Width = 75
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = "Historico.Obs"
+  Column4.Width = 285
+  Column4.ReadOnly = .T.
+  Column4.Sparse = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ControlSource = "Historico.PesReals"
+  Column5.Width = 70
+  Column5.ReadOnly = .T.
+  Column5.InputMask = "9999.99"
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Barras"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.cbars"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Local"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.localis"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ocorrência"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.ocors"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Observação"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column4.fwmemo1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Left = 7
+  Top = 24
+  ControlSource = "Historico.Obs"
+  Name = "fwmemo1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso Real"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.pesreals"
+  InputMask = "9999.99"
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Excluiitem
+------------------------------------------------------------
+  Top = 3
+  Left = 649
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  Enabled = .T.
+  TabIndex = 7
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Excluiitem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCIM.Saída
+------------------------------------------------------------
+  Top = 3
+  Left = 724
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Saída"
+  TabIndex = 8
+  ToolTipText = "[ESC]"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Saída"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCIM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE acertagrade
+------------------------------------------------------------
+PROCEDURE acertagrade
+With ThisForm.Grade
+	.RecordSource = 'CrInvH'
+	.Column1.ControlSource = 'CrInvH.CBars'
+	.Column2.ControlSource = 'CrInvH.Localis'
+	.Column3.ControlSource = 'CrInvH.Ocors'
+	.Column4.ControlSource = 'CrInvH.Obs'  
+	.Column5.ControlSource = 'CrInvH.PesReals'
+	.Refresh
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters lExcluir,OldForm
+
+ThisForm.ParentForm = OldForm
+
+ThisForm.Excluir            = lExcluir
+ThisForm.ExcluiItem.Visible = ThisForm.Excluir
+ThisForm.Shape2.Visible     = ThisForm.Excluir
+ThisForm.Shape3.Visible     = !ThisForm.Excluir
+ThisForm.Caption            = Iif(lExcluir,'Exclusão de Barras','Consulta Imagem')
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Grade.RecordSource = ''
+Select * From Historico Where .F. Into Cursor CrInvH ReadWrite
+Select CrInvH
+Index On CBars Tag CBars
+Index On CPros Tag CPros
+Go Top
+
+ThisForm.AcertaGrade()
+
+Select Historico
+Go Bottom
+Go Top
+
+ThisForm.Get_Barra.Value = ''
+ThisForm.Get_Barra.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Get_Descricao
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Get_Barra
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Select CrInvH
+Go Bottom
+ThisForm.Grade.Refresh
+If ThisForm.ParentForm.TipoLeitora = 'S'
+	If Empty(ThisForm.ParentForm.LeituraSerial)
+		If !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError
+			ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.
+		EndIf
+	EndIf
+Else
+	Set Confirm On
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ThisForm.ParentForm.TipoLeitora = 'S'
+	If Empty(ThisForm.ParentForm.LeituraSerial)
+		If !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError
+			ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.
+		EndIf
+	Else
+		This.Value = ThisForm.ParentForm.LeituraSerial
+		This.Refresh
+		ThisForm.ParentForm.LeituraSerial = ''
+	EndIf
+EndIf
+
+If !Empty(This.Value)
+	lcConsulta = Sys(2023) + '\TempCon.jpg'
+
+	ThisForm.ExcluiItem.Visible = ThisForm.Excluir
+	ThisForm.Shape2.Visible     = ThisForm.Excluir
+	ThisForm.Shape3.Visible     = !ThisForm.Excluir
+
+	lStrQuery = [Select CBars,CPros,Pesos ]+;
+				[From SigOpEtq ]+;
+				[Where CBars = ]+This.Value+[ ]
+	If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'TmpBar') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpBar)')
+		Return(.F.)
+	EndIf
+	Select TmpBar
+	Go Top
+	If !Eof()
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro','TmpPro','CPros',TmpBar.CPros,'CPros,DPros,Linhas,FigJpgs')
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdLin','TmpLinha','Linhas',TmpPro.Linhas,'Descs')
+		ThisForm.Get_Produto.Value   = TmpPro.CPros
+		ThisForm.Get_Descricao.Value = TmpPro.DPros
+		ThisForm.Get_Peso.Value      = TmpBar.Pesos
+		ThisForm.Get_Linha.Value     = TmpLinha.Descs
+	
+		With ThisForm
+			.ImgJpg.Visible = .F.
+			.ImgJpg.Picture = ''
+			Clear Resources
+			If !Empty(TmpPro.FigJpgs) And !IsNull(TmpPro.FigJpgs)
+				* Figura no Campo Memo
+				lcFoto=Strconv(Strtran(Strtran(Strtran(TmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+				If (StrToFile(lcFoto,lcConsulta) > 0)
+					.ImgJpg.Visible = .T.
+					.ImgJpg.Picture = (lcConsulta)
+				EndIf
+				If File(lcConsulta)
+					Delete File (lcConsulta)
+				EndIf
+			Else
+				.ImgJpg.Visible = .F.
+				.ImgJpg.Picture = ''
+			EndIf
+			.Refresh
+		EndWith
+	EndIf
+
+	ThisForm.Grade.RecordSource = ''
+	
+	If !Seek(This.Value,'CrInvH','CBars')
+		If Seek(This.Value,'Historico','CBars')
+			Select Historico
+			Scatter MemVar Memo
+			Insert Into CrInvH From MemVar
+		Else
+			lStrQuery = [Select * From SigIvTrH ]+;
+						[Where Emps = ']+CrSigCdBal.Emps+[' And Codigos = ]+Alltrim(Str(CrSigCdBal.Codigos,6))+[ ]+;
+							[And CBars = ]+This.Value+[ ]
+			If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CrInvH') < 1
+				MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrInvH)')
+				Return(.F.)
+			EndIf
+			Select CrInvH
+			Index On CBars Tag CBars
+			Index On CPros Tag CPros
+			Go Top
+		EndIf
+	EndIf
+	Select CrInvH
+	Update CrInvH Set Obs = Nvl(Obs,'')
+	ThisForm.AcertaGrade()
+	Select CrInvH
+	Go Top
+EndIf
+
+If LastKey() # 27 And !ThisForm.Excluir
+	ThisForm.Get_Barra.Value = ''
+	ThisForm.Refresh
+	If ThisForm.ParentForm.TipoLeitora = 'S'
+		If Empty(ThisForm.ParentForm.LeituraSerial)
+			If !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError
+				ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.
+			EndIf
+		Else
+			This.Value = ThisForm.ParentForm.LeituraSerial
+			This.Refresh
+			ThisForm.ParentForm.LeituraSerial = ''
+		EndIf
+	Endif
+	Return 0
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If ThisForm.ParentForm.TipoLeitora = 'S'
+	If Empty(ThisForm.ParentForm.LeituraSerial)
+		If !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError
+			ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.
+		EndIf
+	Else
+		This.Value = ThisForm.ParentForm.LeituraSerial
+		This.Refresh
+		ThisForm.ParentForm.LeituraSerial = ''
+	EndIf
+Endif
+If !Empty(This.Value)
+	ThisForm.Grade.Column1.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Get_Produto
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Barra.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                   = Evaluate('CrProds.CPros')
+		ThisForm.Get_Descricao.Value = Evaluate('CrProds.DPros') 
+	Else
+		This.Value                   = ''
+		ThisForm.Get_Descricao.Value = ''
+	EndIf
+
+	lcConsulta = Sys(2023) + '\TempCon.jpg'
+
+	ThisForm.ExcluiItem.Visible = ThisForm.Excluir
+	ThisForm.Shape2.Visible     = ThisForm.Excluir
+	ThisForm.Shape3.Visible     = !ThisForm.Excluir
+
+	lStrQuery = [Select a.CPros,a.Linhas,a.FigJpgs,b.Descs ]+;
+				[From SigCdPro a ]+;
+				[Left Join SigCdLin b On b.Linhas = a.Linhas ]+;
+				[Where CPros = ']+This.Value+[' ]
+	If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'TmpPro') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpPro)')
+		Return(.F.)
+	EndIf
+	Select TmpPro
+	Go Top
+	If !Eof()
+		ThisForm.Get_Produto.Value   = TmpPro.CPros
+		ThisForm.Get_Peso.Value      = 0
+		ThisForm.Get_Linha.Value     = Nvl(TmpPro.Descs,'')
+	
+		With ThisForm
+			.ImgJpg.Visible = .F.
+			.ImgJpg.Picture = ''
+			Clear Resources
+			If !Empty(TmpPro.FigJpgs) And !IsNull(TmpPro.FigJpgs)
+				* Figura no Campo Memo
+				lcFoto=Strconv(Strtran(Strtran(Strtran(TmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+				If (StrToFile(lcFoto,lcConsulta) > 0)
+					.ImgJpg.Visible = .T.
+					.ImgJpg.Picture = (lcConsulta)
+				EndIf
+				If File(lcConsulta)
+					Delete File (lcConsulta)
+				EndIf
+			Else
+				.ImgJpg.Visible = .F.
+				.ImgJpg.Picture = ''
+			EndIf
+			.Refresh
+		EndWith
+	EndIf
+	ThisForm.Grade.RecordSource = ''
+
+	If !Seek(This.Value,'CrInvH','CPros')
+		Select * From Historico Where CPros = This.Value Into Cursor TmpHistorico
+		Select TmpHistorico
+		Go Top
+		If !Eof()
+			Scan
+				Scatter MemVar Memo
+				Insert Into CrInvH From MemVar
+				Select TmpHistorico
+			EndScan
+		Else
+			lStrQuery = [Select * From SigIvTrH ]+;
+						[Where Emps = ']+CrSigCdBal.Emps+[' And Codigos = ]+Alltrim(Str(CrSigCdBal.Codigos,6))+[ ]+;
+							[And CPros = ']+This.Value+[' ]
+			If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CrInvH') < 1
+				MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrInvH)')
+				Return(.F.)
+			EndIf
+			Select CrInvH
+			Index On CBars Tag CBars
+			Index On CPros Tag CPros
+			Go Top
+		EndIf
+	EndIf
+	Select CrInvH
+	Update CrInvH Set Obs = Nvl(Obs,'')
+	ThisForm.AcertaGrade()
+	Select CrInvH
+	Go Top
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.Grade.Column1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Get_Peso
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Get_Linha
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Grade
+* Classe: grid (Base: grid)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+If !ThisForm.Excluir
+	ThisForm.Get_Barra.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Excluiitem
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrInvH
+DO Case
+	Case Empty(ThisForm.Get_Barra.Value) And !Empty(ThisForm.Get_Produto.Value)
+		Select Historico
+		If !Seek(ThisForm.Get_Produto.Value,'Historico','CPros')
+			Select CrInvH
+			Scatter MemVar Memo
+			Insert Into Historico From MemVar
+		EndIf
+		Select Historico
+		Go Top
+		Delete From Historico Where CPros = ThisForm.Get_Produto.Value
+		Select Historico
+		Go Top
+		Select CrInvH
+		Delete From CrInvH
+	Case !Empty(ThisForm.Get_Barra.Value)
+		If !Seek(CrInvH.CBars,'Historico','CBars')
+			Select CrInvH
+			Scatter MemVar Memo
+			Insert Into Historico From MemVar
+		EndIf
+		Select Historico
+		lnRecno = Recno('Historico')
+		Go Top
+		Go lnRecno
+		Delete In Historico
+		Select CrInvH
+		Delete In CrInvH
+	Otherwise
+		ThisForm.Grade.SetFocus
+		ThisForm.Grade.Refresh
+		ThisForm.Refresh
+		ThisForm.Get_Barra.Value = ''
+		ThisForm.Get_Barra.SetFocus
+		Return
+EndCase
+
+Select CrInvH
+Go Bottom
+ThisForm.Grade.SetFocus
+ThisForm.Grade.Refresh
+ThisForm.Refresh
+ThisForm.Get_Barra.Value = ''
+If Eof('CrInvH')
+	ThisForm.ExcluiItem.Visible = .F.
+	ThisForm.Shape2.Visible     = .F.
+	ThisForm.Shape3.Visible     = .T.
+	ThisForm.Get_Barra.SetFocus
+EndIf
+Return
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCIM.Saída
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select Historico
+Set Order To
+Go Bottom
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCIM
+RESERVED3 (ClassInfo): excluir
+leituraserial
+parentform
+tipoleitora
+*acertagrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

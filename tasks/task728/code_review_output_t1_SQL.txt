@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Resultado: os 4 achados s├úo falsos positivos do validador ÔÇö nenhum arquivo foi alterado.**
+
+Verifiquei os `WHERE` reais em `SigOpEmbBO.prg` (`grep -n -i WHERE`):
+
+| linha | WHERE real | coluna |
+|---|---|---|
+| 486 | cursor do pai | `citens` |
+| 521 | consulta servidor (`CarregarLinhasDoItem`) | `empdopnums` + `citens` |
+| 1505, 1676, 1693 | `CarregarPorCodigo`/`MontarUpdateLinha`/`MontarDeleteLinha` | `cidchaves` (PK) |
+| 1719 | `MontarDeleteDoItem` | `empdopnums` + `citens` |
+
+Nenhum WHERE usa `qtds` ou `datasession`:
+- **DATASESSION**: n├úo ├® coluna nenhuma ÔÇö s├│ aparece em coment├írio de prosa citando a property VFP (`DataSession = 2 ...`, linhas 265/679). O validador confundiu o token com nome de coluna.
+- **QTDS**: s├│ aparece em `SET qtds = ...` do UPDATE, `COUNT FOR qtds > 0` (cursor local) e ControlSource ÔÇö nunca num WHERE.
+- **EMPDOPNUMS** e **CIDCHAVES**: s├úo WHERE reais, mas n├úo s├úo inventados ÔÇö s├úo necess├írios porque o BO migrado opera direto na tabela `SigMvIte` (todas as movimenta├º├Áes), enquanto o legado operava num cursor em mem├│ria (`crSigMvIte`) j├í pr├®-filtrado pela movimenta├º├úo corrente. `cidchaves` ├® a PK real da linha (sem ela, UPDATE/DELETE por chave atingiria todas as linhas da tabela); `empdopnums` escopa o DELETE por item tamb├®m pela movimenta├º├úo, porque `citens` sozinho se repete entre documentos diferentes ÔÇö remov├¬-los introduziria grava├º├úo em massa, um bug grave.
+
+Esse ├® o mesmo mecanismo de falso positivo j├í mapeado em mem├│ria (`SQLFILTROcoment` / `WARNINGmassivo`): o validador extrai a refer├¬ncia de um `FOR`-clause de cursor local do legado e depois varre o arquivo inteiro por qualquer token pr├│ximo de "WHERE", inclusive em coment├írios. Atualizei essa mem├│ria com a reincid├¬ncia. Nenhuma mudan├ºa de c├│digo era segura ou correta de se aplicar aqui.

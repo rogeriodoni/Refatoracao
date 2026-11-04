@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpEtq.prg` (1225 ÔåÆ 1358 linhas).
+
+## O que foi entregue
+
+`ConfigurarContainerProcurar` deixou de nascer sem filhos e passou a montar a **superf├¡cie de campos inteira** da tela ÔÇö os dois objetos que o dump tem dentro de `Cnt_Procurar`:
+
+| objeto migrado | legado | geometria / propriedades transcritas |
+|---|---|---|
+| `lbl_4c_Label4` | `Cnt_Procurar.Label4` | Top 17 / Left 11 / 43x17 / Tahoma 8 / ForeColor 90,90,90 / TabIndex 10 / Caption `"Barra  :"` |
+| `txt_4c_Busca` | `Cnt_Procurar.GetBusca` (classe `fwget`) | Top 15 / Left 56 / 108x23 / Tahoma 8 / **Format "K"** / ForeColor 0,0,0 / Disabled{Back,Fore}Color / Themes .F. / TabIndex 1 |
+
+## Decis├Áes que vale registrar
+
+**A fase pede "metade dos campos" e aqui ela entrega todos ÔÇö o legado tem um.** Dos 5 `textbox` do dump, 4 s├úo os `Text1` nativos das `Column` da grade (c├®lulas, j├í entregues na Fase 4). O 5┬║ ├® o `GetBusca`. Sobra um par indivis├¡vel: um r├│tulo e o campo de que ele ├® legenda. Partir isso entre duas fases deixaria legenda sem campo ÔÇö meia tela, o que a regra de completude pro├¡be. O que ficou para a Fase 6 n├úo ├® campo, s├úo os **eventos** (`Valid`/`LostFocus`/`btn*.Valid`/`Click`), e ambas as metades da busca j├í est├úo prontas esperando o `BINDEVENT`: o corpo no BO (`BuscarPorBarra`, Fase 2) e a repintura (`CarregarDados`, Fase 4).
+
+**`Format = "K"` veio da CLASSE `fwget`, n├úo do override do SCX** ÔÇö o SCX sobrep├Áe a classe, n├úo a substitui. Ignor├í-lo perderia a sele├º├úo do conte├║do ao entrar no campo, que num campo de coletor tem uso real.
+
+**Tr├¬s coisas deliberadamente N├âO escritas**, cada uma documentada no c├│digo: `ZOrderSet = 4` (bookkeeping do Form Designer, derrubaria o `Init` ÔÇö regra #33); `MaxLength`/`InputMask` (nem o SCX nem o `fwget` os declaram ÔÇö inventar "14" fecharia o campo mais que o legado, regra #49); e `BackStyle`/`BackColor` no r├│tulo e no container (ambos ficam no mesmo default de classe base, igual ao legado ÔÇö fixar um dos dois ├® que os descasaria). O `GetBusca.When` legado tem corpo `**`, ├® no-op, e a aus├¬ncia est├í registrada para n├úo parecer omiss├úo.
+
+**`Value = ""` (caractere), como o `fwget` entrega** ÔÇö a coluna indexada ├® `CBars numeric(14,0)`, mas a convers├úo fica no BO, que l├¬ o tipo real com `TYPE()` antes de escolher entre `VAL(texto)` e o texto. O cursor vem de fora, montado pelo chamador.
+
+## Verifica├º├úo
+
+- **Compila├º├úo provada**, com controle negativo: `-T <form.prg>` gerou `.FXP` sem `.ERR`; a c├│pia com `PUBLIC PROCEDURE` colada no fim produziu `.ERR` apontando **s├│** as 3 linhas acrescentadas (1359-1361), o que prova de uma vez que o detector funciona e que as 1358 linhas est├úo limpas.
+- **N├úo houve como provar runtime**: o smoke test falhou (`exit=0`, `.FXP` criado, arquivo de sa├¡da ausente) ÔÇö nesta sess├úo o VFP9 compila e sai sem executar. Instancia├º├úo e comportamento em tela seguem n├úo verificados.
+- **26 propriedades conferidas uma a uma** contra `propriedades_baseclasses.txt` ÔÇö todas existem em `Label`/`TextBox` (regra #33).
+- Geometria: filhos cabem no pai (54 e 164 contra Width 174; 34 e 38 contra Height 54) e n├úo se cruzam ÔÇö r├│tulo termina em 54, campo come├ºa em 56.
+- 0 bytes >127 (sem acento literal), 0 `this_* .Value`, 0 `PUBLIC PROCEDURE`, `PROCEDURE`/`ENDPROC` e `WITH`/`ENDWITH` balanceados, validador de completude **0 problemas**, nomes id├¬nticos aos do `mapeamento.json`.
+- **Gate da Fase 5: PASSA** pelo ramo FLAT (`OPERACIONAL` + sem `pgf_4c_` + `.ControlSource` vinculado) ÔÇö rodado isolado, sem dot-source do orquestrador. CRLF ├¡ntegro (CR=LF=1358) e diff puramente aditivo: as ├║nicas linhas removidas s├úo coment├írios que eu reescrevi.
+
+Uma observa├º├úo sobre o gate da Fase 6: o `$temBindEvent` dele casa `BINDEVENT` em **coment├írio** tamb├®m, e este arquivo cita a palavra em 3 coment├írios. Ele n├úo vai liberar a fase por isso, porque o ramo FLAT exige junto `PROCEDURE Validar\w+`, que est├í corretamente ausente ÔÇö mas ├® um fail-open latente nesse gate, da mesma fam├¡lia do j├í registrado em `feedback_comentario_citando_nome_satisfaz_gate`.

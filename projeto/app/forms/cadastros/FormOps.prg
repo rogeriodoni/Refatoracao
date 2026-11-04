@@ -304,6 +304,21 @@ DEFINE CLASS FormOps AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
 
+        *----------------------------------------------------------------------
+        *-- Erro307: esta tela e SOMENTE CONSULTA no legado. O Init do SCX
+        *-- desabilita os tres:
+        *--   .plAcInserir = .f.   .Pagina.Lista.Grupo_Op.Inserir.Enabled = .f.
+        *--   .plAcAlterar = .f.   .Pagina.Lista.Grupo_Op.Alterar.Enabled = .f.
+        *--   .plAcExcluir = .f.   .Pagina.Lista.Grupo_Op.Excluir.Enabled = .f.
+        *-- Visualizar e Buscar continuam ativos - o legado nao os toca. O que
+        *-- o usuario pode mudar e o checkbox INATIVA, que grava em SigOpCdc.
+        *-- Nada reabilita estes botoes depois: o AjustarBotoesPorModo so mexe
+        *-- no Salvar/Cancelar da Page2 (conferido - regra #40).
+        *----------------------------------------------------------------------
+        loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir.Enabled = .F.
+        loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar.Enabled = .F.
+        loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir.Enabled = .F.
+
         *-- Container Saida - PADRAO CANONICO (Left=917, Width=90; Top compensado=29)
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
         WITH loc_oPagina.cnt_4c_Saida
@@ -535,7 +550,7 @@ DEFINE CLASS FormOps AS FormBase
         *-- Container Botoes Acao (Grupo_Salva: top=7+29=36, left=821, w=160, h=85)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 36
+            .Top         = 27
             .Left        = 821
             .Width       = 160
             .Height      = 85
@@ -760,8 +775,16 @@ DEFINE CLASS FormOps AS FormBase
             .ForeColor     = RGB(90, 90, 90)
             .BackColor     = RGB(255, 255, 255)
             .Themes        = .F.
-            .RowSourceType = 0
+            *-- Erro307: o combo ficava VAZIO porque RowSourceType era 0 e nao
+            *-- havia RowSource nenhum. O legado traz a lista FIXA no SCX:
+            *--   cmbMenus.RowSourceType = 1
+            *--   cmbMenus.RowSource = ",SISTEMA,OPERACIONA,CAIXA"
+            *-- (o 1o item vazio existe de proposito). Conferido no banco: os
+            *-- valores de SigCdOpe.Menus sao exatamente "", CAIXA e OPERACIONA.
+            .RowSourceType = 1
+            .RowSource     = ",SISTEMA,OPERACIONA,CAIXA"
             .Style         = 0
+            *-- Legado: cmbMenus.When -> Return .f. (campo so de leitura)
             .Enabled       = .F.
             .Visible       = .T.
         ENDWITH
@@ -799,7 +822,13 @@ DEFINE CLASS FormOps AS FormBase
             .BackColor = RGB(255, 255, 255)
             .Themes    = .F.
             .ReadOnly  = .T.
-            .MaxLength = 15
+            *-- Legado getSubMenus.MaxLength = 14, com este comentario no SCX:
+            *-- "Atencao!!! Este Campo Esta Aceitando 14 posicoes
+            *--  propositalmente! Nao Altere!" - apesar de submenus ser
+            *-- char(15) no banco. O 15 do migrado desfazia a trava de proposito
+            *-- (Erro307). Campo e TEXTO LIVRE e so de leitura (When -> .F. no
+            *-- legado): NAO tem nem precisa de pesquisa.
+            .MaxLength = 14
             .Visible   = .T.
         ENDWITH
 
@@ -891,11 +920,20 @@ DEFINE CLASS FormOps AS FormBase
             .ForeColor     = RGB(90, 90, 90)
             .BackColor     = RGB(255, 255, 255)
             .Themes        = .F.
+            *-- Erro307: ficava VAZIO (RowSourceType 0, sem itens). O legado
+            *-- popula no Init com AddItem a partir de SigCdTom:
+            *--   Select Codigos, Descrs From SigCdTom Order By Codigos
+            *--   .AddItem(Padl(Codigos, 2, '0') + "-" + Descrs)
+            *-- RowSourceType = 0 permite AddItem; ver CarregarComboTipoOps().
             .RowSourceType = 0
             .Style         = 2
+            *-- Legado: cmbTOpers.When -> Return .f. (campo so de leitura)
             .Enabled       = .F.
             .Visible       = .T.
         ENDWITH
+
+        *-- Popular o combo de Tipo a partir de SigCdTom (legado faz no Init)
+        THIS.CarregarComboTipoOps()
 
         *-- Label Numero (Say25: top=219+29=248, left=253, w=46, h=15)
         loc_oPagina.AddObject("lbl_4c_Label25", "Label")
@@ -1482,6 +1520,83 @@ DEFINE CLASS FormOps AS FormBase
     *==========================================================================
     * BOParaForm - Transfere valores do BO para o Form
     *==========================================================================
+    *==========================================================================
+    * TextoTipoOps - monta o item do combo, igual ao legado:
+    *   Padl(Codigos, 2, '0') + "-" + Descrs   ->  "01-FATURAMENTO"
+    * SigCdTom.Codigos e numeric(2,0) (medido no banco) e o PADL do VFP aceita
+    * numerico direto, como no legado. Chamado com THIS. (regra #8).
+    *==========================================================================
+    PROCEDURE TextoTipoOps(par_nCodigo, par_cDescr)
+        RETURN PADL(par_nCodigo, 2, "0") + "-" + ALLTRIM(NVL(par_cDescr, ""))
+    ENDPROC
+
+    *==========================================================================
+    * CarregarComboTipoOps - popula o combo de Tipo a partir de SigCdTom.
+    * Legado (Init): Select Codigos, Descrs From SigCdTom Order By Codigos
+    *                Scan / .AddItem(Padl(Codigos,2,'0') + "-" + Descrs)
+    * O cursor fica aberto porque o SelecionarTipoOps precisa dele para casar
+    * TipoOps -> texto do item, como o legado faz varrendo LocalTOpe.
+    *==========================================================================
+    PROCEDURE CarregarComboTipoOps()
+        LOCAL loc_oCbo, loc_nRes, loc_oErro
+
+        TRY
+            loc_oCbo = THIS.pgf_4c_Paginas.Page2.cbo_4c_CmbTOpers
+            loc_oCbo.Clear()
+
+            IF USED("cursor_4c_TOpers")
+                USE IN cursor_4c_TOpers
+            ENDIF
+
+            loc_nRes = SQLEXEC(gnConnHandle, ;
+                "SELECT Codigos, Descrs FROM SigCdTom ORDER BY Codigos", ;
+                "cursor_4c_TOpers")
+
+            IF loc_nRes > 0 AND USED("cursor_4c_TOpers")
+                SELECT cursor_4c_TOpers
+                SCAN
+                    loc_oCbo.AddItem(THIS.TextoTipoOps(cursor_4c_TOpers.Codigos, ;
+                                                  cursor_4c_TOpers.Descrs))
+                ENDSCAN
+                GO TOP IN cursor_4c_TOpers
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormOps.CarregarComboTipoOps")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * SelecionarTipoOps - acha no combo o item cujo codigo casa com par_nTipo
+    * e o seleciona (legado: Scan em LocalTOpe comparando TipoOps = Codigos).
+    *==========================================================================
+    PROCEDURE SelecionarTipoOps(par_nTipo)
+        LOCAL loc_oCbo, loc_oErro
+
+        TRY
+            loc_oCbo = THIS.pgf_4c_Paginas.Page2.cbo_4c_CmbTOpers
+            loc_oCbo.Value = ""
+
+            IF VARTYPE(par_nTipo) # "N" OR !USED("cursor_4c_TOpers")
+                RETURN
+            ENDIF
+
+            SELECT cursor_4c_TOpers
+            GO TOP
+            SCAN
+                IF par_nTipo = cursor_4c_TOpers.Codigos
+                    loc_oCbo.Value = THIS.TextoTipoOps(cursor_4c_TOpers.Codigos, ;
+                                                  cursor_4c_TOpers.Descrs)
+                    EXIT
+                ENDIF
+            ENDSCAN
+            GO TOP IN cursor_4c_TOpers
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormOps.SelecionarTipoOps")
+        ENDTRY
+    ENDPROC
+
     PROTECTED PROCEDURE BOParaForm()
         LOCAL loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -1516,11 +1631,13 @@ DEFINE CLASS FormOps AS FormBase
             loc_oPg2.txt_4c_Ordem.Value   = THIS.this_oBusinessObject.this_nOrdes
         ENDIF
 
-        IF PEMSTATUS(loc_oPg2, "cbo_4c_CmbTOpers", 5)
-            loc_oPg2.cbo_4c_CmbTOpers.Value = ;
-                IIF(THIS.this_oBusinessObject.this_nTipoOps = 0, "", ;
-                    ALLTRIM(TRANSFORM(THIS.this_oBusinessObject.this_nTipoOps)))
-        ENDIF
+        *-- Erro307: o Value era "1"/"2", mas os itens do combo sao
+        *-- "01-FATURAMENTO" etc - nunca casavam e o combo ficava vazio. E o
+        *-- IIF(TipoOps = 0, "") escondia o tipo 00-OUTROS, que e valido e tem
+        *-- registros no banco. O legado procura o item pelo CODIGO:
+        *--   If (crSigCdOpe.TipoOps = LocalTOpe.Codigos)
+        *--       .Value = Padl(Codigos, 2, '0') + "-" + Descrs
+        THIS.SelecionarTipoOps(THIS.this_oBusinessObject.this_nTipoOps)
 
         IF PEMSTATUS(loc_oPg2, "txt_4c_NDopes", 5)
             loc_oPg2.txt_4c_NDopes.Value  = THIS.this_oBusinessObject.this_nNDopes

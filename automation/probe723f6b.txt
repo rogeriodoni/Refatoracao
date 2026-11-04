@@ -1,0 +1,39 @@
+A: inicio
+B: config.prg OK
+B2: flags de teste setadas (ModoTeste=.T.)
+C: deps carregadas
+D: antes do CREATEOBJECT
+CK01 CREATEOBJECT devolveu O
+CK02 lbl_4c_Label1  T/L/W/H = 599/414/119/15  (dump 599/414/119/15)
+CK03 lbl_4c_Label2  T/L/W/H = 599/667/103/15  (dump 599/667/103/15)
+CK04 txt_4c_Usuars  T/L = 595/535  Enabled=.F.  (dump 595/535 Enabled=.F.)
+CK05 txt_4c_Datas   T/L/W = 595/772/143  Enabled=.F.  (dump 595/772/143 Enabled=.F.)
+CK06 cursor USED=.F.  ObsArqs.CS=[cursor_4c_Dados.ObsArqs]  Usuars.CS=[cursor_4c_Dados.Usuars]  Datas.CS=[cursor_4c_Dados.Datas]
+CK07 grade RecordSource=[cursor_4c_Dados]  Col1.CS=[cursor_4c_Dados.Arquivos]  Col1.W=778  (esperado cursor_4c_Dados / .Arquivos / 778)
+CK08 grade vazia -> img.Visible=.F.  (esperado .F.)
+D1b: datasession do form = 2  cursor USED=.T.
+D2: linha 1 inserida, antes do GradeAfterRowColChange
+CK09 linha JPG real -> img.Visible=.T.  Picture=[c:\temp\probe723img.jpg]  (esperado .T. + caminho)
+CK10 detalhe Usuars=[TESTE]  ObsArqs=[obs um]  (esperado TESTE / obs um)
+CK11 linha PDF -> img.Visible=.F.  detalhe Usuars=[OUTRO]  (esperado .F. / OUTRO)
+CK12 nome sem ponto -> img.Visible=.F.  (esperado .F., sem excecao)
+D3: antes do DblClick em nao-imagem
+CK13 DblClick em nao-imagem: sem excecao
+D4: antes do DblClick em JPG real (SigOpZom ausente)
+CK14 DblClick em JPG real: tratou ausencia de SigOpZom
+D5: antes de BtnOpnArqsClick com arquivo inexistente
+CK15 arquivo inexistente: avisou sem excecao
+CK16 modo ALTERAR: Inserir.En=.T. Excluir.En=.T. Obs.RO=.F. Abrir.En=.T.  (esperado .T./.T./.F./.T.)
+CK17 modo PROCURAR: Inserir.En=.F. Excluir.En=.F. Obs.RO=.T. Abrir.En=.T.  (esperado .F./.F./.T./.T.)
+CK18 visibilidade:
+     8 metodos conferidos; TODOS existem e sao PUBLIC
+
+CK19 internos PROTECTED: ValidarArquivoSelecionado=.T. ValidarExtensaoImagem=.T. VincularCamposDetalhe=.T.  (esperado .T./.T./.T.)
+CK20 Datas dir=915 base=616 Form W/H=1000/640
+CK21 Release OK
+DIALOGOS SUPRIMIDOS:
+[31/10/2026 03:06:52 PM] Aviso: Módulo de Zoom de Imagem (SigOpZom) ainda não está disponível nesta versão.
+[31/10/2026 03:06:52 PM] Atenção: Arquivo não encontrado!
+[31/10/2026 03:06:52 PM] Atenção: Arquivo não encontrado!
+
+Z: fim

@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpCtdBO.prg` criado (315 linhas, CRLF, ASCII puro com `CHR()` onde h├í acento).
+
+**Por que a tentativa anterior falhou**: n├úo foi conte├║do. O `fase_1_output.txt` mostra o CLI respondendo *"don't see an actual request in your message"* ÔÇö o prompt n├úo chegou ao modelo, e o arquivo nunca foi criado. Nada a corrigir no c├│digo gerado antes.
+
+## O que o SigOpCtd ├®
+
+Di├ílogo **filho, modal, sem barra de t├¡tulo** (800x200), aberto pelo `msv_procurar` do Cadastro de Contas em 4 call sites (`task388/SIGCDCTA_form_codigo_fonte.txt:9111,9146,9183,9208`) com `Do Form SigOpCtd With lcMsg, ThisForm`. N├úo consulta nem grava: pergunta **como casar** o texto digitado e devolve um n├║mero. Contrato confirmado nos call sites ÔÇö `1`=`'x%'` (Iniciais), `2`=`'%x'` (Finais), `3`=`'%x%'` (Qualquer Posi├º├úo), `4`=igualdade (Desc. Exata), `0`=Encerrar; default 1.
+
+## Decis├Áes que registrei no arquivo
+
+- **`this_cTabela` e `this_cCampoChave` ficam VAZIOS** e o `DODEFAULT()` vai sem nome de tabela. A tela n├úo tem entidade: `SigCdCli` ├® do chamador. Fix├í-la aqui sugeriria que este BO grava nela ÔÇö e, pela regra #22, inventar colunas ├® proibido. O gate da Fase 2 (exce├º├úo *BO somente-leitura*, fail-closed) ├® satisfeito pelo dump: zero `TABLEUPDATE`, zero `.AddCursor(`, zero escrita.
+- **`poForm` n├úo entra no BO** ÔÇö ├® contexto de interface e fecharia ciclo paiÔåÆdi├ílogoÔåÆBOÔåÆpai. Fica no `FormSigOpCtd` (Fase 3), com o consumo can├┤nico sendo o chamador ler `this_nRetorno` ap├│s o `Show()` (`Hide()` nos bot├Áes, n├úo `Release()` ÔÇö Erro168).
+- **`this_nOpcaoSelecionada` e `this_nRetorno` s├úo separadas**, como no legado (`Optiongroup1.Value` x `pnReturno`): junt├í-las faria o cancelamento apagar a escolha e o chamador perderia o que distingue "cancelou" de "escolheu Iniciais".
+- **`this_nTamanhoTermo` ├® property (default 50), n├úo constante**: no modo 4 o legado *n├úo* remonta o termo, ent├úo ele vai ao servidor como `Padr(valor, N)` com brancos, e `N` ├® a largura da coluna ÔÇö 50 em `rclis`/`razaos`, **40** em `contato` (conferido no `schema.sql` via `Get-Content -Raw`).
+
+## Achado relevante
+
+J├í existe `classes\FormOpcaoBusca.prg`, escrito quando este SCX **n├úo estava no acervo**, com o contrato deduzido dos mesmos call sites ÔÇö e os n├║meros 0..4, a ordem dos modos e o default 1 batem **exatamente**. Ou seja, o comportamento em produ├º├úo est├í certo; esta migra├º├úo acrescenta fidelidade **visual**. `FormCTA.prg:5652` e `FormCliente.prg:3810` continuam no stand-in: repont├í-los para `FormSigOpCtd` ├® decis├úo separada desta task. Salvei isso em mem├│ria.
+
+## Verifica├º├Áes
+
+| checagem | resultado |
+|---|---|
+| Compila├º├úo VFP9 (c├│pia em dir temp) | `sigopctdbo.FXP` gerado, **sem `.ERR`** |
+| Gate de completude (regex do `05d` replicado) | OK ÔÇö nenhum TODO/stub/procedure vazia |
+| Encoding | `CR=315 LF=315` (CRLF), 0 bytes n├úo-ASCII |
+
+Ressalva sobre a compila├º├úo: `vfp9.exe` nesta sess├úo compila e sai **sem executar** o `.prg`, ent├úo o que est├í provado ├® a compila├º├úo limpa (FXP presente + aus├¬ncia de `.ERR`) ÔÇö n├úo instancia├º├úo. O processo que ficou no IDE foi encerrado e o diret├│rio tempor├írio removido.
+
+N├úo toquei em `task_state.json` ÔÇö o orquestrador ├® quem marca a etapa.

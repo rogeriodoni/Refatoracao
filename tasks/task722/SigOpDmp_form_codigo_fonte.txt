@@ -1,0 +1,1253 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpDmp.SCX
+* Data/Hora: 31/10/2026 12:05:50
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDMP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetNome
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDMP.Pagina.Dados.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Excluir
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Inserir
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Get_DConta
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DGrupo
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Grupo
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Conta
+  Parent: SIGOPDMP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 792
+  Height = 447
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = (prompt())
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGOPDMP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 309
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 338
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 718
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Nome : "
+  Left = 172
+  Top = 149
+  Width = 39
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.GetNome
+------------------------------------------------------------
+  ControlSource = "crSigPrDmo.nome"
+  Height = 23
+  Left = 214
+  MaxLength = 20
+  TabIndex = 4
+  Top = 146
+  Width = 150
+  Name = "GetNome"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta Sd Inicial : "
+  Height = 15
+  Left = 125
+  Top = 199
+  Width = 86
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 260
+  Left = 108
+  Panel = 1
+  RowHeight = 20
+  ScrollBars = 2
+  TabIndex = 10
+  Top = 225
+  Width = 492
+  GridLineColor = 238,238,238
+  ZOrderSet = 15
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Width = 75
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Format = "K!"
+  Column1.Name = "Column2"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 75
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Format = "K!"
+  Column2.Name = "Column3"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 5
+  Column3.ControlSource = ""
+  Column3.Width = 30
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Format = "K!"
+  Column3.InputMask = ""
+  Column3.Name = "Column5"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 1
+  Column4.ControlSource = ""
+  Column4.Width = 40
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.InputMask = "999"
+  Column4.Name = "Column1"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 4
+  Column5.ControlSource = ""
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Format = "K!"
+  Column5.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Fase"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Format = "K!"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Funcionário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 75
+  Margin = 0
+  Top = 89
+  Width = 100
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "E/S"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ordem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Excluir
+------------------------------------------------------------
+  Top = 352
+  Left = 607
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 12
+  ToolTipText = "Excluir Fase"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Inserir
+------------------------------------------------------------
+  Top = 309
+  Left = 607
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  TabIndex = 11
+  ToolTipText = "Inserir Fase"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo Sd Inicial : "
+  Height = 15
+  Left = 125
+  Top = 174
+  Width = 86
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Get_DConta
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K!"
+  Height = 25
+  Left = 294
+  MaxLength = 40
+  TabIndex = 8
+  Top = 194
+  Width = 271
+  ZOrderSet = 9
+  Name = "Get_DConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Get_DGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K!"
+  Height = 25
+  Left = 294
+  MaxLength = 20
+  TabIndex = 6
+  Top = 169
+  Width = 271
+  ZOrderSet = 10
+  Name = "Get_DGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Get_Grupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "crSigPrDmo.Grupos"
+  Format = "K!"
+  Height = 25
+  Left = 214
+  MaxLength = 10
+  TabIndex = 5
+  Top = 169
+  Width = 80
+  ZOrderSet = 12
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDMP.Pagina.Dados.Get_Conta
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = "crSigPrDmo.Contas"
+  Format = "K!"
+  Height = 25
+  Left = 214
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 194
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDMP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE excluiitens
+------------------------------------------------------------
+PROCEDURE excluiitens
+lcQuery = [Delete From SigCdDpr Where nome=']+ThisForm.pagina.dados.getnome.Value+[']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crDelSigCdDpr') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDelSigCdDpr)')
+	Return 0
+EndIf
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+	Return 0
+EndIf
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE iniciadesc
+------------------------------------------------------------
+PROCEDURE iniciadesc
+Chave = crSigPrDmo.Grupos
+If not IsEmpty(Chave)
+	thisform.podatamgr.cursorquery('SigCdGcr','crCursorPesq','Codigos',Chave)
+	ThisForm.Pagina.Dados.Get_DGrupo.Value = crCursorPesq.DesCrs
+Else
+	ThisForm.Pagina.Dados.Get_DGrupo.Value = ''
+EndIf
+Chave = crSigPrDmo.Contas
+If not IsEmpty(Chave)
+	thisform.podatamgr.cursorquery('SigCdCli','crCursorPesq','iclis',Chave)
+	ThisForm.Pagina.Dados.Get_DConta.Value = crCursorPesq.rclis
+Else
+	ThisForm.Pagina.Dados.Get_DConta.Value = ''
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE insirareggrade
+------------------------------------------------------------
+PROCEDURE insirareggrade
+Select crSigCdDpr
+Append Blank
+Replace contas With Space(10),;
+		grupos With Space(10),;
+		nome   With ThisForm.pagina.dados.getNome.Value,;
+		operas With Space(1),;
+		ordems With 0,;
+		tpops  With Space(15),;
+		cIdChaves With fUniqueIds()
+		
+		
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Set Near On
+Select crSigPrDmo
+Index On nome tag ix_Nome
+Set Order To ix_nome
+Seek ThisForm.pagina.dados.getNome.Value
+Set Near Off
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private sNome
+sNome=Space(20)
+lcQryDmPro = [Select * From SigPrDmo ]
+lcQryDmPri = [Select * From SigCdDpr Where nome=?sNome Order By Ordems]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigPrDmo', 'cIdChaves', 'crSigPrDmo', '', ThisForm.Pagina.Lista.Grade, lcQryDmPro)
+			.pfSqlTabela(1).pColuna('Nome', '', '', 'Nome do Demonstrativo', 150, .t.)
+			.AddCursor('SigCdDpr', 'cIdChaves', 'crSigCdDpr', '', , lcQryDmPri)
+		EndWith
+		Select crSigPrDmo
+		Index On nome tag ix_nome
+
+		lcQuery = [Select * ] + ;
+		    [ From SigOpOpt]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpOpt') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpOpt)')
+			Return 0
+		EndIf
+		Select crSigOpOpt
+		Index On cods tag cods
+
+		lcQuery = [Select codigos,Descrs ] + ;
+		    [ From SigCdGcr] + ;
+		    [ Where gerbals=1 ]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')
+			Return 0
+		EndIf
+		Select crSigCdGcr
+		Index On codigos tag BALCODIGO
+		Index On descrs tag BALDESCRS
+
+		lcQuery = [Select Grupos, IClis, RClis ] + ;
+				    [From SigCdCli ] + ;
+				   [Where GerBals = 1]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+			Return 0
+		EndIf
+		Select crSigCdCli
+		Index On IClis Tag BalCodigo
+		Index On RClis Tag BalNome
+
+		ThisForm.pagina.dados.grade.RecordSource=''
+		ThisForm.pagina.dados.grade.column1.ControlSource=''
+		ThisForm.pagina.dados.grade.column2.ControlSource=''
+		ThisForm.pagina.dados.grade.column3.ControlSource=''
+		ThisForm.pagina.dados.grade.column4.ControlSource=''
+		ThisForm.pagina.dados.grade.column5.ControlSource=''
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !DoDefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+ThisForm.Pagina.Dados.Grade.Refresh
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.GetNome.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+Endcase
+
+ThisForm.pagina.dados.grade.RecordSource = ''
+
+If not Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+	ThisForm.IniciaDesc()
+	sNome=ThisForm.pagina.dados.getNome.value
+	ThisForm.podatamgr.Requery('crSigCdDpr')
+Else
+	Zap in ('crSigCdDpr')
+EndIf
+
+ThisForm.pagina.dados.grade.RecordSource='crSigCdDpr'
+ThisForm.pagina.dados.grade.column1.ControlSource='crSigCdDpr.Ordems'
+ThisForm.pagina.dados.grade.column1.ReadOnly=.F.
+ThisForm.pagina.dados.grade.column2.ControlSource='crSigCdDpr.grupos'
+ThisForm.pagina.dados.grade.column2.ReadOnly=.F.
+ThisForm.pagina.dados.grade.column3.ControlSource='crSigCdDpr.contas'
+ThisForm.pagina.dados.grade.column3.ReadOnly=.F.
+ThisForm.pagina.dados.grade.column4.ControlSource='crSigCdDpr.tpops'
+ThisForm.pagina.dados.grade.column4.ReadOnly=.F.
+ThisForm.pagina.dados.grade.column5.ControlSource='crSigCdDpr.operas'
+ThisForm.pagina.dados.grade.column5.ReadOnly=.F.
+
+Go Top in ('crSigCdDpr')
+Thisform.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+ThisForm.pagina.dados.grade.RecordSource=''
+ThisForm.pagina.dados.grade.column1.ControlSource=''
+ThisForm.pagina.dados.grade.column2.ControlSource=''
+ThisForm.pagina.dados.grade.column3.ControlSource=''
+ThisForm.pagina.dados.grade.column4.ControlSource=''
+ThisForm.pagina.dados.grade.column5.ControlSource=''
+If ThisForm.pcescolha ='INSERIR'
+	Replace cIdChaves With fUniqueIds() in crSigPrDmo
+EndIf
+If Not ThisForm.poDataMgr.Update('crSigCdDpr')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdDpr)')
+	Return 0
+EndIf
+If Inlist( ThisForm.pcEscolha, 'EXCLUIR' )
+	ThisForm.ExcluiItens()
+EndIf
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If Thisform.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.GetNome
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Do Case 
+	Case ThisForm.pcEscolha = 'PROCURAR'
+		Return .t.
+	Case ThisForm.pcEscolha <> 'INSERIR'
+		Return .f.
+	Case ThisForm.pcEscolha = 'INSERIR'
+		Select crSigCdDpr
+		Count to lnLinhas
+		If lnLinhas > 1
+			Return .f.
+		Endif
+		Go Top
+		If ( lnLinhas = 1 And IsEmpty( crSigCdDpr.Grupos ) And IsEmpty( crSigCdDpr.Contas ) ) Or lnLinhas = 0
+			Return .t.
+		Else
+			Return .f.
+		Endif
+Other
+	Return .f.
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If IsEmpty( This.Value ) And LastKey() # 27
+	Messagebox( 'O Nome deve ser informado...', 32, '' )
+	Return 0
+Endif
+
+Select crSigCdDpr
+Go Top
+
+If Eof()
+	ThisForm.InsiraRegGrade()
+	Go Top
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If not IsEmpty(This.Value)
+	If not Seek(Padr(This.Value,10),'crSigCdGcr','BalCodigo')
+		xBrow = CreateObject('fwBuscaInt', 'crSigCdGcr', 'Codigos', This.Value, 'Cadastro de Grupos')
+		xBrow.mAddColuna('Codigos', '', 'Código', .t.)
+		xBrow.mAddColuna('Descrs', '', 'Descrição', .t.)
+		xBrow.Show
+		If Lastkey()<>27
+			This.Value = crSigCdGcr.Codigos
+			This.Refresh
+		EndIf
+	EndIf
+EndIf
+Select crSigPrDmo
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( This.Value )
+	If !Seek( This.Value, 'crSigCdCli', 'BalCodigo' )
+		loBrowse = CreateObject( 'fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas' )
+		loBrowse.AddColuna( 'Iclis', '', 'Código', .t., 'BalCodigo' )
+		loBrowse.AddColuna( 'Rclis', '', 'Descrição', .t., 'BalNome' )
+		loBrowse.AddColuna( 'Grupos', '', 'Grupo' )
+		loBrowse.Show
+		
+		If Lastkey() = 27
+			this.Value = ''
+		Else
+			this.Value = crSigCdCli.Iclis
+		Endif
+	Endif
+	If !fAcessoContas( Usuar, crSigCdDpr.Grupos, 'C', This.Value )
+		Messagebox( 'Acesso Negado...', 48, '' )
+		This.Value = '' 
+	Endif
+Endif
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Inlist( Upper( This.Value ), 'E', 'S', 'P', 'H', 'T' )
+	Messagebox( 'Informe [E]NTRADA / [S]AÍDA / [P]OSIÇÃO ATUAL...', 32, '' )
+	This.Value = ' '
+	Return
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Between( This.Value, 0, 999 )
+	Messagebox( 'Entre com um valor entre 1 e 999...', 32, '' )
+	This.Value = 0
+	Return
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If IsEmpty( This.Value )
+	Return .t.
+Endif
+
+Select crSigOpOpt
+Set Order to Cods
+Set Near On
+If !Seek( This.Value ) Or ( crSigCdDpr.Grupos # crSigOpOpt.Grupos And !IsEmpty( crSigOpOpt.Grupos ) )
+	lcGrupo = crSigCdDpr.Grupos
+	Select Cods, Descs, pFalhas From crSigOpOpt ;
+			where Grupos = lcGrupo Or IsEmpty( Grupos ) Into cursor TmpOpt
+	Index on Cods tag Cods
+
+	loBrowse = CreateObject( 'fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação' )
+	loBrowse.AddColuna( 'Cods', '', 'Código', .t., 'Cods' )
+	loBrowse.AddColuna( 'Descs', '', 'Descrição' )
+	loBrowse.AddColuna( 'PFalhas', '999.99 %', 'Falha' )
+	loBrowse.Show
+	This.Value = Iif( Lastkey() == 27, '', TmpOpt.Cods )
+	use in TmpOpt
+Endif
+Set Near Off
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+	Select crSigCdDpr
+	Delete
+	Skip
+	If Eof()
+		Go Bottom
+	Endif
+	If Eof()
+		ThisForm.insirareggrade()
+	Endif
+	ThisForm.Pagina.Dados.Grade.Column1.Text1.SetFocus
+	ThisForm.Pagina.Dados.Grade.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Inserir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.InsiraRegGrade()
+ThisForm.Pagina.Dados.Grade.Column1.Text1.SetFocus
+ThisForm.Pagina.Dados.Grade.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Get_DConta
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( This.Parent.Get_Conta.Value ) And Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !Seek(This.Value,'crSigCdCli','BalNome')
+		xBrow = CreateObject( 'fwBuscaSel', 'crSigCdCli', 'BalNome', This.Value, 'Contas' )
+		xBrow.AddColuna( 'RClis', Repl( 'X', 30 ), 'Descrição', .T., 'BalNome' )
+		xBrow.AddColuna( 'IClis', Repl( 'X', 10 ), 'Código' , .T., 'BalCodigo' )
+		xBrow.Show
+	EndIf
+	This.Parent.Get_Conta.Value = Iif(LastKey()==27,'', crSigCdCli.IClis )
+	This.Parent.Get_DConta.Value = Iif(LastKey()==27, '' , crSigCdCli.RClis )
+Else
+	This.Parent.Get_DConta.Value = Space(20)
+EndIf
+This.Parent.Get_Conta.Refresh
+This.Parent.Get_DConta.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Get_DGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( This.Parent.Get_Grupo.Value ) And Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !Seek(This.Value,'crSigCdGcr','BalDescrs')
+		xBrow = CreateObject( 'fwBuscaSel', 'crSigCdGcr', 'BalDescrs', This.Value, 'Grupos de Estoque' )
+		xBrow.AddColuna( 'Descrs', Repl( 'X', 30 ), 'Descrição', .T., 'BalDescrs' )
+		xBrow.AddColuna( 'Codigos', Repl( 'X', 10 ), 'Código' , .T., 'BalCodigo' )
+		xBrow.Show
+	EndIf
+	This.Parent.Get_Grupo.Value = Iif(LastKey()==27,'', crSigCdGcr.Codigos )
+	This.Parent.Get_DGrupo.Value = Iif(LastKey()==27, '' , crSigCdGcr.Descrs )
+Else
+	This.Parent.Get_Grupo.Value = Space(20)
+EndIf
+This.Parent.Get_Grupo.Refresh
+This.Parent.Get_DGrupo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Get_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !Seek( This.Value, 'crSigCdGcr', 'BalCodigo')
+		xBrow = CreateObject( 'fwBuscaSel', 'crSigCdGcr', 'BalCodigo', This.Value, 'Grupos de Estoque' )
+		xBrow.AddColuna( 'Codigos', Repl( 'X', 10 ), 'Código' , .T., 'BalCodigo' )
+		xBrow.AddColuna( 'Descrs', Repl( 'X', 30 ), 'Descrição', .T., 'BalDescrs' )
+		xBrow.Show
+	EndIf
+	This.Parent.Get_Grupo.Value = Iif(LastKey()==27,'', crSigCdGcr.Codigos )
+	This.Parent.Get_DGrupo.Value = Iif(LastKey()==27, '' , crSigCdGcr.Descrs )
+Else
+	This.Parent.Get_DGrupo.Value = Space(20)
+EndIf
+
+This.Parent.Get_Grupo.Refresh
+This.Parent.Get_DGrupo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDMP.Pagina.Dados.Get_Conta
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !Seek(This.Value,'crSigCdCli','BalCodigo')
+		xBrow = CreateObject( 'fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Contas' )
+		xBrow.AddColuna( 'IClis', Repl( 'X', 10 ), 'Código' , .T., 'BalCodigo' )
+		xBrow.AddColuna( 'RClis', Repl( 'X', 30 ), 'Descrição', .T., 'BalNome' )
+		xBrow.Show
+	EndIf
+	
+	This.Parent.Get_Conta.Value = Iif(LastKey()==27,'', crSigCdCli.IClis )
+	This.Parent.Get_DConta.Value = Iif(LastKey()==27, '' , crSigCdCli.RClis )
+Else
+	This.Parent.Get_DConta.Value = Space(20)
+EndIf
+This.Parent.Get_Conta.Refresh
+This.Parent.Get_DConta.Refresh
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPDMP
+RESERVED3 (ClassInfo): *excluiitens 
+*iniciadesc 
+*insirareggrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 33
+================================================================================

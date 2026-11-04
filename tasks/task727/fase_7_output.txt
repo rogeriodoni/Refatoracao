@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada.
+
+## O que a fase entregou: zero c├│digo novo ÔÇö e isso ├® o correto
+
+O legado `SIGOPECM` **n├úo tem CRUD algum**. Medido no dump pelas tr├¬s vias independentes que o gate usa, tudo zero: `frmcadastro`/`frmrelatorio`/`Grupo_Op`/`pcEscolha` = 0, e `Incluir`/`Alterar`/`Visualizar`/`Excluir`/`Inserir` = 0. ├ë um di├ílogo de um ├║nico fluxo (informar arquivo ÔåÆ Processar) com 3 bot├Áes: `Processa`, `Cancela`, `btnGetArqO`.
+
+Criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├úo que o SCX n├úo tem (viola o PILAR 1) ou escrever m├®todo vazio (proibido pela regra de completude). Os **6** m├®todos com c├│digo do dump j├í est├úo todos portados ÔÇö os 3 `Click` sa├¡ram na Fase 4 junto com os pr├│prios bot├Áes, `processamento` virou `GerarArquivoExportacao`, `Init` virou `Init(par_oFormPai)`, e `getArqTXT.When` virou `ReadOnly = .T.` (n├úo `BINDEVENT "When"`, que descartaria o retorno). N├úo sobra evento de outra fam├¡lia: zero Grid/`KeyPress`/`Valid`/`LostFocus`.
+
+**Gate da Fase 7 passa**: `nBotoesLegado = 3` ÔåÆ piso 2, contra 4 handlers.
+
+O trabalho real foi a **auditoria** dos 8 pontos do par `BINDEVENT`+handler, registrada no cabe├ºalho do `.prg`: delegates PUBLIC e existentes; bind depois dos `AddObject`; alvos de `SetFocus` com o nome do `AddObject`; ESC pelo `Cancel = .T.`; `Release()` justificado; as 5 properties do BO que os handlers tocam declaradas; e os 3 `.Picture` conferidos em `vbmp\` (falhariam em sil├¬ncio pela regra #25). Nada estava quebrado.
+
+## Provas de que s├│ mudou coment├írio
+
+- Reconstru├º├úo do "antes" por `head`/`tail`: md5 e tamanho **exatos** (`598f65bfÔÇª`, 36954 bytes)
+- Bloco inserido: **0** linhas n├úo-coment├írio; arquivo inteiro **401 == 401**
+- `.FXP` compilado no mesmo path: **11124 == 11124**, zero `.ERR` (BO e Form)
+
+## Duas coisas que achei no caminho
+
+**Um erro meu, corrigido:** `grep -c $'\r'` devolveu `0` num arquivo que ├® CRLF ÔÇö escrevi o bloco em LF antes de perceber. Normalizei para CRLF (851/851, igual aos vizinhos). `sed` e `awk` strippam CR **na leitura**, n├úo s├│ no `-i`; `head`/`tail`/`tr`/`md5sum` s├úo binary-safe. Isso tamb├®m corrige a nota de ambiente do task726, que registrou `forms\operacionais\` como LF-only ÔÇö ├® CRLF, aquela medi├º├úo usou o mesmo cheque falho.
+
+**Diverg├¬ncia guard-x-gate, 6┬¬ ocorr├¬ncia, sem fix:** o guard de NO-OP delega a `Test-LegadoSemBotaoAlgum`, que exige `nBotoes = 0`; com 3 bot├Áes ele for├ºaria retry opus num form correto. O predicado mede o *legado*, mas "fase sem trabalho" aqui depende do que a Fase 4 j├í entregou ÔÇö nenhum predicado existente alcan├ºa isso. **N├úo mexi no orquestrador**, pelos mesmos bloqueadores das 5 ocorr├¬ncias anteriores (diff grande n├úo commitado em `OrquestradorMigracao.ps1` e `& script.ps1` parseia na invoca├º├úo, logo a edi├º├úo n├úo valeria para execu├º├úo em curso). Registrado em mem├│ria com a medi├º├úo.

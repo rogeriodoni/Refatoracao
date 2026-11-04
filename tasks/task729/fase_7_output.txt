@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 executada em `C:\4c\projeto\app\forms\operacionais\FormSigOpEmp.prg` (647 ÔåÆ 735 linhas, 85 linhas acrescentadas, 2 alteradas).
+
+## O que a fase entregou
+
+O ├║nico evento do dump legado que ainda n├úo tinha equivalente: **`grdItens.AfterRowColChange`** ÔåÆ `PROCEDURE GradeAfterRowColChange(par_nColIndex)` + `BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GradeAfterRowColChange")` no fim de `ConfigurarGrid`.
+
+Ele reproduz as duas atribui├º├Áes do legado (`CursorQuery` de `SigCdGcr.Descrs` e `SigCdCli.Rclis` para a linha corrente) lendo a linha pelo BO (`CarregarDoCursor`, que j├í resolve as duas descri├º├Áes) e espelhando nos visores via `BOParaForm()`; descri├º├úo n├úo encontrada vira string vazia, igual ao `Iif(...,'')` do legado. **Sem filtro por `par_nColIndex`** ÔÇö ├® carga de detalhe da linha corrente, o uso correto de `AfterRowColChange` (regra #46); e **sem `Refresh`** no grid, que ├® o que redispararia o pr├│prio evento.
+
+## Os 4 handlers CRUD n├úo existem ÔÇö e isso est├í provado, n├úo presumido
+
+O `SIGOPEMP.SCX` **n├úo tem barra CRUD**: herda de `form` puro (zero ocorr├¬ncia da classe de cadastro do framework), zero ocorr├¬ncia do CommandGroup dessa barra, da vari├ível de modo e dos quatro verbos em qualquer forma (objeto/caption/m├®todo/`.Click`). A superf├¡cie de bot├úo do legado ├® **1** (`BaseClass: commandbutton` = `SIGOPEMP.ok`, "Encerrar"; zero `commandgroup`) e esse bot├úo j├í tem seu evento portado (`CmdOkClick`, Fase 5). Cri├í-los exigiria inventar bot├Áes (PILAR 1) ou escrever m├®todos vazios (regra de completude).
+
+A justificativa no cabe├ºalho est├í em **prosa**, sem os identificadores literais: cit├í-los faria o gate achar que os handlers existem e aprovar pelo caminho errado, sem exercitar o carve-out real. Medido: os 4 tokens d├úo **0** no `.prg`, `pgf_4c_` d├í **0**, e h├í 1 handler `Cmd*/Btn*Click` ÔÇö ent├úo a aprova├º├úo vem de `legadoSemCrud` + piso de 1 handler (1 bot├úo no dump), como deve.
+
+## Verifica├º├úo executada
+
+Diferente do que uma mem├│ria registrava, **o `vfp9.exe` executa nesta sess├úo** ÔÇö confirmei com smoke test de 4 linhas (arquivo de sa├¡da gerado). Com isso:
+
+- **Compila├º├úo**: `.err` ausente, `.fxp` regenerado (11.853 bytes).
+- **Instancia├º├úo**: `CREATEOBJECT("FormSigOpEmp")` devolve objeto, Caption "Empenho".
+- **Escopo do handler**: `PEMSTATUS(oForm,"GradeAfterRowColChange",2)` = `.F.` ÔåÆ ├® PUBLIC, logo o BINDEVENT funciona (regra #3 ÔÇö e `PEMSTATUS` atributo 2 ├® a medi├º├úo certa, n├úo a 4).
+- **Binding registrado**: `AEVENTS` no grid devolve **1** binding, coluna 3 = `AFTERROWCOLCHANGE`, coluna 4 = `GRADEAFTERROWCOLCHANGE`.
+- **Chamada externa** do handler (como o BINDEVENT faz) sem exce├º├úo.
+
+Os dois visores terminam vazios no probe, e isso ├® o caminho correto, n├úo defeito: sem form pai o `this_cProduto` fica vazio, o BO devolve "Produto n├úo informado" (di├ílogo suprimido, lido no `_dialogs.txt`) e o handler cai em `LimparCampos()`.
+
+Dois pontos para registro: o probe disparou a auto-regenera├º├úo do `start\indice_classes.txt` (comportamento previsto da carga sob demanda), que passou a conter `formsigopemp`/`sigopempbo` com o fecho de depend├¬ncias correto ÔÇö necess├írio para o form carregar. E o arquivo segue LF, como as fases anteriores o deixaram; n├úo houve convers├úo de encoding.

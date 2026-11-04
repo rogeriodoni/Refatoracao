@@ -4697,20 +4697,80 @@ DEFINE CLASS FormOpt AS FormBase
     ENDPROC
 
     *==========================================================================
-    * BtnCartaClick - Abre formulario SigOpCoc (configuracao de carta)
+    * BtnCartaClick - Abre o dialogo da Carta de Operacoes de Cheques
+    *
+    * Legado (SIGCDOPT.Pagina.Dados.BtnCarta.Click), UMA linha:
+    *       Do Form SigOpCoc With ThisForm.DataSessionId, ThisForm.pcEscolha
+    *
+    * O dialogo edita SigCdOpt.Cabs / SigCdOpt.Rods, que sao colunas do MESMO
+    * registro que este form esta editando. No legado o dado voltava pelo
+    * cursor COMPARTILHADO CrSigCdOpt (o OK.Click do dialogo faz
+    * "Replace Cabs With ..., Rods With ... In CrSigCdOpt"); o PILAR 3
+    * eliminou esse cursor global, entao a ligacao eh feita por REFERENCIA ao
+    * BO deste form - o dialogo escreve em THIS.this_oBusinessObject.this_cCabs
+    * / .this_cRods, e quem PERSISTE continua sendo o Salvar() deste form, como
+    * no legado (o dialogo nao tem Insert/Update proprio).
+    *
+    * O contrato de abertura eh o documentado no cabecalho de FormSigOpCoc:
+    *   1. CREATEOBJECT dentro do TRY (regra #29 - Show() fora dele, senao
+    *      qualquer erro de runtime do dialogo cai neste CATCH, derruba a
+    *      referencia LOCAL e a tela "fecha sozinha");
+    *   2. this_oBOOrigem + CarregarCamposDaOrigem() ANTES do Show(): o Init do
+    *      dialogo recebe so (DataSessionId, modo), igual ao legado, entao a
+    *      origem dos dados so pode ser entregue depois do CREATEOBJECT;
+    *   3. Show() - modal, bloqueia aqui;
+    *   4. leitura de this_lConfirmado e SO DEPOIS Release(). O dialogo fecha
+    *      com Hide() justamente para esta leitura ser possivel; Release()
+    *      antes dela destruiria o objeto e a leitura estouraria "is not an
+    *      object" (medido no VFP9). Release() eh obrigacao DESTE metodo -
+    *      sem ele o objeto e o BO dele vazam.
+    *
+    * Sem GarantirClasse(): o CREATEOBJECT eh LITERAL dentro de um Form, caso
+    * em que indice_classes.txt ja traz a dependencia (CLAUDE.md, carga sob
+    * demanda).
+    *
+    * Nao recarrega a lista no retorno: Cabs/Rods nao sao colunas do grid da
+    * Page1 (este form nao tem controle nenhum para elas), e a gravacao em
+    * SigCdOpt ainda nao aconteceu - acontece no Confirmar deste form.
     *==========================================================================
     PROCEDURE BtnCartaClick()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_oCarta, loc_oErro
         loc_lResultado = .F.
+        loc_oCarta     = .NULL.
 
         TRY
-            MsgAviso("Funcionalidade SigOpCoc n" + CHR(227) + "o migrada ainda.", ;
-                "FormOpt")
-            loc_lResultado = .T.
+            *-- modo: o this_cModoAtual deste form eh o equivalente novo do
+            *-- pcEscolha legado (o dialogo traduz "VISUALIZAR" para o
+            *-- 'CONSULTAR' do legado e abre em somente leitura)
+            loc_oCarta = CREATEOBJECT("FormSigOpCoc", THIS.DataSessionId, ;
+                THIS.this_cModoAtual)
         CATCH TO loc_oErro
-            MsgErro("Erro ao abrir carta:" + CHR(13) + loc_oErro.Message, ;
+            MsgErro("Erro ao abrir a Carta de Opera" + CHR(231) + CHR(245) + "es:" + ;
+                CHR(13) + loc_oErro.Message + ;
+                CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + ;
+                CHR(13) + "Procedure: " + loc_oErro.Procedure, ;
                 "FormOpt.BtnCartaClick")
+            loc_oCarta = .NULL.
         ENDTRY
+
+        IF VARTYPE(loc_oCarta) = "O"
+            *-- origem dos dados: o BO deste form (OptBO), que ja tem
+            *-- this_cCabs / this_cRods carregados do registro em edicao
+            loc_oCarta.this_oBOOrigem = THIS.this_oBusinessObject
+            loc_oCarta.CarregarCamposDaOrigem()
+
+            *-- FORA do TRY: form modal vive inteiro dentro do Show(), e um
+            *-- TRY em volta faria cada erro de runtime do dialogo fechar a
+            *-- tela (regra #29)
+            loc_oCarta.Show()
+
+            *-- legivel porque o dialogo fechou com Hide()
+            loc_lResultado = loc_oCarta.this_lConfirmado
+
+            *-- o Release eh deste lado - SEMPRE, e so depois de ler
+            loc_oCarta.Release()
+            loc_oCarta = .NULL.
+        ENDIF
 
         RETURN loc_lResultado
     ENDPROC

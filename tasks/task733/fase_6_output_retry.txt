@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 completa em `C:\4c\projeto\app\forms\operacionais\Formsigopets.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O arquivo j├í tinha os campos restantes (os 4 OptionGroups de Pre├ºo/Separadora/Ordem/Origem + r├│tulos) e os defaults do `Init` legado. O que faltava era **o lookup** ÔÇö e com `BINDEVENT = 0` o gate da Fase 6 n├úo tinha nenhum ramo por onde passar.
+
+O diagn├│stico anterior ("n├úo h├í lookup nesta tela, logo nada a fazer") estava metade certo: n├úo h├í lookup de **tabela** (zero `fwBusca*`/`sigacess`/`mAddColuna` no dump, `"temLookup": false` no `comportamento.json`). Mas h├í o lookup **de campo**: escolher a impressora resolve os campos que dependem dela. O legado faz isso chamando `fCarregarImps` nos dois ├║nicos eventos de campo do dump (`Get_Printer.InteractiveChange` e `Opt_Impressora.InteractiveChange`) e tamb├®m direto no `Init` (linha 1180). O `sigopetsBO.CarregarAjustesImpressora()` ÔÇö o porte de `fCarregarImps`, entregue nas Fases 1-2 ÔÇö **n├úo era chamado por ningu├®m**: trocar de impressora deixava na tela os ajustes da anterior e a etiqueta sairia com densidade/velocidade erradas, sem erro nenhum.
+
+## O que entrou
+
+- `ConfigurarEventosImpressora()` ÔÇö os dois `BINDEVENT` de `"InteractiveChange"` (combo + grupo aposentado).
+- `ValidarImpressoraSelecionada(par_cNomeImpressora)` ÔÇö o funil: espelha nos controles (`obj_4c_Opcao_imp` + os 4 spinners) o que o BO leu de `SigCdmp`. Fonte ├║nica: o BO decide o valor, o form s├│ exibe.
+- `GetPrinterInteractiveChange()` / `OptImpressoraInteractiveChange()` ÔÇö os dois handlers, PUBLIC (regra #3).
+- Wiring no `InicializarForm` + a chamada direta que reproduz a linha 1180 do `Init` legado, na mesma posi├º├úo do fluxo.
+
+Detalhes que escolhi documentar no c├│digo, porque erram f├ícil: o nome sai de `crImpreV.impres**S**` (nome no sistema, que casa com `SigCdmp.impres`) e n├úo de `.impres` (nome no Windows); nome vazio sai **calado** ÔÇö ├® o `Append Blank` proposital do legado e o grupo aposentado sem `Tag` (regra #50: universo vazio de lookup n├úo ├® erro, e apagar/avisar seria inventar comportamento).
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 6 (ramo CAPTURA, simulado com os helpers reais do orquestrador) | **passa** ÔÇö `semPageFrame`+`BINDEVENT`+`legadoCapturaF6`+`legadoSemLookup`+superf├¡cie |
+| `Test-CompletudeCodigo` (os 4 checks, replicados) | **0 problemas** |
+| Balan├ºo de blocos | TRY/WITH/PROC/FUNC/IF/FOR/DEFINE todos pareados |
+| `COMPILE` no VFP9 | **sem `.err`** ÔÇö e provei o m├®todo com controle negativo (um `.prg` quebrado de prop├│sito gerou `.err` com as duas mensagens) |
+| Acentos literais, `PUBLIC PROCEDURE`, `MESSAGEBOX`, `.Self`, `this_X .Value` | 0 ocorr├¬ncias |
+
+Duas coisas que **n├úo** consegui verificar e n├úo vou alegar: o form n├úo foi instanciado (sem `gnConnHandle` nesta m├íquina ÔÇö `192.168.200.10` ├® inalcan├º├ível), e `vfp9.exe` nesta sess├úo compila mas **n├úo executa** o corpo do script (medido de novo agora: o `STRTOFILE` sentinela nunca aparece, embora o `COMPILE` rode ÔÇö o `.fxp` nasce com timestamp fresco e um script s├│ com `QUIT` n├úo produz `.fxp` nenhum). Ent├úo "compila limpo" ├® o teto do que est├í provado aqui; o comportamento em runtime do lookup depende de teste com banco.
+
+Tamb├®m corrigi o cabe├ºalho do arquivo, que atribu├¡a os dois `InteractiveChange` ├ás Fases 7-8 ÔÇö elas ficam agora com o que de fato lhes cabe: `Imprime.Click`, `Sair.Click` e o `.Imprime.Enabled`/`.Value` que o `Init` legado calcula no fim (linhas 1182-1185).

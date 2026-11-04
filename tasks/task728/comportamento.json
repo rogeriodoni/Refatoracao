@@ -1,0 +1,179 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 4,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOEMB",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "lParameters poForm, pCnx\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = poForm\nthisform.parentform.pesoemb = 0\n\nThisForm.poDataMgr = pCnx\n\nSelect crSigMvIte\nSet Order to\nSet Order to CItens\nSet Key to crTpmMvItn.CItens\nGo Top\n\nlcQuery = [Select Descs, Cods, Pesos as PesoEmbs From SigCdemb Order By Cods]\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCdEmb]) < 1) \n\t=MessageBox([Favor Reinicializar o Process... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOEMB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOEMB",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "This.Grade.RecordSource          = []\nThis.Grade.Column1.ControlSource = []\nThis.Grade.Column2.ControlSource = []\nUse In LocalEmb\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOEMB.cntBotoes",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "LOCAL lnTotP\n\nSelect LocalEmb\nGo Top In LocalEmb\nlnTotP = 0\n\nSelect CrSigMvIte\nSet Order To\nSet Order To Citens\nGo Top\nDelete For cItens = crTpmMvItn.Citens in CrSigMvIte\n\n**** Calcula peso total das embalagens ****\nSelect LocalEmb\nScan\n\tIf LocalEmb.Qtds > 0\n\t\tlnTotP = lnTotP + Localemb.Qtds * Localemb.PesoEmbs\n\t\t\n\t\tScatter Memo Memvar\n\t\tm.Citens = crTpmMvItn.Citens\n\t\tm.CodEmbs = m.Cods\n\t\tInsert into crSigMvIte From Memvar\n\tEndif\nEndscan\nthisform.parentform.pesoemb = lnTotP\nThisForm.Release()\n* ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOEMB.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "Select LocalEmb\nReplace Qtds With This.Value, Pesos with Localemb.Qtds * LocalEmb.PesoEmbs\n\nthisform.grade.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOEMB.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .T.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOEMB.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOEMB.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOEMB.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOEMB.Init",
+      "queryOriginal": "lcQuery = [Select Descs, Cods, Pesos as PesoEmbs From SigCdemb Order By Cods]",
+      "tabelas": "SigCdemb",
+      "colunas": "Descs,Cods,Pesos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOEMB.cntBotoes.Click",
+      "queryOriginal": "\t\tInsert into crSigMvIte From Memvar",
+      "tabelas": "crSigMvIte",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdemb", "crSigMvIte"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

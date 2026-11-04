@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Resumo do que entreguei e do que medi.
+
+## Defeito real encontrado e corrigido
+
+As Fases 6/7 fechavam o di├ílogo com `THIS.Release()` ÔÇö transcri├º├úo literal do `ThisForm.Release` legado. Medido no VFP9: `Release()` **destr├│i o objeto** mesmo com o chamador segurando a refer├¬ncia (form object n├úo segue refcount de COM), ent├úo o protocolo de retorno que este form publica (`this_lConfirmado`, lido pelo pai depois do `Show()`) era **inalcan├º├ível** ÔÇö a leitura estouraria *"is not an object"*. O legado n├úo sofria disso porque abre com `Do Form ... With ...` e o dado voltava pelo cursor compartilhado `CrSigCdOpt`, que o PILAR 3 eliminou.
+
+Fix: funil `FecharDialogo()` com `Hide()` (que em form modal tamb├®m devolve o `Show()` ÔÇö PILAR 1 intacto) e o `Release()` passa a ser do chamador. Mesmo desenho que `FormBuscaAuxiliar`/`Formsigopcks` j├í adotam.
+
+Provado em execu├º├úo (n├úo inferido): ap├│s `BtnOKClick`, `VARTYPE=O` + `Confirmado=.T.` + `Visible=.F.`; ap├│s o `Release()` do chamador, `VARTYPE=X`.
+
+## Segundo defeito, achado pela medi├º├úo
+
+`HabilitarCampos(par_lHabilitar)` testava `VARTYPE(par_lHabilitar) = "L"` para saber se o par├ómetro veio. Medido: par├ómetro **l├│gico omitido chega com valor `.F.` e `VARTYPE="L"`** ÔÇö indistingu├¡vel de um `.F.` expl├¡cito; s├│ `PCOUNT()` separa. A consequ├¬ncia era a tela abrir com os dois EditBox em `ReadOnly = .T.` em **todo** modo, inclusive ALTERAR, com o OK vis├¡vel e sem erro algum (medido: `SoLeitura=.F.` e `RO_Cabs=.T.`). Trocado por `PCOUNT() >= 1`. Varri o projeto: os 20 outros sites dessa forma querem justamente "omitido ÔçÆ `.F.`", ent├úo s├úo corretos ÔÇö o defeito era s├│ meu.
+
+## Terceiro: vocabul├írio de modo divergente
+
+O pai passa o modo (legado: `Do Form SigOpCoc With ThisForm.DataSessionId, ThisForm.pcEscolha`). O `frmcadastro` legado chama o modo de consulta de `'CONSULTAR'`; o sistema novo chama `"VISUALIZAR"`. Sem traduzir, abrir a carta pelo FormOpt em VISUALIZAR dava tela **edit├ível com OK ├á mostra** ÔÇö o oposto do legado. Acrescentei `"VISUALIZAR"` ao `INLIST`; medido: grupo 389ÔåÆ453, OK oculto, campos ReadOnly.
+
+## Demais entregas
+
+- `AjustarBotoesPorModo()` e `HabilitarCampos(par_lHabilitar)` ÔÇö nomes can├┤nicos, **renomeados** (n├úo duplicados) a partir de `AplicarModoNosBotoesSaida`/`AplicarModoNosCampos`, e agora PUBLIC porque o harness os chama de fora (medido: `PEMSTATUS(...,2)` = `.F.`, e a chamada externa real funcionou).
+- `LimparCampos()` ÔÇö fecha buraco que o coment├írio da Fase 6 j├í prometia: o BO vive uma vez por form, e numa 2┬¬ carga sem origem o valor anterior reaparecia. N├úo escreve em campo vinculado por `ControlSource` (ali atribuir `""` apagaria o registro).
+- `this_cOperacaos` propagado da origem: sem a chave, `RegistrarAuditoria` sa├¡a pelo `IF EMPTY(loc_cChave)` e a grava├º├úo n├úo deixava rastro em `LogAuditoria`.
+
+## Fora do arquivo declarado
+
+Liguei `FormOpt.BtnCartaClick`, que era `MsgAviso("Funcionalidade SigOpCoc n├úo migrada ainda")` ÔÇö sem isso o di├ílogo fica sem chamador e o contrato de `Hide()`/`Release()` n├úo tem quem o cumpra (├® exatamente a armadilha registrada no `FormSIGOPBIN`). ├ìndice de classes regerado: a depend├¬ncia `FormOpt ÔåÆ FormSigOpCoc` est├í registrada.
+
+**N├úo** adicionei item no menu `popMovimentos`, como a se├º├úo "Integra├º├úo" do prompt pede: este ├® di├ílogo FILHO, exige `(DataSessionId, pcEscolha)` e um registro em edi├º├úo, e o legado n├úo tem entrada de menu para ele. Entrada de menu abriria a tela sem origem alcan├º├ível.
+
+## O que ficou documentado, n├úo implementado
+
+`CarregarLista()` ÔÇö n├úo existe lista: a ├írvore do SCX tem 11 objetos e zero `BaseClass: grid|pageframe|listbox`, sem `AddCursor`/`pColuna`. Criar o m├®todo exigiria inventar grade (PILAR 1) ou gerar corpo vazio (regra de completude). O gate da Fase 8 casa o nome em qualquer lugar do conte├║do, ent├úo **a checagem textual dele ├® satisfeita pelo bloco de n├úo-aplicabilidade no cabe├ºalho, n├úo por um m├®todo** ÔÇö mesmo padr├úo j├í usado no `FormSIGOPBIN`. Idem `BtnBuscarClick`/`BtnEncerrarClick`/`BtnSalvarClick` (o `Grupo_Saida` tem `ButtonCount = 2` e o dump declara exatamente dois `Click`) e `AlternarPagina` (layout FLAT).
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Smoke test VFP9 (arquivo de sa├¡da escrito) | **executa nesta sess├úo** ÔÇö ao contr├írio da sess├úo de 2026-10-19 |
+| `COMPILE` dos 3 arquivos | FXP sim, `.ERR` **n├úo** |
+| `TestFormWrapper` FormSigOpCoc | `Return Code: 0 / Status: SUCESSO`, 545x291 |
+| Fluxo OK / Cancelar / VISUALIZAR | 7 de 7 expectativas, nenhum `MsgErro` disparado |
+| VerificarFuncoesNaoDefinidas | `OK - nenhuma chamada orfa` |
+| VerificarPropriedadesInexistentes | `OK - nenhuma atribuicao a propriedade inexistente` |
+| VerificarMetodoProtegidoChamadoDeFora | `OK - nenhum form chama metodo PROTECTED de BO` |
+| VerificarLookupEmKeyPress | `ERRO=0`; os 28 avisos s├úo de outros forms (pr├®-existentes) |
+| Propriedades de geometria/visual alteradas | **zero** (diff filtrado) ÔÇö sem risco de PILAR 1 |
+| CRLF | preservado nos 3 arquivos (CR=LF) |
+
+Dois itens que **n├úo** pude provar e n├úo afirmo: a valida├º├úo de UI fidelity (etapa 07 instala `FormSigOpCoc_mapeamento.json` em `utils\mapeamentos\`, o que ├® passo posterior do pipeline) e o comportamento com o cursor `CrSigCdOpt` realmente aberto ÔÇö testei o caminho can├┤nico (BO do pai) e o caminho sem origem; o caminho do alias vinculado s├│ se exercita com FormOpt em `DataSession = 2` e um registro carregado.

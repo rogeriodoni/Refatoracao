@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCpr.prg` modificado (589 ÔåÆ 888 linhas).
+
+## O que entrou
+
+**`ConfigurarCampos()`** ÔÇö a primeira metade dos campos de dados (a linha da **origem**), transcrita do dump:
+
+| objeto | migrado | geometria | demais |
+|---|---|---|---|
+| `Label1` | `lbl_4c_Label1` | 122,97 92x15 | Tahoma 8 bold, `ForeColor RGB(90,90,90)`, `BackStyle 0`, `AutoSize .F.`, `Alignment 0`, TabIndex 1, "Processo Atual :" |
+| `GetOrigem` | `txt_4c_Origem` | 216,94 **W**x23 | Courier New, `Format "!"`, `MaxLength` da modalidade, TabIndex 3 |
+
+**`OrigemParaTela()`** (PUBLIC) ÔÇö o `GetOrigem.Value = pOperacao` + `Refresh` do `Init` legado, lendo de `BO.this_cOrigem`.
+**`OrigemWhen()`** (PUBLIC, FUNCTION) ÔÇö o `PROCEDURE When / Return .f.`, ligado por BINDEVENT.
+Chamada de `ConfigurarCampos()` acrescentada em `ConfigurarPageFrame()`, depois dos bot├Áes.
+
+## Tr├¬s desvios do enunciado da fase, e por qu├¬
+
+1. **N├úo criei `cnt_4c_Cabecalho`.** A faixa cinza j├í existe como `cnt_4c_Sombra` (o `cntSombra` do dump, Fase 3) ÔÇö `BackColor RGB(100,100,100)` + `Height 80`. Um segundo container pintaria a faixa em dobro, o estrago exato da regra #11. O probe confirma: **1** faixa, n├úo 2.
+2. **N├úo h├í "Page2"** ÔÇö o SIGOPCPR ├® flat (zero `pageframe` na ├írvore do SCX), ent├úo os `Top` do dump s├úo absolutos e entram **sem** o `+29`. Aplic├í-lo jogaria os campos fora de um form de 157px.
+3. **Largura e MaxLength n├úo s├úo os do SCX.** O `Init` legado sobrescreve sempre: `Width = 150 / MaxLength = 20`, e `290 / 40` se `pComis`. O dump diz 142/20 ÔÇö um estado que o legado nunca exibe. O `MaxLength` vem de `BO.ObterTamanhoChave()`, a mesma fun├º├úo que as consultas usam no `PADR`, em vez de um 20/40 repetido ├á m├úo.
+
+Um ponto que decidi por transcri├º├úo literal: o dump de `GetOrigem` declara `FontName` e **n├úo** declara `FontSize`, ent├úo n├úo escrevi nenhum ÔÇö o campo fica no default da classe base (o probe mediu **Courier New 9**), que ├® o que o legado renderizava. Escrever `8` "por coer├¬ncia com o form" mudaria o tamanho do texto.
+
+O `When = .F.` ficou **condicionado** ├á origem ter vindo do chamador. O legado nunca abre esta tela sem chamador (o `Init` faz `DataSessionId = poForm.DataSessionId`), mas a Fase 3 j├í deixou a tela alcan├º├ível pelo menu ÔÇö travar o foco ali tornaria inalcan├º├ível o ├║nico campo onde o usu├írio poderia informar a origem.
+
+## Verifica├º├úo
+
+Compila├º├úo: Form e BO geram `.fxp`, **zero `.ERR`**. Instancia├º├úo real (`automation\ProbeCpr712F5.prg`, sa├¡da em `automation\probe_712_f5.txt`), tr├¬s cen├írios, todos `VARTYPE = O` e sem nenhum di├ílogo:
+
+- **sem chamador**: origem edit├ível (`ReadOnly .F. / TabStop .T.`), **0** BINDEVENT
+- **com chamador, processo**: `[PROCESSO 001]`, 150/20, `ReadOnly .T. / TabStop .F.`, 1 evento `[WHEN -> ORIGEMWHEN]`, BO em `SigPcOop / processos`
+- **com chamador, comiss├úo**: 290/40, BO em `SigCmCab / cods`, Caption segue "C├│pia de Processo" (o legado nunca o reatribui)
+
+Label termina em 214 com o campo em 216 ÔÇö 2px de folga, sem sobreposi├º├úo. `OrigemWhen` e `OrigemParaTela` s├úo PUBLIC (`PEMSTATUS ...,2 = .F.`), como BINDEVENT exige.
+
+Falta para o bloco seguinte: `Label2` + `GetDestino` (a linha do destino), o `Valid` de GetDestino com a checagem de duplicidade, e o `CmdCopia.Click`.

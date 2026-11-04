@@ -1,0 +1,25 @@
+A: inicio
+B: deps carregadas
+C: CREATEOBJECT -> O
+D: estado inicial -> EmEdicao=.F. NovoRegistro=.F.   DataSessionId=2
+E: --- INCLUIR ---
+   depois de BtnIncluirClick -> EmEdicao=.T. NovoRegistro=.T.   Salvar aceitaria? .T.
+F: --- ENCERRAR (cancelar) ---
+   depois de BtnCancelarClick -> EmEdicao=.F. NovoRegistro=.F.
+G: --- ALTERAR apos INCLUIR cancelado ---
+   cursor reposto: RECCOUNT=1
+   depois de BtnAlterarClick -> EmEdicao=.T. NovoRegistro=.F.   Salvar aceitaria? .T.
+H: --- controle negativo: Salvar fora de edicao ---
+   apos CancelarEdicao -> EmEdicao=.F. NovoRegistro=.F.
+   Salvar() = .F.  msg=[Não está em modo de edição]  erroExibido=.T.
+I: Release OK
+DIALOGOS:
+[04/11/2026 02:27:18 PM] PATBO.Buscar: Connection handle is invalid. (Linha:47)
+[04/11/2026 02:27:18 PM] PATBO.BuscarDescEmpresa: Connection handle is invalid.
+[04/11/2026 02:27:18 PM] PATBO.BuscarDescEmpresa: Connection handle is invalid.
+[04/11/2026 02:27:18 PM] PATBO.Buscar: Connection handle is invalid. (Linha:47)
+[04/11/2026 02:27:18 PM] PATBO.BuscarDescEmpresa: Connection handle is invalid.
+[04/11/2026 02:27:18 PM] PATBO.BuscarDescVendedor: Connection handle is invalid.
+[04/11/2026 02:27:18 PM] Salvar: Não está em modo de edição
+
+Z: fim

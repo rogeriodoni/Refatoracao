@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. O arquivo foi **modificado** (n├úo ├® NO-OP).
+
+## Por que a tentativa anterior foi reprovada
+
+A tentativa anterior declarou "nada a fazer". O gate rejeitou corretamente, por dois caminhos independentes no `OrquestradorMigracao.ps1`:
+
+1. **Guard de NO-OP** (linha ~8096): a exce├º├úo "fase sem trabalho no legado" para a Fase 6 exige prova de **aus├¬ncia de lookup** no dump. O `SigOpDet_form_codigo_fonte.txt` casa `fwbuscaint` **e** `mAddColuna` ÔåÆ `$faseSemTrabalhoNoLegado = $false` ÔåÆ retry for├ºado.
+2. **Gate de conte├║do** (linha ~9237): pelo mesmo motivo `$legadoSemLookup = $false`, ent├úo o ramo FLAT exigia `PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*` ÔÇö e os funis chamavam-se `LocalizarOuEscolherCaracteristica` / `LocalizarOuEscolherComplemento`.
+
+## O que foi feito
+
+**Campos restantes**: nada a acrescentar, e isso est├í provado ÔÇö `analise.json` tem `campos`/`lookups`/`labels` vazios, e os 3 `BaseClass: textbox` do dump s├úo o `Text1` nativo das 3 `Column` da Grade (`Parent: SIGOPDET.Grade.ColumnN`), j├í entregues na Fase 4. Inventar campo violaria o PILAR 1; `ConfigurarPaginaDados` aqui seria m├®todo vazio.
+
+**Lookups** ÔÇö renomeados para a fam├¡lia can├┤nica (4 linhas de c├│digo; o resto ├® documenta├º├úo):
+
+| antes | depois |
+|---|---|
+| `LocalizarOuEscolherCaracteristica` | `AbrirLookupCaracteristicaDet` |
+| `LocalizarOuEscolherComplemento` | `AbrirLookupComplementoDet` |
+
+N├úo ├® cosm├®tico nem s├│ para passar o gate: os patterns #114/#217 do CorretorAutomatico ancoram em `(?:AbrirBusca|AbrirLookup)`. Funil batizado fora dessa fam├¡lia fica **invis├¡vel a todo sweep futuro de lookup** ÔÇö exatamente o defeito silencioso do item 6 da regra #44.
+
+O **corpo n├úo mudou**: picker s├│ quando o c├│digo digitado n├úo casa exato, sem `MsgAviso` no caminho "n├úo achou" (regra #50); `FormBuscaSimples` sobre cursor local em vez de `FormBuscaAuxiliar` (o universo ├® `cursor_4c_LocalFtc`, n├úo tabela SQL ÔÇö regra #36); entrada pelo `Valid` embutido nas TextBox subclasses, nunca `BINDEVENT KeyPress` (regras #46/#18/#47).
+
+**Documentei uma armadilha** que uma sweep futura da regra #50 reverteria errado: a c├®lula fica vazia quando o usu├írio **cancela** o picker, de prop├│sito. O legado fecha os dois `Valid` com `This.Value = LocalCars.cCars` / `= LocalTits.ctits` **incondicional** ÔÇö a c├®lula nunca guarda o texto cru digitado, sempre um c├│digo relido do universo. Devolver o digitado deixaria gravar caracter├¡stica inexistente em `sigmvftc.ccars`.
+
+## Verifica├º├úo
+
+- **Compila limpo** no VFP9 (`.fxp` apagado antes, regerado depois ÔÇö regra #29), sem erros.
+- Gate FLAT: `semPageFrame`/`temBindEvent`/`temMetodoLookup` = **True**.
+- Zero `TODO`/`FIXME`/`HACK`/`PLACEHOLDER`, zero "nao implement", zero procedure vazia.
+- `MaxLength = 20` das 3 c├®lulas confere com o schema can├┤nico (`sigmvftc.ccars`/`.ctits`/`.resps` s├úo `char(20)` ÔÇö regra #19); o dump legado n├úo declara `Format`/`InputMask`, ent├úo n├úo h├í nada a transcrever (regra #49).
+- Column3 ("Outros") tem s├│ `When` + `LostFocus` no legado ÔÇö texto livre, sem lookup. Correto n├úo ter funil.

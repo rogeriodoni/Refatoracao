@@ -719,7 +719,7 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Grupo_Salva (Confirmar + Cancelar), Top original=7, +29 comp
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 36
+            .Top         = 27
             .Left        = 819
             .Width       = 161
             .Height      = 85

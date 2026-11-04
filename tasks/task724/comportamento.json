@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "For Empty", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDPE",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect crSigOpDup\nLocate for Qtddfs=0\nIf Eof()\n\tInsert Into crSigOpDup (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\nSelect crSigOpDup\nKeyboard '{DNARROW}' \nThisForm.GradeSubN.Refresh\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha = IIF(EMPTY(poForm.PcEscolha),\"INSERIR\",poForm.PcEscolha)\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\t\t    \nWith Thisform\n\t.Caption = 'Tabela de Depreciação da Operação ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "PcEscolha = IIF,Columns,inserelinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE.GradeSubN.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE.GradeSubN.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "Select CrSigOpDup\nLocate for Qtddfs = 0\nIf Eof()\n\tThisform.Inserelinha()\nEndIf\nSelect CrSigOpDup\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Inserelinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE.cmdExcluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigOpDup\n\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\nThisForm.GradeSubN.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDPE.cmdSair",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\n\tSelect CrSigOpDup\n\tGo Top\n\tDelete For Empty(Dopes) or Empty(Qtddfs)\n\tReplace CidChaves with fUniqueIds() For Empty(CidChaves)\n\n\tm.lnErro1 = SigCdOpe.poDatamgr.pnIdConn\n\n\tWith SigCdOpe\n\t\tIf m.lnErro1>0 \n\t\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpDup'),1,-1)\n\t\tEndIf \n\t\tIf m.lnErro1>0 \n\t\t\tm.lnErro1 = .poDataMgr.Commit()\n\t\tEndIf \n\t\tIf Not m.lnErro1>0 \n\t\t\t.poDataMgr.RollBack()\n\t\tEndIf \n\tEndWith \n\tIf Not m.lnErro1>0 \n\t\t= MessageBox('Erro na Gravação... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty,fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDPE.Procedure",
+      "queryOriginal": "\tInsert Into crSigOpDup (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "crSigOpDup",
+      "colunas": "Dopes,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigOpDup"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

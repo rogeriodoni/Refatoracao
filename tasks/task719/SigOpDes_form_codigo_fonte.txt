@@ -1,0 +1,1519 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpDes.SCX
+* Data/Hora: 31/10/2026 06:50:02
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDES
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPDES
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPDES.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPDES.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOPDES
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGOPDES
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDES.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGOPDES.Grade.Column1
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDES.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDES.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDES.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lnSaldo
+  Parent: SIGOPDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lnTDesc
+  Parent: SIGOPDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lnValor
+  Parent: SIGOPDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdCota
+  Parent: SIGOPDES
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDES.GrdCota.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.GrdCota.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDES.GrdCota.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.GrdCota.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDES.GrdCota.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDES.GrdCota.Column4
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 361
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleção de Descontos"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  podatamgr = .F.
+  parentform = .F.
+  Name = "SIGOPDES"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 643
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Verdana"
+  FontSize = 8
+  HeaderHeight = 22
+  Height = 169
+  Left = 24
+  Panel = 1
+  ReadOnly = .F.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 131
+  Visible = .T.
+  Width = 748
+  Name = "Grade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Alignment = 2
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 23
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 500
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.InputMask = ""
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 88
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Width = 110
+  Column4.ReadOnly = .F.
+  Column4.Visible = .T.
+  Column4.Format = ""
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Picture = ..\framework\imagens\checkbx.bmp
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column1.fwcheckbox1
+------------------------------------------------------------
+  Top = 31
+  Left = 12
+  FontName = "Verdana"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  Centered = .T.
+  BackStyle = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do Desconto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "% Desconto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  InputMask = "999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Desconto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Format = "999,999,999.99"
+  InputMask = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.lnSaldo
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 1
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 654
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 38
+  Top = 329
+  Width = 98
+  Name = "lnSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Total Desconto :"
+  Height = 15
+  Left = 564
+  Top = 308
+  TabIndex = 33
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.lnTDesc
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 1
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 654
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 38
+  Top = 304
+  Width = 98
+  Name = "lnTDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Saldo :"
+  Height = 15
+  Left = 610
+  Top = 330
+  TabIndex = 33
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor Original :"
+  Height = 15
+  Left = 368
+  Top = 307
+  TabIndex = 33
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.lnValor
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 1
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 452
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 38
+  Top = 303
+  Width = 98
+  Name = "lnValor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Verdana"
+  FontSize = 8
+  HeaderHeight = 22
+  Height = 39
+  Left = 25
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 85
+  Visible = .T.
+  Width = 413
+  Name = "GrdCota"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 75
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.InputMask = ""
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 145
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Format = ""
+  Column2.Name = "Column3"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 169
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cota"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Format = "999,999,999.99"
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Utilizada"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDES.GrdCota.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDES
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE calctots
+------------------------------------------------------------
+PROCEDURE calctots
+LOCAL lnReg, lnSaldo, lnTDesc
+
+SELECT localdes
+
+*!*	IF INLIST(localDes.tpdesc,7,10)	&& updimond ou up alianca
+*!*		replace valdes with IIF(localdes.selecao = 0, 000000000.00,ROUND(crProdS.pvens,2))
+*!*	else
+*!*	ENDIF
+
+replace descos with IIF(localdes.selecao = 0, 00.0000, localdes.descos)
+replace valdes with IIF(localdes.selecao = 0, 000000000.00, ROUND(thisform.lnvalor.value*localdes.descos/100,2))
+lnReg=IIF(EOF('localdes'),0,RECNO())
+
+GO top
+SUM localdes.valdes to lnTDesc
+
+*** soma descontos do item ***
+GO top
+SUM localdes.valdes to lnTDescI for !INLIST(localdes.tpdesc,1,2,6,7,10,11,12,13)	&& nao entra na cota A,V,TZ,UP,UpAlianca,extra/loja,brinde,troca preco
+
+*** soma descontos dos outros itens ***
+SELECT crSigmvitd
+GO top
+SUM vdes to lnTDescM for !INLIST(tpdesc,1,2,6,7,10,11,12,13) AND citens <> pcItem 	&& nao entra na cota A,V,TZ,UP
+
+replace valdes with crValdes.vdes+lnTDescI+lnTDescM in crSigCdDes
+ 
+SELECT localdes
+GO top
+lnSaldo = this.lnvalor.value-lnTDesc
+
+thisform.lnSaldo.Value =  lnSaldo
+thisform.lnTdesc.Value = lnTDesc
+SELECT localdes
+IF lnReg <> 0
+	GO lnReg
+endif
+thisform.Refresh 
+RETURN
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pCnx, pForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+public pcChv, pcEDN, pcItem
+LOCAL lcCpros, lcEmp,lcValtot, lcGru, lcListaP, llDescJ
+
+pcChv = []
+pcEDN = []
+lcValtot = [0]
+
+lcCpros=crTpmMvItn.cpros
+pcItem = crTpmMvItn.citens
+lcEmp = TprMvCab.emps
+
+This.poDataMgr = pCnx
+This.parentform = pForm
+
+SELECT * from xPar where parcs>1 into cursor crPar	&& mena - 13/12/2017 - seleciona recebimentos com parcelas
+
+*** mena - seleciona o cadastro do produto atual ***
+lcQuery = [Select * from SigcdPro where cpros=']+lcCpros+[']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crProd]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crProd)])
+	Return .f.
+EndIf
+
+
+*** mena - 02/04/2017 - seleciona tabelas habilitadas na operação***
+lcQuery = [Select a.* from SigOpTdz a, SigCdTbd c where a.codigos = c.codigos and c.dopes = ']+TprMvCab.dopes+[' and a.tpdesc <> 0]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDesc]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDesc)])
+	Return .f.
+EndIf
+
+*** mena - 02/04/2017 - tabela 11 precisa estar habilitadas na empresa***
+DELETE FROM crDesc where tpDesc = 11 and !listaemp like [%]+lcEmp+[%]
+
+Select 0 as selecao, 000000000.00 as valdes, descos as descosmax, * from crDesc  Order By Codigos into cursor crDesc readwrite
+replace all descos with 0.00 in crDesc
+
+lcQuery = [Select b.*, a.tpdesc, a.listaemp from SigOpTdt b, SigOpTdz a where a.tpdesc <> 0 and a.codigos = b.codigos order by b.cidchaves]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crTipo]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crTipo)])
+	Return .f.
+EndIf
+
+*** mena - 02/04/2017 - tabela 11 precisa estar habilitadas na empresa***
+DELETE FROM crTipo where tpDesc = 11 and !listaemp like [%]+lcEmp+[%]
+
+*** Calcula valor total da lista de itens ***
+lnReg = RECNO('crTpmMvItn')		&& salva recno atual para recuperar depois
+SELECT SUM(totas) as valtot from crTpmMvItn where citens <> pcItem into cursor crXi
+lcValTot = transform(NVL(crXi.valtot,0.00), '9999999999.99')
+SELECT crTpmMvItn
+GO lnReg
+**********************************************
+
+****************************************************************************
+*** Mena - 28/08/2017 - seleciona se o item atual tem desconto financeiro de 100% - itens do grupo jolie ***
+lnReg = RECNO('crTpmMvItn')		&& salva recno atual para recuperar depois
+
+*** monta lista de produtos ***
+lcListaP = []
+Select crTpmMvItn
+Scan
+	lcListaP = lcListaP + Iif(!Empty(lcListaP),[,'],[']) + crTpmMvItn.cpros + [']
+Endscan
+lcListaP = Iif(!Empty(lcListaP),[(] + lcListaP + [)],[])
+
+*** seleciona o cadastro dos produtos da lista de itens ***
+lcQuery = [Select cpros, cgrus from SigcdPro where cpros in]+lcListaP
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crProdL]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crProdL)])
+	Return .f.
+EndIf
+
+SELECT codTips as grupoJ, codigos from crTipo where tipos = 1 and tpdesc = 2 into cursor crGruJ
+
+SELECT SUM(qtds) as qtds from crTpmMvItn where cpros in (select cpros from crProdL where cgrus = crGruJ.grupoJ) into cursor crItnJT
+
+SELECT SUM(a.qtds) as qtds from crTpmMvItn a, crSigMvItd c where a.cpros in (select b.cpros from crProdL b where b.cgrus = crGruJ.grupoJ) ;
+and a.cpros=c.cpros and a.citens = c.citens and c.tpdesc = 2 and c.cdesc=crGruJ.codigos  into cursor crItnJD
+
+llDescJ = IIF((NVL(crItnJT.qtds,0)/4) - NVL(crItnJD.qtds,0)>=1,.t.,.f.)	&& calcula se ainda tem item para aplicar desconto
+
+IF llDescJ
+	SELECT top 1 * from crTpmMvItn a where a.cpros in (select b.cpros from crProdL b where b.cgrus = crGruJ.grupoJ) ;
+	and a.cpros+STR(a.citens) not in ;
+	(select c.cpros+STR(c.citens) from crSigMvItd c where c.tpdesc = 2 and c.cdesc=crGruJ.codigos ) ;
+	order by units into cursor crItnJP
+	
+	SELECT * from crItnJP where cpros = lcCpros and citens = pcItem and qtds = 1 into cursor crItnJD
+ELSE
+	SELECT * from crTpmMvItn where 1=0 into cursor crItnJD
+ENDIF
+
+SELECT * from crSigmvitd where cpros=lcCpros and citens = pcItem and tpdesc=2 and cdesc=crGruJ.codigos into cursor crItdJ
+		
+IF crItnJT.qtds>3
+	MessageBox('Tem produtos Jolie. Para aplicar desconto de 100% o menor valor precisa estar c qtde 1.',0+48,'Aviso')
+ENDIF
+
+SELECT crTpmMvItn
+GO lnReg
+****************************************************************************
+****************************************************************************
+
+
+*** mena - 05/06/2017 - verifica se produto de/por ou fora de linha ***
+lcQuery = [Select cpros from SigcdPro where cpros=']+lcCpros+[' and (foralinha=1) ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crFora]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crFora)])
+	Return .f.
+EndIf
+
+*** mena - 08/07/2017 - verifica se produto de/por ***
+lcQuery = [Select cpros from SigcdPro where cpros=']+lcCpros+[' and (precode <> 0) ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDepor]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDepor)])
+	Return .f.
+EndIf
+
+lcQuery = [Select * from SigcdCli where iclis=']+TprMvCab.contads+[']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crClid]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crClid)])
+	Return .f.
+EndIf
+
+*** lista produtos em promoção ***
+lcQuery = [Select * from Sigimppr where cpros=']+lcCpros+[' and dtInicial <= ?TprMvCab.datas and dtfinal >=?TprMvCab.datas ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crProPro]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crProPro)])
+	Return .f.
+EndIf
+
+*** lista de promoções ***
+lcQuery = [Select * from SigcdPmc where cpros=']+lcCpros+[' and dtIni <= ?TprMvCab.datas and dtfin >=?TprMvCab.datas and tppro=1 and valmin <= ]+lcValtot
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crPromo]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPromo)])
+	Return .f.
+EndIf
+
+*** lista troca de preços ***
+lcQuery = [Select * from SigprPre where cpros=']+lcCpros+[']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crPre]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPre)])
+	Return .f.
+ENDIF
+ldData = DTOT(TTOD(TprMvCab.datas)-2)
+SELECT pvens-pvensant as valdif, ROUND((pvens-pvensant)/pvens*100,2) as descos  from crPre where datas >= ldData into cursor crPre readwrite
+****************************************************************************************************************
+
+*** pegar item do subnivel - cria cursores vazios para qdo não existir subnivel **
+SELECT * from crProd where 1=0 into cursor crProdS
+SELECT * from crTpmMvItn where 1=0 into cursor crItns
+IF USED('creesti')
+	SELECT * from crEesti where empdopnums <> TprMvCab.empdopnums into cursor crItns
+	lcQuery = [Select * from SigcdPro where cpros=']+crItns.cpros+[']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crProdS]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crProdS)])
+		Return .f.
+	EndIf
+ENDIF
+*****************************************************
+
+*** Mena - 28-08-2017 pecas jolie - grupo = PGJ e tipo 2, se configurado grupo verificar se produto pertence ao grupo configurado (PGJ) ***
+SELECT * from crTipo where tipos = 1 and tpdesc = 2 order by cidchaves into cursor crTipoJ	&& seleciona os grupos - para desconto extra alianca
+SELECT * from crProd where cgrus in (select codtips from crTipoJ) into cursor crGrJ			&& seleciona se grupo desse produto está na configuração do desconto
+
+SELECT * from crTipo where tipos = 1 and tpdesc = 3 order by cidchaves into cursor crTipoRe					&& seleciona os grupos - para desconto relogio
+SELECT top 1 * from crTipo where tipos = 8 and tpdesc = 7 order by cidchaves into cursor crTipoSG1			&& seleciona o subgrupos maior  - para desconto updiamound
+SELECT top 1 * from crTipo where tipos = 8 and tpdesc = 7 order by cidchaves desc into cursor crTipoSG2		&& seleciona os subgrupos menor - para desconto updiamound
+SELECT * from crTipo where tipos = 1 and tpdesc = 10 order by cidchaves into cursor crTipoAl				&& seleciona os grupos - para upgrade alianca
+
+*** relogio de terceiros **
+SELECT * from crProd where cgrus in (select codtips from crTipoRe) into cursor crGrRe	&& seleciona se grupo desse produto está na configuração do desconto
+
+*** up diamond ***
+SELECT * from crProd where sgrus in (select codtips from crTipoSG1) into cursor crSG1	&& seleciona se subgrupo desse produto está na configuracao do desconto
+SELECT * from crProdS where sgrus in (select codtips from crTipoSG1) into cursor crSG1S	&& seleciona se subgrupo do produto snivel está na configuracao do desconto
+SELECT * from crProdS where sgrus in (select codtips from crTipoSG2) into cursor crSG2S	&& seleciona se subgrupo do produto snivel está na configuracao do desconto
+
+*** up alianca
+SELECT * from crProd where cgrus in (select codtips from crTipoAl)  into cursor crGrAl	&& seleciona se grupo desse produto (al) está na configuração do desconto
+SELECT * from crProdS where cgrus in (select codtips from crTipoAl) into cursor crGrAlS	&& seleciona se grupo do produto snivel está na configuracao do desconto
+
+
+**** busca produto do subnivel  equivalente ao produto atual conforme o tipo de desconto ***
+SELECT * from crItnS where cpros = lcCpros into cursor crItnZ	&& troca zerada
+
+lcProdCha	= crProd.cgrus+crProd.codcors+crProd.colecoes+crProd.codfinp
+SELECT * from crItnS where cpros in (select cpros from crProdS where cgrus+codcors+colecoes+codfinp = lcProdCha) into cursor crItnUD	&& troca up diamond
+
+lcProdCha = crProd.cgrus
+SELECT * from crItnS where cpros in (select cpros from crProdS where cgrus = lcProdCha) into cursor crItnUL
+********************************************************************************************
+
+*** verifica se empresa tem desconto extra - tipo 11 e se configurado grupo verificar se produto pertence ao grupo configurado (Aliança) ***
+SELECT * from crTipo where tipos = 1 and tpdesc = 11 order by cidchaves into cursor crTipoExAl	&& seleciona os grupos - para desconto extra alianca
+SELECT * from crProd where cgrus in (select codtips from crTipoExAl) into cursor crGrAl			&& seleciona se grupo desse produto está na configuração do desconto
+&&SELECT * from crDesc where lcEmp$NVL(listaemp,'') into cursor crDesExt readwrite
+
+
+SELECT *, SPACE(10) as usuars from crDesc into cursor localDes readwrite
+SELECT localDes
+
+if RECCOUNT('crItnS')=0					&& se não tem subnivel não é troca zero nem updiamound
+	DELETE for INLIST(tpdesc,6,7,10)	&& se desconto de troca não entra
+ENDIF
+
+*** Tipo 11 pode ser desconto extra para todos os produtos ou para aliancas ***
+if RECCOUNT('crTipoExAl')<>0 and RECCOUNT('crGrAl')=0			&& Tem grupo configurado no tipo 11 mas o produto não pertence a este grupo
+	DELETE for tpdesc=11 and codigos = crTipoExAl.codigos		&& mena 11/05/2017 - exclui só o tipo alianca 
+ENDIF
+
+if RECCOUNT('crPre')=0					&& Não tem desconto por alteração de preco há menos de 2 dias
+	DELETE for INLIST(tpdesc,13)
+ELSE
+	replace descosmax with crPre.descos in localDes for localDes.tpdesc=13 
+ENDIF
+
+*** Não é updiamod qdo 		***
+*** Nao é o subgrupo configurado
+*** O subnivel não é do subgrupo configurado
+*** a operação tem mais de tres anos
+
+*** Se for algum desconto especial, o desconto de qq peça não entra ***
+IF RECCOUNT('crItnUD')=0 or DATE()-TTOD(crItnUD.dtalts) > 1095 or (RECCOUNT('crSG1S')=0 and RECCOUNT('crSG2S')=0)  			&& se não é updiamound
+	DELETE for INLIST(tpdesc,7)	
+ELSE
+	replace descosmax with ROUND(crProdS.pvens/crTpmMvItn.unitorigs*100,2) in localDes for localDes.tpdesc=7 
+ENDIF
+
+IF RECCOUNT('crItnZ')=0	or DATE()-TTOD(crItnZ.dtalts) > 10		&& se não é troca Zerada
+	DELETE for INLIST(tpdesc,6)	
+ENDIF
+
+IF RECCOUNT('crItnUL')=0 or DATE()-TTOD(crItnUL.dtalts) > 10 or RECCOUNT('crGrAl')=0 or RECCOUNT('crGrAlS')=0 or crItnUl.unitorigs > crProd.pvens 		&& se não é upgrade de alianca
+	DELETE for INLIST(tpdesc,10)	
+ELSE
+	replace descosmax with ROUND(crProdS.pvens/crTpmMvItn.unitorigs*100,2) in localDes for localDes.tpdesc=10 
+ENDIF
+
+IF RECCOUNT('crGrRe')=0			&& se não é relogio 
+	DELETE for INLIST(tpdesc,3)
+ENDIF
+
+IF ISNULL(crClid.nascs) or empty(crClid.nascs) or MONTH(crClid.nascs) <> MONTH(DATE())	&& or DAY(crClid.nascs) <> DAY(DATE())
+	DELETE for INLIST(tpdesc,1)	 
+ENDIF
+
+IF ISNULL(crProd.DtLacto) or  TTOD(TprMvCab.datas) > TTOD(crProd.DtLacto)	&& não é lancamento
+	*DELETE for INLIST(tpdesc,4)	 
+ENDIF
+
+IF RECCOUNT('crProPro')>0			&& se é promoção deixa apenas desconto de supervisor e diretoria
+	DELETE for !INLIST(tpdesc,8,9)
+ENDIF
+
+IF RECCOUNT('crPromo')=0			&& se não é brinde sai o tipo 12
+	DELETE for INLIST(tpdesc,12)
+ENDIF
+
+*** mena - 05/06/2017  Se lancamento ou relogio apaga desconto tipo 1/5/11 extra ***
+IF TTOD(TprMvCab.datas) <= TTOD(crProd.DtLacto) or RECCOUNT('crGrRe')<>0
+	*DELETE for INLIST(tpdesc,1,5)
+	*DELETE for tpdesc=11 and codigos <> crTipoExAl.codigos
+ENDIF
+
+*** mena - 05/06/2017  Se De/por deixa tipo 2, 8 e 9 ***
+IF RECCOUNT('crDepor')>0
+	DELETE for !INLIST(tpdesc,2,8,9)
+ENDIF
+
+*** mena - 08/07/2017  Se fora de linha deixa tipo 2,5,8 e 9 ***
+*** Mena - 15/02/2018 - Permite descontos mesmo se produto fora de linha ***
+*!*	IF RECCOUNT('crFora')>0
+*!*		DELETE for !INLIST(tpdesc,2,5,8,9)
+*!*	ENDIF
+
+*** Mena 28/08/2017 - Verifica se deixa desconto Tipo 2 Jolie ***
+if ((RECCOUNT('crTipoJ')<>0 and RECCOUNT('crGrJ')=0) or (RECCOUNT('crTipoJ')<>0 and RECCOUNT('crItnJD')=0)) and RECCOUNT('crItdJ')=0 && Tem grupo configurado no tipo 2 mas o produto não pertence a este grupo
+	DELETE for tpdesc=2 and codigos = crTipoJ.codigos
+ENDIF
+Set Step On 
+SELECT * from crSigmvitd where cpros=lcCpros and citens = pcItem into cursor crOpItd
+
+SELECT localDes
+GO top
+SCAN
+	SELECT crOpItd
+	LOCATE for cdesc = localDes.codigos
+	IF FOUND()
+		replace selecao with 1 in localDes
+		replace descos with crOpItd.pdes  in localDes
+		replace valdes with crOpItd.vdes  in localDes
+		replace usuars with crOpItd.usuars  in localDes		&& Mena - 07/03/2019 - carrega usuario da inclusao
+	ENDIF
+	SELECT localDes
+ENDSCAN
+
+this.lnValor.value = crTpmMvItn.unitorigs
+SELECT crSigCdDes
+GO top
+
+replace valdes with crValdes.vdes in crSigCdDes
+ 
+=thisform.CalcTots()
+
+THIS.grdCota.Visible=fChecaAcesso('SIGCDDES','GERENTE') 	&& MOSTRA grade para acesso de gerente
+This.GrdCota.RecordSource          = [crSigCdDes]
+This.GrdCota.Column1.ControlSource = [crSigCdDes.emps]
+*!*This.GrdCota.Column2.ControlSource = [crSigCdDes.valmeta]
+This.GrdCota.Column3.ControlSource = [crSigCdDes.valcota]
+This.GrdCota.Column4.ControlSource = [crSigCdDes.Valdes]
+
+SELECT localDes
+GO top
+
+This.Grade.RecordSource          = [localDes]
+This.Grade.Column1.ControlSource = [localDes.Selecao]
+This.Grade.Column2.ControlSource = [localDes.Descrs]
+This.Grade.Column3.ControlSource = [localDes.Descos]
+This.Grade.Column4.ControlSource = [localDes.Valdes]
+
+This.Refresh
+This.Grade.Column1.SetFocus
+This.Grade.Column1.fwcheckbox1.SetFocus
+
+ThisForm.Grade.AfterRowColChange()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+RELEASE pcChv, pcEDN, pcItem 
+This.Grade.RecordSource          = []
+This.Grade.Column1.ControlSource = []
+This.Grade.Column2.ControlSource = []
+This.Grade.Column3.ControlSource = []
+This.Grade.Column4.ControlSource = []
+Use In localDes
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+ThisForm.Grade.Refresh
+Select localDes
+Go Top In localDes
+ThisForm.Grade.Refresh
+
+SELECT crsigmvitd
+DELETE all for cpros = crTpmMvItn.cpros and citens = crTpmMvItn.citens
+
+Select localDes
+DELETE ALL for descos = 0
+GO top
+SCAN
+	If (localDes.Selecao = 1)
+		lcIdChave = fUniqueIds()
+		INSERT into crSigmvItd (citens, emps, dopes, numes, cpros, cidchaves, empdopnums, dtalts, cdesc, ddesc, pdes, vdes, valbase, tpdesc, codigo, usuars) values;
+		(crTpmMvItn.citens, TprMvCab.emps, TprMvCab.dopes, TprMvCab.numes, crTpmMvItn.cpros, lcIdChave, TprMvCab.empdopnums, DATETIME(), ;
+		localdes.codigos, localdes.descrs, localdes.descos, localdes.valdes, crTpmMvItn.unitorigs, localdes.tpdesc, crSigcdDes.codigo, LocalDes.usuars ) 
+	ENDIF
+ENDSCAN
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.Grade.Column1.Header1
+* Classe: header (Base: header)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+If (This.parent.Header1.Tag = [X])
+	This.parent.Header1.Tag = [ ]
+	Update localDes Set Selecao = 0
+Else
+	This.parent.Header1.Tag = [X]
+	Update localDes Set Selecao = 1
+EndIf
+
+*-- Rafael - 16/02/2016 - Correção do erro 1925 - objeto Seleciona nao Existe
+*!*	If (ThisForm.Grade.Seleciona.Header1.Tag = [X])
+*!*		ThisForm.Grade.Seleciona.Header1.Tag = [ ]
+*!*		Update localDes Set Selecao = 0
+*!*	Else
+*!*		ThisForm.Grade.Seleciona.Header1.Tag = [X]
+*!*		Update localDes Set Selecao = 1
+*!*	EndIf
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.Grade.Column1.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=DoDefault()
+
+LOCAL lcRet
+lcRet=[]
+
+IF this.Value = 0
+	thisform.calctots() 
+	return
+ENDIF
+	
+*!*	lcRet=thisform.chkDesc()
+*!*	IF !EMPTY(lcRet)
+*!*		=MessageBox(lcRet, 0+48, [Desconto não permitido])
+*!*		this.Value = 0
+*!*		thisform.grade.Refresh     
+*!*		thisform.calctots() 
+*!*		RETURN .t.
+*!*	ENDIF
+
+if INLIST(localdes.tpdesc,3,4,5,11,12,13)	&& desconto de gerente
+	Do Form SigOpSen With 'CANCITEM','Libera Desconto','' To _Retorno
+	llOk = ( Left( _Retorno, 1 ) = "*" )
+	If !llOk
+		MessageBox('Autorização não Confirmada!!',0+48,'')
+		thisform.grade.column1.Fwcheckbox1.Value=0
+		thisform.grade.Refresh     
+	ELSE
+		replace usuars with SUBSTR(_Retorno,2) in localdes
+	EndIf
+	thisform.calctots() 
+	RETURN .t.
+ENDIF
+
+if INLIST(localdes.tpdesc,8)	&& desconto supervisor
+	Do Form SigOpSen With 'LIBFPAG','Libera Desconto','' To _Retorno
+	llOk = ( Left( _Retorno, 1 ) = "*" )
+	If !llOk
+		MessageBox('Autorização não Confirmada!!',0+48,'')
+		thisform.grade.column1.Fwcheckbox1.Value=0
+		thisform.grade.Refresh     
+	ELSE
+		replace usuars with SUBSTR(_Retorno,2) in localdes
+	EndIf
+	thisform.calctots() 
+	RETURN .t.
+ENDIF
+
+if INLIST(localdes.tpdesc,9)	&& desconto diretoria
+	Do Form SigOpSen With 'SDINSUF','Libera Desconto','' To _Retorno
+	llOk = ( Left( _Retorno, 1 ) = "*" )
+	If !llOk
+		MessageBox('Autorização não Confirmada!!',0+48,'')
+		thisform.grade.column1.Fwcheckbox1.Value=0
+		thisform.grade.Refresh     
+	ELSE
+		replace usuars with SUBSTR(_Retorno,2) in localdes
+	EndIf
+*!*		SELECT tmpusu
+*!*		brow
+	thisform.calctots() 
+	RETURN .t.
+ENDIF
+
+thisform.calctots() 
+RETURN .t.
+	
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+IF INLIST(localdes.tpdesc,1,2,3,4,5,8)
+	THISFORM.GRADE.column3.SetFocus   
+	thisform.grade.refresh  
+	RETURN
+ENDIF
+
+IF INLIST(localdes.tpdesc,6,7)
+	THISFORM.GRADE.column4.SetFocus   
+	thisform.grade.refresh  
+	RETURN
+ENDIF
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+SELECT crDesc
+LOCATE for codigos = localdes.codigos
+SELECT localDes
+&&IF this.Value > crDesc.descos
+IF this.Value > crDesc.descosmax
+	=MessageBox([Desconto maior que o permitido], 0+48, [Aviso])
+	this.Value = crDesc.descos
+	this.Refresh 
+	RETURN .f.
+ENDIF
+
+*** Mena 13/12/2017 - Checa se tem pagamento parcelado e nao permite desconto financeiro ***
+IF crDesc.tpdesc = 2 and RECCOUNT('crPar') <> 0 and this.Value > 0
+	=MessageBox([Desconto não permitido para pagamento parcelado.], 0+48, [Aviso])
+	this.Value = crDesc.descos
+	this.Refresh 
+	RETURN .f.
+ENDIF
+ 
+thisform.calctots() 
+
+**** Não permite desconto > valor do produto ***
+IF (thisform.lnSaldo.Value < 0) or (crSigCdDes.valdes > crSigCdDes.valcota and !INLIST(crDesc.tpdesc,1,2,9,11))
+	=MessageBox([Desconto maior que o permitido], 0+48, [Aviso])
+	this.Value = crDesc.descos
+	this.Refresh 
+	thisform.calctots() 
+	RETURN IIF(this.Value=0,.t.,.f.)
+ENDIF
+ 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+&&RETURN INLIST(localdes.tpdesc,1,2,3,4,5,8,9) and localdes.selecao=1 
+RETURN localdes.selecao=1 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lnPdes
+Select crDesc
+Locate For codigos = localdes.codigos
+Select localdes
+&&IF this.Value > crDesc.descos
+lnPdes = Iif(This.Value = 0 Or (Thisform.lnvalor.Value*100) = 0,0,Round(This.Value/Thisform.lnvalor.Value*100,4))
+If lnPdes > crDesc.descosmax
+	=Messagebox([Desconto maior que o permitido], 0+48, [Aviso])
+	This.Value = crDesc.valdes
+	This.Refresh
+	Return .F.
+Endif
+
+*** Mena 13/12/2017 - Checa se tem pagamento parcelado e nao permite desconto financeiro ***
+IF crDesc.tpdesc = 2 and RECCOUNT('crPar') <> 0 and this.Value > 0
+	=MessageBox([Desconto não permitido para pagamento parcelado.], 0+48, [Aviso])
+	this.Value = crDesc.descos
+	this.Refresh 
+	RETURN .f.
+ENDIF
+
+Replace descos With lnPdes In localdes
+Thisform.calctots()
+
+**** Mena - 10/04/2018 incluido igual a porcentagem - Não permite desconto > valor do produto ***
+IF (thisform.lnSaldo.Value < 0) or (crSigCdDes.valdes > crSigCdDes.valcota and !INLIST(crDesc.tpdesc,1,2,9,11))
+	=MessageBox([Desconto maior que o permitido], 0+48, [Aviso])
+	This.Value = crDesc.valdes
+	thisform.calctots() 
+	this.Refresh 
+	RETURN IIF(this.Value=0,.t.,.f.)
+ENDIF
+
+*!*	**** Não permite desconto > valor do produto ***
+*!*	If Thisform.lnSaldo.Value < 0
+*!*		=Messagebox([Desconto maior que o permitido], 0+48, [Aviso])
+*!*		This.Value = crDesc.valdes
+*!*		Thisform.calctots()
+*!*		This.Refresh
+*!*		Return .F.
+*!*	Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN localdes.selecao=1 
+&&RETURN .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.lnSaldo
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( .F. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.lnTDesc
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( .F. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.lnValor
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( .F. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.GrdCota.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+IF INLIST(localdes.tpdesc,1,2,3,4,5,8)
+	THISFORM.GRADE.column3.SetFocus   
+	thisform.grade.refresh  
+	RETURN
+ENDIF
+
+IF INLIST(localdes.tpdesc,6,7)
+	THISFORM.GRADE.column4.SetFocus   
+	thisform.grade.refresh  
+	RETURN
+ENDIF
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDES.GrdCota.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPDES
+RESERVED3 (ClassInfo): podatamgr
+parentform
+*calcdesc 
+*calctots 
+*chkdesc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

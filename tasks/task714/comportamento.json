@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Dtos"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCRP",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "Parameters Arquivos, pFormPai\n\nSet DataSession To Arquivos\nThisForm.FormPai = pFormPai\n\nThisForm.getLancamento.Value = Ctod('  /  /  ')\nThisForm.getValor.Value      = 0.00\nThisForm.getHistorico.Value  = ''\n\n*!*\tThisForm.Top  = 63\n*!*\tThisForm.Left = 389\nThisForm.Top  = ThisForm.FormPai.Top\nThisForm.Left = (ThisForm.FormPai.Left + ThisForm.FormPai.Width) - ThisForm.Width\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ctod,Left =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.Commandgroup1",
+      "evento": "Click",
+      "linhas": 55,
+      "codigoOriginal": "Local lcChave, llFinal\n\nSet Near On\nSelect CrSigMvCcr\n\nllFinal = Eof()\nIf !llFinal \n\tSkip\n\tllFinal = Eof()\n\tSkip - 1\nEndif\n\nDo Case\n\tCase !IsEmpty(ThisForm.getLancamento.Value)\n\t\tThisForm.Continuar = ''\n\t\tlcChave = Dtos(ThisForm.getLancamento.Value)\n\t\tLocate For Dtos(Datas) = lcChave\n\n\tCase ThisForm.getValor.Value # 0\n\t\tlcChave = ThisForm.getValor.Value\n\t\tIf lcChave = Val(ThisForm.Continuar) .and. !llFinal\n\t\t\tContinue\n\t\tElse\n\t\t\tThisForm.Continuar = Str(lcChave,12,2)\n\t\t\tGo Top\n\t\t\tLocate For lcCha... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Dtos",
+        "metodosFormChamados": "Continuar = Str",
+        "controlesReferenciados": "grd_lancamento",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getLancamento",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Dtos(This.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getLancamento",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value # Ctod(Subs(This.Tag,7,2) + '/' + Subs(This.Tag,5,2) + '/' + Subs(This.Tag,1,4))\n\tThisForm.getValor.Value      = 0.00\n\tThisForm.getHistorico.Value  = ''\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getValor",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Str(This.Value,12,2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getValor",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # Val(This.Tag)\n\tThisForm.Continuar = ''\n\tThisForm.getLancamento.Value = Ctod('  /  /  ')\n\tThisForm.getHistorico.Value  = ''\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ctod",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getHistorico",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Alltrim(This.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCRP.getHistorico",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If This.Tag # Alltrim(This.Value)\n\tThisForm.Continuar = ''\n\tThisForm.getLancamento.Value = Ctod('  /  /  ')\n\tThisForm.getValor.Value      = 0.00\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ctod",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

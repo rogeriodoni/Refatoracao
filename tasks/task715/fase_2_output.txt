@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File looks correct and complete. Phase 2 is done ÔÇö but this BO is the documented exception (no table, read-only, legado has zero SQL/INSERT/UPDATE), so instead of forcing fake `CarregarDoCursor`/`Inserir`/`Atualizar`/`ObterChavePrimaria` overrides, I added the three methods that are this dialog's actual business logic:
+
+- `MontarTermoBusca()` ÔÇö transcribes the legado's term-building expression (`%`/`Like`/`=` per mode)
+- `ConfirmarOpcao()` ÔÇö legado `Command1.Click` ("Procurar"): sets `this_nRetorno`, `this_lConfirmou`, builds the term
+- `Cancelar()` ÔÇö legado `Command2.Click` ("Encerrar"): zeroes retorno/termo
+
+`ObterChavePrimaria`/`Inserir`/`Atualizar`/`CarregarDoCursor` are left as BusinessBase's safe no-op defaults, consistent with the NOTA DE ARQUITETURA already in the file header (this dialog has no table and grants nothing to persist).
+
+Next phase (3/8) will create `FormSigOpCtd.prg`, which should call `ConfirmarOpcao()`/`Cancelar()` from the button handlers and read `this_nRetorno` after `Show()`.

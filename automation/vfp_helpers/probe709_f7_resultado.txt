@@ -1,0 +1,39 @@
+=== 1. COMPILACAO ===
+BO.FXP   = .T.
+BO.ERR   = .F.
+FORM.FXP = .T.
+FORM.ERR = .F.
+
+=== 2. CONTROLE NEGATIVO ===
+NEG.FXP = .T.
+NEG.ERR = .T.
+--- NEG.ERR (so as linhas acrescentadas devem aparecer) ---
+PUBLIC PROCEDURE Falha()
+Error in line 1836: Syntax error.
+ENDPROC
+Error in line 1837: Nesting error.
+
+
+=== 3. INSTANCIACAO ===
+VARTYPE(loForm) = O
+Caption = [Porta de Comunicação]
+RECCOUNT(cursor_4c_Dados) = -1
+
+=== 4. VISIBILIDADE ===
+existe BtnConfirmarClick  = .T.
+PROTECTED BtnConfirmarClick = .F.
+existe BtnEncerrarClick   = .T.
+PROTECTED BtnEncerrarClick  = .F.
+
+=== 5. BINDEVENT ===
+
+=== 6. CONFIRMAR SEM CONEXAO ===
+BtnConfirmarClick retornou sem excecao
+form continua ABERTO depois do Confirmar recusado = .T.
+
+=== 7. ENCERRAR ===
+BtnEncerrarClick retornou sem excecao
+VARTYPE(loForm) pos-Encerrar = X
+cursor_4c_Dados aberto pos-Encerrar = .F.
+
+FIM

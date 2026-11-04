@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da e verificada.
+
+## Entregue
+
+`C:\4c\projeto\app\classes\SIGOPCORBO.prg` (137 linhas, ASCII puro, CRLF) ÔÇö `DEFINE CLASS SIGOPCORBO AS BusinessBase`.
+
+**Entidade correta**: o esqueleto auto-gerado apontava para `SigCdEmp` com chave `cods` ÔÇö ambos errados. O legado faz `.AddCursor('SigNfCor','cidchaves','CrSigNfCor',...)`, logo `this_cTabela = "SigNfCor"` / `this_cCampoChave = "cidchaves"`.
+
+**14 propriedades**, todas com tipo conferido em `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14):
+
+| Grupo | Propriedades |
+|---|---|
+| Colunas de `SigNfCor` | `this_cCidchaves` char(20) PK ┬À `this_cEmps` char(3) ┬À `this_cSeries` char(3) ┬À `this_cNfis` char(6) ┬À `this_nNoccors` numeric(3,0) ┬À `this_cMretifs` text |
+| Faixa de notas (`Get_NotaIni`/`Get_NotaFim`) | `this_cNfisDe` ┬À `this_cNfisAte` ÔÇö CHARACTER, porque o `Ok.Click` do form irm├úo faz `Padr(...Value, 6)` |
+| Contexto do chamador | `this_dEmisDe` ┬À `this_dEmisAte` ÔÇö DATE, confirmado em `SIGCDCNF` (`DtIni.Value`/`DtFim.Value`) |
+| Apoio | `this_cRazas` (`SigCdEmp.razas`) ┬À `this_nNcodigos`/`this_cCdescrs` (`SigCcOco`) ┬À `this_lTemCorrecoesGravadas` |
+
+Inclu├¡ tamb├®m `ObterChavePrimaria()` (PROTECTED, como a regra #51 manda) e `LimparDados()` ÔÇö a base s├│ limpa `this_cMensagemErro`, ent├úo sem o override o contexto de uma nota vazaria para a seguinte; ele zera o registro e **preserva** de prop├│sito empresa/s├®rie/faixa/datas, que valem para a faixa inteira.
+
+## Verifica├º├úo executada
+
+- `COMPILE` no VFP9: `ERRCOUNT=0`, sem `.err`, `.fxp` gerado (apagado depois para a Fase 2 n├úo rodar c├│digo velho).
+- `CREATEOBJECT("SIGOPCORBO")` real: instancia, `Tabela=[SigNfCor]`, `CampoChave=[cidchaves]`, os 14 tipos saem `C/N/D/L` como declarado, `LimparDados()` zera o registro e mant├®m o contexto, e `PEMSTATUS(...,2)` confirma `Init`/`LimparDados` p├║blicos e `ObterChavePrimaria` protegido.
+- Regexes do `05d_validarCompletude` (marcadores, procedure vazia, "pendente/nao implement/proxima fase", stub de `MsgAviso`): nenhuma ocorr├¬ncia.
+
+## Dois achados para a Fase 2
+
+1. **O `Ok.Click` do SIGOPCOR legado est├í vazio.** Dumpei o `.sct` byte a byte (e tamb├®m a c├│pia divergente em `FortyusMC_refatorado`): os ├║nicos m├®todos s├úo `Load`, `Init`, dois `When` e um `KeyPress`. O bot├úo "Confirmar" (├¡cone `cadastro_salvar_60`) n├úo tem c├│digo ÔÇö a tela legada nunca grava. O irm├úo `SIGOPCCO` ("Alterar Carta", task657) tem o `Ok.Click` completo: `DELETE FROM SigNfCor` + inserts com `fUniqueIds()` + `UPDATE SigMvNfi SET Correcs`. A grava├º├úo da Fase 2 tem de se basear nesse irm├úo (mesma tabela, mesma composi├º├úo de chave) e **n├úo** ser inventada, com a diferen├ºa de que aqui a chave ├® uma FAIXA (`cnfis between ?pcNFisDe And ?pcNFisAte`), n├úo uma nota s├│.
+
+2. **A exce├º├úo "BO somente-leitura" do gate da Fase 2 n├úo vai valer**, porque o dump tem `.AddCursor(` ÔÇö a prova (2) do crit├®rio fail-closed reprova. Ou seja, a Fase 2 ter├í de entregar `Inserir`/`Atualizar` de fato.
+
+Aten├º├úo na Fase 2: `SigNfCor.cseries` ├® char(**3**) mas `SigMvNfi.series` ├® char(**8**) ÔÇö o `PADR` do `UPDATE SigMvNfi` precisa da largura pr├│pria.

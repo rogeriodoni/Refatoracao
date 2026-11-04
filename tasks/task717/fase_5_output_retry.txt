@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. O arquivo `projeto\app\forms\operacionais\FormSigOpCts.prg` foi modificado.
+
+## Causa da reprova├º├úo anterior
+
+O gate da Fase 5 n├úo era insatisfaz├¡vel ÔÇö ele estava **certo**. Medi o ramo CAPTURA (`case 5`) com os helpers REAIS do `OrquestradorMigracao.ps1`, carregados por AST (dot-source dispararia uma migra├º├úo):
+
+| condi├º├úo | antes | agora |
+|---|---|---|
+| `legadoCapturaF5` | True | True |
+| `nCamposTbLegadoF5` (TextBox no legado) | 3 | 3 |
+| `pisoCamposF5` = ceil(3/2) | 2 | 2 |
+| **`nCamposMigradoF5`** | **1** | **2** |
+| `temLayoutCapturaF5` | **False** | **True** |
+
+A tentativa anterior entregou s├│ 1 dos 3 campos digit├íveis (`senha`), e "metade de 3" arredondada para cima ├® 2. Controle negativo rodado sobre o arquivo antigo: reprova exatamente por essa linha, e por nenhuma outra.
+
+## O que foi acrescentado
+
+`ConfigurarCamposSenhaNova()`, chamado de `InicializarForm()` logo ap├│s `ConfigurarCamposSenhaAtual()`, criando ÔÇö na ordem dos registros do SCX ÔÇö `lbl_4c_Label1` ("Digite a nova senha : "), `shp_4c_Shape2` (moldura) e `txt_4c_Nova1` (GetNova1). Todos os valores transcritos do dump; `GetNova2` fica para a Fase 6, como ├║ltimo `AddObject` do bloco (documentei por qu├¬: z-order sobre o Shape e ordem de tabula├º├úo).
+
+Tr├¬s pontos onde o dump n├úo se copia literalmente, com a raz├úo no coment├írio:
+- **`AutoSize = .T.` do Label1 ÔåÆ `.AutoSize = .F.`** + `Width`/`Height` do SCX (regra #23: AutoSize ├® no-op em Label criado por `AddObject`).
+- **Shape usa `BorderColor`, n├úo `ForeColor`** ÔÇö confirmei na tabela real de propriedades (`SHAPE|...,BORDERCOLOR,...` sem `FORECOLOR`); atribuir `ForeColor` derrubaria o `Init` (regra #33). Nada de `ShapeType` (├® do VB).
+- **`BackStyle`/`FontBold`/`Alignment` do Label1 omitidos de prop├│sito**: o dump n├úo os declara e esta ├® a classe BASE `label` (sem `ClassLoc`, diferente de `Frase`/`Say3`, que v├¬m da `say` do framework.vcx) ÔÇö omitindo, o controle herda o mesmo default que o legado herdou, o que ├® fiel sem eu afirmar um valor que n├úo consigo medir nesta sess├úo.
+
+## Verifica├º├Áes
+
+- **VFP9**: `.fxp` apagado antes, `COMPILE` do Form e do BO ÔåÆ ambos `.FXP=.T.`, `.ERR=.F.`, timestamps novos.
+- **Propriedades**: todas as 19 atribu├¡das existem nas classes (conferido na tabela `propriedades_baseclasses.txt`); `VerificarPropriedadesInexistentes.ps1` ÔåÆ "OK - nenhuma atribuicao a propriedade inexistente".
+- **Completude (05d)**: rodei os tr├¬s regexes reais do validador ÔÇö 0 marcadores TODO/FIXME, 0 indicadores de pend├¬ncia, 0 procedures vazias.
+- **Acentos**: 0 bytes >127 no arquivo.
+- **CRLF preservado** (CR=LF=595), diff limpo: +129/ÔêÆ9 linhas.
+
+Uma observa├º├úo sobre o log: o `fase_5_output.txt` est├í polu├¡do por avisos de regras de permiss├úo com `*` antes do resto do comando em `.claude\settings.local.json` (5 ocorr├¬ncias). N├úo afetam esta fase, mas tornam o preview dos logs do pipeline dif├¡cil de ler e s├úo permiss├Áes mais amplas do que parecem ÔÇö vale corrigir quando conveniente.

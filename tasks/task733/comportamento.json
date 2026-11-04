@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fCarregarImps"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPETS",
+      "evento": "Init",
+      "linhas": 193,
+      "codigoOriginal": "Lparameters pForm, pnDatSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal llFechaTpEti, lnTipos, lnMaxTipos\n\nSet DataSession To pnDatSes\n\nThisform.ParentForm=pForm\n\nIf Not Used('SigCdPac')\n\tThisform.ParentForm.podatamgr.Cursorquery('SigCdPac','CrSigCdPac')\n\tGo Top In CrSigCdPac\nEndif\nGoto Top In CrSigCdPam\nllFechaTpEti = .F.\n\nlcQuery = [Select * From SigCdTpe Where nSituas = 1 ]\nIf (Thisform.ParentForm.podatamgr.SqlExecute... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery,SqlExecute,Value = Recno",
+        "controlesReferenciados": "Opt_Tipo,Option&lcI,get_Printer",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETS.BtnReport",
+      "evento": "Click",
+      "linhas": 220,
+      "codigoOriginal": "Local llImpPreco, lnTipo, lcSelecao, lnConfirma, lnTotalQtds, vnTpImp, vnAjVerts, vnAjHorzs, vnAjDenss, vnAjVelos, lnImpres, llOrigem\n\nllImpPreco = ( ThisForm.Opt_Preco.Value = 1 )\nllImpPeso  = ( ThisForm.Cnt_Impressora.Opt_Qtd.Value = 1 )\nllOrigem   = ( ThisForm.optOrigem.Value <> 1 )\n\nWith ThisForm.Opt_Tipo\n\tlnTipo  = .Value\n\tvTipEtq = Int( Val( .Buttons(lnTipo).Tag ) )\nEndWith\n\n*** mena - 10/09/2015 - pega o nome da impressora que está no combobox *** \nWith Thisform.get_Printer \n\tlnImpres  = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Opt_Preco,Opt_Qtd,optOrigem,Opt_Tipo,get_Printer",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPETS.BtnReport",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETS.Opt_Impressora",
+      "evento": "InteractiveChange",
+      "linhas": 7,
+      "codigoOriginal": "loImp = ThisForm.cnt_Impressora\n=fCarregarImps(ThisForm.Opt_Impressora.Buttons(ThisForm.Opt_Impressora.Value).Tag, loImp.Opcao_Imp, ;\n\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ;\n\t\t\t\t   ThisForm.ParentForm.poDataMgr, ThisForm.Opt_Tipo)\n\n\t\t\t\t   \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "Buttons",
+        "controlesReferenciados": "Opt_Impressora,Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETS.Get_Printer",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "\t*** mena - 06/03/2015 - incluido para atualizar flags da impressora escolhida ***\t\n\tloImp = ThisForm.cnt_Impressora\n\t=fCarregarImps(ALLTRIM(crImpreV.impresS), loImp.Opcao_Imp, ;\n\t\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ThisForm.ParentForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPETS.Init",
+      "queryOriginal": "lcQuery = [Select * From SigCdTpe Where nSituas = 1 ]",
+      "tabelas": "SigCdTpe",
+      "colunas": "nSituas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdTpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,638 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpEtq.SCX
+* Data/Hora: 01/11/2026 06:38:08
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPETQ
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPETQ
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPETQ.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPETQ.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPETQ
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPETQ.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPETQ.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPETQ.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPETQ.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPETQ.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPETQ.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPETQ.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPETQ.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGOPETQ
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cnt_Procurar
+  Parent: SIGOPETQ
+  Class: container
+  BaseClass: container
+
+Objeto: Label4
+  Parent: SIGOPETQ.Cnt_Procurar
+  Class: label
+  BaseClass: label
+
+Objeto: GetBusca
+  Parent: SIGOPETQ.Cnt_Procurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Saída
+  Parent: SIGOPETQ
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdEtiquetas
+  Parent: SIGOPETQ
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdImprimir
+  Parent: SIGOPETQ
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 530
+  Width = 630
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Consulta Etiquetas não lidas"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPETQ"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 378
+  Left = 4
+  Panel = 1
+  ReadOnly = .T.
+  RecordSource = "CsRelatorio"
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 143
+  Width = 622
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "CsRelatorio.CBars"
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .T.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "CsRelatorio.Datas"
+  Column2.Width = 70
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "CsRelatorio.DPros"
+  Column3.Width = 370
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Alignment = 2
+  Column4.ControlSource = "CsRelatorio.pLocals"
+  Column4.Width = 40
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Barra"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "CsRelatorio.CBars"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data Entrada"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "CsRelatorio.Datas"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "CsRelatorio.DPros"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Local"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Shape1
+------------------------------------------------------------
+  Top = 9
+  Left = 548
+  Height = 55
+  Width = 73
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Cnt_Procurar
+------------------------------------------------------------
+  Top = 86
+  Left = 5
+  Width = 174
+  Height = 54
+  SpecialEffect = 0
+  TabIndex = 2
+  Name = "Cnt_Procurar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Cnt_Procurar.Label4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Barra  :"
+  Height = 17
+  Left = 11
+  Top = 17
+  Width = 43
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Cnt_Procurar.GetBusca
+------------------------------------------------------------
+  Height = 23
+  Left = 56
+  TabIndex = 1
+  Top = 15
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "GetBusca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.Saída
+------------------------------------------------------------
+  Top = 4
+  Left = 553
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "<Esc> Sair"
+  TabIndex = 3
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Saída"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.cmdEtiquetas
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 398
+  Top = -1
+  Width = 85
+  TabIndex = 64
+  Name = "cmdEtiquetas"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_etiqueta_26.jpg
+  Command1.Caption = "\<Etiquetas"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnEtiquetas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPETQ.cmdImprimir
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 473
+  Top = -1
+  Width = 85
+  TabIndex = 64
+  Name = "cmdImprimir"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_32.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnImprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPETQ
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.poDataMgr = pForm.poDataMgr
+
+Select csRelatorio
+Go Top
+ThisForm.Grade.Refresh
+ThisForm.Grade.Column1.Text1.SetFocus
+
+ThisForm.cmdEtiquetas.Visible = fChecaAcesso('SIGOPETQ', 'ETIQUETA')
+ThisForm.cmdImprimir.Visible  = fChecaAcesso('SIGOPETQ', 'IMPRIMIR')
+
+Thisform.Tipo = 'DIVERSAS'
+Thisform.Op_Escolha = 'DIVERSAS'
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPETQ.Cnt_Procurar.GetBusca
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.Grade.Refresh
+ThisForm.Grade.Column1.Text1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcProd = This.Value
+
+If Not Empty(lcProd)
+	Select csRelatorio
+	lnReg = Recno()
+	If Not Seek(lcProd, 'csRelatorio', 'CBars')
+		Go lnReg
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+**
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPETQ.Saída
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPETQ.cmdEtiquetas
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnEtiquetas.Valid
+------------------------------------------------------------
+PROCEDURE btnEtiquetas.Valid
+Do Form SigOpIpE With ThisForm
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPETQ.cmdImprimir
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnImprimir.Valid
+------------------------------------------------------------
+PROCEDURE btnImprimir.Valid
+If .f.
+	Report Form SigOpEtq && Linha Colocada Apenas Para Compilação
+EndIf
+
+Select csRelatorio
+	
+Do Form SigMvDoc With 'SIGOPETQ', 'Impressão da Consulta de Etiquetas'
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPETQ
+RESERVED3 (ClassInfo): op_escolha
+podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

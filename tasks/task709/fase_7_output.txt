@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 7 entregue** em `projeto/app/forms/operacionais/FormSIGOPCPE.prg` (+328 linhas).
+
+## O que foi entregue
+
+O legado **n├úo tem barra CRUD** ÔÇö por isso n├úo h├í `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. Medido no dump pelos pr├│prios crit├®rios do gate da fase: zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha`, zero nome `(btn|cmd)(Incluir|Alterar|Visualizar|Excluir)`, zero `<verbo>.Click`. Os **dois ├║nicos** `Click` do dump inteiro s├úo `Ok` e `cancela`, e s├úo esses os eventos principais:
+
+| m├®todo | legado | o que faz |
+|---|---|---|
+| `BtnConfirmarClick()` | `Ok.Click` | os 3 passos na ordem do legado, cada um com seu caminho de falha abortando **sem fechar a tela** |
+| `BtnEncerrarClick()` | `cancela.Click` | `Release` ÔÇö descarta o que est├í s├│ no cursor |
+| `GravarTodosOsTipos()` | `poDataMgr.Update('crSigSyCom')` | varre o cursor **inteiro** (n├úo s├│ a linha corrente); INSERT ou UPDATE decidido pela PK `cidchaves` contra uma ├║nica consulta de confer├¬ncia; para no primeiro erro, como o `Return 0` |
+| `ConfirmarTransacao()` | `Commit() < 1` | `SQLCOMMIT` guardado por `Transactions = 2`, em `IF` aninhado (VFP9 n├úo faz curto-circuito) |
+
+Os dois handlers s├úo PUBLIC e ficam ligados por `BINDEVENT` em `ConfigurarEventos`.
+
+## Verificado rodando no VFP9
+
+Smoke test passou, ent├úo deu para provar runtime:
+
+- **compila limpo** (form e BO: `.FXP` sim, `.ERR` n├úo) ÔÇö com **controle negativo**: uma c├│pia do form com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` apontando **s├│** as linhas acrescentadas (1836/1837), provando que o detector funciona;
+- `CREATEOBJECT("FormSIGOPCPE")` devolve objeto, Caption correto;
+- `PEMSTATUS(...,2) = .F.` nos dois handlers (PUBLIC, regra #51/#3);
+- `AEVENTS` confirma o bind real: `cmd_4c_Confirmar ÔåÆ BTNCONFIRMARCLICK`, `cmd_4c_Encerrar ÔåÆ BTNENCERRARCLICK`;
+- Confirmar **sem conex├úo**: recusa, mostra **um** di├ílogo e a tela **continua aberta** (fechar daria a grava├º├úo por feita sem gravar nada);
+- `Click()` de verdade no Encerrar (pelo BINDEVENT) libera o form e fecha o cursor;
+- `ON ERROR` pr├│prio n├úo capturou **nada** no fluxo todo.
+
+O probe inicial trouxe **dois** di├ílogos empilhados no caminho sem conex├úo; corrigi marcando `this_lErroExibido` nos guards, e o segundo probe confirma um s├│.
+
+## Dois pontos para o seu conhecimento
+
+1. **`fGrvSettings('CrSigSyCom')` (passo 3 do `Ok.Click`) ficou AUSENTE, de prop├│sito e documentado no c├│digo.** Era fun├º├úo global do legado (`sig.prg`/`SIGFUNCS.PRG`) que n├úo veio no acervo ÔÇö zero ocorr├¬ncia em `Framework\` e em `utils\`. Pelo nome e argumento, reaplicava os Settings da porta ao objeto serial em mem├│ria. A grava├º├úo em `SigSyCom` acontece integralmente; o que se perde ├® a reaplica├º├úo imediata, vis├¡vel na pr├│xima abertura do sistema. N├úo criei stub: mascararia a aus├¬ncia (regra #27), e chamar o nome sem o arquivo estouraria em runtime (regra #13).
+
+2. **O round-trip de grava├º├úo n├úo foi exercitado contra o banco** ÔÇö n├úo h├í conex├úo dispon├¡vel nesta m├íquina (o probe rodou com `gnConnHandle = 0`), ent├úo o la├ºo INSERT/UPDATE e o `SQLCOMMIT` est├úo provados s├│ por compila├º├úo e leitura, n├úo por execu├º├úo. Isso ├® o que falta para fechar a fase com confian├ºa total.

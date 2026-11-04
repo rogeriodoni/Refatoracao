@@ -472,10 +472,12 @@ DEFINE CLASS FormCNF AS FormBase
 
         loc_oPagina.BackColor = RGB(255, 255, 255)
 
-        *-- Container Salva: Confirmar + Cancelar (Grupo_Salva do legado: top=4 -> 33)
+        *-- Container Salva: Confirmar + Cancelar
+        *-- Erro303: Top = 27 poe os botoes (Top = 5, H = 75) em 32..107, dentro
+        *-- da faixa do cabecalho (29..109) - 3px de folga acima, 2px abaixo.
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 33
+            .Top         = 27
             .Left        = 842
             .Width       = 160
             .Height      = 85
@@ -492,7 +494,10 @@ DEFINE CLASS FormCNF AS FormBase
             .Width           = 75
             .Height          = 75
             .Left            = 5
-            .Top             = 17
+            *-- Legado: Grupo_Salva.Salva.Top = 5 (igual ao Cancelar). O 17 era
+            *-- invencao do migrador e deixava os dois botoes, que ficam LADO A
+            *-- LADO, 12px desalinhados entre si (Erro303).
+            .Top             = 5
             .FontName        = "Tahoma"
             .FontBold        = .T.
             .FontItalic      = .T.

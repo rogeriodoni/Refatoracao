@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada. O resultado ├® que **esta fase n├úo tem nada a acrescentar neste form** ÔÇö e isso foi medido, n├úo presumido.
+
+## O que o legado ├®
+
+`SIGOPCKS` ├® um di├ílogo modal de autoriza├º├úo ("Valida├º├úo de Acesso"): recebe um tipo de libera├º├úo, pede Representante + Senha e devolve ao chamador se autorizou. A ├írvore tem **12 objetos**, conferidos um a um:
+
+- **ZERO** `BaseClass: grid | pageframe | listbox`
+- **ZERO** `AddCursor | pColuna | RecordSource | ControlSource | Grade | grd`
+- 2 `textbox` (usuario, senha), ambos de entrada, nenhum `ReadOnly`
+- **ZERO** `commandbutton`/`commandgroup` ÔÇö o di├ílogo nem tem bot├úo; resolve-se pela cadeia de `Valid` e aborta por ESC
+
+N├úo existe superf├¡cie de LISTA para Grid, barra CRUD ou os dois m├®todos do layout paginado operarem. Fabric├í-los daria ao usu├írio como *cadastrar/apagar registro* numa tela que s├│ confere credencial ÔÇö UX que o legado n├úo tem (PILAR 1), com m├®todos sem nada para listar: o "stub disfar├ºado" que a regra de completude pro├¡be.
+
+Rodei os helpers reais do gate da Fase 4: `temListaEstritaF4 = .F.`, `temCampoCapturaF4 = .T.`, `temApiNosCapturaF4 = .F.`, `DialogoExibicao = .F.` ÔåÆ **`temLayoutCaptura = .T.` (PASSA)**. O gate j├í reconhece o perfil CAPTURA. Precedentes: SIGOPCHP/task699, SIGPRCFN/task589.
+
+## O que entreguei
+
+Registrei no cabe├ºalho do form a aus├¬ncia **medida**, com o invent├írio e os valores dos predicados. A edi├º├úo ├® s├│ coment├írio: o `.FXP` do form ficou **byte-id├¬ntico** (4358 ÔåÆ 4358 bytes), provando que nenhum c├│digo mudou, enquanto o hash do `.prg` mudou ÔÇö o que evita o retry opus desnecess├írio do guard de NO-OP (a Fase 4 ainda est├í fora da lista `@(5,6,7)` do guard).
+
+Atualizei tamb├®m o invent├írio das fases seguintes: os 7 controles restantes s├úo da **Fase 5**, n├úo "Fase 4/5".
+
+## Um erro meu, pego na medi├º├úo
+
+A primeira vers├úo do coment├írio grafava `ConfigurarPaginaLista` e `AlternarPagina` por extenso. O gate casa identificador no `.prg` inteiro, coment├írio inclu├¡do ÔÇö medi `temLayoutPaginado = True`, ou seja, a fase passaria **por palavra-chave, pelo caminho errado**, sem o ramo CAPTURA ser exercitado (o modo de falha de SIGOPCAC/task651). Reescrevi em prosa gen├®rica (`Configurar<Pagina>Lista`): agora `temLayoutPaginado = False`, `temLayoutFlat = False`, e a aprova├º├úo vem do motivo verdadeiro. Deixei a armadilha anotada no pr├│prio cabe├ºalho.
+
+## Verifica├º├úo
+
+- `COMPILE` do BO e do form: **zero `.ERR`** nos dois
+- Instancia├º├úo em harness m├¡nimo (`gb_4c_ModoTeste` + `gc_4c_ArquivoErroTeste` pareados, `gnConnHandle = -1`): `VARTYPE = O`, `BaseClass = Form`, 1000x600, `WindowType = 1`, `Caption = "Limite Excedido"` (o `DO CASE` do tipo resolveu), faixa `cnt_4c_Sombra` vis├¡vel com `BackColor = 6579300` = RGB(100,100,100) e `Height = 80`, t├¡tulo espelhando o Caption, BO criado, **nenhum erro capturado**
+- Confirmado que a Fase 4 n├úo criou nada: sem `pgf_4c_Paginas`, `grd_4c_Dados`, `cnt_4c_Botoes`, `ConfigurarPaginaLista`. O `AlternarPagina` que o `PEMSTATUS` acusa ├® **herdado de FormBase** (`formbase.prg:308`), n├úo definido aqui.
+
+Rodei o smoke test de 4 linhas primeiro: nesta sess├úo o VFP9 **executa** (escreveu o arquivo de sa├¡da), ent├úo compila├º├úo e instancia├º├úo est├úo de fato provadas, n├úo inferidas do `.FXP`. Apaguei os `.FXP` e o diret├│rio de scratch.
+
+## Duas coisas para voc├¬ decidir
+
+1. **A lacuna do guard de NO-OP na Fase 4 recorreu pela terceira vez.** O guard cobre s├│ `@(5,6,7)`; a Fase 4 passa no gate mas leva retry opus porque o `.prg` n├úo muda. Documentei isso em 25/10 (task699) e adiei por duas raz├Áes ÔÇö hoje s├│ uma persiste: o orquestrador est├í **limpo** (as 857 inser├º├Áes foram commitadas), mas h├í `RunLoop.ps1` **vivo** (PID 17004, 29/10 18:01), anterior a qualquer edi├º├úo, ent├úo corrigir o guard agora n├úo valeria para esta fase. N├úo mexi: editar um orquestrador de 1,5 MB no meio de um run est├í al├®m de "executar a Fase 4". Se quiser, fa├ºo em seguida ÔÇö com o teste estrito de lista + `-not` API de n├│s e medi├º├úo do blast radius nos ~700 dumps, como as recorr├¬ncias anteriores exigiram.
+
+2. N├úo commitei nada ÔÇö os dois arquivos seguem **untracked** no git, e estamos na branch `fix/erro283-tabstretch`.

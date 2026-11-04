@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da.
+
+## O que foi feito em `projeto\app\classes\sigopetsBO.prg`
+
+**`CarregarDoCursor(par_cAliasCursor)`** ÔÇö o m├®todo que faltava, implementado como **fonte ├║nica** de leitura das colunas de par├ómetro de impress├úo (`impetis`, `ajverts`, `ajhorzs`, `ajdens`, `ajvelos`, `etqseps`, `ntipos`). Os tr├¬s pontos do legado que leem essa mesma fam├¡lia passaram a delegar para ele:
+
+| origem | colunas | antes | agora |
+|---|---|---|---|
+| `CrSigCdPam` (Init 1169ÔÇæ1171) | impetis, ajverts, ajhorzs | inline em `ObterParametrosPadraoImpressao` | `CarregarDoCursor` |
+| `CrSigCdPac` (Init 1172ÔÇæ1181) | ajdens, ajvelos, etqseps | inline no mesmo m├®todo | `CarregarDoCursor` |
+| `SigCdmp` da impressora escolhida | as cinco | duplicado em `CarregarAjustesImpressora` | `CarregarDoCursor` |
+
+Os pisos (`ajdens` ÔëÑ 10, `ajvelos` ÔëÑ 1) e a regra `impetis = 0` n├úo troca o tipo deixaram de estar duplicados. Cada coluna ├® lida s├│ com `TYPE("<alias>.<col>") = "N"` ÔÇö os tr├¬s conjuntos de colunas s├úo **disjuntos** no `docs\schema.sql` (conferido lendo com `Get-Content -Raw`), e sem esse guard a 2┬¬ chamada apagaria o que a 1┬¬ carregou. As flags que recebem o retorno levam `.T.` expl├¡cito onde "zero linhas" ├® caminho leg├¡timo (`LOCAL` nasce `.F.`).
+
+**`Inserir`/`Atualizar`/`ExecutarExclusao`/`ObterChavePrimaria`/`RegistrarAuditoria` ficam herdados de `BusinessBase`**, com a justificativa documentada no cabe├ºalho e num bloco ao final da classe. O dump prova que esta tela n├úo grava no SQL Server: acesso remoto 100% `Select`, nenhum `TABLEUPDATE(`, nenhum `.AddCursor(`, e os 8 `Insert Into` t├¬m por destino cursores **locais** (`crImpre` linha 1021, `crOrdenado` linha 1398, `dbImpressao` montado pelo form pai). Escrever INSERT/UPDATE aqui seria inventar tabela e lista de colunas ÔÇö proibido pela regra #22.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa**: `sigopetsbo.FXP` gerado, `.ERR` ausente. Com **controle negativo** sobre a vers├úo final (c├│pia + `PUBLIC PROCEDURE`, regra #9.1): o `.ERR` saiu apontando **s├│** as 3 linhas acrescentadas (937ÔÇæ939), o que prova de uma vez que o detector funciona e que as 934 linhas reais compilam limpas. `.fxp` removido depois.
+- `Test-CompletudeCodigo` rodado standalone: **0 problemas** (sem TODO/stub/procedure vazia/frase de pend├¬ncia).
+- Gate da Fase 2 rodado standalone: **True**.
+- Acento literal = 0, `this_*  .Value` = 0, nenhum `RETURN` dentro de `TRY`. CRLF restaurado (934/934).
+
+Isto prova **compila├º├úo**, n├úo instancia├º├úo: o VFP9 nesta sess├úo compila mas **n├úo executa** (smoke test de 4 linhas devolveu `exit=0` e `.FXP`, sem escrever o arquivo de sa├¡da).
+
+## Ponto de aten├º├úo
+
+A exce├º├úo "BO somente-leitura" do gate **n├úo disparou**, por uma lacuna nova: SIGOPETS ├® di├ílogo **filho** e `dbImpressao` ├® criado pelo form **pai** (SIGMVCAB), logo n├úo aparece no dump do filho e a prova (3) o l├¬ como tabela remota. ├ë a 5┬¬ cegueira desse harvest ÔÇö registrei em `feedback_gate_fase2_exige_crud_inexistente.md`, junto com a generaliza├º├úo (todo di├ílogo filho que preenche cursor do pai cai nisso). N├úo alterei o `.ps1`, que ├® compartilhado e fora do escopo da task.

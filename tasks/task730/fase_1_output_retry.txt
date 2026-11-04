@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SigOpEncBO.prg` criado (257 linhas, 14 KB, CRLF, zero bytes n├úo-ASCII).
+
+## O que foi entregue
+
+**122 propriedades** extra├¡das do legado `SIGOPENC.SCX` + `docs/schema.sql`, em 7 blocos:
+
+| Bloco | Origem no legado |
+|---|---|
+| Filtro (4) | `Get_Grupo`/`Get_DGrupo`/`Get_Conta`/`get_Dconta` ÔåÆ SigCdGcr + SigCdCli |
+| Contra-partida (4) | `Get_GrupoC`/`Get_DgrupoC`/`Get_contaC`/`Get_DcontaC` |
+| Par├ómetros (2) | `SigCdPac.dopzers` (Get_Dope, read-only) e `sigkeys` (sufixo da PK) |
+| Sess├úo (2) | PUBLIC `_Empr` e `Usuar` do legado |
+| Cursores (4) | `crSigMvSlc` / `crSigMvCcr` / `crSigMvCab` / `crSigCdPac` |
+| Estado (5) + linha corrente SigMvSlc (5) | contadores do `SCAN` do `cmdProcessa.Click` |
+| **SigMvCcr ÔÇö todas as 86 colunas** | regra #22: o INSERT tem de cobrir toda coluna NOT NULL; no legado isso vinha de gra├ºa pelo `AddCursor` + `TableUpdate` |
+| SigMvCab (10, prefixo `Cab`) | o `Insert Into CrSigMvCab` ÔÇö prefixo porque `emps`/`dopes`/`numes`/`datas`/`cidchaves` existem nas **duas** tabelas |
+
+**`Init()`**: `DODEFAULT("SigMvCcr")` com a tabela no argumento (sem ela `this_oDataAccess` fica `.NULL.` e todo m├®todo herdado falha), `this_cTabela`/`this_cCampoChave`, resolu├º├úo de empresa/usu├írio, `RETURN` fora do TRY/CATCH. Mais `ObterChavePrimaria()` para a auditoria.
+
+## Decis├úo que divergi do `analise.json`
+
+Ele aponta **SigMvCab** como tabela principal ÔÇö isso vem de ele ter pegado o segundo `AddCursor` do `Init` legado. O alvo real do processamento ├® **SigMvCcr**: o `cmdProcessa.Click` gera um lan├ºamento de encerramento + a contra-partida por conta marcada, e s├│ toca em SigMvCab quando o cabe├ºalho `Emps+Dopes` ainda n├úo existe. Usei `this_cTabela = "SigMvCcr"` / `this_cCampoChave = "cidchaves"`, espelhando o `sigopaccBO` (mesma fam├¡lia), e deixei a justificativa no cabe├ºalho do arquivo.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: `COMPILE` limpo, `.fxp` gerado, sem `.err` (tempor├írios j├í removidos)
+- **Gate de completude** (`Test-CompletudeCodigo`, extra├¡do do orquestrador sem dot-source ÔÇö ele dispararia migra├º├úo): `[OK] nenhum TODO/stub/procedure vazia`
+- **`ValidadorSQLSchema.ps1`**: `PASSOU` ÔÇö 683 tabelas lidas do schema (acima do piso de 100, prova que o UTF-16 foi lido certo), 0 statements SQL nesta fase
+- Zero acentos literais, zero `PUBLIC` em `DEFINE CLASS`, ambos os `RETURN` fora de TRY/CATCH, `TratarNulo` com o 2┬║ argumento como valor padr├úo (n├úo tipo)
+
+**Por que a tentativa anterior falhou**: o log mostra exit code 0 em 46 s com o modelo respondendo *"What would you like me to help with?"* ÔÇö o prompt foi carregado como contexto e a tarefa nunca chegou. Nada foi escrito, da├¡ o no-op.
+
+Fases 2ÔÇô8 (CarregarDoCursor/Inserir/Atualizar, Form, grade, campos, lookups, bot├Áes) seguem pendentes conforme o pipeline.

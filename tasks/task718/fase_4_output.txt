@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No collisions. The Fase 4 work is complete.
+
+## Summary
+
+`Formsigopden` (SIGOPDEN ÔÇö "Dados de Entrega") is a flat OPERACIONAL **exhibition dialog**, not a CRUD form: the dump has no grid/PageFrame/list, and all 13 fields (`get01`ÔÇô`get13`) are read-only or focus-blocked (`When` ÔåÆ `Return .f.`). So "Grid e Bot├Áes CRUD" doesn't literally apply ÔÇö this matches the project's documented EXIBICAO exception (same family as `FormSigMvMen`/SIGPDMEN).
+
+What I added to `Formsigopden.prg`, mirroring that precedent:
+- `ConfigurarShapeOk()` ÔÇö decorative shape behind the close button (exact dump coords).
+- `ConfigurarBotaoOk()` ÔÇö the one real interactive control, `cmd_4c_Ok` ("Encerrar", `Cancel=.T.` so Esc closes it), properties copied exactly from the dump, icon `cadastro_sair_60.jpg` (verified it exists in `vbmp/`).
+- `BtnOkClick()` (PUBLIC, bound via `BINDEVENT`) ÔÇö mirrors the legacy `ok.Click` = `ThisForm.Release`.
+- `Activate()` ÔÇö reproduces the legacy `.OK.SetFocus` from `Init` (deferred here since the button only exists after `AddObject`).
+- Fixed `InicializarForm` so the visual structure (cabe├ºalho + shape + button) is built in **both** branches, including under `gb_4c_ValidandoUI`, not just when a DB connection succeeds ÔÇö otherwise `ValidarUIFidelity` would never see these controls.
+- Documented in the header why Fase 4's literal Grid/CRUD mandate doesn't apply, to keep Fases 5ÔÇô8 from re-litigating it.
+
+No grid, no CRUD buttons were invented ÔÇö doing so would've violated PILAR 1 by showing UI the legacy never had.

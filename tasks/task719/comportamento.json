@@ -1,0 +1,369 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 8,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["for !INLIST", "fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDES",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "LOCAL lnReg, lnSaldo, lnTDesc\n\nSELECT localdes\n\n*!*\tIF INLIST(localDes.tpdesc,7,10)\t&& updimond ou up alianca\n*!*\t\treplace valdes with IIF(localdes.selecao = 0, 000000000.00,ROUND(crProdS.pvens,2))\n*!*\telse\n*!*\tENDIF\n\nreplace descos with IIF(localdes.selecao = 0, 00.0000, localdes.descos)\nreplace valdes with IIF(localdes.selecao = 0, 000000000.00, ROUND(thisform.lnvalor.value*localdes.descos/100,2))\nlnReg=IIF(EOF('localdes'),0,RECNO())\n\nGO top\nSUM localdes.valdes to lnTDesc\n\n*** soma descontos d... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for !INLIST",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES",
+      "evento": "Init",
+      "linhas": 333,
+      "codigoOriginal": "lParameters pCnx, pForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\npublic pcChv, pcEDN, pcItem\nLOCAL lcCpros, lcEmp,lcValtot, lcGru, lcListaP, llDescJ\n\npcChv = []\npcEDN = []\nlcValtot = [0]\n\nlcCpros=crTpmMvItn.cpros\npcItem = crTpmMvItn.citens\nlcEmp = TprMvCab.emps\n\nThis.poDataMgr = pCnx\nThis.parentform = pForm\n\nSELECT * from xPar where parcs>1 into cursor crPar\t&& mena - 13/12/2017 - seleciona recebimentos com parcelas\n\n*** me... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTdz,OpTdt",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "RELEASE pcChv, pcEDN, pcItem \nThis.Grade.RecordSource          = []\nThis.Grade.Column1.ControlSource = []\nThis.Grade.Column2.ControlSource = []\nThis.Grade.Column3.ControlSource = []\nThis.Grade.Column4.ControlSource = []\nUse In localDes\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.cntBotoes",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "ThisForm.Grade.Refresh\nSelect localDes\nGo Top In localDes\nThisForm.Grade.Refresh\n\nSELECT crsigmvitd\nDELETE all for cpros = crTpmMvItn.cpros and citens = crTpmMvItn.citens\n\nSelect localDes\nDELETE ALL for descos = 0\nGO top\nSCAN\n\tIf (localDes.Selecao = 1)\n\t\tlcIdChave = fUniqueIds()\n\t\tINSERT into crSigmvItd (citens, emps, dopes, numes, cpros, cidchaves, empdopnums, dtalts, cdesc, ddesc, pdes, vdes, valbase, tpdesc, codigo, usuars) values;\n\t\t(crTpmMvItn.citens, TprMvCab.emps, TprMvCab.dopes, TprMvCab... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column1.Header1",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If (This.parent.Header1.Tag = [X])\n\tThis.parent.Header1.Tag = [ ]\n\tUpdate localDes Set Selecao = 0\nElse\n\tThis.parent.Header1.Tag = [X]\n\tUpdate localDes Set Selecao = 1\nEndIf\n\n*-- Rafael - 16/02/2016 - Correção do erro 1925 - objeto Seleciona nao Existe\n*!*\tIf (ThisForm.Grade.Seleciona.Header1.Tag = [X])\n*!*\t\tThisForm.Grade.Seleciona.Header1.Tag = [ ]\n*!*\t\tUpdate localDes Set Selecao = 0\n*!*\tElse\n*!*\t\tThisForm.Grade.Seleciona.Header1.Tag = [X]\n*!*\t\tUpdate localDes Set Selecao = 1\n*!*\tEndIf\nThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column1.fwcheckbox1",
+      "evento": "Click",
+      "linhas": 66,
+      "codigoOriginal": "=DoDefault()\n\nLOCAL lcRet\nlcRet=[]\n\nIF this.Value = 0\n\tthisform.calctots() \n\treturn\nENDIF\n\t\n*!*\tlcRet=thisform.chkDesc()\n*!*\tIF !EMPTY(lcRet)\n*!*\t\t=MessageBox(lcRet, 0+48, [Desconto não permitido])\n*!*\t\tthis.Value = 0\n*!*\t\tthisform.grade.Refresh     \n*!*\t\tthisform.calctots() \n*!*\t\tRETURN .t.\n*!*\tENDIF\n\nif INLIST(localdes.tpdesc,3,4,5,11,12,13)\t&& desconto de gerente\n\tDo Form SigOpSen With 'CANCITEM','Libera Desconto','' To _Retorno\n\tllOk = ( Left( _Retorno, 1 ) = \"*\" )\n\tIf !llOk\n\t\tMessageBox('Au... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "calctots",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 14,
+      "codigoOriginal": "IF INLIST(localdes.tpdesc,1,2,3,4,5,8)\n\tTHISFORM.GRADE.column3.SetFocus   \n\tthisform.grade.refresh  \n\tRETURN\nENDIF\n\nIF INLIST(localdes.tpdesc,6,7)\n\tTHISFORM.GRADE.column4.SetFocus   \n\tthisform.grade.refresh  \n\tRETURN\nENDIF\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "SELECT crDesc\nLOCATE for codigos = localdes.codigos\nSELECT localDes\n&&IF this.Value > crDesc.descos\nIF this.Value > crDesc.descosmax\n\t=MessageBox([Desconto maior que o permitido], 0+48, [Aviso])\n\tthis.Value = crDesc.descos\n\tthis.Refresh \n\tRETURN .f.\nENDIF\n\n*** Mena 13/12/2017 - Checa se tem pagamento parcelado e nao permite desconto financeiro ***\nIF crDesc.tpdesc = 2 and RECCOUNT('crPar') <> 0 and this.Value > 0\n\t=MessageBox([Desconto não permitido para pagamento parcelado.], 0+48, [Aviso])\n\tth... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "calctots,Value < 0) or",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "&&RETURN INLIST(localdes.tpdesc,1,2,3,4,5,8,9) and localdes.selecao=1 \nRETURN localdes.selecao=1 ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 42,
+      "codigoOriginal": "Local lnPdes\nSelect crDesc\nLocate For codigos = localdes.codigos\nSelect localdes\n&&IF this.Value > crDesc.descos\nlnPdes = Iif(This.Value = 0 Or (Thisform.lnvalor.Value*100) = 0,0,Round(This.Value/Thisform.lnvalor.Value*100,4))\nIf lnPdes > crDesc.descosmax\n\t=Messagebox([Desconto maior que o permitido], 0+48, [Aviso])\n\tThis.Value = crDesc.valdes\n\tThis.Refresh\n\tReturn .F.\nEndif\n\n*** Mena 13/12/2017 - Checa se tem pagamento parcelado e nao permite desconto financeiro ***\nIF crDesc.tpdesc = 2 and REC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value*100) = 0,0,Round,calctots,Value < 0) or",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN localdes.selecao=1 \n&&RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES.lnSaldo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.lnTDesc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.lnValor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.GrdCota.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 14,
+      "codigoOriginal": "IF INLIST(localdes.tpdesc,1,2,3,4,5,8)\n\tTHISFORM.GRADE.column3.SetFocus   \n\tthisform.grade.refresh  \n\tRETURN\nENDIF\n\nIF INLIST(localdes.tpdesc,6,7)\n\tTHISFORM.GRADE.column4.SetFocus   \n\tthisform.grade.refresh  \n\tRETURN\nENDIF\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDES.GrdCota.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDES.GrdCota.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDES.Init",
+      "queryOriginal": "SELECT * from xPar where parcs>1 into cursor crPar\t&& mena - 13/12/2017 - seleciona recebimentos com parcelas",
+      "tabelas": "xPar",
+      "colunas": "parcs>1,crPar\t&&,mena,seleciona,recebimentos,com,parcelas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDES.cntBotoes.Click",
+      "queryOriginal": "\t\tINSERT into crSigmvItd (citens, emps, dopes, numes, cpros, cidchaves, empdopnums, dtalts, cdesc, ddesc, pdes, vdes, valbase, tpdesc, codigo, usuars) values; \t\t(crTpmMvItn.citens, TprMvCab.emps, TprMvCab.dopes, TprMvCab... [TRUNCADO]",
+      "tabelas": "crSigmvItd",
+      "colunas": "citens,emps,dopes,numes,cpros,cidchaves,empdopnums,dtalts,cdesc,ddesc,pdes,vdes,valbase,tpdesc,codigo,usuars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDES.Grade.Column1.Header1.Click",
+      "queryOriginal": "\tUpdate localDes Set Selecao = 0",
+      "tabelas": "localDes",
+      "colunas": "Selecao",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDES.Grade.Column1.Header1.Click",
+      "queryOriginal": "\tUpdate localDes Set Selecao = 1",
+      "tabelas": "localDes",
+      "colunas": "Selecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xPar", "crSigmvItd", "localDes"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

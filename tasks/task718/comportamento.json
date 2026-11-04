@@ -1,0 +1,342 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 17,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["ForCompls c", "ForContato c", "ForeMails c", "fAltBar2de5", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "ThisForm.lblTitFornec.Caption  = [Dados ] + crCabecalho.TitFornec\n\nThisForm.get01.Value = Alltrim(crCabecalho.ForRClis) + ' - (' + Alltrim(crCabecalho.ForIClis) + ')'\nThisForm.get02.Value = Iif(crCabecalho.ForTpClis=1, 'C.P.F', 'C.N.P.J') + '.: ' + crCabecalho.ForCgcs + '  ' + Iif(crCabecalho.ForTpClis=1, 'R.G.', 'I.E.') + ' : ' + crCabecalho.ForIes + Iif(crCabecalho.ForTpClis=1, '', '  Inscr.Municipal: ' + crCabecalho.ForIMuns)\nThisForm.get03.Value = 'Endereço : ' + Allt(crCabecalho.ForEndes) +... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Alltrim,Value = Iif,Value = 'Endereço : ' + Allt,Value = 'Cidade: ' + Alltrim,Value = 'Telefone: ' + Iif,Value = 'Contato : ' + Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Procedure",
+      "linhas": 372,
+      "codigoOriginal": "Local lnMax, loCnx, lcFig, lcArq, lcFor, lcRef, lcEnt, lcVen, llBar, lcBar\n\nloCnx = ThisForm.poDataMgr\n\nCreate Cursor crCabecalho (Dopes c(20), Numes n(6), Datas d(8), RazSocs c(50), Cgcs c(20), RespFretes c(16), ;\n\t\t\t\t\t\t   Obses m(4), Ies c(15), GrVends c(10), Vends c(10), DVends c(50), DddVends c(4), ;\n\t\t\t\t\t\t   Tel1sVends c(20), Tel2sVends c(20), eMailVends c(50), GrResps c(10), Resps c(10), ;\n\t\t\t\t\t\t   DResps c(40), ForIClis c(10), ForRClis c(50), ForEndes c(60), ForNums c(10), ;\n\t\t\t\t\t\t   ForC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "ForCompls c,ForContato c,ForeMails c,fAltBar2de5",
+        "metodosFormChamados": "SelecionaDados,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Procedure",
+      "linhas": 178,
+      "codigoOriginal": "Local lcEdn, loCnx\n\nlcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)\nloCnx = ThisForm.poDataMgr\n\n* Campos Usados Do SigCdOpe\n* Opers\t\t= Tipo da Operação = 1-Entrada; 2-Saida\n* NDopes    = Número da Operação\nloCnx.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', Padr(ThisForm.pcDopes, 20), 'Opers, NDopes, Docus')\nGo Top In LocalOpe\nIf Eof('LocalOpe')\n\tReturn .f.\nEndIf\n\n* Campos Usados Do SigOpCdc\n* DocTit\t = Título a Ser Impresso no Documento\n* DocOrig\t = Descr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEmps, 3) + Padr",
+        "controlesReferenciados": "ChkPrzEnts",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Init",
+      "linhas": 35,
+      "codigoOriginal": "LParameters pEmp, pDop, pNum\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Icon = [\\vbmp\\4Control1.ico]\n\t\t.LockScreen = .t.\n\n\t\t.Caption = Alltrim(pEmp) + [ - ] + Alltrim(pDop) + [ - ] + Alltrim(Str(pNum, 6)) + ' - Dados de Entrega'\n\n\t\t.pcEmps\t \t = pEmp\n\t\t.pcDopes \t = pDop\n\t\t.pcNumes \t = pNum\n\t\t.TpImpressao = 0\n\t\t.Contaemail  = []\n\t\t.ImgLogotipo = []\n\t\t.ImgTecnicas = []\n\t\t.ImgBranco   = []\n\t\t\n\t\t.Processamento\n\n\t\t.MostraCampos\n\t\t\n\t\t.OK.SetFocus ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDEN",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.ok",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get01",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get02",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get03",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get04",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get05",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get06",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get07",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get08",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get09",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get11",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get12",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDEN.get13",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

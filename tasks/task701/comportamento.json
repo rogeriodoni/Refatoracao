@@ -1,0 +1,273 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 6,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCIM",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "With ThisForm.Grade\n\t.RecordSource = 'CrInvH'\n\t.Column1.ControlSource = 'CrInvH.CBars'\n\t.Column2.ControlSource = 'CrInvH.Localis'\n\t.Column3.ControlSource = 'CrInvH.Ocors'\n\t.Column4.ControlSource = 'CrInvH.Obs'  \n\t.Column5.ControlSource = 'CrInvH.PesReals'\n\t.Refresh\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM",
+      "evento": "Init",
+      "linhas": 28,
+      "codigoOriginal": "Parameters lExcluir,OldForm\n\nThisForm.ParentForm = OldForm\n\nThisForm.Excluir            = lExcluir\nThisForm.ExcluiItem.Visible = ThisForm.Excluir\nThisForm.Shape2.Visible     = ThisForm.Excluir\nThisForm.Shape3.Visible     = !ThisForm.Excluir\nThisForm.Caption            = Iif(lExcluir,'Exclusão de Barras','Consulta Imagem')\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Grade.RecordSource = ''\nSelect * From Historico Where... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption            = Iif,AcertaGrade",
+        "controlesReferenciados": "Get_Barra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Descricao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Barra",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "Select CrInvH\nGo Bottom\nThisForm.Grade.Refresh\nIf ThisForm.ParentForm.TipoLeitora = 'S'\n\tIf Empty(ThisForm.ParentForm.LeituraSerial)\n\t\tIf !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError\n\t\t\tThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\tEndIf\n\tEndIf\nElse\n\tSet Confirm On\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Barra",
+      "evento": "Valid",
+      "linhas": 103,
+      "codigoOriginal": "If ThisForm.ParentForm.TipoLeitora = 'S'\n\tIf Empty(ThisForm.ParentForm.LeituraSerial)\n\t\tIf !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError\n\t\t\tThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\tEndIf\n\tElse\n\t\tThis.Value = ThisForm.ParentForm.LeituraSerial\n\t\tThis.Refresh\n\t\tThisForm.ParentForm.LeituraSerial = ''\n\tEndIf\nEndIf\n\nIf !Empty(This.Value)\n\tlcConsulta = Sys(2023) + '\\TempCon.jpg'\n\n\tThisForm.ExcluiItem.Visible = ThisForm.Excluir\n\tThisForm.Shape... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "SqlExecute,CursorQuery,AcertaGrade",
+        "controlesReferenciados": "Get_Produto,Get_Descricao,Get_Peso,Get_Linha,Get_Barra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Barra",
+      "evento": "LostFocus",
+      "linhas": 14,
+      "codigoOriginal": "If ThisForm.ParentForm.TipoLeitora = 'S'\n\tIf Empty(ThisForm.ParentForm.LeituraSerial)\n\t\tIf !ThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ParentForm.ReadComm.PortaError\n\t\t\tThisForm.ParentForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\tEndIf\n\tElse\n\t\tThis.Value = ThisForm.ParentForm.LeituraSerial\n\t\tThis.Refresh\n\t\tThisForm.ParentForm.LeituraSerial = ''\n\tEndIf\nEndif\nIf !Empty(This.Value)\n\tThisForm.Grade.Column1.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Barra.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Barra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Produto",
+      "evento": "Valid",
+      "linhas": 90,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CPros','','Código')\n\t\tm.loLista.mAddColuna('DPros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrProds')\n\t\tThis.Value                   = Evaluate('CrProds.CPros')\n\t\tThisForm.Get_Descricao.Value = Evaluate('CrProds.DPros') \n\tElse\n\t\tThis.Value                ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt,File",
+        "metodosFormChamados": "Value = Evaluate,SqlExecute,Value     = Nvl,AcertaGrade",
+        "controlesReferenciados": "Get_Descricao,Get_Produto,Get_Peso,Get_Linha",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Produto",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Peso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Get_Linha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Grade",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nColIndex\nIf !ThisForm.Excluir\n\tThisForm.Get_Barra.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Barra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Excluiitem",
+      "evento": "Click",
+      "linhas": 51,
+      "codigoOriginal": "Select CrInvH\nDO Case\n\tCase Empty(ThisForm.Get_Barra.Value) And !Empty(ThisForm.Get_Produto.Value)\n\t\tSelect Historico\n\t\tIf !Seek(ThisForm.Get_Produto.Value,'Historico','CPros')\n\t\t\tSelect CrInvH\n\t\t\tScatter MemVar Memo\n\t\t\tInsert Into Historico From MemVar\n\t\tEndIf\n\t\tSelect Historico\n\t\tGo Top\n\t\tDelete From Historico Where CPros = ThisForm.Get_Produto.Value\n\t\tSelect Historico\n\t\tGo Top\n\t\tSelect CrInvH\n\t\tDelete From CrInvH\n\tCase !Empty(ThisForm.Get_Barra.Value)\n\t\tIf !Seek(CrInvH.CBars,'Historico','CBar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And !Empty",
+        "controlesReferenciados": "Get_Barra,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCIM.Saída",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select Historico\nSet Order To\nGo Bottom\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCIM.Init",
+      "queryOriginal": "Select * From Historico Where... [TRUNCADO]",
+      "tabelas": "Historico",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCIM.Excluiitem.Click",
+      "queryOriginal": "\t\t\tInsert Into Historico From MemVar",
+      "tabelas": "Historico",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCIM.Excluiitem.Click",
+      "queryOriginal": "\t\tDelete From Historico Where CPros = ThisForm.Get_Produto.Value",
+      "tabelas": "Historico",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCIM.Excluiitem.Click",
+      "queryOriginal": "\t\tDelete From CrInvH",
+      "tabelas": "CrInvH",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Historico", "CrInvH"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

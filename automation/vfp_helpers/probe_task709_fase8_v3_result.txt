@@ -1,0 +1,35 @@
+PROBE FASE 8 - FormSIGOPCPE - 30/10/2026 10:56:14
+SETUP OK
+1 CREATEOBJECT OK  Caption=[Porta de Comunicação]  DataSessionId=2
+2 CarregarLista                existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 BOParaForm                   existe=.T. protected=.T.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 FormParaBO                   existe=.T. protected=.T.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 BtnCancelarClick             existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 BtnEncerrarClick             existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 BtnConfirmarClick            existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 ValidarTipo                  existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+2 AplicarVisibilidadePorTipo   existe=.T. protected=.F.   (esperado .T. SO em BOParaForm/FormParaBO - hooks PROTECTED no FormBase)
+3 cursor USED=.T. RECCOUNT=6 TAG=[PESQTIPO] ORDER=[PESQTIPO]
+3 linha corrente na abertura: tipos=[Balança] settings=[9600,n,8,1]
+3 Cmb_Tipo ListCount=6 ListIndex=0  (legado abre em BRANCO: ListIndex esperado = 0)
+3 blocos condicionais escondidos na abertura: Label12=.F. Opt_leitor=.F.
+4 combo apos ListIndex=3 -> Value=[Leitora Cheques]
+4 apos ValidarTipo: linha=[Leitora Cheques] BO.this_cTipos=[Leitora Cheques] this_cTipoSelecionado=[Leitora Cheques]
+4 visibilidade apos ValidarTipo: Label12=.T. Get_TpLeChq=.T. Label13=.T. Opt_leitor=.T.  (as 4 esperadas .T.)
+5 ANTES: BO.this_cSettings=[9600,n,8,1]
+5 BO.this_cSettings SEM FormParaBO (stale esperado)=[9600,n,8,1]
+5 FormParaBO retorno=.T.
+5 CURSOR: settings=[4800,e,7,2] portas=5 dtrs=.T. bompara=1 tpbarras=3 tplechqs=[S] inbufs=1024
+5 BO    : this_cSettings=[4800,e,7,2] this_nPortas=5 this_lDtrs=.T. this_nBompara=1 this_nTpbarras=3 this_cTplechqs=[S] this_nInbufs=1024
+5 tipos NAO foi tocado pelo FormParaBO: linha=[Leitora Cheques]
+6 BOParaForm retorno=.T.
+6 CONTROLES: Spinner=7 txt_Set=[19200,n,8,1] Opt_leitor=1 Cmb_Tipo.ListIndex=3
+6 CURSOR   : portas=7 settings=[19200,n,8,1] tpbarras=1
+7 tpbarras = 0 preservado: Opt_leitor.Value=0 cursor.tpbarras=0  (esperado 0 nos dois - nao promover para 1)
+8 CarregarLista retorno=.T.
+8 apos recarga: RECCOUNT=6 linha=[Leitora Cheques] ORDER=[PESQTIPO] Cmb_Tipo.ListIndex=3  (esperado: 6 linhas, linha=Leitora Cheques, ListIndex=3)
+9 EOF=.T. FormParaBO retorno=.F.  (esperado .F.)
+10 apos BtnCancelarClick: VARTYPE(loForm)=X objeto vivo=.F.  (esperado: referencia morta)
+10 cursor_4c_Dados na sessao default USED=.F.
+FIM - erros capturados em modo teste:
+

@@ -442,7 +442,7 @@ DEFINE CLASS FormOrg AS FormBase
         *-- Container BotoesAcao (Grupo_Salva: Left=816, Top=11+29=40, Width=160, Height=85)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 40
+            .Top         = 27
             .Left        = 816
             .Width       = 160
             .Height      = 85

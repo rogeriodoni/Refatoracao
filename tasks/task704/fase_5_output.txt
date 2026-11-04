@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da ÔÇö `FormSigOpClp.prg` atualizado.
+
+## O que a medi├º├úo mostrou
+
+A Fase 5 pede "cnt_4c_Cabecalho + os primeiros 50% dos campos da Page2". **Nenhuma das duas metades tem o que acrescentar neste form**, e isso foi medido no dump, n├úo presumido:
+
+Os 23 objetos de `SigOpClp_form_codigo_fonte.txt`: 1 dataenvironment, 1 form, 1 container, 2 label, 1 shape, 1 grid, 7 header, 7 textbox, 1 commandgroup.
+
+- Os **7 textbox** s├úo os `Text1` nativos das 7 `Column` de `fwgrade` ÔÇö o `Parent` de cada um termina em `.emps`/`.mascnum`/`.dopes`/`.datas`/`.valos`/`.tipo`/`.moeda`, que s├úo os `Column<N>.Name`. S├úo c├®lulas de grade (regra #18), entregues na Fase 4.
+- Os **2 label** t├¬m ambos `Parent: SIGOPCLP.cntSombra` ÔÇö s├úo `lblSombra`/`lblTitulo`, entregues na Fase 3 junto com o container.
+
+Campos de tela fora de grade = **zero**, e `cnt_4c_Cabecalho` j├í existe. Criar `ConfigurarPaginaDados` aqui s├│ poderia ser TextBox inventado (viola o PILAR 1) ou m├®todo vazio (proibido pela regra de completude) ÔÇö mesmo perfil VISUALIZADOR dos precedentes SIGPRGST/task620 e SIGOPCHP/task699.
+
+## Entregue
+
+Registrei a aus├¬ncia medida no cabe├ºalho do form (65 linhas de coment├írio, **zero linha de c├│digo alterada** ÔÇö provado estruturalmente: delta de linhas = tamanho do bloco, todas come├ºando com `*`, lista de m├®todos id├¬ntica deslocada exatamente pelo mesmo n├║mero; `git diff` aqui ├® v├ícuo porque o arquivo est├í *untracked*).
+
+Reconferi de passagem, e est├í tudo correto: os 23 objetos reproduzidos; os dois `.Picture` apontando para arquivo que **existe** em `vbmp\` (`new_background.jpg`, `cadastro_sair_60.jpg` ÔÇö `.Picture` inexistente falha em sil├¬ncio, regra #25); e todo membro de `SigOpClpBO` chamado de fora existe e ├® PUBLIC (`CursorPronto`, `PosicionarNoTopo`, `OrdenarPorNumero`, `OrdenarPorData`, `AplicarOrdem`, `this_cCursorOperacoes` ÔÇö regras #13 e #51).
+
+## Um defeito que eu mesmo introduzi e corrigi
+
+A primeira vers├úo do coment├írio explicava as condi├º├Áes do gate e **citava o regex literalmente** (`AddObject("pgf_4c_`). Como o gate testa `-notmatch` sobre o `.prg` inteiro, coment├írio incluso, isso faria a Fase 5 reprovar por "layout paginado" num form que n├úo cria PageFrame nenhum. Reescrevi em prosa; `pgf_4c_` agora d├í **0** ocorr├¬ncias. ├ë o inverso exato da li├º├úo j├í conhecida ("coment├írio citando nome satisfaz o gate") ÔÇö anexei o caso ├áquela mem├│ria.
+
+## Verifica├º├úo
+
+- Gate FLAT da Fase 5: `FormType = OPERACIONAL` Ô£ô, sem AddObject de PageFrame (0) Ô£ô, `.ControlSource =` presente (15 sites) Ô£ô
+- Compila├º├úo VFP9 com o `.fxp` apagado antes: regerado com 10672 bytes, **nenhum `.err`**
+- CRLF e ASCII puro preservados (0 bytes n├úo-ASCII)

@@ -469,7 +469,7 @@ DEFINE CLASS FormFct AS FormBase
 
             loc_oPag.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPag.cnt_4c_BotoesAcao
-                .Top       = 38
+                .Top       = 27
                 .Left      = 820
                 .Width     = 160
                 .Height    = 85

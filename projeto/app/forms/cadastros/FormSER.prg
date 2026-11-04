@@ -447,7 +447,7 @@ DEFINE CLASS FormSER AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 40
+            .Top         = 27
             .Left        = 817
             .Width       = 160
             .Height      = 85

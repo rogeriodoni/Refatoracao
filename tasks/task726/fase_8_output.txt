@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. `C:\4c\projeto\app\forms\operacionais\FormSIGOPDVM.prg` is final.
+
+## What Phase 8 delivered
+
+The real gap left by Phase 7: the tela opened but **the grid never received data** ÔÇö `ConfigurarPaginaDados()` called `VincularColunasGrade()`, which is `USED()`-guarded (regra #41), and at `Init` time the comparison cursor didn't exist yet, so nothing ever called `GerarComparacao()`. The user saw an empty grid, with no error.
+
+| Added | What it does |
+|---|---|
+| `CarregarLista()` (PUBLIC) | The single data funnel, in the legacy's own order: `GerarComparacao()` ÔåÆ then `VincularColunasGrade()` (regra #41). PUBLIC because the harness calls it from outside the class (regras #3/#51) |
+| `InicializarForm()` | Now calls `CarregarLista()` after all `AddObject` ÔÇö the legacy does this inside its own `Init`. Data failure does **not** abort the form |
+| `AplicarColunasDoDump()` (PROTECTED) | 7 widths + 7 captions, extracted out of `VincularColunasGrade` as single source ÔÇö two paths now touch `RecordSource`, and it resets `Width`ÔåÆ90 / `Caption`ÔåÆ"Header1" (Problema 48) |
+| `Destroy()` | Closes the comparison cursor **only if this dialog created it** (`this_lCursorProprio`). In the legacy `crImpressao` belongs to the **parent** form (`Select crImpressao / Zap`, never created); with `DataSession = 1` an unconditional `USE IN` would close the parent's cursor and break the screen that opened us. No `TABLEREVERT` ÔÇö it requires buffering and errs at `Buffering = 1` (regra #52) |
+
+## Verification (measured, not read)
+
+Compile: both `.fxp` generated, **zero `.ERR`**. Runtime probe (`automation\Probe726F8.prg`) ÔåÆ `PROBE_OK`, with synthetic parent cursors:
+
+- **Grid actually got data** ÔÇö 2 rows with the exact expected values: caixa `001` ÔåÆ 95/90/80 (DifMr 15, DifIT 5) and caixa `003` ÔåÆ 30/25/0. This confirms the transcribed legacy asymmetry (pass 1 *subtracts* the financial total, pass 2 does *not*).
+- `RecordSource` bound, 7 `ControlSource` incl. the two expression columns, `Column7.Width=33` / others 90, captions intact, `ColumnOrder` 1..7 with Caixa first.
+- Scope: `CarregarLista`/`VincularColunasGrade`/`BtnEncerrarClick` public; `AplicarColunasDoDump` protected.
+- Ownership both ways: we created it ÔåÆ `Destroy` closed it; parent pre-created it ÔåÆ flag `.F.` and `Destroy` **left it open**.
+- Failure path: form still opens, grid unbound, widths/captions reapplied, no spurious dialog in test mode.
+
+## Two things worth flagging
+
+1. **Not created, and measured in the dump ÔÇö not assumed:** `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `BtnBuscarClick`, `HabilitarCampos`/`AjustarBotoesPorModo`/`LimparCampos`, and any `BtnSalvar/Confirmar/Gravar*Click`. The SCX has zero `Incluir/Alterar/Visualizar/Excluir/Inserir/pcEscolha/frmcadastro/Grupo_Op`, exactly **1** `commandbutton` (zero `commandgroup`) whose Click is one line (`Release Windows`), and `ReadOnly = .T.` on `Grid1` plus all seven Columns ÔÇö the 7 "textbox" entries are the Columns' native `Text1` (regra #18). Creating them would violate PILAR 1; creating them empty would violate the completeness rule. Phase 8's gate reaches the VISUALIZADOR branch, which dispenses exactly those three names and keeps `CarregarLista` ÔÇö the one that does have a referent here. Reasoning recorded in the file header so a later sweep doesn't conclude handlers are missing.
+
+2. **Landmine fixed, unrelated to my change:** the completeness validator's regex `^\s*\*--?\s*(TODO|ÔÇª)\b` also matches the Portuguese word **"todo"** when it opens a comment line. Two pre-existing lines tripped it ÔÇö `FormSIGOPDVM.prg:191` (Phase 7 text) and `SIGOPDVMBO.prg:252` (Phase 2 text). Both rephrased to "cada"; both files now measure 0 TODO / 0 pend├¬ncia. Worth propagating ÔÇö any comment line starting with "todo"/"toda" will fail `05d_validarCompletude` as a false positive.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö `AlwaysOnTop` is already used widely as a valid Form property in this codebase. The Phase 3 structure is consistent with project conventions.
+
+Phase 3/8 complete. **FormSigOpCrp.prg** created at `projeto\app\forms\operacionais\FormSigOpCrp.prg`:
+
+- `DEFINE CLASS FormSigOpCrp AS FormBase` with layout props transcribed from the SCX dump (520x200, modal, no title bar, `AlwaysOnTop=.T.`)
+- `this_oFormPai` / `this_nDataSessionPai` ÔÇö mirror the legado's `pFormPai`/`Arquivos` Init params
+- `Init(par_nDataSessionPai, par_oFormPai)` stores both before `DODEFAULT()` so `InicializarForm()` can use them
+- `InicializarForm()` instantiates `SigOpCrpBO`, positions the dialog beside the parent form, builds the header, all inside TRY/CATCH with `RETURN` outside it
+- `PosicionarJuntoAoFormPai()` ÔÇö transcription of the legado's Top/Left-from-parent logic
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Sombra` + `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`, names fixed by `mapeamento.json`; width uses `THIS.Width` instead of the legado's literal 800/769 (unoverridden framework-class defaults that would overflow this 520px dialog)
+- `TornarControlesVisiveis()` and `Destroy()` (forwards to `DODEFAULT()` for the menu-restore fix)
+
+Deliberately left out (per phase scope): `obj_4c_Commandgroup1` and the three field/label pairs ÔÇö those land in later phases. Next up would be Fase 4/8.

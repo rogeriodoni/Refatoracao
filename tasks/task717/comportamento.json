@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCriptografar", "fDecriptografar"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCTS",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "LParameters _Titulo, _Altera, _Arquivo\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Arquivo = _Arquivo\n\nIf (Type('_Arquivo') <> 'C')\n\tThisForm.Arquivo = 'crSigCdCli'\nEndIf\n\nIf _Altera\n\tThis.Frase.Caption = 'Conta '+Alltrim(_Titulo)+Chr(13)+'Digite a Senha Atual : '\n\tThis.Height = 250\n\tThis.Altera = .t.\nElse\n\tThis.Frase.Caption = 'A Conta ' + Alltrim(_Titulo) + Chr(13) + ' Possui Senha : '\n\tThis.Altera = .f.\nEndIf\n\nThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return This.ZSen",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.senha",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.senha",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm Off",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.senha",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local Senha, Arquivo\n\nArquivo = ThisForm.Arquivo\nSenha   = fCriptografar(&Arquivo..Senhas)\n\nIf (Alltrim(This.Value) == Alltrim(Senha))\n\tIf Not ThisForm.Altera\n\t\tThisform.ZSen = .t.\n\t\tSet Confirm Off\n\t\tThisform.Release\n\tEndIf\nElse\n\tIf (Messagebox('Deseja Digitar Novamente ?', 4+256, 'Senha Conflitante...') = 7)\n\t\tThisform.ZSen = .f.\n\t\tSet Confirm Off\n\t\tThisform.Release\n\tElse\n\t\tReturn 0\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCriptografar",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.senha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.GetNova1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.Altera\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.GetNova2",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If (ThisForm.GetNova1.Value = ThisForm.GetNova2.Value)\n\tThisForm.ZSen = .t.\n\tArquivo = ThisForm.Arquivo\n\tSelect (Arquivo)\n\tReplace &Arquivo..Senhas With fDecriptografar(This.Value)\nElse\n\t=Messagebox('Senha Conflitante!!! Alteração Cancelada!!!', 32, '')\n\tThisForm.ZSen = .f.\nEndIf\n\nIf (LastKey() = 13)\n\tThisForm.Release\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDecriptografar",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCTS.GetNova2",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.Altera\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

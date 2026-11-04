@@ -397,7 +397,7 @@ DEFINE CLASS FormAcessoGrupo AS FormBase
         *-- Container dos botoes de acao (Salvar/Cancelar)
         loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
         WITH loc_oPagina.cnt_4c_BotoesDados
-            .Top = 38               && Framework: 9 + 29 (compensa PageFrame.Top=-29)
+            .Top = 27               && Erro303: era 9+29=38; 27 poe os botoes dentro da faixa
             .Left = 817
             .Width = 155
             .Height = 85

@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCOT",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "LParameters ParentForm, pdDatas\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = ParentForm\n\nIf (Type([pdDatas]) = [D])\n\tThisForm.dDatas = pdDatas\nElse\t\n\tThisForm.dDatas = Date()\nEndIf\n\nThisForm.ParentForm.poDataMgr.CursorQuery([SigCdUsu], [crSigCdUsu], [Usuarios], Padr(Alltrim(Usuar),10))\n\nThisForm.btnCotacao.Visible = Not (Seek(crSigCdUsu.Ccargs, [crSigCdCrg], [Ccargs]) And ;\n\t\t\t\t\t\t\t  (crSigCdCrg.AltCots = [... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "dDatas = Date,CursorQuery,Visible = Not",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Set Decimals to 5\nSelect TmpCot\nDelete All For Empty(CMoes)\nReplace All aValos With Valos\nGo Top\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.Gradeget_cotacao.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.Gradeget_cotacao.cotacao.Text1",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf (nKeyCode = 9)\n\tThisForm.cntBotoes.btnConfirmar.SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.Gradeget_cotacao.cotacao.Text1",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "Local ldDatas\n\nldDatas = ThisForm.dDatas\n\nIf (LastKey() = 13)\n\tKeyboard [{DnArrow}]\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.Gradeget_cotacao.cotacao.Text1",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.AntValue = This.Value\nThisForm.Parentform.poDataMgr.CursorQuery([SigCdUsu],[crSigCdUsu], [Usuarios], Padr(Alltrim(Usuar),10))\nThisForm.Parentform.poDataMgr.CursorQuery([SigCdMoe], [crSigCdMoe],  [CMoes],    TmpCot.CMoes)\nReturn (Seek(crSigCdUsu.Ccargs, [crSigCdCrg], [Ccargs]) And (crSigCdCrg.AltCots = [S]) And crSigCdMoe.Cotas)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.cntBotoes",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Release\n\nReturn .t.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.cntBotoes",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Set Decimals To 2\n\nReplace All Valos With aValos\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.btnCotacao",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Do Form SigOpAlC With TmpCot.CMoes, TmpCot.Valos, ThisForm.dDatas To lcRetorno\n\nIf (MLine(lcRetorno, 1) = [OK])\n\tReplace Valos With Val(MLine(lcRetorno, 2)) In TmpCot\n\n\tIf Used([TprMvCab])\n\t\tReplace CotUsus With MLine(lcRetorno, 3) In TprMvCab\n\tEndIf\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOT.btnCotacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.ParentForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. Resumo:
+
+## O que foi entregue
+
+Dois m├®todos novos em `projeto/app/forms/operacionais/Formsigopcks.prg` (435 ÔåÆ 727 linhas), ligados no `InicializarForm`:
+
+**`ConfigurarControles()`** ÔÇö os 7 controles restantes do SCX, todos filhos diretos do form (├® FLAT, n├úo tem Page):
+
+| Legado | Migrado | Left/Top | W├ùH |
+|---|---|---|---|
+| Shape1 | `shp_4c_Shape1` | 247/197 | 113├ù105 |
+| Frase | `lbl_4c_Frase` | 12/120 | 968├ù34 |
+| Say2 | `lbl_4c_Label2` | 405/221 | 152├ù24 |
+| usuario | `txt_4c_Usuario` | 561/217 | 125├ù32 |
+| Say3 | `lbl_4c_Label3` | 486/265 | 146├ù24 |
+| senha | `txt_4c_Senha` | 561/261 | 125├ù32 |
+| Image1 | `img_4c_Image1` | 265/212 | 77├ù76 |
+
+**`AplicarModoSenhaDoDia()`** ÔÇö o ├║ltimo bloco do `Init` legado, via `BO.DevePreencherUsuarioLogado()`: preenche o usu├írio logado, troca o r├│tulo para `"Senha Do Dia : "` e move para `Left = 142`.
+
+## Duas decis├Áes que vale destacar
+
+**Entreguei os 7 juntos, n├úo "os primeiros 50%".** O di├ílogo tem exatamente 7 controles e eles v├¬m em pares indivis├¡veis (moldura+├¡cone, r├│tulo+campo). Meia tela deixaria `"Senha :"` sem campo de senha. A Fase 6 n├úo fica sem trabalho ÔÇö o gate dela para perfil *captura* cobra eventos/handler, n├úo mais campos. N├úo fabriquei `ConfigurarPaginaDados` (o nome que o prompt sugere): seria um m├®todo que ningu├®m chama, s├│ para casar com regex.
+
+**A medi├º├úo corrigiu dois erros meus.** Eu havia estimado as larguras dos r├│tulos pela m├®dia de 10px/char da tabela de fontes do dump (as duas labels declaram `AutoSize = .T.` e o Form Designer n├úo persiste W/H nesse caso). Medindo no VFP9 com `TXTWIDTH ├ù FONTMETRIC(6)`:
+
+- `"Representante :"` = **152px**, n├úo 150 ÔåÆ cortaria 2px em sil├¬ncio
+- `"Senha Do Dia : "` = **146px**, n├úo 130 ÔåÆ cortaria o r├│tulo longo
+
+Com `AutoSize = .F.` o excedente ├® descartado sem erro e sem log ÔÇö exatamente a armadilha da regra #23. Corrigido para os valores medidos; os dois textos terminam em 557, 4px antes dos campos em 561, que ├® o padr├úo da classe `say`.
+
+## Verifica├º├úo
+
+- **Compila limpo** (`.fxp` gerado, nenhum `.err`).
+- **Instancia de verdade** ÔÇö probe com dois tipos: `LIMITE` (8 controles, geometria batendo com o dump, `.Picture` dos dois arquivos confirmada em disco) e `MAXIMO` (exercita o ramo senha-do-dia: `Value = "SISTEMA"`, caption e `Left = 142` aplicados). Nenhum erro capturado.
+- `VerificarPropriedadesInexistentes.ps1`: *nenhuma atribui├º├úo a propriedade inexistente*.
+- `VerificarFormatInputMask.ps1 -Form Formsigopcks`: `ALTA=0 MEDIA=0 BAIXA=0`.
+- Validador de completude (os 4 regex reais de `Test-CompletudeCodigo`): 0 marcadores, 0 pend├¬ncias, 0 stubs, nenhuma procedure vazia.
+- Gate da Fase 5 (ramo *layout captura*): legado com 2 TextBox ÔåÆ piso 1; migrado tem 2 + `InicializarForm` ÔåÆ passa. Zero `pgf_4c_`, zero acentos literais, zero `RETURN` dentro de `TRY`.
+
+Ferramentas de evid├¬ncia ficaram em `automation/vfp_helpers/` (`compile_task702_f5.prg`, `probe_task702_f5*.prg`, `medir_task702_f5.prg` ÔÇö esta ├║ltima ├® citada no coment├írio do c├│digo como origem das larguras).
+
+Uma ressalva: o probe rodou com `gnConnHandle = 0` (sem banco), ent├úo `SigCdPam.liblcreds` n├úo carregou e o ramo `LIMITE` do senha-do-dia n├úo p├┤de ser exercitado por dados reais ÔÇö cobri-o pelo tipo `MAXIMO`, cuja condi├º├úo n├úo depende do banco. A valida├º├úo do par usu├írio/senha contra o SQL Server ├® das Fases 6/7.

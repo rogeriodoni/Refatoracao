@@ -110,7 +110,12 @@ DEFINE CLASS FormGpe AS FormBase
         *-- Container cabecalho cinza superior
         loc_oPagina.AddObject("cnt_4c_Sombra", "Container")
         WITH loc_oPagina.cnt_4c_Sombra
-            .Top         = 2
+            *-- Erro303: a faixa estava em Top = 2, ou seja -27..53 na tela: o
+            *-- titulo saia cortado e os botoes (containers em 29, corretos)
+            *-- transbordavam 27px. Top = 31 e o canonico da pagina Lista
+            *-- (FormCor/Formcfo). Conferido instanciando: o 1o controle de
+            *-- dados desta pagina fica bem abaixo de 111, nada e soterrado.
+            .Top         = 31
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80

@@ -433,7 +433,7 @@ DEFINE CLASS FormFpr AS FormBase
 		*-- Container bot" + CHR(245) + "es a" + CHR(231) + CHR(227) + "o (Grupo_Salva: Left=819, Top=10+29=39)
 		loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
 		WITH loc_oPagina.cnt_4c_BotoesAcao
-			.Top         = 39
+			.Top         = 27
 			.Left        = 819
 			.Width       = 160
 			.Height      = 85

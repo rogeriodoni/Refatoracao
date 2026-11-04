@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 entregue em `projeto\app\forms\operacionais\Formsigopets.prg` (903 ÔåÆ 1288 linhas, CRLF preservado: CR=LF=1288).
+
+## O que entrou
+
+Como este ├® um form **OPERACIONAL FLAT** (sem PageFrame, 34 objetos pendurados direto na Form ou num dos 2 containers), o enunciado de "Page2 parte 1" foi aplicado ao equivalente real: **metade dos 14 controles de dados que faltavam**, agrupados pelo bloco visual a que pertencem no dump ÔÇö o **bloco da impressora**, tudo que mora sobre a moldura `shp_4c_Shape3`:
+
+| Dump | Migrado | Nota |
+|---|---|---|
+| `Label2` | `lbl_4c_Label2` "Etiquetas" | r├│tulo de Shape2 |
+| `Label4` | `lbl_4c_Label4` "Impressoras" | r├│tulo de Shape3, `Top=126` (o desalinhamento de 2px ├® do dump) |
+| `Label5`/`Label6` | `lbl_4c_Label5`/`6` "Sistema"/"Windows" | cabe├ºalho das duas metades do combo |
+| `Get_Printer` | `cbo_4c_Get_Printer` | combo + carga de `crImpreV` via `sigopetsBO.CarregarImpressorasDisponiveis()` |
+| `Opt_Impressora` | `obj_4c_Opt_Impressora` | radio **aposentado** pelo legado ÔÇö Option1 invis├¡vel/desabilitado |
+
+Novos m├®todos: `ConfigurarBlocoImpressora()` (FUNCTION, RETURN ├║nico fora do TRY) e `RestaurarOcultosDoDump()`.
+
+## Decis├Áes que exigiram julgamento
+
+- **`RestaurarOcultosDoDump()`**: `TornarControlesVisiveis` recursa dentro de OptionGroup e reexibiria o `Option1` que o dump manda nascer oculto. N├úo d├í para excetuar por nome dentro da varredura ÔÇö "Option1" ├® gen├®rico e esconderia o 1┬║ bot├úo de *todos* os grupos. Medido: com o m├®todo, `Opt_Impressora.Option1` fica `.F.` e `Opt_Tipo.Option1` segue `.T.`
+- **`ConfigurarBlocoImpressora` devolve `.F.` sem impressora**, e o resultado entra no `loc_lSucesso` do `InicializarForm` ÔÇö ├® o `Return 0` do Init legado (linhas 1030/1086), que recusa abrir a tela. `MsgAviso` (condi├º├úo de ambiente), n├úo `MsgErro`.
+- **Colis├úo `lbl_4c_Label2..5` no `mapeamento.json`** (mesmo nome para `Label2..5` da Form e `Say2..5` do container): pais diferentes, ent├úo `AddObject` n├úo colide e o validador resolve pelo caminho completo. Mantive os nomes do mapeamento e provei em runtime que coexistem.
+- **`Courier New` no combo n├úo ├® descuido**: a coluna exibida ├® `PADR(...,15) + " " + <nome Windows>`; s├│ monospace alinha a 2┬¬ metade sob o r├│tulo "Windows".
+
+## Duas corre├º├Áes de premissa
+
+1. Eu havia escrito no coment├írio que inverter a ordem `RowSource` ÔåÆ `Value` era necess├írio porque "atribuir RowSource descarta um Value posto antes". **Medi no VFP9 e ├® falso** ÔÇö com RECNO=2 as duas ordens d├úo `ListIndex=2`. Voltei ao c├│digo para a ordem do legado (`Value` ÔåÆ `RowSource`) e o coment├írio registra a medi├º├úo, para ningu├®m "consertar" de novo.
+2. O gate `05d_validarCompletude` rejeitava o arquivo por uma linha de coment├írio da **Fase 4** que come├ºava com `* placeholder` (falso positivo j├í documentado no CLAUDE.md). Reescrevi a frase ÔÇö s├│ coment├írio, zero mudan├ºa de comportamento.
+
+## Provas
+
+- `COMPILE` sem `.ERR`, `.fxp` de 17.292 bytes (apaguei o artefato depois)
+- `CREATEOBJECT("Formsigopets")` **instancia OK**, `ControlCount` 6 ÔåÆ 12, todos os controles com `Visible=.T.`, Caption/Top/Width conferidos contra o dump (`Width=55` provou que `AutoSize=.F.` preservou o valor do dump em vez do default 100)
+- Binding do combo medido ├á parte: `RowSourceType=2` + `crImpreV` ÔåÆ `ListCount=2`, `Value` num├®rico = ├¡ndice, `crImpreV.impres` naveg├ível por posi├º├úo (├® como o `Imprime.Click` legado l├¬)
+- `VerificarPropriedadesInexistentes.ps1` ÔåÆ OK; TRY/WITH/IF balanceados; zero `RETURN` dentro de TRY, zero literal acentuado, zero `MESSAGEBOX`
+- `diff` com 11 linhas removidas, todas esperadas (nenhuma exclus├úo acidental)
+
+**Fora de escopo que notei e n├úo toquei:** `ConfigurarOptTipo` (Fase 4) guarda s├│ `gb_4c_ValidandoUI`, n├úo `gb_4c_ModoTeste` ÔÇö uma probe em ModoTeste cairia no SQL. Meu m├®todo novo guarda os dois. Vale alinhar na Fase 6 ou 7.
+
+**Fica para a Fase 6:** bloco de op├º├Áes ├á direita (Left 434..663) ÔÇö `Opt_Preco`, `opt_separador`, `OptOrdem`, `OptOrigem` e os 4 r├│tulos, mais os defaults do Init legado (`CrSigCdPac.etqseps`, spinners via `ObterParametrosPadraoImpressao()`).

@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da.
+
+## Entrega
+`C:\4c\projeto\app\classes\SigOpCrpBO.prg` ÔÇö 346 linhas, 16.452 bytes, CRLF (CR=346/LF=346), zero bytes n├úo-ASCII (regra #4).
+
+**Por que a tentativa anterior falhou**: o log mostra que o Claude CLI recebeu s├│ o contexto do projeto, sem a tarefa (`"No task was included in your message"`) ÔÇö falha de invoca├º├úo do CLI, n├úo defeito de c├│digo. Nenhum arquivo havia sido criado.
+
+## O que ├® esta tela (lido do dump, n├úo presumido)
+`SIGOPCRP` n├úo ├® CRUD: ├® o di├ílogo modal **"Procura"** aberto pelo extrato de Conta Corrente Individual ÔÇö `Formsigopind.BtnProcuraHistClick` faz `DO FORM SigOpCrp WITH THIS.DataSessionId, THIS`. Ele **n├úo vai ao servidor e n├úo grava nada**: s├│ reposiciona, com `LOCATE`/`CONTINUE`, o cursor `CrSigMvCcr` que o form pai mant├®m ligado ├á grade de lan├ºamentos. Da├¡ o `Set DataSession To Arquivos` do legado.
+
+## Achado de tipo que muda o c├│digo
+A coluna de data divergia entre as duas pontas, e o que vale ├® o **cursor**:
+
+| coluna | `SigMvCcr` (schema) | `CrSigMvCcr` (cursor do pai) | property |
+|---|---|---|---|
+| datas | `datetime` | **`D`** | `this_dDatas` |
+| valors | `numeric(11,2)` | `N(11,2)` | `this_nValors` |
+| hists | `char(60)` | `C(60)` | `this_cHists` |
+
+Conferido em `docs/schema.sql` com `Get-Content -Raw` (regra #14) **e** no `CREATE CURSOR` de `Formsigopind.prg:1802`. Por isso a property de data ├® DATE e o `MaxLength` do Hist├│rico ├® 60 (largura da coluna, n├úo do controle ÔÇö regra #19).
+
+## 23 properties declaradas
+Crit├®rios (`this_dDatas`/`this_nValors`/`this_cHists`, grafia da coluna preservada); estado da busca sequencial (`this_cContinuar` **caractere** inclusive no crit├®rio num├®rico, porque o legado guarda `Str(valor,12,2)` e compara com `Val()`; `this_lFinalArquivo` = o `llFinal` medido *antes* da busca); crit├®rio escolhido e destino do foco (`this_cTipoBusca`/`this_cCampoFoco`/`this_lFecharDialogo` ÔÇö a assimetria do legado em que Data fecha o di├ílogo e Valor/Hist├│rico mant├¬m aberto para a ocorr├¬ncia seguinte); resultado; cursor e contexto do pai; os tr├¬s `Tag` do par GotFocus/Valid; larguras.
+
+`Init` aceita os dois par├ómetros como opcionais e devolve **sempre `.T.`** ÔÇö n├úo h├í SQL nem cursor a abrir, e `Init` de BO que devolve `.F.` derruba o `Init` do form. O esqueleto do Form chama `CREATEOBJECT("SigOpCrpBO")` sem argumentos; os guards por `VARTYPE` cobrem isso (n├úo h├í par├ómetro l├│gico, ent├úo a armadilha do `PCOUNT` n├úo se aplica).
+
+## Verifica├º├úo
+- **Compila├º├úo VFP9 limpa**: `.FXP` gerado sem `.ERR`. Para n├úo repetir o erro de *alegar* verifica├º├úo, rodei um **teste de controle** injetando `PUBLIC PROCEDURE` (regra #9.1): produziu `.ERR` com 11 erros ÔÇö o m├®todo detecta mesmo.
+- **Tr├¬s gates do validador 05d** rodados com as regexes exatas extra├¡das do orquestrador: marcadores = 0, indicadores de pend├¬ncia = 0, `Init` com 43 linhas de c├│digo (nenhuma procedure vazia).
+- Sem `PUBLIC` em `DEFINE CLASS`, sem `RETURN` em TRY, sem `ISEMPTY`/`MESSAGEBOX`/`MostrarAviso`.
+
+**N├úo verificado**: instancia├º├úo em runtime. `vfp9.exe` nesta sess├úo compila e sai sem executar o corpo do script (medido e registrado em mem├│ria), ent├úo n├úo existe probe honesto a fazer aqui.
+
+Uma decis├úo que a Fase 2 vai herdar: o legado n├úo tem `INSERT`/`UPDATE`/`DELETE`/`TABLEUPDATE`/`AddCursor` ÔÇö este BO ├® **somente-leitura** e documentei no cabe├ºalho por que n├úo sobrescreve `Inserir`/`Atualizar`/`ExecutarExclusao` (inventar lista de colunas violaria a regra #22), com a frase redigida para n├úo disparar o falso positivo do gate.

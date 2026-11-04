@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada. `FormSigOpEnt.prg`: 1887 ÔåÆ 2133 linhas.
+
+## O que a fase 8 realmente tinha de fazer
+
+A rodada anterior concluiu "nada a mudar" e o guard de NO-OP do orquestrador for├ºou este retry ÔÇö corretamente. Medindo o gate da Fase 8 contra os arquivos do HEAD:
+
+```
+metodosFaltantes = [FormParaBO, BOParaForm]   -> fase REPROVA
+```
+
+Nenhum dos 15 ramos de exce├º├úo alcan├ºa este form: todos exigem `FormParaBO`/`BOParaForm` de qualquer jeito, e os que dispensariam outros nomes pedem aus├¬ncia de grade e de persist├¬ncia ÔÇö o SigOpEnt tem a `Gradevenc` e grava em `SigMvCab`. Os dois nomes n├úo eram burocracia: s├úo o contrato can├┤nico (PILAR 3) para transfer├¬ncia FormÔåöBO, e esta tela tem dois campos de data reais para transferir.
+
+## Entregue
+
+Quatro hooks com corpo **real**, nenhum inventado ÔÇö o corpo de cada um **saiu** de onde estava escrito em linha nas fases anteriores, n├úo foi duplicado:
+
+| Hook | Origem no legado | Saiu de |
+|---|---|---|
+| `FormParaBO()` | `ldAnt = getAtual.Value` / `ldNew = getNova.Value` | `BtnConfirmarClick`, que agora o chama e **n├úo grava se ele recusar** |
+| `BOParaForm()` | `getAtual.Value = pPrz` + os dois `Refresh` | `SincronizarCamposPrazo` |
+| `LimparCampos()` | `getNova.Value = Ctod('')` (as duas pontas) | idem |
+| `HabilitarCampos()` | efeito na tela do `If ThisForm.Bloquear` | `AplicarBloqueioAlteracao`, que segue sendo quem **l├¬** o crit├®rio no BO |
+
+Os tr├¬s primeiros s├úo `PROTECTED` **expl├¡cito**: `FormBase.prg` os declara assim e VFP9 n├úo alarga escopo herdado ÔÇö omitir n├úo tornaria p├║blico, s├│ esconderia. `HabilitarCampos` fica `PUBLIC` porque o nome n├úo existe em `FormBase`.
+
+Os outros nomes do checklist n├úo existem no legado e ficaram documentados no cabe├ºalho com o miolo elidido (`Btn...Buscar...Click` etc.), pela conven├º├úo j├í adotada no arquivo: o validador casa o identificador no `.prg` inteiro, coment├írio inclu├¡do.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.FXP` de Form e BO gerados, **zero `.ERR`**.
+- **Runtime provado**, n├úo s├│ compila├º├úo: probe com `DEFINE CLASS ProbeSigOpEnt AS FormSigOpEnt` (subclasse alcan├ºa membro protegido; script solto n├úo). Form instanciou e **as 7 baterias bateram com o esperado** ÔÇö round-trip camposÔåÆBOÔåÆcampos, `LimparCampos` zerando as duas c├│pias sem tocar em "Data Atual", tipo dos campos permanecendo `D`/`D`, `HabilitarCampos` nos tr├¬s modos, `AplicarBloqueioAlteracao` nos dois crit├®rios, e Confirmar sem data nova sendo in├│cuo. Nenhum arquivo de erro gerado.
+- **Gate da Fase 8 remedido**: `metodosFaltantes = []`, bot├úo de a├º├úo presente, `legadoSemSalvar = .T.`.
+- Validadores: completude **OK**, `ValidadorSQLSchema` **PASSOU** (683 tabelas), propriedades inexistentes **OK**, fun├º├Áes ├│rf├ús **zero**, m├®todo protegido chamado de fora **zero**. Est├íticas limpas (0 bytes n├úo-ASCII, 0 `RETURN` em TRY, 0 `PUBLIC` em `DEFINE CLASS`, 0 `MESSAGEBOX`), CRLF preservado em 2133/2133 linhas.
+- **CorretorAutomatico rodado em c├│pia** (regra #44, item 5), comparando pr├® e p├│s-Fase 8: **o mesmo conjunto de 5 ocorr├¬ncias, s├│ com as linhas deslocadas**. Nada que eu escrevi provoca atividade nova no corretor.
+
+## Dois riscos pr├®-existentes para a etapa 05b ÔÇö n├úo s├úo da Fase 8 e n├úo mexi neles
+
+O corretor vai mutar este form na pr├│xima etapa, e duas muta├º├Áes me parecem erradas:
+
+1. **`BOTAO-SAIDA-CANONICO` troca `cmd_4c_Cancelar.Caption` de `"Cancelar"` para `"Encerrar"`.** O SCX declara `sair.Caption = "Cancelar"` literalmente. A regra #10 ├® sobre o `cmd_4c_Encerrar` do bloco de sa├¡da CRUD; este form n├úo tem barra CRUD. Como est├í, o pattern viola o PILAR 1 aqui.
+2. **`SHOWWINDOW_AUSENTE` injeta `ShowWindow = 1`** num di├ílogo filho modal cujo dump n├úo declara a propriedade ÔÇö e o cabe├ºalho do form documenta essa aus├¬ncia como decis├úo.
+
+H├í ainda um falso positivo inofensivo: `INICIALIZAR_DUPLICADO` apaga uma **linha de coment├írio** que s├│ menciona `THIS.InicializarForm()`.
+
+Corrigir esses patterns ├® decis├úo transversal (afeta sweep em todo o acervo), ent├úo n├úo a tomei por conta pr├│pria nesta fase. Se quiser, investigo e proponho o ajuste.

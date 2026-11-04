@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 done. `Formsigopden.prg` compiles clean and instantiates (22 controls).
+
+## What Phase 8 actually delivered
+
+The legacy `SIGOPDEN` has six form methods. Five were already mapped in Phases 1ÔÇô7; the sixth, `mostracampos`, was not ÔÇö its 13 `.Value` + 2 `.Caption` expressions had been inlined into the `AddObject` blocks, mixing control creation with data loading.
+
+1. **`BOParaForm()`** ÔÇö `mostracampos` as a real, re-callable method, expressions transcribed verbatim (`ALLTRIM` only where the legacy uses `Allt`/`Alltrim`), called after `CarregarDadosEntrega` in the legacy's own order. `PROTECTED`, because `FormBase.BOParaForm()` is (regra #51). Side effect: fields now start empty as the dump declares, instead of rendering formula residue like `" - ()"` when there's no connection.
+2. **`AjustarOrdemTabulacao()`** ÔÇö the dump's tab order, which had been discarded entirely.
+3. `LockScreen` around construction (reset **after** `ENDTRY`, so an exception can't freeze the screen), `lblTitulo.ToolTipText`, and dump-faithful initial captions.
+
+**Not added:** `FormParaBO`, `CarregarLista`, `BtnCancelarClick`, `BtnSalvarClick`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`. All 13 fields are read-only, there is zero list surface in the dump (0 hits for grid/pageframe/AddCursor/pColuna/RecordSource/ControlSource/Grade/grd), and there is no CRUD or Save button. Writing them would be disguised stubs.
+
+## Two things worth flagging
+
+**The Phase-8 gate needed a fix, and I made one.** The EXIBICAO branch (which waives those names for list-less read-only dialogs) used `Test-LegadoDialogoExibicao`, which only recognizes `ReadOnly = .T.` on the control. `get13` is blocked by `PROCEDURE When / Return .f.` instead, so the branch missed and the form fell to VISUALIZADOR ÔÇö which deliberately keeps `CarregarLista` because *its* legacy has a grid. The gate was demanding a list-loader for a form with no list. I added the stronger sibling predicate `Test-LegadoSomenteLeitura` as an alternative proof. Measured across all 717 dumps: 26 ÔåÆ 53 approved, and **exactly one** changes branch ÔÇö task718 itself. The other four conditions are untouched, so it can only turn REPROVA ÔåÆ PASSA.
+
+**I caught a bug in my own fix only by measuring.** My first `AjustarOrdemTabulacao` listed the four `Shape`s. `Shape`/`Image`/`Line` have **no `TabIndex`** ÔÇö the pass threw `Property TABINDEX is not found` on every form open, caught by its own `CATCH` into an error dialog. The `PEMSTATUS(THIS, "<nome>", 5)` guard didn't protect it (it only proves the member exists). Fixed to guard on the control and number only the 18 capable controls. Verified by reading values back: Encerrar is now 18 (last, as the dump intends) instead of 2.
+
+Related: the existing memory already recorded "Shape n├úo tem TabIndex" ÔÇö I measured it instead of reading first. I appended only the genuinely new part (duplicate/out-of-range assignments are silently discarded; the valid range is capable-controls, not `ControlCount`).
+
+## Integration
+
+No menu entry ÔÇö consistent with every other child dialog (`FormSigMvSbn`, `FormSigOpCcj`, `FormSigOpCtd`) and required, since it takes three key params. The real parent turned out to be `Formsigprite`, which already calls `CREATEOBJECT("FormSigOpDen", this_cEmps, this_cDopes, this_nNums)` with a matching contract; I only updated its now-stale "ainda NAO foi migrado" comment. Class index regenerated.
+
+**One caveat:** the end-to-end probe through `config.prg` + `ConfigurarAmbiente()` hangs on this machine (SQL `192.168.200.10` is unreachable and the unattended VFP blocks). I verified via a lean probe that loads the classes directly, so `BOParaForm` has **not** been exercised against real data ÔÇö only its reachability and the empty-BO path.

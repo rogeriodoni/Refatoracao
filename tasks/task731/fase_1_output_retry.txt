@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpEntBO.prg` criado (10.068 bytes, 182 linhas, CRLF ├¡ntegro, ASCII puro).
+
+## O que foi gerado
+
+`DEFINE CLASS SigOpEntBO AS BusinessBase` com **29 propriedades** + `Init()`, em 6 blocos documentados:
+
+| Bloco | Propriedades | Origem |
+|---|---|---|
+| Colunas de `SigOpMvv` (8) | `this_cCidChaves`, `this_cEmps`, `this_cDopcs`, `this_nNoTitulos`, `this_cEmpDopNcs`, `this_dVencs`, `this_dDatas`, `this_cUsuars` | `docs/schema.sql` ÔÇö grafia exata, as 6 NOT NULL cobertas (regra #22) |
+| Chave posicional (3) | `this_nLarguraEmps=3`, `this_nLarguraDopcs=20`, `this_nLarguraNoTitulos=6` | `emps(3)+dopcs(20)+STR(,6) = 29 = empdopncs char(29)` ÔÇö regra #42, `PADR`, nunca `ALLTRIM` |
+| Par├ómetros do form pai (6) | `this_dPrazoAtual`, `this_dPrazoNovo`, `this_dDataMovimento`, `this_nPrazoMinimo`, `this_nPrazoMaximo`, `this_lBloquear` | `Init(pEmp, pDop, pNum, pPrz, pFor, pMin, pDat, pBlqAlt, pMax)` ÔÇö `pFor` fica no Form |
+| Contexto do pai (2) | `this_cEscolhaPai`, `this_cModoNaoAtualizaCabecalho="ALTERAR"` | `If llOks And (ParentForm.pcEscolha <> 'ALTERAR')` |
+| Config dos cursores de apoio (2) | `this_nDtEntrs`, `this_nChkUteis` | `CursorQuery(SigCdOpe/DtEntrs)` e `(SigOpCdd/chkUteis)` ÔÇö ambas `numeric(1,0)`, logo `this_n*` |
+| Aliases + libera├º├úo + estado (8) | `this_cCursorHistorico/Operacao/ConfigDoc`, `this_cProgramaLiberacao="LIBPRZENT"`, `this_cTituloLiberacao`, `this_cUsuarioLiberacao`, `this_lPrazoLiberado`, `this_lGravouPrazo` | `crSigOpMvv/crSigCdOpe/crSigOpCdd`; `Do Form SigOpSen With 'LIBPRZENT'` + `fGravarLog`; `llOks`/`parentform.validOk` |
+
+`Init()`: `DODEFAULT()` ÔåÆ `this_cTabela = "SigOpMvv"`, `this_cCampoChave = "cidchaves"` (PK real, `CONSTRAINT [sigopmvv_cidchaves]`), `this_cUsuars` do `gc_4c_UsuarioLogado` com guard de `TYPE()` para probe headless, e reset das flags.
+
+## Verifica├º├úo feita
+
+- **Smoke test VFP9 passou** (`_smoke731_out.txt` = "VIVO", exit 0) ÔåÆ havia janela real de verifica├º├úo.
+- **`COMPILE` limpo**: `SigOpEntBO.FXP` gerado (1.789 bytes), **`.ERR` ausente**.
+- **Controle negativo na mesma rodada**: c├│pia com `PUBLIC PROCEDURE` (regra #9.1) gerou `.ERR` apontando **s├│** as 3 linhas injetadas (`Syntax error` / `Statement is not valid in a class definition` / `Nesting error`) ÔÇö prova que o detector funciona e que as 182 linhas do alvo est├úo limpas.
+- Est├íticos: `CR=182 == LF=182`, 0 bytes n├úo-ASCII (medido com `tr -dc`, n├úo `grep`), 0 `this_X .Value`, 0 `TRY/CATCH`, 0 `PUBLIC PROCEDURE`, 0 marcadores TODO/pend├¬ncia, chamadas em c├│digo = s├│ `DODEFAULT/TYPE/LEFT/ALLTRIM`.
+- `.FXP` e os scripts tempor├írios removidos; o ├║nico artefato novo no repo ├® o `.prg`.
+
+Isso prova **compila├º├úo**, n├úo runtime ÔÇö o BO ainda n├úo tem m├®todo de dados para instanciar/exercitar.
+
+## Por que a tentativa anterior falhou
+
+N├úo foi conte├║do: o `fase_1_output.txt` mostra o Claude CLI respondendo *"no actual task or question from you yet"* com exit 0 ÔÇö o prompt de 250 KB n├úo chegou como instru├º├úo. O gate de no-op do orquestrador (`Erro178`) n├úo disparou porque `assinaturaAntes` era `$null` (o arquivo n├úo existia), ent├úo a fase foi adiante com o BO inexistente.
+
+Fica aberto para a Fase 2: `Buscar`, `CarregarDoCursor`, `MontarChaveEmpDopNcs` (com `PADR`), `Inserir` (as 8 colunas, `cidchaves = EscaparSQL(fUniqueIds())`, `datas = GETDATE()`) e o `UPDATE SigMvCab SET PrazoEnts` condicionado a `this_cEscolhaPai`.

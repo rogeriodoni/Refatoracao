@@ -578,7 +578,7 @@ DEFINE CLASS FormTgp AS FormBase
         *-- VAZIO nesta fase - botoes Confirmar/Cancelar entram na Fase 6
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 46
+            .Top         = 27
             .Left        = 615
             .Width       = 160
             .Height      = 85

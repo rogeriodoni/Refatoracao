@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and passing. Here's what happened.
+
+## The previous attempt's diagnosis was wrong
+
+It wrote **no code** ÔÇö only a 65-line comment arguing all nine template methods "have no referent." Two problems:
+
+1. **A factual error.** It claimed the typed values are "read and discarded, never stored in a BO property." But all four legacy `LostFocus` handlers write into `this_cBuffer`, which *is* a BO property. The fieldÔåÆBO transport always existed ÔÇö it was just inline and duplicated four times (`Alltrim(This.Value) + Replicate(Chr(0), ...)`).
+2. **It created a false-pass.** Spelling the four required names out in prose satisfied the gate's whole-file substring check. Measured with `-SemCitacao`: deleting 5 *comment* lines makes `BtnCancelarClick` and `CarregarLista` go missing again. The gate was reporting 1 missing item when 3 were.
+
+## The gate was right, and a branch already fit
+
+I reproduced `case 8` AST-only (dot-sourcing the orchestrator triggers a real migration). Every legacy-side proof of the existing **PROTOCOLO** branch ÔÇö built for exactly this kind of DLL dialog ÔÇö already passed: `DECLARE ... IN "CliSiTef32I.DLL"`, no grid, editable fields, no CRUD, `ButtonCount = 1`. The sole blocker was `temSuperficieProtF8`, which demands real `FormParaBO`/`BOParaForm` **deliberately** ("os campos s├úo edit├íveis e alimentam o protocolo do dispositivo").
+
+So the fix belonged in the `.prg`, not the gate. I added no exception branch and changed no validator.
+
+## What I implemented
+
+- `FormParaBO()` / `BOParaForm()` ÔÇö `PROTECTED` explicit (`FormBase` declares them protected; VFP9 can't widen inherited scope), parameterless to match the `THIS.FormParaBO()` calls at `formbase.prg:156/235`.
+- `SigOpCtfBO.MontarBufferSiTef()` ÔÇö the buffer assembly, replacing the four duplicated padding expressions. Its second parameter preserves the legacy's *literal* `REPLICATE(CHR(0), 1996)` from `GetDigitos.LostFocus` rather than recomputing it (rule #17); the probe confirms both forms coincide at 4 chars.
+- `BOParaForm()` absorbed the two assignments that were inline in `CarregarDadosEmpresaSiTef`.
+
+One judgment call worth flagging: I did **not** copy `this_nValorPago` into the BO. The form owns it (10 read sites, mirroring the legacy's `PUBLIC lnValPago`), and mirroring it would create the second source of truth the old justification rightly feared. I documented that in the code.
+
+## Verification (not inferred)
+
+VFP9 *does* execute in this session ÔÇö I ran the mandated 4-line smoke test first, since a prior session's `.FXP`-without-output trap makes `exit=0` meaningless on its own.
+
+- **Gate**: `VALIDADO = True`, `metodosFaltantes = []`, passing via `legadoProtocoloF8 = True` ÔÇö the right reason. Residual citations of the dispensed names: 0.
+- **Compile**: both files, `.fxp` generated, **no `.ERR`**.
+- **Probe** (`ProbeF8SigOpCtf716.prg`, subclass ÔÇö a loose script can't reach protected members and would freeze mutely): 15 checkpoints, all as expected ÔÇö round-trip, the blank-field guard preserving prior protocol state, the `Label5` caption switch, buffer length 2000 across six input shapes, and both hooks confirmed protected via `PEMSTATUS(...,2)` (attribute 5 only answers "exists?").
+- **Completeness validator**: no TODO/stub/empty procedure. **SQL schema validator**: 683 tables parsed, clean.
+
+New files: `FormSigOpCtf.prg`, `SigOpCtfBO.prg`, plus three `automation/` harness scripts following the Task715 precedent. All LF-only and consistent. I saved a memory on the distinct lesson ÔÇö *a failing Phase 8 doesn't mean the gate is wrong*; check whether an existing branch already fits and is merely blocked by a missing deliverable.

@@ -1,0 +1,46 @@
+=== PROBE FASE 8 - FormSIGOPCOR ===
+FXP BO   : OK
+FXP Form : OK
+ERR BO   : nenhum
+ERR Form : nenhum
+VARTYPE form : O
+INSTANCIOU OK  Caption=[Carta de Correção]
+--- escopo (atributo 2 = PROTECTED; os tres hooks DEVEM ser protegidos) ---
+FormParaBO    existe=.T. protected=.T.
+BOParaForm    existe=.T. protected=.T.
+LimparCampos  existe=.T. protected=.T.
+CarregarLista existe=.T. protected=.F.  (harness chama de fora: tem de ser .F.)
+--- exercicio dos hooks (subclasse, sem banco) ---
+A) FormParaBO retorno=.T.
+   cNfisDe=[000100] cNfisAte=[000105]  (esperado 000100 / 000105)
+   cEmps=[001] cSeries=[22]  (esperado 001 / 22)
+   dEmisDe=20/10/2026 dEmisAte=30/10/2026  (esperado 20/10/2026 / 30/10/2026)
+   linha corrente: nNoccors=1 cMretifs=[texto um]  (esperado 1 / texto um)
+   this_cNfis=[]  (esperado VAZIO - a nota concreta e resolvida na gravacao)
+A2) cursor em EOF -> nNoccors=0 cMretifs=[]  (esperado 0 / vazio)
+B) BOParaForm retorno=.T.
+   NotaIni=[000200] NotaFim=[000202]  (esperado 000200 / 000202)
+   linha cods=3 retifs=[TEXTO VINDO DO BO]  (esperado TEXTO VINDO DO BO)
+   linha cods=1 retifs=[texto um]  (esperado texto um - intacta)
+B2) ocorrencia 99 (inexistente) escreveu em alguma linha=.F.  (esperado .F.)
+C) antes de limpar: RECCOUNT=3 retificacoes preenchidas=2
+   depois de limpar: RECCOUNT=3  (esperado 3 - catalogo intacto)
+   retificacoes preenchidas=0  (esperado 0)
+   NotaIni=[] NotaFim=[]  (esperado vazios)
+   BO reespelhado: cNfisDe=[] cNfisAte=[]  (esperado vazios)
+   contexto PRESERVADO: cEmps=[001] cSeries=[22]  (esperado 001 / 22)
+   linha 1 descs=[OCORRENCIA UM] cods=1  (catalogo nao apagado)
+--- REGRESSAO Fase 7 (espelho agora via FormParaBO) ---
+A) 000123..000123 n=2  [000123/1][000123/3]
+B) 100..102       n=6  [100/1][101/1][102/1][100/3][101/3][102/3]
+C) 000100..000102 n=6  [000100/1][000101/1][000102/1][000100/3][000101/3][000102/3]
+D) 200..100 (inv) n=0  []  (esperado 0)
+E) A100..A102     n=0  []  (esperado 0)
+G) faixa vazia    gravou=[] vivo=.T.
+H) sem validar    n=0  []  (esperado 0)
+I) BtnEncerrarClick executou sem erro
+--- dialogos capturados ---
+[30/10/2026 07:12:57] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 07:12:57] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 07:12:57] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 07:12:57] Atenção: Nota Fiscal Inválida !!

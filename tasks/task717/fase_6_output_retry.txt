@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Already covered. Phase 6 is complete and verified.
+
+## What I found
+
+Phase 6's work was already done correctly by the prior attempt. The rejection was **not** a defect in the form ÔÇö it was the known self-reference pattern: the gate counted migrated fields with a literal `AddObject(..., "TextBox")` regex, so a form using **TextBox subclasses** (required by rule #46, since `Valid`'s `Return 0` and `When`'s `Return ThisForm.Altera` are the mechanism, and `BINDEVENT` discards return values) read **zero fields** and failed the `CAPTURA` branch. The prior attempt fixed the orchestrator on disk at 04:36, but the running process had parsed it at 03:44, so the 04:45 gate used stale code.
+
+Measured, not assumed:
+
+| | legado | migrado |
+|---|---|---|
+| lista estrita / lookup / API de n├│s | 0 / 0 / 0 | ÔÇö |
+| TextBox | 3 ÔåÆ piso 2 | **3** (regex novo) / **0** (regex antigo) |
+
+Gate `CAPTURA` rodado standalone com o orquestrador **em disco**: `True`. Com o de HEAD: `False`. Artefato correto ÔÇö n├úo toquei no form por isso.
+
+## O defeito real que achei e corrigi
+
+`SigOpCtsBO` usa o par **inverso** `fCriptografar`/`fDecriptografar` do legado, e s├│ uma metade foi portada:
+
+- **leitura** ÔåÆ `fCriptografar` ausente ÔåÆ estoura ÔåÆ mensagem vis├¡vel (correto pela regra #27);
+- **grava├º├úo** ÔåÆ `fDecriptografar` **existe**, como *pass-through escrito para outro contrato* (n├║mero de s├®rie de impressora fiscal ÔÇö o pr├│prio arquivo avisa "NAO confundir com fCriptografar") ÔåÆ **gravava a senha em CLARO, com sucesso e sem erro.**
+
+Controle negativo no VFP9 com a linha pr├®-fix exata: `antes=[ABC1]` ÔåÆ `pos=[XYZ9]`, sem erro, **gravou em claro: SIM**; e `fCriptografar(gravado)` estourou na mesma execu├º├úo. Hoje n├úo chega ao usu├írio por acidente (o `Valid` estoura antes), mas arma no dia em que algu├®m restaurar `fcriptografar.prg` ÔÇö a├¡ toda troca de senha grava texto puro e tranca o usu├írio fora da conta, em sil├¬ncio.
+
+Corrigi com uma guarda de ida-e-volta: s├│ grava o que a pr├│pria confer├¬ncia consegue ler de volta. ├ë no-op quando as duas fun├º├Áes existem e s├úo inversas de verdade, ent├úo n├úo desvia do PILAR 1.
+
+## Provado em runtime (smoke test passou)
+
+`H=211/W=300/DS=1`, geometria dos 3 campos id├¬ntica ao `layout.json` (95/107, 153/106, 178/106), 3 subclasses instaladas, 4 m├®todos chamados de fora todos PUBLIC (regra #51), `When` = `.F.` em consulta e `.T.` em altera├º├úo, `Height` 211ÔåÆ250 por modo. Grava├º├úo: par igual ÔåÆ **recusou, `Senhas` intacta**, mensagem vis├¡vel; par diferente ÔåÆ texto exato do legado. `COMPILE` limpo nos dois arquivos com controle negativo funcionando (erros s├│ nas linhas injetadas). Zero acento literal, zero `RETURN` dentro de `TRY`, zero `this_*.Value`, `Test-CompletudeCodigo` = OK, e todo `nome(` resolvido exceto `fCriptografar` ÔÇö aus├¬ncia deliberada.
+
+## Pend├¬ncia que n├úo ├® minha para resolver
+
+O orquestrador em execu├º├úo n├úo enxerga o fix em disco, e a **Fase 8** depende do mesmo regex (`$temSuperficieEntradaF8`, ramo `ENTRADA-SEM-BOTAO`): com o antigo d├í `False`, com o novo `True`. Ent├úo a Fase 8 desta task deve reprovar pelo mesmo motivo, sem nada errado no artefato ÔÇö o retry segue adiante s├│ por `Test-Path`, e o fix vale da pr├│xima invoca├º├úo do orquestrador em diante. Fase 7 n├úo tem site afetado. Gravei em mem├│ria o defeito do par de wrappers assim├®trico (o problema do gate j├í estava registrado).

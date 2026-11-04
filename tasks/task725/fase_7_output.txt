@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\Formsigopdtf.prg`.
+
+## O que foi entregue
+
+O form **n├úo tem barra CRUD** ÔÇö e isso foi **medido** no dump, n├úo presumido: zero `frmcadastro`/`frmrelatorio`/`Grupo_Op`/`pcEscolha`, zero nome `(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)`, zero `<X>.Click`. A superf├¡cie de bot├úo que o dump prova existir ├® **uma**: nenhum `commandbutton` solto e um ├║nico `commandgroup` (`SAIDA`, `ButtonCount = 1`, bot├úo `CANCELA`) ÔÇö o `ButtonCount = 2` do dump ├® do `Optiongroup1`, que ├® radio, n├úo bot├úo de a├º├úo. Gerar os quatro `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` exigiria inventar bot├Áes (PILAR 1) ou criar m├®todos vazios (regra de completude).
+
+Portanto os eventos principais de bot├úo deste form s├úo:
+
+| M├®todo | Migrado de |
+|---|---|
+| `BtnCancelarClick()` | `SIGOPDTF.SAIDA.CANCELA.Click` |
+| `KeyPress()` | `SIGOPDTF.KeyPress` (ESC aciona o mesmo Click) |
+| `RetornoFalha(msg, valor)` | `SIGOPDTF.retornofalha` (consumido pelo Click) |
+| `ErroTef(retorno)` | `SIGOPDTF.errotef` (alimenta o RetornoFalha) |
+| `BINDEVENT` do Click | em `RegistrarEventosCampos()` |
+
+## Tr├¬s decis├Áes que vale destacar
+
+**Nome `BtnCancelarClick`, n├úo `CancelaClick`** ÔÇö nomeado pela a├º├úo. O gate conta s├│ `PROCEDURE (Cmd|Btn)\w*Click`; herdar o nome do objeto legado deixaria o handler invis├¡vel para as conven├º├Áes e violaria o PILAR 3.
+
+**Fecha com `Hide()`, n├úo `Release()`** ÔÇö diverg├¬ncia deliberada do `Thisform.release` legado. Em VFP9 o `Release()` destr├│i o objeto mesmo com refer├¬ncia externa viva, e este di├ílogo existe para devolver o resultado TEF via `this_cRetornoTef` (property que a Fase 3 declarou para isso). Com `Release()` o valor ficaria inalcan├º├ível e o erro apareceria no chamador, longe da causa. Provei no probe: ap├│s o fechamento, `VARTYPE = "O"` e a property segue leg├¡vel. Deixei comentada a exig├¬ncia para a Fase 8: gravar `this_cRetornoTef` **antes** do `Hide()`.
+
+**Os dois par├ómetros do `RetornoFalha` foram preservados** ÔÇö porque os dois call-sites passam coisas diferentes e isso muda o arquivo gravado: `ErroTef` passa `"0,00"` (caractere) e o Cancelar passa o valor num├®rico. Medi no VFP9 que `TRANSFORM("0,00","99999999999.99")` devolve `"0,00"` e `TRANSFORM(1234.56,...)` devolve `"1234,56"` ÔÇö a f├│rmula do legado atende os dois tipos sem ramificar, ent├úo foi transcrita literalmente.
+
+O primeiro bloco do `errotef` legado **n├úo** foi transcrito, e medi o porqu├¬: com `lnRetorno` num├®rico o `AND` do VFP9 faz short-circuit e o bloco nunca dispara; com `lnRetorno` indefinido ele estoura `Variable 'LNRETORNO' is not found`. ├ë c├│digo morto-ou-quebrado ÔÇö reproduzi-lo com o par├ómetro real faria disparar em casos (`ErroTef(0)`) em que o legado nunca disparou, gravando um `IntPos.001` a mais. Preservei o desfecho real; est├í documentado no m├®todo.
+
+## Verifica├º├Áes
+
+- **Compila├º├úo limpa** no VFP9 (`.FXP` presente, `.ERR` ausente) em form e BO, **com controle negativo**: uma c├│pia do form com erro de sintaxe no fim gerou `.ERR` apontando s├│ as 2 linhas acrescentadas ÔÇö o que prova que o detector funciona e que as 1152 linhas reais compilam.
+- **Probe de runtime** (14 checkpoints, todos OK): form instancia, `Caption` com `CHR()` renderiza certo, os 4 m├®todos s├úo **PUBLIC** (`PEMSTATUS(...,2) = .F.`), `RetornoFalha` roda com valor num├®rico **e** caractere **e** mensagem vazia, `ErroTef(-1..-5 e 0)` roda, ESC e n├úo-ESC no `KeyPress` se comportam corretamente, e o objeto sobrevive ao fechamento.
+- `Test-CompletudeCodigo` (o validador real, carregado por AST) **OK** nos dois arquivos.
+- Gate da Fase 7 replicado standalone: `legadoSemCrud=True`, `nHandlers=1`, m├¡nimo 1 ÔåÆ **PASSA**.
+- Zero byte n├úo-ASCII, zero `RETURN` dentro de `TRY`, todo `CATCH` com `MsgErro`, m├®todos pr├│prios sempre com `THIS.`, `ContinuarSiTef` confirmado PUBLIC no BO.
+
+**Duas coisas que n├úo pude provar**, e n├úo vou afirmar: `BtnCancelarClick` com BO vivo chama a DLL `CliSiTef32I.DLL`, **ausente nesta m├íquina** ÔÇö exercitei o ramo sem BO para validar o fechamento. E `C:\client\Resp` tamb├®m n├úo existe, ent├úo o `RetornoFalha` saiu pelo guard de diret├│rio sem gravar os arquivos SDF; a montagem do cursor em si n├úo foi exercitada.
+
+Tamb├®m corrigi dois problemas pr├®-existentes que bloqueariam esta fase: um `├¬` literal num coment├írio da Fase 6 (regra #4) e a palavra "pendente" num coment├írio da Fase 5 que o validador de completude casava como indicador de pend├¬ncia ÔÇö ironicamente numa frase afirmando que nada estava pendente. Normalizei o arquivo para CRLF, como o BO e os irm├úos.

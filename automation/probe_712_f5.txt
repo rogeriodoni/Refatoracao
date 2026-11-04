@@ -1,0 +1,56 @@
+=== CENARIO A: sem chamador (modo processo) ===
+VARTYPE(form) = O
+--- cabecalho NAO duplicado ---
+  cnt_4c_Sombra    existe = SIM
+  cnt_4c_Cabecalho existe = NAO (ok)
+  faixas RGB(100,100,100) H>=60 = 1 (esperado 1)
+--- lbl_4c_Label1 (esperado 122,97 92x15 FC 90,90,90 bold TabIndex 1) ---
+  existe   = SIM
+  Left/Top = 122,97
+  W x H    = 92x15
+  AutoSize = .F.  Alignment = 0
+  ForeColor= 5921370 (RGB 90,90,90 = 5921370)
+  Font     = Tahoma 8 bold=.T.
+  BackStyle= 0  TabIndex = 1
+  Caption  = [Processo Atual :]
+  Visible  = .T.
+  Left+W   = 214 (campo comeca em 216)
+--- txt_4c_Origem (esperado 216,94 150x23 Format ! MaxLength 20 TabIndex 3) ---
+  existe   = SIM
+  Left/Top = 216,94
+  W x H    = 150x23
+  Format   = [!]  InputMask = []
+  MaxLength= 20  TabIndex = 3
+  Font     = Courier New 9
+  Alignment= 3 (default de TextBox = 3)
+  Value    = [] tipo C
+  ReadOnly = .F.  TabStop = .T. (esperado .F. / .T.)
+  Visible  = .T.
+--- BINDEVENT na origem (sem chamador: NENHUM When) ---
+  eventos = 0 (esperado 0)
+--- escopo dos handlers (PEMSTATUS ...,2 = Protected) ---
+  OrigemWhen     prot=.F. (esperado .F.)
+  OrigemParaTela prot=.F. (esperado .F.)
+  OrigemWhen()   retorna .F. (esperado .F.)
+--- OrigemParaTela le do BO (fonte unica) ---
+  Value apos = [PROC-DO-BO] (esperado PROC-DO-BO)
+
+=== CENARIO B: com chamador, modo PROCESSO ===
+VARTYPE(form) = O
+  Origem.Value    = [PROCESSO 001] (esperado PROCESSO 001)
+  Origem W/MaxLen = 150 / 20 (esperado 150 / 20)
+  Origem ReadOnly = .T.  TabStop = .F. (esperado .T. / .F.)
+  eventos = 1 (esperado 1 = When)
+     [WHEN -> ORIGEMWHEN]
+  BO tabela/campo = SigPcOop / processos
+
+=== CENARIO C: com chamador, modo COMISSAO ===
+VARTYPE(form) = O
+  Caption         = [Cópia de Processo] (NAO muda com a modalidade)
+  Origem.Value    = [COMISSAO ABCDEFGHIJ]
+  Origem W/MaxLen = 290 / 40 (esperado 290 / 40)
+  Origem Left+W   = 506 (form Width = 800)
+  BO tabela/campo = SigCmCab / cods
+
+=== DIALOGOS CAPTURADOS ===
+(nenhum dialogo - ok)

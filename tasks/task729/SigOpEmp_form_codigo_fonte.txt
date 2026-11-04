@@ -1,0 +1,685 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpEmp.SCX
+* Data/Hora: 01/11/2026 00:24:20
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPEMP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPEMP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPEMP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPEMP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPEMP
+  Class: shape
+  BaseClass: shape
+
+Objeto: ok
+  Parent: SIGOPEMP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_NGrupo
+  Parent: SIGOPEMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_NConta
+  Parent: SIGOPEMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdItens
+  Parent: SIGOPEMP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEMP.grdItens.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEMP.grdItens.Column7
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Empenho"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowState = 0
+  parentform = .F.
+  Name = "SIGOPEMP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 768
+  Height = 17
+  Width = 20
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 11
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.get_NGrupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 68
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 81
+  Top = 465
+  Width = 360
+  ZOrderSet = 3
+  Themes = .F.
+  Name = "get_NGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.Get_NConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 68
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 84
+  Top = 488
+  Width = 360
+  ZOrderSet = 3
+  Themes = .F.
+  Name = "Get_NConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 343
+  Left = 37
+  ReadOnly = .T.
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 122
+  Width = 725
+  GridLineColor = 238,238,238
+  Name = "grdItens"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 31
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 206
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 60
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.Width = 80
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.Width = 80
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.Width = 80
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontBold = .T.
+  Column7.FontName = "Tahoma"
+  Column7.Width = 80
+  Column7.ReadOnly = .T.
+  Column7.BackColor = 255,255,170
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column5.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEMP.grdItens.Column7.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,170
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 1, 9, 6, 14, 12, 35, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPEMP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montagrades
+------------------------------------------------------------
+PROCEDURE montagrades
+With ThisForm
+	With .grdItens
+		.ColumnCount 	   = 7
+		.RecordSource 	   = 'CrEmpenhado'
+		.DeleteMark 	   = .f.
+		.RecordMark 	   = .f.
+		.ReadOnly 		   = .t.
+		.Scrollbars 	   = 2
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource  = 'CrEmpenhado.Emps'
+		.Column2.ControlSource  = 'CrEmpenhado.Dopes'
+		.Column3.ControlSource  = 'CrEmpenhado.Numes'
+		.Column3.InputMask 	    = '999999'
+		.Column4.ControlSource  = 'CrEmpenhado.Datas'
+		.Column5.ControlSource  = 'CrEmpenhado.GrupoDs'
+		.Column6.ControlSource  = 'CrEmpenhado.ContaDs'
+		.Column7.ControlSource  = 'CrEmpenhado.Qtds'
+		.Column7.InputMask 	    = '9999999.99'
+
+		For I=1 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+
+			.Column&lcCol..FontName  	  = [Courier New]
+			.Column&lcCol..Text1.FontName = [Courier New]
+		Next
+		.Refresh
+	EndWith
+
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDatSes
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	Set DataSession to pnDatSes
+	thisform.ParentForm = poForm
+	
+	.Icon = '\vbmp\4Control1.ico'
+
+	.Caption = [Empenho - ] + Alltrim(crSigMvEtr.Cpros)
+
+	thisform.montagrades()
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEMP.ok
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEMP.get_NGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEMP.Get_NConta
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEMP.grdItens
+* Classe: grid (Base: grid)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+thisform.get_NGrupo.Value = Iif(thisform.parentform.poDatamgr.CursorQuery('SigCdGcr','crSigCdGcr','codigos',crEmpenhado.GrupoDs,[Descrs]),evaluate('crSigCdGcr.Descrs'),'')
+thisform.get_NConta.Value = Iif(thisform.parentform.poDatamgr.CursorQuery('SigCdCli','crSigCdCli','iclis',crEmpenhado.ContaDs,[Rclis]),evaluate('crSigCdCli.Rclis'),'')
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPEMP
+RESERVED3 (ClassInfo): parentform
+podatamgr
+podatatmp
+produto
+*montagrades 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 complete and verified. `Formsigopdiv.prg` (11:42:10) is my only edit ÔÇö the other modified files carry mtimes from previous pipeline runs.
+
+## Fase 6 ÔÇö Formsigopdiv (task721)
+
+### Os tr├¬s entreg├íveis da fase
+
+**1. Campos restantes** ÔÇö j├í completos. A superf├¡cie de dados do legado tem **6 controles, todos presentes e fi├®is** (`Say1`ÔåÆ`lbl_4c_Op`, `Get_OP`ÔåÆ`txt_4c_Op`, `Say2`ÔåÆ`lbl_4c_Produto`, `Get_Produto`ÔåÆ`txt_4c_Produto`, `fwmemo_obs`ÔåÆ`edt_4c_MemoObs`, `Get_obss`ÔåÆ`edt_4c_Obss`), com `Format`/`InputMask`/`MaxLength` transcritos e `txt_4c_Produto.ReadOnly = .T.` reproduzindo o `When Return .f.` do legado.
+
+**2. Lookups ÔÇö o legado tem ZERO.** Medido com os 5 padr├Áes do pr├│prio gate (`fwbusca` gen├®rico, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`): nenhuma ocorr├¬ncia ÔåÆ `legadoSemLookup = True`. O ├║nico `CreateObject` do dump ├® o conector de dados. Criar `AbrirLookup*` aqui exigiria **inventar tabela de lookup** (viola o PILAR 1) ou gerar m├®todo vazio (proibido pela regra de completude).
+
+**3. `cnt_4c_BotoesAcao`** ÔÇö n├úo existe neste form. O legado usa dois CommandGroup (`Grupo_Salva`, `Grupo_Conf`), ambos j├í presentes com handlers de `Click`.
+
+### O que estava realmente quebrado
+
+O form ├® **task019/Formsigopdiv**, um dos 4 que a mem├│ria registra reprovando a Fase 6 ÔÇö e o defeito mora justamente na superf├¡cie que esta fase ├® dona: os eventos dos campos. **Todos os 6 handlers `*LostFocus` estavam ligados a `"KeyPress"`**, declarando `par_nKeyCode` sem nunca test├í-lo (regra #47: a assinatura n├úo conta como teste):
+
+| handler | efeito real |
+|---|---|
+| `GetOpLostFocus` | `SetFocus` para a grade a **cada caractere** ÔÇö o usu├írio n├úo conseguia corrigir a OP |
+| `GradeCol2LostFocus` | validava por caractere; o guard `IF valor = 1` abria modal e **zerava a c├®lula** ÔÇö digitar o 2┬║ d├¡gito de qualquer n├║mero iniciado por 1 (10, 12, 15ÔÇª) matava a entrada |
+| `GradeCol4LostFocus` | mesma forma |
+| `MemoObs` / `Obss` | `grade2.Refresh` por caractere em vez de ao sair |
+
+Os dois `LostFocus` de c├®lula eram, al├®m disso, **inventados** ÔÇö o legado n├úo tem `LostFocus` em coluna nenhuma.
+
+### Corre├º├úo
+
+Religuei os 6 handlers de sa├¡da a `"LostFocus"` (sem par├ómetros) e renomeei para o can├┤nico `Validar<Campo>` / `ValidarAcesso<Campo>` / `<Campo>LostFocus`, com corpo em `Validar*Exec` (wrapper + Exec porque os corpos t├¬m `RETURN` antecipado). Acrescentei `this_lEmValidacao` (reentr├óncia ÔÇö o Exec abre `MsgAviso` e zera c├®lula, e as duas coisas redisparam o pr├│prio `LostFocus`) e `this_cOpValidada` (valor-n├úo-mudou, para a sa├¡da por mouse reproduzir o `Valid` do legado ÔÇö que dispara ao sair por qualquer meio ÔÇö sem repetir a consulta do ENTER/TAB), invalidado em `LimparCampos`, que ZAPa os cursores.
+
+O rename n├úo ├® ceder ao regex: `<X>LostFocus` ligado a KeyPress ├® exatamente a assinatura de defeito da regra #47, e `Validar<Campo>` ├® o nome can├┤nico do projeto.
+
+### Verifica├º├úo
+
+- **Compila├º├úo VFP9**: zero erros, `.fxp` apagado antes e recriado.
+- **Gate antesÔåÆdepois** (bloco `case 6` extra├¡do verbatim do `OrquestradorMigracao.ps1`): `temCamposFlat` `False`ÔåÆ`True`, `GATE FASE 6` `False`ÔåÆ`True`; **nenhum outro flag mudou**.
+- 15/15 delegates de `BINDEVENT` resolvem para m├®todos definidos, nenhum `PROTECTED` (regra #3).
+- Todo handler ligado a `KeyPress` tem guard de tecla; zero `"KeyPress"` com handler `*LostFocus`.
+- Validador 05d: 0 marcadores `TODO/FIXME/HACK/XXX/PLACEHOLDER`, 0 frases de adiamento, 0 procedures vazias.
+- 1626/1626 linhas CRLF preservadas (editei por `perl`, n├úo pelo Edit tool).
+
+### Ponto que deixei de fora, de prop├│sito
+
+A valida├º├úo de c├®lula continua em `BINDEVENT` KeyPress+LostFocus, **n├úo** numa subclasse de TextBox com `Valid` embutido como a regra #46 prescreve. As duas rotas de sa├¡da est├úo cobertas, mas a forma can├┤nica da #46 exigiria refatorar `ConfigurarGrade` (`ColumnCount`/`AddObject`/`CurrentControl`), o que p├Áe em risco a Fase 4 j├í aprovada ÔÇö e a #46 foi escrita para c├®lula **com lookup**, que este form n├úo tem. Fica registrado como pend├¬ncia de arquitetura, n├úo como lacuna funcional desta fase.

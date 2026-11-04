@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 entregue e verificada. Resumo:
+
+## O que foi acrescentado a `projeto/app/forms/operacionais/FormSigOpCop.prg`
+
+**Campos restantes** (linha de baixo do bloco de dados, transcritos do dump):
+- `lbl_4c_Label2` ÔÇö 169,136 / 109x15, Tahoma 8, `ForeColor = RGB(90,90,90)`, `AutoSize = .F.` (regra #23), Caption via `CHR()`
+- `txt_4c_Destino` ÔÇö 280,134 / 150x23, `Format = "!"`, `MaxLength = 20` (largura de `SigCdOpe.dopes char(20)`, n├úo do Width ÔÇö regra #19), TabIndex 4
+
+**Lookup completo** (`GetOrigem.Valid` ÔåÆ `fwBuscaExt` do legado):
+- `AbrirBuscaOrigem()` ÔÇö funil ├║nico com `FormBuscaAuxiliar(gnConnHandle, "SigCdOpe", "cursor_4c_BuscaOpe", "Dopes", ...)`, `this_lAchouRegistro` antes do `Show()`, atribui├º├úo s├│ sob `this_lSelecionou`, `Release()` + `USE IN` (regras #36/#37). **Uma** coluna no picker ÔÇö `SigCdOpe` n├úo tem coluna de descri├º├úo
+- tr├¬s entradas: `ValidarOrigem()` em **LostFocus** (n├úo KeyPress ÔÇö regra #47), `TxtOrigemKeyPress()` em F4/F5 (115/116, com ENTER/TAB deliberadamente fora para n├úo abrir o picker duas vezes) e `TxtOrigemDblClick()`
+- campo vazio ÔåÆ `MsgAviso("Opera├º├úo Deve ser informada !!!")` + `SetFocus` (o `Return .f.` legado; BINDEVENT descarta retorno)
+
+**`ValidarDestino()`** ÔÇö a confer├¬ncia de duplicidade do `GetDestino.Valid` (n├úo ├® lookup: ├® o inverso dele). Guarda `gnConnHandle > 0`, sem `TABLEREVERT` (regra #52), e **nunca apaga o que o usu├írio digitou** (regra #50)
+
+**Guardas de reentr├óncia** ÔÇö `this_lEmLookupOrigem` / `this_lEmValidaDestino`, com set/clear no handler-alvo e **save/restore** no funil, nenhum `RETURN` depois de ligar a flag (regra #47)
+
+## Verifica├º├úo (n├úo inferida)
+
+| prova | resultado |
+|---|---|
+| Smoke test VFP9 (o execut├ível roda de verdade nesta sess├úo) | `VIVO` gravado |
+| `COMPILE` do Form e do BO | FXP gerado, **zero `.ERR`** |
+| `CREATEOBJECT` sem chamador e com chamador | `VARTYPE = "O"` nos dois |
+| `AEVENTS` nos dois campos | origem `LOSTFOCUS/KEYPRESS/DBLCLICK` (+`WHEN` no caminho com chamador), destino `LOSTFOCUS` |
+| `PEMSTATUS(...,2)` dos 6 handlers | `.F.` em todos ÔÇö PUBLIC (regra #3) |
+| campo vazio / tecla n├úo-lookup / sem conex├úo / flag ligada / campo ReadOnly | mensagem exata do legado, flags sempre liberadas, valor digitado preservado |
+| Gate da Fase 6 (`case 6` verbatim) | `temLayoutFlat = True`, **APROVADA** pela exig├¬ncia integral (`legadoSemLookup = False`) |
+| `Test-CompletudeCodigo` (05d) | OK nos dois arquivos |
+
+## Um conserto fora do escopo da fase
+
+O `Test-CompletudeCodigo` reprovava `SigOpCopBO.prg` por um falso positivo que **bloquearia a etapa 05d**: o coment├írio `*-- Todo override tem de ter casado...` (portugu├¬s "todo" = "cada") casa o regex de marcador `TODO`. Troquei uma palavra ÔÇö `*-- Cada override tem de ter casado...` ÔÇö e o validador passou. Diff de 1 linha.
+
+## Para a Fase 7
+
+`AbrirBuscaOrigem` escreve s├│ no TextBox, **n├úo** sincroniza o BO de prop├│sito: o `FormParaBO` do Click do `CmdCopia` tem de ler `txt_4c_Origem`/`txt_4c_Destino` como fonte ├║nica (o `this_cOperacaoOrigem` semeado no `InicializarForm` fica obsoleto se o usu├írio trocar a origem pelo lookup). Est├í registrado na nota 21 do cabe├ºalho.

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 executada. O `Formsigopecm.prg` foi modificado (789 linhas, era 734) e o `sigopecmBO.prg` tamb├®m.
+
+## O que a fase pedia vs. o que o legado tem
+
+A FASE 6 pede "campos restantes e lookups". **O `SIGOPECM` n├úo tem lookup nenhum** ÔÇö grep exaustivo do dump: zero `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`sigacess`/F4, e os 6 m├®todos do `comportamento.json` t├¬m `temLookup: false`. O ├║nico "campo" ├® 1 TextBox (`ReadOnly`, alimentado pelo `GETFILE()`) + 1 CheckBox, ambos j├í entregues. Os 13 objetos do SCX est├úo todos migrados.
+
+Inventar lookup violaria o PILAR 1. Ent├úo fiz a auditoria linha-a-linha do dump contra o migrado ÔÇö o conte├║do real da Fase 6 neste perfil. **Achei 3 defeitos:**
+
+| # | Defeito | Corre├º├úo |
+|---|---|---|
+| 1 | `sigopecmBO` condicionava a exporta├º├úo de imagens a `this_lExportarImagens` ÔÇö **o legado NUNCA l├¬ `chkImagens`** (s├│ aparece na ├írvore de objetos e nas propriedades; o `Processamento` guarda s├│ com `If Not Empty(FigJpgs) And Not IsNull(FigJpgs)`). Quem desmarcasse a caixa deixaria de receber JPGs que o sistema antigo gera sempre | condi├º├úo passa a ser s├│ `IF !EMPTY(this_cFigjpgs)` |
+| 2 | `ConfigurarBotoes` gravava `.TabIndex = 6`/`= 5` ÔÇö os literais que a Fase 5 **mediu como n├úo sobreviventes ao load** ÔÇö contra os 7/8 medidos em `ConfigurarOrdemTabulacao`. Fonte de verdade duplicada e contradit├│ria | literais removidos; `ConfigurarOrdemTabulacao` fica ├║nica fonte |
+| 3 | `BtnProcessarClick` sem guarda de reentr├óncia, com `DOEVENTS` no la├ºo de progresso (o legado **n├úo tinha** DOEVENTS). Reentrar ├® destrutivo: `STRTOFILE("", arq, 0)` **apaga** os td01/td03 j├í gravados, e `USE IN` + recria o cursor que o SCAN est├í percorrendo | `this_lProcessando` + wrapper com `FINALLY` (regra #47) |
+
+## Sobre o defeito 1 ÔÇö decis├úo que ├® sua, n├úo minha
+
+Fui **fiel ao legado** e documentei nos dois lugares, mas isso deixa a caixa "Exportar Imagens" **inerte** ÔÇö como j├í ├® no sistema antigo. Ativ├í-la ├® mudan├ºa de comportamento (PILAR 1) e precisa da sua decis├úo; a property foi mantida, ent├úo ├® um `IF` de dist├óncia.
+
+## Provas (VFP9 rodou nesta sess├úo)
+
+- **Compila├º├úo**: `.FXP` novos (21:58), nenhum `.ERR`
+- **Instancia├º├úo**: `VARTYPE=O`, `ControlCount=10`, todos `Visible=.T.`
+- **TabIndex = exatamente a ordem medida 1..8** (Cancela=7, Processa=8) ÔåÆ remover os literais n├úo regrediu
+- **Guarda bloqueia**: flag em `.T.` ÔåÆ `BtnProcessarClick` devolve antes do `TRY`, o `FINALLY` n├úo roda, flag continua `.T.`. Prova independente: o log de mensagens tem **2** entradas de `MsgConfirma` para as 2 chamadas leg├¡timas e **zero** para a bloqueada
+- **Guarda libera apesar do `RETURN` antecipado** (o caminho que travaria um set/clear simples) e o bot├úo n├úo morre na 2┬¬ chamada
+- **F├│rmulas conferidas numericamente** (`automation/medir_scan_workarea_727.prg`): `PADL(coluna)` do legado Ôëí `STR(ÔÇª,12,3)`/`STR(ÔÇª,18,5)` do migrado para `pesoms`/`pvens`, inclusive o truncamento de `123.45678` ÔåÆ `123,4567`
+- **`SCAN` sobrevive** ao `USE IN` dentro do la├ºo (4 cen├írios) ÔåÆ os `USE IN` aninhados do BO n├úo s├úo defeito
+- **Auditorias do projeto**: `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas` (1102 `.prg`), `VerificarPropriedadesInexistentes` ÔåÆ todas zero achados
+- **Est├íticos**: 0 bytes >127, 0 TODO, 0 `RETURN` dentro de `TRY` (TRY/ENDTRY balanceados), 0 procedures vazias, 0 `MESSAGEBOX` direto, 0 `this_X .Value`, CRLF preservado
+
+**Duas coisas que n├úo consegui medir**, para n├úo dar por provado o que n├úo foi: o harness de reentr├óncia do `DOEVENTS` e o de dano **penduraram** (form n├úo-modal sem `READ EVENTS`; e di├ílogo modal do VFP ao recriar o cursor em SCAN). Matei os processos e removi os harnesses. O defeito 3 est├í justificado pela sem├óntica documentada do `STRTOFILE` modo 0 (sobrescrita) e pela doutrina de guarda do projeto ÔÇö n├úo por medi├º├úo.
+
+Nota: os arquivos ainda est├úo **n├úo rastreados** no git (sa├¡da de pipeline em voo); n├úo commitei. Li├º├úo gravada em mem├│ria como `CtrlNuncaLido`.

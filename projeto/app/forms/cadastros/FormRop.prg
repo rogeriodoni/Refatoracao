@@ -416,7 +416,7 @@ DEFINE CLASS FormRop AS FormBase
         *-- Container botões Confirmar/Cancelar (canônico: Top=51, Left=842)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 51
+            .Top         = 27
             .Left        = 842
             .Width       = 160
             .Height      = 85

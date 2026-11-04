@@ -110,7 +110,12 @@ DEFINE CLASS Formorl AS FormBase
         *-- Container cabecalho (cntSombra no legado)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 2
+            *-- Erro303: a faixa estava em Top = 2, ou seja -27..53 na tela: o
+            *-- titulo saia cortado e os botoes (containers em 29, corretos)
+            *-- transbordavam 27px. Top = 31 e o canonico da pagina Lista
+            *-- (FormCor/Formcfo). Conferido instanciando: o 1o controle de
+            *-- dados desta pagina fica bem abaixo de 111, nada e soterrado.
+            .Top         = 31
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -152,7 +157,10 @@ DEFINE CLASS Formorl AS FormBase
         *-- Container botoes CRUD (Grupo_Op no legado) - lado direito
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 0
+            *-- Erro303: Top = 0 punha os 5 botoes CRUD em -24..51 na tela,
+            *-- DECAPITADOS (24px acima da borda superior da janela). 29 e o
+            *-- mesmo Top do cnt_4c_Saida desta pagina, que ja estava certo.
+            .Top         = 29
             .Left        = 542
             .Width       = 390
             .Height      = 85

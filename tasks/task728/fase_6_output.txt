@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 executada em `C:\4c\projeto\app\forms\operacionais\FormSigOpEmb.prg` (1017 ÔåÆ 1127 linhas).
+
+## O que a fase encontrou
+
+Medi o dump antes de escrever, e o resultado muda o escopo nominal da fase ("campos restantes e lookups"):
+
+| medi├º├úo no dump (`SigOpEmb_form_codigo_fonte.txt`) | resultado |
+|---|---|
+| `fwBuscaExt` / `fwBuscaSel` / `fwBuscaInt` / `sigacess` / `Acesso*` / `CreateObject` / `mAddColuna` / `Seek` | **0 ocorr├¬ncias** ÔÇö o legado n├úo tem lookup algum |
+| `BaseClass: textbox` | 4, todos com `Parent: SIGOEMB.Grade.ColumnN` ÔÇö s├úo os `Text1` nativos das colunas, entregues com a grade na Fase 4 |
+| campo/label fora da grade | nenhum (os 2 labels s├úo `lblSombra`/`lblTitulo` do cabe├ºalho) |
+
+N├úo h├í campo solto nem lookup a acrescentar. O pr├│prio `OrquestradorMigracao.ps1` j├í registra isso: cita **SIGOEMB** nominalmente como exemplo da fam├¡lia "GRADE + BOTOES ÔÇö todo controle de entrada ├® c├®lula de coluna, n├úo sobra campo solto para as Fases 5 e 6". Inventar um picker aqui gravaria consulta a tabela que o legado nunca leu (PILAR 1), e duplicar uma c├®lula como controle fantasma n├úo reproduz nada.
+
+Ent├úo a fase virou auditoria propriedade-a-propriedade contra a SE├ç├âO 2 do dump, que achou defeitos reais:
+
+## Mudan├ºas de c├│digo
+
+**1. Flags de janela que faltavam** (linhas 151-187) ÔÇö o dump declara todas, e o cabe├ºalho anterior afirmava o oposto ("n├úo aparecem no layout.json... seguido o padr├úo dos outros di├ílogos por analogia"). Corrigi o coment├írio tamb├®m: "inferido por analogia" convida um sweep a "consertar" valor que ├® do legado.
+
+- `AlwaysOnTop = .T.`, `FontName = "Verdana"`, `FontSize = 8`
+- `DataSession = 1` ÔÇö ├® o default, mas **expl├¡cito de prop├│sito**: esta tela existe para ler/reescrever os cursores do form pai (`crSigMvIte`/`crTpmMvItn`), que s├│ s├úo vis├¡veis porque `1` significa a sess├úo *corrente*. Um sweep de "forms sem DataSession" que acrescentasse `2` daria sess├úo privada: grade vazia e peso sempre zero, sem erro e sem log.
+- `KeyPreview = .T.` ÔÇö inerte aqui (nenhum dos 9 m├®todos do dump ├® `KeyPress`); quem responde ao ESC ├® o `Cancel = .T.` do bot├úo. Transcrita porque o dump a declara.
+- `Closable = .F.` ÔÇö **transcrito, n├úo inventado**, e a distin├º├úo importa: com `TitleBar = 0` n├úo h├í bot├úo de fechar, mas `Closable` ainda governa o Alt+F4. Consequ├¬ncia documentada: a ├║nica sa├¡da ├® o bot├úo que *grava*, ou seja a tela n├úo tem como desistir ÔÇö e isso ├® o legado. Se o dump n├úo declarasse, eu **n├úo** poderia acrescentar por coer├¬ncia com `TitleBar`/`ControlBox`.
+
+**2. Colunas calculadas travadas** (linhas 488-498) ÔÇö `Column2/3/4.ReadOnly` passou de `.F.` para `.T.`, depois do `Grid.ReadOnly`. O `When -> .F.` dos TextBox continua sendo a prote├º├úo prim├íria (recusa o foco, ├® o que reproduz a navega├º├úo por Tab do legado); o `ReadOnly` ├® a rede de baixo exigida pela regra #46: se a Column for recriada num rebind, ela volta ao `Text1` nativo sem o `When` e, com `Grid.ReadOnly = .F.` propagado, "Peso" e "Peso Total" ÔÇö que s├úo **calculados** ÔÇö passariam a aceitar digita├º├úo direta no cursor, corrompendo o peso devolvido ao pai. Isso tamb├®m ├® o que satisfaz o gate `grade ├║nica` da Fase 6, que exigia `.ReadOnly = .T.` e n├úo casava em nenhuma linha do arquivo.
+
+**3. `Load -> =fConfigGeral()`** ÔÇö ├║nica fun├º├úo externa do `comportamento.json`. Registrada como substitu├¡da, **sem** virar chamada: o wrapper `utils\fconfiggeral.prg` existe s├│ para o p-code dos VCX legado alcan├ºar pelo PATH e o cabe├ºalho dele manda n├úo cham├í-lo de c├│digo nosso. A configura├º├úo global que ela fazia j├í acontece antes (`config.prg`, `main.prg`) e os cursores desta tela s├úo do `SigOpEmbBO`.
+
+## Verifica├º├úo
+
+- `COMPILE` no VFP9: `.fxp` de 13046 bytes, **sem `.err`** ÔÇö antes e depois da normaliza├º├úo de encoding (mesmo tamanho, prova que o CRLF n├úo alterou c├│digo).
+- As 6 propriedades novas conferidas contra `automation/propriedades_baseclasses.txt`: todas na linha `FORM`.
+- Zero byte > 127 (acentos por `CHR()`), zero `TODO`/stub, nenhum `PUBLIC PROCEDURE` em `DEFINE CLASS`.
+- O arquivo estava **LF puro** (CR=0, escrito por fase anterior); restaurei CRLF (CR=1127=LF=1127) pelo m├®todo de arquivo `.ps1`, com `diff` provando conte├║do id├¬ntico. O BO ao lado j├í era CRLF.
+
+N├úo executei a tela: ela depende dos cursores de um form pai de movimenta├º├úo e o SQL Server 192.168.200.10 est├í inalcan├º├ível nesta m├íquina ÔÇö instanciar provaria s├│ que o `Init` abre, n├úo que grava.

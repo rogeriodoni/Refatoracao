@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete. `FormSigOpCoc.prg` now has the button events, compiles clean in VFP9, and the behaviour is verified by execution ÔÇö not just instantiation.
+
+## What was missing and what was added
+
+The form drew the OK and Cancelar buttons but **neither click did anything** ÔÇö no `BINDEVENT`, no handler. The dialog couldn't save and couldn't close.
+
+**`ConfigurarBotoesSaida`** ÔÇö wiring, one per button (the legacy has `OK.Click` and `Sair.Click` separately, not a group Click, so no `.Value` disambiguation is needed):
+```foxpro
+BINDEVENT(THIS.obj_4c_Grupo_Saida.Buttons(2), "Click", THIS, "BtnOKClick")
+BINDEVENT(THIS.obj_4c_Grupo_Saida.Buttons(1), "Click", THIS, "BtnCancelarClick")
+```
+
+**`BtnOKClick`** ÔÇö transcription of the legacy `OK.Click` (`Select CrSigCdOpt` / `Replace Cabs, Rods` / `Release`): `FormParaBO()` ÔåÆ `EditarRegistro()` + `Salvar()` ÔåÆ `Release()` only on success. `EditarRegistro()` is required because `BusinessBase.Salvar()` refuses anything not in edit mode; both are PUBLIC on the base, so regra #51 is respected (the form never calls the PROTECTED `Inserir`/`Atualizar`). No success `MsgInfo` and no duplicate error message ÔÇö `BusinessBase` already reports via `ExibirFalha` (regra #20). Read-only guard sits **before** the `TRY` (regra #1).
+
+**`BtnCancelarClick`** ÔÇö the legacy `Sair.Click` is one line (`ThisForm.Release`), so there's no confirmation prompt and no value restoration; adding either would change behaviour. It clears `this_lConfirmado`, calls `CancelarEdicao()`, and releases.
+
+## On the phase's four CRUD names
+
+I did **not** add `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. This legacy has no CRUD bar, and I measured that rather than assuming it ÔÇö running the orchestrator's own gate functions against the dump: root is `Class: form` (not `frmcadastro`), no `Grupo_Op`, no CRUD-named object, and the only `pcEscolha` evidence arrives as an `Init` parameter from the parent form (`ModoRecebidoDoChamador = True`). So `legadoSemCrud` is true and the requirement is one handler per button the dump proves exists ÔÇö `ButtonCount = 2`, now `nHandlers = 2`. Inventing the four buttons would break PILAR 1; four empty methods would break the completeness rule.
+
+## Verification
+
+Compiled clean (no `.err`). A headless probe then exercised the real flows:
+
+| Scenario | Result |
+|---|---|
+| ALTERAR ÔåÆ type ÔåÆ OK | origin BO received `CAB-NOVO`/`ROD-NOVO`; form released |
+| ALTERAR ÔåÆ type ÔåÆ Cancelar | origin stayed `CAB-ANTIGO` ÔÇö nothing leaked; form released |
+| CONSULTAR | OK hidden, fields `ReadOnly`, guard blocked a programmatic `BtnOKClick`; origin unchanged |
+
+Both handlers measured PUBLIC (`PEMSTATUS(...,2) = .F.`), so `BINDEVENT` will fire them. Zero errors captured in test mode. Temp probe files and the build `.fxp` were removed.
+
+One thing worth flagging for a later phase, outside this scope: in the cursor-bound path (`ControlSource` to `CrSigCdOpt`), typing writes to the cursor live, so Cancelar does not undo it. That matches the legacy exactly ÔÇö the BO's `this_cCabsOriginal`/`this_cRodsOriginal` properties are therefore currently unused, and wiring them into Cancelar would be a deliberate divergence from the legacy, not a fix.

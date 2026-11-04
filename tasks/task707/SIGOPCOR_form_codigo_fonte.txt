@@ -1,0 +1,557 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPCOR.SCX
+* Data/Hora: 30/10/2026 05:35:35
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCOR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCOR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCOR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCOR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPCOR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCOR.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCOR.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCOR.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCOR.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCOR.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Edit1
+  Parent: SIGOPCOR.Grade.Column3
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Sair
+  Parent: SIGOPCOR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say1
+  Parent: SIGOPCOR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCOR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NotaIni
+  Parent: SIGOPCOR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NotaFim
+  Parent: SIGOPCOR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR
+------------------------------------------------------------
+  Height = 425
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Carta de Correção"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .T.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCOR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  GridLineWidth = 1
+  Height = 298
+  Left = 98
+  ReadOnly = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 5
+  Top = 118
+  Width = 604
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 220
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 280
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Sparse = .F.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ocorrência"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Retificação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Grade.Column3.Edit1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowTabs = .F.
+  Height = 53
+  Left = 5
+  ReadOnly = .F.
+  Top = 31
+  Width = 100
+  Name = "Edit1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Sair
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "Sair"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Confirmar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Ok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Say1
+------------------------------------------------------------
+  Caption = "Nota : "
+  Left = 322
+  Top = 92
+  TabIndex = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Say2
+------------------------------------------------------------
+  Caption = "a"
+  Left = 416
+  Top = 92
+  TabIndex = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Get_NotaIni
+------------------------------------------------------------
+  Left = 359
+  MaxLength = 6
+  TabIndex = 1
+  Top = 89
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_NotaIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOR.Get_NotaFim
+------------------------------------------------------------
+  Left = 426
+  MaxLength = 6
+  TabIndex = 2
+  Top = 89
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_NotaFim"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCOR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor XCorNf (cods n(3),descs c(30),retifs m NULL)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm,Emp,Serie,EmisDe,EmisAte
+Private pcEmps,pcSeries,pcNFisDe,pcNFisAte
+
+ThisForm.poDataMgr = CreateObject('fSqlConector',.Name)
+
+ThisForm.ParentForm = pForm
+
+pcEmps    = ''
+pcSeries  = ''
+pcNFisDe  = Null
+pcNFisAte = Null
+
+lcQryCorNf = [Select * From SigNfCor ]+;
+ 			  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis between ?pcNFisDe And ?pcNFisAte ]+;
+		   [Order By cemps,cseries,cnfis,noccors ]
+lcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]
+
+With ThisForm.poDataMgr
+	.AddCursor('SigNfCor','cidchaves','CrSigNfCor','','',lcQryCorNf)
+	.AddCursor('SigCcOco','ncodigos' ,'CrSigCcOco','','')
+	.AddCursor('SigCdEmp'  ,'cemps'    ,'CrSigCdEmp'  ,'','',lcQryEmp)
+EndWith
+
+ThisForm.poDataMgr.Requery('CrSigNfCor')
+ThisForm.poDataMgr.Requery('CrSigCcOco')
+
+ThisForm.Emp     = Emp
+ThisForm.Serie   = Serie
+ThisForm.EmisDe  = EmisDe
+ThisForm.EmisAte = EmisAte
+
+pcEmps = Emp
+
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+
+Select CrSigCcOco
+Scan
+	Insert Into XCorNf (cods,descs,retifs) ;
+	Values (CrSigCcOco.ncodigos,CrSigCcOco.cdescrs,'')
+EndScan
+With ThisForm.Grade
+	.RecordSource = 'XCorNf'
+	.Column1.ControlSource = 'XCorNf.cods'
+	.Column2.ControlSource = 'XCorNf.descs'
+	.Column3.ControlSource = 'XCorNf.retifs'
+	.Refresh
+EndWith
+Select XCorNf
+Go Top
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOR.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOR.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOR.Grade.Column3.Edit1
+* Classe: editbox (Base: editbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+Do Case
+	Case nKeyCode = 13 or nKeyCode = 24
+		Select XCorNf
+		If Not Eof()
+			Skip
+		EndIf
+		ThisForm.Grade.Refresh
+	Case nKeyCode = 5 
+		Select XCorNf
+		If Not Bof()
+			Skip -1
+		EndIf
+		ThisForm.Grade.Refresh
+	Case nKeyCode = 9
+		KeyBoard "{CTRL+TAB}"
+EndCase
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCOR
+RESERVED3 (ClassInfo): emisate
+emisde
+emp
+parentform
+podatamgr
+serie
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

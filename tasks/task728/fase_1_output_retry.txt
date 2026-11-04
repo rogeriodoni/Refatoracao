@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1 conclu├¡da. `C:\4c\projeto\app\classes\SigOpEmbBO.prg` criado (144 linhas).
+
+## O que o form ├®
+
+`SIGOEMB` ├® um **di├ílogo modal filho** ("Quantidade de embalagens"), chamado pelo form pai de itens da movimenta├º├úo. Para o item corrente (`crTpmMvItn.Citens`) lista todas as embalagens de `SigCdEmb`, o usu├írio digita a quantidade de cada uma, e no Confirmar regrava as linhas de `SigMvIte` daquele item devolvendo o peso total ao pai (`parentform.pesoemb`).
+
+## Entrega
+
+**20 propriedades**, extra├¡das do fonte legado e conferidas contra `docs/schema.sql` (682 tabelas, lido com `Get-Content -Raw` ÔÇö regra #14):
+
+| Grupo | Propriedades |
+|---|---|
+| `SigMvIte` (persist├¬ncia, **9 colunas, todas NOT NULL**) | `this_cCidchaves`, `this_nCitens`, `this_cCodembs`, `this_cDopes`, `this_cEmpdopnums`, `this_cEmps`, `this_nNumes`, `this_nPesos`, `this_nQtds` |
+| `SigCdEmb` (refer├¬ncia, leitura) | `this_cCods`, `this_cDescs`, `this_nPesoEmbs`, `this_nMultis`, `this_nPrecos` |
+| Contexto do form pai | `this_cCursorItensMov`, `this_cCursorItemCorrente` |
+| Cursores pr├│prios | `this_cCursorEmbalagens`, `this_cCursorCadEmb` |
+| Derivados | `this_nPesoTotalEmbalagens`, `this_nLinhasGravadas` |
+
+Tr├¬s decis├Áes que valem registrar:
+
+- **`this_nPesoEmbs` separado de `this_nPesos`** ÔÇö as duas colunas se chamam `pesos` (em `SigCdEmb` e `SigMvIte`) e aparecem **juntas** na grade (Column3 = peso unit├írio, Column4 = peso da linha). Colapsar as duas perderia uma coluna da tela.
+- **`MontarChaveEmpDopNums()` j├í implementada** ÔÇö `empdopnums` ├® `char(29)` e a chave ├® **posicional** (3+20+6). `ALLTRIM` nas partes faz o SELECT devolver zero linhas em sil├¬ncio (regra #42, origem Erro177). Usa `PADR` expl├¡cito porque o Form guarda as properties j├í com `ALLTRIM`.
+- **Cursores com nome pr├│prio, n├úo `cursor_4c_Dados`** ÔÇö a grade precisa de cursor READWRITE recarregado por ZAP+APPEND, e reaproveitar o alias compartilhado por 163+ BOs CRUD herda a estrutura deixada por outro form (origem do Erro138).
+
+`Init()` s├│ configura `this_cTabela`/`this_cCampoChave` e retorna `.T.` ÔÇö **nenhum SQLEXEC**. O `Init` legado carregava `LocalCdEmb` e fazia `Return .f.` em falha; replicar isso faria `CREATEOBJECT` virar l├│gico e a tela nunca abrir, nem em valida├º├úo de UI com `gnConnHandle = -1`. Essa carga ├® cache e entra nos m├®todos de busca da Fase 2.
+
+## Verifica├º├úo executada
+
+O smoke test do VFP9 **passou** nesta sess├úo, ent├úo os resultados abaixo s├úo medidos, n├úo inferidos:
+
+- **Compila├º├úo limpa** ÔÇö `.FXP` gerado, `.ERR` ausente. Com **controle negativo**: uma c├│pia com `PUBLIC PROCEDURE` colada no fim gerou `.ERR` apontando **s├│** as 3 linhas acrescentadas ÔÇö o que prova de uma vez que o detector funciona e que as 144 linhas est├úo limpas.
+- **Instancia├º├úo** ÔÇö `VARTYPE(BO) = "O"`, `this_cTabela = [SigMvIte]`, `this_cCampoChave = [cidchaves]`.
+- **As 20 properties existem** via `PEMSTATUS`, com os tipos certos (C/N).
+- **Chave posicional** ÔÇö `MontarChaveEmpDopNums("001","MALOTE",3)` ÔåÆ 29 chars, `[001MALOTE                   3]`; com entradas `ALLTRIM`adas continua 29.
+- **Visibilidade (regra #51)** ÔÇö `ObterChavePrimaria` PROTECTED = `.T.`; `MontarChaveEmpDopNums`/`Salvar`/`Excluir`/`Buscar` PROTECTED = `.F.` (cham├íveis pelo Form).
+- **Completude** ÔÇö rodei os 4 padr├Áes reais de `Test-CompletudeCodigo` (extra├¡dos do orquestrador, sem dot-source): zero TODO/stub/procedure vazia.
+
+O `.FXP` foi removido ao final para a Fase 2 n├úo rodar c├│digo antigo depois de editar o `.prg`.
+
+## Pend├¬ncias que a Fase 1 n├úo cobre (por desenho das fases)
+
+Duas ficam anotadas para a Fase 2, ambas armadilhas conhecidas:
+
+1. O `INSERT` em `SigMvIte` tem de cobrir as **9 colunas NOT NULL**, e `cidchaves` precisa de `EscaparSQL(fUniqueIds())` ÔÇö o legado faz `Scatter Memvar` sobre `NVL(b.CidChaves,'')`, que para linha nova sai vazia e colide na PK no segundo registro (regra #22).
+2. `TratarNulo(valor, padr├úo)` ÔÇö o 2┬║ argumento ├® o **valor padr├úo**, n├úo string de tipo. `sigmvitnBO` usa a forma errada (`TratarNulo(aqtds, "N")`); vou seguir `SigMvSbnBO` (`TratarNulo(Ordes, 0)`).

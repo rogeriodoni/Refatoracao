@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 6/8 completa ÔÇö FormSigOpEnc (Encerramento de Contas)
+
+Adicionei os campos restantes e os lookups ao form, mantendo a arquitetura dos arquivos j├í existentes (`SigOpEncBO.prg` / `FormSigOpEnc.prg`):
+
+**Bloco Contra-Partida** (`ConfigurarCamposContraPartida`): Label4 + Say4/Say5 + os 4 getters (`txt_4c_GrupoC/DGrupoC/ContaC/DContaC`), transcritos do dump com os `When` de depend├¬ncia (`DGrupoCWhen`/`DContaCWhen`).
+
+**Bloco Opera├º├úo** (`ConfigurarCamposOperacao`): Shape1 + Label2 + `txt_4c_Dope`, populado a partir de `SigCdPac.DopZers` via novo m├®todo `SigOpEncBO.CarregarParametros()` (tamb├®m guarda `this_cSigKey` para a fase de Processar).
+
+**Lookups**: em vez de chamar `fAcessoContab`/`fAcessoContas` direto (que reexibem o picker legado e preenchem pelo registro corrente do cursor sem distinguir sele├º├úo de cancelamento ÔÇö o mesmo defeito documentado na mem├│ria para `fAcessoContas`), implementei `ResolverCodigoDescricao()`: busca exata primeiro, e s├│ na falta dela abre `AbrirLookupCanonico()` (herdado de `FormBase`), que s├│ atribui com confirma├º├úo do usu├írio. Usado nos 8 pares LostFocus (Grupo/DGrupo, GrupoC/DGrupoC, Conta/DConta, ContaC/DContaC).
+
+**TabIndex**: um m├®todo dedicado (`AjustarTabIndexContainer1`) aplica os valores altos do dump (9ÔÇô16) s├│ depois que os 16 controles j├í existem no container ÔÇö evita o truncamento que o VFP9 faz ao setar TabIndex acima do ControlCount corrente.
+
+**LimparFiltro** estendido para zerar tamb├®m os 4 campos de Contra-Partida (igual ao `Procedure iniciar` do legado).
+
+Validei compilando os dois arquivos de verdade no VFP9 (`COMPILE`) com smoke test e controle negativo ÔÇö ambos compilam limpo (`.FXP` sem `.ERR`); achei e corrigi um erro de sintaxe real nesse processo (`(cursor).campo` n├úo ├® v├ílido em VFP9 ÔÇö troquei por `SELECT (cursor)` + refer├¬ncia direta ao campo).
+
+Pr├│xima fase (7/8) deve cobrir: valida├º├Áes do `cmdProcessa.Click` (Grupo/GrupoC/ContaC/Dope obrigat├│rios) e o SCAN de gera├º├úo dos lan├ºamentos de encerramento (`FazContra`, chave `cidchaves`/`SigKey`).

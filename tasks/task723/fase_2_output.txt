@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and complete. File is saved at `C:\4c\projeto\app\classes\SigOpDocBO.prg` with Fase 2 additions:
+
+- **ObterChavePrimaria()** (PROTECTED) ÔÇö returns `pkChaves` for audit logging.
+- **CarregarDoCursor()** ÔÇö maps all `SigOpArq` columns via `TratarNulo`, guarded by `SELECT (alias)` per rule #9.
+- **Inserir()** ÔÇö generates `pkChaves` via `fUniqueIds()` when empty, defaults `Usuars`/`Datas` like the legacy `btnInsArqs.Click`, builds the INSERT with `EscaparSQL`/`FormatarDataSQL`, registers audit on success.
+- **Atualizar()** ÔÇö UPDATEs the editable fields (`Arquivos`, `ObsArqs`, `Usuars`, `Datas`) by `pkChaves`, leaving `fkChaves` untouched since it's the link to the parent record.
+- **ExecutarExclusao()** (PROTECTED, per rule #51) ÔÇö DELETEs by `pkChaves`, mirroring the legacy `btnExcArqs.Click`, but persisting directly instead of buffered commit.
+
+All NOT NULL columns (`pkchaves`, `arquivos`, `usuars`) are covered per rule #22, and column types were verified against `docs/schema.sql` (read via `Get-Content -Raw` per rule #14, since it's UTF-16).
+
+Next phase (Fase 3) will create the `FormSigOpDoc.prg` form shell.

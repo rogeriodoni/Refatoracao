@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö Formsigopdiv (task721)
+
+**A fase j├í estava satisfeita. N├úo criei `ConfigurarPaginaDados()`** ÔÇö seria inventar uma Page2 que o `SIGOPDIV.SCX` n├úo tem (viola o PILAR 1), ou gerar m├®todo vazio (proibido pela regra de completude).
+
+### Situa├º├úo encontrada
+`projeto\app\forms\operacionais\Formsigopdiv.prg` j├í existia com **1547 linhas e 44 m├®todos**, cobrindo Fases 3ÔÇô8 (cabe├ºalho do arquivo: *"Fase 7/8: Form completo"*), commitado e limpo em `f87d31419`. Task re-enfileirada sobre form j├í migrado ÔÇö o prompt manda `Write` na Fase 3 e `Read + Edit` na "A├ç├âO OBRIGAT├ôRIA"; segui a n├úo-destrutiva.
+
+O form ├® **OPERACIONAL FLAT** (sem PageFrame). A superf├¡cie de dados do legado tem **6 controles, todos j├í presentes** ÔÇö n├úo "metade", o total:
+
+| dump legado | migrado | conferido |
+|---|---|---|
+| `Say1` "OP :" | `lbl_4c_Op` | T87 L41 W23 H15, ForeColor 90,90,90 |
+| `Get_OP` | `txt_4c_Op` | Alignment 3, `Format "K"`, `InputMask "999999999999"`, MaxLength 12, T83 L67 W108 H23 |
+| `Say2` "Produto :" | `lbl_4c_Produto` | T87 L213 W47 H15, ForeColor 90,90,90 |
+| `Get_Produto` | `txt_4c_Produto` | Alignment 3, `Format "K"`, T83 L262 W108 H23 (`InputMask ""` ├® override vazio ÔÇö n├úo transcrito, regra #49) |
+| `fwmemo_obs` | `edt_4c_MemoObs` | Enabled/Visible `.F.`, BorderColor 36,84,155, `ControlSource "Temporario.Obss"` |
+| `Get_obss` | `edt_4c_Obss` | T421 L11 W626 H94, `ControlSource "Temp_DivOp.Obss"` |
+
+Gate `case 5` rodado com a condi├º├úo real do `OrquestradorMigracao.ps1`: ramo **FLAT** passa ÔÇö `OPERACIONAL` + sem `AddObject("pgf_4c_` + `.ControlSource =` presente ÔåÆ `GATE FASE 5 = True`.
+
+### Corre├º├úo aplicada (2 linhas)
+├Ünica diverg├¬ncia real no bloco de campos: os dois EditBox declaram `DisabledBackColor = 255,255,255` no SCX e o migrado tinha descartado. Importa porque `edt_4c_MemoObs` nasce `Enabled = .F.` e `edt_4c_Obss` ├® desabilitado em runtime pelo legado (`Get_obss.Enabled = .f.`, dump linha 1913) ÔÇö ├® justamente essa a cor que renderiza.
+
+`projeto/app/forms/operacionais/Formsigopdiv.prg:419` e `:436` ÔÇö `.DisabledBackColor = RGB(255, 255, 255)`. Diff confere exatamente 2 inser├º├Áes, nada mais; CRLF preservado (editei por `perl` + `cp`, n├úo pelo Edit tool).
+
+### Dois pontos que deixei de fora, de prop├│sito
+
+1. **`TabIndex` n├úo transcrito** (os 10 objetos de topo declaram 1..10; o migrado herda a ordem de cria├º├úo). **N├úo transcrevi porque os valores literais do dump n├úo s├úo a ordem efetiva do legado**: o VFP clampa o `TabIndex` no instante em que cria cada objeto, e aqui `Grupo_Conf=6` nasce 2┬║, `Grupo_Salva=5` 3┬║, `Grade2=7` 4┬║, `Grade=8` 5┬║ ÔÇö os quatro excedem a contagem e caem na ordem de cria├º├úo. Transcrever ao p├® da letra seria fiel ao arquivo e infiel ├á tela. Confirmar exige probe no VFP9, que **n├úo executa nesta sess├úo** (`vfp9.exe` compila, gera `.FXP` e sai com `exit=0` sem rodar o corpo) ÔÇö ent├úo n├úo alego medi├º├úo. Atenuante: o legado navega por `SetFocus` expl├¡cito (`Get_OP.LostFocus` ÔåÆ `Grade.Column2.Text1.SetFocus`) e `ON KEY LABEL ENTER`, n├úo por Tab.
+
+2. **Fora do escopo da Fase 5, mas anotando**: o toggle de visibilidade p├│s-gera├º├úo do legado (modo `'D'`: esconder `Get_obss`+`Grupo_Salva`, mostrar `fwmemo_obs`+`Grupo_Conf`+`Grade2`, dump linhas 1913ÔÇô1935) n├úo aparece em `GrupoSalvaClick` do migrado ÔÇö os ├║nicos sites de `edt_4c_MemoObs`/`edt_4c_Obss` com `.Visible` est├úo em `ConfigurarPaginaLista` e `AlternarPagina`. ├ë lacuna de Fase 7, n├úo mexi.
+
+N├úo gravei mem├│ria nova: medi o alcance e o migrador **transcreve** `DisabledBackColor` na regra geral (160 forms migrados o t├¬m, contra 201 dumps que o declaram) ÔÇö foi falha pontual deste form, n├úo padr├úo sist├¬mico.

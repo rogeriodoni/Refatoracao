@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpCrd.prg` (+707 linhas, 1309 no total).
+
+## O que foi acrescentado
+
+| M├®todo | Papel |
+|---|---|
+| `ConfigurarPaginaLista()` | funil: Shape ÔåÆ grade ÔåÆ bot├Áes (nessa ordem, por z-order) |
+| `ConfigurarShapeDecorativo()` | `Shape1` ÔåÆ `shp_4c_Shape1` |
+| `ConfigurarGrade()` | `GradeSubN` ÔåÆ `grd_4c_Dados` (grid-level) |
+| `ConfigurarColunasGrade()` | tudo que ├® de **coluna** ÔÇö reaplic├ível |
+| `ConfigurarBotoes()` | `cmdExcluir`/`cmdSair` ÔåÆ `cmd_4c_Excluir`/`cmd_4c_Encerrar` + BINDEVENT |
+| `AjustarBotoesPorModo()` | espelha `this_lPodeExcluir` (fChecaAcesso + modo) |
+| `CarregarLista()` | carga ÔåÆ linha em branco ÔåÆ bind ÔåÆ `GO TOP` + Refresh |
+| `VincularGrade()` | `ColumnCount` ÔåÆ `RecordSource` ÔåÆ `ControlSource` ÔåÆ reaplicar colunas |
+| `RepintarGrade()` | `Refresh` puro (sem `GO TOP`) |
+| `CmdExcluirClick()` / `CmdEncerrarClick()` | Click transcritos do legado |
+
+`InicializarForm` e `AtualizarEstadoControles` foram religados ├á nova sequ├¬ncia.
+
+## Decis├Áes que fogem do roteiro da fase ÔÇö e por qu├¬
+
+**N├úo h├í `AlternarPagina()` nem 6 bot├Áes CRUD.** O SCX n├úo tem PageFrame nem Page, e tem exatamente **dois** bot├Áes (Left 450 e 525). Os bot├Áes CRUD can├┤nicos moram em Left 542..932 num form de Width 600 ÔÇö nasceriam invis├¡veis e mortos. O gate da Fase 4 ├® satisfeito pelo ramo **FLAT**, que eu medi: `FormType=OPERACIONAL Ôêº temGrade Ôêº temBotoes Ôêº temCarga = True`.
+
+**Os `Click` entraram agora, n├úo na Fase 7.** `BINDEVENT` para delegate inexistente estoura no pr├│prio bind e derrubaria o `Init`. Restam para as fases de evento o `inserelinha` disparado pelo `LostFocus` da Column4 (├® como o usu├írio ganha linha nova) e o `LostFocus` da Column2 que joga o foco no Encerrar.
+
+**`RecordMark = .F.` divergindo do dump.** O dump declara `DeleteMark = .F.` e ├® silencioso sobre `RecordMark`, que na BaseClass `grid` vale `.T.` ÔÇö e as larguras fecham com a marca presente (100+100+48+80 = 328 nos 363 do Grid). Mantive `.F.` porque ├® a regra do projeto para grade OPERACIONAL e o CorretorAutomatico injeta `.F.` quando a propriedade falta; declarar expl├¡cito deixa a decis├úo vis├¡vel. As larguras das colunas seguem intocadas.
+
+**Nomes `cmd_4c_Excluir`/`cmd_4c_Encerrar`, n├úo os `cmd_4c_CmdExcluir`/`cmd_4c_CmdSair` do `tasks/task713/mapeamento.json`.** O mapeamento da valida├º├úo de UI (`projeto\app\utils\mapeamentos\`) ├® regerado a partir do `.prg` e ainda n├úo existe para este form; os patterns do corretor e a regra #10 falam de `cmd_4c_Encerrar`.
+
+## Ponto que conv├®m voc├¬ decidir
+
+O `cmdSair.Click` legado **libera o pai e fecha a tela mesmo quando a grava├º├úo falha** ÔÇö o RollBack desfaz no servidor, a MessageBox avisa, e o que foi digitado se perde. Transcrevi fiel (PILAR 1) e documentei no c├│digo. Se preferir que a tela **n├úo** feche em falha para o usu├írio poder reagir, ├® uma linha no `CmdEncerrarClick`.
+
+## Verifica├º├úo
+
+- `COMPILE` com `.fxp` apagado: **FXP OK, zero `.err`**
+- `CREATEOBJECT` em harness m├¡nimo: `VARTYPE=O`, `BaseClass=Form`, 600x349, **5 controles** com a geometria exata do dump (0/0, 7/205, 103/118, 3/450, 3/525)
+- Grid ligado: `ColumnCount=4`, `RecordSource=cursor_4c_Dados`, ControlSource/Header/Width/InputMask corretos nas 4 colunas (`Faixa Inicial`/`Faixa Final`/`%`/`Multiplos`, 100/100/48/80)
+- ├ìcones conferidos em `vbmp\` (`Pic=OK` nos dois), `Cancel=.T.` no Encerrar
+- `PEMSTATUS(...,2) = .F.` nos 7 m├®todos chamados de fora (regra #3)
+- `CarregarLista()` reentrante e `CmdExcluirClick()` executados de fora sem erro
+- CRLF preservado (CR=LF=1309), zero bytes >127, zero `RETURN` dentro de `TRY`, nenhum `TODO`/stub/`MESSAGEBOX`
+- `.FXP` gerados pelo teste removidos

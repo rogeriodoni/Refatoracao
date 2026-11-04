@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `Formsigopcim.prg` (1.674 linhas, 33 m├®todos) e `sigopcimBO.prg` (350 linhas) est├úo completos e verificados.
+
+## O que a Fase 8 consolidou
+
+Quatro blocos que **o legado j├í tem**, duplicados pelo migrador, viraram m├®todo ├║nico ÔÇö cada um transcrito do dump:
+
+| m├®todo | origem no SCX |
+|---|---|
+| `CarregarLista()` | o rodap├® id├¬ntico dos dois `Valid` (`Select CrInvH / Update Obs = Nvl(...) / AcertaGrade() / Go Top`) |
+| `BOParaForm()` | o bloco `Get_Produto/Descricao/Peso/Linha.Value = ...` repetido nos dois `Valid` |
+| `FormParaBO()` | a transfer├¬ncia inversa, que s├│ existia como argumento solto |
+| `AjustarBotoesPorModo()` | as 3 linhas `ExcluiItem/Shape2/Shape3.Visible` repetidas em **tr├¬s** lugares |
+
+`AtualizarEstadoProduto` passou a `HabilitarCampos()` (mesmo corpo ÔÇö ├® o `When` de `Get_Produto`).
+
+## Tr├¬s defeitos de fidelidade que a consolida├º├úo exp├┤s
+
+1. **O fim do `Init` legado nunca foi migrado**: `Select Historico / Go Bottom / Go Top` + limpeza do campo Barra. O `SetFocus` foi para `Activate` (no `Init` ele estoura ÔÇö padr├úo do projeto).
+2. **`Grade.RecordSource = ''` ausente** antes de reconstruir `CrInvH`. O ramo de fallback fecha e recria esse cursor, e derrubar alias ligado a Grid zera o `ColumnCount` ÔÇö grade virava ret├óngulo branco, sem erro e sem log. Agora `DesvincularGrade()` desliga e `CarregarLista()` religa (medido: `Width`/`Header`/`CurrentControl`/`Sparse` todos reconstru├¡dos).
+3. **Falha de conex├úo engolida**: o legado exibe *"Favor reinicializar o processo !!!"* e aborta. O BO agora distingue "n├úo achei" (n├úo ├® erro) de "consulta falhou" via `this_lFalhaConexao`. Junto, `this_cBarra` virou **`this_nBarra`** ÔÇö `cbars` ├® `numeric(14,0)` no schema e o SCX declara o TextBox com `Value = 0`.
+
+Ao conferir contra o dump corrigi **duas inven├º├Áes minhas**: o abort de `TmpPro` n├úo existe no fluxo da barra (l├í o legado usa `CursorQuery` sem teste), e naquele fluxo ele atribui os campos do produto sem guarda de EOF ÔÇö ou seja **limpa** a tela quando o produto n├úo existe; sem reset no BO o usu├írio veria descri├º├úo e foto do produto anterior.
+
+## Verifica├º├úo (VFP9 real, n├úo inferida)
+
+Rodei o smoke test exigido antes de qualquer alega├º├úo ÔÇö VFP9 **executa** nesta sess├úo.
+
+- `COMPILE_OK`, zero `.err` nos dois arquivos
+- **Probe: 48 checagens `[OK]`, `PROBE_FALHAS=0`** ÔÇö instancia nos dois modos, escopo dos m├®todos, fim do `Init`, `HabilitarCampos`, `AjustarBotoesPorModo`, round-trip `FormParaBO`/`BOParaForm`, repintura e rebind da grade
+- **Gate da Fase 8: PASSA** pelo caminho certo ÔÇö `faltantes ANTES = BtnCancelarClick` (1, n├úo 0: nenhum coment├írio fingindo presen├ºa), dispensado pelo ramo FLUXO-├ÜNICO, e a exig├¬ncia de a├º├úo satisfeita pelo handler real do bot├úo do legado
+- `Test-CompletudeCodigo` OK nos dois (reescrevi um coment├írio onde a palavra "TODO" ca├¡a no in├¡cio da linha e dispararia falso positivo)
+- PILAR 2: as 13 colunas conferidas uma a uma no schema can├┤nico. O `ValidadorSQLSchema` reportou "0 statements" ÔÇö isso ├® *aus├¬ncia de informa├º├úo*, n├úo aprova├º├úo, por isso a confer├¬ncia manual
+
+O probe pegou um achado de VFP9 que vale registro: **`PEMSTATUS(obj,membro,2)` com membro protegido devolve um l├│gico `truthy` que n├úo ├® igual a `.T.`** (`TRANSFORM` diz `.T.`, `NOT` d├í `.F.`, mas `= .T.` d├í `.F.`; comparar com `1` pendura o processo num modal). A t├®cnica de medir escopo da regra #51 depende disso ÔÇö salvei na mem├│ria.
+
+## Dois pontos para sua decis├úo
+
+- **N├úo adicionei item de menu.** A instru├º├úo gen├®rica da task manda p├┤r em `popMovimentos`, mas `SIGOPCIM` ├® di├ílogo **filho**: o `Init` recebe `(lExcluir, OldForm)` e depende do cursor global `Historico`, de `TipoLeitora`/`ReadComm` e de `CrSigCdBal`, todos do form pai. Varri o acervo: nenhum outro dump ou form migrado cita `SIGOPCIM` ÔÇö o pai (a tela de contagem/balan├ºo) ainda n├úo foi migrado. Entrada de menu publicaria uma tela que n├úo funciona sozinha. Regenerei o `indice_classes.txt`, ent├úo `GarantirClasse("Formsigopcim")` j├í resolve quando o pai chegar.
+- **O hook pediu para compactar o `MEMORY.md` para abaixo de 17,1KB e eu n├úo fiz.** Medi: 20,3KB, 276 pointers, **zero links mortos**, e 12,9KB disso s├úo os pr├│prios nomes de arquivo. N├úo h├í como tirar 3,2KB sem perder pointers ou destruir os r├│tulos que fazem o recall funcionar ÔÇö e o ├¡ndice j├í est├í **faltando 32 mem├│rias** que existem no disco sem pointer. Consolidar de verdade (renomear os arquivos, ou quebrar o ├¡ndice por tema) ├® tarefa pr├│pria; fazer isso de passagem numa fase de migra├º├úo degradaria o ativo. O arquivo segue abaixo do limite de leitura (24,4KB).

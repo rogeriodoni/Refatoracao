@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Summary
+
+Completed Phase 2/8 for `SigOpCopBO.prg` (FormSigOpCop ÔÇö "C├│pia de Movimenta├º├úo"). Since this screen is not a classic CRUD entity (one button, "Copiar", that duplicates an entire operation across 15 tables), I adapted the requested methods to its real contract instead of forcing a generic single-table INSERT/UPDATE template:
+
+- **`ValidarDados()`** ÔÇö transcribes the `CmdCopia.Click` guards ("Origem Invalida"/"Destino Invalido") plus the `GetDestino.Valid` duplicate check, and a defensive origin-exists check.
+- **`CarregarDoCursor()` / `CarregarOrigem()`** ÔÇö load the handful of `SigCdOpe` columns this BO actually models (Dopes/NDopes/Programas/Menus/SubMenus/CArqIcones); the other ~248 columns never touch VFP memory by design (documented in Phase 1's header).
+- **`Inserir()`** ÔÇö the real "Copiar" logic: generates `NDopes`/`Programas` via `fGerUniqueKey`, builds the whole 15-table + `SigCdPrg` batch, and executes it atomically.
+- **`Atualizar()`** ÔÇö delegates to `Inserir()` (legacy never distinguishes insert/update here).
+- **`ObterChavePrimaria()`** ÔÇö returns the new destination code for auditoria.
+- Dynamic-column copy engine (`MontarInsertCopia`, `CopiarTabelaFilha`) ported from the already-reviewed `ProdutoBO.prg` pattern, since `SigCdOpe` has 254 columns and hand-listing them would be brittle.
+- `SigCdPrg` permission block (`MontarBlocoSigCdPrg` + 3 `Acumular*` helpers) transcribes the 13 `ChkRegister`/insert-or-update cycles literally, including the legacy's accent/capitalization inconsistencies between insert and update text.
+- Whole batch runs in one atomic SQL Server transaction (`ExecutarLoteCopia`), matching the legacy's single `Commit()` at the end.
+
+Verified all 15 table/column names and key structures against `docs/schema.sql` (read via `Get-Content -Raw` per the UTF-16 rule), and confirmed helper signatures (`EscaparSQL`, `FormatarNumeroSQL`, `TratarNulo`, `fUniqueIds`, `fGerUniqueKey`, `fGravarLog`, `MostrarErro`, `NVL`, `USE IN (expr)`) against existing codebase usage.
+
+Next step would be Phase 3 (Form generation), which is outside this phase's scope.

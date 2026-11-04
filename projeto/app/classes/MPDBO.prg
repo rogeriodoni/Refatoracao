@@ -350,6 +350,27 @@ DEFINE CLASS MPDBO AS BusinessBase
     LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
     loc_lSucesso = .F.
     TRY
+      *-- cidchaves eh a PRIMARY KEY CLUSTERED de SigCdOpd (char 20) e nao tem
+      *-- campo na tela: o legado a gera com fUniqueIds() no AddCursor. Gravada
+      *-- em branco, o 2o registro colidia na PK (regra #22).
+      THIS.this_cCidchaves = fUniqueIds()
+
+      *-- O legado grava o registro INTEIRO (AddCursor sem query = Select * +
+      *-- TableUpdate), entao coluna que nao aparece na tela continua sendo
+      *-- gravada com o valor do registro em BRANCO. As 82 colunas do fim da
+      *-- lista sao NOT NULL sem DEFAULT em SigCdOpd e nao sao citadas em lugar
+      *-- nenhum do dump legado: sem elas o SQL Server recusava TODO o INSERT
+      *-- ("nao e possivel inserir o valor NULL na coluna ...") e o cadastro nao
+      *-- incluia nada. Valor fiel ao AppendBlank: 0 nos numericos, branco nos
+      *-- char (regra #22).
+      *--
+      *-- O comando esta quebrado em QUATRO atribuicoes de propsito: com 206
+      *-- colunas o comando unico passava de 10.291 caracteres e o VFP9 recusa
+      *-- em COMPILACAO com "Line is too long" (o limite de 8192 vale para o
+      *-- comando inteiro depois de juntar as continuacoes, nao para a linha
+      *-- fisica). Consequencia a saber: o VerificarInsertNotNull.ps1 so le
+      *-- ate a primeira atribuicao, entao esta tabela precisa ser conferida
+      *-- a mao (ou contra o INFORMATION_SCHEMA).
       loc_cSQL = "INSERT INTO SigCdOpd (" + ;
                  "Dopps, Ndopps, Ordes, Cidchaves," + ;
                  " subns, agregas, nivels, Tnivels, Artigos, cArqIcones," + ;
@@ -370,8 +391,23 @@ DEFINE CLASS MPDBO AS BusinessBase
                  " dckcabec, dckItens, dckResu," + ;
                  " CasQtds, obspads, obsinis, obsfins, CtrLotes, AcEnvs, envelopes," + ;
                  " chkunis, grufins, chkPesoTot, dopcs, pccs, pesmatps, InibAlts," + ;
-                 " ChkCtDes, CodTgOps, gruccus, contaccus, chkoplts, dopsemis, chksenexc, tpsenexc" + ;
-                 ") VALUES (" + ;
+                 " ChkCtDes, CodTgOps, gruccus, contaccus, chkoplts, dopsemis, chksenexc, tpsenexc,"
+      loc_cSQL = loc_cSQL + ;
+                 " copers, opers, docdig, docvend, docorig, docdest," + ;
+                 " docdata, dochora, docobs, docsubt, docenca, docdesco," + ;
+                 " doctota, docnite, docprze, docobsg, docitem, docbarra," + ;
+                 " docqtd, doccod, docdescr, doccoef, docunit, doctoti," + ;
+                 " docobsi, docpag, dckdig, dckvend, dckori, dckdest," + ;
+                 " dckdata, dckhora, dckobs, dcksubt, dckenca, dckdesco," + ;
+                 " dcktota, dcknite, dckprze, dckobsg, dckitem, dckqtd," + ;
+                 " dckcod, dckdescr, dckcoef, dckunit, dcktoti, dckobsi," + ;
+                 " dckpag, dckbarra, dcknvend, dcknori, dckndest, dckfori," + ;
+                 " dckfdest, dckdevo, docdevo, dckacres, docacres, dcktit," + ;
+                 " dckcbar, dckpaga, qtddocs, doctit, dcklinad, dcktacor," + ;
+                 " doctacor, ctipos, bxoest, bxdest, opcdata, tipos," + ;
+                 " edits, unifics, bolservs, digobs, doppservs, gradeservs," + ;
+                 " anaesgrps, alertas, nseqs, cpofasant"
+      loc_cSQL = loc_cSQL + ") VALUES (" + ;
                  EscaparSQL(THIS.this_cDopps) + "," + ;
                  FormatarNumeroSQL(THIS.this_nNdopps) + "," + ;
                  FormatarNumeroSQL(THIS.this_nOrdes) + "," + ;
@@ -495,7 +531,90 @@ DEFINE CLASS MPDBO AS BusinessBase
                  FormatarNumeroSQL(THIS.this_nChkoplts) + "," + ;
                  EscaparSQL(THIS.this_cDopsemis) + "," + ;
                  FormatarNumeroSQL(THIS.this_nChksenexc) + "," + ;
-                 FormatarNumeroSQL(THIS.this_nTpsenexc) + ;
+                 FormatarNumeroSQL(THIS.this_nTpsenexc) + ","
+      loc_cSQL = loc_cSQL + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 EscaparSQL("") + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + "," + ;
+                 FormatarNumeroSQL(0, 0) + ;
                  ")"
       loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
       IF loc_nResultado >= 0

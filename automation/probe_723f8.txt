@@ -1,0 +1,46 @@
+=== PROBE Fase 8 - FormSigOpDoc (task723) v2 ===
+CK01 antes do CREATEOBJECT
+1) CREATEOBJECT -> VARTYPE=O Width=1000 Height=640
+2) escopo dos metodos (existe / PROTECTED)
+   FormParaBO       .T. / .T.   (esperado .T./.T. - herda FormBase)
+   BOParaForm       .T. / .T.   (esperado .T./.T. - herda FormBase)
+   LimparCampos     .T. / .T.   (esperado .T./.T. - herda FormBase)
+   HabilitarCampos  .T. / .F.   (esperado .T./.F. - publico)
+   CarregarLista    .T. / .F.   (esperado .T./.F. - publico)
+   BtnCancelarClick .T. / .F.   (esperado .T./.F. - BINDEVENT)
+   BtnConfirmarClick .T. / .F.  (esperado .T./.F. - BINDEVENT)
+   SalvarDados      .T. / .F.   (esperado .T./.F.)
+3) cursor_4c_Dados: USED=.T. ISREADONLY=.F. (esperado .F. = gravavel)
+   RECCOUNT apos INSERT = 2
+CK02 antes de CarregarLista
+   CarregarLista = .T. / Column1.ControlSource = [cursor_4c_Dados.Arquivos] / EditBox.ControlSource = [cursor_4c_Dados.ObsArqs]
+CK03 antes de GradeAfterRowColChange
+4) linha 1 -> BO: RECNO=1
+   BO.this_cPkChaves = [PK0000000001] (esperado PK0000000001)
+   BO.this_cArquivos = [C:\4c\vbmp\logo.bmp]
+   BO.this_cObsArqs  = [OBS ORIGINAL] (esperado OBS ORIGINAL)
+   EditBox.Value     = [OBS ORIGINAL]
+   preview Visible   = .T. (.bmp -> esperado .T.)
+5) linha 2 (ObsArqs NULL): ISNULL antes = .T.
+CK04 antes de GradeAfterRowColChange na linha 2
+   ISNULL depois   = .F. (esperado .F.)
+   preview Visible = .F. (.sql -> esperado .F.)
+CK05 antes de ProbeFormParaBO
+6) FormParaBO = .T.
+   cursor.ObsArqs    = [TEXTO DIGITADO NA TELA]
+   BO.this_cObsArqs  = [TEXTO DIGITADO NA TELA]
+   BO.this_cPkChaves = [PK0000000001]
+   BO.this_cFkChaves = [001MALOTE                   3]
+   BO.this_dDatas    = 31/10/2026 03:39:55 PM VARTYPE=T (esperado T)
+6b) chamada DIRETA de fora recusada (correto): Property FORMPARABO is not found.
+CK06 antes de HabilitarCampos
+7) HabilitarCampos(.F.) -> EditBox.ReadOnly = .T. (esperado .T.)
+   HabilitarCampos(.T.) -> EditBox.ReadOnly = .F. (esperado .F.)
+   sem argumento (this_cEscolha=[ALTERAR]) -> retorno = .T. / ReadOnly = .F. (esperado .T. / .F.)
+CK07 antes de ProbeLimparCampos
+8) LimparCampos = .T. -> preview Visible = .F. / Picture = [] (esperado .F. / vazio)
+CK08 antes dos hooks em EOF
+9) EOF -> preview Visible = .F. / BOParaForm = .F. / FormParaBO = .F. (esperado .F. / .F. / .F.)
+CK09 antes de BtnSairClick
+10) BtnSairClick -> delegou para BtnCancelarClick sem erro
+=== FIM OK ===

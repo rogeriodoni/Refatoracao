@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 was already complete and correct. The rejection was **self-reference**, not a defect ÔÇö and I deliberately did not modify the form, because doing so would require inventing a button the legacy never had.
+
+## Diagnosis (measured, not inferred)
+
+The Fase 6 retry edited the gate's `$temSuperficieEntradaF8` regex in `OrquestradorMigracao.ps1` at **04:36:20**; the task started at **03:44:47**. PowerShell had already parsed the script, so the running orchestrator validated Fase 8 with the *old* gate. The Fase 6 output **predicted this failure in writing** ÔÇö reading it first resolved the diagnosis in one step.
+
+Controlled measurement of the real `case 8` block (extracted by line, not reimplemented):
+
+| gate | verdict | `metodosFaltantes` |
+|---|---|---|
+| PRE (one line reverted) | **REPROVA** | `BtnSalvarClick (ou BtnConfirmarClick/...)` |
+| POS (disk, current) | **PASSA** | `[]` ÔÇö via ramo `legadoEntradaSemBotaoF8` |
+
+The one-line delta: the old regex matched the base class name exactly (`"(TextBox|ComboBox|...)"`). This form legitimately **subclasses** TextBox (`TextBoxSenhaAtualSigOpCts_4c`, to embed `When`/`Valid` as the legacy does), so the old regex concluded "no input fields" in a form with three.
+
+`BtnSalvarClick` cannot be written: the legacy dump is **5 Label + 3 TextBox + 1 Shape + 1 Container** ÔÇö zero `CommandButton`, zero `PROCEDURE Click`, zero CRUD verbs. It would be invented surface (PILAR 1) or a disguised stub.
+
+## Deliverable proven externally
+
+- **Compile**: both `.fxp` regenerated after deleting the old ones, zero `.ERR` ÔÇö with a **negative control** (a deliberate `PUBLIC PROCEDURE`) that did produce errors, so the check genuinely measures.
+- **`Test-CompletudeCodigo`** (real function, correct `-FilePath`): `True` on both files.
+- **Instantiated in both modes**: consulta ÔåÆ Height 211, `PermitirSenhaNova()=.F.`; altera├º├úo ÔåÆ Height 250, `.T.`; both phrases match the legacy character-for-character. `FormParaBO` proven transferring all 3 fields (`[]`ÔåÆ`[ABC123]`, `[]`ÔåÆ`[AAA]/[BBB]`), and the divergent pair was refused with the cursor left `SEGREDO` ÔÇö no silent wrong write.
+- **Statics**: 0 literal accents, 0 `this_X .Value`, 0 `ISEMPTY`, 0 `PUBLIC PROCEDURE`, balanced `TRY/ENDTRY`. The 3 `MESSAGEBOX` hits are comments quoting the legacy, not calls.
+- **Integration**: ├¡ndice de classes registers form, BO and all 3 subclasses with the `FormBase`+`SigOpCtsBO` closure; `config.prg` correctly has no `SET PROCEDURE`. No `menu.prg` entry ÔÇö correct, since this is a child dialog needing caller parameters and the caller's cursor (siblings SigOpCtf/Ctd/Crd/Chp are likewise absent).
+
+## Blast radius of the gate fix left on disk
+
+The predicate flips in **7** of 508 forms, but the branch also requires `Test-LegadoSemBotaoAlgum`, and the other 6 all have 2ÔÇô3 buttons in their legacy ÔåÆ blocked. Verdicts across the harnesses with valid anchors (714/715/716/717) are identical except 717's `REPROVA ÔåÆ PASSA`. **Real reach = 1 form**, the intended one.
+
+Two caveats I want to flag rather than bury:
+
+1. Four older harnesses (679/680/689/697) abort on stale line anchors and emit **no** `VEREDITO` line ÔÇö my first comparison rendered that as "igual", i.e. falsely reassuring. The predicate sweep plus the legacy-button gate is what actually closes that gap; I'd treat absence as `<n├úo medido>` in any future batch comparison.
+2. The dialog still depends on `fCriptografar`, which was never ported ÔÇö a deliberately *visible* absence (regra #27). Changing a password here will keep failing with a message until that function is recovered. That predates this phase and is not mine to resolve.
+
+The gate fix only takes effect from the **next** orchestrator invocation; Fase 8 is the last phase, so no further phase of this task will reprove. I recorded a 6th confirmation of the pattern in memory, including the new writing rule: any gate predicate matching a base-class name inside `AddObject` must allow `\w*`, or it goes blind precisely to forms following the subclass pattern.

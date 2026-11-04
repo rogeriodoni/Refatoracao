@@ -1,0 +1,21 @@
+A: inicio
+B: deps carregadas
+C: CREATEOBJECT -> VARTYPE=O
+   ColumnCount=28 | C28 chk=.T. cc=[CHK_4C_CHECK1] W=43 | C1 cc=[Text1] C2 cc=[Text1] | C16.W=85
+D: --- INCLUIR ---
+   CriarCursorDetalheVazio = .T.
+   ColumnCount=28 | C28 chk=.T. cc=[CHK_4C_CHECK1] W=43 | C1 cc=[TXT_4C_CENTROCUSTO] C2 cc=[TXT_4C_CENTROCUSTO] | C16.W=0
+E: --- ALTERAR (CarregarDetalhe fecha o alias) ---
+   apos USE IN -> ColumnCount=0
+   ColumnCount=28 | C28 chk=.T. cc=[CHK_4C_CHECK1] W=43 | C1 cc=[TXT_4C_CENTROCUSTO] C2 cc=[TXT_4C_CENTROCUSTO] | C16.W=85
+F: --- 2a volta (Visualizar) ---
+   CriarCursorDetalheVazio = .T.
+   ColumnCount=28 | C28 chk=.T. cc=[CHK_4C_CHECK1] W=43 | C1 cc=[TXT_4C_CENTROCUSTO] C2 cc=[TXT_4C_CENTROCUSTO] | C16.W=0
+G: --- guarda de ColumnCount ---
+   ColumnCount=0
+   os tres metodos rodaram sem estourar com ColumnCount=0
+H: Release OK
+DIALOGOS:
+[04/11/2026 11:36:17] mtzBO.Buscar: Connection handle is invalid.
+
+Z: fim

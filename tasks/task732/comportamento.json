@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPETQ",
+      "evento": "Init",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters pForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poDataMgr = pForm.poDataMgr\n\nSelect csRelatorio\nGo Top\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus\n\nThisForm.cmdEtiquetas.Visible = fChecaAcesso('SIGOPETQ', 'ETIQUETA')\nThisForm.cmdImprimir.Visible  = fChecaAcesso('SIGOPETQ', 'IMPRIMIR')\n\nThisform.Tipo = 'DIVERSAS'\nThisform.Op_Escolha = 'DIVERSAS'",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Visible = fChecaAcesso,Visible  = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.Cnt_Procurar.GetBusca",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.Cnt_Procurar.GetBusca",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "lcProd = This.Value\n\nIf Not Empty(lcProd)\n\tSelect csRelatorio\n\tlnReg = Recno()\n\tIf Not Seek(lcProd, 'csRelatorio', 'CBars')\n\t\tGo lnReg\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.Cnt_Procurar.GetBusca",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "**\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.Saída",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.cmdEtiquetas",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Do Form SigOpIpE With ThisForm",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPETQ.cmdImprimir",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If .f.\n\tReport Form SigOpEtq && Linha Colocada Apenas Para Compilação\nEndIf\n\nSelect csRelatorio\n\t\nDo Form SigMvDoc With 'SIGOPETQ', 'Impressão da Consulta de Etiquetas'",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

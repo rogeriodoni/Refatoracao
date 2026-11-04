@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This completes Phase 2/8. I've added to `SigOpDesBO.prg`:
+
+- Two new properties for NOT NULL columns of `SigMvItd` that the legacy `btnConfirmar.Click` INSERT never referenced (`citenstpdesc`, `chaveexterna` ÔÇö invisible-in-dump columns per CLAUDE.md regra #22), defaulted per the documented safe-default table.
+- `ObterChavePrimaria()` (PROTECTED, per regra #51) returning `cidchaves`.
+- `CarregarDoCursor()` mapping all 18 columns of `SigMvItd` via `TratarNulo`.
+- `Inserir()` (not PROTECTED, per regra #51) generating `cidchaves` via `fUniqueIds()` when empty, rebuilding the positional `empdopnums` key (regra #42, no `ALLTRIM` on the parts), and calling `RegistrarAuditoria("INSERT")`.
+- `Atualizar()` (not PROTECTED) doing the symmetric `UPDATE ... WHERE cidchaves = ...` and calling `RegistrarAuditoria("UPDATE")`.
+
+Both methods use the standard `cursor_4c_Insert`/`cursor_4c_Update` temp-cursor pattern and `CapturarErroSQL()` on failure, matching the house style seen in `sigmvitnBO.prg`.
+
+Next phase (3/8) will create `FormSigOpDes.prg`, which handles the actual discount-selection grid, totals (`calctots` logic), and cota (`SigCdDes`) checks ÔÇö this phase only covers the BO's CRUD contract for `SigMvItd`.

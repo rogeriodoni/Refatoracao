@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada e verificada. (O `fase_8_output.txt` anterior n├úo continha trabalho ÔÇö s├│ uma pergunta sobre o que fazer.)
+
+## O que foi entregue
+
+**`Formsigopdtf.prg`: 1152 ÔåÆ 3698 linhas, 50 m├®todos.** A subst├óncia ├® o **protocolo interativo SiTef**, que as Fases 3-7 adiaram justificadamente por ser indivis├¡vel (cinco variantes do mesmo di├ílogo com a DLL, compartilhando o mesmo estado):
+
+| Entregue | Migrado de |
+|---|---|
+| `DigitosGotFocus`/`Exec` | conecta + inicia a transa├º├úo + conduz leitura do cart├úo |
+| `DigitosKeyPress`/`Exec` | `GetDigitos.Valid` (senha/parcelamento) |
+| `DatasGotFocus`/`Exec`, `DatasKeyPress`/`Exec` | `GetDatas.GotFocus`/`Valid` (autoriza├º├úo, 2 la├ºos cada) |
+| `CodSegLostFocus`/`Exec` | `GetCodSeg.LostFocus` |
+| `ValidarDigitos/Parcelas/DataVencimento` | as cabe├ºas dos `Valid` |
+| `MontaRetorno` | `montaretorno` (arquivo de resposta da venda aprovada) |
+| `ConfigurarValoresIniciais` | o `WITH Thisform` do `Init` ÔÇö **nenhuma fase havia migrado** |
+| `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos` | hooks de camada |
+| `MontarRetornoTef`/`Unload`/`EncerrarDialogo`/`Move` | retorno ao chamador |
+
+**`sigopdtfBO.prg`: 354 ÔåÆ 603 linhas** ÔÇö config `SigOpFp` (8 props + `CarregarConfiguracaoPagamento`), `ValidarBinCartao` (o bloco `TipoCampo=136` que o legado repete 4├ù ÔåÆ fonte ├║nica) e `FinalizarTransacaoSiTef`.
+
+Cobertura: **34/34** m├®todos do dump (os 3 `Move` de SAIDA/Shape2/Container1 t├¬m corpo vazio no legado).
+
+## Quatro defeitos que encontrei em trabalho de fases anteriores
+
+1. **`ShowWindow` atribu├¡do duas vezes** na classe ÔÇö a ├║ltima vence (=1), contradizendo o pr├│prio coment├írio do `Init`, e fazia o form virar top-level no VFP9 headless: exatamente o timeout que aquele coment├írio diz estar evitando.
+2. **O BO declarava 3 das 4 fun├º├Áes da DLL.** A ausente, `FinalizaTransacaoSiTefInterativo`, ├® *chamada* pelo `GetDatas.Valid` ÔÇö aquele ramo estouraria em runtime. O coment├írio afirmava que o legado n├úo a declara; declara, na 4┬¬ linha do `Load`, com `integer` min├║sculo.
+3. **`ConectarSiTef` passava o CAIXA como `lsLoja`.** O dump completo mostra que ├® `SigOpFp.codestabs`. Valor errado ÔåÆ servidor recusa a conex├úo ou credencia na loja errada, e o usu├írio s├│ v├¬ "Sem comunica├º├úo com SiTef".
+4. Um coment├írio do BO prometia aviso ao usu├írio se a DLL faltasse. **Medido: ├® falso** ÔÇö sai `File 'continuafuncaositefinterativo.prg' does not exist`. Corrigi a afirma├º├úo em vez de inventar guarda que o legado n├úo tem.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa** nos dois arquivos, com **controle negativo**: 2 linhas ruins injetadas geraram `.err` apontando s├│ para elas ÔÇö prova que o detector funciona e que as 3698 linhas reais compilam.
+- **Probe de runtime, 30 checkpoints:** formato do retorno (`0,00/03/31/10/20260000000000`, 28 chars), `BackColor=12632256` igual ao literal legado, data vazia ÔåÆ hoje+30, 4-d├¡gitos/2-d├¡gitos, os 6 la├ºos bloqueados pela guarda de reentr├óncia, objeto **sobrevive** ao fechamento (contrato que a Fase 7 pediu).
+- **Gate da Fase 8 reproduzido standalone:** `metodosFaltantes=0`, ramo PROTOCOLO dispara ÔåÆ **veredito `True`**.
+- `ValidadorSQLSchema` **PASSOU** (7 statements, 683 tabelas); `Test-CompletudeCodigo` **OK**; `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` **OK**. Zero byte n├úo-ASCII, zero `RETURN` em `TRY`, CRLF restaurado.
+- `ValidarBinCartao` ├® **fail-closed**: sem banco n├úo aprova cart├úo.
+
+Tr├¬s coment├írios meus trope├ºaram nas regexes do validador de completude ÔÇö um deles citava literalmente `MsgAviso("sera implementado")` para dizer que ├® proibido. Reescrevi preservando o sentido.
+
+## O que n├úo pude provar
+
+N├úo h├í DLL `CliSiTef32I` nem SQL Server alcan├º├ível nesta m├íquina: os la├ºos foram exercitados **s├│ at├® a fronteira da DLL** (guardas, cabe├ºas, reentr├óncia) ÔÇö o sequenciamento dos ramos ├® transcri├º├úo conferida linha a linha contra o dump, n├úo medi├º├úo. `C:\client\Resp` n├úo existe, ent├úo a montagem do cursor de resposta n├úo foi exercitada.
+
+**N├úo transcrevi, com justificativa no c├│digo:** os dois blocos de `Text1.Valid` com `Loop` fora de qualquer la├ºo (morto/quebrado), o `GetCodSeg.Valid` (inteiro comentado no dump) e os 4 di├ílogos filhos fora do acervo ÔÇö `SigTfDss` virou `ExibirMensagemTef` (substitui├º├úo fiel), e `SigCsTef`/`SigPrStf`/`SigCoCDC` **avisam em voz alta**; o de senha de supervisor segue o pr├│prio ramo de cancelamento do legado, em vez de autorizar algo que ningu├®m aprovou.
+
+N├úo h├í item de menu: como os irm├úos TEF, este ├® di├ílogo filho chamado com 9 par├ómetros pelo fluxo do PDV.

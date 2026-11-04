@@ -1,0 +1,29 @@
+=== PROBE Fase 8 - FormSigOpEmp (Empenho) ===
+1) CREATEOBJECT (ValidandoUI=.T.) -> VARTYPE=O
+   ControlCount=6  Picture=[c:\4c\vbmp\new_background.jpg]  Caption=[Empenho]
+2) TabIndex lido de volta:
+   cnt_4c_Sombra    = 1  (esperado 1) OK
+   grd_4c_Dados     = 2  (esperado 2) OK
+   cmd_4c_Ok        = 3  (esperado 3) OK
+   txt_4c__NGrupo   = 4  (esperado 4) OK
+   txt_4c_NConta    = 5  (esperado 5) OK
+   Shape tem TabIndex? NAO (fora do passe)
+3) grade: ColumnCount=7 RecordSource=[cursor_4c_Empenhado] USED(cursor_4c_Empenhado)=.F. ReadOnly=.T. RecordMark=.F. DeleteMark=.F.
+   Col1 hdr=[Emp] W=31 CS=[cursor_4c_Empenhado.Emps] RO=.T. Font=[Courier New]
+   Col2 hdr=[Operação] W=206 CS=[cursor_4c_Empenhado.Dopes] RO=.T. Font=[Courier New]
+   Col3 hdr=[Código] W=60 CS=[cursor_4c_Empenhado.Numes] RO=.T. Font=[Courier New]
+   Col4 hdr=[Data] W=80 CS=[cursor_4c_Empenhado.Datas] RO=.T. Font=[Courier New]
+   Col5 hdr=[Grupo] W=80 CS=[cursor_4c_Empenhado.GrupoDs] RO=.T. Font=[Courier New]
+   Col6 hdr=[Conta] W=80 CS=[cursor_4c_Empenhado.ContaDs] RO=.T. Font=[Courier New]
+   Col7 hdr=[Qtde] W=80 CS=[cursor_4c_Empenhado.Qtds] RO=.T. Font=[Courier New]
+4) visores: NGrupo ReadOnly=.T. TabStop=.F. | NConta ReadOnly=.T. TabStop=.F.
+5) escopos (2 = PROTECTED):
+   CarregarLista              PROTECTED=.F.
+   CmdOkClick                 PROTECTED=.F.
+   GradeAfterRowColChange     PROTECTED=.F.
+   ConfigurarOrdemTabulacao   PROTECTED=.T.
+6) GradeAfterRowColChange(1) executou; NGrupo=[] NConta=[]
+7) CREATEOBJECT (ValidandoUI=.F.) -> VARTYPE=O
+   ControlCount=6  grade TabIndex=2  Ok TabIndex=3
+
+RESULTADO: PROBE_OK (0 falhas)

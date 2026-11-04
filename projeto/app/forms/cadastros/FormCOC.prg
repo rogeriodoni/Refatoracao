@@ -440,7 +440,7 @@ DEFINE CLASS FormCOC AS FormBase
         *-- Top = 9 (original) + 29 (compensacao) = 38; Left = 817 (original)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 38
+            .Top         = 27
             .Left        = 817
             .Width       = 160
             .Height      = 85

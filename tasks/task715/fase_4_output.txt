@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+**Fase 4/8 de `FormSigOpCtd` (task715) conclu├¡da.** O form ├® um di├ílogo filho modal de confirma├º├úo (n├úo CRUD) ÔÇö pergunta + 4 modos de busca + Procurar/Encerrar ÔÇö exatamente o mesmo perfil j├í documentado em `FormSigOpCrp.prg` (task714) e no precedente SIGOPCHP. O template gen├®rico "Grid + CRUD" n├úo se aplica.
+
+O que foi entregue:
+- `ConfigurarControlesOpcao()`: `lbl_4c_Label1`/`lbl_4c_Label2` (a pergunta), `obj_4c_Optiongroup1` (4 modos: Iniciais/Finais/Qualquer Posi├º├úo/Desc. Exata) e `obj_4c_Commandgroup1` (Procurar/Encerrar) ÔÇö tudo transcrito pixel-perfect do dump legado.
+- `BtnProcurarClick`/`BtnEncerrarClick` wireados ao contrato j├í existente do BO (`ConfirmarOpcao`/`Cancelar`).
+
+**Validado por instancia├º├úo real no VFP9** (probe headless): form abre, labels/captions com acentua├º├úo correta, OptionGroup com os 4 modos certos, `ConfirmarOpcao(modo=3)` produziu `this_cTermoBusca="%ABC%"`/`operador=Like` como esperado, zero erros capturados. Probe e `.fxp` de teste removidos depois.
+
+Tamb├®m registrei na mem├│ria uma segunda ocorr├¬ncia real (depois do SIGOPCHP) confirmando que a lacuna do guard de NO-OP da Fase 4 no `OrquestradorMigracao.ps1` ainda est├í aberta ÔÇö n├úo toquei nesse arquivo porque h├í 712 linhas n├úo commitadas de outra sess├úo em curso e um `RunLoop.ps1` vivo, mesmos dois bloqueios j├í documentados anteriormente.

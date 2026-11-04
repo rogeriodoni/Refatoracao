@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 est├í entregue e verificada. N├úo escrevi c├│digo novo no form ÔÇö ele j├í estava completo; o que fiz foi **provar** isso e identificar por que o gate reprovou.
+
+## O que a Fase 6 entrega neste form
+
+`SIGOPCRP` ├® um di├ílogo filho modal "Procura" (520x200, sem PageFrame, sem Grid), aberto pelo extrato de Conta Corrente Individual (`Formsigopind`). Os dois itens do t├¡tulo da fase se resolvem **por aus├¬ncia**, medido no dump:
+
+| Item | Situa├º├úo |
+|---|---|
+| Campos restantes | **N├úo h├í.** O legado tem exatamente 3 (`getLancamento`/`getValor`/`getHistorico`), os 3 j├í criados. Um 4┬║ seria UI inventada. |
+| Lookups | **Zero no legado** ÔÇö nenhuma ocorr├¬ncia de `fwBusca*`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`, nenhum F4/F5. Os tr├¬s `Valid` n├úo consultam tabela: s├│ zeram os outros dois crit├®rios (exclus├úo m├║tua). |
+| O que de fato entrega | `ValidarLancamento`/`ValidarValor`/`ValidarHistorico` ÔÇö o `Valid` de cada campo digit├ível, em `LostFocus`. |
+
+## Verifica├º├Áes feitas
+
+- **Compila limpo** (form e BO, nenhum `.ERR`).
+- **Probe real** (`automation/ProbeF6SigOpCrp714.prg`): instancia o form e passa nos 13 testes ÔÇö 3 TextBox, propriedades conferidas contra o dump **e contra as classes `fweditdata`/`fwget` lidas do `framework.vcx` como DBF** (confirmando que `fweditdata` n├úo declara `Format`/`InputMask`, e `fwget` declara `Format = "K"` ÔÇö ou seja a decis├úo de n├úo inventar m├íscara no campo Data est├í correta, regra #49), labels em `RGB(90,90,90)`/`Alignment 0`, BINDEVENT **registrados** via `AEVENTS` com **zero** handler em `KeyPress` (regra #47), exclus├úo m├║tua funcionando nos dois sentidos (mudou ÔåÆ zera os outros dois; n├úo mudou ÔåÆ preserva os tr├¬s), ├¡cones existentes, ordem de tabula├º├úo e visibilidade.
+- **Gate da Fase 6 avaliado contra o orquestrador atual**: `temLayoutCapturaF6 = True` (ramo CAPTURA ÔÇö legado sem lista, sem lookup, campos de entrada n├úo vinculados).
+- Nenhum padr├úo de completude (TODO/stub/procedure vazia) nos dois arquivos.
+
+## Por que a fase reprovou ÔÇö e por que vai continuar reprovando neste run
+
+O token cru `pColuna|\bGrade\b|\bgrd` do teste "legado sem lista" casava a grade do **form pai** (`ThisForm.FormPai.Page.Hist.grd_lancamento.Refresh`), derrubando o ramo CAPTURA. Isso j├í foi corrigido com o helper `Test-LegadoTokenGradeProprioForm` ÔÇö o `OrquestradorMigracao.ps1` foi alterado ├ás **22:41**, mas o `RunLoop.ps1` (PID 20544) subiu ├ás **17:21** e a itera├º├úo do task714 come├ºou ├ás **21:49**, antes da corre├º├úo: ela roda a c├│pia antiga em mem├│ria.
+
+N├úo existe forma leg├¡tima de passar sob o gate velho ÔÇö o ├║nico caminho seria inventar um `.ControlSource` (cursor/tabela que o legado n├úo consulta), violando os Pilares 1 e 2. A corre├º├úo passa a valer na **pr├│xima invoca├º├úo** do orquestrador (pr├│ximo SCX do loop ou re-run do task714); a├¡ a Fase 6 passa com a mensagem do ramo CAPTURA.

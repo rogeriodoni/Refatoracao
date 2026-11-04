@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e **verificada executando no VFP9**.
+
+## O que entreguei
+
+**`FormSIGOPCOR.prg`** (229 ÔåÆ 634 linhas):
+- `ConfigurarGrade()` ÔÇö `grd_4c_Dados`, 3 colunas, geometria transcrita do dump (118/98/604/298, RowHeight 16, GridLines 3, ScrollBars 2, TabIndex 5)
+- `CriarCursorOcorrencias()` ÔÇö cursor local `(cods N(3), descs C(30), retifs M NULL)` com `SET NULL ON`, igual ao `Create Cursor XCorNf` do `Load` legado
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Sair`, ButtonCount 2 (Confirmar/Cancelar), Pictures **transcritas** (`cadastro_salvar_60.jpg` / `cadastro_sair_60.jpg`), criado **depois** do cabe├ºalho porque Top=-2 o sobrep├Áe
+- `GradeRetificacaoKeyPress()` ÔÇö navega├º├úo Enter/Ctrl+X/Ctrl+E/Tab transcrita literalmente, com as guardas `Eof()`/`Bof()` do legado
+- `CarregarLista()` + `AtualizarGrade()` ÔÇö funil de carga com `GO TOP` + `Refresh` (regra #21a)
+- `Destroy()` fecha os dois cursores antes do `DODEFAULT()`
+
+**`SIGOPCORBO.prg`** (+64 linhas) ÔÇö precisei sair do arquivo declarado como entrega: a grade n├úo tinha fonte de dados. Adicionei `CarregarOcorrencias()` (`SELECT ncodigos, cdescrs FROM SigCcOco ORDER BY ncodigos`, colunas conferidas no `schema.sql` lido em UTF-16 ÔÇö 682 tabelas), espelhando o BO irm├úo, com guarda de handle para n├úo travar o pipeline headless.
+
+## Desvio deliberado do enunciado da fase
+
+O prompt pedia `ConfigurarPaginaLista()`, `AlternarPagina()` e **6 bot├Áes CRUD**. **N├úo criei nada disso**: o `SIGOPCOR.SCX` ├® um di├ílogo ├║nico, sem PageFrame, e seu ├║nico grupo de bot├Áes tem `ButtonCount = 2`. Criar aquela barra seria inventar interface inexistente (PILAR 1) ÔÇö e os bot├Áes can├┤nicos ficam em `Left=542..932`, invis├¡veis se houvesse. Medi o gate `case 4` isolado: aprova pelo ramo **FLAT** (`temLayoutFlat = True`, `temLayoutPaginado = False`), que existe exatamente para isto.
+
+## Provas
+
+Smoke test do VFP9 passou (gravou `VIVO`), ent├úo houve **execu├º├úo real**, n├úo s├│ compila├º├úo:
+
+- `CREATEOBJECT` ÔåÆ `VARTYPE=O`, Form 800x425, `ControlCount=3`
+- Headers `Ocorr├¬ncia`/`Descri├º├úo`/`Retifica├º├úo`, larguras 70/220/280 ÔÇö iguais ao dump
+- `Column3.CurrentControl=EDT_4C_RETIFICACAO`, `Sparse=.F.`, ControlSource ligado (regra #18)
+- Col1/Col2 `ReadOnly=.T.`, Col3 `.F.` ÔÇö ordem ap├│s o `ReadOnly` do Grid
+- Ambas as Pictures existem em disco (`FILE()=.T.`, regra #25)
+- `PEMSTATUS(...,2)=.F.` em `CarregarLista`/`AtualizarGrade`/`GradeRetificacaoKeyPress` e no `CarregarOcorrencias` do BO (regras #3/#51)
+- `CarregarLista()` e os dois ramos de navega├º├úo rodaram, `Release` OK, nenhum erro capturado
+- Validador real `Test-CompletudeCodigo`: **OK nos dois** (pegou e eu corrigi um "Pendente" no coment├írio, que ele trata como indicador de pend├¬ncia)
+- Zero bytes >127, zero `RETURN` dentro de `TRY`, zero `this_*.Value`
+- **Controle negativo**: c├│pia com `PUBLIC PROCEDURE` injetado gerou `.ERR` apontando s├│ as linhas 637-638 (o form tem 634) ÔÇö o detector funciona, logo as 634 linhas compilam limpas
+
+Encodings preservados (BO CRLF 495/495; Form LF, como j├í estava), `.FXP` e tempor├írios removidos.
+
+## Dois pontos para a Fase 7
+
+1. **Os bot├Áes ficaram sem handler de clique de prop├│sito** ÔÇö vincular evento a m├®todo inexistente aborta o `Init` (o `BINDEVENT` valida no registro, n├úo no disparo). O da coluna de retifica├º├úo est├í vinculado porque o m├®todo existe.
+2. **Risco real**: o dump do SCX **n├úo traz c├│digo de Click para nenhum dos dois bot├Áes** (s├│ 5 m├®todos: `Load`, `Init`, dois `When` e o `KeyPress`). Com `TitleBar=0` + `ControlBox=.F.`, a tela n├úo tem sa├¡da nenhuma al├®m do Cancelar. A Fase 7 precisa ligar a sa├¡da ÔÇö e vale conferir se o SCX n├úo est├í desatualizado, porque no legado essa tela tamb├®m n├úo teria como fechar.

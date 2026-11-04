@@ -1,0 +1,58 @@
+=== PROBE Fase 6 - FormSigOpCpo (task710) ===
+VARTYPE(form) = O  (esperado O)
+
+--- 1) ESCOPO dos handlers (PEMSTATUS ...,2: .F. = PUBLIC, exigido por BINDEVENT) ---
+  ValidarFiltroTipo         prot=.F.
+  ValidarFiltroTipoExec     prot=.F.
+  ValidarFocoRodape         prot=.F.
+  ValidarTagRodapeGotFocus  prot=.F.
+  ValidarTagRodapeLostFocus prot=.F.
+  AtualizarRodape           prot=.T. (interno: .T. esperado)
+
+--- 2) BINDEVENT efetivamente ligados (AEVENTS) ---
+  cbo_4c_CmbTipos           = 2 (esperado 2)
+     [INTERACTIVECHANGE -> VALIDARFILTROTIPO]
+     [LOSTFOCUS -> VALIDARFILTROTIPO]
+  grd_4c_Rodape.Col1.Text1  = 1 (esperado 1)
+     [GOTFOCUS -> VALIDARFOCORODAPE]
+  grd_4c_Rodape.Col2.Text1  = 2 (esperado 2)
+     [GOTFOCUS -> VALIDARTAGRODAPEGOTFOCUS]
+     [LOSTFOCUS -> VALIDARTAGRODAPELOSTFOCUS]
+
+--- 3) estado inicial do filtro ---
+  cbo.Value             = [TIPO A              ]
+  this_cTipoFiltroAtual = [TIPO A]
+  this_lEmFiltroTipo    = .F. (esperado .F.)
+  RECNO() atual         = 1  Tipos=[TIPO A] (esperado TIPO A)
+
+--- 4) ValidarFiltroTipo: TROCA de tipo (A -> B) ---
+  this_cTipoFiltroAtual = [TIPO B] (esperado TIPO B)
+  this_lEmFiltroTipo    = .F. (esperado .F. - flag liberada)
+  RECNO() apos (GO TOP) = 3  EOF=.F.
+  Tipos linha corrente  = [TIPO B] (esperado TIPO B)
+  rodape.Totas          = 100  (BO.this_nTotalTotas = 100)
+  Buttons(1).Enabled    = .T.  (BO.this_lPermiteConfirmar = .T.)
+
+--- 5) guarda de valor-nao-mudou: 2a chamada no MESMO tipo nao refiltra ---
+  RECNO antes/depois    = 5 / 5 (iguais = nao refiltrou nem deu GO TOP)
+
+--- 6) guarda de reentrancia: flag ligada faz o handler sair na hora ---
+  this_cTipoFiltroAtual = [TIPO B] (esperado TIPO B - nao mexeu)
+  this_lEmFiltroTipo    = .T. (esperado .T. - preservada)
+
+--- 7) AtualizarRodape(RECNO): caminho do CHECKBOX nao salta de linha ---
+  RECNO antes/depois    = 4 / 4 (iguais = linha corrente preservada)
+  rodape.Totas espelhado= 50 / BO = 50
+
+--- 8) ValidarTagRodape: GotFocus guarda, LostFocus restaura ---
+  Tag apos GotFocus     = [ORIGINAL]
+  Value apos LostFocus  = [ORIGINAL] (esperado ORIGINAL)
+
+--- 9) ValidarFocoRodape nao estoura (devolve foco a grade de itens) ---
+  executou SEM excecao
+
+--- 10) img_4c_ImgFigJpg continua OCULTA apos TornarControlesVisiveis ---
+  Visible               = .F. (esperado .F.)
+
+=== DIALOGOS / ERROS CAPTURADOS ===
+(nenhum dialogo)

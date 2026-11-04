@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 executada.
+
+## O que foi entregue
+
+**`projeto\app\forms\cadastros\FormSigOpDmp.prg`** (1.016 ÔåÆ 2.856 linhas)
+
+**Campos restantes (linha Conta Sd Inicial)** ÔÇö `lbl_4c_Conta`, `txt_4c_Conta`, `txt_4c_DConta`, com `Top` do SCX +29, `MaxLength` da coluna do schema (10/40, n├úo do `Width`), `Format = "K!"` e `ForeColor 90,90,90` (branco ficaria invis├¡vel sobre a `Picture` da Page).
+
+**Grade de fases** (`grd_4c_Fases`, SigCdDpr, 5 colunas). O dump declara `ColumnOrder` e o Form Designer **renomeou** os objetos, ent├úo a posi├º├úo no array n├úo ├® a visual ÔÇö resolvi pelos nomes (como o `Grupo_op.Click` do legado liga os `ControlSource`) e criei na ordem visual direta, sem `ColumnOrder`: Ordem(40)/Fase(75)/Funcion├írio(75)/Tipo Opera├º├úo(100)/E/S(30). C├®lulas edit├íveis via nova classe `TextBoxCelulaDmp_4c` com `When`/`Valid`/`KeyPress`/`DblClick` embutidos + `CurrentControl` + `Sparse = .F.`. O v├¡nculo mora em `VincularGradeFases` (cursor precisa existir antes do `ControlSource`, sen├úo o `Init` cai e a tela n├úo abre).
+
+**Bot├Áes Inserir/Excluir de linha** com `InsiraRegGrade`/`Excluir.Click` transcritos. S├úo ├¡cone-only, ent├úo o `When` do legado virou **guarda dentro do handler** em vez de `Enabled = .F.` (que renderiza ret├óngulo vazio).
+
+**7 lookups completos** ÔÇö Grupo, DGrupo, Conta, DConta (ficha) e Fase, Funcion├írio, Tipo Opera├º├úo (grade), todos em `LostFocus` (o legado valida no `Valid`) com F4/F5 e DblClick como portas extras que **testam a tecla**, guarda de reentr├óncia no funil, e os filtros do legado preservados: `gerbals = 1` em SigCdGcr/SigCdCli e `grupos = <linha> OR grupos = ''` em SigOpOpt. Mais as valida├º├Áes de Ordem (0..999) e E/S (E,S,P,H,T) e o `AtualizarEstadoCampos`, que ├® a fonte ├║nica dos `When`.
+
+**`projeto\app\classes\TextBoxGridLookup.prg`** ÔÇö append da classe `TextBoxCelulaDmp_4c` (nada reescrito: diff ├® +338/-0).
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou, ent├úo deu para provar runtime, n├úo s├│ compila├º├úo:
+
+- `COMPILE` dos tr├¬s arquivos: `.FXP` gerado, **nenhum `.ERR`**
+- Probe de instancia├º├úo: 34 checagens ÔÇö geometria dos 6 controles bate exatamente com o dump+29, grade com `ColumnCount=5` e os 5 `ControlSource`/headers/larguras/c├®lulas corretos, cursor com os 8 campos de SigCdDpr, **31 m├®todos chamados de fora todos PUBLIC**, `cidchaves` distinto por linha, TabIndex 1/4/5/6/7/8/9/10/11/12 como o dump, Inserir/Excluir de linha funcionando e ignorados fora dos modos de edi├º├úo, lookups sem conex├úo n├úo estouram
+- 2┬║ probe: 14 checagens ÔÇö `GravarCelulaFase` grava e ├® silencioso em EOF, `ContarLinhasFases` rep├Áe o RECNO, guarda de reentr├óncia, rev├¡nculo idempotente (n├úo destr├│i c├®lulas nem larguras), `NomeEditavel` nos 4 modos
+- Auditorias do projeto (`VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFormBuscaAuxiliar`, `VerificarLookupEmKeyPress`): **zero achados** nos arquivos desta fase
+- Zero TODO/stub, zero acentos literais, zero `RETURN` dentro de `TRY`, CRLF preservado nos dois arquivos
+- ├ìndice de classes regerado: resolve `textboxceluladmp_4c` e a depend├¬ncia `FormSigOpDmp.prg ÔåÆ TextBoxGridLookup.prg`
+
+## Duas ressalvas
+
+**`fAcessoContas` n├úo foi exercitado** ÔÇö ├® o check de acesso da coluna Funcion├írio, chamado com 4 argumentos (modo "sem UI", devolve l├│gico, como o legado). Precisa de banco, e o SQL Server desta m├íquina est├í inacess├¡vel. O c├│digo est├í no lugar e guardado por `ConexaoAtiva()`.
+
+**`menu.prg` ainda n├úo tem `AbrirFormSigOpDmp`** ÔÇö conferi os irm├úos recentes (SigOpClp, SigOpCpr, SigOpCor): nenhum tem entrada de menu, ent├úo isso ├® de uma fase posterior, n├úo da 6. Fica registrado para n├úo passar batido no fim da task.

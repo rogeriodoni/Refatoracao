@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSigOpCtf.prg` com a estrutura base do form.
+
+Como este ├® um form **OPERACIONAL** (dialogo modal SiTef, sem Lista/Dados), segui o padr├úo j├í estabelecido em `FormSIGPRTFH.prg` (mesma fam├¡lia de di├ílogo com terminal SiTef) em vez do template gen├®rico de PageFrame ÔÇö a pr├│pria tarefa j├í avisa que esse form n├úo segue o padr├úo CRUD.
+
+Entregue nesta fase:
+- `DEFINE CLASS FormSigOpCtf AS FormBase` com as propriedades visuais do SCX (Width=463, Height=295, TitleBar=0, WindowType=1, etc.)
+- `Init()` recebendo os 9 par├ómetros do legado (EndSiTef, IdTerminal, ValPago, Tipo, Data, Nsu, pcCartao, plImpressora, pcCodEstabs), guardados em properties com os mesmos nomes do `SigOpCtfBO` j├í criado nas Fases 1-2
+- `InicializarForm()` criando o BO e montando cabe├ºalho (`cnt_4c_Sombra`), moldura (`shp_4c_Shape2`), container de status (`cnt_4c_Container1`) e o bot├úo ├║nico de sa├¡da (`obj_4c_SAIDA`/CANCELA) ÔÇö sem handlers de clique ainda (isso ├® Fase 7-8)
+- `TornarControlesVisiveis()` e `Destroy()`
+
+Validei compilando e instanciando de verdade no VFP9 (smoke test passou e o VFP executou o probe): `COMPILE` sem `.ERR` no BO e no Form, `CREATEOBJECT("FormSigOpCtf", ...)` devolveu objeto com `ControlCount=4`, os 4 containers/objetos esperados presentes e vis├¡veis, e os par├ómetros do `Init` corretamente transferidos.
+
+Os campos de dados (Valor, 4 ├Ültimos D├¡gitos, Senha, Cart├úo, C├│digo de Seguran├ºa) ficam para as Fases 5-6, e o la├ºo de comunica├º├úo com o terminal SiTef para as Fases 7-8, como documentado no cabe├ºalho do arquivo.

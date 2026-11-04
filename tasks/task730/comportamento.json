@@ -1,0 +1,451 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 17,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoContab", "fAcessoContas", "fGerUniqueKey", "fBuscarCotacao", "fRecalculaS"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "Select CrSigMvCcr\nnoper  = CrSigMvCcr.nopers\nvoper  = CrSigMvCcr.vopers\noper   = CrSigMvCcr.sopers\ngrupo  = CrSigMvCcr.sgrupos\nconta  = CrSigMvCcr.scontas\nmoed   = CrSigMvCcr.smoedas\ncot    = CrSigMvCcr.scotacaos\nvalor  = CrSigMvCcr.svalors\nsoper  = CrSigMvCcr.opers\nsgrupo = CrSigMvCcr.grupos\nsconta = CrSigMvCcr.contas\nsmoed  = CrSigMvCcr.moedas\nscot   = CrSigMvCcr.cotacaos\nsvalor = CrSigMvCcr.valors\nnlanc  = CrSigMvCcr.nlancs\nvlanc  = CrSigMvCcr.vlancs\ndata   = CrSigMvCcr.datas\ndataa  = CrSigMv... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "With ThisForm.Container1\n\t.Get_GrupoC.Value = ' '\n\t.Get_grupo.Value = ' '\n\t.Get_DgrupoC.Value = ' '\n\t.Get_DGrupo.Value = ' '\n\t.Get_DcontaC.Value = ' '\n\t.get_dconta.Value = ' '\n\t.Get_contaC.Value = ' '\n\t.Get_conta.Value = ' '\nEndWith\nThisForm.MontaTela()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MontaTela",
+        "controlesReferenciados": "Get_GrupoC,Get_DgrupoC,Get_DcontaC,Get_contaC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Procedure",
+      "linhas": 38,
+      "codigoOriginal": "If Used('CrSigMvSlc')\n\tThisForm.Grd_Saldo.RecordSource = ''\n\tUse In CrSigMvSlc\nEndIf\nlcGrupo = ThisForm.Container1.Get_grupo.Value\nlcConta = ThisForm.Container1.Get_Conta.Value\nlcGrupo = Iif(Empty(lcGrupo),'ZYWZYWZYWZ',lcGrupo)\n\nlcQuery = [Select a.emps, a.grupos, a.contas, a.moedas, a.saldos, b.Rclis, b.Situas, 0 as Flag, 0 as Marcas ]+;\n\t\t   [From SigMvSlc a, SigCdCli b ]+;\n\t\t   [Where a.grupos = ']+lcgrupo+[' ]+;\n\t\t   Iif(Not Empty(lcConta),[And a.Contas = ']+lcConta+[' ],[ ])+[ And a.Contas ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Grd_Saldo,Get_grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC",
+      "evento": "Init",
+      "linhas": 30,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigMvCcr', 'cIdChaves', 'crSigMvCcr', '', '')\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '')\n\t\tEndWith\n\n\t\tSelect crSigMvCcr\n\t\tIndex On Grupos + Contas + Moedas Tag GruConMoe\n\n\t\tSelect crSigMvCab\n\t\tIndex On Emps + Dopes + Str(Numes,6) Tag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Dope",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.Container1.Get_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DGrupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !Empty( This.Value )\n\tIf Not fAcessoContab( Usuar, 'D', This.Value, This.Parent.Get_Grupo, This.Parent.Get_DGrupo )\n\t\tMessageBox( \"Acesso Negado!\", 48, \"ATENÇÃO!!!\" )\n\t\tReturn .f.\n\tEndIf\n\tThisForm.MontaTela()\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "MontaTela",
+        "controlesReferenciados": "Get_Grupo,Get_DGrupo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If !Empty( This.Value )\n\tIf Not fAcessoContab( Usuar, 'C', This.Value, This.Parent.Get_Grupo, This.Parent.Get_DGrupo )\n\t\tMessageBox( \"Acesso Negado!\", 48, \"ATENÇÃO!!!\" )\n\t\tReturn .f.\n\tEndIf\nEndif\nlcGrupo = This.Value\nThisForm.MontaTela()\nThisform.Grd_saldo.Refresh\nThis.Parent.Get_Grupo.Refresh\nThis.Parent.Get_DGrupo.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "MontaTela",
+        "controlesReferenciados": "Get_Grupo,Get_DGrupo,Grd_saldo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_GrupoC",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not IsEmpty(This.Value)\n\t=fAcessoContab(Usuar,'C',this.value,This,this.parent.GET_DGRUPOc,Thisform.Container1.Get_Contac.Value,ThisForm.Podatamgr)\nElse\n\tthis.parent.GET_DGRUPOC.value = ''\n\tthis.parent.GET_DGRUPOC.refresh\nEndIf\nReturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_DGRUPOc,Get_Contac",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_contaC",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local Grupo\nGrupo = Thisform.Container1.Get_Grupoc.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_dcontac)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_dcontac.Value = ''\n\t\tthis.parent.get_dcontac.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tthis.parent.get_dcontac.Value = ''\n\tthis.parent.get_dcontac.Refresh\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoc,get_dcontac",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DcontaC",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (IsEmpty( This.Parent.Get_ContaC.Value ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DcontaC",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local Grupo\nGrupo = Thisform.Container1.Get_Grupoc.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,this.parent.get_contac,this)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_contac.Value = ''\n\t\tthis.parent.get_contac.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tthis.parent.get_contac.Value = ''\n\tthis.parent.get_contac.Refresh\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoc,get_contac",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DgrupoC",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( IsEmpty( This.Parent.Get_GrupoC.Value ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_DgrupoC",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\t=fAcessoContab(Usuar,'D',this.value,This.Parent.Get_grupoC,this,Thisform.Container1.get_contaC.value,ThisForm.Podatamgr)\nElse\n\tThis.Parent.Get_grupo.value = ''\n\tThis.Parent.Get_grupo.refresh\nEndIf\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grupoC,get_contaC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not IsEmpty(ThisForm.Container1.Get_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_Conta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local Grupo\nGrupo = ThisForm.Container1.Get_Grupo.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_dconta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_dconta.Value = ''\n\t\tThis.parent.get_dconta.Refresh\n\t\tReturn 0 \n\tEndif\nElse\n\tThis.parent.get_dconta.Value = ''\n\tThis.parent.get_dconta.Refresh\nEndIf\nThisForm.MontaTela()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "MontaTela",
+        "controlesReferenciados": "Get_Grupo,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.get_Dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (IsEmpty( This.Parent.Get_Conta.Value ) And Not IsEmpty(ThisForm.Container1.Get_Grupo.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.get_Dconta",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local Grupo\nGrupo = Thisform.Container1.Get_Grupo.value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,this.parent.get_conta,this)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_conta.Value = ''\n\t\tthis.parent.get_conta.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tthis.parent.get_conta.Value = ''\n\tthis.parent.get_conta.Refresh\nEndIf\n\nThisForm.MontaTela()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "MontaTela",
+        "controlesReferenciados": "Get_Grupo,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.Container1.Get_Dope",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENC.grd_saldo.Column5.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.grd_saldo.Column5.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.cmdGprocessa",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "With ThisForm\n\t.LockScreen = .T.\n\t.Release\n\t.Refresh\n\t.LockScreen = .F.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.apaga",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update CrSigMvSlc Set Marcas = 0\nThisForm.grd_saldo.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.SelTudo",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update CrSigMvSlc Set Marcas = 1\nThisForm.grd_saldo.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENC.cmdProcessa",
+      "evento": "Click",
+      "linhas": 134,
+      "codigoOriginal": "With ThisForm.Container1\n\tIf Empty(.Get_grupo.Value)\n\t\tMessageBox('Obrigatorio Informar o Grupo de Filtro!!!',48,'')\n\t\tReturn 0\n\tEndIf\n\tIf Empty(.Get_Grupoc.Value)\n\t\tMessageBox('Grupo de Contra-Partida não Informado!!!',48,'')\n\t\tReturn 0\n\tEndIf\n\tIf Empty(.Get_ContaC.Value)\n\t\tMessageBox('Conta de Contra-Partida não informada!!!',48,'')\n\t\tReturn 0\n\tEndIf\n\tIf Empty(.Get_Dope.Value)\n\t\tMessageBox('Operação de Mov.Estoque não cadastrada nos Parametros do Sistema!!!',48,'')\n\t\tReturn 0\n\tEndIf\n\tlcGrupo  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fBuscarCotacao,fRecalculaS",
+        "metodosFormChamados": "FazContra,Update,Commit,RollBack,Iniciar",
+        "controlesReferenciados": "Get_grupo,Get_Grupoc,Get_ContaC,Get_Dope,Grd_saldo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPENC.apaga.Click",
+      "queryOriginal": "Update CrSigMvSlc Set Marcas = 0",
+      "tabelas": "CrSigMvSlc",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPENC.SelTudo.Click",
+      "queryOriginal": "Update CrSigMvSlc Set Marcas = 1",
+      "tabelas": "CrSigMvSlc",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigMvSlc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

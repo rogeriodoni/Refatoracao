@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All block counts balance (32 IF/ENDIF, 3 SCAN/ENDSCAN, 4 PROCEDURE/ENDPROC). Phase 2 is complete.
+
+## Summary
+
+`sigopecmBO.prg` now has the full business logic. Since this is an OPERACIONAL batch form with **no persistent table** (it reads `SigCdGrp`/`SigCdPro`/`SigPrCar`/`SigCrRap` and writes a flat export file, never INSERT/UPDATE/DELETE to the DB), I deviated from the generic "Fase 2: CRUD" template and instead:
+
+- **Skipped fake `Inserir()`/`Atualizar()`/`CarregarDoCursor()` stubs** ÔÇö following the established `FAPPBO.prg` precedent and the project's "BO somente-leitura" lesson, BusinessBase's default behavior is already correct here, so overriding them would just be theater.
+- **`ObterChavePrimaria()`** ÔåÆ explicit `""` override, documenting the no-PK decision.
+- **`GerarArquivoExportacao()`** ÔåÆ the real transcription of the legacy `SIGOPECM.Processamento` method: scans distinct groups/products from the caller-supplied `crImagens` cursor, queries `SigCdGrp`/`SigCdPro`/`SigPrCar`+`SigCrRap` via `SQLEXEC`, builds the fixed-width `td01`/`td03` records exactly per legacy field widths, decodes/writes product JPGs, and tracks progress counters.
+- **`AtualizarProgresso()`** ÔåÆ mirrors the legacy's live caption updates, but delegates to a `this_oFormUI.AtualizarProgresso()` contract instead of hardcoding a control name (the Form doesn't exist yet ÔÇö Phase 3 will implement that method).
+- Verified every table/column referenced (`SigCdGrp.cgrus/dgrus/ids`, `SigCdPro.*`, `SigPrCar.codigos/cpros`, `SigCrRap.codigos/descrs/ordens`) against `docs/schema.sql` (read via `Get-Content -Raw` per the UTF-16 rule).
+- No `RETURN` inside `TRY`/`CATCH`/`FINALLY`; all accented UI strings use `CHR()` codes; SQL values escaped with `EscaparSQL()`.
+
+Next phase (3/8) will create `Formsigopecm.prg`, wiring `getArqTXT`/`chkImagens`/`Processa`/`Cancela` to this BO.

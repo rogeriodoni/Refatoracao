@@ -1,0 +1,20 @@
+A: inicio
+B: deps carregadas
+C: fUniqueIds() = [0017LM0O41U747751807] LEN=20  (cidchaves eh char(20)) | cabe? .T. | 2a chamada difere? .T.
+D: ConverterParaLogico -> .T./.T.  .F./.F.  1/.T.  0/.F.  NULL/.F.  'S'/.T.
+E: BO espiao -> VARTYPE=O
+F: --- cursor do INCLUIR (ChkValida Logico) ---
+   CriarCursorDetalheVazio = .T.
+   CidChaves=[0017LM0O41V078392004] LEN=20 | VARTYPE(ChkValida)=L | FCOUNT=30
+   SalvarDetalhe = .F.  (esperado .F.: SQLEXEC com handle 0; o que importa eh NAO estourar)
+G: --- cursor do ALTERAR (ChkValida Numerico) ---
+   VARTYPE(ChkValida)=N valor=1 | Acm_Jan=77,50
+   SalvarDetalhe = .F.
+H: --- cursor SEM Acm_* (controle negativo) ---
+   SalvarDetalhe = .F. (esperado .F. com erro de variavel - o SCAN LE mesmo os Acm_*)
+DIALOGOS:
+[04/11/2026 11:14:59] mtzBO.SalvarDetalhe: Connection handle is invalid.
+[04/11/2026 11:14:59] mtzBO.SalvarDetalhe: Connection handle is invalid.
+[04/11/2026 11:14:59] mtzBO.SalvarDetalhe: Variable 'ACM_JAN' is not found.
+
+Z: fim

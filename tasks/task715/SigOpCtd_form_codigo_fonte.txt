@@ -1,0 +1,364 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCtd.SCX
+* Data/Hora: 31/10/2026 00:35:27
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCTD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCTD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCTD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCTD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPCTD
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPCTD
+  Class: label
+  BaseClass: label
+
+Objeto: Optiongroup1
+  Parent: SIGOPCTD
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Commandgroup1
+  Parent: SIGOPCTD
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 200
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Form1"
+  ControlBox = .F.
+  FontName = "Arial"
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCTD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Não Foi Encontrado Um Nome Igual ao Digitado!!! "
+  Height = 15
+  Left = 233
+  Top = 103
+  Width = 277
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Deseja Procurar Pelo Conteudo Digitado ?"
+  Height = 15
+  Left = 251
+  Top = 123
+  Width = 236
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 4
+  BackStyle = 0
+  Value = 1
+  Height = 29
+  Left = 229
+  SpecialEffect = 1
+  Top = 145
+  Width = 341
+  BorderColor = 136,189,188
+  Name = "Optiongroup1"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = " Iniciais"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 53
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = " Finais"
+  Option2.Height = 15
+  Option2.Left = 71
+  Option2.Top = 6
+  Option2.Width = 48
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Qualquer Posição"
+  Option3.Height = 15
+  Option3.Left = 130
+  Option3.Top = 6
+  Option3.Width = 101
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Desc. Exata"
+  Option4.Height = 15
+  Option4.Left = 252
+  Option4.Top = 6
+  Option4.Width = 76
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCTD.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  BorderColor = 136,189,188
+  ToolTipText = "7"
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Command1.Caption = "\<Procurar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCTD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Destroy
+------------------------------------------------------------
+PROCEDURE Destroy
+ThisForm.poForm.pnRetorno = ThisForm.pnReturno
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pcCaption, poForm
+
+ThisForm.Caption = pcCaption
+ThisForm.poForm = poForm
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCTD.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+ThisForm.pnReturno = ThisForm.Optiongroup1.Value
+Release Windows
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+ThisForm.pnReturno = 0
+Release Windows
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCTD
+RESERVED3 (ClassInfo): pnreturno
+poform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

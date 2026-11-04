@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and verified.
+
+## What was added to `FormSIGOPCOR.prg` (1405 ÔåÆ 1687 lines)
+
+| Method | Scope | What it does |
+|---|---|---|
+| `FormParaBO()` | PROTECTED | Screen ÔåÆ BO: the two faixa limits (`this_cNfisDe`/`this_cNfisAte` = legacy `pcNFisDe`/`pcNFisAte`), the caller context (`Emps`/`Series`/`EmisDe`/`EmisAte` ÔÇö the legacy `Init` assignment block), and the grid's current row (`XCorNf.Cods`/`Retifs`) |
+| `BOParaForm()` | PROTECTED | BO ÔåÆ screen: both limits back to the TextBoxes, and `REPLACE retifs` on the matching occurrence row |
+| `LimparCampos()` | PROTECTED | Blanks both limits and the whole retification column, then re-mirrors |
+
+PROTECTED is mandatory on all three ÔÇö `formbase.prg:276/280/285` declares the hooks protected and VFP9 can't widen inherited scope. `CarregarLista` stays PUBLIC (the harness calls it from outside).
+
+**Consolidation** (the point of the phase): `FormParaBO` is now the single source of the screenÔåÆBO mirror. `ValidarFaixaNotas` had that assignment block duplicated since Phase 6 and now delegates; `CarregarLista` calls it before loading (same order as the legacy `Init`: assign context, *then* Requery+Scan); `LimparCampos` re-mirrors the cleared screen so `this_cNfisDe/Ate` can't keep a phantom faixa.
+
+`BOParaForm` uses `LOCATE`, not `SEEK` ÔÇö `cursor_4c_Ocorrencias` is created without an index (the legacy doesn't index it either, unlike the sibling SIGOPCCO). `LimparCampos` uses `REPLACE ALL`, not `ZAP` ÔÇö this grid is the SigCcOco *catalogue*, so codes and descriptions aren't user data.
+
+## Verification
+
+- **Compile**: Form and BO both produce `.fxp`, no `.ERR` (`automation/compilar_f8_sigopcor.txt`).
+- **Phase-8 gate** (`automation/VerificarGateFase8Task707.ps1`, AST-only ÔÇö dot-sourcing the orchestrator would fire a real migration): `VEREDITO = PASSA`. All four required names are **real declarations**, not comment mentions.
+- **Runtime probe** (`automation/probe_fase8_sigopcor.prg`): all three hooks confirmed PROTECTED; `FormParaBO` transfers all 7 values correctly and zeroes the row at EOF; `BOParaForm` writes only the matching row (occurrence 99 touches nothing); `LimparCampos` leaves `RECCOUNT=3` with 0 retifications and context preserved.
+- **Phase-7 regression**: faixa enumeration byte-identical to the Phase-7 baseline (A=2, B=6, C=6, D=0, E=0, G/H=0).
+- **Auditors**: `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes` ÔÇö all clean.
+
+## Scope I deliberately did not implement
+
+The phase template also listed `BtnBuscarClick`, `BtnSalvarClick`, `HabilitarCampos` and `AjustarBotoesPorModo`. None exist in this legacy and I did not fabricate them ÔÇö the gate doesn't require them, and the sibling `FormSIGOPCCO` sets the same precedent:
+
+- **No save/search button**: the SCX has exactly two buttons (`CommandGroup Sair`, `ButtonCount = 2`). The action button is `Sair.Ok` / `"\<Confirmar"`, already handled by `BtnConfirmarClick` (Phase 7). The dump has zero hits for `btnSalvar`/`btnGravar`/`*Salvar*.Click`/`mGravaDados`, and the gate's `legadoSemSalvar` confirms it.
+- **No edit mode**: the SCX inherits from plain `form`, not `frmcadastro` ÔÇö no mode variable, no Lista/Dados pages, no CRUD bar. Both TextBoxes and the retification column are editable from `Init` to `Release`, so there is nothing for a mode-switch to adjust.
+
+Creating them would either invent UI the legacy doesn't have (PILAR 1) or add empty methods (completeness rule). The reasoning is written into the file header so the next reader doesn't re-litigate it.
+
+One pre-existing item carried forward from Phase 7, unchanged and still open: the `SigMvNfi.Correcs` flag update that the sibling performs after saving has no equivalent method on `SIGOPCORBO`, so it remains a documented gap rather than a stub that would report success without setting the flag.

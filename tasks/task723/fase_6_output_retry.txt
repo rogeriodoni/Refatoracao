@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6/8 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpDoc.prg` (722 ÔåÆ 933 linhas).
+
+## Lookups: o legado N├âO tem nenhum
+
+Medido no dump `SigOpDoc_form_codigo_fonte.txt`: zero ocorr├¬ncias de `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`sigacess(`/`mAddColuna`/`FormBuscaAuxiliar`, e `comportamento.json` traz `temLookup: false` nos 19 m├®todos ÔÇö o ├║nico `CreateObject` do legado ├® `Shell.Application`. Inventar lookup violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup". O gate da Fase 6 reconhece isso pelo ramo FLAT (`legadoSemLookup` + `temCamposFlat`), que agora avalia `True`.
+
+## O que a fase entregou de real
+
+Os campos de auditoria (`txt_4c_Usuars`/`txt_4c_Datas`/`lbl_4c_Label1`/`lbl_4c_Label2`) j├í existiam, mas **estavam mortos** ÔÇö nada os alimentava, e o preview da fase 5 nunca aparecia. Transcrevi do dump o que faltava:
+
+- `ValidarArquivoSelecionado` ÔÇö o guard `Not Empty(lcArq) And File(lcArq)` que o legado repete em `btnOpnArqs.Click`/`btnOpnDirs.Click`/`imgArqJpg.DblClick`
+- `ValidarExtensaoImagem` ÔÇö o `InList(...Substr(lcArq, At('.',lcArq), 5)..., '.JPG','.ICO','.BMP','.JPEG')` repetido em `AfterRowColChange` e `DblClick`
+- `GradeAfterRowColChange` (BINDEVENT) ÔÇö `Clear Resources` + preview + os tr├¬s `Refresh` do legado. Sem filtro de coluna de prop├│sito: ├® o uso correto de `AfterRowColChange` (regra #46), e a Column1 ├® ReadOnly nos dois sistemas
+- `ImgArqJpgDblClick` + `AbrirFormZoomImagem` ÔÇö `Do Form SigOpZom` n├úo abre nada no projeto novo (procura `.scx`), ent├úo virou `CREATEOBJECT("FormSigOpZom", ...)` com `Show()` fora do `TRY` (regra #29); `SigOpZom` n├úo foi migrado, logo a aus├¬ncia ├® **avisada**, n├úo estourada
+
+## Um defeito bloqueante encontrado no caminho
+
+`obj_4c_GetObsArqs`/`txt_4c_Usuars`/`txt_4c_Datas` ligavam `ControlSource` nos m├®todos `Configurar*`, que rodam **antes** de `CarregarLista` criar o cursor. Medi no VFP9: `TextBox.ControlSource` e `EditBox.ControlSource` com alias ausente **estouram** `Alias 'CURSOR_4C_DADOS' is not found` ÔÇö a regra #41 vale al├®m de Column de Grid. Dentro do `TRY` do `InicializarForm` isso fazia `CREATEOBJECT` devolver `.F.`: **a tela nunca abriria**. O v├¡nculo foi para `VincularCamposDetalhe()`, chamado por `CarregarLista`.
+
+## Verifica├º├úo (medida, n├úo alegada)
+
+- **Compila limpo**: `COMPILE` gerou `.fxp` sem `.err`; controle negativo com `ENDWITH` sobrando produziu `.err`, provando que o check detecta
+- **Instanciei o form** (`Probe723F6b.prg`, 21 checks): abre; geometria id├¬ntica ao dump (599/414/119/15, 599/667/103/15, 595/535, 595/772/143, `Enabled=.F.`); JPG real ÔåÆ preview vis├¡vel; PDF e nome sem ponto ÔåÆ oculto sem exce├º├úo; campos de detalhe acompanham a troca de linha (`TESTE/obs um` ÔåÆ `OUTRO`); modos `ALTERAR`/`PROCURAR` reproduzem os `When`; 8 m├®todos de BINDEVENT s├úo PUBLIC e os 3 helpers PROTECTED; nada fora da ├írea do form. S├│ os 3 di├ílogos esperados foram suprimidos
+- Gate da Fase 6 e validador de completude rodados com os regexes verbatim do orquestrador: ambos passam
+
+Duas coisas que **deixei fora** e cabem ├ás fases 7/8: o bloco `cmdBtnForm` (Confirmar/Sair + `SalvarDados`), j├í previsto no cabe├ºalho do arquivo; e a grava├º├úo do campo Observa├º├úo ÔÇö `BO.Buscar` popula `cursor_4c_Dados` por `SQLEXEC`, que nasce somente-leitura, ent├úo editar o EditBox n├úo persiste enquanto n├úo houver cursor READWRITE + caminho de `Atualizar`.

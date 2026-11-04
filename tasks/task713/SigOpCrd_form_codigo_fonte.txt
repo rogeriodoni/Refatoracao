@@ -1,0 +1,579 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCrd.SCX
+* Data/Hora: 30/10/2026 19:15:03
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCRD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCRD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCRD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCRD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPCRD
+  Class: shape
+  BaseClass: shape
+
+Objeto: GradeSubN
+  Parent: SIGOPCRD
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCRD.GradeSubN.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCRD.GradeSubN.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCRD.GradeSubN.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCRD.GradeSubN.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCRD.GradeSubN.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCRD.GradeSubN.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCRD.GradeSubN.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCRD.GradeSubN.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdExcluir
+  Parent: SIGOPCRD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGOPCRD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 1
+  Height = 349
+  Width = 600
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Geração de Certificado de Crédito"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Themes = .F.
+  Name = "SIGOPCRD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 205
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 227
+  Left = 118
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 103
+  Width = 363
+  GridLineColor = 238,238,238
+  Name = "GradeSubN"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 100
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.InputMask = "999,999,999.99"
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 100
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 48
+  Column3.InputMask = "999.99"
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.InputMask = "999,999,999.99"
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Faixa Inicial"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Faixa Final"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "%"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Multiplos"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.GradeSubN.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 450
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCRD.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 525
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCRD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE inserelinha
+------------------------------------------------------------
+PROCEDURE inserelinha
+Thisform.lHouveIns = .T.
+
+Select crSigOpCrr
+Locate for faixafs=0
+If Eof()
+	Insert Into crSigOpCrr (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())
+EndIf
+Select crSigOpCrr
+Keyboard '{DNARROW}' 
+ThisForm.GradeSubN.Refresh
+Thisform.GradeSubN.Column1.SetFocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+Local lcOperacao
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.PcEscolha = IIF(EMPTY(poForm.PcEscolha),"INSERIR",poForm.PcEscolha)
+Thisform.ParentForm.Enabled  = .F.
+lcOperacao = crSigCdOpe.Dopes
+		    
+With Thisform
+	.Caption = 'Faixa de Valores da Operação ' + AllTrim( Proper( crSigCdOpe.Dopes ) )
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+
+	.cmdExcluir.Visible = fChecaAcesso('SigOpCrr','EXCLUIR') And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Enabled = .cmdExcluir.Visible 
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With SigCdOpe
+	With .poDatamgr
+        .ReQuery('crSigOpCrr')
+		SELECT crSigOpCrr
+		Go Top
+	EndWith
+Endwith	
+
+
+Select CrSigOpCrr
+Goto Top
+If Reccount() = 0 And InList(Thisform.PcEscolha,'INSERIR','ALTERAR')
+	ThisForm.inserelinha()
+Endif
+
+With Thisform.GradeSubN
+	.RecordSource          = 'crSigOpCrr'
+	.Column1.ControlSource = 'crSigOpCrr.FaixaIs'
+	.Column2.ControlSource = 'crSigOpCrr.FaixaFs'
+	.Column3.ControlSource = 'crSigOpCrr.Percs'
+	.Column4.ControlSource = 'crSigOpCrr.Multiplos'
+	.Refresh
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCRD.GradeSubN.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCRD.GradeSubN.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select CrSigOpCrr
+Locate for faixafs = 0
+If Eof()
+	Thisform.Inserelinha()
+EndIf
+Select CrSigOpCrr
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCRD.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpCrr
+
+If Not Eof()
+	Thisform.lHouveExcl = .T.
+	Delete
+	Skip
+	Skip - 1
+Endif
+ThisForm.GradeSubN.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCRD.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ( Thisform.lHouveExcl Or Thisform.lHouveIns )
+
+	Select CrSigOpCrr
+	Go Top
+	Delete For Empty(Dopes) or Empty(faixafs)
+	Replace CidChaves with fUniqueIds() For Empty(CidChaves)
+
+	m.lnErro1 = SigCdOpe.poDatamgr.pnIdConn
+
+	With SigCdOpe
+		If m.lnErro1>0 
+			m.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpCrr'),1,-1)
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDataMgr.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			.poDataMgr.RollBack()
+		EndIf 
+	EndWith 
+	If Not m.lnErro1>0 
+		= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+	EndIf 
+EndIf
+
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCRD
+RESERVED3 (ClassInfo): lhouveexcl
+lhouveins
+parentform
+pcescolha
+podatamgr
+*inserelinha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

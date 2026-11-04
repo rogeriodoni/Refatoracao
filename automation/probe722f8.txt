@@ -1,0 +1,39 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+CK01 instanciou OK  Caption=[Cadastro de Demonstrativos de Balanço]
+CK02 visibilidade dos metodos PUBLIC:
+     14 metodos conferidos; TODOS existem e sao PUBLIC
+CK03 visibilidade dos metodos do BO:
+     12 metodos conferidos; TODOS existem e sao PUBLIC
+CK04 BO.ExecutarExclusao existe=.T. PROTECTED=.T.  (esperado .T./.T.)
+CK05 BINDEVENT Click: Buscar=1 Confirmar=1 Cancelar=1 Incluir=1  (todos >= 1)
+CK06 FormParaBO=.T.  nome=[DEMONSTRATIVO TESTE](20) grupos=[GRUPO12345](10) contas=[CONTA98765](10)  (esperado .T. / 20 / 10 / 10)
+CK07 BOParaForm: Nome=[DEMONSTRATIVO TESTE] Grupo=[GRUPO12345] Conta=[CONTA98765]
+CK08 HabilitarCampos(.F.): Nome.RO=.T. Grupo.RO=.T. Conta.RO=.T. Grade.RO=.T.  (todos .T.)
+CK09 HabilitarCampos(.T.) em ALTERAR: Grupo.RO=.F. DGrupo.RO=.F. Grade.RO=.F.  (esperado .F./.F./.F.)
+CK10 BtnBuscarClick=.T. modo=[PROCURAR] ActivePage=2 Nome=[] fases=0  (esperado .T./PROCURAR/2/vazio/0)
+CK11 PROCURAR: Nome.RO=.F. Grupo.RO=.T. Conta.RO=.T. Confirmar.Enabled=.T.  (esperado .F./.T./.T./.T.)
+CK12 Confirmar em PROCURAR=.T. ActivePage=1 linha=[MMM MEIO] RECNO=2 SET(NEAR)=OFF  (esperado .T./1/MMM MEIO/OFF)
+CK13 Procurar nome posterior ao ultimo: EOF=.F. linha=[ZZZ ULTIMO]  (esperado .F./ZZZ ULTIMO)
+CK14 Confirmar INCLUIR sem nome=.F.  (esperado .F.)
+CK15 Confirmar INCLUIR sem conexao=.F.  BO.msg=[Sem conexão com o banco de dados.]  (esperado .F. com mensagem)
+CK16 apos falha: EmEdicao=.T. NovoRegistro=.T.  (esperado .T./.T.)
+CK17 Confirmar VISUALIZAR=.T. ActivePage=1 modo=[LISTA]  (esperado .T./1/LISTA)
+CK18 Confirmar em LISTA=.F.  (esperado .F.)
+CK19 Confirmar EXCLUIR sem nome=.F.  (esperado .F.)
+CK20 BO.ExcluirFases('')=.F. msg=[Nome do demonstrativo não informado.]
+CK21 BO.GravarFases('naoexiste','X')=.F. msg=[Cursor de fases indisponível.]
+CK22 BO.GravarFases(cursor,'')=.F. msg=[Nome do demonstrativo não informado.]
+CK23 Cancelar em VISUALIZAR: ActivePage=1 modo=[LISTA] Incluir.Enabled=.T.  (esperado 1/LISTA/.T.)
+CK24 botoes na Lista: Inc/Vis/Alt/Exc/Bus = .T./.T./.T./.T./.T.  (todos .T.)
+CK25 Confirmar.Enabled por modo: INCLUIR=.T. ALTERAR=.T. EXCLUIR=.T. VISUALIZAR=.F. PROCURAR=.T.  (esperado .T. .T. .T. .F. .T.)
+CK26 Release OK
+
+DIALOGOS SUPRIMIDOS:
+[31/10/2026 14:02:36] FormSigOpDmp: O Nome deve ser informado...
+[31/10/2026 14:02:36] Falha ao gravar as fases: Sem conexão com o banco de dados.
+[31/10/2026 14:02:36] FormSigOpDmp: Nenhuma operação em andamento para confirmar.
+[31/10/2026 14:02:36] FormSigOpDmp: A ficha não tem nome de demonstrativo para excluir.
+
+Z: fim

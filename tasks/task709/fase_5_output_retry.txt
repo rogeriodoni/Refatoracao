@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 5 is now passing. Here's what was wrong and what I did.
+
+## Root cause of the failure
+
+The Phase-5 gate has seven layout branches. I evaluated all of them against SIGOPCPE and only one can legitimately apply ÔÇö **FLAT** (OPERACIONAL, no PageFrame), which requires `.ControlSource =` in the form. The previous attempt deliberately emitted **zero** bindings: all 9 occurrences of `ControlSource` in the file were comments explaining why it was omitted. So no branch matched and the gate rejected the phase.
+
+The previous run's reasoning was half right. Binding to a cursor that doesn't exist yet really would kill the `Init` with *Alias not found* (rule #41). But the conclusion was wrong: the fix isn't to drop the binding ÔÇö it's to **open the cursor first**, which is exactly what the legacy does. `SIGOPCPE.Init` runs `AddCursor` ÔåÆ `ReQuery` ÔåÆ `Index On Tipos Tag PesqTipo` ÔåÆ `Go Top` ÔåÆ seeds the 6 device types, *all before any control refreshes*. The binding is this screen's actual mechanism: changing the device in `Cmb_Tipo` only repositions the cursor, and the bound controls are what display the new row. Dropping it would have left Phase 6+ with no working screen.
+
+I did not take the `CAPTURA` branch, which would also have passed the regex: its documented premise is fields with `ControlSource = ""` (empty), and here 14 bindings point at a real table. Claiming it would have gamed the gate against its own stated meaning.
+
+## Changes
+
+**`SIGOPCPEBO.prg`** ÔÇö added `CarregarDados()` (PUBLIC, since the form calls it ÔÇö rule #51), transcribing the legacy opening block: `SELECT`ÔåÆtemp cursorÔåÆ`INTO CURSOR ... READWRITE` (SQLEXEC cursors are read-only; the controls edit the row and the seeding does `INSERT`/`REPLACE`), `INDEX ON tipos TAG PesqTipo`, the 6-type seeding with `fUniqueIds()` and the `'9600,n,8,1'` Settings default. The no-connection branch creates the cursor from the real 17-column `SigSyCom` structure, with `dtrs`/`rtss` as Logical to match `bit` ÔÇö without a live alias the screen wouldn't open even in test mode. Closing uses the `CURSORGETPROP("Buffering")` guard before `TABLEREVERT` (rule #52).
+
+**`FormSIGOPCPE.prg`** ÔÇö `InicializarForm` now calls `CarregarDados()` *before* `ConfigurarCamposPrincipais`, and refuses to open if it fails (mirroring the legacy's `Return .f.` when the connector fails), using a flag rather than a `RETURN` inside `TRY`. Added the 6 `ControlSource` bindings as the last property of each `WITH` block, so the type-seeding `.Value` doesn't fight the binding. `Cmb_Tipo` stays unbound ÔÇö its dump `ControlSource` is an empty string. I also rewrote the three comment blocks that still described the old unbound design, so they don't misdirect the next phase.
+
+## Verification
+
+Completeness validator (the real `Test-CompletudeCodigo` from the orchestrator) passes on both files; the FLAT gate predicates evaluate `True`; `ValidadorSQLSchema.ps1` passes with exit 0 (683 tables parsed, well above the sanity floor); `WITH`/`TRY`/`IF`/`FOR`/`PROCEDURE` all balance to zero; both files are pure ASCII; no `RETURN` inside `TRY`. I confirmed the four name-expression forms I used (`CREATE CURSOR (x)`, `INTO CURSOR (x)`, `INSERT INTO (x)`, `FROM (x)`) are established patterns here ÔÇö `SIGMVCMVBO.prg:595` has the identical `SELECT * FROM (tmp) INTO CURSOR (x) READWRITE` line.
+
+**I could not compile-verify.** I tried: VFP9 hung at startup (process alive at 19 MB, no `.fxp`, no `.err`, no log) ÔÇö the limitation already recorded for this environment. I killed the process and removed the temp script. So the checks above are static only.
+
+## One thing to flag
+
+A pre-existing naming divergence from Phases 3ÔÇô4, which I left alone as out of scope: the header and buttons are built as `cnt_4c_Cabecalho`/`lbl_4c_Sombra`/`lbl_4c_Titulo`/`cmd_4c_Confirmar`/`cmd_4c_Encerrar`, while `mapeamento.json` expects `cnt_4c_Sombra`/`lbl_4c_LblSombra`/`lbl_4c_LblTitulo`/`cmd_4c_Ok`/`cmd_4c_Cancela`. The PRG names are the canonical ones (rules #10/#11), so the JSON is what needs updating ÔÇö but `ValidarUIFidelity` will report those 5 objects as missing until someone does. All 14 Phase-5 data controls match the mapping exactly.

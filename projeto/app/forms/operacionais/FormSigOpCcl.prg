@@ -54,12 +54,12 @@
 * no .prg inteiro, comentario incluido, e citar os quatro o faria aprovar por
 * "handlers presentes" em vez de pelo carve-out de legado sem CRUD.
 *
-* SigOpClp (Do Form SigOpClp With ThisForm, ThisForm.datasessionid) fica
-* FORA do escopo desta migracao - nao foi fornecido fonte/task propria (o
-* .SCX legado esta em ProximasMigracoes\SigOpClp.SCX, ainda nao migrado).
-* BtnConsultaClick mantem a chamada DO FORM literal, no mesmo padrao que
-* Formsigopind.prg (familia SigOp*) ja usa para varios outros forms ainda
-* nao migrados - nenhuma versao reduzida foi inventada no lugar.
+* SigOpClp (Do Form SigOpClp With ThisForm, ThisForm.datasessionid), a tela
+* que EXIBE o cursor montado aqui, JA ESTA MIGRADA (task704 ->
+* projeto\app\forms\operacionais\FormSigOpClp.prg). Enquanto ela nao
+* existia, BtnConsultaClick mantinha o "Do Form" literal apontando para o
+* .SCX legado; agora instancia a classe migrada com os MESMOS dois
+* argumentos do legado - ver o comentario do proprio metodo.
 *
 * Fase 8/8 - CONSOLIDACAO FINAL: acrescenta BOParaForm(), contraparte de
 * FormParaBO que faltava - consolida em UM lugar os blocos "WITH THIS.
@@ -75,7 +75,7 @@
 * Page1=Lista/Page2=Dados, nao tem grade, nao tem CRUD e nao grava em
 * tabela nenhuma - e um dialogo de FILTRO que consulta para um cursor
 * local (TmpOper/cursor_4c_Operacoes) e despacha o resultado a outro form
-* (Do Form SigOpClp, fora do escopo). FormParaBO/BOParaForm continuam
+* (o SigOpClp, hoje FormSigOpClp). FormParaBO/BOParaForm continuam
 * exigidos porque os quatro campos SAO editaveis e alimentam a consulta -
 * exatamente o que esta fase entrega.
 *
@@ -87,7 +87,7 @@
 * codigo NOSSO nunca se chama fConfigGeral. O "Create Cursor TmpOper" do
 * mesmo Load esta reproduzido em SigOpCclBO.RecriarCursorOperacoes (mesma
 * ordem de campos do dump), chamado por BuscarOperacoes - nao ha grade
-* ligada a este cursor nesta tela (ele so e repassado ao SigOpClp), logo
+* ligada a este cursor nesta tela (ele so e repassado ao FormSigOpClp), logo
 * recria-lo so no 1o clique em Consultar, em vez de no Load/Init, nao muda
 * nenhum comportamento visivel.
 *==============================================================================
@@ -1041,13 +1041,35 @@ DEFINE CLASS FormSigOpCcl AS FormBase
     *       Do Form SigOpClp with ThisForm,ThisForm.datasessionid
     *   EndIf
     *
-    * SigOpClp fica FORA do escopo desta migracao (ver comentario no topo do
-    * arquivo) - a chamada DO FORM eh mantida literal, apontando para o form
-    * legado ainda nao migrado, no mesmo padrao do restante da familia SigOp*
-    * (Formsigopind.prg).
+    * O "Do Form SigOpClp with ThisForm,ThisForm.datasessionid" virou
+    * CREATEOBJECT("FormSigOpClp", THIS, THIS.DataSessionId) - os MESMOS dois
+    * argumentos, na mesma ordem, agora apontando para a classe migrada
+    * (task704). Dois cuidados que a troca exige:
+    *
+    *   1) Show() FORA do TRY/CATCH. Em producao FormSigOpClp eh modal, logo
+    *      o Show() BLOQUEIA: com ele dentro do TRY, TODO o uso daquela tela
+    *      (cada clique de cabecalho, cada tecla) ficaria dentro deste bloco,
+    *      e o primeiro erro de runtime la saltaria para o CATCH daqui,
+    *      abandonando o TRY e DESTRUINDO o form filho - a tela "fecharia
+    *      sozinha" (regra CLAUDE.md #29). Por isso a criacao fica no TRY
+    *      (eh ela que pode estourar) e a exibicao vem depois do ENDTRY,
+    *      comandada pela flag loc_lExibir.
+    *   2) a referencia tem de sobreviver a exibicao. "Do Form" mantinha o
+    *      form vivo sozinho; CREATEOBJECT devolve objeto numa LOCAL, e eh o
+    *      Show() bloqueante que mantem loc_oFormOperacoes em escopo
+    *      enquanto a tela existe.
+    *
+    * THIS.Enabled = .F. continua ANTES da abertura, como no legado, e quem
+    * reabilita eh o filho (BtnEncerrarClick e Destroy de FormSigOpClp) - por
+    * isso o caminho de sucesso NAO reabilita aqui. Os caminhos que nao abrem
+    * a tela (nada encontrado, falha ao criar, excecao) reabilitam, senao
+    * este form ficaria travado sem erro nenhum.
     *--------------------------------------------------------------------------
     PROCEDURE BtnConsultaClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_oFormOperacoes, loc_lExibir
+
+        loc_oFormOperacoes = .NULL.
+        loc_lExibir        = .F.
 
         TRY
             THIS.Enabled = .F.
@@ -1061,8 +1083,19 @@ DEFINE CLASS FormSigOpCcl AS FormBase
             IF THIS.this_oBusinessObject.BuscarOperacoes()
                 WAIT CLEAR
 
-                *-- fora do escopo desta migracao - ver comentario acima
-                DO FORM SigOpClp WITH THIS, THIS.DataSessionId
+                *-- Legado: Do Form SigOpClp with ThisForm,ThisForm.datasessionid
+                loc_oFormOperacoes = CREATEOBJECT("FormSigOpClp", THIS, THIS.DataSessionId)
+
+                IF VARTYPE(loc_oFormOperacoes) = "O"
+                    loc_lExibir = .T.
+                ELSE
+                    THIS.Enabled = .T.
+
+                    MsgErro("Erro ao abrir a tela de pesquisa de opera" + CHR(231) + ;
+                        CHR(245) + "es da conta." + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loc_oFormOperacoes), ;
+                        "Erro em BtnConsultaClick")
+                ENDIF
             ELSE
                 WAIT CLEAR
 
@@ -1078,11 +1111,18 @@ DEFINE CLASS FormSigOpCcl AS FormBase
             ENDIF
         CATCH TO loc_oErro
             WAIT CLEAR
-            THIS.Enabled = .T.
+            THIS.Enabled       = .T.
+            loc_oFormOperacoes = .NULL.
+            loc_lExibir        = .F.
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                 "Procedure: " + loc_oErro.Procedure, "Erro em BtnConsultaClick")
         ENDTRY
+
+        *-- FORA do TRY/CATCH (regra CLAUDE.md #29) - ver comentario acima.
+        IF loc_lExibir
+            loc_oFormOperacoes.Show()
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------

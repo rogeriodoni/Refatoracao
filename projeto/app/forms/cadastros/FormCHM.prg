@@ -424,7 +424,7 @@ DEFINE CLASS FormCHM AS FormBase
         *-- Container botoes Salvar/Cancelar (Grupo_Salva.Left=627, Top=6+29=35)
         loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
         WITH loc_oPagina.cnt_4c_BotoesDados
-            .Top         = 35
+            .Top         = 27
             .Left        = 627
             .Width       = 172
             .Height      = 85

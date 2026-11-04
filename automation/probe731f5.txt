@@ -1,0 +1,31 @@
+PROBE 731 F5 INICIO
+ambiente OK - gb_4c_ModoTeste=.T.
+CREATEOBJECT(desbloq) -> VARTYPE=O
+Z-ORDER/TAB (8): CNT_4C_SOMBRA(tab=8) | GRD_4C_DADOS(tab=3) | LBL_4C_PRAZOATUAL(tab=4) | TXT_4C_PRAZOATUAL(tab=5) | LBL_4C_PRAZONOVO(tab=6) | TXT_4C_PRAZONOVO(tab=1) | CMD_4C_CONFIRMAR(tab=2) | CMD_4C_CANCELAR(tab=7)
+EXISTEM? lbl_4c_PrazoAtual=.T. txt_4c_PrazoAtual=.T. lbl_4c_PrazoNovo=.T. txt_4c_PrazoNovo=.T.
+LBL lbl_4c_PrazoAtual (Say1 L315 T110): Cap=[Data Atual] L/T=315/110 W/H=70/15 Font=Tahoma 8 Bold=.T. AutoSize=.F. Align=0 BackStyle=0 WordWrap=.F. ForeColor=5921370 (90,90,90=5921370)
+TXT txt_4c_PrazoAtual (getAtual L315 T124): L/T=315/124 W/H=80/23 Font=Tahoma 8 Align=3 Themes=.F. ForeColor=0 ValueType=D Format=[] InputMask=[] ControlSource=[]
+LBL lbl_4c_PrazoNovo (Say2 L315 T161): Cap=[Nova Data] L/T=315/161 W/H=70/15 Font=Tahoma 8 Bold=.T. AutoSize=.F. Align=0 BackStyle=0 WordWrap=.F. ForeColor=5921370 (90,90,90=5921370)
+TXT txt_4c_PrazoNovo (getNova L315 T175): L/T=315/175 W/H=80/23 Font=Tahoma 8 Align=3 Themes=.F. ForeColor=0 ValueType=D Format=[] InputMask=[] ControlSource=[]
+TEXTO vs WIDTH: 'Data Atual' px=60 Width=70 | 'Nova Data' px=58 Width=70
+BORDAS: Form=500x300 | campo direita=395 | campo baixo=198 | rotulo direita=385
+SOBREPOSICAO: grade direita=278 < campo Left=315 | faixa fim=80 < rotulo Top=110
+VALORES: PrazoAtual=[11/11/2026] tipo=D | PrazoNovo=[  /  /    ] tipo=D EMPTY=.T.
+BO: this_dPrazoAtual=[11/11/2026] this_dPrazoNovo EMPTY=.T.
+DATASESSION=2 SET DATE=DMY CENTURY=ON DTOC(PrazoAtual)=11/11/2026
+ENABLED(desbloq): PrazoNovo=.T. Confirmar=.T. Cancelar=.T.
+SOMENTE-LEITURA: PrazoAtual.ReadOnly=.T. TabStop=.F. Enabled=.T. | PrazoNovo.ReadOnly=.F. TabStop=.T.
+FUNIL: PrazoAtual=[21/11/2026] tipo=D | PrazoNovo EMPTY=.T. tipo=D | BO.this_dPrazoNovo EMPTY=.T.
+FUNIL BLOQUEIO: PrazoNovo.Enabled=.F. Confirmar.Enabled=.F.
+VISIBLE: lblA=.T. txtA=.T. lblN=.T. txtN=.T.
+CarregarLista()=.T. RECCOUNT=-1
+Release(1) OK
+CREATEOBJECT(bloq) -> VARTYPE=O
+ENABLED(bloq): PrazoNovo=.F. Confirmar=.F. Cancelar=.T. | BO.this_lBloquear=.T.
+FOCO one-shot: this_lFocoInicialAplicado=.F.
+Release(2) OK
+CREATEOBJECT(sem params) -> VARTYPE=O
+SEM PARAMS: PrazoAtual EMPTY=.T. PrazoNovo.Enabled=.T. tab(novo/conf/grd/lblA/txtA/lblN/canc)=1/2/3/4/5/6/7
+Release(3) OK
+ARQUIVO DE ERRO DO FORMBASE existe=.F.
+CK99 FIM

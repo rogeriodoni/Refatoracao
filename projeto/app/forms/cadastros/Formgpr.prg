@@ -421,7 +421,7 @@ DEFINE CLASS Formgpr AS FormBase
         *-- Container salvar/cancelar (Grupo_Salva: Left=816, Top=9+29=38)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 38
+            .Top         = 27
             .Left        = 816
             .Width       = 165
             .Height      = 85

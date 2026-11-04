@@ -322,9 +322,12 @@ DEFINE CLASS mtzBO AS BusinessBase
             ENDIF
 
             SET NULL ON
+            *-- CidChaves C(20): a coluna cidchaves de SigCdMtI eh char(20) e eh
+            *-- exatamente o tamanho que fUniqueIds() devolve. C(36) deixava
+            *-- passar chave maior do que a coluna aceita.
             CREATE CURSOR cursor_4c_MtI ( ;
                 Codigo    C(3), ;
-                CidChaves C(36), ;
+                CidChaves C(20), ;
                 Grupos    C(10), ;
                 Contas    C(10), ;
                 Val_Jan   N(14,2), ;
@@ -363,7 +366,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                 Acm_Jan, Acm_Fev, Acm_Mar, Acm_Abr, Acm_Mai, Acm_Jun, ;
                 Acm_Jul, Acm_Ago, Acm_Set, Acm_Out, Acm_Nov, Acm_Dez, ;
                 Total, ChkValida) ;
-                VALUES (par_cCodigo, "", "", "", ;
+                VALUES (par_cCodigo, ALLTRIM(fUniqueIds()), "", "", ;
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ;
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ;
                 0, .F.)
@@ -398,7 +401,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                         Acm_Jan, Acm_Fev, Acm_Mar, Acm_Abr, Acm_Mai, Acm_Jun, ;
                         Acm_Jul, Acm_Ago, Acm_Set, Acm_Out, Acm_Nov, Acm_Dez, ;
                         Total, ChkValida) ;
-                        VALUES (par_cCodigo, "", "", "", ;
+                        VALUES (par_cCodigo, ALLTRIM(fUniqueIds()), "", "", ;
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ;
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ;
                         0, .F.)
@@ -630,11 +633,25 @@ DEFINE CLASS mtzBO AS BusinessBase
     *-- SALVAR DETALHE (PROTECTED) - INSERT SigCdMtI a partir de cursor_4c_MtI
     *-- =========================================================================
 
+    *-- =========================================================================
+    *-- Erro300 / regra #22: SigCdMtI tem 29 colunas, TODAS NOT NULL e sem
+    *-- DEFAULT. O INSERT listava 16 (Codigo, CidChaves, Grupos, Contas e os 12
+    *-- Val_*) e o SQL Server recusava a gravacao inteira:
+    *--   "Nao e possivel inserir o valor NULL na coluna 'chkvalida', tabela
+    *--    'DB_MBAHIA.dbo.sigcdmti'; a coluna nao permite nulos. Falha em INSERT."
+    *-- Faltavam os 12 Acm_* e o ChkValida. No legado isso nao acontecia porque
+    *-- ele grava com poDataMgr.Update('crSigCdMtI') = TABLEUPDATE sobre um
+    *-- cursor de "Select *", entao TODA coluna ia junto, com o valor que o
+    *-- cursor tivesse (0 para linha nova - o cmdInserir.Click so preenche
+    *-- Codigo e cIdChaves). A lista de colunas vem do SCHEMA, nunca do dump.
+    *-- =========================================================================
     PROTECTED FUNCTION SalvarDetalhe(par_cCodigo, par_lSomenteInserir)
         LOCAL loc_cSQL, loc_nResult, loc_lResultado
-        LOCAL loc_cGrupos, loc_cContas, loc_cChave
+        LOCAL loc_cGrupos, loc_cContas, loc_cChave, loc_nChk
         LOCAL loc_nJan, loc_nFev, loc_nMar, loc_nAbr, loc_nMai, loc_nJun
         LOCAL loc_nJul, loc_nAgo, loc_nSet, loc_nOut, loc_nNov, loc_nDez
+        LOCAL loc_nAJan, loc_nAFev, loc_nAMar, loc_nAAbr, loc_nAMai, loc_nAJun
+        LOCAL loc_nAJul, loc_nAAgo, loc_nASet, loc_nAOut, loc_nANov, loc_nADez
         loc_lResultado = .F.
 
         TRY
@@ -664,16 +681,43 @@ DEFINE CLASS mtzBO AS BusinessBase
                     loc_nOut    = NVL(Val_Out, 0)
                     loc_nNov    = NVL(Val_Nov, 0)
                     loc_nDez    = NVL(Val_Dez, 0)
+                    loc_nAJan   = NVL(Acm_Jan, 0)
+                    loc_nAFev   = NVL(Acm_Fev, 0)
+                    loc_nAMar   = NVL(Acm_Mar, 0)
+                    loc_nAAbr   = NVL(Acm_Abr, 0)
+                    loc_nAMai   = NVL(Acm_Mai, 0)
+                    loc_nAJun   = NVL(Acm_Jun, 0)
+                    loc_nAJul   = NVL(Acm_Jul, 0)
+                    loc_nAAgo   = NVL(Acm_Ago, 0)
+                    loc_nASet   = NVL(Acm_Set, 0)
+                    loc_nAOut   = NVL(Acm_Out, 0)
+                    loc_nANov   = NVL(Acm_Nov, 0)
+                    loc_nADez   = NVL(Acm_Dez, 0)
+
+                    *-- chkvalida eh numeric(1,0): a coluna chega ao cursor como
+                    *-- LOGICO (CriarCursorDetalheVazio declara L) ou NUMERICO
+                    *-- (CarregarDetalhe traz do SQL Server). ConverterParaLogico
+                    *-- trata os dois e tambem o NULL (regra #13).
+                    loc_nChk = IIF(ConverterParaLogico(ChkValida), 1, 0)
 
                     IF EMPTY(loc_cChave)
-                        loc_cChave = ALLTRIM(SYS(2015)) + ALLTRIM(STR(SECONDS(), 10, 0))
+                        *-- Legado: Insert Into csSigCdMtI (Codigo, cIdChaves)
+                        *--         Values (lnCodigo, fUniqueIds())
+                        *-- fUniqueIds() devolve exatamente 20 chars = char(20)
+                        *-- de cidchaves. NUNCA improvisar a chave (regra #22).
+                        loc_cChave = ALLTRIM(fUniqueIds())
                     ENDIF
 
+                    *-- As 29 colunas de SigCdMtI, todas NOT NULL (regra #22)
                     loc_cSQL = "INSERT INTO SigCdMtI" + ;
                                " (Codigo, CidChaves, Grupos, Contas," + ;
                                "  Val_Jan, Val_Fev, Val_Mar, Val_Abr," + ;
                                "  Val_Mai, Val_Jun, Val_Jul, Val_Ago," + ;
-                               "  Val_Set, Val_Out, Val_Nov, Val_Dez)" + ;
+                               "  Val_Set, Val_Out, Val_Nov, Val_Dez," + ;
+                               "  Acm_Jan, Acm_Fev, Acm_Mar, Acm_Abr," + ;
+                               "  Acm_Mai, Acm_Jun, Acm_Jul, Acm_Ago," + ;
+                               "  Acm_Set, Acm_Out, Acm_Nov, Acm_Dez," + ;
+                               "  ChkValida)" + ;
                                " VALUES (" + ;
                                EscaparSQL(par_cCodigo) + "," + ;
                                EscaparSQL(loc_cChave) + "," + ;
@@ -690,7 +734,20 @@ DEFINE CLASS mtzBO AS BusinessBase
                                FormatarNumeroSQL(loc_nSet) + "," + ;
                                FormatarNumeroSQL(loc_nOut) + "," + ;
                                FormatarNumeroSQL(loc_nNov) + "," + ;
-                               FormatarNumeroSQL(loc_nDez) + ")"
+                               FormatarNumeroSQL(loc_nDez) + "," + ;
+                               FormatarNumeroSQL(loc_nAJan) + "," + ;
+                               FormatarNumeroSQL(loc_nAFev) + "," + ;
+                               FormatarNumeroSQL(loc_nAMar) + "," + ;
+                               FormatarNumeroSQL(loc_nAAbr) + "," + ;
+                               FormatarNumeroSQL(loc_nAMai) + "," + ;
+                               FormatarNumeroSQL(loc_nAJun) + "," + ;
+                               FormatarNumeroSQL(loc_nAJul) + "," + ;
+                               FormatarNumeroSQL(loc_nAAgo) + "," + ;
+                               FormatarNumeroSQL(loc_nASet) + "," + ;
+                               FormatarNumeroSQL(loc_nAOut) + "," + ;
+                               FormatarNumeroSQL(loc_nANov) + "," + ;
+                               FormatarNumeroSQL(loc_nADez) + "," + ;
+                               FormatarNumeroSQL(loc_nChk, 0) + ")"
 
                     loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
                     IF loc_nResult < 0

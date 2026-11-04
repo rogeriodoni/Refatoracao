@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 2 is complete. Summary of what was done for `sigopdenBO.prg`:
+
+**Context**: SIGOPDEN is a read-only "Dados de Entrega" visualizer (not CRUD), so the generic Fase 2 template (Inserir/Atualizar) doesn't literally apply ÔÇö that decision was already documented in Phase 1 and is correct per the project's "BO somente-leitura" pattern. The real Phase 2 work was porting the legacy `SelecionaDados()`/`Processamento()` pair faithfully.
+
+**Added to `sigopdenBO.prg`**:
+- `ObterChavePrimaria()` ÔÇö returns the positional `EmpDopNums` key.
+- `CarregarDadosEntrega(emps, dopes, numes)` ÔÇö public entry point for the Form (Phase 3), wraps everything in TRY/CATCH, cleans up cursors on exit.
+- `SelecionarDadosOrigem()` ÔÇö loads SigCdOpe/SigOpCdc/SigCdPam/SigCdEmp/SigMvCab/SigMvItn+SigCdPro/SigMvIts(sub)/SigMvNfi/SigMvPar, all verified column-by-column against `docs/schema.sql`.
+- `ProcessarCabecalhoEDados()` ÔÇö rebuilds `cursor_4c_Cabecalho` (1 row) and `cursor_4c_Dados` (paginated items), transcribing the legacy title/barcode/frete/pagination logic literally.
+- `ResolverEnderecoEntrega()` + `LiberarCursoresAuxiliares()` helpers.
+
+**Bugs fixed along the way**:
+- `this_cLocalEnts` was declared as `char` in Phase 1 but the real column (`SigMvCab.localents`) is `numeric(10,0)` ÔÇö renamed to `this_nLocalEnts` and fixed a stray assignment that would have crashed at runtime (assigning an undeclared property).
+- `this_nDckPrzE` and sibling Dck* flag properties were declared but never populated before being read ÔÇö fixed.
+- `this_nTotPag`/`this_nPagina` were declared but orphaned ÔÇö now populated.
+- Resolved the legacy's undefined-helper calls (`fCriarIcone`, used by this BO and already-latent in the sibling `sigreifxBO.prg`) by adding a real implementation to `utils/functions.prg`.
+- Tracked down the legacy `fEndEntrega`/`LocalEnts` address lookup (undocumented in this form's extracted source) to table `SigCdCee` via a research agent, and implemented it directly rather than leaving a silent gap.
+
+Verified IF/ENDIF/FOR/SCAN/FUNCTION/PROCEDURE/TRY/DEFINE CLASS blocks all balance. Phase 3 (Form) can now call `THIS.this_oBusinessObject.CarregarDadosEntrega(pEmp, pDop, pNum)` and read from `cursor_4c_Cabecalho`/`cursor_4c_Dados` or the mirrored `this_*` properties.

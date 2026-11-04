@@ -1,0 +1,40 @@
+=== CENARIO A: instanciacao ===
+VARTYPE(form) = O
+
+=== CENARIO B: handlers de botao (PUBLIC) ===
+BtnConfirmarClick existe=SIM  protected=.F.
+BtnCancelarClick  existe=SIM  protected=.F.
+BtnCotacaoClick   existe=SIM  protected=.F.
+FecharDialogo     existe=SIM  protected=.F.
+
+=== CENARIO C: BINDEVENT dos botoes (AEVENTS) ===
+Buttons(1) -> binds=1 evento=[CLICK] metodo=[BTNCONFIRMARCLICK]
+Buttons(2) -> binds=1 evento=[CLICK] metodo=[BTNCANCELARCLICK]
+cmd_4c_BtnCotacao -> binds=1 evento=[CLICK] metodo=[BTNCOTACAOCLICK]
+
+=== CENARIO D: guard de modo no Click do Alterar ===
+BtnCotacaoClick() em PROCURAR = .F. (esperado .F., sem abrir dialogo)
+PodeUsarBotaoCotacao(PROCURAR) = .F.
+PodeUsarBotaoCotacao(INSERIR)  = .T.
+PodeUsarBotaoCotacao(ALTERAR)  = .T.
+
+=== CENARIO E: aplicacao do retorno autorizado ===
+antes : valos=5.1234567 avalos=5.1234567 cotusus=[          ]
+AplicarCotacaoAutorizada(OK) = .T.
+depois: valos=7.7777777 avalos=5.1234567 cotusus=[CHEFE     ]
+AplicarCotacaoAutorizada(CANCELADO) = .F.  mensagem=[]  valos=7.7777777
+
+=== CENARIO F: Cancelar desfaz e fecha com Hide ===
+antes : valos=9.9999999 avalos=1.1111111 SET(Decimals)=5
+BtnCancelarClick() = .T.
+depois: valos=1.1111111 avalos=1.1111111 SET(Decimals)=2
+this_lConfirmado = .F.  VARTYPE(form) apos fechar = O (tem de seguir O - Hide, nao Release)
+
+=== CENARIO G: Confirmar mantem e fecha com Hide ===
+BtnConfirmarClick() = .T.
+valos (inalterado) = 3.3333333
+this_lConfirmado = .T.  VARTYPE(form) = O
+apos Release do chamador: VARTYPE(form) = X
+
+=== dialogos suprimidos ===
+(nenhum)

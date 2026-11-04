@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpCot.prg` modificado (630 ÔåÆ 1224 linhas, +594).
+
+## O que foi entregue
+
+O SCX legado **n├úo tem PageFrame nem bot├úo CRUD** ÔÇö ├® um di├ílogo modal FLAT. Entreguei a estrutura que a tela realmente tem (ramo FLAT do gate da Fase 4: `grd_4c_*` + barra de bot├Áes + m├®todo de carga), transcrita do dump, sem inventar Lista/Dados nem Incluir/Excluir:
+
+| M├®todo novo | Objeto legado | Conte├║do |
+|---|---|---|
+| `ConfigurarShapeDestaque` | `shpBtnGs` | Shape 92x110 em 6,7 ÔÇö `BorderColor` (Shape n├úo tem `ForeColor`) |
+| `ConfigurarGradeCotacoes` | `Gradeget_cotacao` (fwgrade) | Grid 173x513 em 413,83; `Column1` "moeda" (W=40) e `Column2` "cotacao" (W=101, `InputMask "99999.9999999"`), Headers `Alignment=2`, Verdana 8 |
+| `ConfigurarBotoes` | `cntBotoes` + `btnCotacao` | `cmg_4c_Botoes` (Salvar/Cancelar 75x75, `Cancel=.T.` no Cancelar) e `cmd_4c_BtnCotacao` |
+| `CarregarLista` | `RecordSource="tmpcot"` + `Load` | chama `PrepararCursorCotacao` do BO e faz o bind |
+| `RepintarGradeCotacoes` | `Go Top` do `Load` | funil ├║nico `GO TOP` + `Refresh` |
+| `AplicarVisibilidadeBotaoCotacao` | `Init` legado | `btnCotacao.Visible` via BO + `shpBtnGs.Visible = btnCotacao.Visible` |
+
+**Ordem de cria├º├úo** segue a ├írvore do SCX (cabe├ºalho ÔåÆ shape ÔåÆ grade ÔåÆ grupo ÔåÆ btnCotacao): o CommandGroup est├í em `Top=-2` e o btnCotacao em `Top=3`, dentro da faixa cinza ÔÇö criados depois, desenham por cima (regra #11).
+
+## Decis├Áes que valem registro
+
+- **Nenhum `RecordSource`/`ControlSource` no `Init`** ÔÇö o cursor ├® do form pai e pode n├úo existir ainda; ligar coluna a alias inexistente mataria a tela (regra #41). O bind inteiro fica em `CarregarLista` sob `USED()`, na ordem `RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header`.
+- **`ZOrderSet` (shape=0, btnCotacao=4) n├úo transcrito** ÔÇö n├úo existe em runtime (regra #33); a ordem sai da sequ├¬ncia de cria├º├úo.
+- **`ChildOrder="cmoes"` n├úo transcrito** ÔÇö vem com `LinkMaster=""`/`RelationalExpr=""`, rela├º├úo inerte.
+- **Desvio deliberado do dump:** `cmd_4c_BtnCotacao` leva `Themes=.T.` + `DisabledPicture` (dump diz `.F.`). ├ë standalone com `.Picture` e fica `Enabled=.F.` em modo PROCURAR ÔÇö com `Themes=.F.` o ├¡cone n├úo renderiza desabilitado. Os bot├Áes *dentro* do CommandGroup mant├¬m `.F.`.
+- `tasks/task708/mapeamento.json` corrigido: as colunas estavam mapeadas para `Page_4c_1` e o CommandGroup para `obj_4c_CntBotoes` (bug do gerador) ÔÇö agora apontam para `Column1`/`Column2` e `cmg_4c_Botoes`, sen├úo o ValidarUIFidelity n├úo acharia os objetos.
+
+## Verifica├º├úo
+
+- **Compila limpo**: `vfp9.exe -T` gerou `formsigopcot.FXP` (14.290 bytes) e **nenhum `.ERR``. `.FXP` removido depois.
+- Blocos balanceados (WITH/ENDWITH 15, TRY/ENDTRY 5, IF/ENDIF 47, PROCEDURE/ENDPROC 14); zero `RETURN` dentro de TRY; zero `ISEMPTY`/`MostrarAviso`/`MESSAGEBOX`/`.Self`/`PUBLIC PROCEDURE`/TODO; zero byte >127 (acentos todos via `CHR()`); CRLF preservado (CR=LF=1224).
+- M├®todos chamados de fora (`CarregarLista`, `RepintarGradeCotacoes`, `AplicarVisibilidadeBotaoCotacao`) s├úo PUBLIC (regra #3).
+
+**O que n├úo consigo provar nesta sess├úo:** instancia├º├úo. Medido aqui ÔÇö `vfp9.exe` compila e sai **sem executar** o corpo do script (smoke test de 4 linhas com `STRTOFILE` saiu com `exit=0`, `.FXP` criado e arquivo de sa├¡da ausente). Portanto "a tela abre" n├úo est├í verificado; s├│ a compila├º├úo est├í.

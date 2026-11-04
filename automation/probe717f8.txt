@@ -1,0 +1,28 @@
+=== PROBE F8 - espelhos BOParaForm / FormParaBO ===
+[C1] VARTYPE             = O   (esperado O)
+[C1] Height              = 211   (esperado 211)
+[C1] this_lAltera        = .F.   (esperado .F.)
+[C1] BO.this_lAltera     = .F.
+[C1] this_cTitulo        = [11101]
+[C1] BO.this_cTitulo     = [11101]
+[C1] Frase.Caption       = [A Conta 11101<CR> Possui Senha : ]
+[C1] Frase ESPERADA      = [A Conta 11101<CR> Possui Senha : ]
+[C1] Frase CONFERE       = .T.
+[C1] PermitirSenhaNova   = .F.   (esperado .F.)
+[C1] BO.SenhaDigitada ANTES do Valid  = []   (esperado vazio)
+[C1] BO.SenhaDigitada DEPOIS do Valid = [ABC123]   (esperado ABC123)
+[C1] ObterResultado      = .F.
+
+[C2] VARTYPE             = O   (esperado O)
+[C2] Height              = 250   (esperado 250)
+[C2] this_lAltera        = .T.   (esperado .T.)
+[C2] Frase.Caption       = [Conta 11101<CR>Digite a Senha Atual : ]
+[C2] Frase CONFERE       = .T.
+[C2] PermitirSenhaNova   = .T.   (esperado .T.)
+[C2] BO.Nova1/Nova2 ANTES  = []/[]   (esperado vazio/vazio)
+[C2] BO.Nova1/Nova2 DEPOIS = [AAA]/[BBB]   (esperado AAA/BBB)
+[C2] BO.MensagemErro      = [Senha Conflitante!!! Alteração Cancelada!!!]
+[C2] Senhas do cursor     = [SEGREDO]   (esperado SEGREDO - par divergente NAO grava)
+[C2] ObterResultado       = .F.   (esperado .F.)
+
+=== FIM ===

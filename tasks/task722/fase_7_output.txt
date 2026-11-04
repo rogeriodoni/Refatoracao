@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. Compila├º├úo e probe headless rodaram de verdade nesta sess├úo (smoke test passou primeiro, ent├úo os resultados abaixo s├úo medidos, n├úo inferidos).
+
+## `FormSigOpDmp.prg` (+588 linhas)
+
+Os 4 eventos exigidos, transcritos do `Grupo_op.Click` do `frmcadastro` + do override do SCX:
+
+| handler | legado | o que faz |
+|---|---|---|
+| `BtnIncluirClick` | `Click(1)` INSERIR | `NovoRegistro` ÔåÆ `LimparCampos` ÔåÆ `LimparFases` (o `Zap in ('crSigCdDpr')`) ÔåÆ modo ÔåÆ p├ígina 2 ÔåÆ re-liga/repinta a grade ÔåÆ foco no Nome |
+| `BtnVisualizarClick` | `Click(2)` CONSULTAR | funil `AbrirFichaDoRegistro("VISUALIZAR")` ÔÇö ficha travada, Confirmar desabilitado (`Salva.Enabled = Not pcEscolha=[CONSULTAR]`) |
+| `BtnAlterarClick` | `Click(3)` ALTERAR | mesmo funil + `EditarRegistro` no BO |
+| `BtnExcluirClick` | `Click(4)` EXCLUIR | mesmo funil, modo EXCLUIR ÔÇö **n├úo exclui nada**: no legado a pergunta e o DELETE moram no `Salva.Click` (Fase 8) |
+
+Suporte que os eventos exigem: `LimparCampos`, `BOParaForm`, `CarregarDescricoesMestre` (o `IniciaDesc`), `LimparFases`, `CarregarFasesDoBanco` (o `Requery('crSigCdDpr')`, via cursor tempor├írio + ZAP + APPEND para n├úo destruir as Column ÔÇö Problema 34), `FocarAposAbrirFicha` (o `Do Case` de SetFocus) e `AbrirFichaDoRegistro`. BINDEVENT dos 4 bot├Áes + `KeyPress`/`DblClick` da grade da Lista (Enter sobre a grade ├® CONSULTAR no `frmcadastro`).
+
+## `SigOpDmpBO.prg` (+95 linhas)
+- `CarregarPorCodigo` ÔÇö o `ReQuery` por chave que os tr├¬s verbos de carga precisavam (n├úo existia); rep├Áe `this_lNovoRegistro = .F.`
+- `LimparDados` ÔÇö override que faltava: sem ele `NovoRegistro()` deixava `nome/grupos/contas` e **a `cidchaves` do registro anterior** nas properties, e o INSERT seguinte reaproveitaria aquela PK (colis├úo em `SigPrDmo`).
+
+## Verifica├º├úo
+`COMPILE` dos dois: `.FXP` gerado, nenhum `.err`. Probe headless (modo teste, sem banco):
+
+```
+CK04 BtnVisualizarClick(lista vazia)=.F. ActivePage=1    <- recusa e fica na Lista
+CK05/06 BtnIncluirClick=.T. ActivePage=2 Modo=INCLUIR
+CK07 Fases=0 RecordSource=[cursor_4c_Fases] Col1=[...ordems] Col1W=40
+CK09 apos ValidarNome: 1 linha, nome=[PROBE DEMO] cidchaves=[017LI0T4RDR47751807]
+CK11 Cancelar -> ActivePage=1 Modo=LISTA Incluir/Alterar.Enabled=.T.   <- regra #40
+CK12 NovoRegistro zera Nome e CidChaves
+CK13 CarregarPorCodigo=.F. Msg=[Sem conexao com o banco de dados.]     <- falha nunca muda
+```
+
+## Pendente para a Fase 8 (dito explicitamente, n├úo silenciado)
+`BtnSalvarClick` (o `Salva.Click`: confirma├º├úo "Deseja Realmente Excluir Esses Dados?", `mSv_Excluir` + `ExcluiItens`, persist├¬ncia da grade de fases), `BtnBuscarClick` (busca por exemplo ÔÇö `msv_procurar`) e `SigOpDmpBO.ExecutarExclusao`, que o caminho do Confirmar vai exigir. O `cmd_4c_Buscar` ficou sem BINDEVENT de prop├│sito: vincular a m├®todo inexistente aborta o `Init`.
+
+Observa├º├úo menor pr├®-existente (impacto zero hoje): `CarregarDoCursor` chama `TratarNulo(nome, "C")` ÔÇö o 2┬║ argumento ├® o *valor* padr├úo, n├úo o tipo; como todas as colunas de `SigPrDmo` s├úo `NOT NULL`, nunca dispara. N├úo mexi por estar fora desta fase.

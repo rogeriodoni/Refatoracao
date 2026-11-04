@@ -1,0 +1,42 @@
+=== PROBE task719 FASE 8 (v2) ===
+Ambiente: OK
+CREATEOBJECT VARTYPE: O
+Caption: [Seleção de Descontos]
+BaseClass: [Form]
+ControlCount: 10
+
+--- metodos (existe / PROTECTED) ---
+FormParaBO             existe=SIM protected=SIM
+BOParaForm             existe=SIM protected=SIM
+BtnCancelarClick       existe=SIM protected=NAO
+BtnConfirmarClick      existe=SIM protected=NAO
+CarregarLista          existe=SIM protected=NAO
+MontaGrade             existe=SIM protected=NAO
+CalcularTotais         existe=SIM protected=NAO
+Destroy                existe=SIM protected=NAO
+
+--- hooks protegidos, via subclasse ---
+FormParaBO() -> .T.
+BOParaForm() -> .T.
+
+--- contexto no BO apos FormParaBO ---
+BO.this_cEmps      = [001]
+BO.this_cCpros     = [00000000000001]
+BO.this_nCitens    = 1
+BO.this_nUnitOrigs = 100
+BO.this_nValor     = 100
+BO.this_nTDesc     = 0
+BO.this_nSaldo     = 0
+
+--- totais na tela apos BOParaForm ---
+txt_4c_LnValor = 100
+txt_4c_LnTDesc = 0
+txt_4c_LnSaldo = 0
+
+--- metodos publicos, de FORA ---
+MontaGrade(): OK
+BtnCancelarClick(): OK (liberou o dialogo)
+
+--- limpeza do Destroy (PROCEDURE Release do legado) ---
+cursor_4c_Dados ainda aberto: NAO (fechou)
+cursor_4c_Cota  ainda aberto: NAO (fechou)

@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is delivered. `projeto/app/forms/operacionais/FormSigOpCpr.prg` (1187 ÔåÆ 1508 lines).
+
+## What was added
+
+The legacy `SIGOPCPR` has exactly **two** button Clicks ÔÇö `CmdCopia.Click` and `CmdExit.Click`. `CmdExit` was done in Phase 4, so the real remaining main event was the copier:
+
+- **`BtnCopiarClick()`** ÔÇö transcription of `PROCEDURE CmdCopia.Click`: the single empty-destination guard (`MsgAviso("Destino Invalido !!!")`), the screenÔåÆBO mirror, the copier call, parent-list repaint, `ThisForm.Release`. The ~90 middle lines (both modality branches, key emission, Scatter/Gather, `fGravarLog`, Commit) already live in `SigOpCprBO.Inserir` and are reached through `ExecutarCopia()`, which runs `NovoRegistro + Salvar` so `ValidarDados` fires before the transaction opens.
+- **`AtualizarFormPai()`** ÔÇö the repaint the legacy got for free from the shared data session (`DO CASE` over `CarregarLista` / `CarregarDados` / `MontaGrade`, parent optional, failure is an advisory not a fatal).
+- **`this_lEmCopia`** ÔÇö reentrancy guard (set after the early `RETURN`, cleared after `ENDTRY`, before `Release()`).
+- **`BINDEVENT` of `Buttons(1)`**, which could only be registered now that the handler exists.
+
+## On the four CRUD names
+
+`BtnIncluir/Alterar/Visualizar/ExcluirClick` were **not** created, and the dump is the reason: zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha`, and zero occurrences of any CRUD verb in the whole file (measured). The only action surface is `Commandgroup1` with `ButtonCount = 2`. The phase-7 gate's own `legadoSemCrud` path covers this and requires ÔëÑ2 `Btn*Click` handlers ÔÇö the form now has exactly 2.
+
+## Verification
+
+| check | result |
+|---|---|
+| VFP9 `COMPILE` (form + BO) | both `.fxp` generated, **no `.ERR`** |
+| `VerificarPropriedadesInexistentes` | OK ÔÇö nothing |
+| `VerificarFuncoesNaoDefinidas` | OK ÔÇö no orphan calls |
+| `VerificarMetodoProtegidoChamadoDeFora` | OK ÔÇö `ConfigurarModalidade`/`ExecutarCopia` are public |
+| instantiation probe (`automation/Probe712F7.prg`) | all 5 scenarios match expectations |
+
+The probe proves it end-to-end rather than just compiling: form opens (`VARTYPE = O`); both binds registered (`Buttons(1)ÔåÆBTNCOPIARCLICK`, `Buttons(2)ÔåÆBTNENCERRARCLICK`); empty destination shows exactly one dialog and does **not** call the copier; reentrancy guard blocks the second entry without releasing itself; BO refusal with `this_lErroExibido` produces no duplicate message, keeps the typed value and keeps the form open; success passes the *screen* origin and destination to the BO, repaints the parent once, and closes the form.
+
+One detour worth flagging: the probe itself hung twice in headless VFP ÔÇö `AEVENTS` needs `LOCAL ARRAY`, and its 2-arg form puts the delegate *object* in column 2 (event name is column 3). Both produce a modal Program Error with **no `.ERR` file**, so the process just hangs. I appended that to the existing `feedback_aevents_dois_args_coluna_3` memory, since the note previously only covered the compile-error variant. No form code was involved.

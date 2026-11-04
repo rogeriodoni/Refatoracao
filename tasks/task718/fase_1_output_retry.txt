@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da: `C:\4c\projeto\app\classes\sigopdenBO.prg` (265 linhas, 126 properties).
+
+**Por que a tentativa anterior falhou**: o log mostra que o Claude CLI rodou 10,9s e devolveu s├│ avisos de permiss├úo + *"N├úo vejo ainda uma solicita├º├úo espec├¡fica sua nesta conversa"* ÔÇö o prompt da fase nunca chegou ao modelo. Nenhum arquivo foi gerado.
+
+## O que foi entregue
+
+`DEFINE CLASS sigopdenBO AS BusinessBase` + `Init()`, com as 126 properties agrupadas por origem:
+
+| Bloco | Qtd | Origem |
+|---|---|---|
+| Chave de entrada | 4 | `pcEmps`/`pcDopes`/`pcNumes` do `Init` legado + `EmpDopNums` montada |
+| Cursores de sa├¡da | 2 | `crCabecalho`/`crDados` ÔåÆ `cursor_4c_*` |
+| Controle de impress├úo | 7 | `TpImpressao`, `Contaemail`, `ImgLogotipo/Tecnicas/Branco`, itens/p├ígina |
+| `SigCdOpe` / `SigOpCdc` | 3 + 11 | flags `Dck*` e t├¡tulos `Doc*` |
+| `SigMvCab` (contas) | 5 | `ContaOs/Ds/Es`, `LocalEnts`, `ValVars` |
+| Cabe├ºalho do documento | 90 | todos os campos do `Create Cursor crCabecalho` |
+| Itens | 12 | todos os campos do `Create Cursor crDados` |
+
+`this_cTabela = "SigMvCab"`, `this_cCampoChave = "EmpDopNums"`.
+
+## Verifica├º├Áes feitas
+
+- **Schema can├┤nico** (`Get-Content -Raw`, UTF-16 ÔÇö regra #14): confirmei coluna por coluna as 7 tabelas. Tudo que o legado usa existe. `SigMvItn.reffs` **n├úo** existe ÔÇö e o legado est├í certo: ele traz `Reffs` do join com `SigCdPro b`. `SigCdEmp.razsocs/cgcs/ies` existem (aqui a regra `Cemps`/`Razas` n├úo se aplica), e `SigMvCab.emps` ├® sem `C`, consistente com a regra #48.
+- **Compila├º├úo VFP9**: `COMPILE` gerou `.fxp` sem `.ERR`.
+- **Instancia├º├úo real**: `CREATEOBJECT("sigopdenBO")` ÔåÆ objeto, `ParentClass=Businessbase`, tabela/chave corretas, e os tipos conferidos no VFP (`this_dDatas`=D, `this_nNumes`=N, `this_cEmps`=C, `this_lImpCabBar`=L). `.fxp`/`.err` e o diret├│rio de probe foram apagados depois.
+- **Regras do projeto**: 0 bytes >127 (acentos s├│ via `CHR()`), CRLF preservado (CR=LF=265), 0 `RETURN` dentro de `TRY`, sem `PUBLIC PROCEDURE`, sem TODO/stub.
+
+Uma armadilha vale registro: a palavra `metodos` cont├®m a substring `todo` e disparava o grep de completude ÔÇö reescrevi o coment├írio para `rotinas`.
+
+## Duas decis├Áes que vale voc├¬ conferir
+
+1. **`crCabecalho.Dopes` virou `this_cDocTit`.** No legado esse campo do cursor recebe `LocalDcOpe.DocTit` (t├¡tulo do documento), **n├úo** o c├│digo da opera├º├úo ÔÇö colidiria com o par├ómetro `this_cDopes`. Nomeei pela coluna real de origem (`SigOpCdc.doctit`). O nome da *coluna do cursor* segue `Dopes` nas fases seguintes, porque ├® contrato do FRX.
+2. **`Imagem`/`ImgTec` do cursor n├úo ganharam property pr├│pria.** No legado s├úo c├│pias literais de `ThisForm.ImgLogotipo`/`ImgTecnicas` (`Replace Imagem With ThisForm.ImgLogotipo`); declarar os dois criaria o par de fonte dupla que j├í causou bug antes. Mantive s├│ as tr├¬s properties de caminho, documentado em coment├írio ÔÇö as colunas do cursor s├úo preenchidas a partir delas na Fase 2.
+
+Fica para as pr├│ximas fases, como manda o pipeline: `SelecionarDados`/`Processamento`/`CarregarDoCursor` (Fase 2) e o form (Fases 3-8). Nota para a Fase 2: `EmpDopNums` ├® **chave posicional** `PADR(Emps,3) + PADR(Dopes,20) + STR(Numes,6)` = char(29) ÔÇö `ALLTRIM` nas partes devolve zero linhas em sil├¬ncio (regra #42).

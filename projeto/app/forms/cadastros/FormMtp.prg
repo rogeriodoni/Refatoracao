@@ -1170,9 +1170,20 @@ DEFINE CLASS FormMtp AS FormBase
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Gcr")
                         SELECT cursor_4c_Gcr
                         THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value = ALLTRIM(cursor_4c_Gcr.codigos)
-                    ELSE
-                        THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value = ""
                     ENDIF
+                    *-- Sem ELSE de proposito. O legado (Get_grupo.Valid) so
+                    *-- ATRIBUI quando a selecao nao foi cancelada:
+                    *--     If Lastkey()#27
+                    *--         This.Value = crSigCdGcr.Codigos
+                    *--     Endif
+                    *-- ou seja, desistindo da lista o codigo DIGITADO fica no
+                    *-- campo. O ELSE que havia aqui zerava o campo sempre que
+                    *-- o usuario fechasse o picker - e como o universo deste
+                    *-- lookup hoje esta VAZIO no banco (SigCdGcr tem 44 linhas
+                    *-- e nenhuma com gerbals=1), a lista abria vazia e o campo
+                    *-- era apagado em seguida, sem o usuario ter como preencher
+                    *-- o Grupo (regra #50). Diferente do lookup de Moeda, onde
+                    *-- o legado APAGA mesmo no ESC - la o clear esta correto.
                 ENDIF
                 loc_oBusca.Release()
             ENDIF

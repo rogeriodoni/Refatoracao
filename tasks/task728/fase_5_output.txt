@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 ÔÇö FormSigOpEmb: conclu├¡da
+
+**A fase n├úo tinha campo a acrescentar, e isso est├í CERTO** ÔÇö medido, n├úo presumido.
+
+O dump do `SIGOEMB` tem 15 objetos, e os **4 `BaseClass: textbox` s├úo os `Text1` das 4 colunas da grade** (`Parent: SIGOEMB.Grade.Column1..4`), entregues na Fase 4. Fora deles: 2 Labels na faixa do cabe├ºalho (Fase 3), 1 CommandGroup e a grade (Fase 4). **Zero campo solto** ÔåÆ "metade dos campos" ├® zero.
+
+N├úo inventei campos (PILAR 1 / "NUNCA inventar") nem criei `ConfigurarPaginaDados` vazio (regra de completude). O `.prg` segue intacto (45504 bytes, 23:28:23), e o **gate de conte├║do da Fase 5 passa pelo ramo FLAT**: `FormType=OPERACIONAL` + sem `AddObject("pgf_4c_` + `.ControlSource =` presente.
+
+### O blocker real estava no guard, n├úo no form
+
+O guard de NO-OP for├ºaria uma re-execu├º├úo opus inteira s├│ para reconfirmar que n├úo havia nada a fazer ÔÇö `Test-LegadoSemCampoNemLista` devolve `$false` aqui, porque o legado **tem** lista e **tem** campos. ├ë a fam├¡lia GRADE+BOT├òES que a li├º├úo do `SIGPRGST` especificou em 2026-10-19 como `Test-LegadoSemCamposSoltos` e que **nunca havia sido implementada** (s├│ a metade DESPACHANTE entrou).
+
+Implementei no `automation\OrquestradorMigracao.ps1` (+135 linhas, 3 edi├º├Áes):
+
+1. **`Test-DumpTemAgrupadorVcx`** ÔÇö bloco (3) extra├¡do de `Test-LegadoSemCampoNemLista` para ser reusado pelos dois predicados (regra #44, item 6).
+2. **`Test-LegadoSemCamposSoltos`** ÔÇö 4 portas fail-closed: piso de sanidade; prova *positiva* da grade; nenhum agrupador de VCX; `>= 1` controle de entrada **E** todos com `Parent` casando `\.Column\d+$`.
+3. **Guard**: `(SemCampoNemLista) -or (SemCamposSoltos)` nas Fases 5/6.
+
+### Medi├º├Áes
+
+| prova | resultado |
+|---|---|
+| refatora├º├úo vs original, 727 dumps | **0 diverg├¬ncia** (e 0 tamb├®m contra o arquivo j├í patchado) |
+| alcance do predicado novo | 44 dumps ÔåÆ **39 OPERACIONAL = 26 forms distintos** |
+| sobreposi├º├úo com o predicado antigo | **0** (disjuntos) |
+| 12 controles negativos | todos `$false` |
+| encoding do `.ps1` antes/depois | BOM UTF-8, 100% CRLF, bytes >127 = 2965, **0 erro de parse**, 0 fun├º├úo duplicada |
+
+A popula├º├úo reproduz exatamente a que a especifica├º├úo havia medido: inclui o `SigPrGst` que originou a li├º├úo, e os 6 controles (`SigCdVca`, `SigPrCar`, `SigMvAte`, `sigprtam`, `SigCdGps`, `SIGCDTPG`) liberam a Fase 5 e **mant├¬m** o retry na Fase 6, segurados pela prova extra de aus├¬ncia de lookup. O `SigOpEmb` libera as duas (dump sem lookup).
+
+Dois pontos a registrar:
+
+- **Editar o orquestrador n├úo desbloqueia a execu├º├úo em curso** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo o loop precisa ser relan├ºado para a corre├º├úo valer.
+- N├úo dei dot-source no orquestrador (ele dispara migra├º├úo); as medi├º├Áes sa├¡ram de extra├º├Áes das fun├º├Áes em arquivo tempor├írio, j├í removido. Fase 4 e o perfil CAPTURA da Fase 6 seguem **sem** exce├º├úo.
+
+Mem├│ria `feedback_noop_guard_sem_excecao_para_fase_sem_trabalho` atualizada: o aviso de que o 2┬║ predicado n├úo existia est├í resolvido.

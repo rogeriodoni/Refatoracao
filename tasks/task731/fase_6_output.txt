@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Structure is balanced in both files. Phase 6 is complete.
+
+## Summary
+
+Phase 6 for `FormSigOpEnt` is done. Per the file's own header documentation, this form had no remaining fields and no lookups (`FormBuscaAuxiliar`) to add ÔÇö Phase 5 already covered the complete legacy data surface. What Phase 6 required was the **business validation logic of `getNova.Valid`** (the only piece explicitly deferred to this phase):
+
+**`SigOpEntBO.prg`** ÔÇö added `CarregarConfiguracaoOperacao()`, porting the two `CursorQuery` calls from the legacy `Init` (`SigCdOpe.DtEntrs` and `SigOpCdd.chkUteis`, keyed by `Dopes`). Failure of either aborts the dialog, matching the legacy's `Return .f.`.
+
+**`FormSigOpEnt.prg`**:
+- Wired that BO call into `InicializarForm()`, restructured so the rest of initialization only runs on success.
+- Added `ValidarPrazoNovo()` ÔÇö the ported `getNova.Valid`: normalizes the typed date, and when `DtEntrs` is in `(1,4,6)` enforces not-empty, not-earlier-than-movement-date, and the min/max window.
+- Added `SolicitarLiberacaoPrazo()` ÔÇö the `LIBPRZENT` authorization dialog (`DO FORM SigOpSen`), implemented **fail-closed** per the established project pattern (SigOpSen doesn't exist in the new architecture; absence is surfaced via `MsgErro`, never silently approved).
+- Added the `this_lValidandoPrazoNovo` reentrancy guard, since the modal authorization dialog can redispatch focus events.
+
+BINDEVENT wiring and the Confirmar/Cancelar click handlers remain for Phase 7, as the form's own plan specifies.

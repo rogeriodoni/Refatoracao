@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da.
+
+## O que foi entregue
+
+**`projeto\app\forms\operacionais\FormSigOpEnt.prg`** (1409 ÔåÆ 1887 linhas)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `VincularEventos()` | os 3 BINDEVENT ÔÇö `altera.Valid`/`sair.Valid` ÔåÆ `"Click"`, `getNova.Valid` ÔåÆ `"LostFocus"` |
+| `BtnConfirmarClick()` | corpo de `altera.Valid` |
+| `BtnCancelarClick()` + `FecharDialogo()` | `sair.Valid` (`ThisForm.Release`) |
+| `PrazoNovoLostFocus()` + `GarantirPrazoNovoValidado()` | o encadeamento `Valid` (TabIndex 1) ÔåÆ `Click` (TabIndex 2) |
+| `NotificarFormPai()` + `ObterPrazoConfirmado()` | `parentform.validOk = .t.` e `ParentForm.cntEntregas.getEntregas.Value` |
+
+**`projeto\app\classes\SigOpEntBO.prg`** (681 ÔåÆ 807): `GravarAlteracaoPrazo()` ÔÇö a cadeia `Inserir` + `Atualizar` + `Commit`/`RollBack` que o legado controla com `llOks`.
+
+## Decis├Áes que n├úo s├úo transcri├º├úo literal ÔÇö e por qu├¬
+
+- **`Commit` n├úo foi descartado.** O legado testa `poDataMgr.Commit() < 1` com caminho de falha pr├│prio. Como a conex├úo deste ambiente nasce em transa├º├úo MANUAL, sem ele o gravado n├úo persiste. Usei o par `loc_lManual` + `SQLCOMMIT`/`SQLROLLBACK` (padr├úo do `SIGPRCNBBO`), com `IF` aninhado ÔÇö VFP9 n├úo faz curto-circuito.
+- **Fecha com `Hide()`, n├úo `Release()`.** `Release()` destr├│i o objeto mesmo com o chamador segurando a refer├¬ncia, e este di├ílogo tem resultado a devolver. Para o usu├írio a tela fecha igual.
+- **Valida├º├úo n├úo roda duas vezes no mesmo clique.** O `LostFocus` do campo e o `Click` do bot├úo disparam em sequ├¬ncia; sem o guard de valor-n├úo-mudou o usu├írio levaria **dois** pedidos de senha LIBPRZENT para a mesma data. O veredicto ├® consumido uma vez, e o clique seguinte valida de novo ÔÇö como o legado.
+- **Na falha o campo digitado n├úo ├® limpo** (regra #50); s├│ os tr├¬s `Refresh` finais do legado acontecem.
+- **A tela n├úo fecha ao confirmar** ÔÇö o legado n├úo chama `Release` ali.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `formsigopent.FXP` (19.538 bytes) e `sigopentbo.FXP` (9.814 bytes) gerados, **zero `.ERR`**.
+- **Execu├º├úo n├úo foi provada**: o smoke test (`STRTOFILE` + `QUIT`) **falhou** nesta sess├úo ÔÇö `exit=0`, `.FXP` criado, arquivo de sa├¡da ausente. Ent├úo n├úo h├í como afirmar instancia├º├úo nem teste de grava├º├úo; s├│ compila├º├úo.
+- Est├íticas, todas limpas: `RETURN` dentro de `TRY` = 0, acentos literais = 0, `this_X .Value` = 0, `.Self` = 0, `PUBLIC` em `DEFINE CLASS` = 0, `Controls("nome")` = 0, os 10 helpers resolvem em `utils\`, nenhum m├®todo do BO chamado pelo Form ├® `PROTECTED`, CRLF preservado (1887/1887 e 807/807).
+- **Gate da Fase 7** medido no dump: 2 CommandButton, zero CommandGroup, zero nome CRUD, sem `frmcadastro`/`Grupo_Op`, o ├║nico `pcEscolha` ├® `ThisForm.ParentForm.pcEscolha` (descontado) ÔåÆ `legadoSemCrud` e piso 2, com 2 handlers.
+- Corrigi duas armadilhas latentes do validador de completude: `independentes` e `pendentes` em coment├írio casam o regex `\*.*pendente` e reprovariam a fase por falso positivo.
+
+Uma sobra: `tasks\task731\probe\` ficou como diret├│rio **vazio** e travado (├® cwd de um shell de fundo) ÔÇö some ao fim da sess├úo.

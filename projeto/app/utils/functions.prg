@@ -1833,6 +1833,45 @@ FUNCTION fAltBar2de5(par_cDados)
 ENDFUNC
 
 *------------------------------------------------------------------------------
+* fCriarIcone - Wrapper do helper global legado (SIGFUNCS.PRG), chamado direto
+*   pelo fonte de telas de impressao de documento (ex: SIGOPDEN/SIGREIFX) para
+*   obter um .jpg "em branco" usado como fallback de logotipo/imagem tecnica.
+*
+*   O legado extrai o arquivo de um recurso gravado no banco (par_oConexao);
+*   aqui simplificamos usando o arquivo estatico que já acompanha o projeto
+*   (vbmp\<par_cNomeArquivo>) e copiamos para um nome unico na pasta destino,
+*   evitando colisao quando varias instancias/registros geram o mesmo arquivo
+*   em sequencia (regra #27 - wrapper tem de reproduzir o CONTRATO, nao so o
+*   nome: aqui o contrato e "devolver o path de um .jpg valido").
+*
+* Parametros: par_cNomeArquivo  - nome do arquivo em vbmp\ (ex: "brjpg.jpg")
+*             par_cPastaDestino - pasta onde a copia temporaria sera criada
+* Retorno: path completo do arquivo copiado, ou "" se a origem nao existir
+*------------------------------------------------------------------------------
+FUNCTION fCriarIcone(par_cNomeArquivo, par_cPastaDestino)
+    LOCAL loc_cOrigem, loc_cDestino
+
+    IF VARTYPE(par_cNomeArquivo) != "C" OR EMPTY(par_cNomeArquivo)
+        RETURN ""
+    ENDIF
+
+    loc_cOrigem = gc_4c_CaminhoIcones + ALLTRIM(par_cNomeArquivo)
+    IF !FILE(loc_cOrigem)
+        RETURN ""
+    ENDIF
+
+    loc_cDestino = ADDBS(ALLTRIM(NVL(par_cPastaDestino, SYS(2023)))) + SYS(2015) + ".jpg"
+
+    TRY
+        COPY FILE (loc_cOrigem) TO (loc_cDestino)
+    CATCH
+        RETURN ""
+    ENDTRY
+
+    RETURN loc_cDestino
+ENDFUNC
+
+*------------------------------------------------------------------------------
 * fBuscarCotacao - Retorna taxa de cambio de uma moeda para a data informada
 *   Tabela: SigCdCot (cmoes, datas, horas, valos)
 *   Terceiro parametro (conn) aceito por compatibilidade mas usa gnConnHandle global.

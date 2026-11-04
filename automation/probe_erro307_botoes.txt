@@ -1,0 +1,32 @@
+A: inicio
+B: deps carregadas (copias)
+C: gnConnHandle = 1
+D: CREATEOBJECT -> O
+E: --- botoes da pagina Lista ---
+   Incluir    Enabled=.F.   (esperado .F.)
+   Alterar    Enabled=.F.   (esperado .F.)
+   Excluir    Enabled=.F.   (esperado .F.)
+   Visualizar Enabled=.T.   (esperado .T.)
+   Buscar     Enabled=.T.   (esperado .T.)
+   Encerrar   Enabled=.T.   (esperado .T.)
+F: apos AjustarBotoesPorModo -> Incluir=.F. Alterar=.F. Excluir=.F.
+G: --- combo Menu ---
+   RowSourceType=1  RowSource=[,SISTEMA,OPERACIONA,CAIXA]  itens=4  Enabled=.F.
+      []
+      [SISTEMA]
+      [OPERACIONA]
+      [CAIXA]
+H: --- combo Tipo ---
+   itens=18  Enabled=.F.
+      [00-OUTROS]
+      [01-FATURAMENTO]
+      [02-CANCELAMENTO DE VENDA]
+      [04-VENDAS]
+      [05-DEVOLUÇÃO DE VENDA]
+      ... (+13)
+   SelecionarTipoOps(4) -> Value=[04-VENDAS]
+   SelecionarTipoOps(0) -> Value=[00-OUTROS]  (00-OUTROS, antes era escondido)
+I: --- Submenu ---
+   MaxLength=14 (legado 14)  ReadOnly=.T.
+J: Release OK
+Z: fim

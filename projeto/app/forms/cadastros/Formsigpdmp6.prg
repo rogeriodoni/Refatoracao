@@ -786,7 +786,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Grupo_Salva.Left=843, Top=22+29=51, Width=160, Height=85
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 51
+            .Top         = 27
             .Left        = 843
             .Width       = 160
             .Height      = 85

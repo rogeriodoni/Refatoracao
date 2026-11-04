@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is done. `FormSigOpCpr.prg` is complete at 1854 lines, CRLF, ASCII-only.
+
+## What Phase 8 added
+
+**Two real methods** ÔÇö both `PROTECTED`, because `FormBase` declares these hooks `PROTECTED` and VFP9 cannot widen an inherited method's scope:
+
+- **`FormParaBO()`** ÔÇö the `lcOpeOri = ThisForm.GetOrigem.Value` / `lcOpeDes = ThisForm.GetDestino.Value` pair that opens the legacy `CmdCopia.Click`, now in one place. Origin goes **first**, through `ConfigurarModalidade` (single source of truth); destination goes **second**, because that call zeroes `this_cDestino` ÔÇö inverted, the user's typed code would be wiped and the copy refused with *"Destino Invalido !!!"* on a filled-in field. Returns `.T./.F.` so the caller aborts.
+- **`BOParaForm()`** ÔÇö the `GetOrigem.Value = pOperacao` / `.Refresh` pair that closes the legacy `Init`, plus the destination field. Origin **delegates** to the existing `OrigemParaTela()` (its single source since Phase 5) rather than re-reading the BO.
+
+**Wiring:** `ConfigurarCampos()` now ends with `BOParaForm()`; `BtnCopiarClick()` calls `FormParaBO()` in place of its inline `ConfigurarModalidade`, and passes the destination the hook just normalized.
+
+## Verification
+
+- **Compiles clean** ÔÇö `.fxp` generated, no `.err`, for both form and BO. Note this proves compilation only: `vfp9.exe` in this session generates the `.fxp` and exits **without executing**, so I could not run a probe and am not claiming runtime validation. `.fxp` files removed afterward so nothing runs stale bytecode.
+- **Completeness validator** (`Test-CompletudeCodigo`) passes on both files.
+- **Phase 8 gate** verified by loading the orchestrator's functions via AST (never dot-sourcing it ÔÇö that triggers a real migration): `Test-LegadoCopiadorFilho` = **True**, exactly 2 legacy buttons, no `Do Form`, no pageframe, and `temSuperficieCopiadorF8` = True. So the **copiador-filho** branch ÔÇö whose documented origin case is the sibling SIGOPCOP ÔÇö waives `BtnCancelarClick` and `CarregarLista` and requires the two hooks I delivered.
+- Blocks balanced, zero bytes >127, no `PUBLIC` method in the class, no `ISEMPTY`, and **no `RETURN` inside any `TRY/CATCH`**.
+
+## Two things to flag
+
+**Seven of the nine contract names have no referent** and I deliberately did not create them, documenting each with measured dump evidence in the header: no search button and zero lookups; the saving button is named `Copiar` in the legacy (handler `BtnCopiarClick`, Phase 7); there is no PageFrame/edit mode to cancel or adjust buttons for; and `LimparCampos` has no caller ÔÇö wiring it to the failure path would erase the user's typed code, violating rule #50. Writing them empty would be the disguised stub the completeness rule forbids.
+
+**One side fix in the BO:** `SigOpCprBO.prg:1271` had the Portuguese comment `*-- Todo override pedido...` ("every requested override"), which the completeness validator matched as a `TODO` marker and failed on. Reworded to `*-- Cada override pedido...`. This was pre-existing Phase 1/2 text, not Phase 8 work, but it was a live blocker. Both files are still untracked (`??`), so nothing is committed.

@@ -30,6 +30,8 @@ DEFINE CLASS Formmtz AS FormBase
     this_cModoAtual      = "LISTA"
     *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
     this_lEmLookup = .F.
+    *-- Guarda do ValidarAnoMtz: o SetFocus redispara o proprio LostFocus (Erro297)
+    this_lEmValidacaoAno = .F.
 
     *-- =========================================================================
     *-- INIT - Apenas DODEFAULT (FormBase.Init chama InicializarForm)
@@ -136,7 +138,10 @@ DEFINE CLASS Formmtz AS FormBase
         *--------------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 2
+            *-- Legado: Pagina.Lista.cntSombra.Top = 1 (+29 do PageFrame.Top = -29)
+            *-- Canonico (regra #11 / FormCor / Formcfo): Top = 31. Top = 2 deixava a
+            *-- faixa em -27 na tela e cortava o titulo pela metade.
+            .Top         = 31
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -180,9 +185,12 @@ DEFINE CLASS Formmtz AS FormBase
         *--------------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 0
+            *-- Legado: Pagina.Lista.Grupo_op.Top = -1 / Width = 385
+            *-- Canonico: Top = 29 (Top = 0 jogava os botoes para -29 e cortava o topo).
+            *-- Width 390 para o container nao invadir o cnt_4c_Saida (Left = 917).
+            .Top         = 29
             .Left        = 542
-            .Width       = 475
+            .Width       = 390
             .Height      = 85
             .BackStyle = 0
             .BorderWidth = 0
@@ -318,8 +326,9 @@ DEFINE CLASS Formmtz AS FormBase
             .Left        = 917
             .Width       = 90
             .Height      = 85
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+            *-- Canonico: container de saida eh FLUTUANTE/TRANSPARENTE sobre a faixa.
+            *-- BackStyle = 1 branco pintava um retangulo branco por cima do cinza.
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -348,18 +357,23 @@ DEFINE CLASS Formmtz AS FormBase
         ENDWITH
 
         *--------------------------------------------------------------------------
-        *-- Grid lista de matrizes - cursor_4c_Dados (7 colunas)
+        *-- Grid lista de matrizes - cursor_4c_Dados
+        *-- Legado: Pagina.Lista.Grade Top=121 (+29) Left=11 Width=1044 Height=475
+        *--         Tahoma 8, RowHeight 16, ForeColor 90,90,90
+        *-- Colunas: 6, conforme pColuna() do Init legado (NAO ha coluna "Valida"
+        *-- na pagina Lista - regra #35b). Caption/Width sao aplicados em
+        *-- VincularGradeLista(), DEPOIS do RecordSource (regra #35c).
         *--------------------------------------------------------------------------
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         loc_oPagina.grd_4c_Lista.RecordSource = ""
-        loc_oPagina.grd_4c_Lista.ColumnCount  = 7
+        loc_oPagina.grd_4c_Lista.ColumnCount  = 6
 
         WITH loc_oPagina.grd_4c_Lista
-            .Top                = 88
-            .Left               = 5
-            .Width              = 905
-            .Height             = 480
-            .FontName           = "Verdana"
+            .Top                = 150
+            .Left               = 11
+            .Width              = 1044
+            .Height             = 475
+            .FontName           = "Tahoma"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
             .BackColor          = RGB(255, 255, 255)
@@ -374,20 +388,6 @@ DEFINE CLASS Formmtz AS FormBase
             .GridLines          = 3
             .ReadOnly           = .T.
             .Visible            = .T.
-            .Column1.Header1.Caption = ""
-            .Column1.Width           = 50
-            .Column2.Header1.Caption = ""
-            .Column2.Width           = 50
-            .Column3.Header1.Caption = "Grupo"
-            .Column3.Width           = 80
-            .Column4.Header1.Caption = "Conta"
-            .Column4.Width           = 80
-            .Column5.Header1.Caption = ""
-            .Column5.Width           = 440
-            .Column6.Header1.Caption = ""
-            .Column6.Width           = 60
-            .Column7.Header1.Caption = "Valida"
-            .Column7.Width           = 55
         ENDWITH
 
         *-- Vincular eventos da Page1
@@ -463,12 +463,23 @@ DEFINE CLASS Formmtz AS FormBase
         *--------------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 33
+            *-- Erro299: Top = 33 deixava o botao em 9..84 na tela, com a faixa
+            *-- da Dados em 0..80 - 9px de folga em cima e 4px TRANSBORDANDO por
+            *-- baixo da faixa, invadindo a linha do Codigo. A faixa da Dados
+            *-- comeca em 29 (e nao em 31 como a da Lista, porque aqui o fundo
+            *-- dela tem de encostar em 109, onde comeca a 1a linha de campos),
+            *-- entao o alinhamento se acerta no Top do BOTAO, abaixo.
+            *-- Top = 29, igual ao cnt_4c_Saida da Lista.
+            .Top         = 29
             .Left        = 842
             .Width       = 160
             .Height      = 85
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+            *-- Erro298: com BackStyle = 1 branco o container pintava um
+            *-- retangulo por cima da faixa cinza e "cortava" a borda escura
+            *-- superior. O container de botoes eh FLUTUANTE/TRANSPARENTE sobre
+            *-- a faixa (igual ao cnt_4c_Saida da Lista e ao Formcfo); quem tem
+            *-- fundo branco sao os botoes, nao a caixa.
+            .BackStyle   = 0
             .Visible     = .T.
         ENDWITH
 
@@ -478,7 +489,10 @@ DEFINE CLASS Formmtz AS FormBase
             .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 13
-            .Top             = 5
+            *-- Top = 3 (e nao os 5 canonicos): a faixa da Dados fica 2px mais
+            *-- alta que a da Lista, entao 3 reproduz a MESMA folga visual da
+            *-- Lista - 3px de cinza acima do botao e 2px abaixo (Erro299).
+            .Top             = 3
             .Left            = 5
             .Width           = 75
             .Height          = 75
@@ -502,7 +516,7 @@ DEFINE CLASS Formmtz AS FormBase
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
-            .Top             = 5
+            .Top             = 3     && mesma folga do cmd_4c_Confirmar (Erro299)
             .Left            = 80
             .Width           = 75
             .Height          = 75
@@ -622,10 +636,13 @@ DEFINE CLASS Formmtz AS FormBase
         ENDWITH
 
         loc_oPagina.AddObject("txt_4c_Ano", "TextBox")
+        *-- Legado getAno: Alignment=3, Format="K!", MaxLength=4, SpecialEffect=1
         WITH loc_oPagina.txt_4c_Ano
             .Value     = ""
             .Format = "K!"
             .MaxLength = 4
+            .Alignment     = 3
+            .SpecialEffect = 1
             .Top       = 136
             .Left      = 382
             .Width     = 51
@@ -779,17 +796,32 @@ DEFINE CLASS Formmtz AS FormBase
 
         loc_oPagina.AddObject("grd_4c_Dados", "Grid")
         WITH loc_oPagina.grd_4c_Dados
-            .Top         = 158     && 129+29
+            *-- Erro298: a grade era o UNICO controle da pagina ainda em +29
+            *-- (129+29=158) enquanto todo o bloco de campos levou +70 (+29 do
+            *-- PageFrame +41 para sair de baixo da faixa). Resultado: a grade
+            *-- comecava em 158 e COBRIA a linha "Centro de Custo :" (Grupo /
+            *-- Conta / Descricao / Classe, Top = 163) e o getSaldo (179) - o
+            *-- usuario nao via nem conseguia preencher o Grupo, e o Salvar
+            *-- acusava "Grupo e obrigatorio" (regra #39).
+            *-- Top = 129+70. Height encolhe os mesmos 41 porque a grade eh
+            *-- controle FOLHA e o rodape (Top = 582) nao se mexe (regra #11):
+            *-- 199+378 = 577, logo abaixo do "Data / Usuario".
+            .Top         = 199     && 129+70
             .Left        = 11
             .Width       = 1045
-            .Height      = 419
+            .Height      = 378     && 419-41 (encolhe no rodape, regra #11)
             .ColumnCount = 28
             .ReadOnly    = .T.     && HabilitarCampos gerencia
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Visible     = .T.
-            .RecordMark   = .F.
-            .DeleteMark   = .F.
+            *-- Legado: RecordMark = .T. / DeleteMark = .F. / ScrollBars = 3 /
+            *-- RowHeight = 16 / GridLineColor = 238,238,238
+            .RecordMark    = .T.
+            .DeleteMark    = .F.
+            .ScrollBars    = 3
+            .RowHeight     = 16
+            .GridLineColor = RGB(238, 238, 238)
         ENDWITH
 
         loc_oGrid = loc_oPagina.grd_4c_Dados
@@ -797,190 +829,178 @@ DEFINE CLASS Formmtz AS FormBase
         *-- Coluna 1 - Grupos
         WITH loc_oGrid.Column1
             .Header1.Caption = "Grupo"
-            .Width           = 65
+            .Width           = 90
         ENDWITH
 
         *-- Coluna 2 - Contas
         WITH loc_oGrid.Column2
             .Header1.Caption = "Conta"
-            .Width           = 65
+            .Width           = 90
         ENDWITH
 
         *-- Coluna 3 - Janeiro
         WITH loc_oGrid.Column3
             .Header1.Caption = "Janeiro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 4 - Fevereiro
         WITH loc_oGrid.Column4
             .Header1.Caption = "Fevereiro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 5 - Marco
         WITH loc_oGrid.Column5
             .Header1.Caption = "Mar" + CHR(231) + "o"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 6 - Abril
         WITH loc_oGrid.Column6
             .Header1.Caption = "Abril"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 7 - Maio
         WITH loc_oGrid.Column7
             .Header1.Caption = "Maio"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 8 - Junho
         WITH loc_oGrid.Column8
             .Header1.Caption = "Junho"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 9 - Julho
         WITH loc_oGrid.Column9
             .Header1.Caption = "Julho"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 10 - Agosto
         WITH loc_oGrid.Column10
             .Header1.Caption = "Agosto"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 11 - Setembro
         WITH loc_oGrid.Column11
             .Header1.Caption = "Setembro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 12 - Outubro
         WITH loc_oGrid.Column12
             .Header1.Caption = "Outubro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 13 - Novembro
         WITH loc_oGrid.Column13
             .Header1.Caption = "Novembro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 14 - Dezembro
         WITH loc_oGrid.Column14
             .Header1.Caption = "Dezembro"
-            .Width           = 70
+            .Width           = 85
         ENDWITH
 
         *-- Coluna 15 - Total (calculado, readonly)
         WITH loc_oGrid.Column15
             .Header1.Caption = "Total"
-            .Width           = 85
+            .Width           = 90
             .ReadOnly        = .T.
         ENDWITH
 
         *-- Colunas 16-27: Acumulados mensais (readonly)
         WITH loc_oGrid.Column16
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Janeiro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column17
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Fevereiro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column18
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Mar" + CHR(231) + "o"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column19
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Abril"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column20
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Maio"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column21
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Junho"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column22
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Julho"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column23
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Agosto"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column24
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Setembro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column25
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Outubro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column26
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Novembro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         WITH loc_oGrid.Column27
-            .Header1.Caption = ""
-            .Width           = 75
+            .Header1.Caption = "Dezembro"
+            .Width           = 85
             .ReadOnly        = .T.
         ENDWITH
 
         *-- Coluna 28 - Valida (CheckBox)
+        *-- Legado: Column28.Width = 43 / Sparse = .F. / CurrentControl = "Check1"
         WITH loc_oGrid.Column28
             .Header1.Caption = "Valida"
-            .Width           = 45
+            .Width           = 43
             .Sparse          = .F.
         ENDWITH
 
-        loc_oGrid.Column28.AddObject("chk_4c_Check1", "CheckBox")
-        WITH loc_oGrid.Column28.chk_4c_Check1
-            .Caption   = ""
-            .Alignment = 0
-            .ReadOnly  = .F.
-            .Visible   = .T.
-            .Top       = 25
-            .Left      = 31
-            .Height    = 17
-            .Width     = 22
-        ENDWITH
-
-        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
-        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
-        loc_oGrid.Column28.CurrentControl = "chk_4c_Check1"
-        loc_oGrid.Column28.Sparse         = .F.
+        *-- A instalacao mora num metodo proprio e IDEMPOTENTE porque fechar o
+        *-- alias do grid destroi as Columns (ver InstalarCelulaValida).
+        THIS.InstalarCelulaValida(loc_oGrid)
 
         *--------------------------------------------------------------------------
         *-- Container botoes Inserir/Excluir linha (cmdInsFtc)
@@ -988,12 +1008,15 @@ DEFINE CLASS Formmtz AS FormBase
         *--------------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_InsFtc", "Container")
         WITH loc_oPagina.cnt_4c_InsFtc
-            .Top         = 282     && 253+29
+            *-- Mesmo deslocamento da grade, para os botoes manterem a posicao
+            *-- relativa as linhas dela (legado: cmdInsFtc.Top = 253).
+            .Top         = 323     && 253+70
             .Left        = 1055
             .Width       = 45
             .Height      = 90
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+            *-- Legado declara EXPLICITAMENTE cmdInsFtc.BackStyle = 0 /
+            *-- BorderStyle = 0: o grupo eh transparente, sem caixa branca.
+            .BackStyle   = 0
             .Visible     = .T.
         ENDWITH
 
@@ -1148,7 +1171,10 @@ DEFINE CLASS Formmtz AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
         *-- Vincular validacao/lookup campos header
-        BINDEVENT(loc_oPagina.txt_4c_Ano,    "KeyPress", THIS, "ValidarAnoMtz")
+        *-- Legado valida no getAno.Valid, ou seja ao SAIR do campo. Ligado a
+        *-- "KeyPress" a mensagem saltava a CADA TECLA e o usuario nao conseguia
+        *-- terminar de digitar o ano (Erro297 / regra #47).
+        BINDEVENT(loc_oPagina.txt_4c_Ano,    "LostFocus", THIS, "ValidarAnoMtz")
         BINDEVENT(loc_oPagina.txt_4c_Sgrupo, "LostFocus", THIS, "ValidarGrupoMtz")
         BINDEVENT(loc_oPagina.txt_4c_Sconta, "LostFocus", THIS, "ValidarContaMtz")
         BINDEVENT(loc_oPagina.txt_4c_Moeda,  "LostFocus", THIS, "ValidarMoedaMtz")
@@ -1162,6 +1188,63 @@ DEFINE CLASS Formmtz AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_InsFtc.cmd_4c_ExcluirLinha, "Click", THIS, "BtnExcluirLinhaClick")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *-- =========================================================================
+    *-- VINCULAR GRADE LISTA - Funil unico de bind da grade da Page1
+    *-- Ordem obrigatoria (regra #35c / FormCor): ColumnCount -> RecordSource ->
+    *-- ControlSource -> Width -> Header1.Caption. RecordSource RESETA Width e
+    *-- Caption, por isso os dois vem no fim.
+    *-- Colunas e larguras transcritas do pColuna() do Init legado.
+    *-- =========================================================================
+
+    PROCEDURE VincularGradeLista()
+        LOCAL loc_oGrid, loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
+
+            IF VARTYPE(loc_oGrid) = "O" AND USED("cursor_4c_Dados")
+                loc_oGrid.ColumnCount  = 6
+                loc_oGrid.RecordSource = "cursor_4c_Dados"
+
+                loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Codigo"
+                loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Ano"
+                loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.sGrupos"
+                loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.sContas"
+                loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.sDContas"
+                loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.Moeda"
+
+                loc_oGrid.Column1.Width = 80
+                loc_oGrid.Column2.Width = 80
+                loc_oGrid.Column3.Width = 100
+                loc_oGrid.Column4.Width = 100
+                loc_oGrid.Column5.Width = 250
+                loc_oGrid.Column6.Width = 60
+
+                loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+                loc_oGrid.Column2.Header1.Caption = "Ano"
+                loc_oGrid.Column3.Header1.Caption = "Grupo"
+                loc_oGrid.Column4.Header1.Caption = "Conta"
+                loc_oGrid.Column5.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                loc_oGrid.Column6.Header1.Caption = "Moeda"
+
+                THIS.FormatarGridLista(loc_oGrid)
+
+                *-- Popular cursor NAO repinta a grade (regra #21a)
+                SELECT cursor_4c_Dados
+                GO TOP
+                loc_oGrid.Refresh()
+
+                loc_lResultado = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formmtz.VincularGradeLista")
+        ENDTRY
+
+        RETURN loc_lResultado
     ENDPROC
 
     *-- =========================================================================
@@ -1181,18 +1264,7 @@ DEFINE CLASS Formmtz AS FormBase
 
         TRY
             IF THIS.this_oBusinessObject.Buscar("")
-                loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-                loc_oGrid.ColumnCount = 7
-                loc_oGrid.RecordSource            = "cursor_4c_Dados"
-                loc_oGrid.Column1.ControlSource   = "cursor_4c_Dados.Codigo"
-                loc_oGrid.Column2.ControlSource   = "cursor_4c_Dados.Ano"
-                loc_oGrid.Column3.ControlSource   = "cursor_4c_Dados.sGrupos"
-                loc_oGrid.Column4.ControlSource   = "cursor_4c_Dados.sContas"
-                loc_oGrid.Column5.ControlSource   = "cursor_4c_Dados.sDContas"
-                loc_oGrid.Column6.ControlSource   = "cursor_4c_Dados.Moeda"
-                loc_oGrid.Column7.ControlSource   = "cursor_4c_Dados.Inativas"
-                THIS.FormatarGridLista(loc_oGrid)
-                loc_lResultado = .T.
+                loc_lResultado = THIS.VincularGradeLista()
             ENDIF
 
         CATCH TO loc_oErro
@@ -1563,22 +1635,9 @@ DEFINE CLASS Formmtz AS FormBase
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMtz")
                     SELECT cursor_4c_BuscaMtz
                     IF !EOF()
-                        LOCAL loc_oGrid
                         THIS.this_oBusinessObject.Buscar( ;
                             "a.Codigo = " + EscaparSQL(ALLTRIM(cursor_4c_BuscaMtz.Codigo)))
-                        loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-                        IF VARTYPE(loc_oGrid) = "O"
-                            loc_oGrid.ColumnCount = 7
-                            loc_oGrid.RecordSource            = "cursor_4c_Dados"
-                            loc_oGrid.Column1.ControlSource   = "cursor_4c_Dados.Codigo"
-                            loc_oGrid.Column2.ControlSource   = "cursor_4c_Dados.Ano"
-                            loc_oGrid.Column3.ControlSource   = "cursor_4c_Dados.sGrupos"
-                            loc_oGrid.Column4.ControlSource   = "cursor_4c_Dados.sContas"
-                            loc_oGrid.Column5.ControlSource   = "cursor_4c_Dados.sDContas"
-                            loc_oGrid.Column6.ControlSource   = "cursor_4c_Dados.Moeda"
-                            loc_oGrid.Column7.ControlSource   = "cursor_4c_Dados.Inativas"
-                            THIS.FormatarGridLista(loc_oGrid)
-                        ENDIF
+                        THIS.VincularGradeLista()
                     ENDIF
                 ENDIF
 
@@ -1719,10 +1778,25 @@ DEFINE CLASS Formmtz AS FormBase
                 loc_oGrid.Column25.ControlSource = "cursor_4c_MtI.Acm_Out"
                 loc_oGrid.Column26.ControlSource = "cursor_4c_MtI.Acm_Nov"
                 loc_oGrid.Column27.ControlSource = "cursor_4c_MtI.Acm_Dez"
-                loc_oGrid.Column28.chk_4c_Check1.ControlSource = "cursor_4c_MtI.ChkValida"
+                *-- O ControlSource do CheckBox mora na COLUNA, nunca no controle:
+                *-- Column28.chk_4c_Check1.ControlSource dispara
+                *-- "Parent object will not allow this property setting" (Erro296).
+                *-- Legado: grdSaldos.column28.ControlSource = [csSigCdMtI.ChkValida]
+                loc_oGrid.Column28.ControlSource = "cursor_4c_MtI.ChkValida"
 
+                *-- A FONTE vem ANTES das larguras. Medido no VFP9 (Erro297):
+                *-- Grid.FontSize REESCALA Column.Width - 90/85/0 virou 74/64/64,
+                *-- ou seja ate a coluna ESCONDIDA (Width = 0) reaparece. Por isso
+                *-- FormatarGradeDetalhe() tem de ser a ULTIMA coisa (regra #35c).
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
+
+                *-- Largura/caption/ordem APOS o RecordSource E a fonte (regra #35c)
+                THIS.FormatarGradeDetalhe()
+
+                *-- Popular cursor NAO repinta a grade (regra #21a)
+                SELECT cursor_4c_MtI
+                GO TOP
                 loc_oGrid.Refresh()
                 loc_lResultado = .T.
             ENDIF
@@ -1734,28 +1808,182 @@ DEFINE CLASS Formmtz AS FormBase
     ENDPROC
 
     *-- =========================================================================
-    *-- VALIDAR ANO MTZ - Valida ano de competencia (range 2000-2999)
-    *-- Original: getAno.Valid
+    *-- FORMATAR GRADE DETALHE - Largura, caption, mascara e ORDEM das colunas
+    *-- Chamado SEMPRE depois do RecordSource (que reseta Width e Caption).
+    *-- Transcrito do SCX legado (grdSaldos): as colunas Val_<mes> e Acm_<mes>
+    *-- ficam INTERCALADAS na tela via ColumnOrder - Grupo, Conta, Valida,
+    *-- Jan(valor), Jan(acum.), Fev(valor), Fev(acum.) ... Dez, Total.
+    *-- As 12 colunas de acumulado so aparecem em ALTERAR; no legado
+    *-- Width = IIF(INLIST(pcEscolha,[INSERIR],[EXCLUIR],[PROCURAR]), 0, 85)
     *-- =========================================================================
 
-    PROCEDURE ValidarAnoMtz
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_cAno, loc_nAno
-        loc_cAno = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Ano.Value)
+    PROCEDURE FormatarGradeDetalhe()
+        LOCAL loc_oGrid, loc_nI, loc_nLargAcm
+
+        loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
+
+        *-- Guarda FORA do TRY (regra #1: nunca RETURN dentro de TRY/CATCH).
+        *-- ColumnCount < 28 acontece de verdade: fechar o alias do grid zera o
+        *-- ColumnCount para 0 (Erro301), e ai nem Column1 existe.
+        IF VARTYPE(loc_oGrid) # "O" OR loc_oGrid.ColumnCount < 28
+            RETURN
+        ENDIF
+
+        TRY
+            *-- Largura (legado: 90/90 nos codigos, 85 nos meses, 90 no total, 43 no check)
+            loc_oGrid.Column1.Width  = 90
+            loc_oGrid.Column2.Width  = 90
+            FOR loc_nI = 3 TO 14
+                STORE 85 TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".Width")
+            ENDFOR
+            loc_oGrid.Column15.Width = 90
+            loc_oGrid.Column28.Width = 43
+
+            *-- Acumulados: visiveis apenas no modo ALTERAR
+            loc_nLargAcm = IIF(THIS.this_cModoAtual = "ALTERAR", 85, 0)
+            FOR loc_nI = 16 TO 27
+                STORE loc_nLargAcm TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".Width")
+            ENDFOR
+
+            *-- Caption (RecordSource zera os headers)
+            loc_oGrid.Column1.Header1.Caption  = "Grupo"
+            loc_oGrid.Column2.Header1.Caption  = "Conta"
+            loc_oGrid.Column3.Header1.Caption  = "Janeiro"
+            loc_oGrid.Column4.Header1.Caption  = "Fevereiro"
+            loc_oGrid.Column5.Header1.Caption  = "Mar" + CHR(231) + "o"
+            loc_oGrid.Column6.Header1.Caption  = "Abril"
+            loc_oGrid.Column7.Header1.Caption  = "Maio"
+            loc_oGrid.Column8.Header1.Caption  = "Junho"
+            loc_oGrid.Column9.Header1.Caption  = "Julho"
+            loc_oGrid.Column10.Header1.Caption = "Agosto"
+            loc_oGrid.Column11.Header1.Caption = "Setembro"
+            loc_oGrid.Column12.Header1.Caption = "Outubro"
+            loc_oGrid.Column13.Header1.Caption = "Novembro"
+            loc_oGrid.Column14.Header1.Caption = "Dezembro"
+            loc_oGrid.Column15.Header1.Caption = "Total"
+            loc_oGrid.Column16.Header1.Caption = "Janeiro"
+            loc_oGrid.Column17.Header1.Caption = "Fevereiro"
+            loc_oGrid.Column18.Header1.Caption = "Mar" + CHR(231) + "o"
+            loc_oGrid.Column19.Header1.Caption = "Abril"
+            loc_oGrid.Column20.Header1.Caption = "Maio"
+            loc_oGrid.Column21.Header1.Caption = "Junho"
+            loc_oGrid.Column22.Header1.Caption = "Julho"
+            loc_oGrid.Column23.Header1.Caption = "Agosto"
+            loc_oGrid.Column24.Header1.Caption = "Setembro"
+            loc_oGrid.Column25.Header1.Caption = "Outubro"
+            loc_oGrid.Column26.Header1.Caption = "Novembro"
+            loc_oGrid.Column27.Header1.Caption = "Dezembro"
+            loc_oGrid.Column28.Header1.Caption = "Valida"
+
+            FOR loc_nI = 1 TO 28
+                STORE 2 TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".Header1.Alignment")
+            ENDFOR
+
+            *-- Mascara numerica (legado: InputMask das colunas de valor)
+            FOR loc_nI = 3 TO 14
+                STORE "999,999,999.99" TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".InputMask")
+            ENDFOR
+            FOR loc_nI = 16 TO 27
+                STORE "999,999,999.99" TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".InputMask")
+            ENDFOR
+            loc_oGrid.Column15.InputMask = "999,999,999,999.99"
+
+            *-- ColumnOrder: atribuir na ORDEM DA POSICAO DE DESTINO (1..28),
+            *-- senao cada atribuicao empurra as demais e a permutacao se perde.
+            loc_oGrid.Column1.ColumnOrder  = 1     && Grupos
+            loc_oGrid.Column2.ColumnOrder  = 2     && Contas
+            loc_oGrid.Column28.ColumnOrder = 3     && ChkValida
+            loc_oGrid.Column3.ColumnOrder  = 4     && Val_Jan
+            loc_oGrid.Column16.ColumnOrder = 5     && Acm_Jan
+            loc_oGrid.Column4.ColumnOrder  = 6     && Val_Fev
+            loc_oGrid.Column17.ColumnOrder = 7     && Acm_Fev
+            loc_oGrid.Column5.ColumnOrder  = 8     && Val_Mar
+            loc_oGrid.Column18.ColumnOrder = 9     && Acm_Mar
+            loc_oGrid.Column6.ColumnOrder  = 10    && Val_Abr
+            loc_oGrid.Column19.ColumnOrder = 11    && Acm_Abr
+            loc_oGrid.Column7.ColumnOrder  = 12    && Val_Mai
+            loc_oGrid.Column20.ColumnOrder = 13    && Acm_Mai
+            loc_oGrid.Column8.ColumnOrder  = 14    && Val_Jun
+            loc_oGrid.Column21.ColumnOrder = 15    && Acm_Jun
+            loc_oGrid.Column9.ColumnOrder  = 16    && Val_Jul
+            loc_oGrid.Column22.ColumnOrder = 17    && Acm_Jul
+            loc_oGrid.Column10.ColumnOrder = 18    && Val_Ago
+            loc_oGrid.Column23.ColumnOrder = 19    && Acm_Ago
+            loc_oGrid.Column11.ColumnOrder = 20    && Val_Set
+            loc_oGrid.Column24.ColumnOrder = 21    && Acm_Set
+            loc_oGrid.Column12.ColumnOrder = 22    && Val_Out
+            loc_oGrid.Column25.ColumnOrder = 23    && Acm_Out
+            loc_oGrid.Column13.ColumnOrder = 24    && Val_Nov
+            loc_oGrid.Column26.ColumnOrder = 25    && Acm_Nov
+            loc_oGrid.Column14.ColumnOrder = 26    && Val_Dez
+            loc_oGrid.Column27.ColumnOrder = 27    && Acm_Dez
+            loc_oGrid.Column15.ColumnOrder = 28    && Total
+
+            *-- Column.ReadOnly DEPOIS do Grid.ReadOnly (regra #18):
+            *-- so Grupo, Conta, os 12 valores mensais e o check sao editaveis.
+            loc_oGrid.Column15.ReadOnly = .T.
+            FOR loc_nI = 16 TO 27
+                STORE .T. TO ("loc_oGrid.Column" + TRANSFORM(loc_nI) + ".ReadOnly")
+            ENDFOR
+
+            *-- Reinstalar os controles de celula: o ColumnCount do
+            *-- AlternarGradeDetalhe recria as Columns do zero (Header1+Text1) e
+            *-- leva junto tudo que foi posto por AddObject. Os dois metodos sao
+            *-- idempotentes e TEM de rodar antes de qualquer CurrentControl.
+            THIS.InstalarCelulaValida(loc_oGrid)
+            THIS.InstalarCelulasCentroCusto(loc_oGrid)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formmtz.FormatarGradeDetalhe")
+        ENDTRY
+    ENDPROC
+
+    *-- =========================================================================
+    *-- VALIDAR ANO MTZ - Valida ano de competencia
+    *-- Transcrito de getAno.Valid (dispara ao SAIR do campo, nunca por tecla):
+    *--   If Not Empty(This.Value)
+    *--       This.Value = Padl(This.Value,4,'2000')
+    *--       If Val(This.Value) <= 2000 or Val(This.Value) >= 2999
+    *--           MessageBox([Informe um Ano Valido.],0+64,[Atencao])
+    *--           Return .F.
+    *--       EndIf
+    *--   EndIf
+    *-- O PADL eh a metade que faltava: medido no VFP9, PADL("2",4,"2000") = "2002"
+    *-- e PADL("26",4,"2000") = "2026" - o digito solto NAO eh ano invalido, ele eh
+    *-- completado. Sem o PADL, VAL("2") = 2 caia direto no <= 2000 (Erro297).
+    *-- Guarda de reentrancia: o SetFocus dentro do proprio LostFocus redispara o
+    *-- evento; o corpo vive no Exec para a flag ser liberada tambem nos RETURN.
+    *-- =========================================================================
+
+    PROCEDURE ValidarAnoMtz()
+        IF THIS.this_lEmValidacaoAno
+            RETURN
+        ENDIF
+        THIS.this_lEmValidacaoAno = .T.
+        THIS.ValidarAnoMtzExec()
+        THIS.this_lEmValidacaoAno = .F.
+    ENDPROC
+
+    PROCEDURE ValidarAnoMtzExec()
+        LOCAL loc_oTxt, loc_cAno
+
+        loc_oTxt = THIS.pgf_4c_Paginas.Page2.txt_4c_Ano
+        loc_cAno = ALLTRIM(loc_oTxt.Value)
 
         IF EMPTY(loc_cAno)
             RETURN
         ENDIF
 
-        loc_nAno = VAL(loc_cAno)
+        *-- Legado: completa pela ESQUERDA com '2000' ("2" -> "2002", "26" -> "2026")
+        loc_cAno       = PADL(loc_cAno, 4, "2000")
+        loc_oTxt.Value = loc_cAno
 
-        IF loc_nAno <= 2000 OR loc_nAno >= 2999
+        IF VAL(loc_cAno) <= 2000 OR VAL(loc_cAno) >= 2999
             MsgAviso("Informe um Ano V" + CHR(225) + "lido.", ;
                     "Aten" + CHR(231) + CHR(227) + "o")
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Ano.Value = ""
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Ano.SetFocus()
-        ELSE
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Ano.Value = TRANSFORM(loc_nAno)
+            *-- O legado so devolve .F. (segura o foco). NAO apagar o digitado -
+            *-- apagar impede o usuario de corrigir o que escreveu (regra #50).
+            loc_oTxt.SetFocus()
         ENDIF
     ENDPROC
 
@@ -1804,7 +2032,8 @@ DEFINE CLASS Formmtz AS FormBase
                             CHR(231) + CHR(227) + "amento para este grupo!" + CHR(13) + ;
                             "A classe do grupo n" + CHR(227) + "o est" + CHR(225) + ;
                             " informada!", "Aten" + CHR(231) + CHR(227) + "o")
-                    THIS.pgf_4c_Paginas.Page2.txt_4c_Sgrupo.Value = ""
+                    *-- O legado so faz Return(.F.) neste ramo: NAO apaga o
+                    *-- codigo digitado, so a descricao derivada (regra #50).
                     THIS.pgf_4c_Paginas.Page2.txt_4c_Class3.Value = ""
                     THIS.pgf_4c_Paginas.Page2.txt_4c_Sgrupo.SetFocus()
                 ELSE
@@ -1854,10 +2083,9 @@ DEFINE CLASS Formmtz AS FormBase
                         THIS.pgf_4c_Paginas.Page2.txt_4c_Class3.Value = ;
                             ALLTRIM(cursor_4c_GcBusca2.Classes)
                     ENDIF
-                ELSE
-                    THIS.pgf_4c_Paginas.Page2.txt_4c_Sgrupo.Value = ""
-                    THIS.pgf_4c_Paginas.Page2.txt_4c_Class3.Value = ""
                 ENDIF
+                *-- Sem ELSE: desistir do picker NAO pode apagar o codigo que o
+                *-- usuario digitou - sem ele nao ha como corrigir (regra #50).
 
                 loc_oBusca.Release()
             ENDIF
@@ -1879,7 +2107,10 @@ DEFINE CLASS Formmtz AS FormBase
         LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
         loc_lEmLookupAnt    = THIS.this_lEmLookup
         THIS.this_lEmLookup = .T.
-        IF par_nKeyCode = 63
+        *-- F4 = 115 (convencao do projeto, 745 sites). O 63 eh "?" - o
+        *-- comentario dizia F4 e o codigo exigia ponto-de-interrogacao;
+        *-- os dois passam a abrir a lista.
+        IF INLIST(par_nKeyCode, 115, 63)
             THIS.AbrirBuscaGrupoMtz()
         ENDIF
         THIS.this_lEmLookup = loc_lEmLookupAnt
@@ -1986,10 +2217,11 @@ DEFINE CLASS Formmtz AS FormBase
                         THIS.pgf_4c_Paginas.Page2.txt_4c_Sdconta.Value = ;
                             ALLTRIM(cursor_4c_CliBusca2.Rclis)
                     ENDIF
-                ELSE
-                    THIS.pgf_4c_Paginas.Page2.txt_4c_Sconta.Value  = ""
-                    THIS.pgf_4c_Paginas.Page2.txt_4c_Sdconta.Value = ""
                 ENDIF
+                *-- Sem ELSE: desistir do picker NAO pode apagar o codigo
+                *-- digitado (regra #50). O legado so limpa quando o acesso eh
+                *-- NEGADO ou a conta esta INATIVA - esses ramos continuam
+                *-- limpando, fieis ao Get_sconta.Valid.
 
                 loc_oBusca.Release()
             ENDIF
@@ -2011,7 +2243,10 @@ DEFINE CLASS Formmtz AS FormBase
         LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
         loc_lEmLookupAnt    = THIS.this_lEmLookup
         THIS.this_lEmLookup = .T.
-        IF par_nKeyCode = 63
+        *-- F4 = 115 (convencao do projeto, 745 sites). O 63 eh "?" - o
+        *-- comentario dizia F4 e o codigo exigia ponto-de-interrogacao;
+        *-- os dois passam a abrir a lista.
+        IF INLIST(par_nKeyCode, 115, 63)
             THIS.AbrirBuscaContaMtz()
         ENDIF
         THIS.this_lEmLookup = loc_lEmLookupAnt
@@ -2123,7 +2358,10 @@ DEFINE CLASS Formmtz AS FormBase
         LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
         loc_lEmLookupAnt    = THIS.this_lEmLookup
         THIS.this_lEmLookup = .T.
-        IF par_nKeyCode = 63
+        *-- F4 = 115 (convencao do projeto, 745 sites). O 63 eh "?" - o
+        *-- comentario dizia F4 e o codigo exigia ponto-de-interrogacao;
+        *-- os dois passam a abrir a lista.
+        IF INLIST(par_nKeyCode, 115, 63)
             THIS.AbrirBuscaMoedaMtz()
         ENDIF
         THIS.this_lEmLookup = loc_lEmLookupAnt
@@ -2221,6 +2459,13 @@ DEFINE CLASS Formmtz AS FormBase
     *-- Original: Column1.Text1.Valid, Column2.Text1.Valid, Column3-14.Text1.Valid
     *-- =========================================================================
 
+    *-- Erro298 / regra #46: a validacao de Grupo e Conta NAO mora mais aqui.
+    *-- AfterRowColChange dispara DEPOIS de entrar na celula nova e nColIndex eh
+    *-- a coluna de DESTINO: com "CASE par_nColIndex = 1" o lookup so rodava ao
+    *-- CHEGAR na coluna 1 (ainda vazia, logo RETURN imediato) e ao SAIR dela o
+    *-- indice entregue era 2. Resultado: o usuario digitava o codigo do grupo,
+    *-- nenhuma lista abria e nada era validado. Agora vive no Valid da celula
+    *-- (TextBoxCentroCustoMtz_4c -> ValidarGrupoGrade/ValidarContaGrade).
     PROCEDURE GrdDadosAfterRowColChange(par_nColIndex)
         LOCAL loc_cChave
 
@@ -2231,119 +2476,350 @@ DEFINE CLASS Formmtz AS FormBase
         SELECT cursor_4c_MtI
         loc_cChave = ALLTRIM(NVL(cursor_4c_MtI.CidChaves, ""))
 
-        DO CASE
-        CASE par_nColIndex >= 3 AND par_nColIndex <= 14
+        IF par_nColIndex >= 3 AND par_nColIndex <= 14
             IF !EMPTY(loc_cChave)
                 THIS.AtualizaTotal(loc_cChave)
             ENDIF
-
-        CASE par_nColIndex = 1
-            THIS.ValidarGrupoLinhaGrid()
-
-        CASE par_nColIndex = 2
-            THIS.ValidarContaLinhaGrid()
-
-        ENDCASE
+        ENDIF
     ENDPROC
 
     *-- =========================================================================
-    *-- VALIDAR GRUPO LINHA GRID - Valida SigCdGcr.Codigos na coluna Grupos
-    *-- Original: Column1.Text1.Valid (fAcessoContab)
+    *-- INSTALAR CELULA VALIDA - poe o CheckBox na coluna Valida (28).
+    *-- Erro301: FECHAR o alias ligado ao grid ZERA o ColumnCount para 0 e
+    *-- DESTROI todas as Columns. Medido no VFP9 (2026-11-04):
+    *--   apos USE IN do alias   -> ColumnCount=0, "Property COLUMN5 is not found"
+    *--   apos repor ColumnCount -> colunas NOVAS, so Header1+Text1,
+    *--                             CurrentControl de volta em [Text1]
+    *--   Column28.CurrentControl = "chk_4c_Check1" -> "Error with Column28 -
+    *--   CurrentControl : Expression evaluated to an illegal value."
+    *-- Quem fecha o alias eh o CarregarDetalhe (USE IN + SQLEXEC no mesmo nome
+    *-- de cursor), ou seja o caminho de ALTERAR e VISUALIZAR. Por isso o
+    *-- Incluir funcionava e o Alterar nao. Trocar SO o RecordSource, com o
+    *-- alias vivo, PRESERVA os controles - o gatilho eh o fechamento.
+    *-- Legado: Check1 Top=25 Left=31 Height=17 Width=60 Tahoma / Alignment=0 /
+    *--         Centered=.T. / Caption=""
     *-- =========================================================================
 
-    PROCEDURE ValidarGrupoLinhaGrid()
-        LOCAL loc_cGrupo, loc_cSQL
+    PROCEDURE InstalarCelulaValida(par_oGrid)
+        LOCAL loc_oCol
 
-        IF !USED("cursor_4c_MtI") OR EOF("cursor_4c_MtI")
+        IF VARTYPE(par_oGrid) # "O" OR par_oGrid.ColumnCount < 28
             RETURN
         ENDIF
 
-        SELECT cursor_4c_MtI
-        loc_cGrupo = ALLTRIM(NVL(cursor_4c_MtI.Grupos, ""))
+        loc_oCol = par_oGrid.Columns(28)
+
+        IF !PEMSTATUS(loc_oCol, "chk_4c_Check1", 5)
+            loc_oCol.AddObject("chk_4c_Check1", "CheckBox")
+        ENDIF
+
+        WITH loc_oCol.chk_4c_Check1
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .Alignment = 0
+            .Centered  = .T.
+            .ReadOnly  = .F.
+            .Visible   = .T.
+            .Top       = 25
+            .Left      = 31
+            .Height    = 17
+            .Width     = 60
+        ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oCol.CurrentControl = "chk_4c_Check1"
+        loc_oCol.Sparse         = .F.
+    ENDPROC
+
+    *-- =========================================================================
+    *-- INSTALAR CELULAS CENTRO DE CUSTO - poe TextBoxCentroCustoMtz_4c nas
+    *-- colunas Grupos (1) e Contas (2) da grade de saldos. Chamado no fim do
+    *-- FormatarGradeDetalhe, que roda depois de todo rebind do RecordSource:
+    *-- idempotente, so adiciona quando falta (regra #18 + #46).
+    *-- =========================================================================
+
+    PROCEDURE InstalarCelulasCentroCusto(par_oGrid)
+        LOCAL loc_nCol, loc_oCol
+
+        IF VARTYPE(par_oGrid) # "O" OR par_oGrid.ColumnCount < 2
+            RETURN
+        ENDIF
+
+        FOR loc_nCol = 1 TO 2
+            loc_oCol = par_oGrid.Columns(loc_nCol)
+
+            IF !PEMSTATUS(loc_oCol, "txt_4c_CentroCusto", 5)
+                loc_oCol.AddObject("txt_4c_CentroCusto", "TextBoxCentroCustoMtz_4c")
+            ENDIF
+
+            WITH loc_oCol.txt_4c_CentroCusto
+                .this_cCampo = IIF(loc_nCol = 1, "Grupos", "Contas")
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .BorderStyle = 0
+                .Margin      = 0
+                *-- SigCdMtI.grupos char(10) / SigCdMtI.contas char(10)
+                .MaxLength   = 10
+                .Visible     = .T.
+            ENDWITH
+
+            *-- Sem CurrentControl a coluna continua desenhando o Text1 e o
+            *-- controle acima NUNCA aparece; Sparse = .F. para valer em todas
+            *-- as linhas, nao so na ativa (regra #18).
+            loc_oCol.CurrentControl = "txt_4c_CentroCusto"
+            loc_oCol.Sparse         = .F.
+        ENDFOR
+    ENDPROC
+
+    *-- =========================================================================
+    *-- PODE EDITAR CELULA CENTRO DE CUSTO - When de Column1/Column2.Text1:
+    *--   Return(INLIST(pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)
+    *-- =========================================================================
+
+    PROCEDURE PodeEditarCelulaCentroCusto()
+        LOCAL loc_lPode
+
+        loc_lPode = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+        IF loc_lPode AND VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_lPode = !THIS.this_oBusinessObject.this_lInativas
+        ENDIF
+
+        RETURN loc_lPode
+    ENDPROC
+
+    *-- =========================================================================
+    *-- VALIDAR GRUPO GRADE - Valid da celula Grupos (Column1)
+    *-- Original: Column1.Text1.Valid -> fAcessoContab(Usuar,'C',This.Value,This,'')
+    *-- O fAcessoContab do Framework abre o browse quando o codigo nao casa; aqui
+    *-- o equivalente eh o FormBuscaAuxiliar (regra da memoria sobre fAcessoContas
+    *-- como handler de UX). O valor digitado vem de par_oTxt.Value - o cursor so
+    *-- recebe DEPOIS do Valid, ler do cursor validaria o valor ANTIGO (regra #46).
+    *-- =========================================================================
+
+    PROCEDURE ValidarGrupoGrade(par_oTxt)
+        LOCAL loc_cGrupo, loc_cSQL, loc_lOk, loc_oErro
+        loc_lOk = .T.
+
+        IF VARTYPE(par_oTxt) # "O" OR !USED("cursor_4c_MtI")
+            RETURN .T.
+        ENDIF
+
+        loc_cGrupo = ALLTRIM(NVL(par_oTxt.Value, ""))
 
         IF EMPTY(loc_cGrupo)
-            RETURN
+            RETURN .T.
         ENDIF
 
         TRY
-            loc_cSQL = "SELECT TOP 1 Codigos, Classes FROM SigCdGcr" + ;
+            loc_cSQL = "SELECT TOP 1 Codigos FROM SigCdGcr" + ;
                        " WHERE Codigos = " + EscaparSQL(loc_cGrupo)
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GcGrid") <= 0 OR ;
-               EOF("cursor_4c_GcGrid")
-                MsgErro("Acesso Negado!!! Grupo n" + CHR(227) + "o encontrado.", "")
-                SELECT cursor_4c_MtI
-                REPLACE Grupos WITH "" IN cursor_4c_MtI
-                IF VARTYPE(THIS.pgf_4c_Paginas.Page2.grd_4c_Dados) = "O"
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column1.SetFocus()
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoCel") > 0 AND ;
+               !EOF("cursor_4c_GrupoCel")
+                THIS.GravarCelulaCentroCusto(par_oTxt, "Grupos", loc_cGrupo)
+            ELSE
+                IF USED("cursor_4c_GrupoCel")
+                    USE IN cursor_4c_GrupoCel
                 ENDIF
+                *-- Codigo nao casou: abre a lista com o digitado como prefixo,
+                *-- igual ao browse do fAcessoContab. NAO apagar o digitado
+                *-- quando o usuario desiste (regra #50).
+                loc_lOk = THIS.AbrirBuscaGrupoGrade(par_oTxt, loc_cGrupo)
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Formmtz.ValidarGrupoLinhaGrid")
+            MsgErro(loc_oErro.Message, "Formmtz.ValidarGrupoGrade")
         ENDTRY
 
-        IF USED("cursor_4c_GcGrid")
-            USE IN cursor_4c_GcGrid
+        IF USED("cursor_4c_GrupoCel")
+            USE IN cursor_4c_GrupoCel
         ENDIF
+
+        RETURN loc_lOk
     ENDPROC
 
     *-- =========================================================================
-    *-- VALIDAR CONTA LINHA GRID - Valida SigCdCli.IClis na coluna Contas
-    *-- Original: Column2.Text1.Valid (fAcessoContas)
+    *-- ABRIR BUSCA GRUPO GRADE - FormBuscaAuxiliar da celula Grupos
     *-- =========================================================================
 
-    PROCEDURE ValidarContaLinhaGrid()
-        LOCAL loc_cConta, loc_cGrupo, loc_cSQL
-
-        IF !USED("cursor_4c_MtI") OR EOF("cursor_4c_MtI")
-            RETURN
-        ENDIF
-
-        SELECT cursor_4c_MtI
-        loc_cConta = ALLTRIM(NVL(cursor_4c_MtI.Contas, ""))
-        loc_cGrupo = ALLTRIM(NVL(cursor_4c_MtI.Grupos, ""))
-
-        IF EMPTY(loc_cConta)
-            RETURN
-        ENDIF
+    PROCEDURE AbrirBuscaGrupoGrade(par_oTxt, par_cValor)
+        LOCAL loc_oBusca, loc_lOk, loc_oErro
+        loc_lOk = .T.
 
         TRY
-            loc_cSQL = "SELECT TOP 1 IClis, Rclis, Inativa FROM SigCdCli" + ;
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGcr", "cursor_4c_GrupoCelBusca", "Codigos", ;
+                par_cValor, "Grupo de Centro de Custo")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_GrupoCelBusca")
+                    SELECT cursor_4c_GrupoCelBusca
+                    IF !EOF()
+                        THIS.GravarCelulaCentroCusto(par_oTxt, "Grupos", ;
+                            ALLTRIM(cursor_4c_GrupoCelBusca.Codigos))
+                    ENDIF
+                ELSE
+                    *-- Nada escolhido: segura o foco na celula para o usuario
+                    *-- corrigir o que digitou, sem apagar (regra #50).
+                    loc_lOk = .F.
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formmtz.AbrirBuscaGrupoGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_GrupoCelBusca")
+            USE IN cursor_4c_GrupoCelBusca
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *-- =========================================================================
+    *-- VALIDAR CONTA GRADE - Valid da celula Contas (Column2)
+    *-- Original: Column2.Text1.Valid
+    *--   Grupo = csSigCdMtI.Grupos
+    *--   llRet = Empty(This.Value) or fAcessoContas(Usuar,grupo,'C',This.Value,This,'')
+    *-- O 2o argumento (pGrp) do fAcessoContas eh FILTRO: a lista de contas sai
+    *-- restrita ao grupo da linha corrente, nao e a tabela inteira.
+    *-- =========================================================================
+
+    PROCEDURE ValidarContaGrade(par_oTxt)
+        LOCAL loc_cConta, loc_cGrupo, loc_cSQL, loc_lOk, loc_oErro
+        loc_lOk = .T.
+
+        IF VARTYPE(par_oTxt) # "O" OR !USED("cursor_4c_MtI")
+            RETURN .T.
+        ENDIF
+
+        loc_cConta = ALLTRIM(NVL(par_oTxt.Value, ""))
+
+        IF EMPTY(loc_cConta)
+            RETURN .T.
+        ENDIF
+
+        *-- O grupo JA esta no cursor (coluna anterior, Valid dela ja gravou)
+        SELECT cursor_4c_MtI
+        loc_cGrupo = ALLTRIM(NVL(cursor_4c_MtI.Grupos, ""))
+
+        TRY
+            loc_cSQL = "SELECT TOP 1 IClis, Inativa FROM SigCdCli" + ;
                        " WHERE IClis = " + EscaparSQL(loc_cConta)
             IF !EMPTY(loc_cGrupo)
                 loc_cSQL = loc_cSQL + " AND Grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CliGrid") > 0 AND ;
-               !EOF("cursor_4c_CliGrid")
-                SELECT cursor_4c_CliGrid
-                IF NVL(cursor_4c_CliGrid.Inativa, 0) = 1
-                    MsgErro("Acesso Negado!!! Conta Inativa.", "")
-                    SELECT cursor_4c_MtI
-                    REPLACE Contas WITH "" IN cursor_4c_MtI
-                    IF VARTYPE(THIS.pgf_4c_Paginas.Page2.grd_4c_Dados) = "O"
-                        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-                        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column2.SetFocus()
-                    ENDIF
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaCel") > 0 AND ;
+               !EOF("cursor_4c_ContaCel")
+                SELECT cursor_4c_ContaCel
+                IF TratarNulo(cursor_4c_ContaCel.Inativa, "N") = 1
+                    MsgAviso("Conta Inativa ...", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lOk = .F.
+                ELSE
+                    THIS.GravarCelulaCentroCusto(par_oTxt, "Contas", loc_cConta)
                 ENDIF
             ELSE
-                MsgErro("Acesso Negado!!! Conta n" + CHR(227) + "o encontrada.", "")
-                SELECT cursor_4c_MtI
-                REPLACE Contas WITH "" IN cursor_4c_MtI
-                IF VARTYPE(THIS.pgf_4c_Paginas.Page2.grd_4c_Dados) = "O"
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column2.SetFocus()
+                IF USED("cursor_4c_ContaCel")
+                    USE IN cursor_4c_ContaCel
                 ENDIF
+                loc_lOk = THIS.AbrirBuscaContaGrade(par_oTxt, loc_cConta, loc_cGrupo)
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Formmtz.ValidarContaLinhaGrid")
+            MsgErro(loc_oErro.Message, "Formmtz.ValidarContaGrade")
         ENDTRY
 
-        IF USED("cursor_4c_CliGrid")
-            USE IN cursor_4c_CliGrid
+        IF USED("cursor_4c_ContaCel")
+            USE IN cursor_4c_ContaCel
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *-- =========================================================================
+    *-- ABRIR BUSCA CONTA GRADE - FormBuscaAuxiliar da celula Contas
+    *-- =========================================================================
+
+    PROCEDURE AbrirBuscaContaGrade(par_oTxt, par_cValor, par_cGrupo)
+        LOCAL loc_oBusca, loc_cFiltro, loc_cGrupo, loc_lOk, loc_oErro
+        loc_lOk = .T.
+
+        *-- Grupo omitido (chamada pelo F4 da celula): le o da linha corrente.
+        loc_cGrupo = IIF(VARTYPE(par_cGrupo) = "C", ALLTRIM(par_cGrupo), "")
+        IF EMPTY(loc_cGrupo) AND USED("cursor_4c_MtI") AND !EOF("cursor_4c_MtI")
+            loc_cGrupo = ALLTRIM(NVL(cursor_4c_MtI.Grupos, ""))
+        ENDIF
+
+        TRY
+            loc_cFiltro = ""
+            IF !EMPTY(loc_cGrupo)
+                loc_cFiltro = "Grupos = " + EscaparSQL(loc_cGrupo)
+            ENDIF
+
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdCli", "cursor_4c_ContaCelBusca", "IClis", ;
+                par_cValor, "Conta de Centro de Custo", .F., .T., loc_cFiltro)
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("IClis", "", "Conta")
+                    loc_oBusca.mAddColuna("Rclis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_ContaCelBusca")
+                    SELECT cursor_4c_ContaCelBusca
+                    IF !EOF()
+                        THIS.GravarCelulaCentroCusto(par_oTxt, "Contas", ;
+                            ALLTRIM(cursor_4c_ContaCelBusca.IClis))
+                    ENDIF
+                ELSE
+                    loc_lOk = .F.
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formmtz.AbrirBuscaContaGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_ContaCelBusca")
+            USE IN cursor_4c_ContaCelBusca
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *-- =========================================================================
+    *-- GRAVAR CELULA CENTRO DE CUSTO - escreve o codigo escolhido no cursor E
+    *-- de volta no proprio TextBox. Sem devolver para par_oTxt.Value o texto
+    *-- digitado sobrescreve o cursor quando o Valid termina (regra #46).
+    *-- =========================================================================
+
+    PROTECTED PROCEDURE GravarCelulaCentroCusto(par_oTxt, par_cCampo, par_cValor)
+        IF !USED("cursor_4c_MtI") OR EOF("cursor_4c_MtI")
+            RETURN
+        ENDIF
+
+        par_oTxt.Value = par_cValor
+
+        SELECT cursor_4c_MtI
+        IF par_cCampo = "Grupos"
+            REPLACE Grupos WITH par_cValor IN cursor_4c_MtI
+        ELSE
+            REPLACE Contas WITH par_cValor IN cursor_4c_MtI
         ENDIF
     ENDPROC
 
@@ -2380,8 +2856,9 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        *-- Legado: Pagina.Lista.Grade.FontName = "Tahoma" / FontSize = 8
         WITH par_oGrid
-            .FontName = "Verdana"
+            .FontName = "Tahoma"
             .FontSize = 8
         ENDWITH
     ENDPROC
@@ -2414,3 +2891,56 @@ DEFINE CLASS Formmtz AS FormBase
 
 ENDDEFINE
 
+
+*==============================================================================
+* TextBoxCentroCustoMtz_4c - celulas Grupos (Column1) e Contas (Column2) da
+* grade de saldos do Formmtz (Erro298). Transcreve Column1/Column2.Text1 do
+* legado:
+*   When  -> Return(INLIST(pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)
+*   Valid -> fAcessoContab / fAcessoContas  (validam e, no miss, abrem o browse)
+* Eventos EMBUTIDOS na classe: BINDEVENT em Valid de TextBox dentro de Column
+* nao dispara de forma confiavel no VFP (ver TextBoxGridLookup.prg).
+*==============================================================================
+DEFINE CLASS TextBoxCentroCustoMtz_4c AS TextBox
+    this_cCampo = "Grupos"
+
+    PROCEDURE When()
+        LOCAL loc_lPode
+        loc_lPode = .T.
+        IF PEMSTATUS(THISFORM, "PodeEditarCelulaCentroCusto", 5)
+            loc_lPode = THISFORM.PodeEditarCelulaCentroCusto()
+        ENDIF
+        RETURN loc_lPode
+    ENDPROC
+
+    PROCEDURE Valid()
+        LOCAL loc_lRetorno
+        loc_lRetorno = .T.
+        IF THIS.this_cCampo = "Grupos"
+            IF PEMSTATUS(THISFORM, "ValidarGrupoGrade", 5)
+                loc_lRetorno = THISFORM.ValidarGrupoGrade(THIS)
+            ENDIF
+        ELSE
+            IF PEMSTATUS(THISFORM, "ValidarContaGrade", 5)
+                loc_lRetorno = THISFORM.ValidarContaGrade(THIS)
+            ENDIF
+        ENDIF
+        RETURN loc_lRetorno
+    ENDPROC
+
+    *-- F4 abre a lista direto, sem precisar errar o codigo antes
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115        && F4 (convencao do projeto)
+            IF THIS.this_cCampo = "Grupos"
+                IF PEMSTATUS(THISFORM, "AbrirBuscaGrupoGrade", 5)
+                    THISFORM.AbrirBuscaGrupoGrade(THIS, ALLTRIM(NVL(THIS.Value, "")))
+                ENDIF
+            ELSE
+                IF PEMSTATUS(THISFORM, "AbrirBuscaContaGrade", 5)
+                    THISFORM.AbrirBuscaContaGrade(THIS, ALLTRIM(NVL(THIS.Value, "")), "")
+                ENDIF
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+ENDDEFINE

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3 conclu├¡da. Criado `C:\4c\projeto\app\forms\operacionais\FormSigOpCop.prg` (306 linhas, CRLF, ASCII puro).
+
+## O que foi entregue
+
+`SIGOPCOP` ├® um di├ílogo **FLAT** (600x187, `WindowType=1`, aberto por um form chamador com `LParameters poForm, pOperacao`) ÔÇö n├úo tem PageFrame, grade nem barra CRUD. A estrutura base entregue ├® a que o legado de fato tem:
+
+| Membro | Origem no dump |
+|---|---|
+| `DEFINE CLASS FormSigOpCop AS FormBase` | propriedades transcritas (600x187, BorderStyle=2, AutoCenter, TitleBar=0, ControlBox=.F., MaxButton=.F., Verdana 8, ForeColor 36,84,155) |
+| `Init(par_oFormPai, par_cOperacao)` | `ThisForm.ParentForm = poForm` + `GetOrigem.Value = pOperacao`; Caption por CHR() antes do `DODEFAULT()` |
+| `InicializarForm()` | instancia `SigOpCopBO`, aplica `Picture`, semeia a origem no BO, propaga Caption para os dois labels |
+| `ConfigurarPageFrame()` ÔåÆ `ConfigurarCabecalho()` | `cntSombra` + `lblSombra`/`lblTitulo`, geometria transcrita |
+| `TornarControlesVisiveis()` / `Destroy()` | ÔÇö |
+
+## Decis├Áes de transcri├º├úo (documentadas no cabe├ºalho do arquivo)
+
+- **`WindowType = 0` na classe, promovido a `1` no `Init`** fora de `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` ÔÇö conven├º├úo j├í usada em 18 forms (FormSIGOPCCO/FormSigOpCcl/FormSigOpCgl): modal top-level d├í timeout no harness, e transcrever `0` na classe mataria a tela aberta pelo menu.
+- **`Closable`/`MinButton`/`ClipControls` N├âO escritos** ÔÇö o dump n├úo as declara, e `ControlBox=.F.` + `TitleBar=0` n├úo as implicam.
+- **Larguras do cabe├ºalho responsivas** (`THIS.Width` / `THIS.Width - 20`) em vez dos literais 800/769 do dump: com o form em 600 s├úo artefato do Form Designer e recortariam o t├¡tulo.
+- **`AutoSize = .F.` + Width e Height expl├¡citos** nos labels (AutoSize ├® no-op em Label de `AddObject` e com `WordWrap` descarta a Height).
+- **`DataSession = 1`** = sess├úo corrente, equivalente ao `DataSessionId = poForm.DataSessionId` do legado.
+- Sem guarda `gb_4c_ValidandoUI` envolvendo o `InicializarForm` (n├úo h├í SQL nesta fase, e `RETURN` no topo tornaria diferen├ºas de UI Fidelity irrecuper├íveis pelo auto-fix).
+
+## Verifica├º├Áes executadas
+
+- **Gate da Fase 3** reproduzido do `OrquestradorMigracao.ps1` (extra├¡do por AST, sem dot-source): `VALIDADO = True` ÔÇö passa tanto pelo ramo de tokens (`ConfigurarPageFrame` + `InicializarForm`) quanto pelo ramo **FLAT** (legado sem PageFrame + `InicializarForm` + `AddObject("cnt_4c_Sombra")` + nenhum `pgf_4c_`).
+- **`Test-CompletudeCodigo`** (fun├º├úo real do orquestrador): `[OK] nenhum TODO/stub/procedure vazia`.
+- **Compila├º├úo VFP9**: `.FXP` gerado, **nenhum `.ERR`**. Validei que o check ├® significativo com um controle negativo (c├│pia com erro de sintaxe ÔåÆ `ctrl.ERR: "Error in line 81: Syntax error."`).
+- Checks de regra: 0 `pgf_4c_`, 0 `RETURN` dentro de TRY, 0 `PUBLIC` em DEFINE CLASS, 0 literais acentuados, 0 `MESSAGEBOX`, 0 `Page.Width/Height`, `DODEFAULT()` no `Destroy`. Tempor├írios removidos, sem `.fxp` residual.
+
+**Uma ressalva honesta:** n├úo foi poss├¡vel **instanciar** o form. Confirmei por smoke test (`STRTOFILE` + `QUIT`) que o `vfp9.exe` nesta sess├úo **compila e sai sem executar** ÔÇö `exit=0`, `.FXP` criado, arquivo de sa├¡da ausente. Portanto a prova ├® de *compila├º├úo*, n├úo de instancia├º├úo; "a tela abre" s├│ se prova rodando o form com GUI.

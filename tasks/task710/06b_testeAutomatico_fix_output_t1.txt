@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fixed the crash. Root cause: `FormSigOpCpo.InicializarForm()` failed because `ConfigurarFiltroTipo()` (line 726) bound `cbo_4c_CmbTipos.RowSource` to `cursor_4c_Tipos`, but that cursor never got created.
+
+The chain: `SigOpCpoBO.CarregarComposicao()` only calls `CarregarTipos()` (which creates `cursor_4c_Tipos`) inside the success branch of its `SQLEXEC` call. With an invalid connection handle (expected in the headless test harness ÔÇö `SQLEXEC` throws rather than returning -1, per the documented VFP9 behavior), execution jumps straight to `CATCH`, skipping `CarregarTipos()` entirely. `ConfigurarFiltroTipo()` then tried to bind a ComboBox's `RowSourceType = 2` to a non-existent alias, which VFP9 reports as `'field' phrase is not found.` ÔÇö crashing `InicializarForm` and making `CREATEOBJECT` return a non-object.
+
+The form already has an analogous fallback for `cursor_4c_Grade` in `CarregarDados()` for this exact scenario (BO failure leaving a cursor uncreated); `cursor_4c_Tipos` was missing its sibling fallback. Added it in `CarregarDados()`:
+
+```foxpro
+IF !USED(loc_cCursorTipos)
+    CREATE CURSOR (loc_cCursorTipos) (Tipos C(20))
+ENDIF
+```
+
+This only creates an empty cursor when the BO didn't already create it ÔÇö no change to the normal/success path, no business logic altered.

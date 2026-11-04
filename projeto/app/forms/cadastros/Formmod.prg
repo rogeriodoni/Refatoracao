@@ -424,7 +424,7 @@ DEFINE CLASS Formmod AS FormBase
         *-- Container botoes acao (Grupo_Salva no legado: Left=812, Top=24+29=53)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 53
+            .Top         = 27
             .Left        = 812
             .Width       = 160
             .Height      = 85

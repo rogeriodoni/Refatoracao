@@ -1,0 +1,339 @@
+{
+  "resumo": {
+    "totalMetodos": 19,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 12,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDOC",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Local llOks\n\nllOks = .t.\nIf Not ThisForm.poDataMgr.Update([crSigOpArq])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpArq)])\n\tllOks = .f.\nEndIf\n\nIf llOks And (ThisForm.poDataMgr.Commit() < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])\n\tllOks = .f.\nEndIf\n\nIf Not llOks\n\tThisForm.poDataMgr.RollBack()\nEndIf\n\nReturn llOks\n* Fim ********************************************************************************* ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC",
+      "evento": "Init",
+      "linhas": 56,
+      "codigoOriginal": "Lparameters pKey, pEsc\n* Função: Mostrar Arquivos (Endereços de Rede) Relacionados a Chave Passada\n* pKey = Chave de Amarração 30 Posições (EmpDopNums, CPros, IClis, etc...) \n* pEsc = Equivalente ao .pcEscolha\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nIf Empty(pKey) Or Empty(pEsc)\n\t=Messagebox([Parâmetros Inválidos!!!], 0+16, [Erro!!!])\n\tReturn .f.\nEndIf\n\nlcQryOpArq = [Select * From SigOpArq Where fkChaves = '] + Padr(pKey, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.SalvarDados()\n\tThisForm.Release\nElse\n\tReturn .f.\nEndIf\n* Fim ********************************************************************************* \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SalvarDados",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.getObsArqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.grdArquivos",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArq\n\nlcArq = Alltrim(crSigOpArq.Arquivos)\n\nWith ThisForm\n\tClear Resources\n\t.imgArqJpg.Picture = []\n\t.imgArqJpg.Visible = .f.\n\n\tIf Not Empty(lcArq) And InList(Alltrim(Upper(Substr(lcArq, At([.],lcArq), 5))), [.JPG], [.ICO], [.BMP], [.JPEG])\n\t\t.imgArqJpg.Picture = (lcArq)\n\t\t.imgArqJpg.Visible = .t.\n\tEndIf\nEndWith\n\nThisForm.getDatas.Refresh \nThisForm.getUsuars.Refresh \nThisForm.getObsArqs.Refresh \n* Fim *****************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.grdArquivos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnInsArqs",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Local lcArq\n\nlcArq = GetFile([], [Selecione o Arquivo], [Selecione o Arquivo], 0, [Seleção de Arquivos])\nIf Not IsEmpty(lcArq)\n\tInsert Into crSigOpArq (fkChaves, pkChaves, Arquivos, ObsArqs, Usuars, Datas) ;\n\t\t\t\t    Values (ThisForm.ArqChaves, fUniqueIds(), Upper(lcArq), [], Usuar, Datetime())\nEndIf\nThisForm.grdArquivos.Refresh\nThisForm.grdArquivos.Column1.SetFocus \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ArqChaves, fUniqueIds",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnInsArqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnOpnArqs",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Local lcArq\n\nlcArq = Alltrim(crSigOpArq.Arquivos)\n\nIf Not Empty(lcArq) And File(lcArq)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcArq)\nElse\n\t=MessageBox([Arquivo Não Encontrado!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnOpnArqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.imgArqJpg",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lcArq\n\nlcArq = Alltrim(crSigOpArq.Arquivos)\n\nIf Not Empty(lcArq) And File(lcArq) And InList(Alltrim(Upper(Substr(lcArq, At([.],lcArq), 5))), [.JPG], [.ICO], [.BMP], [.JPEG])\n\tDo Form SigOpZom With lcArq, [Arquivo : ] + lcArq\nEndIf\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnExcArqs",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If Not Empty(crSigOpArq.Arquivos)\n\tThisForm.grdArquivos.Enabled = .f.\n\tlnReg = Recno([crSigOpArq])\n\tDelete In crSigOpArq\n\tGo Top In crSigOpArq\n\tIf Not Eof([crSigOpArq])\n\t\tGo lnReg In crSigOpArq\n\tEndIf\n\tThisForm.grdArquivos.Enabled = .t.\nEndIf\nThisForm.grdArquivos.SetFocus \nThisForm.grdArquivos.Column1.SetFocus \nThisForm.grdArquivos.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnExcArqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.getDatas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.getUsuars",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnOpnDirs",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Local lcArq\n\nlcArq = Alltrim(crSigOpArq.Arquivos)\n\nIf Not Empty(lcArq) And File(lcArq)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(JustPath(lcArq))\nElse\n\t=MessageBox([Arquivo Não Encontrado!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDOC.btnOpnDirs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDOC.Init",
+      "queryOriginal": "lcQryOpArq = [Select * From SigOpArq Where fkChaves = '] + Padr(pKey, ... [TRUNCADO]",
+      "tabelas": "SigOpArq",
+      "colunas": "fkChaves,PadrpKey",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDOC.btnInsArqs.Click",
+      "queryOriginal": "\tInsert Into crSigOpArq (fkChaves, pkChaves, Arquivos, ObsArqs, Usuars, Datas) ; \t\t\t\t    Values (ThisForm.ArqChaves, fUniqueIds(), Upper(lcArq), [], Usuar, Datetime())",
+      "tabelas": "crSigOpArq",
+      "colunas": "fkChaves,pkChaves,Arquivos,ObsArqs,Usuars,Datas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpArq", "crSigOpArq"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

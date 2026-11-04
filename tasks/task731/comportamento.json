@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fGravarLog", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPENT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENT",
+      "evento": "Init",
+      "linhas": 65,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum, pPrz, pFor, pMin, pDat, pBlqAlt, pMax\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcQrySigOpMvv = [Select * ] + ;\n\t\t\t\t [From SigOpMvv ] + ;\n\t\t\t\t[Where EmpDopNcs = '] + pEmp + pDop + Str(pNum, 6) + [' ] + ;\n\t\t\t\t[Order By Vencs]\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigOpMvv', 'cIdChaves', 'crSigOpMvv', '', ''... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkUteis]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENT.getNova",
+      "evento": "Valid",
+      "linhas": 58,
+      "codigoOriginal": "Local ldEnt\n\nldEnt  = ThisForm.pDat + ThisForm.pMin\nldEntm = ThisForm.pDat + ThisForm.pMax\n\nIf Not IsEmpty(This.Value)\n\tldDat = Ttod(fDtoSQL(This.Value))\n\tThis.Value = ldDat\n\tThis.Refresh\nEndIf\n\nIf InList(crSigCdOpe.DtEntrs, 1, 4, 6)\n\tIf IsEmpty(This.Value)\n\t\t=Messagebox([Prazo de Entrega Deve Ser Informado...], 32, [])\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf (Ttod(fDtoSQL(This.Value)) < ThisForm.pDat)\n\t\t=Messagebox([Prazo de Entrega Deve Ser Maior Que a Data da Movimentação...], 32, [])\n\t\tReturn .f.\n\tEndIf\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENT.getAtual",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPENT.sair",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPENT.altera",
+      "evento": "Valid",
+      "linhas": 57,
+      "codigoOriginal": "Private pDtp\nLocal ldAnt, ldNew, llOks\n\nldAnt = ThisForm.getAtual.Value\nldNew = ThisForm.getNova.Value\n\nIf Not Empty(ldNew)\n\tInsert Into crSigOpMvv (Emps, Dopcs, NoTitulos, Vencs, EmpDopNcs, cIdChaves, Usuars, Datas) ;\n\t\t\t\t   Values (ThisForm.pEmp, ThisForm.pDop, ThisForm.pNum, fDtoSQL(ldAnt), ;\n\t\t\t\t   \t\t   ThisForm.pEmp + ThisForm.pDop + Str(ThisForm.pNum, 6), ;\n\t\t\t\t   \t\t   fUniqueIds(), Usuar, Datetime())\n\t\n\tllOks = .t.\n\n\tpDtp = fDtoSQL(ldNew)\n\t\n\tIf llOks And (ThisForm.ParentForm.pcEscolha <> ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fUniqueIds",
+        "metodosFormChamados": "pDop + Str,SqlExecute,Update,Commit,RollBack,Value  = Ctod",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPENT.altera.Valid",
+      "queryOriginal": "\tInsert Into crSigOpMvv (Emps, Dopcs, NoTitulos, Vencs, EmpDopNcs, cIdChaves, Usuars, Datas) ; \t\t\t\t   Values (ThisForm.pEmp, ThisForm.pDop, ThisForm.pNum, fDtoSQL(ldAnt), ; \t\t\t\t   \t\t   ThisForm.pEmp + ThisForm.pDop + Str(ThisForm.pNum, 6), ; \t\t\t\t   \t\t   fUniqueIds(), Usuar, Datetime())",
+      "tabelas": "crSigOpMvv",
+      "colunas": "Emps,Dopcs,NoTitulos,Vencs,EmpDopNcs,cIdChaves,Usuars,Datas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigOpMvv"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

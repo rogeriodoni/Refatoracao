@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4 executada. Arquivo modificado: `projeto/app/forms/operacionais/FormSigOpCpr.prg` (345 ÔåÆ 589 linhas).
+
+## O que foi entregue
+
+O contrato da fase pede "Grid + bot├Áes CRUD na Page1". O **SIGOPCPR n├úo tem nenhum dos dois** ÔÇö medido no dump, n├úo presumido:
+
+| superf├¡cie | medi├º├úo no dump |
+|---|---|
+| `BaseClass: grid` / `pageframe` | **0** |
+| `AddCursor` / `pColuna` / `RecordSource` / `ControlSource` | **0** |
+| `BaseClass: listbox` | **0** |
+| bot├Áes do legado | `CmdCopia` ("Copiar") + `CmdExit` ("Encerrar") ÔÇö n├úo Incluir/Alterar/Excluir |
+
+Criar PageFrame Lista/Dados + barra CRUD obrigaria a inventar estrutura ausente (PILAR 1), e os bot├Áes can├┤nicos ocupam `Left 542..932` ÔÇö exatamente onde o grupo do legado j├í mora (645..805). Entreguei ent├úo o que a fase de fato tem a acrescentar:
+
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` (CommandGroup 160x85 em 645,-2) com os dois bot├Áes 75x75, geometria/fonte/cor/`Picture`/`Caption` transcritos do dump
+- **`BtnEncerrarClick()`** ÔÇö PUBLIC, transcreve `CmdExit.Click / Release Windows` ÔåÆ `THIS.Release()`
+- chamada a `ConfigurarBotoes()` em `ConfigurarPageFrame()`, **depois** de `ConfigurarCabecalho()`
+- notas de transcri├º├úo 9ÔÇô19 no cabe├ºalho
+
+Pontos que exigiram o dump e n├úo palpite: o ├¡cone de Copiar aqui ├® `geral_duplicar_60.jpg`, **n├úo** o `geral_subnivel_60.jpg` do irm├úo `SigOpCop` (mesma a├º├úo, arquivos diferentes ÔÇö regra #25); e `CommandGroup` n├úo recebeu `ForeColor`/`FontName` (n├úo existem na classe base ÔÇö regra #33), que no dump moram em cada bot├úo.
+
+O `BINDEVENT` de `Buttons(1)` (Copiar) **n├úo** foi registrado: BINDEVENT valida o delegate na hora do bind, e `BtnCopiarClick` ainda n├úo existe ÔÇö apontar para ele derrubaria o `Init`. Entra junto com o handler, no bloco que migrar `CmdCopia.Click`.
+
+## Verifica├º├úo (medida, n├úo inferida)
+
+Smoke test obrigat├│rio do VFP9 passou (`smoke712.txt` = "VIVO"), ent├úo os resultados abaixo s├úo de execu├º├úo real:
+
+- **Compila├º├úo**: `.FXP` gerado, **zero `.ERR`**
+- **Instancia├º├úo**: `VARTYPE=O`, `BaseClass=Form`, 800x157, 2 controles, `Caption=[C├│pia de Processo]`
+- **Grupo**: `645,-2,160x85`, `ButtonCount=2`, `BackStyle=0`, `Themes=.F.`, `Visible=.T.`
+- **Buttons(1)**: `[\<Copiar]` em 5,5 ÔÇö `FILE(Picture)=.T.`, `ForeColor=5921370` = `RGB(90,90,90)`
+- **Buttons(2)**: `[Encerrar]` em 80,5 ÔÇö `FILE(Picture)=.T.`, `Cancel=.T.`
+- **Z-order**: filho 1 = `CNT_4C_SOMBRA`, filho 2 = `CMG_4C_BOTOES` ÔåÆ cabe├ºalho primeiro, grupo por cima (regra #11)
+- **`BtnEncerrarClick` PROTECTED = `.F.`** (PUBLIC, regra #3) e `AEVENTS(array, Buttons(2))` = **1** ÔåÆ bind registrado
+
+Nota de medi├º├úo: `AEVENTS(array, 0|1)` devolve **0** neste contexto e isso ├® artefato da fun├º├úo, n├úo bind ausente ÔÇö provado isolando numa mini-classe (`BINDEVENT` retornou 1, `AEVENTS(,0)` e `AEVENTS(,1)` deram 0, e o handler **disparou**). A forma que mede ├® `AEVENTS(array, <objeto>)`.
+
+Est├íticos: 0 bytes >127 (acentos via `CHR()`), 0 `TODO`/`nao implement`, 0 `RETURN` dentro de `TRY`, 0 `PUBLIC PROCEDURE` em `DEFINE CLASS`, 0 `MESSAGEBOX(` direto, `WITH`/`ENDWITH` e `PROCEDURE`/`ENDPROC` balanceados.
+
+## Sobre o gate da Fase 4
+
+Rodei os predicados do `case 4` contra este dump: o ramo **CAPTURA** se aplica ÔÇö `FormType=OPERACIONAL`, sem lista pelo teste estrito, sem API de n├│s, com `BaseClass: textbox`, e `Test-LegadoDialogoExibicao` falso (nenhum campo marcado `ReadOnly = .T.`; `GetOrigem` ├® travado por `When = .F.`, n├úo por `ReadOnly`). `temSuperficieCaptura` tamb├®m est├í satisfeito (`InicializarForm` + `AddObject(` presentes). N├úo precisei relaxar nada no orquestrador.
+
+Artefatos tempor├írios de compila├º├úo/probe e os `.FXP` gerados foram removidos.

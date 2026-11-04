@@ -25,6 +25,9 @@ DEFINE CLASS FormPAT AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda do lookup de Conta: o picker e MODAL e redispara o proprio
+    *-- LostFocus do campo ao devolver o foco (regra #37, Erro304)
+    this_lEmLookupConta  = .F.
 
     *==========================================================================
     * Init - REGRA CRITICA: Apenas RETURN DODEFAULT()
@@ -637,7 +640,9 @@ DEFINE CLASS FormPAT AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .ForeColor     = RGB(90, 90, 90)
-            .ToolTipText   = "C" + CHR(243) + "digo do Vendedor"
+            *-- O legado rotula "Conta :" e busca em SigCdCli (iclis/rclis). A
+            *-- coluna se chama codvends por heranca, mas o conteudo e CONTA.
+            .ToolTipText   = "C" + CHR(243) + "digo da Conta"
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Codvends, "LostFocus", THIS, "ValidarCodvends")
@@ -654,7 +659,7 @@ DEFINE CLASS FormPAT AS FormBase
             .FontSize      = 8
             .ForeColor     = RGB(90, 90, 90)
             .ReadOnly      = .T.
-            .ToolTipText   = "Descri" + CHR(231) + CHR(227) + "o do Vendedor"
+            .ToolTipText   = "Descri" + CHR(231) + CHR(227) + "o da Conta"
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_DVends, "LostFocus", THIS, "ValidarDVends")
@@ -769,36 +774,60 @@ DEFINE CLASS FormPAT AS FormBase
             .Format = "K!"
         ENDWITH
 
-        *-- Botoes Confirmar e Cancelar
+        *-- Botoes Confirmar e Encerrar
+        *-- Erro304: estavam SOLTOS no rodape (Top=456), com tamanhos diferentes
+        *-- entre si (90x27 contra 75x75) e sem icone. O legado usa o Grupo_Salva
+        *-- canonico: dois botoes IGUAIS lado a lado (Salva.Top=5/Left=5,
+        *-- Cancelar.Top=5/Left=80) e sem Top/Left proprios no SCX, ou seja na
+        *-- posicao da classe - a barra do topo, como em todo o resto do sistema.
+        *-- Top = 32 poe os dois em 32..107, dentro da faixa 29..109 (3px acima,
+        *-- 2px abaixo). Continuam filhos DIRETOS da pagina porque
+        *-- HabilitarCampos/IrParaDados acessam loc_oPg2.cmd_4c_Confirmar.
         loc_oPagina.AddObject("cmd_4c_Confirmar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Confirmar
-            .Caption       = "Confirmar"
-            .Top           = 456
-            .Left          = 153
-            .Width         = 90
-            .Height        = 27
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .Themes        = .F.
-            .SpecialEffect = 0
-            .MousePointer  = 15
-            .Visible       = .T.
+            .Caption         = "Confirmar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 32
+            .Left            = 847
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
 
         loc_oPagina.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Cancelar
-            .Caption       = "Encerrar"
-            .Top           = 456
-            .Left          = 253
-            .Width         = 75
-            .Height        = 75
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .Themes        = .F.
-            .SpecialEffect = 0
-            .MousePointer  = 15
-            .Visible       = .T.
+            .Caption         = "Encerrar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 32
+            .Left            = 922
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
     ENDPROC
@@ -914,6 +943,31 @@ DEFINE CLASS FormPAT AS FormBase
             IF !loc_lPodeNavegar
                 loc_lSucesso = .F.
             ELSE
+
+            *-- Erro305: POR O BO EM MODO DE EDICAO.
+            *-- O IrParaDados preparava so a TELA (ReadOnly, BOParaForm) e nunca
+            *-- chamava NovoRegistro()/EditarRegistro(), entao this_lEmEdicao
+            *-- ficava .F. e o BusinessBase.Salvar() recusava a gravacao com
+            *-- "Nao esta em modo de edicao" (regra #20 - a base EXIBE a falha).
+            *-- Padrao canonico do FormCor:
+            *--   Incluir -> NovoRegistro()   ANTES do BOParaForm, porque ele
+            *--              chama LimparDados() e zeraria o que ja estivesse
+            *--              carregado;
+            *--   Alterar -> EditarRegistro() depois do CarregarDoCursor.
+            *-- VISUALIZAR nao entra em edicao: nao grava.
+            DO CASE
+            CASE loc_lNovo
+                THIS.this_oBusinessObject.NovoRegistro()
+            CASE !loc_lReadOnly
+                *-- EditarRegistro() recusa enquanto this_lNovoRegistro = .T.
+                *-- (sobra de um Incluir anterior); CancelarEdicao no Encerrar
+                *-- normaliza isso, mas a chamada aqui fica defensiva.
+                IF !THIS.this_oBusinessObject.EditarRegistro()
+                    THIS.this_oBusinessObject.CancelarEdicao()
+                    THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Dados")
+                    THIS.this_oBusinessObject.EditarRegistro()
+                ENDIF
+            ENDCASE
 
             *-- Preencher controles da tela
             THIS.BOParaForm()
@@ -1197,7 +1251,11 @@ DEFINE CLASS FormPAT AS FormBase
                         MsgInfo("Registro exclu" + CHR(237) + "do com sucesso.", "Sucesso")
                         THIS.IrParaLista()
                     ELSE
-                        MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Excluir")
+                        *-- Mesma guarda do BtnConfirmarClick: o Excluir() da
+                        *-- BusinessBase tambem ja exibe a falha (regra #20).
+                        IF !THIS.this_oBusinessObject.this_lErroExibido
+                            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Excluir")
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -1241,9 +1299,18 @@ DEFINE CLASS FormPAT AS FormBase
                 loc_lSucesso = THIS.this_oBusinessObject.Salvar()
 
                 IF loc_lSucesso
+                    *-- Confirmacao de gravacao. O legado delega ao DoDefault()
+                    *-- do frmcadastro; aqui vale o canonico do projeto, igual
+                    *-- ao FormCor (99 sites usam exatamente este texto).
+                    MsgInfo("Registro salvo com sucesso!")
                     THIS.IrParaLista()
                 ELSE
-                    MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Salvar")
+                    *-- A BusinessBase JA exibe a falha em todo caminho que
+                    *-- devolve .F. (regra #20) e marca this_lErroExibido. Sem
+                    *-- esta guarda o usuario leva a MESMA mensagem duas vezes.
+                    IF !THIS.this_oBusinessObject.this_lErroExibido
+                        MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Salvar")
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -1256,6 +1323,12 @@ DEFINE CLASS FormPAT AS FormBase
     ENDPROC
 
     PROCEDURE BtnCancelarClick()
+        *-- Erro305: sair da edicao TAMBEM no BO. Sem isto o this_lNovoRegistro
+        *-- de um Incluir cancelado sobrevive, e o EditarRegistro() do Alterar
+        *-- seguinte e recusado - o "Nao esta em modo de edicao" voltaria.
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject.CancelarEdicao()
+        ENDIF
         THIS.IrParaLista()
     ENDPROC
 
@@ -1325,7 +1398,36 @@ DEFINE CLASS FormPAT AS FormBase
         *-- Descricao e ReadOnly, nao requer validacao
     ENDPROC
 
+    *==========================================================================
+    * ValidarCodvends - campo rotulado "Conta :" (getVends.Valid do legado).
+    *
+    * Erro304: o campo e de CONTA (o legado rotula "Conta :" e busca em
+    * SigCdCli: CursorQuery('SigCdcli','crSigCdCli','iclis', codvends) ->
+    * rclis). A coluna se chama codvends por heranca do legado, mas o conteudo
+    * e uma conta - por isso a mensagem "Vendedor nao encontrado" aparecia num
+    * campo rotulado Conta.
+    *
+    * E, principalmente: o legado NAO devolve "nao encontrado". Ele chama
+    *   fAcessoContas(Usuar, Grupo, 'C', This.Value, getVends, getDVends)
+    * que ABRE O BROWSE de contas quando o codigo nao casa - digitar parte do
+    * codigo e justamente a forma de achar a conta. So quando fAcessoContas
+    * recusa o acesso e que vem 'Acesso Negado!!!'. O migrado trocou o browse
+    * por um aviso, entao digitar "11" (prefixo) virava erro sem saida.
+    *
+    * Guarda de reentrancia: o picker e MODAL, tira o foco e redispara este
+    * proprio LostFocus (regra #37). O corpo vive no Exec para a flag ser
+    * liberada tambem nos RETURN antecipados.
+    *==========================================================================
     PROCEDURE ValidarCodvends()
+        IF THIS.this_lEmLookupConta
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupConta = .T.
+        THIS.ValidarCodvendsExec()
+        THIS.this_lEmLookupConta = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodvendsExec()
         LOCAL loc_cCodvends, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "txt_4c_Codvends", 5)
@@ -1333,16 +1435,64 @@ DEFINE CLASS FormPAT AS FormBase
         ENDIF
         loc_cCodvends = ALLTRIM(loc_oPg2.txt_4c_Codvends.Value)
         IF EMPTY(loc_cCodvends)
+            *-- Legado: Else getDVends.Value = '' (so limpa a descricao)
             loc_oPg2.txt_4c_DVends.Value = ""
             RETURN
         ENDIF
+
         loc_cDesc = THIS.this_oBusinessObject.BuscarDescVendedor(loc_cCodvends)
-        IF EMPTY(loc_cDesc)
-            MsgAviso("Vendedor " + CHR(34) + loc_cCodvends + CHR(34) + " n" + CHR(227) + "o encontrado.", "Vendedor")
-            loc_oPg2.txt_4c_DVends.Value   = ""
-            loc_oPg2.txt_4c_Codvends.SetFocus()
-        ELSE
+        IF !EMPTY(loc_cDesc)
             loc_oPg2.txt_4c_DVends.Value = loc_cDesc
+        ELSE
+            *-- Nao casou exato: abrir a lista, como o fAcessoContas faz.
+            *-- Sem aviso - o picker EH o feedback, e o digitado vira prefixo
+            *-- da busca; apagar o codigo aqui impediria o usuario de corrigir
+            *-- o que escreveu (regra #50).
+            loc_oPg2.txt_4c_DVends.Value = ""
+            THIS.AbrirBuscaConta()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaConta - FormBuscaAuxiliar em SigCdCli (iclis / rclis),
+    * equivalente ao browse que o fAcessoContas abre no legado.
+    *==========================================================================
+    PROCEDURE AbrirBuscaConta()
+        LOCAL loc_oBusca, loc_oPg2, loc_oErro
+
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdCli", "cursor_4c_BuscaConta", "IClis", ;
+                ALLTRIM(loc_oPg2.txt_4c_Codvends.Value), "Conta")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                *-- Show SO se o Init nao resolveu sozinho (regra #37)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("IClis", "", "Conta")
+                    loc_oBusca.mAddColuna("RClis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaConta")
+                    SELECT cursor_4c_BuscaConta
+                    IF !EOF()
+                        loc_oPg2.txt_4c_Codvends.Value = ALLTRIM(cursor_4c_BuscaConta.IClis)
+                        loc_oPg2.txt_4c_DVends.Value   = ALLTRIM(cursor_4c_BuscaConta.RClis)
+                    ENDIF
+                ENDIF
+                *-- Sem ELSE: desistir do picker nao pode apagar o digitado.
+
+                loc_oBusca.Release()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormPAT.AbrirBuscaConta")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaConta")
+            USE IN cursor_4c_BuscaConta
         ENDIF
     ENDPROC
 

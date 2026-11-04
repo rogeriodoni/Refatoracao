@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSIGOPDVM.prg` (1024 ÔåÆ 1112 linhas).
+
+## O problema com a fase, como especificada
+
+A Fase 6 pede "├║ltimos 50% dos campos + TODOS os lookups + container Salvar/Cancelar". Esta tela **n├úo tem nenhum dos tr├¬s**, e eu medi isso em vez de supor:
+
+- **Campos**: os 7 `BaseClass: textbox` do dump s├úo os `Text1` **nativos** das 7 `Column` do Grid1 ÔÇö nenhum controle de entrada fora da grade. Rodei a pr├│pria `Test-LegadoCamposSaoCelulasDeGrade` do orquestrador (extra├¡da verbatim, sem dot-source do `.ps1` ÔÇö ele dispara migra├º├úo): `True`, com dois controles negativos (`False` com um textbox solto injetado; `False` com dump vazio). Todos s├úo `ReadOnly = .T.` no legado ÔÇö campo ReadOnly n├úo recebe lookup por defini├º├úo.
+- **Lookups**: zero. Nenhum `fwbusca*` (as tr├¬s variantes), nenhum `mAddColuna`, `sigacess()`, fam├¡lia `Acesso<X>()` nem `FormBuscaAuxiliar`. O `comportamento.json` confirma pela via independente: `temLookup` sai `.F.` nos 3 m├®todos e a ├║nica `funcaoExterna` ├® `fConfigGeral`.
+- **Salvar/Cancelar**: o SCX tem **um** bot├úo, `CmdCat` ("Encerrar").
+
+Inventar lookup violaria o PILAR 1; m├®todo vazio violaria a regra de completude.
+
+## O que entreguei
+
+A Fase 4 criou `cmd_4c_Encerrar` **sem handler e sem BINDEVENT** ÔÇö o ├║nico bot├úo da tela estava inerte. Esse ├® o trabalho real desta fase (mesmo crit├®rio que a Fase 5 usou aqui: auditar o que a fase anterior derrubou):
+
+- `BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")` no fim de `ConfigurarBotoes`;
+- `PROCEDURE BtnEncerrarClick()` PUBLIC (regra #3) com o `Release Windows` do legado traduzido para `THIS.Release()` ÔÇö e **n├úo** `Hide()`: esta tela n├úo devolve nada (sem `Unload`, sem property de retorno, n├úo ├® aberta com `DO FORM ... TO`), ent├úo o caso da mem├│ria do `Hide` n├úo se aplica;
+- se├º├úo da Fase 6 no cabe├ºalho com a medi├º├úo acima e o motivo de cada aus├¬ncia.
+
+## Verifica├º├úo (VFP9 real, smoke test passou antes)
+
+- **Compila├º├úo**: `.fxp` do form e do BO presentes, `.err` ausente nos dois.
+- **Runtime**: form instancia (`VARTYPE = "O"`, Caption e 7 colunas corretos); `BtnEncerrarClick` existe e `PEMSTATUS(...,2) = .F.` (PUBLIC de verdade); `AEVENTS(arr, cmd_4c_Encerrar)` = **1 bind**, `evento=CLICK` / `metodo=BTNENCERRARCLICK`; `cmd_4c_Encerrar.Cancel = .T.`; acionar `.Click()` fecha a tela (`VARTYPE` vai a `X`).
+- **Controle negativo decisivo**: c├│pia id├¬ntica do form com **s├│ a linha do BINDEVENT removida** ÔåÆ `AEVENTS` = 0 e `.Click()` deixa o form vivo (`VARTYPE = "O"`). Isso prova as duas coisas: o bind dispara, e o bot├úo realmente estava morto antes desta fase.
+
+Dois erros meus no caminho, corrigidos medindo: `AEVENTS(arr, 0)` devolve 0 mesmo com bind vivo (a forma certa ├® por objeto de **origem**, evento na coluna 3); e o heredoc do patch falhou no bash, refeito via arquivo.
+
+## Gate da Fase 6
+
+Passa pelo ramo **GRADE-├ÜNICA** (o anal├│go exato ├® `SIGOPCLP` ÔåÆ `FormSigOpClp`): confirmei os 5 conjuntos do lado migrado (`semPageFrame`, `BINDEVENT`, `ReadOnly=.T.`, `ControlSource`, `ColumnCount`) e os 2 do lado do dump. Os 4 checks do validador de completude d├úo 0 problema ÔÇö aten├º├úo que o check 3 casa `proxima fase`/`pendente`/`nao implement` em **qualquer** coment├írio, ent├úo a se├º├úo nova fala "fase seguinte".
+
+## Consequ├¬ncia que vale avisar
+
+A Fase 7 (eventos de bot├úo) fica **sem item novo** nesta tela: o legado tem um bot├úo e um `Click`, j├í ligado aqui. Deix├í-lo morto para a fase seguinte seria fechar esta com um defeito conhecido. O gate da Fase 7 continua passando (ramo "legado sem bot├úo CRUD, um ├║nico bot├úo, validado pelo handler desse bot├úo" ÔÇö h├í 1).
+
+Deixei registrado para a Fase 8, junto do `CarregarLista`, um item que n├úo ├® desta fase: com `DataSession = 1` o `cursor_4c_Dados` nasce na sess├úo do form **pai** e n├úo se fecha sozinho ÔÇö falta o `USE IN` no `Destroy`. N├úo quebra nada hoje (o BO j├í faz `ZAP` se o alias existir), mas o alias fica aberto na sess├úo do pai. Apaguei os `.fxp` (eram untracked) e removi todo o scratch de `automation/`.

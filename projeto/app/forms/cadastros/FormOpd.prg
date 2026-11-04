@@ -449,7 +449,7 @@ DEFINE CLASS FormOpd AS FormBase
         *-- Container BotoesAcao (grupo_salva: Left=618, Top=11+29=40, Width=160, Height=85)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 40
+            .Top         = 27
             .Left        = 618
             .Width       = 160
             .Height      = 85

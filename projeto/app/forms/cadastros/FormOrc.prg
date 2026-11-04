@@ -119,10 +119,11 @@ DEFINE CLASS FormOrc AS FormBase
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
-        *-- Container Cabecalho (cntSombra no legado, Top=1+29=30)
+        *-- Container Cabecalho (cntSombra no frmcadastro legado: Top=2, H=80
+        *-- -> 2+29=31, que e tambem o canonico do FormCor)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top           = 30
+            .Top           = 31
             .Left          = 0
             .Width         = THIS.Width
             .Height        = 80
@@ -318,16 +319,27 @@ DEFINE CLASS FormOrc AS FormBase
             .AutoSize        = .F.
         ENDWITH
 
-        *-- Botao Copiar (cmdCopiar legado: Top=78+29=107, Left=614, W=115, H=55)
+        *-- Botao Copiar. No legado eh um CommandGroup TRANSPARENTE (cmdCopiar,
+        *-- Top=78 Left=614 W=115 H=55, BackStyle=0) com UM botao interno
+        *-- (btnCopiar, Top=5 Left=5 W=105 H=45). O que se ve na tela eh o botao
+        *-- INTERNO, em 83..128 absoluto - a migracao transcreveu a caixa do
+        *-- GRUPO e com isso o controle comecava em 107, 4px DENTRO da faixa do
+        *-- cabecalho (que vai ate 111), aparecendo por baixo dela.
+        *--   legado btnCopiar absoluto: Top 78+5=83, Left 614+5=619, 105x45
+        *--   migrado (+29 do PageFrame): Top=112, Left=619
+        *-- Icone e PicturePosition transcritos do dump (regra #25): o botao e
+        *-- largo e baixo, com o icone AO LADO do texto - nao o "cadastro_inserir"
+        *-- dos botoes CRUD. A fonte segue Tahoma, como as irmas (o legado usa
+        *-- Comic Sans MS em todos e a migracao ja padronizou Tahoma).
         loc_oPagina.AddObject("cmd_4c_Copiar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Copiar
             .Caption         = "Copiar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
-            .PicturePosition = 13
-            .Top             = 107
-            .Left            = 614
-            .Width           = 115
-            .Height          = 55
+            .Picture         = gc_4c_CaminhoIcones + "geral_subnivel_60.jpg"
+            .PicturePosition = 1
+            .Top             = 112
+            .Left            = 619
+            .Width           = 105
+            .Height          = 45
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
             .FontName        = "Tahoma"
@@ -380,6 +392,13 @@ DEFINE CLASS FormOrc AS FormBase
             .Column4.Width           = 40
         ENDWITH
 
+        *-- O Copiar e criado ANTES da grade, entao a grade (Top=117) o cobre e
+        *-- so sobra a fresta entre a faixa e ela. No legado o cmdCopiar tem
+        *-- ZOrderSet=7 e desenha POR CIMA da Grade (que tambem comeca em 88+29).
+        *-- ZOrderSet e propriedade so do Form Designer (regra #33): o
+        *-- equivalente em runtime e o METODO ZOrder(0), que traz para a frente.
+        loc_oPagina.cmd_4c_Copiar.ZOrder(0)
+
         *-- BINDEVENTs dos botoes (PUBLIC methods - sem PROTECTED)
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir,    "Click", THIS, "BtnIncluirClick")
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
@@ -405,7 +424,7 @@ DEFINE CLASS FormOrc AS FormBase
         *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top           = 29
+            .Top           = 31
             .Left          = 0
             .Width         = THIS.Width
             .Height        = 80
@@ -1197,9 +1216,13 @@ DEFINE CLASS FormOrc AS FormBase
 
             loc_oGrdContas = loc_oPg2.grd_4c_Contas
             IF USED("cursor_4c_Contas")
-                *-- Indexar por grupos para viabilizar SET KEY TO (filtro de exibicao)
+                *-- Indexar por grupos para viabilizar SET KEY TO (filtro de exibicao).
+                *-- Legado SIGCDORC:1169 - "Index on Grupos Tag Grupos", CRU.
+                *-- NAO por ALLTRIM aqui: a chave do SET KEY e crua (char(10) dos
+                *-- dois lados) e indice trimado contra chave crua nao casa - o
+                *-- filtro passaria a devolver ZERO contas, sem erro (regra #42).
                 SELECT cursor_4c_Contas
-                INDEX ON ALLTRIM(grupos) TAG grupos
+                INDEX ON grupos TAG grupos
                 loc_oGrdContas.ColumnCount = 4
                 loc_oGrdContas.RecordSource          = "cursor_4c_Contas"
                 loc_oGrdContas.Column1.ControlSource = "cursor_4c_Contas.iclis"
@@ -1218,7 +1241,7 @@ DEFINE CLASS FormOrc AS FormBase
                 *-- Filtrar contas para o primeiro grupo
                 IF USED("cursor_4c_Grupos") AND !EOF("cursor_4c_Grupos")
                     SELECT cursor_4c_Grupos
-                    SET KEY TO ALLTRIM(codigos) IN cursor_4c_Contas
+                    SET KEY TO cursor_4c_Grupos.Codigos IN cursor_4c_Contas
                     GO TOP IN cursor_4c_Contas
                 ENDIF
             ENDIF
@@ -1654,9 +1677,10 @@ DEFINE CLASS FormOrc AS FormBase
     * Replica logica do SIGCDORC.RecalculaValores no legado
     *===========================================================================
     PROTECTED PROCEDURE RecalcularValores()
-        LOCAL loc_nVlTots, loc_nValor
+        LOCAL loc_nVlTots, loc_nValor, loc_cArea
 
         loc_nVlTots = THIS.this_oBusinessObject.this_nVlTots
+        loc_cArea   = ALIAS()
 
         TRY
             IF USED("cursor_4c_Grupos")
@@ -1671,12 +1695,29 @@ DEFINE CLASS FormOrc AS FormBase
 
             IF USED("cursor_4c_Contas")
                 SELECT cursor_4c_Contas
+                *-- Legado SIGCDORC.recalculavalores:983 - a chave de exibicao eh
+                *-- LIMPA antes de varrer as contas e REPOSTA depois (linha 994).
+                *-- Sem limpar, o SCAN so alcanca as contas do grupo visivel: os
+                *-- percentuais dos outros grupos nunca sao recalculados, e isso
+                *-- nao gera erro nenhum - so deixa valor desatualizado.
+                SET KEY TO ('') IN cursor_4c_Contas
+                GO TOP IN cursor_4c_Contas
                 SCAN
                     IF cursor_4c_Contas.Perc <> 0
                         loc_nValor = ROUND(loc_nVlTots * (cursor_4c_Contas.Perc / 100), 2)
                         REPLACE Valor WITH loc_nValor
                     ENDIF
                 ENDSCAN
+            ENDIF
+
+            *-- Legado:992-996 - repoe a area de trabalho e a chave de exibicao
+            IF !EMPTY(loc_cArea)
+                SELECT (loc_cArea)
+            ENDIF
+            IF USED("cursor_4c_Grupos") AND USED("cursor_4c_Contas")
+                GO TOP IN cursor_4c_Grupos
+                SET KEY TO cursor_4c_Grupos.Codigos IN cursor_4c_Contas
+                GO TOP IN cursor_4c_Contas
             ENDIF
 
             THIS.RetornarTotalLancado()
@@ -1743,7 +1784,7 @@ DEFINE CLASS FormOrc AS FormBase
             IF USED("cursor_4c_Grupos") AND USED("cursor_4c_Contas") AND ;
                !EOF("cursor_4c_Grupos")
                 SELECT cursor_4c_Grupos
-                SET KEY TO ALLTRIM(codigos) IN cursor_4c_Contas
+                SET KEY TO cursor_4c_Grupos.Codigos IN cursor_4c_Contas
                 GO TOP IN cursor_4c_Contas
                 THIS.RetornarTotalLancado()
                 THIS.pgf_4c_Paginas.Page2.grd_4c_Contas.Refresh()

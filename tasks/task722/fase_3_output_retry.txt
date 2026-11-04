@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\cadastros\FormSigOpDmp.prg` (349 linhas, CRLF, zero bytes > 127 ÔÇö acentos s├│ via `CHR()`).
+
+## O que entrou
+
+| M├®todo | Conte├║do |
+|---|---|
+| `Init()` | s├│ `RETURN DODEFAULT()` ÔÇö sem chamada duplicada de `InicializarForm` |
+| `InicializarForm()` | cria `SigOpDmpBO`, monta o PageFrame, propaga o `Caption` para as faixas das **duas** p├íginas, `ActivePage = 1`, modo `LISTA`. Nenhum `RETURN` dentro do `TRY` |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas`, `PageCount=2`, `Top=-29`, `Tabs=.F.`; Page1=Lista / Page2=Dados |
+| `ConfigurarPaginaLista()` | faixa do cabe├ºalho como **primeiro** `AddObject` (regra #11) + `cnt_4c_Botoes` (542/390) e `cnt_4c_Saida` (917/90) **vazios** |
+| `ConfigurarPaginaDados()` | faixa tamb├®m aqui (regra #11) + `cnt_4c_Salva` (842/160) vazio |
+| `ConfigurarLabelsCabecalho()` | fonte ├║nica de `lbl_4c_Sombra`/`lbl_4c_Titulo` ÔÇö labels nunca pelados |
+| `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` | helpers obrigat├│rios; o `TABLEREVERT` do `Destroy` vai com guard de `Buffering` (regra #52) |
+
+Grade da Lista, bot├Áes CRUD e `CarregarLista`/`AlternarPagina` ficam para a Fase 4; campos e lookups, 5ÔÇô6; eventos, 7ÔÇô8 ÔÇö escopo desta fase.
+
+## Decis├Áes de fidelidade (PILAR 1), documentadas no cabe├ºalho do arquivo
+
+- O SCX tem `Caption = (prompt())`, resolvido em runtime pelo prompt do menu, e o dump n├úo traz o literal. Usei `"Cadastro de Demonstrativos"`, o mesmo texto do cabe├ºalho do `SigOpDmpBO` das Fases 1ÔÇô2 ÔÇö ser├í tamb├®m o `DEFINE BAR` do `menu.prg`. **Fica como ponto de aten├º├úo**: o `popCadastros` j├í tem a bar 130 com prompt "Demonstrativos" (SigCdMrr/FormMrc), ent├úo o texto do menu talvez precise desambiguar.
+- `Page2.Picture = new_background.jpg` vem do SCX (`Pagina.Dados.Picture`); Page1 n├úo ├® sobrescrita e usa `fundo_cad_1003.jpg`, a variante de 1000px da textura do framework (os 992 sites do projeto contra 72 de `new_background` confirmam esse par).
+- `Grupo_op.Left=338` e `Grupo_Saida.Left=718` do SCX est├úo no espa├ºo do `frmcadastro` de **800px**; o form novo tem 1000px e usa os can├┤nicos **542** e **917** (regra #10). `cnt_4c_Cabecalho.Top=29` ├® o valor dominante do acervo (214 sites) e o da regra #11.
+
+## Verifica├º├úo feita
+
+- **Balanceamento**: `WITH/ENDWITH` 9/9, `PROCEDURE/ENDPROC` 9/9, `TRY/CATCH/ENDTRY` 1/1/1, `FOR/ENDFOR` 2/2, `IF/ENDIF` 10/10, `DEFINE/ENDDEFINE` 1/1.
+- **Completude**: rodei os 4 checks do `Test-CompletudeCodigo` do orquestrador contra o arquivo ÔÇö nenhum problema (nenhuma procedure vazia, nenhum marcador, nenhum indicador de pend├¬ncia).
+- **Smoke test do VFP9 passou** (`STRTOFILE` gravou "VIVO", exit=0), ent├úo as provas abaixo s├úo reais, n├úo inferidas de `.FXP`/exit code:
+  - `COMPILE` ÔåÆ `FORM.FXP=SIM FORM.ERR=NAO`.
+  - **Controle negativo**: c├│pia do form com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` apontando **s├│** as linhas 352ÔÇô354 injetadas ÔÇö prova que o detector funciona e que as 349 linhas reais est├úo limpas.
+  - **Probe de instancia├º├úo headless**: `CREATEOBJECT("FormSigOpDmp")` devolveu objeto; `PGF Top=-29 W=1000 H=629 Tabs=.F. ActivePage=1`; Page1 com 3 controles (cabe├ºalho com 2 filhos, bot├Áes, sa├¡da) e Page2 com 2 (cabe├ºalho com 2 filhos, salva), todos `Visible=.T.` nas posi├º├Áes acima; t├¡tulo propagado nas duas p├íginas; BO instanciado com `TABELA=[SigPrDmo] CHAVE=[nome]`; as duas `Picture` resolveram para arquivos existentes em `c:\4c\vbmp\`.
+- Apaguei o `.fxp` gerado e os tempor├írios do probe.
+
+O gate da Fase 3 para form CRUD (`ConfigurarPageFrame` + `InicializarForm`) est├í satisfeito.

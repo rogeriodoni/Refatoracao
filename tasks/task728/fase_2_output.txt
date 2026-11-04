@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `SigOpEmbBO.prg` completado (2.086 linhas), compilando limpo e com os caminhos cr├¡ticos verificados em VFP9 real.
+
+## O que entrou
+
+**CRUD de `SigMvIte`** (o que o gate da fase exige):
+- `CarregarDoCursor()` ÔÇö mapeia **todas** as 12 colunas (9 de SigMvIte + `cods`/`descs`/`pesoembs` de SigCdEmb), cada campo conferido com `TYPE(alias+".campo")` (n├úo `PEMSTATUS`, que exige objeto) e com **guarda de EOF** ÔÇö sem ela o m├®todo zeraria as properties e ainda devolveria `.T.`
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` (PROTECTED, regra #51) + `CarregarPorCodigo()` / `ValidarDados()`, todos sobre montadores ├║nicos de SQL
+- `RegistrarAuditoria()` em Inserir/Atualizar/Excluir, e auditoria **dentro do lote transacional** na grava├º├úo em massa
+
+**Funcionalidade do di├ílogo** (fases 3ÔÇæ8 s├úo s├│ Form ÔÇö sem isso o form chamaria m├®todos inexistentes): `CriarCursorEmbalagens` (ponto ├║nico de `CREATE CURSOR`), `CarregarCadastroEmbalagens`, `CarregarLinhasDoItem`, `CarregarEmbalagensDoItem` (o LEFT JOIN do `Init` legado), `AtualizarPesoLinha` (o `Column1.Valid`), `CalcularPesoTotalEmbalagens` (o `lnTotP`), `GravarEmbalagensDoItem` (o `btnConfirmar.Click`), `Destroy`.
+
+## Pontos onde a fidelidade exigiu decis├úo
+
+- **`empdopnums` posicional** (regra #42): `PADR(emps,3)+PADR(dopes,20)+STR(numes,6)` = 29 = a largura da coluna. Medido: a chave sai `001MALOTEÔÉúÔÉúÔÉú...3`, 29 chars.
+- **INSERT cobre as 9 colunas NOT NULL** de SigMvIte (nenhuma tem DEFAULT ÔÇö conferido no schema can├┤nico, UTFÔÇæ16). `VerificarInsertNotNull.ps1` lista 44 BOs com INSERT incompleto no acervo; **SigOpEmbBO n├úo est├í entre eles**.
+- **Diverg├¬ncia documentada e deliberada**: no legado o di├ílogo s├│ mexe no cursor remoto do pai (`crSigMvIte`), e quem grava ├® o `Replace all Emps/Dopes/Numes/EmpDopNums/CidChaves ... in crSigMvIte` + `poDataMgr.UpDate` do SIGMVCAB (conferi no dump da task560). O `Formsigmvitn` migrado n├úo faz isso. Ent├úo `GravarEmbalagensDoItem` tenta os **dois** destinos ÔÇö cursor do pai quando aberto, e servidor (DELETE do item + INSERT das linhas, num `SQLEXEC` ├║nico e at├┤mico) quando h├í chave e conex├úo ÔÇö e **falha com mensagem** se nenhum existir, em vez de relatar sucesso sem gravar nada.
+- **F├│rmula n├úo reescrita** (regra #17): o total soma `Qtds * PesoEmbs` (n├úo a coluna `pesos`), s├│ com `Qtds > 0`, e sem `ROUND` ÔÇö igual ao legado.
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| `COMPILE` no VFP9 | `COMPILE_OK`, `.err` vazio |
+| `ValidadorSQLSchema.ps1` | PASSOU ÔÇö 8 statements, 0 coluna inv├ílida |
+| Completude (regexes da etapa 05d) | 0 problemas |
+| `VerificarFuncoesNaoDefinidas.ps1` | nenhuma chamada ├│rf├ú |
+| `VerificarCamposCursorBO.ps1` | limpo (o ├║nico achado ├® pr├®-existente em SIGPRCPRBO) |
+| `RETURN` dentro de TRY / acentos literais / `PUBLIC PROCEDURE` | nenhum |
+
+Dois probes em VFP9 real (descartados depois) confirmaram o que compila├º├úo n├úo prova: o `FROM (expr) a LEFT JOIN (expr) b` com name expression **e alias** funciona; o LEFT JOIN traz as 3 embalagens com a linha existente casada; `APPEND FROM DBF` preserva a estrutura; `pesos = 3 ├ù 1,50 = 4,500`; total `5,50`; e no caminho de confirma├º├úo o `DELETE FOR ... IN (expr)` remove s├│ as linhas do item 7, com o `SELECT` de volta dentro do `SCAN` impedindo que o `INSERT INTO` desvie o la├ºo.
+
+Observa├º├úo para a Fase 3: `CriarCursorEmbalagens()` ├® o ponto ├║nico da estrutura do cursor ÔÇö o Form deve cham├í-lo para o placeholder da grade em vez de escrever um segundo `CREATE CURSOR`.

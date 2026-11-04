@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All counts balance (3 WITH/ENDWITH, 6 PROCEDURE/ENDPROC). The file structure is sound.
+
+## Summary
+
+Created **FASE 3/8** of `FormSigOpCpr.prg` (`C:\4c\projeto\app\forms\operacionais\FormSigOpCpr.prg`), modeling it on the existing sibling dialog `FormSigOpCop.prg` (same "copy" dialog pattern, already fully built across all 8 phases) rather than the generic CRUD Page1/Page2 template ÔÇö the legacy SCX has no PageFrame, grid, or CRUD buttons at all, just a flat 800├ù157 modal dialog.
+
+Delivered in this phase:
+- `DEFINE CLASS FormSigOpCpr AS FormBase` with visual properties transcribed from the dump (800├ù157, BorderStyle=2, AutoCenter, TitleBar=0, Courier New)
+- `Init(par_oFormPai, par_cOperacao, par_lComissao)` ÔÇö mirrors the legacy `LParameters poForm, pOperacao, pComissao`, with the WindowType=0ÔåÆ1 promotion trick (avoids VFP9 `-T` harness timeout)
+- `InicializarForm()` ÔÇö creates `SigOpCprBO`, seeds it via the BO's own `ConfigurarModalidade()` (built in Fases 1-2) instead of poking properties directly, applies the background Picture, and sets the two header labels' captions
+- `ConfigurarPageFrame()` ÔÇö orchestrator stub (no real PageFrame exists; kept only for pipeline contract conformity)
+- `ConfigurarCabecalho()` ÔÇö the gray banner container + shadow/title labels, geometry transcribed from the SCX dump
+- `TornarControlesVisiveis()` and `Destroy()`
+
+Deferred to later phases (matching the sibling's phase breakdown): the `CommandGroup` (Copiar/Encerrar buttons) in Fase 4, and the two data fields + their Valid/When events in Fases 5-6 ÔÇö since GetOrigem/GetDestino width and MaxLength depend on the `pComis` flag, that logic belongs with the field configuration, not the structural skeleton.

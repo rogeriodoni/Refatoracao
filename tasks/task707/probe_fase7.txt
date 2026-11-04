@@ -1,0 +1,34 @@
+=== PROBE FASE 7 - FormSIGOPCOR ===
+FXP BO   : OK
+FXP Form : OK
+ERR BO   : nenhum
+ERR Form : nenhum
+VARTYPE form : O
+INSTANCIOU OK  Caption=[Carta de Correção]
+--- escopo dos handlers (atributo 2 = PROTECTED, deve ser .F.) ---
+BtnConfirmarClick existe=.T. protected=.F.
+BtnCancelarClick  existe=.T. protected=.F.
+BtnEncerrarClick  existe=.T. protected=.F.
+--- BINDEVENT registrado nos 2 botoes (AEVENTS) ---
+Buttons(1) evento=(Object) delegate=BTNCONFIRMARCLICK
+Buttons(2) evento=(Object) delegate=BTNCANCELARCLICK
+--- caminho REAL (gnConnHandle = -1) ---
+BtnConfirmarClick sem banco: form ainda vivo=.T.
+--- enumeracao da faixa (subclasse, sem banco) ---
+ContarRetificacoesDigitadas = 2  (esperado 2)
+A) 000123..000123 n=2  [000123/1][000123/3]
+B) 100..102       n=6  [100/1][101/1][102/1][100/3][101/3][102/3]
+C) 000100..000102 n=6  [000100/1][000101/1][000102/1][000100/3][000101/3][000102/3]
+D) 200..100 (inv) n=0  []  (esperado 0)
+E) A100..A102     n=0  []  (esperado 0)
+F) sem retificacao gravou=[] vivo=.T.
+G) faixa vazia    gravou=[] vivo=.T.
+H) sem validar    n=0  []  (esperado 0)
+I) BtnEncerrarClick executou sem erro
+--- dialogos capturados ---
+[30/10/2026 06:59:04] Salvar: Erro ao salvar: File 'mostrarerro.prg' does not exist.
+[30/10/2026 06:59:04] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 06:59:04] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 06:59:04] Atenção: Informe ao menos uma retificação antes de gravar.
+[30/10/2026 06:59:04] Atenção: Nota Fiscal Inválida !!
+[30/10/2026 06:59:04] Atenção: Nota Fiscal Inválida !!

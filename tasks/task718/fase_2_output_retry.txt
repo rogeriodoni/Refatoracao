@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 2 conclu├¡da. `C:\4c\projeto\app\classes\sigopdenBO.prg` (1371 linhas, 63 KB) compila limpo no VFP9, sem `.ERR`.
+
+## O que foi acrescentado
+
+| M├®todo | Papel |
+|---|---|
+| `MontarChaveEmpDopNums()` | Chave **posicional** `PADR(Emps,3) + PADR(Dopes,20) + STR(Numes,6)` = 29 = `SigMvCab.EmpDopNums char(29)` (regra #42 ÔÇö sem `ALLTRIM` nas partes) |
+| `ObterChavePrimaria()` | Remonta pelo **mesmo** montador quando a chave ainda n├úo foi resolvida, para as duas nunca divergirem no padding |
+| `CarregarPorCodigo()` | Quebra a chave `char(29)` nas partes 3+20+6 e delega a `CarregarDadosEntrega` |
+| `CarregarDoCursor()` | PUBLIC (como na `BusinessBase`, regra #51). Identifica o cursor pela **estrutura** via `TYPE(alias + ".campo")` e despacha; sem par├ómetro assume o cabe├ºalho |
+| `CarregarCabecalhoDoCursor()` | **91 de 91** colunas de `cursor_4c_Cabecalho` ÔåÆ propriedades |
+| `CarregarItemDoCursor()` | **12 de 12** colunas de `cursor_4c_Dados` ÔåÆ propriedades `this_*It*` |
+
+`CarregarDadosEntrega` passou a usar o montador (em vez da concatena├º├úo inline) e ganhou `loc_oErro` no `LOCAL` que faltava.
+
+## Verifica├º├Áes feitas
+
+- **Propriedades**: 134 usadas ├ù 132 declaradas ÔÇö as 3 restantes (`this_cTabela`, `this_cCampoChave`, `this_cMensagemErro`) s├úo da `BusinessBase`. Zero mismatch (regra #177).
+- **Colunas**: todo campo lido existe no `CREATE CURSOR` correspondente ÔÇö mapeamento 1:1, nenhuma coluna ├│rf├ú nem n├úo lida.
+- **`TratarNulo`**: 2┬║ argumento usado como **valor padr├úo** (`""` / `0` / `.F.`), nunca letra de tipo.
+- Datas por `ConverterParaData` (regra #16); `SELECT (alias)` antes de ler campos e work area anterior restaurada; nenhum `RETURN` dentro de `TRY`; `CATCH` sempre com mensagem + linha + procedure; sem literais acentuados; CRLF preservado (CR=LF=1371) e diff aditivo (319 linhas novas, 3 substitu├¡das).
+
+## Decis├úo de projeto: `Inserir`/`Atualizar` **n├úo** foram escritos
+
+Medido no dump do legado: nenhum `TABLEUPDATE`, nenhum `.AddCursor`, e os ├║nicos alvos de escrita (`crCabecalho`, `crDados`) s├úo cursores **locais** declarados no pr├│prio dump. O acesso remoto ├® 100% `Select` ÔÇö SIGOPDEN ├® um visualizador de dados de entrega. Escrever um `INSERT`/`UPDATE` aqui seria inventar a lista de colunas (proibido pela regra #22) e violar o PILAR 2; o comportamento herdado de `BusinessBase` j├í ├® o correto, e `RegistrarAuditoria()` n├úo tem grava├º├úo a auditar. Isso est├í documentado no cabe├ºalho do arquivo e corresponde exatamente ├á exce├º├úo *BO somente-leitura* que o gate da Fase 2 reconhece ÔÇö confirmei que as 4 provas passam, inclusive a de que o BO n├úo tem `SQLEXEC` de escrita.
+
+**N├úo testei em runtime**: o VFP9 nesta sess├úo compila e sai sem executar, e o SQL Server `192.168.200.10` ├® inalcan├º├ível desta m├íquina ÔÇö instanciar o BO sem conex├úo abre di├ílogo e travaria o processo headless. A valida├º├úo ficou em compila├º├úo + as checagens estruturais acima.

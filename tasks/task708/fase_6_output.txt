@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da.
+
+## O que esta tela tinha de Fase 6
+
+`SIGOPCOT` **n├úo tem Page2 e n├úo tem lookup nenhum** ÔÇö medido no dump: zero `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`mAddColuna`/`sigacess`. Inventar um lookup violaria o PILAR 1. O ├║nico campo que aceita digita├º├úo ├® a **c├®lula Cota├º├úo** da grade, e dela faltavam dois dos tr├¬s eventos do legado.
+
+## Arquivos modificados
+
+**`projeto/app/forms/operacionais/FormSigOpCot.prg`** (+138/ÔêÆ20)
+- `ValidarCotacao(par_oTxt)` ÔÇö **novo**, transcreve o `Valid` legado: `LastKey() = 13` ÔåÆ `KEYBOARD "{DNARROW}"` (ENTER desce uma linha). O `ldDatas` do SCX ├® atribu├¡do e nunca lido ÔÇö c├│digo morto, n├úo reproduzido. Sem TRY/CATCH de prop├│sito: `LASTKEY()`/`KEYBOARD` n├úo podem falhar, e um `MsgErro` (regra #9) ali seria um modal a cada troca de linha. `RETURN .T.` sempre ÔÇö `Valid` devolvendo `.F.` prenderia o foco na c├®lula.
+- `ValidarCotacaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö **novo**, transcreve o `KeyPress` legado: `nKeyCode = 9` ÔåÆ foco em `btnConfirmar` (`cmg_4c_Botoes.Buttons(1)`). Guard de tecla preservado (regra #47) e guard de Visible/Enabled antes do `SetFocus`, que estoura em controle desabilitado. Sem `NODEFAULT`, como o legado.
+- `GradeCotacaoWhen` ÔåÆ **`ValidarAcessoCotacao`**: `<X>KeyPress`/nome ad-hoc ├® a grafia que a regra #47 marca como suspeita; `Validar<Campo>`/`ValidarAcesso<Campo>` ├® o can├┤nico do projeto.
+
+**`projeto/app/classes/TextBoxGridLookup.prg`** (+44/ÔêÆ6) ÔÇö `TextBoxCotacaoGridCot_4c` ganhou `Valid` e `KeyPress`, delegando aos m├®todos PUBLIC hom├┤nimos. Os tr├¬s eventos moram na **subclasse e n├úo em BINDEVENT** porque a regra #46 ├® expl├¡cita de que `BINDEVENT` em `When`/`Valid` de TextBox de Column n├úo ├® confi├ível.
+
+## Provas (n├úo infer├¬ncias)
+
+Smoke test do VFP9 passou (`VIVO` gravado), ent├úo houve execu├º├úo real:
+
+| | resultado |
+|---|---|
+| `COMPILE` dos 3 arquivos | `.FXP` presente, `.ERR` **ausente** nos tr├¬s |
+| controle negativo | c├│pia com `PUBLIC PROCEDURE` gerou `.ERR` apontando **s├│** as 3 linhas acrescentadas (1419-1421) ÔÇö prova que as 1416 do form est├úo limpas |
+| `CREATEOBJECT("FormSigOpCot")` | devolveu objeto |
+| os 3 m├®todos | existem, `PEMSTATUS(...,2) = .F.` (PUBLIC, regra #51); `GradeCotacaoWhen` n├úo existe mais |
+| c├®lulas (regra #18) | `CurrentControl` preenchido nas duas, `Sparse = .F.`, `InputMask = 99999.9999999` |
+| `Moeda.When()` | `.F.` (literal do legado) |
+| `ValidarCotacao` | `LASTKEY()Ôëá13` ÔåÆ nada enfileirado; `LASTKEY()=13` ÔåÆ `CHRSAW() = .T.` |
+| `KeyPress(65,0)` / `(9,0)` | no-op / executa sem exce├º├úo |
+| di├ílogos suprimidos | **nenhum** |
+
+05d (regexes exatas do orquestrador): 0 marcadores, 0 procedures vazias, 0 pend├¬ncias. Zero acentos literais, zero `this_x.Value`, zero `RETURN` dentro de TRY. CRLF preservado (CR == LF; diff 138 linhas, n├úo arquivo reescrito).
+
+## Dois pontos para voc├¬ decidir
+
+1. **Mudei o escopo declarado da fase.** O cabe├ºalho do arquivo dizia que `Valid`/`KeyPress` da c├®lula eram Fase 8. Trouxe para c├í porque sem eles a tela exibe o campo edit├ível e a navega├º├úo do legado n├úo acontece ÔÇö o usu├írio digita a cota├º├úo e nem desce de linha nem alcan├ºa o Salvar pelo teclado. Atualizei o roteiro: **Fase 7** = os 3 `Click` (`btnConfirmar`, `btnSair`, `btnCotacao`), **Fase 8** = `FormParaBO`/`BOParaForm`.
+
+2. **O gate passa, mas o `temBindEvent` dele ├® um falso positivo.** Avaliei os flags: `temLayoutFlat = True`. S├│ que `temBindEvent` casa porque a palavra `BINDEVENT` aparece nos **coment├írios** que explicam por que ela *n├úo* ├® usada (regra #46). Este form n├úo tem ÔÇö e n├úo deve ter ÔÇö chamada de `BINDEVENT` alguma. N├úo fabriquei uma para satisfazer o regex; vale registrar que o gate aceitaria um form flat sem bind real desde que algum coment├írio mencione a palavra.

@@ -1,0 +1,22 @@
+PROBE INICIO
+config.prg carregado
+ConfigurarAmbiente OK - PATH=C:\4C\PROJETO\APP\START,C:\4C\PROJETO\APP\START\..\CLASSES\,C:\4C\PROJETO\APP\START\..\UTILS\,C:\4C\PROJETO\APP\START\..\FORMS\,C:\4C\PROJETO\APP\START\..\..\..\VBMP\
+GarantirClasse OK
+CREATEOBJECT -> VARTYPE=O
+Caption=[Cadastro de Demonstrativos] Width=1000 Height=600 ActivePage=1 Modo=LISTA
+Page1.ControlCount=4 Page2.ControlCount=2
+Page1 z-order: CNT_4C_CABECALHO | CNT_4C_BOTOES | CNT_4C_SAIDA | GRD_4C_LISTA
+Botoes CRUD: Incluir=.T. Visualizar=.T. Alterar=.T. Excluir=.T. Buscar=.T. Encerrar=.T.
+Incluir: Left=5 Top=5 W=75 H=75 Visible=.T. Caption=[Incluir] PictureOK=.T.
+Encerrar: Left=922 W=75 Caption=[Encerrar] PictureOK=.T.
+Page2: Confirmar=.T. Cancelar=.T. CancelarPictureOK=.T.
+Grade: Top=117 Left=26 W=880 H=498 ColumnCount=1 RecordSource=[cursor_4c_Dados] Visible=.T. ReadOnly=.T.
+Grade.Column1: ControlSource=[cursor_4c_Dados.nome] Width=150 Header=[Nome do Demonstrativo] ReadOnly=.T.
+cursor_4c_Dados USED=.T. RECCOUNT=0
+PROTECTED? CarregarLista=.F. AlternarPagina=.F. AjustarBotoesPorModo=.F. BtnCancelarClick=.F. BtnEncerrarClick=.F. BO.Buscar=.F.
+LISTA: Incluir.Enabled=.T. Buscar.Enabled=.T. Confirmar.Enabled=.F. Cancelar.Enabled=.T.
+APOS AlternarPagina(2) INCLUIR: ActivePage=2 Modo=INCLUIR Incluir.Enabled=.F. Confirmar.Enabled=.T.
+APOS BtnCancelarClick: ActivePage=1 Modo=LISTA Incluir.Enabled=.T. Buscar.Enabled=.T. Grade.RecordSource=[cursor_4c_Dados] Column1.Header=[Nome do Demonstrativo] Column1.Width=150
+CarregarLista() direto = .T. Column1.Width=150 Header=[Nome do Demonstrativo]
+Release OK
+PROBE FIM

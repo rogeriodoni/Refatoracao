@@ -1048,3 +1048,341 @@ DEFINE CLASS TextBoxCelulaFti_4c AS TextBox
         RETURN ""
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxMoedaGridCot_4c - celula "Moeda" (Column1) da grade de cotacoes do
+* FormSigOpCot (SIGOPCOT.Gradeget_cotacao.moeda.Text1).
+*
+* Legado: PROCEDURE When / Return .f. - a coluna Moeda eh sempre SOMENTE
+* LEITURA (Column.ReadOnly fica .F. no dump, o bloqueio eh so pelo When).
+* Constante literal, sem delegar ao form: nao ha calculo nem estado algum
+* envolvido, so o "nunca entra na celula" do legado.
+*
+* Instalada com Column.AddObject + CurrentControl + Sparse = .F. (regra #18) -
+* BINDEVENT em "When" de Column.Text1 nao eh confiavel (regra #46/CLAUDE.md).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxMoedaGridCot_4c AS TextBox
+    FontName    = "Verdana"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    Format      = "K"
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        RETURN .F.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCotacaoGridCot_4c - celula "Cotacao" (Column2) da grade de cotacoes
+* do FormSigOpCot (SIGOPCOT.Gradeget_cotacao.cotacao.Text1).
+*
+* Legado (When):
+*   ThisForm.AntValue = This.Value
+*   ThisForm.Parentform.poDataMgr.CursorQuery([SigCdUsu],...)
+*   ThisForm.Parentform.poDataMgr.CursorQuery([SigCdMoe],...)
+*   Return (Seek(crSigCdUsu.Ccargs,[crSigCdCrg],[Ccargs]) And
+*           (crSigCdCrg.AltCots=[S]) And crSigCdMoe.Cotas)
+*
+* Legado (KeyPress):
+*   Lparameters nKeyCode, nShiftAltCtrl
+*   If (nKeyCode = 9)
+*       ThisForm.cntBotoes.btnConfirmar.SetFocus
+*   EndIf
+*
+* Legado (Valid):
+*   Local ldDatas
+*   ldDatas = ThisForm.dDatas
+*   If (LastKey() = 13)
+*       Keyboard [{DnArrow}]
+*   EndIf
+*
+* O snapshot do valor anterior (AntValue) e os dois termos de permissao
+* (cargo + moeda cotavel) moram no BO (RegistrarCelulaCorrente /
+* PodeAlterarCotacao - SigOpCotBO.prg), que resolve os cursores de apoio
+* sob demanda em vez do CursorQuery do legado. Os tres eventos so DELEGAM,
+* cada um para o metodo PUBLIC homonimo do form.
+*
+* Esta eh a UNICA celula digitavel da tela, e por isso os TRES eventos do
+* legado (When / Valid / KeyPress) moram aqui - e nao em BINDEVENT: a regra
+* #46 do CLAUDE.md eh explicita de que BINDEVENT em "Valid"/"When" de
+* TextBox de Column NAO eh confiavel. Instalada com Column.AddObject +
+* CurrentControl + Sparse = .F. (regra #18).
+*
+* Nenhum dos tres usa NODEFAULT: o legado tambem nao usa, e suprimir o
+* tratamento nativo da tecla mudaria a navegacao da grade (PILAR 1).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCotacaoGridCot_4c AS TextBox
+    FontName    = "Verdana"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    Format      = "K"
+    InputMask   = "99999.9999999"
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    *-- When legado: guarda o valor anterior da celula e devolve a permissao
+    *-- (cargo com altcots = S E moeda cotavel). Devolvendo .F., o Grid nao
+    *-- deixa o foco entrar na celula - eh o bloqueio de edicao do legado
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "ValidarAcessoCotacao", 5)
+            RETURN THISFORM.ValidarAcessoCotacao(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *-- Valid legado: com ENTER, desce uma linha na grade ({DnArrow})
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCotacao", 5)
+            RETURN THISFORM.ValidarCotacao(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *-- KeyPress legado: com TAB (9), o foco vai para o botao Salvar
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF PEMSTATUS(THISFORM, "ValidarCotacaoKeyPress", 5)
+            THISFORM.ValidarCotacaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCaracteristicaDet_4c - celula "Caracteristica" (Column1) da grade
+* de detalhes do FormSigOpDet (SIGOPDET.Grade.Column1.Text1).
+*
+* Legado:
+*   When  -> InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+*   Valid -> com valor digitado, procura em LocalFtc (Distinct cCars,
+*            Desccars); se nao achar exato, abre fwbuscaint sobre o proprio
+*            universo (LocalCars); grava o resultado com Replace CCars
+*            With This.Value in crSigMvFtc
+*
+* No migrado o universo e um CURSOR local (cursor_4c_LocalFtc), nao uma
+* tabela do SQL Server - por isso o picker usa FormBuscaSimples (que exibe
+* um cursor JA carregado), nao FormBuscaAuxiliar. O corpo mora no form
+* (ValidarCaracteristicaDetExec), que recebe o proprio TextBox - regra #46:
+* BINDEVENT em Valid/When de Column.Text1 nao eh confiavel, por isso os
+* eventos ficam EMBUTIDOS na classe, instalada com Column.AddObject +
+* CurrentControl + Sparse = .F. (regra #18).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCaracteristicaDet_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 20
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GradeDetEditavel", 5)
+            RETURN THISFORM.GradeDetEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCaracteristicaDetExec", 5)
+            RETURN THISFORM.ValidarCaracteristicaDetExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxComplementoDet_4c - celula "Complemento" (Column2) da grade de
+* detalhes do FormSigOpDet (SIGOPDET.Grade.Column2.Text1).
+*
+* Legado:
+*   When      -> igual ao Column1 (INSERIR/ALTERAR)
+*   Valid     -> procura em LocalFtc filtrado pela Caracteristica da MESMA
+*                linha (Where CCars = lcCCars); nao achando exato, abre
+*                fwbuscaint sobre esse subconjunto (LocalTits); grava com
+*                Replace cTits With This.Value in crSigMvFtc e, se o valor
+*                nao ficou vazio, zera a coluna Resps da linha (Replace
+*                Resps With [] in crSigMvFtc)
+*   LostFocus -> garante linha em branco no fim da grade e desce o foco
+*                (mesmo comportamento do Column3 - THISFORM.
+*                GarantirLinhaVaziaGradeDet)
+*
+* O corpo mora no form (ValidarComplementoDetExec) - regra #46/#18, mesma
+* razao do TextBoxCaracteristicaDet_4c acima.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxComplementoDet_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 20
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GradeDetEditavel", 5)
+            RETURN THISFORM.GradeDetEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarComplementoDetExec", 5)
+            RETURN THISFORM.ValidarComplementoDetExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "GarantirLinhaVaziaGradeDet", 5)
+            THISFORM.GarantirLinhaVaziaGradeDet(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxOutrosDet_4c - celula "Outros" (Column3, coluna Resps - observacao
+* livre) da grade de detalhes do FormSigOpDet (SIGOPDET.Grade.Column3.Text1).
+*
+* Legado:
+*   When      -> Empty(crSigMvFtc.cTits) And InList(ThisForm.pcEscolha,
+*                'INSERIR','ALTERAR') - so editavel quando a linha NAO tem
+*                Complemento escolhido (texto livre eh alternativa ao
+*                catalogo de Complementos, nao soma com ele)
+*   LostFocus -> mesma garantia de linha em branco do Column2
+*
+* Sem Valid proprio no legado (texto livre, sem lookup) - o ControlSource
+* nativo do Grid ja grava o valor digitado na saida da celula.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxOutrosDet_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 20
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GradeDetOutrosEditavel", 5)
+            RETURN THISFORM.GradeDetOutrosEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "GarantirLinhaVaziaGradeDet", 5)
+            THISFORM.GarantirLinhaVaziaGradeDet(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaDmp_4c - celulas da grade de fases do FormSigOpDmp
+* (SIGOPDMP.Pagina.Dados.Grade.ColumnN.Text1 do SCX legado).
+*
+* BINDEVENT em "When"/"Valid" de Column.Text1 NAO dispara de forma confiavel
+* (regra #46) e AfterRowColChange entrega a coluna de DESTINO, nao a de
+* origem - o padrao certo eh TextBox subclasse com os eventos EMBUTIDOS,
+* instalada com AddObject + CurrentControl + Sparse = .F. (regra #18),
+* delegando a metodos PUBLIC do form.
+*
+* this_cCelula diz QUAL celula a instancia representa - uma classe so para as
+* cinco, como no TextBoxCelulaFti_4c:
+*   ORDEM  FASE  FUNCIONARIO  TPOP  ES
+*
+* O Valid passa THIS para o form: dentro dele o valor DIGITADO vive em
+* .Value e o cursor so recebe depois (regra #46) - ler do cursor validaria o
+* valor ANTIGO.
+*
+* Defaults visuais transcritos de Grade.ColumnN.Text1 do dump (Tahoma 8,
+* BorderStyle = 0, Margin = 0, ForeColor 0,0,0, BackColor 255,255,255).
+* Column3.Text1 declara BackStyle = 0 no dump: aplicado na INSTANCIA, nao
+* aqui, porque e' o unico dos cinco que o tem.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaDmp_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    this_cCelula = ""
+
+    *-- When: no legado as CINCO celulas tem o MESMO corpo
+    *--   Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+    *-- logo um unico metodo do form responde por todas.
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GradeFasesCelulaWhen", 5)
+            RETURN THISFORM.GradeFasesCelulaWhen()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        LOCAL loc_cM
+        loc_cM = THIS.MetodoValid()
+        IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+            RETURN EVALUATE("THISFORM." + loc_cM + "(THIS)")
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *-- F4/F5 e duplo clique: mesma porta do Valid nas celulas de lookup.
+    *-- Celula de validacao pura (ORDEM/ES) nao tem lookup e nada abre.
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cM
+        IF INLIST(par_nKeyCode, 115, 116)
+            loc_cM = THIS.MetodoLookup()
+            IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+                EVALUATE("THISFORM." + loc_cM + "(THIS)")
+                NODEFAULT
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        LOCAL loc_cM
+        loc_cM = THIS.MetodoLookup()
+        IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+            EVALUATE("THISFORM." + loc_cM + "(THIS)")
+        ENDIF
+    ENDPROC
+
+    PROCEDURE MetodoValid()
+        DO CASE
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "ORDEM"
+                RETURN "GradeFasesOrdemValid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "FASE"
+                RETURN "GradeFasesFaseValid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "FUNCIONARIO"
+                RETURN "GradeFasesFuncionarioValid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "TPOP"
+                RETURN "GradeFasesTpOpValid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "ES"
+                RETURN "GradeFasesEsValid"
+        ENDCASE
+        RETURN ""
+    ENDPROC
+
+    PROCEDURE MetodoLookup()
+        DO CASE
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "FASE"
+                RETURN "AbrirLookupFaseGrade"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "FUNCIONARIO"
+                RETURN "AbrirLookupFuncionarioGrade"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "TPOP"
+                RETURN "AbrirLookupTpOpGrade"
+        ENDCASE
+        RETURN ""
+    ENDPROC
+ENDDEFINE

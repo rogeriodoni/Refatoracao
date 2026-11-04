@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 of `Formsigopclg.prg` is complete. I created the form at `C:\4c\projeto\app\forms\operacionais\Formsigopclg.prg` with:
+
+- **DEFINE CLASS Formsigopclg AS FormBase** ÔÇö canonical OPERACIONAL dimensions (1000x600, scaled from the legado's 800x600, following the `FormSigOpCgr`/`Formsigopcgc` sibling convention for pesquisa/consulta dialogs).
+- **Init()** ÔåÆ `RETURN DODEFAULT()`.
+- **ValidarParametros()** ÔÇö connection guard with bypass for `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` (mirrors the legado's `poDataMgr.pnIdconn` check).
+- **InicializarForm()** ÔÇö instantiates `sigopclgBO`, builds the PageFrame/pages, makes controls visible, activates Page1.
+- **ConfigurarPageFrame()** ÔÇö 2 pages mirroring the legado's `PgDados`/`pgResultado`: Page1="Dados" (filtros), Page2="Resultado" (grade), both with `fundo_cad_1003.jpg`.
+- **ConfigurarPaginaLista()** (Page1) / **ConfigurarPaginaDados()** (Page2) ÔÇö faixa do cabe├ºalho on *both* pages (regra #11) plus the empty `cnt_4c_Botoes` (Page1) / `cnt_4c_BotoesAcao` (Page2) containers that Fase 4 will fill.
+- **TornarControlesVisiveis()** and **Destroy()**.
+
+Noted in comments for future phases: the legado's `cmdBotoes` on the Resultado page is captioned "Encerrar" but its real Click action goes back to the filter page ÔÇö so its Fase-4 handler must be named `BtnVoltarClick` (by the real action), not by the legend.
+
+Verified both ways, not just by reading code:
+- `COMPILE` of both the form and `sigopclgBO.prg` ÔåÆ clean, no `.err`.
+- Actual VFP9 instantiation (headless, `gb_4c_ModoTeste`) ÔåÆ form instantiates at 1000x600, both pages/cabe├ºalhos/containers exist at the right coordinates, and the BO attaches with `this_cTabela="SigOpLog"`/`this_cCampoChave="cidchaves"`.

@@ -1,0 +1,19 @@
+FASE7 task703 - inicio 29/10/2026 22:42:10
+0 setup OK
+1 INSTANCIA VARTYPE=O Caption=[Consulta do Log]
+2 INICIAL ActivePage=1 Page2.Enabled=.F. (esperado 1 / .F.)
+3 PEM BtnProcessarClick=.T. BtnEncerrarClick=.T. BtnVoltarClick=.T. GrdDadosAfterRowColChange=.T. | PROTECTED? FormParaBO=.T. BtnProcessarClick=.F.
+4 FormParaBO: UserRede=[REDE01] DtIni=[01/01/2026] (D) DtFin=[31/01/2026] (D) HrIni=[0830] HrFin=[1745] Prg=[SIGCDCOR] Oper=[Entrada] UserSis=[USUSIS01] Param=[PAR1] Trans=[TRANS-X]
+5 GUARD QtdeLog=0 -> ActivePage=1 Page2.Enabled=.F. (esperado 1 / .F. - o legado nao muda de pagina sem linha)
+6a DESVINCULADO RecordSource=[] ColumnCount=7 Col1.ControlSource=[] (esperado vazio / 7 / vazio)
+6b VINCULADO RecordSource=[cursor_4c_Log] ColumnCount=7 Col1.ControlSource=[cursor_4c_Log.UsuaRedes] Col1.Width=130 Col1.Header=[Usuario Rede] Col5.ControlSource=[cursor_4c_Log.cOpers] fwget1.ControlSource=[cursor_4c_Log.Transacaos]
+7a COM LINHA ActivePage=2 Page2.Enabled=.T. RECCOUNT=2 RECNO=1 (esperado 2 / .T. / 2 / 1)
+7b AfterRowColChange(1) linha 1 -> BO.this_cTransacaos=[TRANSACAO-LINHA-1] UsuaRedes=[REDE01] OperacaoDesc=[Entrada]
+7c AfterRowColChange(3) linha 2 -> BO.this_cTransacaos=[TRANSACAO-LINHA-2] UsuaRedes=[REDE02] OperacaoDesc=[Saida]
+8 BtnVoltarClick -> ActivePage=1 Page2.Enabled=.F. form vivo=.T. (esperado 1 / .F. / .T. - NAO fecha a tela)
+9 BtnProcessarClick (confirmacao RECUSADA em modo teste) ret=.F. ActivePage=1 RecordSource=[cursor_4c_Log] (esperado .F. / 1 / grade intacta)
+10 BtnEncerrarClick -> VARTYPE(form)=X (esperado O apos Release com referencia local, sem erro)
+DIALOGOS SUPRIMIDOS:
+[29/10/2026 10:42:10 PM] Confirmação!!!: Confirma o Processamento?
+
+FIM 29/10/2026 22:42:10

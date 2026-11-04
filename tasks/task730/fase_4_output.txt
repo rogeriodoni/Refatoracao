@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. Resumo do que foi implementado em `FormSigOpEnc.prg`:
+
+**Grid de saldos** (`grd_4c_Dados`), bindado ao cursor placeholder `cursor_4c_Saldos` (mesma estrutura que a carga SQL das pr├│ximas fases vai usar ÔÇö `SigMvSlc` + `SigCdCli`):
+- Colunas Conta/Descri├º├úo/Moeda/Saldo (somente leitura) + coluna de marca├º├úo (CheckBox `Check1` ligado a `marcas`, com `CurrentControl`/`Sparse`/`ReadOnly` corretos ÔÇö regra #18)
+- `DynamicBackColor` verde-claro para linha j├í processada (`Flag = 1`), espelhando o `SetAll` do `MontaTela()` legado
+
+**Bot├Áes reais do legado** (n├úo os gen├®ricos CRUD do template, j├í que este ├® um form OPERACIONAL flat, n├úo um cadastro Lista/Dados ÔÇö confirmado pelo pr├│prio c├│digo-fonte: `SelTudo`, `apaga`, `cmdProcessa`, `cmdGprocessa.cmdSair`):
+- `cmd_4c_SelTudo` / `cmd_4c_Apaga` ÔÇö marcam/desmarcam todas as linhas via `UPDATE (cursor) SET marcas = ...` (padr├úo j├í usado em `SIGREGDPBO`/`sigregnfBO`)
+- `cmd_4c_CmdProcessa` ÔÇö valida "nenhuma conta selecionada" (├║nico trecho totalmente autocontido nesta fase); a valida├º├úo dos campos de filtro e o SCAN de lan├ºamentos ficam para a fase que adicionar os campos do `Container1`
+- `cmd_4c_Encerrar` ÔÇö achatado do `CommandGroup` de 1 bot├úo do legado (sem efeito visual, `BackStyle=0`/`BorderStyle=0`) para `CommandButton` avulso, seguindo o padr├úo j├í usado em `FormDCC`
+
+Compilei o arquivo no VFP9 isoladamente ÔÇö **zero erros**. N├úo toquei no `SigOpEncBO.prg` (fora do escopo desta fase) e removi os artefatos de teste (`.fxp`, script de compila├º├úo).

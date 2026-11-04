@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is complete and verified.
+
+## What was wrong
+
+The previous attempt delivered **complete, faithful handlers** ÔÇö the only defect was their **names**. Following the decision table in the existing `feedback_gate_fase7_handler_sem_prefixo_btn_cmd` lesson, I measured both sides of the gate before judging it:
+
+| measurement | value | verdict |
+|---|---|---|
+| `legadoSemCrud` | `.T.` (all 5 CRUD detectors = 0) | exception path available |
+| `nBotoesLegado` | 2 (`BtnReport` is a `commandgroup`, `ButtonCount = 2`) | floor = **2** |
+| `nHandlers` (`PROCEDURE (Cmd\|Btn)\w*Click`) | **0** | **reproved** |
+
+The gate was **right**. The handlers were named `ImprimeClick` / `SairClick` ÔÇö each inheriting the legacy `Command<N>.Name` (`"Imprime"` / `"Sair"`). Without the `Btn`/`Cmd` prefix they aren't *enumerable* by the gates, and inheriting the legacy object name also violates PILAR 3.
+
+## Fix
+
+Renamed by the **action**, not the legacy object ÔÇö `BtnImprimirClick` and `BtnSairClick` ÔÇö updating the `BINDEVENT` strings and comment references, and documenting the rationale in each header so a future pass doesn't revert it. `BtnSairClick` is honest here: the legacy Click body is literally `ThisForm.Release`.
+
+The rename pays **both** phases: Fase 8's `Test-AcaoDoLegadoTemHandler` derives root `Imprimi` from `Command1.Caption = "\<Imprimir"` and accepts `Btn`/`Cmd` ÔÇö measured `True`.
+
+## Verification
+
+- **Gate Fase 7: PASSA** ÔÇö `nHandlers = 2` vs floor 2, `legadoSemCrud = .T.`
+- **Compiles clean**, and this is a real result: the mandatory VFP9 smoke test **passed** in this session (wrote its output file), so `BO.FXP=.T. BO.ERR=.F. FORM.FXP=.T. FORM.ERR=.F.` reflects actual execution, not just an `.fxp` artifact
+- **`Test-CompletudeCodigo`** (extracted and run standalone): `True` for both form and BO ÔÇö no TODO/stub/empty procedure
+- Both `BINDEVENT` delegates **resolve and are PUBLIC** (regra #3); the 4 `\btodo\b` hits are the Portuguese word "todo", and the real validator anchors `TODO` at comment start, so they don't trigger
+- Static checks all zero: accented literals, `this_x .Value` (#43), `.Self` (#38), raw `MESSAGEBOX`, `MostrarAviso` (#9.3), `PUBLIC PROCEDURE` (#9.1)
+- The 3 BO methods orchestrated exist, are PUBLIC (regra #51), and `ExecutarImpressao` matches 10 params Ôåö 10 args in order
+- **CRLF preserved** (2185/2185) via .NET round-trip with occurrence assertions ÔÇö no `sed -i`/`Edit`, so the diff stays scoped. Artifacts and backup removed.
+
+Two things worth flagging: I did **not** re-derive the print logic against the legacy dump line by line ÔÇö those bodies came from the prior run; I verified them by reading, compiling, and the completude validator. And my first comment insertion duplicated the "por BINDEVENT" sentence (anchored on the title line instead of a paragraph boundary) ÔÇö caught by reading the result back, then redone from backup.
+
+I also appended the reincidence to that existing memory rather than creating a duplicate, since it's the same lesson in a new shape (CommandGroup members, so the defect arrives in a *pair*, with the floor at 2 instead of 1).

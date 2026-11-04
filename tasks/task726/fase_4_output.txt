@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4/8 conclu├¡da ÔÇö FormSIGOPDVM.prg
+
+Esta ├® uma tela OPERACIONAL de layout **FLAT** (sem PageFrame, sem Page1/Page2, sem CRUD) ÔÇö o pr├│prio cabe├ºalho do arquivo (escrito na Fase 3) j├í documentava isso explicitamente e alertava que inventar PageFrame/bot├Áes CRUD violaria o PILAR 1. Segui esse escopo real em vez do template gen├®rico de "Grid e Bot├Áes CRUD (Page1)" que n├úo se aplica aqui.
+
+O que foi adicionado em `FormSIGOPDVM.prg`:
+
+- **`ConfigurarGrid()`** ÔÇö `grd_4c_Dados` (Grid1 do dump): 7 colunas com `ColumnOrder`, `Header1`/`Text1` transcritos literalmente (fontes, cores RGB(36,84,155) dos headers, `InputMask="999,999.99"` onde o dump declara ÔÇö Column6 "Diferen├ºa IT" fica sem InputMask, pois o dump s├│ tem um `Comment` ali, n├úo uma m├íscara real). **Sem** `RecordSource`/`ControlSource` ainda ÔÇö o cursor `cursor_4c_Dados` s├│ existe depois de `SIGOPDVMBO.GerarComparacao()`, que ├® Fase 8 (regra #41).
+- **`ConfigurarBotoes()`** ÔÇö `shp_4c_Shape1` decorativo (posi├º├Áes exatas do dump) e `cmd_4c_Encerrar` (Top/Left do dump; Width/Height=75├ù75 e `Themes=.T.+DisabledPicture` seguindo o padr├úo confirmado em outros dialogs standalone do projeto, j├í que o dump n├úo especifica tamanho).
+- Ambos chamados em `InicializarForm()` na mesma ordem de cria├º├úo do SCX legado (cabe├ºalho ÔåÆ Grid1 ÔåÆ Shape1 ÔåÆ CmdCat), e o header do arquivo foi atualizado para refletir o novo escopo entregue.
+
+Validei balanceamento de `WITH`/`ENDWITH` (27/27) e `PROCEDURE`/`ENDPROC` (11/11) ÔÇö sem VFP9 dispon├¡vel neste ambiente para compile-test real.
+
+Faltam: Fase 7 (ligar `cmd_4c_Encerrar` ao fechamento via BINDEVENT) e Fase 8 (`CarregarLista()` chamando `GerarComparacao()` e s├│ ent├úo religando `RecordSource`/`ControlSource` do grid).

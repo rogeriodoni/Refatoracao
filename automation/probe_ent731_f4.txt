@@ -1,0 +1,20 @@
+CK01 inicio
+CK02 config.prg ok
+CK03 dependencias carregadas
+CK04 CREATEOBJECT VARTYPE=O
+CK05 DataSessionId=2
+GRADE existe=.T.
+GRADE Top=99 Left=105 Width=173 Height=184
+GRADE ColumnCount=2 RecordSource=[cursor_4c_Dados] ReadOnly=.T. RecordMark=.F. DeleteMark=.F. Visible=.T.
+COL1 CS=[TTOD(cursor_4c_Dados.vencs)] W=70 Cap=[Histórico] Align=2 RO=.T.
+COL2 CS=[cursor_4c_Dados.usuars] W=70 Cap=[Usuário] Align=2 RO=.T.
+CONFIRMAR Top=3 Left=350 W=75 H=75 Cap=[\<Confirmar] Enabled=.T. Themes=.T. PicOk=.T.
+CANCELAR  Top=3 Left=425 W=75 H=75 Cap=[Cancelar] Cancel=.T. PicOk=.T.
+CANCELAR direita=500 / Form.Width=500
+CK06 antes de CarregarLista
+CK07 CarregarLista=.T.
+CURSOR [cursor_4c_Dados] USED=.T. RECCOUNT=0 FCOUNT=8
+CURSOR campos=[CIDCHAVES,EMPS,DOPCS,NOTITULOS,EMPDOPNCS,VENCS,DATAS,USUARS]
+CURSOR tipos=[TT] SAFETY=OFF
+BLOQUEADO Confirmar.Enabled=.F.
+CK99 FIM

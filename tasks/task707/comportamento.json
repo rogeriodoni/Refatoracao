@@ -1,0 +1,115 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 0,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCOR",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor XCorNf (cods n(3),descs c(30),retifs m NULL)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOR",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LParameters pForm,Emp,Serie,EmisDe,EmisAte\nPrivate pcEmps,pcSeries,pcNFisDe,pcNFisAte\n\nThisForm.poDataMgr = CreateObject('fSqlConector',.Name)\n\nThisForm.ParentForm = pForm\n\npcEmps    = ''\npcSeries  = ''\npcNFisDe  = Null\npcNFisAte = Null\n\nlcQryCorNf = [Select * From SigNfCor ]+;\n \t\t\t  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis between ?pcNFisDe And ?pcNFisAte ]+;\n\t\t   [Order By cemps,cseries,cnfis,noccors ]\nlcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]\n\nWith ThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOR.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOR.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCOR.Grade.Column3.Edit1",
+      "evento": "KeyPress",
+      "linhas": 17,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\nDo Case\n\tCase nKeyCode = 13 or nKeyCode = 24\n\t\tSelect XCorNf\n\t\tIf Not Eof()\n\t\t\tSkip\n\t\tEndIf\n\t\tThisForm.Grade.Refresh\n\tCase nKeyCode = 5 \n\t\tSelect XCorNf\n\t\tIf Not Bof()\n\t\t\tSkip -1\n\t\tEndIf\n\t\tThisForm.Grade.Refresh\n\tCase nKeyCode = 9\n\t\tKeyBoard \"{CTRL+TAB}\"\nEndCase",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCOR.Init",
+      "queryOriginal": "lcQryCorNf = [Select * From SigNfCor ]+; \t\t\t  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis between ?pcNFisDe And ?pcNFisAte ]+; \t\t   [Order By cemps,cseries,cnfis,noccors ]",
+      "tabelas": "SigNfCor",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCOR.Init",
+      "queryOriginal": "lcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigNfCor", "SigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

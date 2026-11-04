@@ -1,0 +1,1580 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpEnc.SCX
+* Data/Hora: 01/11/2026 01:40:37
+* Total de registros: 42
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPENC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPENC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPENC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPENC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Container1
+  Parent: SIGOPENC
+  Class: container
+  BaseClass: container
+
+Objeto: Shape1
+  Parent: SIGOPENC.Container1
+  Class: shape
+  BaseClass: shape
+
+Objeto: lbl_grupo
+  Parent: SIGOPENC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPENC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Get_DGrupo
+  Parent: SIGOPENC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Grupo
+  Parent: SIGOPENC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label4
+  Parent: SIGOPENC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Get_GrupoC
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_contaC
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DcontaC
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPENC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPENC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPENC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DgrupoC
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Conta
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Dconta
+  Parent: SIGOPENC.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dope
+  Parent: SIGOPENC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGOPENC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: shp_saldo
+  Parent: SIGOPENC
+  Class: shape
+  BaseClass: shape
+
+Objeto: grd_saldo
+  Parent: SIGOPENC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPENC.grd_saldo.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Ingrid1
+  Parent: SIGOPENC.grd_saldo.Column1
+  Class: ingrid
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPENC.grd_saldo.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Ingrid1
+  Parent: SIGOPENC.grd_saldo.Column2
+  Class: ingrid
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPENC.grd_saldo.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPENC.grd_saldo.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPENC.grd_saldo.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPENC.grd_saldo.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPENC.grd_saldo.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPENC.grd_saldo.Column5
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: cmdGprocessa
+  Parent: SIGOPENC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: lbl_saldo
+  Parent: SIGOPENC
+  Class: label
+  BaseClass: label
+
+Objeto: apaga
+  Parent: SIGOPENC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGOPENC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdProcessa
+  Parent: SIGOPENC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 186
+  Left = 7
+  Width = 663
+  Height = 294
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Encerramento de Contas"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  Themes = .F.
+  Name = "SIGOPENC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1
+------------------------------------------------------------
+  Top = 106
+  Left = 60
+  Width = 679
+  Height = 132
+  BackStyle = 0
+  TabIndex = 1
+  BorderColor = 90,90,90
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Shape1
+------------------------------------------------------------
+  Top = 72
+  Left = 509
+  Height = 57
+  Width = 166
+  BackStyle = 0
+  BorderColor = 90,90,90
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 83
+  Top = 7
+  Width = 38
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Filtro"
+  Height = 17
+  Left = 3
+  Top = 2
+  Width = 40
+  TabIndex = 10
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_DGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = ""
+  Height = 25
+  Left = 204
+  MaxLength = 20
+  TabIndex = 2
+  Top = 3
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "Get_DGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_Grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!"
+  Height = 25
+  Left = 123
+  MaxLength = 10
+  TabIndex = 1
+  Top = 3
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Contra-Partida"
+  Height = 18
+  Left = 2
+  Top = 53
+  Width = 110
+  TabIndex = 11
+  ForeColor = 255,0,0
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_GrupoC
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 123
+  TabIndex = 5
+  Top = 75
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 20
+  Name = "Get_GrupoC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_contaC
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 123
+  TabIndex = 7
+  Top = 99
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Name = "Get_contaC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_DcontaC
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 204
+  MaxLength = 50
+  TabIndex = 8
+  Top = 99
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 22
+  Name = "Get_DcontaC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 83
+  Top = 78
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Left = 83
+  Top = 32
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Left = 83
+  Top = 102
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_DgrupoC
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 204
+  TabIndex = 6
+  Top = 75
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 37
+  Name = "Get_DgrupoC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_Conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 123
+  TabIndex = 3
+  Top = 29
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.get_Dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 204
+  MaxLength = 50
+  TabIndex = 4
+  Top = 29
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 22
+  Name = "get_Dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Get_Dope
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 516
+  MaxLength = 20
+  TabIndex = 12
+  Top = 99
+  Width = 151
+  ForeColor = 0,0,0
+  BackColor = 255,255,215
+  Name = "Get_Dope"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.Container1.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Operação"
+  Height = 18
+  Left = 517
+  Top = 78
+  Width = 72
+  TabIndex = 16
+  ForeColor = 255,0,0
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.shp_saldo
+------------------------------------------------------------
+  Top = 262
+  Left = 81
+  Height = 254
+  Width = 613
+  BackStyle = 0
+  Curvature = 0
+  BorderColor = 90,90,90
+  Name = "shp_saldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Enabled = .T.
+  Height = 244
+  Left = 87
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 268
+  Width = 601
+  GridLineColor = 238,238,238
+  Name = "grd_saldo"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 320
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Alignment = 3
+  Column3.ColumnOrder = 4
+  Column3.ControlSource = ""
+  Column3.Enabled = .T.
+  Column3.Width = 40
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.InputMask = ""
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.ControlSource = ""
+  Column4.Enabled = .T.
+  Column4.Width = 94
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.DynamicForeColor = ""
+  Column4.InputMask = "999,999,999.99"
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 1
+  Column5.Enabled = .T.
+  Column5.Width = 21
+  Column5.ReadOnly = .F.
+  Column5.Sparse = .F.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta "
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column1.Ingrid1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 12
+  ReadOnly = .T.
+  Top = 20
+  cordertag = Contas
+  cseektag = Contas
+  Name = "Ingrid1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column2.Ingrid1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 15
+  ReadOnly = .T.
+  Top = 32
+  cordertag = Rclis
+  cseektag = Rclis
+  Name = "Ingrid1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moeda"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saldo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.grd_saldo.Column5.Check1
+------------------------------------------------------------
+  Top = 28
+  Left = 6
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.cmdGprocessa
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 720
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 2
+  BorderColor = 136,189,188
+  ZOrderSet = 4
+  Name = "cmdGprocessa"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.TabIndex = 2
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.lbl_saldo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Contas / Saldos "
+  Height = 15
+  Left = 90
+  Top = 248
+  Width = 96
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "lbl_saldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.apaga
+------------------------------------------------------------
+  Top = 519
+  Left = 132
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 4
+  ToolTipText = "Desmarca tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.SelTudo
+------------------------------------------------------------
+  Top = 519
+  Left = 90
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Seleciona tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPENC.cmdProcessa
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "cmdProcessa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPENC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE fazcontra
+------------------------------------------------------------
+PROCEDURE fazcontra
+Select CrSigMvCcr
+noper  = CrSigMvCcr.nopers
+voper  = CrSigMvCcr.vopers
+oper   = CrSigMvCcr.sopers
+grupo  = CrSigMvCcr.sgrupos
+conta  = CrSigMvCcr.scontas
+moed   = CrSigMvCcr.smoedas
+cot    = CrSigMvCcr.scotacaos
+valor  = CrSigMvCcr.svalors
+soper  = CrSigMvCcr.opers
+sgrupo = CrSigMvCcr.grupos
+sconta = CrSigMvCcr.contas
+smoed  = CrSigMvCcr.moedas
+scot   = CrSigMvCcr.cotacaos
+svalor = CrSigMvCcr.valors
+nlanc  = CrSigMvCcr.nlancs
+vlanc  = CrSigMvCcr.vlancs
+data   = CrSigMvCcr.datas
+dataa  = CrSigMvCcr.datalts
+valpag = CrSigMvCcr.valpags
+emp    = CrSigMvCcr.emps
+hist   = CrSigMvCcr.hists
+Hist2  = CrSigMvCcr.Hist2s
+dope   = CrSigMvCcr.dopes
+nume   = CrSigMvCcr.numes
+venc   = CrSigMvCcr.vencs
+valpag = CrSigMvCcr.valpags * scot / cot
+
+Insert Into CrSigMvCcr ( VOpers, NOpers, NLancs, VLancs, Opers, Grupos,;
+		Contas, Moedas, Cotacaos, Valors, Emps, Datas, usualts, datalts,;
+		sgrupos, scontas, smoedas, scotacaos, svalors, sopers, autos,;
+		hists, dopes, numes, valpags, vencs, Hist2s ) ;
+	Values ( vOper, nOper, nLanc, vLanc, Oper, Grupo, Conta, Moed, Cot,;
+		Valor, Emp, Data, Usuar, Dataa, sGrupo, sConta, sMoed, sCot,;
+		sValor, sOper, .t., hist, Dope, Nume, valpag, venc, Hist2 )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE iniciar
+------------------------------------------------------------
+PROCEDURE iniciar
+With ThisForm.Container1
+	.Get_GrupoC.Value = ' '
+	.Get_grupo.Value = ' '
+	.Get_DgrupoC.Value = ' '
+	.Get_DGrupo.Value = ' '
+	.Get_DcontaC.Value = ' '
+	.get_dconta.Value = ' '
+	.Get_contaC.Value = ' '
+	.Get_conta.Value = ' '
+EndWith
+ThisForm.MontaTela()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montatela
+------------------------------------------------------------
+PROCEDURE montatela
+If Used('CrSigMvSlc')
+	ThisForm.Grd_Saldo.RecordSource = ''
+	Use In CrSigMvSlc
+EndIf
+lcGrupo = ThisForm.Container1.Get_grupo.Value
+lcConta = ThisForm.Container1.Get_Conta.Value
+lcGrupo = Iif(Empty(lcGrupo),'ZYWZYWZYWZ',lcGrupo)
+
+lcQuery = [Select a.emps, a.grupos, a.contas, a.moedas, a.saldos, b.Rclis, b.Situas, 0 as Flag, 0 as Marcas ]+;
+		   [From SigMvSlc a, SigCdCli b ]+;
+		   [Where a.grupos = ']+lcgrupo+[' ]+;
+		   Iif(Not Empty(lcConta),[And a.Contas = ']+lcConta+[' ],[ ])+[ And a.Contas = b.Iclis ]+;
+		   [And a.Saldos <> 0 Order By a.Contas, a.Moedas ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvSlc') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvSlc)')
+	Return 0
+EndIf
+
+Select CrSigMvSlc
+Index On Rclis Tag Rclis
+Index On Contas Tag Contas
+If Reccount('CrSigMvSlc') > 0
+	ThisForm.CmdProcessa.Enabled = .t.
+Else
+	ThisForm.CmdProcessa.Enabled = .f.
+Endif
+Go Top
+
+With ThisForm.Grd_Saldo
+	.RecordSource = 'CrSigMvSlc'
+	.Column5.ControlSource = 'CrSigMvSlc.Marcas'
+	.Column1.ControlSource = 'CrSigMvSlc.contas'
+	.Column2.ControlSource = 'CrSigMvSlc.rclis'
+	.Column3.ControlSource = 'CrSigMvSlc.moedas'
+	.Column4.ControlSource = 'CrSigMvSlc.saldos'
+	.SetAll('DynamicBackColor','Iif(CrSigMvSlc.Flag = 1, RGB(220,255,220), RGB(255,255,255) )','Column') && Verde Claro
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigMvCcr', 'cIdChaves', 'crSigMvCcr', '', '')
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '')
+		EndWith
+
+		Select crSigMvCcr
+		Index On Grupos + Contas + Moedas Tag GruConMoe
+
+		Select crSigMvCab
+		Index On Emps + Dopes + Str(Numes,6) Tag EmpDopNum
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac')
+		ThisForm.SigKey = CrSigCdPac.SigKeys
+		
+		ThisForm.Container1.Get_Dope.Value = CrSigCdPac.DopZers
+		
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_DGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.Container1.Get_Grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value )
+	If Not fAcessoContab( Usuar, 'D', This.Value, This.Parent.Get_Grupo, This.Parent.Get_DGrupo )
+		MessageBox( "Acesso Negado!", 48, "ATENÇÃO!!!" )
+		Return .f.
+	EndIf
+	ThisForm.MontaTela()
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value )
+	If Not fAcessoContab( Usuar, 'C', This.Value, This.Parent.Get_Grupo, This.Parent.Get_DGrupo )
+		MessageBox( "Acesso Negado!", 48, "ATENÇÃO!!!" )
+		Return .f.
+	EndIf
+Endif
+lcGrupo = This.Value
+ThisForm.MontaTela()
+Thisform.Grd_saldo.Refresh
+This.Parent.Get_Grupo.Refresh
+This.Parent.Get_DGrupo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_GrupoC
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value)
+	=fAcessoContab(Usuar,'C',this.value,This,this.parent.GET_DGRUPOc,Thisform.Container1.Get_Contac.Value,ThisForm.Podatamgr)
+Else
+	this.parent.GET_DGRUPOC.value = ''
+	this.parent.GET_DGRUPOC.refresh
+EndIf
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_contaC
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = Thisform.Container1.Get_Grupoc.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_dcontac)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		this.parent.get_dcontac.Value = ''
+		this.parent.get_dcontac.Refresh
+		return 0 
+	Endif
+Else
+	this.parent.get_dcontac.Value = ''
+	this.parent.get_dcontac.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_DcontaC
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty( This.Parent.Get_ContaC.Value ) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = Thisform.Container1.Get_Grupoc.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,this.parent.get_contac,this)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		this.parent.get_contac.Value = ''
+		this.parent.get_contac.Refresh
+		return 0 
+	Endif
+Else
+	this.parent.get_contac.Value = ''
+	this.parent.get_contac.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_DgrupoC
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( IsEmpty( This.Parent.Get_GrupoC.Value ) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	=fAcessoContab(Usuar,'D',this.value,This.Parent.Get_grupoC,this,Thisform.Container1.get_contaC.value,ThisForm.Podatamgr)
+Else
+	This.Parent.Get_grupo.value = ''
+	This.Parent.Get_grupo.refresh
+EndIf
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Not IsEmpty(ThisForm.Container1.Get_Grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = ThisForm.Container1.Get_Grupo.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_dconta)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		This.parent.get_dconta.Value = ''
+		This.parent.get_dconta.Refresh
+		Return 0 
+	Endif
+Else
+	This.parent.get_dconta.Value = ''
+	This.parent.get_dconta.Refresh
+EndIf
+ThisForm.MontaTela()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.get_Dconta
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty( This.Parent.Get_Conta.Value ) And Not IsEmpty(ThisForm.Container1.Get_Grupo.Value) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = Thisform.Container1.Get_Grupo.value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,this.parent.get_conta,this)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		this.parent.get_conta.Value = ''
+		this.parent.get_conta.Refresh
+		return 0 
+	Endif
+Else
+	this.parent.get_conta.Value = ''
+	this.parent.get_conta.Refresh
+EndIf
+
+ThisForm.MontaTela()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.Container1.Get_Dope
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.grd_saldo.Column5.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+DoDefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.cmdGprocessa
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdSair.Click
+------------------------------------------------------------
+PROCEDURE cmdSair.Click
+With ThisForm
+	.LockScreen = .T.
+	.Release
+	.Refresh
+	.LockScreen = .F.
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update CrSigMvSlc Set Marcas = 0
+ThisForm.grd_saldo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update CrSigMvSlc Set Marcas = 1
+ThisForm.grd_saldo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPENC.cmdProcessa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+With ThisForm.Container1
+	If Empty(.Get_grupo.Value)
+		MessageBox('Obrigatorio Informar o Grupo de Filtro!!!',48,'')
+		Return 0
+	EndIf
+	If Empty(.Get_Grupoc.Value)
+		MessageBox('Grupo de Contra-Partida não Informado!!!',48,'')
+		Return 0
+	EndIf
+	If Empty(.Get_ContaC.Value)
+		MessageBox('Conta de Contra-Partida não informada!!!',48,'')
+		Return 0
+	EndIf
+	If Empty(.Get_Dope.Value)
+		MessageBox('Operação de Mov.Estoque não cadastrada nos Parametros do Sistema!!!',48,'')
+		Return 0
+	EndIf
+	lcGrupo  = .Get_Grupo.Value
+	lcGrupoC = .Get_Grupoc.Value
+	lcContaC = .Get_ContaC.Value
+EndWith
+
+Select CrSigMvSlc
+Count to x For Marcas = 1
+If x = 0
+	MessageBox('Nenhuma Conta Selecionada!!!!',16,'')
+	Return 0
+Endif
+
+lcDope = ThisForm.Container1.Get_Dope.Value
+
+Select crSigMvCcr
+ZAP
+
+Select crSigMvCab
+Zap
+
+Select CrSigMvSlc
+
+Scan
+	If Marcas = 0
+		Loop
+	Endif
+
+	Replace Flag With 1 in CrSigMvSlc
+	ThisForm.Grd_saldo.Refresh
+
+	If !Seek(_Empr + lcDope,'CrSigMvCab','EmpDopNum')
+		_Inicio = fGerUniqueKey(alltrim(lcDope)+_Empr)
+		_IniLet = alltrim( fGerMascara( _Inicio ) )
+		Insert Into CrSigMvCab ( Emps, Dopes, Numes, Usuars, Datars, Datas, MascNum, EmpDopNums, CidChaves, DtAlts ) ;
+						Values ( _Empr, lcDope, _Inicio, Usuar, Datetime(), Date(),  ;
+							_IniLet, _Empr+lcDope+Str(_inicio,6), fUniqueIds(), DATETIME() )
+	EndIf
+
+	_Hist  = 'Encerramento de conta - Grupo:'+Alltrim(lcGrupo)
+	_hist2 = 'com Contra-Partida:'+Alltrim(lcGrupoc)+'-'+Alltrim(lcContaC)
+	
+	xOper  = Iif(CrSigMvSlc.Saldos > 0,[C],[D])
+	xsOper = Iif(xOper=[C],[D],[C])
+	lnValor= Abs(CrSigMvSlc.Saldos)
+	
+	_noper = fGerUniqueKey( 'SigMvCcr' )
+	_voper = CrSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+
+	lnCota = fBuscarCotacao(CrSigMvSlc.Moedas,Date(), ThisForm.Podatamgr )
+
+	Select CrSigMvCcr
+	Append Blank
+	Replace NOpers    With _noper,;
+			VOpers    With _voper,;
+			Emps      With _Empr,;
+			Datas     With Datetime(),;
+			usualts   With usuar,;
+			datalts   With Datetime(),;
+			Vencs     With Datetime(),;
+			hists     With _hist,;
+			opers     With xOper,;
+			sopers    With xsOper,;
+			moedas    With CrSigMvSlc.Moedas,;
+			cotacaos  With lnCota,;
+			autos     With .t.,;
+			grupos    With CrSigMvSlc.Grupos,;
+			contas    With CrSigMvSlc.Contas,;
+			sgrupos   With lcGrupoc,;
+			scontas   With lcContac,;
+			smoedas   With CrSigMvSlc.Moedas,;
+			scotacaos With lnCota,;
+			dopes     With CrSigMvCab.Dopes,;
+			numes     With CrSigMvCab.Numes,;
+			Hist2s    With _Hist2,;
+			valors    With lnValor,;
+			svalors   With lnValor
+
+	ThisForm.FazContra()
+
+EndScan
+
+Select CrSigMvCcr
+Scan
+	Replace CidChaves  With Dtos(crSigMvCcr.Datas)+Transform(fGerUniqueKey(Dtos(crSigMvCcr.datas)),"@L 999999") + ThisForm.Sigkey ,;
+			gruconmoes with crSigMvCcr.grupos + crSigMvCcr.contas + crSigMvCcr.moedas,;
+			EmpDopNums With crSigMvCcr.Emps + crSigMvCcr.Dopes + Str(crSigMvCcr.Numes,6)
+
+	=fRecalculaS( CrSigMvCcr.Grupos,  CrSigMvCcr.Contas,  CrSigMvCcr.Datas, CrSigMvCcr.Moedas,  ThisForm.poDataMgr)
+
+EndScan
+
+llTaOk = .t.
+If Not ThisForm.poDataMgr.Update('crSigMvCcr')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvCcr)')
+	llTaOk = .f.
+EndIf
+
+If llTaOk
+	If Not ThisForm.poDataMgr.Update('crSigMvCab')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvCab)')
+		llTaOk = .f.
+	EndIf
+EndIf
+If llTaOk And Not fRecalculaS( .t., ThisForm.poDataMgr)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpClS)')
+	llTaOk = .f.
+Endif
+
+If llTaOk
+	Thisform.Podatamgr.Commit()
+Else
+	ThisForm.poDataMgr.RollBack()
+	=MessageBox('Ocorreu Um Erro Com o Processamento!!! Favor Reinicializar o Processo!!!', 16, 'Processamento Cancelado')
+EndIf
+
+ThisForm.Iniciar()
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPENC
+RESERVED3 (ClassInfo): podatamgr
+sigkey
+*fazcontra 
+*iniciar 
+*montatela 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

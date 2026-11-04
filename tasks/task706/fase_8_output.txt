@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is done. Summary:
+
+## Form completado ÔÇö `projeto/app/forms/operacionais/FormSigOpCop.prg` (1352 ÔåÆ 1677 linhas)
+
+Quatro m├®todos novos, todos sobre os **dois** campos que a tela tem:
+
+| M├®todo | O que faz |
+|---|---|
+| `FormParaBO()` | `PROTECTED FUNCTION` ÔÇö ├® o `lcOpeOri/lcOpeDes = ...Value` do `CmdCopia.Click` legado, que estava inline. Devolve l├│gico, e `BtnCopiarClick` **aborta** se recusar (transfer├¬ncia que falha e segue grava registro parcial em sil├¬ncio) |
+| `BOParaForm()` | Fonte **├║nica** do valor exibido na origem ÔÇö antes `ConfigurarCampos` lia a property por conta pr├│pria |
+| `LimparCampos()` | Origem volta ao valor do chamador, destino em branco (zerar os dois perderia o contexto da c├│pia ÔÇö o `Init` n├úo roda de novo) |
+| `HabilitarCampos()` | A ├║nica regra de editabilidade num lugar s├│ + trava durante a transa├º├úo das 15 tabelas |
+
+`BtnCopiarClick` trava antes do `Salvar()` e **destrava depois do `ENDTRY`**, junto com a libera├º├úo da guarda ÔÇö sen├úo uma exce├º├úo deixaria a tela travada para sempre (regra #40).
+
+**Verificado, n├úo presumido:** compila limpo no VFP9 (sem `.err`, `.fxp` gerado); harness `TestFormWrapper` ÔåÆ `Status: SUCESSO`; probe mediu o estado real dos campos nos **dois** caminhos ÔÇö com chamador (`Origem=[VENDA BALCAO]`, `ReadOnly=.T.`, `TabStop=.F.`; destino edit├ível) e sem chamador (origem digit├ível, regra #50) ÔÇö e provou que os guards destravam a tela e soltam as tr├¬s flags de reentr├óncia. Auditores de propriedade inexistente, m├®todo protegido e fun├º├úo ├│rf├ú: limpos. Validador de completude: sem TODO/stub.
+
+## Gate da Fase 8 ÔÇö 14┬║ ramo estrutural
+
+O gate cobrava `BtnCancelarClick` de um legado que tem **dois** bot├Áes ("Copiar" e "Encerrar", cujo `Click` inteiro ├® `Release Windows`), sem PageFrame, sem modo de edi├º├úo. Medi: **nenhum** dos 13 ramos existentes alcan├ºa essa forma ÔÇö ela ├® filha do chamador *e* persiste (15 tabelas), o que a separa do ramo `retorno-ao-pai`.
+
+Adicionei o ramo **COPIADOR-FILHO** + helper `Test-LegadoCopiadorFilho` (inser├º├úo pura: 239 linhas, **zero** remo├º├Áes). Sweep de largura nos **705** dumps de `tasks\`: 3 passam o helper, 2 o predicado inteiro, e `FormSigOpChp` j├í tem os quatro nomes (a dispensa ├® guardada por `$metodosFaltantes.Count -gt 0`) ÔåÆ **1 form afetado, zero regress├úo**. Os verificadores das tasks 655/698/702 seguem PASSA. `BtnCancelarClick` n├úo aparece por extenso no `.prg` ÔÇö sen├úo o gate casaria substring e o ramo viraria no-op.
+
+Veredito: `faltantes = []` ÔåÆ **PASSA**.
+
+## Fora de escopo ÔÇö um item que deixei de fora de prop├│sito
+
+**A tela n├úo est├í acess├¡vel pela UI.** O chamador no legado ├® o Cadastro de Opera├º├Áes (`tasks/task483/SIGCDOPE`):
+
+```foxpro
+Do Form SigOpCop With ThisForm, CrSigCdOpe.Dopes
+```
+
+que ├® exatamente o contrato `Init(par_oFormPai, par_cOperacao)` implementado ÔÇö mas `projeto/app/forms/cadastros/FormOPE.prg` ainda n├úo tem esse call site. N├úo mexi nele (deliverable de outra task) e **n├úo** adicionei item em `menu.prg`: o legado n├úo tem entrada de menu para SIGOPCOP, e nenhum dos 5 di├ílogos-filhos irm├úos (`FormSigOpCcl`, `FormSIGOPCCO`, `FormSigOpCcj`, `FormSigOpCim`, `FormSigOpChp`) est├í no menu ÔÇö inventar essa navega├º├úo violaria o PILAR 1. Se voc├¬ preferir a entrada de menu (o form j├í suporta esse caminho, com a origem digit├ível), ou que eu ligue o call site no `FormOPE`, ├® s├│ dizer.
+
+Nota: o `exit=124` dos runs ├® o `vfp9 -T` n├úo encerrando o processo nesta m├íquina ÔÇö os logs saem completos; o mesmo acontece com o harness do projeto.
+
+Registrei a li├º├úo em `feedback_gate_fase8_copiador_filho_que_persiste.md` e indexei no `MEMORY.md`.

@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8/8 complete. `FormSigOpDoc.prg` is final at 1417 lines; the gate passes.
+
+## What Phase 8 added
+
+| Method | Scope | Role |
+|---|---|---|
+| `FormParaBO()` | `PROTECTED` | Current row screen ÔåÆ BO. Flushes the typed Observa├º├úo into the cursor (the legacy's `poDataMgr.Update` pushing the buffer); key/file/audit fields read from the **cursor**, not the controls, so `this_dDatas` stays DATETIME (rule #16) |
+| `BOParaForm()` | `PROTECTED` | BO ÔåÆ detail panel. Normalizes NULL `ObsArqs`, repaints the preview, refreshes the three `ControlSource`-bound controls |
+| `HabilitarCampos()` | PUBLIC | Single decision point for the editable surface (legacy `getObsArqs.When`). No-arg form derives the mode from `this_cEscolha` |
+| `LimparCampos()` | `PROTECTED` | Clears the panel when there's no current row |
+| `BtnCancelarClick()` | PUBLIC | The legacy `btnSair` (`Cancel=.T.`); `BtnSairClick` kept as the legacy-named alias, `BINDEVENT` repointed |
+
+`SalvarDados` now routes through `FormParaBO` first, and restores the `RECNO` and the BO after the `SCAN`. `GradeAfterRowColChange` became cursor ÔåÆ BO ÔåÆ controls.
+
+## Two silent parity defects found and fixed
+
+1. **`cursor_4c_Dados` arrived read-only.** The Observa├º├úo EditBox is `ControlSource`-bound to a pass-through `SQLEXEC` cursor ÔÇö it would not accept a keystroke and `SalvarDados` would never have anything to write, with no error on screen. The legacy binds `crSigOpArq` via `.AddCursor` (buffered, writable ÔÇö proven by its own `Init` doing `Update crSigOpArq Set ObsArqs = ÔÇª`). Fixed in `SigOpDocBO.Buscar`: `SQLEXEC` ÔåÆ temp alias ÔåÆ `SELECT * ÔÇª INTO CURSOR ÔÇª READWRITE`.
+2. **The legacy's `Set ObsArqs = Nvl(ObsArqs, [])` was never migrated** ÔÇö a NULL `TEXT` column reaches the EditBox as `.NULL.` and that's what the user reads.
+
+Both are in the BO, slightly outside the stated deliverable, but without #1 the Phase 8 hooks are dead code.
+
+## Verification
+
+VFP9 smoke test passed, so these are measured, not inferred:
+
+- **Compile**: form + BO ÔåÆ `.FXP` present, no `.ERR`. Negative control (a copy with `PUBLIC PROCEDURE` appended) produced an `.ERR` pointing *only* at the 3 added lines ÔÇö proving the detector fires and the real 1407 lines are clean.
+- **Runtime probe** (`automation/Probe723F8.prg`, 10 checks, all matching expectations): form instantiates 1000├ù640; `ISREADONLY("cursor_4c_Dados") = .F.`; cursorÔåÆBO load correct; NULL `ObsArqs` normalized; `FormParaBO` round-trip puts typed text in both cursor and BO with `VARTYPE = T`; `HabilitarCampos` toggles both ways; EOF path safe.
+- **`READWRITE` conversion proven in isolation** with a negative control (unconverted source genuinely fails with error 111) ÔÇö SQL Server 192.168.200.10 is unreachable from this machine, so the probe exercised the no-connection branch; the `SQLEXEC` branch's conversion is proven by pattern, not end-to-end.
+- Gate `case 8` standalone: **PASSA**. Completude, `ValidadorSQLSchema`, undefined-function and protected-method audits: all clean.
+
+Two corrections the probe forced, worth noting:
+
+- I initially guarded with `CURSORGETPROP("ReadOnly", ÔÇª)`, which **does not exist** ÔÇö measured error 1470. `ISREADONLY()` is the right function.
+- `FormParaBO`/`BOParaForm`/`LimparCampos` are `PROTECTED` in `FormBase` and VFP9 won't let a subclass widen scope, so they're now declared `PROTECTED` explicitly and exercised via a probe subclass. Nothing external calls them.
+
+I did **not** add a `menu.prg` entry despite the prompt's boilerplate: this is a child dialog (`DO FORM SigOpDoc WITH pKey, pEsc`), its `Init` rejects empty parameters, so a menu item would only ever show "Par├ómetros inv├ílidos". `FormSigOpDoc` is registered in `indice_classes.txt` instead, so `GarantirClasse` resolves it when a parent form opens it. `FormSigOpZom` (the zoom dialog) is still unmigrated ÔÇö the call is guarded and warns the user rather than crashing.

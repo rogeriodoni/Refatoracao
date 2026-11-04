@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpEtqBO.prg` (576 linhas, CRLF, ASCII puro com acentos via `CHR()`).
+
+## O que entrou
+
+| M├®todo | Origem no legado |
+|---|---|
+| `GarantirCursorRelatorio()` | fonte **├║nica** do `CREATE CURSOR` do alias da grade (`CBars N(14,0)` / `Datas T` / `DPros C(65)` / `pLocals C(10)`, `SET NULL ON`, `INDEX ON CBars TAG CBars`) |
+| `CarregarDoCursor(par_cCursor)` | publica a linha corrente nas 4 properties |
+| `PosicionarPrimeiro()` | `Select csRelatorio / Go Top` do `SIGOPETQ.Init` |
+| `BuscarPorBarra(par_uBarra)` | `GetBusca.Valid` ÔÇö `Recno()` ÔåÆ `Seek(...)` ÔåÆ `Go lnReg` |
+| `ContarRegistros()` | guarda dos bot├Áes Etiquetas/Imprimir (`Select csRelatorio` + `Do Form`) |
+| `LimparDados()` / `ObterChavePrimaria()` / `Destroy()` | reset, identidade (`cbars`, PK de `SigOpEtq`), fecho condicional do cursor |
+
+`Inserir()`, `Atualizar()`, `ExecutarExclusao()` e `RegistrarAuditoria()` ficaram **sem override** e a decis├úo est├í documentada no cabe├ºalho: `comportamento.json` traz `sqlQueries: []` / `totalQueries: 0` e o dump n├úo tem um ├║nico `SQLEXEC`/`AddCursor`/`TABLEUPDATE` ÔÇö inventar INSERT/UPDATE aqui violaria a regra #22. `ObterChavePrimaria()` saiu `PROTECTED`, igual ├á base (regra #51).
+
+## Decis├Áes que valem para as fases 3-8
+
+- **`DataSession` do form tem de ficar em 1** (o default). O cursor ├® do form PAI; `DataSession = 2` criaria sess├úo privada e a grade abriria vazia.
+- **`this_lCursorProprio`** registra a origem do cursor: o `Destroy()` fecha apenas o que este BO criou ÔÇö fechar o alias do pai quebraria a tela de tr├ís. Fecho com `USE IN` puro, sem `TABLEREVERT` (regra #52).
+- **Nenhum `fChecaAcesso()` no BO** ÔÇö a vers├úo de `sigacess.PRG` vence a de `functions.prg`, abre conex├úo pr├│pria e pendura dentro do `CREATEOBJECT`. A visibilidade de `cmdEtiquetas`/`cmdImprimir` fica para o form.
+- `GarantirCursorRelatorio()` ├® o ├║nico ponto autorizado a declarar a estrutura do alias ÔÇö o `Grade.Refresh` fica na UI (grade em p├ígina oculta n├úo pinta).
+
+## Verifica├º├úo
+
+Rodei as checagens estruturais: `TRY`/`ENDTRY` 5/5, `IF`/`ENDIF` 21/21, `PROCEDURE`/`ENDPROC` 9/9, `DO CASE`/`ENDCASE` 1/1; zero `RETURN` dentro de `TRY`; zero literal acentuado, `ISEMPTY`, `MESSAGEBOX`, `MostrarAviso`, `.Self` ou `TTOD(`; nenhum m├®todo vazio; todas as `THIS.this_*` usadas s├úo declaradas aqui ou herdadas de `BusinessBase`; e os 4 regex do `Test-CompletudeCodigo` n├úo casam nada.
+
+`vfp9.exe -T` sobre o arquivo gerou o `.FXP` **sem `.ERR`** ÔÇö ou seja, **compila limpo**. Duas ressalvas honestas: o processo pendurou depois disso e eu o matei (da├¡ o "exit code 1" do evento de background ÔÇö n├úo ├® falha de compila├º├úo), e, nesta sess├úo, o VFP n├úo executa o corpo do `.prg`, ent├úo **n├úo houve probe de runtime** ÔÇö o comportamento de `SEEK`/`GO`/`CREATE CURSOR` est├í apoiado em padr├Áes j├í estabelecidos no projeto (80 sites de `CREATE CURSOR (var)`, `SEEK` de 3 args, `SET ORDER TO TAG (var)`), n├úo em medi├º├úo. Removi o `.fxp` ao final.
+
+Uma observa├º├úo para quando o pai for migrado: `sigmvcabBO.prg` existe, mas **n├úo produz** `cursor_4c_Relatorio` ÔÇö nenhum arquivo do projeto produz hoje. Por isso o `GarantirCursorRelatorio()` cria o cursor vazio; quando o `SIGMVCAB` entregar o alias, ele passa a ser respeitado como est├í, sem recria├º├úo.

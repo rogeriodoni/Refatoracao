@@ -1,0 +1,24 @@
+=== SET FILTER TO <THIS.prop> x troca de contexto ===
+
+--- 1) THIS.prop, GO TOP de DENTRO do dono ---
+   OK - RECNO=3 Tipos=[TIPO B] visiveis=3 (esperado 3)
+   FILTER() = [TIPOS==This.THIS_CTIPOSELECIONADO]
+
+--- 2) mesmo filtro, GO TOP de dentro de OUTRO objeto ---
+   ERRO: Property THIS_CTIPOSELECIONADO is not found.
+
+--- 3) mesmo filtro, GO TOP do programa principal ---
+   OK - RECNO=1 Tipos=[TIPO A]
+   FILTER() = []
+
+--- 4) filtro com valor LITERAL (macro) ---
+   OK - RECNO=3 Tipos=[TIPO B] visiveis=3 (esperado 3)
+   FILTER() = [TIPOS=="TIPO B              "]
+
+   ... e agora andando de OUTRO objeto:
+   OK - RECNO=3 Tipos=[TIPO B]
+
+   ... e do programa principal:
+   OK - RECNO=3 Tipos=[TIPO B]
+   linhas visiveis = 3 (esperado 3)
+   FILTER() = [TIPOS=="TIPO B              "]

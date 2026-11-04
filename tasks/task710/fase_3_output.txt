@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 is done: `FormSigOpCpo.prg` now exists in `projeto/app/forms/operacionais/`, compiled cleanly in VFP9 alongside the already-existing `SigOpCpoBO.prg`.
+
+Summary of what was built, following the OPERACIONAL-form override (flat dialog, no Page1/Page2) and the sibling precedent `FormSIGOPCCO.prg`/`FormDCC.prg`:
+
+- `DEFINE CLASS FormSigOpCpo AS FormBase` with the legado's exact visual props (1000x600, `WindowType`/`ShowWindow` toggled to modal only outside test mode to avoid the known VFP9 `-T` timeout), `this_oFormPai` and `this_cCprosParam`.
+- `Init(par_oFormPai, par_cCpros)` ÔÇö sets the accented Caption via `CHR()`, disables the parent form (`.ParentForm.Enabled = .f.` equivalent), stores the product key, then `RETURN DODEFAULT()`.
+- `InicializarForm()` ÔÇö creates `SigOpCpoBO`, calls `CarregarProduto()` (equivalent to the legado's `CursorQuery(SigCdPro,...)` + release-on-not-found), appends `Cpros - Dpros` to the Caption, builds the header, and calls `TornarControlesVisiveis`.
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Sombra` / `lbl_4c_LblSombra` / `lbl_4c_LblTitulo`, geometry transcribed from the SCX dump, names matching `mapeamento.json`.
+- `Destroy()` ÔÇö equivalent to the legado's `PROCEDURE Release` (re-enables the parent form), closes `cursor_4c_Produto`, then `DODEFAULT()`.
+
+Grid/combo/buttons/image and all events are intentionally deferred to Fases 4ÔÇô8, per the task's explicit scope.

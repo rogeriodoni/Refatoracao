@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o pass visual e o ├║nico problema listado (NULL-CURSOR) contra o c├│digo completo do `sigopecmBO.prg`.
+
+**NULL-CURSOR ├® falso positivo ÔÇö nenhuma altera├º├úo aplicada:**
+
+`cursor_4c_ControleGrupos` (`CREATE CURSOR ... (Grupo N(8))`) nunca ├® alimentado por `APPEND FROM` de um resultset do SQL Server. As ├║nicas grava├º├Áes s├úo:
+```foxpro
+INSERT INTO cursor_4c_ControleGrupos (Grupo) VALUES (THIS.this_nIds)
+INSERT INTO cursor_4c_ControleGrupos (Grupo) VALUES (THIS.this_nOrdens)
+```
+`this_nIds`/`this_nOrdens` v├¬m de `TratarNulo(Ids, 0)`/`TratarNulo(Ordens, 0)` em `CarregarDoCursor` ÔÇö j├í garantidos n├úo-nulos antes de chegar aqui. N├úo h├í caminho para `.NULL.` entrar nesse cursor, ent├úo `SET NULL ON`/`OFF` n├úo mudaria nenhum comportamento; ├® o mesmo padr├úo de falso positivo descrito na minha mem├│ria de "WARNING massivo" (detector reconhece `CREATE CURSOR` sem checar como o cursor ├® populado).
+
+**Checagem dos itens visuais da pr├│pria pauta (ALINHAMENTO, TITULO-NAO-PROPAGADO, CHECKBOX-TIPO, FONTNAME-ERRADO)** ÔÇö nenhum detectado como problema, mas conferi mesmo assim:
+- `cmd_4c_Cancela`/`cmd_4c_Processa`: `Top = 3` nos dois ÔÇö alinhados.
+- `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`: `.Caption = THIS.Caption` nos dois ÔÇö t├¡tulo propagado.
+- `chk_4c_ChkImagens.Value = 1` ÔÇö num├®rico, correto.
+- `FontName = "Comic Sans MS"` em `cmd_4c_Cancela`/`cmd_4c_Processa`: o coment├írio do pr├│prio arquivo (linhas 453-459) documenta que isso ├® o **default da classe `fwbtng`** do framework legado, n├úo um dump sobrescrito ÔÇö exatamente a excepcionalidade do Erro178 que a pr├│pria instru├º├úo do pass cita para N├âO trocar.
+
+Nenhum dos dois arquivos precisa de edi├º├úo neste pass.

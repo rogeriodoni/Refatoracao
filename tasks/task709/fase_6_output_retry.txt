@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da em `projeto/app/forms/operacionais/FormSIGOPCPE.prg` (1322 ÔåÆ 1518 linhas).
+
+## O que faltava
+
+Os 31 controles de dados j├í estavam criados (Fases 5 + 6 anterior), com `ControlSource` transcrito do SCX. O que a fase n├úo entregou foi **o que faz esses campos funcionarem**: nenhum `BINDEVENT` e nenhum handler. Sem isso o usu├írio escolhia o dispositivo no `Cmb_Tipo` e **nada acontecia** ÔÇö o cursor ficava na linha em que `CarregarDados` o deixou e todos os campos continuavam exibindo (e gravando) a configura├º├úo de outro aparelho; e os 10 controles dos dois blocos condicionais ficavam permanentemente vis├¡veis.
+
+## O que foi acrescentado
+
+- **`ConfigurarEventos()`** ÔÇö `BINDEVENT(cbo_4c_Cmb_Tipo, "InteractiveChange", THIS, "ValidarTipo")`, o ├║nico evento de campo do dump.
+- **`ValidarTipo()`** (PUBLIC, delegado de BINDEVENT) ÔÇö transcri├º├úo do `Cmb_Tipo.InteractiveChange`: `SEEK(PADR(valor,20))` na tag `PesqTipo`, `Refresh` **s├│ quando acha** a linha (igual ao legado), e a altern├óncia de visibilidade sempre.
+- **`AplicarVisibilidadePorTipo()`** (PUBLIC, regra #45 ÔÇö fonte ├║nica) ÔÇö o bloco de esconder/reexibir que o legado repete no `Init` e no `InteractiveChange`. Chamado no fim do `InicializarForm`, **depois** do `TornarControlesVisiveis`, que for├ºa `.Visible = .T.` em tudo.
+
+**N├úo h├í lookup a implementar**: o dump n├úo tem `fwBusca*`/`mAddColuna`/`sigacess`/`Acesso*`, e nenhum campo tem `Valid`/`When`/`LostFocus` ÔÇö o ├║nico `When` (`Chk_Bompara`) est├í com o corpo vazio no legado. N├úo inventei valida├º├úo de campo: a faixa 1..10 da porta j├í vem do `Spinner` e o dom├¡nio {0,1} de `InModes` ├® s├│ a nota do `Say11`.
+
+Uma diverg├¬ncia do legado est├í documentada no c├│digo: o 2┬║ `IF` do `Init` omite `'Impressora de Cheque'`, que o `InteractiveChange` inclui. Usei a condi├º├úo do `InteractiveChange` ÔÇö a diferen├ºa n├úo ├® observ├ível na abertura, porque a linha corrente ├® sempre `Balan├ºa` (medido).
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| `COMPILE` VFP9 | `.fxp` gerado, **sem `.err`** |
+| `CREATEOBJECT("FormSIGOPCPE")` | `VARTYPE = O`, 33 controles, cursor com 6 tipos |
+| BINDEVENT (via `AEVENTS`, evento **nativo** disparado) | `INTERACTIVECHANGE -> VALIDARTIPO` |
+| Abertura (`Balan├ºa`) | 10 controles condicionais ocultos Ô£ö |
+| `Leitora Cheques` | cheque Ô£ö + leitor Ô£ö |
+| `Leitora Codigo Barra` | s├│ leitor Ô£ö |
+| `Impressora de Cheque` | cheque Ô£ö + leitor Ô£ö |
+| `Cupom Fiscal` | ambos ocultos Ô£ö |
+| Tipo inexistente | sem `Refresh`, sem quebra Ô£ö |
+| Gate Fase 6 (ramo FLAT) | `semPageFrame`+`temBindEvent`+`legadoSemLookup`+`ControlSource`+`PROCEDURE Validar*` = **passa** |
+| Validador 05d (regex reais) | 0 marcadores, 0 frases bloqueantes |
+
+Duas notas: o probe s├│ v├¬ o cursor com `SET DATASESSION TO loF.DataSessionId` (o form ├® `DataSession = 2`); e o arquivo continua **LF** ÔÇö foi assim que as fases anteriores o geraram, ├® novo/untracked (sem diff a poluir) e o VFP9 compila igual. Apaguei os `.fxp` gerados pelos testes para a fase seguinte n├úo rodar c├│digo velho.

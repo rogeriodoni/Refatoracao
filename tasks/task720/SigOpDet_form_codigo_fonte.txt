@@ -1,0 +1,804 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpDet.SCX
+* Data/Hora: 31/10/2026 08:55:04
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDET
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPDET
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPDET.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPDET.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOPDET
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGOPDET
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPDET.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDET.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDET.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDET.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDET.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDET.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdInsFtc
+  Parent: SIGOPDET
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleção de Detalhes"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  pcdopes = .F.
+  pcedn = .F.
+  pcescolha = .F.
+  pcpro = .F.
+  podatamgr = .F.
+  Name = "SIGOPDET"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 642
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.AutoSize = .F.
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 405
+  Left = 74
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 88
+  Width = 600
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 155
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 155
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 255
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Caracteristica"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Complemento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Outros"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDET.cmdInsFtc
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 90
+  Left = 676
+  Top = 272
+  Width = 50
+  TabIndex = 2
+  Name = "cmdInsFtc"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontBold = .T.
+  Command1.FontName = "Small Fonts"
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Inserir Composição"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 0,0,0
+  Command1.BackColor = 255,255,255
+  Command1.DisabledForeColor = 128,128,128
+  Command1.Themes = .F.
+  Command1.Name = "cmdInserir"
+  Command2.AutoSize = .F.
+  Command2.Top = 45
+  Command2.Left = 5
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontBold = .T.
+  Command2.FontName = "Small Fonts"
+  Command2.FontSize = 7
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.SpecialEffect = 0
+  Command2.ForeColor = 0,0,0
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Small Fonts, 1, 7, 6, 11, 9, 10, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDET
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE validacao
+------------------------------------------------------------
+PROCEDURE validacao
+Select crSigMvFtc
+
+If Used([CarsObrigs])
+	Use in CarsObrigs
+EndIf 
+
+Select LocalFtc 
+Select Distinct cCars, Desccars From LocalFtc Where chkobrig = 1 Into Cursor CarsObrigs ReadWrite 
+
+lcMsg = []
+lcCar = []
+llOk  = .T.
+
+Select CarsObrigs
+Scan 
+	Select crSigMvFtc
+	Locate For Ccars = CarsObrigs.CCars
+	If Not Found()
+		lcCar = lcCar + Alltrim(CarsObrigs.Ccars) + Chr(13)+Chr(10)
+	EndIf 
+	
+	If Not Empty(lcCar)
+		lcMsg = [Existem Caracteristicas Obrigatórias e não Foram Informadas.] + Chr(13)+Chr(10)
+		lcMsg = lcMsg + Chr(13)+Chr(10) + lcCar
+		lcMsg = lcMsg + Chr(13)+Chr(10) + [Verifique.]
+		MessageBox(lcMsg,0+64,[Atenção])
+		llOk  = .F.
+	EndIf 
+	If !llOk
+		Exit 
+	EndIf 
+	Select CarsObrigs
+EndScan 
+
+If llOk
+	Delete From crSigMvFtc where Empty(CCars)
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+This.Grade.RecordSource          = []
+This.Grade.Column1.ControlSource = []
+This.Grade.Column2.ControlSource = []
+This.Grade.Column3.ControlSource = []
+Use In LocalFtc
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pCnx, pEscolha, pDopes, pProd, pEDN
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.pcDopes   = pDopes
+ThisForm.pcEscolha = pEscolha
+ThisForm.poDataMgr = pCnx
+ThisForm.pcEDN 	   = pEDN
+ThisForm.pcPro 	   = pProd
+
+=Thisform.Podatamgr.CursorQuery([SigCdPro],[crProduto],[Cpros],ThisForm.pcPro,[Mercs, Cpros])
+
+If Used([crSigMvFtc])
+	Zap in crSigMvFtc
+EndIf 
+
+If Reccount([crSigMvFtc])=0 or Not Used([crSigMvFtc])
+	lcQuery = [Select * from SigMvFtc where EmpDopNums = ']+ThisForm.pcEDN+[' And Cpros = ']+crProduto.Cpros+['] 
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvFtc]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvFtc)])
+		Return .f.
+	EndIf
+EndIf 
+
+Select crSigMvFtc
+Go Top 
+
+*-- Carrega as informações do detalhe
+lcQuery = [Select a.ccars, b.descrs as Desccars, a.cgrus as Dopes,a.ctits, b.chkobrig, b.cgrus, c.descrs, a.cselecaos, space(20) as Resps ] + ;
+		[from SigCdFtc a ] + ;
+		[join SigCrRap b on a.ccars = b.codigos ] + ;
+		[join SigPrCpP c on a.ctits = c.codigos ] + ;
+		[where a.ntipos = 2 ] + ;
+		[And a.cgrus = ']+ThisForm.pcDopes+[' ] + ;
+		[And b.cgrus = ']+crProduto.Mercs+[' ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalFtc]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalFtc)])
+	Return .f.
+EndIf
+
+Select LocalFtc
+Index on cCars Tag cCars
+Index on cTits Tag cTits
+Go Top In LocalFtc
+
+Select crSigMvFtc
+Go Top 
+
+This.Grade.RecordSource          = [crSigMvFtc]
+This.Grade.Column1.ControlSource = [crSigMvFtc.ccars]
+This.Grade.Column2.ControlSource = [crSigMvFtc.ctits]
+This.Grade.Column3.ControlSource = [crSigMvFtc.Resps]
+
+Select LocalFtc
+Select Distinct cCars, Desccars From LocalFtc Where chkobrig = 1 Into Cursor CarsObrigs ReadWrite 
+
+Select CarsObrigs
+Scan 
+	Select crSigMvFtc
+	Locate for cCars = CarsObrigs.cCars
+	If Not Found()
+		Insert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves, cCars) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds(), CarsObrigs.cCars)
+	EndIf 	
+	Select CarsObrigs
+EndScan 
+
+Select crSigMvFtc
+Go Top 
+
+This.Refresh
+This.Grade.Column1.SetFocus
+
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDET.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+If Not ThisForm.Validacao()
+	Return .f.
+EndIf 
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+If Not ThisForm.Validacao()
+	Return .f.
+EndIf 
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDET.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	Select LocalFtc
+	Select Distinct cCars, Desccars From LocalFtc Into Cursor LocalCars ReadWrite 
+	
+	Select LocalCars
+	Go Top In LocalCars
+	Locate For cCars = This.Value
+	
+	If Eof([LocalCars])
+		loLista = CreateObject([fwbuscaint], [LocalCars], [cCars], This.Value, [Caracteristicas], .t.)
+		loLista.mAddColuna([cCars], 	[], [Código], 	  .t.)
+		loLista.mAddColuna([Desccars],  [], [Descrição], .t.)
+		loLista.Show()
+	EndIf
+	This.Value = LocalCars.cCars
+Else
+	This.Value = []	
+EndIf
+
+Replace CCars With This.Value in crSigMvFtc
+
+This.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDET.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista, lcCCars
+
+lcCCars = crSigMvFtc.CCars 
+
+If Not Empty(This.Value)
+	Select LocalFtc
+	Select Distinct ctits, Descrs From LocalFtc Where CCars = lcCCars Into Cursor LocalTits ReadWrite 
+	
+	Select LocalTits
+	Go Top In LocalTits
+	Locate For ctits = This.Value
+	
+	If Eof([LocalTits])
+		loLista = CreateObject([fwbuscaint], [LocalTits], [ctits], This.Value, [Complementos], .t.)
+		loLista.mAddColuna([ctits],  [], [Código], 	  .t.)
+		loLista.mAddColuna([Descrs], [], [Descrição], .t.)
+		loLista.Show()
+	EndIf
+	This.Value = LocalTits.ctits
+Else
+	This.Value = []	
+EndIf
+
+Replace cTits With This.Value in crSigMvFtc
+
+If Not Empty(This.Value)
+	Replace Resps With [] in crSigMvFtc
+EndIf 
+This.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not Empty(This.Value)
+
+	Select crSigMvFtc
+	Go Top In crSigMvFtc
+	Locate For Empty(CCars)
+	If Eof([crSigMvFtc])
+		Insert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())
+	EndIf
+	*Go Top In crSigMvFtc
+	Keyboard [{DNARROW}]
+	
+	ThisForm.Grade.Refresh
+	ThisForm.Grade.Column1.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDET.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(crSigMvFtc.cTits) and InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not Empty(This.Value)
+
+	Select crSigMvFtc
+	Go Top In crSigMvFtc
+	Locate For Empty(CCars)
+	If Eof([crSigMvFtc])
+		Insert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())
+	EndIf
+	*Go Top In crSigMvFtc
+	Keyboard [{DNARROW}]
+	
+	ThisForm.Grade.Refresh
+	ThisForm.Grade.Column1.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDET.cmdInsFtc
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdInserir.Click
+------------------------------------------------------------
+PROCEDURE cmdInserir.Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+	Select crSigMvFtc
+	Go Top In crSigMvFtc
+	Locate For Empty(CCars)
+	If Eof([crSigMvFtc])
+		Insert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())
+	EndIf
+
+	ThisForm.Grade.Refresh
+	ThisForm.Grade.Column1.SetFocus
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdExcluir.Click
+------------------------------------------------------------
+PROCEDURE cmdExcluir.Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Select crSigMvFtc
+	If Not Eof()
+		Delete
+	EndIf
+	
+	If Not Eof()
+		Skip 
+		Skip - 1
+	EndIf 
+	Go Bottom
+	
+	ThisForm.Grade.SetFocus
+	ThisForm.Grade.Refresh
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPDET
+RESERVED3 (ClassInfo): pcdopes
+pcedn
+pcescolha
+pcpro
+podatamgr
+*validacao 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

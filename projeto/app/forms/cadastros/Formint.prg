@@ -665,7 +665,7 @@ DEFINE CLASS Formint AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 39
+            .Top         = 27
             .Left        = 821
             .Width       = 160
             .Height      = 85

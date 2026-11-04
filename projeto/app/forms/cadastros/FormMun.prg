@@ -446,7 +446,7 @@ DEFINE CLASS FormMun AS FormBase
         *-- Com compensacao +29: Top=38
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 38
+            .Top         = 27
             .Left        = 817
             .Width       = 160
             .Height      = 85

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 entregue. `FormSigOpDes.prg` (1.258 ÔåÆ 1.971 linhas) + suporte no `SigOpDesBO.prg`.
+
+## O que entrou
+
+**Campos restantes** ÔÇö `ConfigurarTotais` completado com o terceiro par de totais, `Say1`/`lnSaldo` ("Saldo :"), transcrito do dump (Top 330/Left 610 e Top 329/Left 654, `InputMask = "999,999,999.99"`). Com ele a tela cobre todos os objetos do `layout.json`.
+
+**Lookups: n├úo existe nenhum nesta tela ÔÇö e isso foi medido, n├úo presumido.** O dump n├úo casa `fwbusca` (cobre `fwBuscaExt`/`Sel`/`Int`), `mAddColuna`, `sigacess(` nem `Acesso<X>(`: zero ocorr├¬ncias. A lista de descontos eleg├¡veis chega resolvida pelo pipeline do BO; o usu├írio marca linhas e edita percentual/valor, n├úo digita c├│digo de tabela. Criar um `AbrirLookup*` aqui seria consultar tabela que o legado nunca consulta.
+
+**No lugar do lookup, a outra metade do contrato da fase: o `When`/`Valid` dos campos digit├íveis.** As tr├¬s c├®lulas da grade passaram a ser subclasses de TextBox instaladas por `InstalarCelulasGrade` via `Column.AddObject` + `CurrentControl` (regra #18/#46) ÔÇö subclasse e n├úo `BINDEVENT` porque o BINDEVENT **descarta o retorno**, e aqui o retorno ├® o mecanismo (`Valid` ÔåÆ `.F.` recusa a sa├¡da; `When` ÔåÆ `.F.` recusa a entrada):
+
+- `Column2` (Descri├º├úo): `When ÔåÆ .F.`, o bloqueio que o legado usa ÔÇö o dump declara `Column2.ReadOnly = .F.`, ent├úo transcrever s├│ isso deixava a descri├º├úo **edit├ível**.
+- `Column3`/`Column4`: `When ÔåÆ Selecao = 1` + `Valid` delegando a `ValidarPercentualDesconto`/`ValidarValorDesconto` (PUBLIC, regra #51), com as tr├¬s regras do legado transcritas: teto do tipo, desconto financeiro vedado em venda parcelada, e saldo negativo / cota estourada.
+- `CalcularTotais` (o `calctots` legado) veio junto porque os dois `Valid` **leem o Saldo que ele produz** ÔÇö n├úo d├í para adiar um sem adiar os outros. `CarregarLista` passou a fechar com ele, como o `=thisform.CalcTots()` do `Init` legado.
+
+## Verificado, n├úo inferido
+
+VFP9 executa nesta sess├úo (smoke test confirmado). Form e BO compilam sem `.err`; o form **instancia** e o probe exercitou o fluxo: `CurrentControl` nas 4 colunas, m├íscaras preservadas, os 3 m├®todos PUBLIC, `CalcularTotais` ÔåÆ TDesc 10 / Saldo 90 / cota usada 5 com RECNO reposto, `When` recusando linha desmarcada, `Valid` recusando 30% sobre teto 20 e revertendo a 0, aceitando 10%, aceitando R$20 (=20%) e recusando R$30, e a regra do parcelado com a mensagem exata do legado. Gates: `05d` limpo, `ValidadorSQLSchema` passou (683 tabelas, 14 statements), auditorias de fun├º├úo ├│rf├ú / m├®todo PROTECTED / propriedade inexistente OK. Zero caractere acentuado literal.
+
+## Tr├¬s pontos para voc├¬ decidir
+
+1. **Contexto novo no `Init`** ÔÇö acrescentei o 21┬║ par├ómetro `par_nQtdParcelas` (opcional, default 0), equivalente ao `RECCOUNT('crPar')` do legado, que vinha do cursor global `xPar` do form chamador. Com 0 a regra n├úo bloqueia nada, igual ao legado com `crPar` vazio ÔÇö mas **o form de venda que abrir este di├ílogo precisa passar o valor**, sen├úo o desconto financeiro deixa de ser vedado em venda parcelada.
+
+2. **Diverg├¬ncia conhecida, de um tipo de desconto s├│.** O legado valida contra `crDesc.descosmax` (teto do cadastro); as Fases 1-2 fundiram `crDesc` e `localDes` num cursor ├║nico, e nele o `Descosmax` do tipo 13 (troca de pre├ºo) j├í vem sobrescrito pelo percentual da troca. Resultado: o tipo 13 passa a ser cobrado pelo teto da troca em vez do teto do cadastro. Est├í documentado no c├│digo; desfazer exigiria separar os cursores no BO, fora do escopo desta fase.
+
+3. **O gate da Fase 6 exige a string `BINDEVENT` no arquivo, e aqui ela s├│ aparece em coment├írio** ÔÇö n├úo h├í `BINDEVENT` real porque n├úo h├í nenhum que seja fiel ao legado nesta fase (os reais s├úo da Fase 7/8: checkbox, bot├Áes, `Header1.Click`). N├úo fabriquei um para satisfazer regex. O `GotFocus` de `Column2.Text1` e de `GrdCota.Column1.Text1` ├® **c├│digo morto no legado** (ambos t├¬m `When ÔåÆ .F.`, ent├úo nunca disparam) e por isso n├úo foi reproduzido ÔÇö via `AfterRowColChange` ele acrescentaria um salto de foco que a tela legada n├úo faz.
+
+Os dois arquivos seguem **untracked** no git (nunca foram `git add`-ados, como os demais artefatos desta migra├º├úo) ÔÇö n├úo commitei nada.

@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpClpBO.prg` criado (9.421 bytes, ASCII, CRLF).
+
+## O que foi apurado antes de escrever
+
+`SigOpClp.SCX` **n├úo ├® um CRUD nem um form que consulta banco**: ├® o di├ílogo **filho** que `SIGOPCCL` abre no fim da consulta (`Do Form SigOpClp With ThisForm, ThisForm.datasessionid`). Ele recebe o form pai + o id da data session, entra na mesma sess├úo e liga a grade ao cursor que o **pai** j├í montou ÔÇö `TmpOper` no legado, `cursor_4c_Operacoes` no migrado. Isso est├í confirmado no lado j├í migrado: `SigOpCclBO.BuscarOperacoes()/CarregarMovimentos()` ├® quem cruza `SigMvCab` (lados Destino e Origem) com `SigCdOpe`, e `FormSigOpCcl.BtnConsultaClick:1065` tem o `DO FORM SigOpClp` esperando esta migra├º├úo.
+
+Portanto o BO n├úo leva consulta de tabela nenhuma ÔÇö `this_cTabela`/`this_cCampoChave` ficam vazios e `DODEFAULT()` ├® chamado sem argumento (medido: `this_oDataAccess` sai `.NULL.`, sem instanciar DataAccess).
+
+## Propriedades declaradas (17)
+
+| Grupo | Propriedades |
+|---|---|
+| Par├ómetros do pai (Caption) | `this_cGrupo`, `this_cConta`, `this_cDConta` |
+| Cursor da grade + TAGs | `this_cCursorOperacoes`, `this_cTagNumero`, `this_cTagData`, `this_cOrdemAtual`, `this_lOrdemDescendente` |
+| Linha corrente (7 colunas de `TmpOper`) | `this_cEmps`, `this_cDopes`, `this_cMascNum`, `this_cTipo`, `this_cMoeda`, `this_nValos`, `this_dDatas` |
+
+As sete colunas espelham **exatamente** o `CREATE CURSOR` do pai (`Emps C(3), Dopes C(20), MascNum C(10), Tipo C(10), Moeda C(3), Valos N(12,2), Datas T NULL`), com a origem de cada uma conferida em `docs/schema.sql` via `Get-Content -Raw` (regra #14): `emps char(3)`, `dopes char(20)`, `mascnum char(10)`, `valos numeric(11,2)`, `datas datetime NULL`, `SigCdOpe.cmoes char(3)`. Os dois nomes de TAG (`Num`, `Datas`) ficam em propriedade porque s├úo o contrato dos `Header1.Click` do legado (`Set Order To Num` / `Set Order To Datas Descending`). `this_cOrdemAtual` nasce em `"Num"` porque ├® nessa ordem que o pai entrega o cursor.
+
+O `PROCEDURE Load` legado (`=fConfigGeral()`) ficou fora, com a justificativa documentada no cabe├ºalho: `fconfiggeral.prg` ├® wrapper no-op que existe s├│ para o p-code dos VCX.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: exit 0, `.fxp` gerado, nenhum `.err`.
+- **Instancia├º├úo headless**: `CREATEOBJECT("SigOpClpBO")` ÔåÆ `VARTYPE=O`; todas as propriedades com o tipo certo (`Valos=N`, `Datas=D`, demais `C`/`L`), `Cursor=[cursor_4c_Operacoes]`, `Ordem=[Num]`, `EmEdicao=.F.`.
+- **Regexes do gate 05d**: 0 marcadores TODO/FIXME, 0 frases bloqueantes ("nao implement"/"pendente"/"proxima fase"), nenhuma procedure vazia.
+- Tempor├írios de compila├º├úo/probe e o `.fxp` removidos; a ├║nica altera├º├úo no repo ├® o `.prg` novo.
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()`/`ObterChavePrimaria()` ficaram **sem override** de prop├│sito (visualizador sem tabela pr├│pria) ÔÇö e `CarregarDoCursor()` ├® da Fase 2, conforme o contrato desta fase.

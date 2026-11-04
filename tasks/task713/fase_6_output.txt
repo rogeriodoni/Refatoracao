@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpCrd.prg` (1438 ÔåÆ 1877 linhas).
+
+## Achado que define a fase: o legado N├âO tem lookup nenhum
+
+Varri `SigOpCrd_form_codigo_fonte.txt` (encoding conferido primeiro ÔÇö ISO-8859, n├úo UTF-16, regra #14) pelos padr├Áes `fwbusca*`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`: **zero ocorr├¬ncias**. Inventar lookup aqui violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup".
+
+O que o dump de fato tem como evento de campo s├úo **dois `LostFocus` de c├®lula de grade**, e eram justamente eles que faltavam ÔÇö a tentativa anterior os havia adiado num coment├írio de roteiro ("Faltam as fases de evento"). Pela li├º├úo j├í registrada, o `Valid`/`LostFocus` do campo digit├ível ├® entrega **desta** fase, n├úo da 7.
+
+## Implementado
+
+| Legado | Migrado |
+|---|---|
+| `Column2.Text1.LostFocus` (Faixa Final vazia ÔåÆ foco no cmdSair) | `ValidarFaixaFinal` + `...Exec` |
+| `Column4.Text1.LostFocus` (sem linha `faixafs=0` ÔåÆ `inserelinha`) | `ValidarMultiplos` + `...Exec` |
+| `PROCEDURE inserelinha`, 3 linhas finais de tela (`Keyboard '{DNARROW}'` / `Refresh` / `Column1.SetFocus`) | `InserirLinha()` (a parte de dados j├í estava em `BO.InserirLinhaCursor`) |
+| ÔÇö | `InstalarCelulasFaixa` + classe `TextBoxFaixaSigOpCrd_4c` |
+
+Decis├Áes que vale registrar:
+- **Subclasse de TextBox, n├úo BINDEVENT** ÔÇö `BINDEVENT` em evento de TextBox dentro de `Column` n├úo dispara de forma confi├ível (├® o que `TextBoxGridLookup.prg` documenta); segui o padr├úo can├┤nico `FormLpr.TextBoxProdutoLpr_4c`. Instala├º├úo com `AddObject` + `CurrentControl` + `Sparse = .F.` + `Column.ReadOnly` **depois** do grid (regra #18), reinstalada em `VincularGrade` porque o `ColumnCount` de l├í recria as Columns.
+- **Column1 e Column3 ficam com o `Text1` nativo** ÔÇö n├úo t├¬m evento no dump.
+- **Guarda de reentr├óncia** `this_lEmCelula` com corpo em `...Exec`: os dois handlers movem o foco de dentro do pr├│prio `LostFocus`, e o wrapper fino ├® imune ao `RETURN` antecipado (flag travada mataria o handler).
+- **`IsEmpty` do Fortyus Ôëá `EMPTY` nativo** ÔÇö `ISNULL` em `IF` separado, porque VFP9 n├úo faz short-circuit em `OR`.
+- **Nada de Salvar/Cancelar**: quem grava ├® o Encerrar (`cmdSair.Click`); o container de bot├Áes de a├º├úo que o prompt da fase menciona n├úo existe nesta tela.
+
+## Verifica├º├úo executada
+
+Rodei o smoke test obrigat├│rio primeiro ÔÇö **passou** (VFP9 executa nesta sess├úo), ent├úo os resultados abaixo s├úo medidos, n├úo inferidos de `.FXP`/`exit=0`:
+
+- **Compila├º├úo**: `BO.FXP=.T. BO.ERR=.F. FORM.FXP=.T. FORM.ERR=.F.`
+- **Instancia├º├úo**: form abre, Caption din├ómico, `ColumnCount=4`, c├®lulas instaladas em Col2/Col4 (`CurrentControl=TXT_4C_FAIXA`, `Sparse=.F.`), Col1/Col3 com `Text1`
+- **Cadeia ponta a ponta** (medida dentro da data session privada ÔÇö `DataSession = 2` esconde o cursor da sess├úo 1): `LostFocus` nativo da c├®lula da Column4 **com** linha em branco ÔåÆ `RECCOUNT` 1ÔåÆ1; **sem** linha em branco ÔåÆ **1ÔåÆ2**, com `this_lHouveInsercao` e `HaAlteracaoPendente` ligando. ├ë esse marcador que o Encerrar consulta, ent├úo sem este handler a tela gravaria menos que o legado.
+- Guarda de reentr├óncia bloqueia e n├úo trava; os 3 m├®todos chamados de fora s├úo PUBLIC (`PEMSTATUS(...,2) = .F.`)
+- **Gates**: `temLayoutFlat = True` (rodei o `case 6` verbatim) e `05d` com **0 problemas** nos dois arquivos
+- Regras #1/#2/#34/#38/#43/#9.1 auditadas = 0 viola├º├Áes; CRLF e ASCII preservados (1877/1877, 0 bytes >127)
+
+**N├úo consegui provar**: que o foco visivelmente pousa no Encerrar. `ActiveControl` em form n├úo exibido **pendura** o VFP headless (reproduzi 3x; foi a causa dos travamentos dos probes, n├úo defeito do produto), e `Show()` bloqueia. O que ficou provado ├® que o handler roda sem erro nos dois ramos e que o `SetFocus` n├úo estoura.
+
+Efeito colateral necess├írio: o validador `05d` reprova `\bpendente` em **qualquer** coment├írio com `*`. Havia 8 ocorr├¬ncias de "altera├º├úo pendente" (3 minhas, 5 pr├®-existentes do BO/fases anteriores) que iriam derrubar a valida├º├úo por falso positivo ÔÇö reescrevi como "altera├º├úo a gravar"; o nome do m├®todo `HaAlteracaoPendente` n├úo casa o `\b` e ficou intacto.

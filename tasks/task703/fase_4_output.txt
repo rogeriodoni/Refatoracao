@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. The two source files `Formsigopclg.prg` and `sigopclgBO.prg` are the actual deliverables, both confirmed compiling cleanly.
+
+## Summary ÔÇö FASE 4/8 (Formsigopclg)
+
+Since this is an OPERACIONAL consulta form (not a CRUD cadastro), I followed the plan already laid out in the file's own header from Fase 3 rather than the generic "Incluir/Alterar/Excluir" template text ÔÇö mirroring the established convention from `FormSigOpCgr.prg`. Added to `Formsigopclg.prg`:
+
+- **Page1 (Dados):** `cmg_4c_Acoes` CommandGroup inside `cnt_4c_Botoes` ÔÇö 2 buttons (Processar/Encerrar), transcribed from the legacy `cmdProcessar` CommandGroup (icons, captions, geometry).
+- **Page2 (Resultado):** `cmg_4c_Voltar` CommandGroup inside `cnt_4c_BotoesAcao` ÔÇö 1 button, transcribed from `cmdBotoes` (caption/icon say "Encerrar" but its real Click just returns to page 1, matching the legacy's actual behavior).
+- **Grid `grd_4c_Dados`** on Page2, bound to `this_oBusinessObject.this_cCursorLog` via a new `VincularGradeLog()` method (single source of truth for the bind, per the Width/Caption-reset rule), with 7 columns transcribed from the legacy `PROCEDURE processamento` (which overrides the SCX's static headers) ÔÇö including Column5 bound to the computed `cOpers` description rather than the raw `Opers` code.
+- `InicializarCursorLog()` ÔÇö creates the placeholder cursor before the grid is configured (required since `Column.ControlSource` against a non-existent cursor crashes Init).
+- `AlternarPagina(par_nPagina)` ÔÇö fully functional now, since it only depends on `this_oBusinessObject.this_nQtdeLog` (already existing from Fase 1/2); mirrors the legacy's `If Eof() Then Return` guard and the `Page2.Enabled` toggle.
+
+Deliberately deferred to Fase 7/8 (per the file's own plan): `BtnProcessarClick`/`BtnVoltarClick`/`BtnEncerrarClick` and their `BINDEVENT`s, since the delegate must exist at bind time and `BtnProcessarClick` needs the filter fields from Fase 5/6.
+
+Verified by compiling both `Formsigopclg.prg` and `sigopclgBO.prg` with VFP9 (`vfp9.exe -T`) ÔÇö both produced `.FXP` with no `.err` output.

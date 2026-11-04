@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSigOpCrd.prg` est├í completo (2.296 linhas), compila sem erro e foi validado por probe no VFP9.
+
+## O que a Fase 8 acrescentou
+
+Reconhecendo que **nesta tela a "ficha" ├® a LINHA da grade** (as 4 colunas t├¬m `ControlSource` direto no cursor ÔÇö n├úo h├í painel de campos soltos):
+
+| M├®todo | O que faz |
+|---|---|
+| `FormParaBO` | linha corrente ÔåÆ properties do BO, com **flush da c├®lula em edi├º├úo** ÔÇö s├│ a coluna **ATIVA** ├® lida do controle, porque com `Sparse = .F.` o controle ├® por COLUNA e, fora da ativa, o `.Value` s├│ vale para a linha pintada por ├║ltimo (ler dali gravaria valor de outra linha) |
+| `BOParaForm` | properties ÔåÆ linha corrente, com **guarda de identidade por `cidchaves`**, escrevendo s├│ as 4 colunas vis├¡veis (`cidchaves`/`dopes` s├úo identidade, n├úo campo de tela) e repintando (regra #21) |
+| `HabilitarCampos` | abre/fecha a digita├º├úo: `Grid.ReadOnly` ANTES das colunas (regra #18/#46) e as **QUATRO** reabertas ÔÇö `Column1`/`Column3` n├úo passam por `InstalarCelulasFaixa` |
+| `LimparCampos` | devolve a linha ao estado "em branco" (`faixafs = 0`, o crit├®rio do `inserelinha` legado), composto dos dois hooks |
+
+Wiring: `VincularGrade` e `AtualizarEstadoControles` reabrem a grade ap├│s o rebind; `CmdEncerrarClick` faz o flush e congela a digita├º├úo antes do lote.
+
+## Dois defeitos que o probe pegou (e que compilavam limpo)
+
+1. **`PROCEDURE FormParaBO` sem `PROTECTED` n├úo torna o m├®todo p├║blico.** `FormBase` os declara `PROTECTED` e o VFP9 n├úo deixa a subclasse alargar escopo herdado ÔÇö chamados de fora estouravam *"Property FORMPARABO is not found"*. Os tr├¬s levam `PROTECTED` expl├¡cito agora (omitir s├│ engana quem l├¬). `HabilitarCampos`/`CarregarLista` n├úo existem em `FormBase`, logo s├úo p├║blicos de verdade.
+2. **`HabilitarCampos()` sem argumento FECHAVA a grade.** Par├ómetro n├úo passado chega como `.F.` **l├│gico**, ent├úo `VARTYPE(par_lHabilitar) = "L"` ├® verdade igual para "n├úo passou" e "passou `.F.`". Trocado por `PCOUNT() >= 1`. Salvei isso na mem├│ria ÔÇö o guard por `VARTYPE` ├® correto para C/N/O e ├® exatamente o caso degenerado em par├ómetro l├│gico.
+
+## N├úo entram, e o motivo ├® o dump
+
+Handler de Salvar/Confirmar (quem grava ├® o Encerrar ÔÇö o legado n├úo tem bot├úo de gravar) e handler de Cancelar (n├úo h├í Page2 nem modo de edi├º├úo cancel├ível; fechar sem clicar no Encerrar j├í ├® o descarte). Os **nomes can├┤nicos** desses dois ficaram deliberadamente fora dos coment├írios: o gate da fase procura o nome como texto no arquivo, e cit├í-lo o satisfaria por coment├írio ÔÇö falso positivo que esconderia o motivo real.
+
+Medi os predicados do gate da Fase 8 contra este dump (extraindo os helpers do Orquestrador para um arquivo tempor├írio, sem dot-source do original): o ramo **fluxo-├║nico** dispensa `BtnCancelarClick` (`semCrudReal` = `.T.` via `VerbosCrudSaoTodosDeLinhaDeGrade`, lista e campo edit├ível reais, `Carregar*` presente), a exig├¬ncia de bot├úo de a├º├úo cai por `acaoComHandler` = `.T.` e a de `BtnSalvarClick` por `legadoSemSalvar` = `.T.`.
+
+**Probe:** `automation\ProbeF8SigOpCrd.prg` ÔÇö 10 testes, todos `[OK]`, incluindo round-trip linhaÔåÆBOÔåÆlinha, guarda de identidade recusando escrita em linha errada, EOF devolvendo `.F.` sem estourar, e pai reabilitado no `Release`. Duas armadilhas documentadas nele: `fChecaAcesso` precisa ser redefinido no script (a de `sigacess.PRG` vence e pendura sem SQL Server) e o `DataSession = 2` exige `SET DATASESSION TO loForm.DataSessionId` para ver o cursor. N├úo commitei ÔÇö os arquivos seguem untracked, como a migra├º├úo os deixou.

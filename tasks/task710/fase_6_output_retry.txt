@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 complete. `FormSigOpCpo.prg` modified (plus one necessary fix in `SigOpCpoBO.prg`), compiling clean with no `.ERR`, completeness validator green, and the Fase 6 gate now passing.
+
+## What the phase delivered
+
+The legacy `SIGOPCPO` has **no lookup** ÔÇö I verified the dump has zero `fwBuscaExt`/`fwBuscaSel`/`sigacess()`/`mAddColuna`/F4-F5 picker calls. Inventing one would violate PILAR 1, so the field surface of this phase is the one data-entry field outside the grids (`cbo_4c_CmbTipos`) plus its real validation, wired by `BINDEVENT`:
+
+| Added | Transcribed from |
+|---|---|
+| `ValidarFiltroTipo()` + `ÔÇªExec()` | `cmbTipos.Valid` (`Set Filter To Tipos = ÔÇª / Go Top / grdItens.Refresh`) |
+| `AtualizarRodape(par_nRegistroGrade)` | `atuatotas` ÔÇö single repaint funnel (regra #21), reused by Fase 7 |
+| `ValidarFocoRodape()` | `grdRodape.Column1.Text1.GotFocus` |
+| `ValidarTagRodapeGotFocus/LostFocus()` | `grdRodape.Column2.Text1` Tag save/restore pair |
+
+Handlers are PUBLIC (regra #3), guard-released via a thin wrapper so a `RETURN` can't jam the reentrancy flag (regra #47), no `RETURN` inside `TRY` (regra #1).
+
+## Two defects the probe caught
+
+I couldn't instantiate the real form (SQL Server 192.168.200.10 is unreachable here, so `CarregarProduto` fails), so I probed via a subclass that replaces only the SQL load ÔÇö exercising the real `Configurar*`/`BINDEVENT` paths. All 10 checks pass, no dialogs. It surfaced:
+
+1. **`SigOpCpoBO.AplicarFiltroTipo` had a latent Fase-2 bug I fixed.** `SET FILTER TO Tipos == THIS.this_cTipoSelecionado` stores the expression as *text* and re-evaluates it per record access, resolving `THIS` against whatever object is active then. Measured (`automation/MedirSetFilterThis.prg`): from inside the BO ÔåÆ OK; from another object ÔåÆ `Property THIS_CTIPOSELECIONADO is not found`; **from outside any object ÔåÆ VFP silently drops the filter** (`FILTER()` empty). Since the Grid repaints outside any method, the type filter would have shown all types with no error on screen. Now the value goes in as a literal, which works in all three contexts.
+
+2. **A total that looks wrong but is faithful** ÔÇö worth knowing before someone "fixes" it. Measured (`automation/MedirSelectComSetFilter.prg`): VFP's local SQL `SELECT` *ignores* `SET FILTER` (100) while `SCAN`/`COUNT` respect it (90). The legacy `atuatotas` uses the SQL form, so the footer total covers the **whole** composition, not the filtered type. Our BO matches; I documented it in `AtualizarTotais` so it isn't converted to `SCAN` later, which would silently change a number the user sees.
+
+Pre-existing warnings in other files (`Formsigopcgp` lookups in KeyPress, `sigopclgBO` TABLEREVERT) are outside this task ÔÇö untouched.

@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6/8 executada. Arquivo modificado: `C:\4c\projeto\app\forms\operacionais\FormSigOpCrp.prg`
+
+## O que a fase encontrou
+
+Os dois itens do t├¡tulo da fase est├úo **resolvidos por aus├¬ncia** neste form ÔÇö e eu medi isso em vez de presumir:
+
+- **Campos restantes: n├úo h├í.** O legado tem exatamente 3 (`getLancamento`/`getValor`/`getHistorico`), todos criados desde a Fase 4. O di├ílogo n├úo tem Page2 ÔÇö a superf├¡cie de campos ├® ├║nica.
+- **Lookups: zero no legado.** `grep -icE "fwbuscaext|fwbuscasel|sigacess\(|CreateObject\(|KeyPress|F4|F5|mAddColuna"` no dump devolve **0**. Os tr├¬s `Valid` do legado n├úo consultam tabela nenhuma: cada um s├│ zera os *outros dois* crit├®rios de pesquisa (e o `Continuar`) ÔÇö exclus├úo m├║tua, n├úo lookup. Inventar `FormBuscaAuxiliar` violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup".
+- **Sem `cnt_4c_BotoesAcao` (Salvar/Cancelar):** n├úo ├® CRUD. O legado tem um `CommandGroup` de 2 bot├Áes (Procurar/Encerrar), j├í entregue na Fase 4, e n├úo grava nada ÔÇö s├│ `LOCATE`/`CONTINUE` no cursor do form pai.
+
+## O que foi entregue
+
+Rodei o gate da Fase 6 extra├¡do do orquestrador num harness isolado: o form **reprovava**, e o diagn├│stico apontou um ├║nico item. Ramo aplic├ível = **CAPTURA** (`legadoCapturaF6=True`, `legadoSemLookup=True`, paridade 3 campos ÔëÑ piso 2), e o que faltava era `PROCEDURE Validar\w+`.
+
+Os tr├¬s handlers que transcrevem o `Valid` existiam e estavam corretos, mas chamavam-se `Txt<Campo>LostFocus` ÔÇö que ├® exatamente a assinatura que a **regra #47** marca como defeito. Renomeei para o nome can├┤nico do projeto:
+
+| antes | agora |
+|---|---|
+| `TxtLancamentoLostFocus` | `ValidarLancamento` |
+| `TxtValorLostFocus` | `ValidarValor` |
+| `TxtHistoricoLostFocus` | `ValidarHistorico` |
+
+Os `BINDEVENT` continuam em `"LostFocus"` (correto ÔÇö sem picker, n├úo h├í tecla a testar) e os handlers de `GotFocus` **n├úo** foram renomeados: eles n├úo validam nada, capturam o valor de entrada, e o nome casa com o evento.
+
+## Verifica├º├Áes
+
+| verifica├º├úo | resultado |
+|---|---|
+| Gate Fase 6 ÔÇö baseline (controle negativo) | **REPROVA**, com a mensagem exata do gate |
+| Gate Fase 6 ÔÇö atual | **PASSA** pelo ramo CAPTURA |
+| Completude 05d (os 4 regex dele, n├úo `grep -i todo`) | 0 marcadores, 0 procedure vazia, 0 pend├¬ncia ÔÇö Form e BO |
+| `VerificarLookupEmKeyPress` (#47) | 0 achados neste form |
+| `VerificarMetodoProtegidoChamadoDeFora` (#51) | OK; os 7 m├®todos do BO que o form chama s├úo PUBLIC em toda a heran├ºa |
+| `VerificarPropriedadesInexistentes` (#33) | OK |
+| Balan├ºo de blocos + regras #1/#2/#9.1/#16/#34/#38/#52 | tudo OK (16 `PROCEDURE`/`ENDPROC`, 13 `WITH`/`ENDWITH`, 0 acento literal) |
+| Diff de **c├│digo** vs. baseline | id├¬ntico fora do renome ÔÇö as outras edi├º├Áes foram s├│ de coment├írio |
+
+Um ponto que preciso declarar explicitamente: **n├úo consigo provar compila├º├úo nem instancia├º├úo nesta sess├úo.** Rodei o smoke test obrigat├│rio de 4 linhas (`STRTOFILE` + `QUIT`) e o arquivo de sa├¡da n├úo foi gerado ÔÇö o `vfp9.exe` compila e sai sem executar o corpo, o mesmo comportamento j├í medido antes. Ent├úo "COMPILE_OK"/"PROBE_OK" seriam alega├º├úo, n├úo verifica├º├úo.
+
+Tamb├®m confirmei de passagem que o caminho da grade do pai usado em `BtnProcurarClick` (`pgf_4c_1.Page2.grd_4c_Lancamento`) existe de fato em `Formsigopind.prg` ÔÇö ele est├í sob guarda de `PEMSTATUS`, que falharia em sil├¬ncio se o caminho estivesse errado.
+
+O harness de medi├º├úo foi descartado; nada dele ficou no reposit├│rio.

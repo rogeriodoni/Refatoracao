@@ -1,0 +1,303 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 10,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Found", "Foram Informadas.] + Chr", "From crSigMvFtc where Empty", "fConfigGeral", "fwBuscaInt", "For Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDET",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "Select crSigMvFtc\n\nIf Used([CarsObrigs])\n\tUse in CarsObrigs\nEndIf \n\nSelect LocalFtc \nSelect Distinct cCars, Desccars From LocalFtc Where chkobrig = 1 Into Cursor CarsObrigs ReadWrite \n\nlcMsg = []\nlcCar = []\nllOk  = .T.\n\nSelect CarsObrigs\nScan \n\tSelect crSigMvFtc\n\tLocate For Ccars = CarsObrigs.CCars\n\tIf Not Found()\n\t\tlcCar = lcCar + Alltrim(CarsObrigs.Ccars) + Chr(13)+Chr(10)\n\tEndIf \n\t\n\tIf Not Empty(lcCar)\n\t\tlcMsg = [Existem Caracteristicas Obrigatórias e não Foram Informadas.] + Chr(13)+Chr(10)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found,Foram Informadas.] + Chr,From crSigMvFtc where Empty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkobrig",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "This.Grade.RecordSource          = []\nThis.Grade.Column1.ControlSource = []\nThis.Grade.Column2.ControlSource = []\nThis.Grade.Column3.ControlSource = []\nUse In LocalFtc\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET",
+      "evento": "Init",
+      "linhas": 75,
+      "codigoOriginal": "lParameters pCnx, pEscolha, pDopes, pProd, pEDN\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.pcDopes   = pDopes\nThisForm.pcEscolha = pEscolha\nThisForm.poDataMgr = pCnx\nThisForm.pcEDN \t   = pEDN\nThisForm.pcPro \t   = pProd\n\n=Thisform.Podatamgr.CursorQuery([SigCdPro],[crProduto],[Cpros],ThisForm.pcPro,[Mercs, Cpros])\n\nIf Used([crSigMvFtc])\n\tZap in crSigMvFtc\nEndIf \n\nIf Reccount([crSigMvFtc])=0 or Not Used([crSigMvFtc])\n\tl... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "CursorQuery,SqlExecute,pcPro, fUniqueIds",
+        "controlesReferenciados": "chkobrig",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDET.cntBotoes",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not ThisForm.Validacao()\n\tReturn .f.\nEndIf \nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Validacao",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDET.cntBotoes",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Not ThisForm.Validacao()\n\tReturn .f.\nEndIf \nThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Validacao",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tSelect LocalFtc\n\tSelect Distinct cCars, Desccars From LocalFtc Into Cursor LocalCars ReadWrite \n\t\n\tSelect LocalCars\n\tGo Top In LocalCars\n\tLocate For cCars = This.Value\n\t\n\tIf Eof([LocalCars])\n\t\tloLista = CreateObject([fwbuscaint], [LocalCars], [cCars], This.Value, [Caracteristicas], .t.)\n\t\tloLista.mAddColuna([cCars], \t[], [Código], \t  .t.)\n\t\tloLista.mAddColuna([Desccars],  [], [Descrição], .t.)\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = LocalCars.cCars\nElse\n\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista, lcCCars\n\nlcCCars = crSigMvFtc.CCars \n\nIf Not Empty(This.Value)\n\tSelect LocalFtc\n\tSelect Distinct ctits, Descrs From LocalFtc Where CCars = lcCCars Into Cursor LocalTits ReadWrite \n\t\n\tSelect LocalTits\n\tGo Top In LocalTits\n\tLocate For ctits = This.Value\n\t\n\tIf Eof([LocalTits])\n\t\tloLista = CreateObject([fwbuscaint], [LocalTits], [ctits], This.Value, [Complementos], .t.)\n\t\tloLista.mAddColuna([ctits],  [], [Código], \t  .t.)\n\t\tloLista.mAddColuna([Descrs], [], [Descrição], .t.)\n\t\tloLista.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\n\tSelect crSigMvFtc\n\tGo Top In crSigMvFtc\n\tLocate For Empty(CCars)\n\tIf Eof([crSigMvFtc])\n\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())\n\tEndIf\n\t*Go Top In crSigMvFtc\n\tKeyboard [{DNARROW}]\n\t\n\tThisForm.Grade.Refresh\n\tThisForm.Grade.Column1.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "pcPro, fUniqueIds",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(crSigMvFtc.cTits) and InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.Grade.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\n\tSelect crSigMvFtc\n\tGo Top In crSigMvFtc\n\tLocate For Empty(CCars)\n\tIf Eof([crSigMvFtc])\n\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())\n\tEndIf\n\t*Go Top In crSigMvFtc\n\tKeyboard [{DNARROW}]\n\t\n\tThisForm.Grade.Refresh\n\tThisForm.Grade.Column1.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "pcPro, fUniqueIds",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.cmdInsFtc",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\n\tSelect crSigMvFtc\n\tGo Top In crSigMvFtc\n\tLocate For Empty(CCars)\n\tIf Eof([crSigMvFtc])\n\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())\n\tEndIf\n\n\tThisForm.Grade.Refresh\n\tThisForm.Grade.Column1.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "pcPro, fUniqueIds",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDET.cmdInsFtc",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tSelect crSigMvFtc\n\tIf Not Eof()\n\t\tDelete\n\tEndIf\n\t\n\tIf Not Eof()\n\t\tSkip \n\t\tSkip - 1\n\tEndIf \n\tGo Bottom\n\t\n\tThisForm.Grade.SetFocus\n\tThisForm.Grade.Refresh\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDET.Valid",
+      "queryOriginal": "Select Distinct cCars, Desccars From LocalFtc Where chkobrig = 1 Into Cursor CarsObrigs ReadWrite",
+      "tabelas": "LocalFtc",
+      "colunas": "Desccars,chkobrig,CarsObrigs,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDET.Grade.Column1.Text1.Valid",
+      "queryOriginal": "\tSelect Distinct cCars, Desccars From LocalFtc Into Cursor LocalCars ReadWrite",
+      "tabelas": "LocalFtc",
+      "colunas": "Desccars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDET.Grade.Column2.Text1.Valid",
+      "queryOriginal": "\tSelect Distinct ctits, Descrs From LocalFtc Where CCars = lcCCars Into Cursor LocalTits ReadWrite",
+      "tabelas": "LocalFtc",
+      "colunas": "Descrs,CCars,lcCCars,LocalTits,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDET.Grade.Column2.Text1.LostFocus",
+      "queryOriginal": "\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())",
+      "tabelas": "crSigMvFtc",
+      "colunas": "EmpDopNums,Cpros,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDET.Grade.Column3.Text1.LostFocus",
+      "queryOriginal": "\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())",
+      "tabelas": "crSigMvFtc",
+      "colunas": "EmpDopNums,Cpros,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDET.cmdInsFtc.Click",
+      "queryOriginal": "\t\tInsert Into crSigMvFtc (EmpDopNums, Cpros, cIdChaves) Values (ThisForm.pcEdn, ThisForm.pcPro, fUniqueIds())",
+      "tabelas": "crSigMvFtc",
+      "colunas": "EmpDopNums,Cpros,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalFtc", "crSigMvFtc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

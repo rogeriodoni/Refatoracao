@@ -458,7 +458,7 @@ DEFINE CLASS FormDES AS FormBase
         *-- Container Salvar/Cancelar (Grupo_Salva do legado - Left=819, Top=38)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 38
+            .Top         = 27
             .Left        = 819
             .Width       = 160
             .Height      = 85

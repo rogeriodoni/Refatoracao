@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. `FormSigOpEmb.prg` is final at 1300 lines.
+
+## What I found and did
+
+The form arrived from Phase 7 nearly complete, so I audited rather than assumed. Two real defects surfaced, both now fixed:
+
+**1. The legacy `PROCEDURE Release` was only ┬╝ reproduced.** The dump does four things ÔÇö clear `Grade.RecordSource`, clear two `Column.ControlSource`, then `Use In LocalEmb`. `Destroy` only did the last one, closing the alias while the Grid still pointed at it. Added `DesvincularGrade()`, called *before* the close, matching the legacy's order. It unbinds all four columns, not the legacy's two ÔÇö the SCX bound four and cleared two, which is the legacy's own oversight, not a rule.
+
+**2. `Destroy` hardcoded four cursor-name literals the BO already owns.** A rename in `SigOpEmbBO` would have left the form closing a dead alias and silently leaking the live one. `FecharCursoresDoDialogo()` now reads the names from the BO's `this_cCursor*` properties (literals only as last-resort fallback, same pattern the form's own `ObterAliasGrade` already argued for), and deliberately does *not* touch `crSigMvIte`/`crTpmMvItn` ÔÇö those belong to the parent form and are only visible here because of `DataSession = 1`.
+
+## On the methods the phase brief named
+
+`BtnBuscarClick`/`BtnEncerrarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo` are **not** in this form, and `FormParaBO`/`BOParaForm` keep FormBase's empty hook. This is deliberate, not omission: the dump proves one button (`ButtonCount = 1`, caption `\<Encerrar`, which *grays*), no `pcEscolha`/`frmcadastro`/`Grupo_Op` so no modes, and no field outside the grid ÔÇö the grid binds straight to the cursor the BO owns, so there's no field-by-field pair to mirror. Filling those hooks would be dead code: only `FormBase.Salvar`/`Cancelar` call them, and this screen uses neither. I recorded the measurement in the header so the absence doesn't read as an unfinished phase.
+
+Worth flagging: with `Closable = .F.` and `Cancel = .T.` on the sole button, **ESC confirms and commits** ÔÇö this screen has no abandon path. That's the legacy's behaviour, carried over intentionally.
+
+## Verification (measured in VFP9, not read from code)
+
+- **Compiles clean** ÔÇö form and BO, no `.err`.
+- **Instantiates** (`automation\ProbeEmb728Fase8.prg`, new): grid opens with `ColumnCount = 4`, bound, with the dump's exact widths/headers (52/130/87/87, Qtde/Embalagem/Peso/Peso Total); cell `When` returns `.T./.F./.F./.F.` as the SCX; all six externally-called methods are PUBLIC (rules #3/#51); `Valid` recalculates `pesos = qtds * pesoembs` (4 ├ù 2,50 ÔåÆ 10,000); total uses the legacy's `Qtds > 0` criterion (12,500 across 3 rows, one zero); `Init` zeroes `pesoemb` on the parent; teardown closes the cursor. **RESULTADO: OK.**
+- **Phase 8 gate PASSA** (`automation\VerificarGateFase8Task728.ps1`, new) ÔÇö and it already passed *before* my edits, via the `fluxo-unico` branch, so the verdict isn't resting on my comment text.
+- **Audits**: undefined-functions, nonexistent-properties, protected-method-called-from-outside ÔåÆ zero findings for these files. `ValidadorSQLSchema` passes (683 tables parsed, so the UTF-16 read was sound). Since that validator only saw 4 statements and can be blind to concatenated SQL, I checked rule #22 by hand: `MontarInsertLinha` covers all 9 NOT NULL columns of `SigMvIte`, and the `empdopnums char(29)` positional key is padded, not trimmed (rule #42).
+- Index regenerated ÔÇö form, BO, both cell subclasses and the dependency closure are registered, so `GarantirClasse("FormSigOpEmb")` resolves. `config.prg` correctly does not mention it (on-demand loading). **No menu entry**, matching the convention of its sibling child dialogs `FormSigOpDet`/`FormSigOpDpe`: the parent opens it with `CREATEOBJECT`.
+- CRLF intact (1300/0); stale `.fxp` removed.
+
+One thing I did **not** re-litigate: the BO persists to `SigMvIte` on the server, whereas the legacy only staged rows in the parent's remote cursor for the parent to commit. That divergence is documented and reasoned in `PersistirEmbalagensDoItem`, and it was decided in Phases 1ÔÇô2 ÔÇö but it does mean a movement the user later abandons can leave rows behind, which the legacy would have discarded. Flagging it as yours to confirm rather than silently changing scope.
+
+Files are untracked (new in this migration); I haven't committed anything.

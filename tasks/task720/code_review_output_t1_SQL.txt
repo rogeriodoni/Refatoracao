@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei o achado antes de aplicar a "corre├º├úo" ÔÇö e conclu├¡ que ├® **falso positivo**, n├úo vou remover a condi├º├úo.
+
+**O que a pass SQL encontrou**: `SigOpDetBO.Atualizar()` (linha ~259 do BO) tem:
+```foxpro
+UPDATE SigMvFtc
+SET ccars = ..., ctits = ..., resps = ..., ordens = ...
+WHERE cidchaves = <<EscaparSQL(THIS.this_cCIdChaves)>>
+```
+e `CIDCHAVES` n├úo aparece na lista de colunas de WHERE do legado (que usa `CHKOBRIG, CCARS, EMPDOPNUMS, CPROS, NTIPOS, CGRUS, CTITS`).
+
+**Por que n├úo ├® condi├º├úo inventada**:
+1. `cidchaves` ├® a **chave prim├íria** da linha (`this_cCampoChave = "cidchaves"`) ÔÇö o `WHERE` n├úo ├® um filtro de regra de neg├│cio copiado de alguma consulta do legado, ├® a identifica├º├úo da linha a atualizar num `UPDATE` comum.
+2. O motivo de ela n├úo aparecer no legado ├® que o legado **nunca faz UPDATE** nessa tabela ÔÇö ele sempre regrava tudo via `Delete` + `Insert Into crSigMvFtc (...)`. O `Atualizar()` migrado ├® um m├®todo **exigido pela arquitetura** (`BusinessBase.Atualizar()` ├® hook virtual, chamado por `Salvar()` ÔÇö ver `businessbase.prg:370-375`), n├úo uma tradu├º├úo 1:1 de alguma linha do dump.
+3. Confirmei via grep que `Atualizar()` **nunca ├® chamado** neste fluxo ÔÇö nem pelo Form, nem por `GravarItens()` (que s├│ chama `THIS.Inserir()` dentro do `SCAN`, reproduzindo fielmente o padr├úo DELETE+INSERT do legado). ├ë c├│digo morto por enquanto, mantido s├│ para cumprir o contrato da classe base.
+4. Remover o `WHERE cidchaves = ...` faria o `UPDATE` afetar **todas as linhas** da tabela `SigMvFtc` caso esse m├®todo seja chamado no futuro ÔÇö uma regress├úo grave, n├úo uma corre├º├úo.
+
+Como a regra do pass ├® "NAO alterar logica de negocio" e remover essa condi├º├úo quebraria a l├│gica (viraria UPDATE sem WHERE), optei por **n├úo alterar o arquivo**. Nenhuma mudan├ºa foi salva.

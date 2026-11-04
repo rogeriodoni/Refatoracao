@@ -1,0 +1,564 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpEmb.SCX
+* Data/Hora: 31/10/2026 22:32:02
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOEMB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOEMB
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOEMB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOEMB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOEMB
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGOEMB
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOEMB.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOEMB.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOEMB.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOEMB.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOEMB.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOEMB.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOEMB.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOEMB.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 239
+  Width = 650
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Quantidade de embalagens"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  parentform = .F.
+  podatamgr = .F.
+  Name = "SIGOEMB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 567
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Encerrar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Confirmar a Seleção"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Verdana"
+  FontSize = 8
+  HeaderHeight = 22
+  Height = 143
+  Left = 84
+  Panel = 1
+  ReadOnly = .F.
+  RecordMark = .F.
+  RowHeight = 20
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 84
+  Visible = .T.
+  Width = 380
+  Name = "Grade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 52
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = "999999"
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 130
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 87
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.InputMask = "999999.999"
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Width = 87
+  Column4.ReadOnly = .F.
+  Column4.Visible = .T.
+  Column4.InputMask = "999999.999"
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column2.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Embalagem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column3.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Peso"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column4.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Peso Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOEMB.Grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOEMB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters poForm, pCnx
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm = poForm
+thisform.parentform.pesoemb = 0
+
+ThisForm.poDataMgr = pCnx
+
+Select crSigMvIte
+Set Order to
+Set Order to CItens
+Set Key to crTpmMvItn.CItens
+Go Top
+
+lcQuery = [Select Descs, Cods, Pesos as PesoEmbs From SigCdemb Order By Cods]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCdEmb]) < 1) 
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEmb)])
+	Return .f.
+EndIf
+
+Select a.Cods, a.Descs, a.PesoEmbs, Nvl(b.EmpDopNums,'') as EmpDopNums, Nvl(b.Emps,'') as Emps, Nvl(b.Dopes,'') as Dopes, Nvl(b.Numes,0) as Numes, ;
+		Nvl(b.Qtds,0) as Qtds, Nvl(b.Pesos,0) as Pesos, Nvl(b.CidChaves,'') as CidChaves, Nvl(b.CodEmbs,'') as CodEmbs ;
+	From LocalCdEmb a Left Join crSigMvIte b On a.Cods = b.CodEmbs And b.Citens = crTpmMvItn.Citens Order By a.Cods Into Cursor LocalEmb ReadWrite
+
+This.Grade.RecordSource          = [LocalEmb]
+This.Grade.Column1.ControlSource = [LocalEmb.Qtds]
+This.Grade.Column2.ControlSource = [LocalEmb.Descs]
+This.Grade.Column3.ControlSource = [LocalEmb.PesoEmbs]
+This.Grade.Column4.ControlSource = [LocalEmb.Pesos]
+
+Select LocalEmb
+Go Top
+
+This.Refresh()
+This.Grade.Column1.SetFocus()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+This.Grade.RecordSource          = []
+This.Grade.Column1.ControlSource = []
+This.Grade.Column2.ControlSource = []
+Use In LocalEmb
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOEMB.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+LOCAL lnTotP
+
+Select LocalEmb
+Go Top In LocalEmb
+lnTotP = 0
+
+Select CrSigMvIte
+Set Order To
+Set Order To Citens
+Go Top
+Delete For cItens = crTpmMvItn.Citens in CrSigMvIte
+
+**** Calcula peso total das embalagens ****
+Select LocalEmb
+Scan
+	If LocalEmb.Qtds > 0
+		lnTotP = lnTotP + Localemb.Qtds * Localemb.PesoEmbs
+		
+		Scatter Memo Memvar
+		m.Citens = crTpmMvItn.Citens
+		m.CodEmbs = m.Cods
+		Insert into crSigMvIte From Memvar
+	Endif
+Endscan
+thisform.parentform.pesoemb = lnTotP
+ThisForm.Release()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOEMB.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select LocalEmb
+Replace Qtds With This.Value, Pesos with Localemb.Qtds * LocalEmb.PesoEmbs
+
+thisform.grade.Refresh()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .T.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOEMB.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOEMB.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOEMB.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOEMB
+RESERVED3 (ClassInfo): parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

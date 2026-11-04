@@ -1,0 +1,61 @@
+=== CENARIO A: sem chamador (origem digitavel) ===
+VARTYPE(form) = O
+--- lbl_4c_Label2 (esperado 169,136 109x15 FC 90,90,90) ---
+  existe   = SIM
+  Left/Top = 169,136
+  W x H    = 109x15
+  AutoSize = .F.  Alignment = 0
+  ForeColor= 5921370 (RGB 90,90,90 = 5921370)
+  BackStyle= 0  TabIndex = 2
+  Caption  = [Nova Movimentação : ]
+  Visible  = .T.
+--- txt_4c_Destino (esperado 280,134 150x23 Format ! MaxLength 20) ---
+  existe   = SIM
+  Left/Top = 280,134
+  W x H    = 150x23
+  Format   = [!]  MaxLength = 20
+  TabIndex = 4  ReadOnly = .F.
+  Value    = [] tipo C
+  Visible  = .T.
+--- txt_4c_Origem (sem chamador: digitavel) ---
+  ReadOnly = .F.  TabStop = .T.
+--- BINDEVENT via AEVENTS(a, objeto) ---
+  txt_4c_Origem  = 3
+     [LOSTFOCUS -> VALIDARORIGEM]
+     [KEYPRESS -> TXTORIGEMKEYPRESS]
+     [DBLCLICK -> TXTORIGEMDBLCLICK]
+  txt_4c_Destino = 1
+     [LOSTFOCUS -> VALIDARDESTINO]
+--- escopo dos handlers (PEMSTATUS ...,2 = Protected; .F. = PUBLIC) ---
+  ValidarOrigem     prot=.F.
+  ValidarDestino    prot=.F.
+  AbrirBuscaOrigem  prot=.F.
+  TxtOrigemKeyPress prot=.F.
+  TxtOrigemDblClick prot=.F.
+  OrigemWhen        prot=.F.
+--- ValidarOrigem com campo VAZIO (deve avisar e nao travar a flag) ---
+  flag lookup apos = .F. (esperado .F.)
+--- TxtOrigemKeyPress com tecla NAO-lookup (A=65): nao abre nada ---
+  flag lookup apos = .F. (esperado .F.)
+--- ValidarDestino sem conexao (gnConnHandle=-1): pula SQL, nao estoura ---
+  flag destino apos = .F. (esperado .F.)
+  Value preservado  = [TESTE DESTINO] (nunca apagado - regra 50)
+--- guarda de reentrancia: flag ligada faz o handler sair na hora ---
+  flag preservada   = .T. (esperado .T.)
+--- lookup com campo ReadOnly nao altera o valor ---
+  Value   = [NAO MEXER] (esperado NAO MEXER)
+  flag    = .F. (esperado .F. - restaurada)
+
+=== CENARIO B: com chamador (origem somente-exibicao) ===
+VARTYPE(form) = O
+  txt_4c_Origem.Value    = [ENTRADA NF]
+  txt_4c_Origem.ReadOnly = .T. (esperado .T.)
+  txt_4c_Destino.Value   = [] (esperado vazio)
+  eventos na origem      = 4
+     [WHEN -> ORIGEMWHEN]
+     [LOSTFOCUS -> VALIDARORIGEM]
+     [KEYPRESS -> TXTORIGEMKEYPRESS]
+     [DBLCLICK -> TXTORIGEMDBLCLICK]
+
+=== DIALOGOS CAPTURADOS ===
+[30/10/2026 03:54:27] Atenção: Operação Deve ser informada !!!

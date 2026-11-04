@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 ÔÇö task725 / `Formsigopdtf`
+
+**N├úo acrescentei campo nenhum, e esse ├® o resultado correto.** O que a fase pede ("metade dos campos da Page2") n├úo tem referente aqui: `SIGOPDTF` ├® um di├ílogo modal de **captura** (perfil CAPTURA), sem Page2 ÔÇö e os campos j├í foram entregues **por inteiro** pela Fase 4.
+
+**Paridade conferida objeto a objeto** contra o dump (26 objetos) e o `layout.json`: 6 TextBox, 1 OptionGroup, 1 CommandGroup, 2 Container, 1 Shape, 12 Label ÔÇö cobertura total, nada pendente. `Format`/`InputMask` transcritos conforme a regra #49 (os 5 `Format = ""` e o `InputMask = ""` do `GetDatas` corretamente fora), os 7 Label com `AutoSize = .T.` no dump sa├¡ram com `.AutoSize = .F.` + Width/Height expl├¡citos (regra #23), e `Option1.Value = 1` corretamente **n├úo** foi replicado nos `Buttons(N)`.
+
+### Por que a fase foi re-executada (n├úo foi o gate)
+
+Medido com os helpers reais do orquestrador carregados por AST:
+
+| | resultado |
+|---|---|
+| **Gate de conte├║do da Fase 5** | **PASSA** (ramo CAPTURA: `legadoCapturaF5 = True`, 6 TextBox contra piso 3) |
+| **Guard de NO-OP** (roda **antes** do gate) | `Test-LegadoSemCampoNemLista = False` ÔåÆ **for├ºa retry opus** |
+
+O guard usa o predicado do perfil **DESPACHANTE**, que exige legado sem lista **e** sem campos ÔÇö e este tem 6. ├ë a 4┬¬ ocorr├¬ncia da diverg├¬ncia guardÔÇæxÔÇægate j├í registrada (Fase 4: task699/715/717; Fase 6: task699) e a **primeira medida na Fase 5**.
+
+**N├úo mexi no orquestrador**, pela pol├¡tica j├í documentada para esse caso: h├í `RunLoop.ps1` vivo (PID 20544) e **1062 inser├º├Áes n├úo commitadas** em `OrquestradorMigracao.ps1` ÔÇö editar o `.ps1` n├úo valeria para a execu├º├úo em curso. O fix do guard continua pendente.
+
+### O que foi gravado
+
+`Formsigopdtf.prg`: bloco `FASE 5/8` no cabe├ºalho com a aus├¬ncia medida, a paridade objeto a objeto e o diagn├│stico acima. **Coment├írio puro**, provado de tr├¬s formas: `diff` das linhas n├úo-coment├írio do arquivo inteiro = zero; 0 linhas n├úo-coment├írio no bloco; `.FXP` compilado no mesmo path **12486 == 12486**, sem `.ERR`. Aproveitei para normalizar o arquivo de volta para **CRLF** (a Fase 4 deixou LF-only; os irm├úos do diret├│rio s├úo todos CRLF) ÔÇö a medi├º├úo do `.FXP` foi feita com as duas vers├Áes j├í em CRLF, para n├úo comparar duas vari├íveis juntas.
+
+### Achado colateral (custou tempo, vale registrar)
+
+O script auxiliar de compila├º├úo pendurou o `vfp9.exe` num di├ílogo modal: usava `FILESIZE()`, que **n├úo existe em VFP9** (regra #13). Corrigir o `.prg` n├úo resolveu ÔÇö o `.FXP` **do pr├│prio script** ficou velho e seguiu rodando o pÔÇæcode antigo. Assinatura nova: *compila limpo + trava + imune ├á edi├º├úo = `.FXP` velho*. O helper (`automation\CompilarF5Sigopdtf725.prg`) ficou funcionando, com checkpoints e o aviso no cabe├ºalho.
+
+Mem├│rias atualizadas: `feedback_noop_guard_sem_excecao_para_fase_sem_trabalho` (4┬¬ ocorr├¬ncia) e `feedback_harness_fxp_velho_roda_codigo_antigo` (3┬¬ assinatura).
+
+**Escopo leg├¡timo das Fases 6ÔÇæ8** (n├úo entra aqui): os `BINDEVENT` dos campos, o `Click` do CANCELA, o `KeyPress` de ESC e o protocolo SiTef.

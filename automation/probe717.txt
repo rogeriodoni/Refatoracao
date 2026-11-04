@@ -1,0 +1,40 @@
+=== PROBE FASE 6 - FormSigOpCts ===
+cursor crTesteCts: USED=.T. Senhas=[ABC123    ]
+
+--- C1 modo CONSULTA (Altera = .F.) ---
+VARTYPE(form)      = O
+Height             = 211  (esperado 211)
+Width              = 300  (esperado 300)
+Frase.Caption      = [A Conta 1101 LOJA 001<CR> Possui Senha : ]
+txt_4c_Senha.Class = Textboxsenhaatualsigopcts_4c / Base=Textbox
+txt_4c_Nova1.Class = Textboxsenhanovasigopcts_4c / Base=Textbox
+txt_4c_Nova2.Class = Textboxsenhanova2sigopcts_4c / Base=Textbox
+Nova2 Top/Left/W/H = 178/106/80/18  (esperado 178/106/80/18)
+Nova2 PasswordChar = [*] InputMask=[!!!!!!!!!!]
+Nova2 Visible      = .T.
+PROTECTED? ValidarSenhaAtual     = .F.
+PROTECTED? ValidarSenhaNova      = .F.
+PROTECTED? PermitirSenhaNova     = .F.
+PROTECTED? AtivarConfirmSenha    = .F.
+PROTECTED? RestaurarConfirmSenha = .F.
+AEVENTS(txt_4c_Senha) = 2
+   [GOTFOCUS -> ATIVARCONFIRMSENHA]
+   [LOSTFOCUS -> RESTAURARCONFIRMSENHA]
+PermitirSenhaNova()   = .F.  (esperado .F.)
+When txt_4c_Nova1     = .F.  (esperado .F.)
+When txt_4c_Nova2     = .F.  (esperado .F.)
+CONFIRM antes/ativado/restaurado = OFF/ON/OFF
+ValidarSenhaAtual ret = .T. (tipo L)
+form apos Valid       = O
+
+--- C2 modo ALTERAR (Altera = .T.) ---
+VARTYPE(form)      = O
+Height             = 250  (esperado 250)
+Frase.Caption      = [Conta 1101 LOJA 001<CR>Digite a Senha Atual : ]
+PermitirSenhaNova()   = .T.  (esperado .T.)
+When txt_4c_Nova2     = .T.  (esperado .T.)
+par DIFERENTE: ret=.T. ZSen=.F. Senhas=[ABC123    ]  (esperado inalterado ABC123)
+par IGUAL:     ret=.T. ZSen=.F. Senhas=[ABC123    ]  (esperado XYZ9)
+
+CONFIRM no fim do probe = OFF
+=== FIM ===

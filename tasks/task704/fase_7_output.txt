@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7/8 executada. `FormSigOpClp.prg` atualizado: 1123 ÔåÆ 1390 linhas.
+
+## O que foi implementado
+
+O legado **n├úo tem CRUD**. Medido no dump, n├úo presumido: raiz `SIGOPCLP` ├® `BaseClass: form` (gen├®rico, nunca `frmcadastro`), e a ├║nica superf├¡cie de bot├úo do SCX inteiro ├® `grp_operacao` (`commandgroup`, `ButtonCount = 1`, membro `cmd_sair`/"Encerrar"). Zero objeto ou m├®todo com os verbos Incluir/Alterar/Visualizar/Excluir; `comportamento.json` confirma por via independente ÔÇö dos 6 m├®todos com c├│digo, nenhum grava em tabela.
+
+Ent├úo inventar os quatro `BtnXxxClick` violaria o PILAR 1, e cri├í-los vazios ├® o stub disfar├ºado que a regra de completude pro├¡be. Esta fase entregou os eventos que o legado **de fato** tem, os tr├¬s que as Fases 4 e 6 deixaram explicitamente para c├í:
+
+| Legado | Migrado |
+|---|---|
+| `fwgrade.dopes.Header1.Click` | `HeaderOperacaoClick` ÔåÆ `Set Order To Num` (ASCENDENTE) |
+| `fwgrade.datas.Header1.Click` | `HeaderDataClick` ÔåÆ `Set Order To Datas Descending` |
+| `fwgrade.valos.Text1.KeyPress` | `TxtValorKeyPress` ÔåÆ TAB (9) move o foco para Encerrar |
+
+Mais `ReordenarGrade` (funil comum dos dois `Header1.Click`) e `ConfigurarEventosGrade` (os 3 `BINDEVENT`), chamado no fim de `ConfigurarPageFrame`. O quarto evento de controle ÔÇö `cmd_sair.Click` ÔåÆ `BtnEncerrarClick` ÔÇö j├í veio na Fase 4.
+
+**Decis├úo que registrei no c├│digo**: `ReordenarGrade` **n├úo** chama `CarregarLista`, apesar de a Fase 4 ter previsto isso. `CarregarLista` termina em `PosicionarNoTopo()` (`GO TOP` incondicional, correto para a *abertura*), e isso desfaria a reposi├º├úo de RECNO que `AplicarOrdem` acaba de fazer ÔÇö o legado volta deliberadamente para a linha do usu├írio (`If (lnRecno <> 0) / Go lnRecno`), caindo em `GO TOP` s├│ em EOF. Passar pelo `CarregarLista` faria o usu├írio perder a linha que estava olhando, sem erro e sem log. O `Refresh` obrigat├│rio (regra #21/#46) ficou no funil, n├úo duplicado nos handlers.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: `FormSigOpClp.fxp` gerado (13.354 bytes), nenhum `.err`
+- **Gate Fase 7** (rodado com a l├│gica exata do orquestrador): `legadoSemCrud = True`, `nBotoesLegado = 1` ÔåÆ `minHandlersF7 = 1`, `nHandlers = 1` ÔåÆ **PASSA**
+- **Validador de completude** (regex id├¬nticos do `05d`): **0 problemas** nos dois arquivos (os 23 "TODO" s├úo a palavra portuguesa *TODO/TODOS* no meio de frase; o padr├úo real exige `^\s*\*--\s*TODO\b`)
+- Handlers de `BINDEVENT` todos PUBLIC, sem colis├úo com `FormBase` (regra #3)
+- Zero `TRY/CATCH` nos blocos novos ÔåÆ os 10 `RETURN` s├úo seguros (regra #1)
+- `ColumnCount` atribu├¡do uma ├║nica vez, em `ConfigurarGrade` ÔåÆ os 3 `BINDEVENT` sobrevivem a cada rebind do `CarregarLista` (regras #34/#183)
+- Zero literal acentuado; `Column3/4/5` conferidos contra os `ControlSource` de `.Dopes`/`.Datas`/`.Valos`
+- `CursorPronto`/`OrdenarPorNumero`/`OrdenarPorData` conferidos como PUBLIC no BO (regra #51)
+- CRLF preservado em 1390/1390 linhas; diff contra o original mostra **s├│ adi├º├Áes**, nenhuma remo├º├úo
+
+Ressalva honesta: validei por compila├º├úo e an├ílise est├ítica. N├úo executei a tela ÔÇö ela ├® um di├ílogo filho que s├│ abre via `FormSigOpCcl` com o cursor que o pai monta, e o SQL Server (192.168.200.10) est├í inalcan├º├ível nesta m├íquina. O comportamento de clique/TAB em runtime s├│ se prova com a tela vis├¡vel (regra #46), o que fica para a Fase 8 ou para teste manual.

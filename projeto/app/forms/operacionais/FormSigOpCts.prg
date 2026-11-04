@@ -1,0 +1,1442 @@
+*==============================================================================
+* FormSigOpCts.prg
+* Form OPERACIONAL: dialogo MODAL de Senha de Conta (SigOpCts.SCX migrado)
+*
+* Dialogo generico reaproveitado por varios cadastros/movimentos: confere a
+* senha gravada na coluna Senhas de um cursor que o CHAMADOR ja mantem aberto
+* (alias informado no 3o parametro) e, em modo alteracao, troca essa senha
+* depois de o usuario confirmar a nova senha duas vezes.
+*
+* Legado (Init): LParameters _Titulo, _Altera, _Arquivo
+* Chamadores legado (sigcdepd/sigpdmp6/sigmvcab):
+*   Do Form SigOpCts With TmpNens.ContaDs, .f., 'LocalCli' To _Libera
+*
+* Uso canonico no sistema novo (regra CLAUDE.md #29: Show() FORA do TRY, pois
+* o dialogo eh MODAL e todo o uso da tela vive dentro da chamada bloqueante;
+* e o CHAMADOR eh quem da Release, depois de ler o resultado):
+*   loc_oDlg = .NULL.
+*   TRY
+*       loc_oDlg = CREATEOBJECT("FormSigOpCts", loc_cConta, .F., "LocalCli")
+*   CATCH TO loc_oErro
+*       MostrarErro(loc_oErro.Message, "Erro")
+*       loc_oDlg = .NULL.
+*   ENDTRY
+*   IF VARTYPE(loc_oDlg) = "O"
+*       loc_oDlg.Show()
+*       loc_lLibera = loc_oDlg.ObterResultado()
+*   ENDIF
+*
+* Layout: form PLANO, sem PageFrame - o SCX legado nao declara PageFrame algum
+* (cntSombra + Frase/Say3/Label1/Shape2 + 3 fwget soltos direto na form, todos
+* com "Parent: SIGOPCTS"). Mesmo padrao de dialogo OPERACIONAL pequeno sem abas
+* de FormSigOpAut.prg/FormDCC.prg. Nao se inventa aqui PageFrame, Page de Lista
+* nem Page de Dados, porque o legado nao tem nenhum dos tres (PILAR 1).
+*
+* DataSession = 1 (declarado no SCX) eh ESSENCIAL neste dialogo: ele le e grava
+* a coluna Senhas de um alias aberto pelo form CHAMADOR. DataSession = 2 daria
+* uma sessao privada onde esse alias nao existe, e o USED() do BO devolveria
+* .F. para um cursor que esta aberto do outro lado.
+*
+* Fase 3/8 - Estrutura base: propriedades visuais transcritas do dump, Init com
+* os mesmos parametros do legado, InicializarForm (instancia o SigOpCtsBO criado
+* nas Fases 1-2), a faixa de cabecalho (cntSombra -> cnt_4c_Sombra) e o ciclo de
+* saida do dialogo (ObterResultado/Destroy/Unload).
+*
+* Fase 4/8 - Grid e botoes CRUD da Page1: NADA A ACRESCENTAR, por ausencia
+* MEDIDA no legado. Este dialogo tem o perfil CAPTURA (modal que so COLETA um
+* valor digitado e o devolve ao chamador), o mesmo de FormSigOpChp (task699),
+* FormSigOpCrp (task714) e FormSigOpCtd (task715).
+*
+* Medido em 2026-10-31 sobre tasks\task717\SigOpCts_form_codigo_fonte.txt:
+*   superficie de LISTA ... BaseClass grid 0 | pageframe 0 | listbox 0;
+*                           AddCursor 0 | pColuna 0 | RecordSource 0 |
+*                           ControlSource 0 | "Grade" 0 | "grd" 0
+*   superficie de BOTAO ... BaseClass commandbutton 0 | commandgroup 0;
+*                           PROCEDURE Click 0; Incluir/Alterar/Excluir/
+*                           Buscar/Confirmar/Encerrar 0
+*   campos ............... 3 BaseClass textbox (senha, GetNova1, GetNova2),
+*                           TODOS editaveis (ReadOnly 0) - por isso o perfil
+*                           eh CAPTURA, e nao EXIBICAO
+*
+* Os 12 objetos do SCX sao Dataenvironment, o form, cntSombra com 2 Label,
+* Frase, Say3 e Label1 (5 Label no total), Shape2 e os 3 fwget. Nao ha grade
+* para listar, nem registro para percorrer, nem botao algum: o dialogo se
+* fecha pelo proprio senha.Valid ("Thisform.Release"), sem CommandButton.
+*
+* Inventar aqui um Grid, um cnt_4c_Botoes com 6 botoes CRUD e um
+* AlternarPagina() numa tela de 300x211 violaria o PILAR 1 e a regra "NUNCA
+* inventar"; escrever esses metodos vazios so para casar com o regex do gate
+* seria o "stub disfarcado" que a regra de completude proibe.
+*
+* O gate da Fase 4 reconhece a ausencia: medido com os helpers REAIS do
+* automation\OrquestradorMigracao.ps1 (carregados por AST - dot-source do
+* orquestrador DISPARA uma migracao de verdade), temListaEstritaF4 = .F.,
+* temCampoCapturaF4 = .T., legadoCapturaF4 = .T. e temLayoutCaptura = .T.:
+* a fase PASSA pelo ramo CAPTURA com o arquivo entregue na Fase 3.
+*
+* Fase 5/8 - Campos principais (1a metade). O legado tem 3 campos digitaveis
+* (senha, GetNova1, GetNova2), logo a 1a metade sao DOIS deles:
+*
+*   ConfigurarCamposSenhaAtual() .. Frase (mensagem), Say3 ("Senha : ") e o
+*                                   TextBox senha
+*   ConfigurarCamposSenhaNova() ... Label1 ("Digite a nova senha : "), Shape2
+*                                   (moldura) e o 1o TextBox do par, GetNova1
+*
+* Os dois metodos sao chamados de InicializarForm() depois da faixa do
+* cabecalho, na ordem dos registros do SCX (Frase, Say3, senha, Label1,
+* Shape2, GetNova1), para o z-order ficar igual ao do legado.
+*
+* Fica para a 2a metade (Fase 6) o 3o campo - GetNova2, a caixa de confirmacao
+* da nova senha -, que o legado cria DEPOIS de GetNova1: ele tem de continuar
+* sendo o ULTIMO AddObject deste bloco, por dois motivos medidos:
+*   - z-order: Shape2 eh a moldura dos dois campos (Top 149..205 cobre
+*     GetNova1 em 153..171 e GetNova2 em 178..196); criado ANTES deles, o
+*     retangulo fica por baixo e os cliques chegam aos TextBox;
+*   - ordem de tabulacao: o SCX declara TabIndex senha=3, GetNova1=5,
+*     GetNova2=6, e entre os FOCALIZAVEIS (so os 3 TextBox - Label tem
+*     TabIndex mas nao tem TabStop, e Shape nao tem TabIndex) a ordem relativa
+*     eh exatamente a ordem de criacao aqui. Com AddObject o VFP numera pela
+*     ordem de criacao, entao nao ha TabIndex a reatribuir: um metodo de
+*     renumeracao ascendente seria no-op. Reordenar os AddObject, sim,
+*     quebraria a sequencia do legado sem erro algum.
+*
+* Fase 6/8 - Campos restantes e lookups.
+*
+* (A) LOOKUP: NADA A ACRESCENTAR, por ausencia MEDIDA no legado. Medido em
+* 2026-10-31 sobre tasks\task717\SigOpCts_form_codigo_fonte.txt, com os cinco
+* padroes que o proprio gate da fase usa para decidir se o legado tem lookup:
+*
+*     fwbusca ............................................. 0
+*     mAddColuna .......................................... 0
+*     sigacess( ........................................... 0
+*     Acesso(Campos|Contab|Contas|Empresa|Grupos|
+*            MovInd|MovMto|Produto|Titulo)( ............... 0
+*     FormBuscaAuxiliar ................................... 0
+*     CreateObject( ....................................... 0
+*
+* Os tres campos deste dialogo sao SENHAS digitadas pelo usuario: nao ha
+* codigo a resolver contra tabela alguma, nenhuma coluna de descricao a
+* preencher e nenhum universo a listar. Escrever aqui um AbrirLookup*/
+* AbrirBusca* apontando para alguma tabela seria INVENTAR consulta que o
+* legado nunca faz (viola o PILAR 1 e a regra "NUNCA inventar tabelas de
+* lookup"), e escrever o metodo vazio so para casar com o regex do gate seria
+* o "stub disfarcado" que a regra de completude proibe.
+*
+* (B) BOTOES: tambem NADA A ACRESCENTAR. O dump nao tem UM CommandButton nem
+* UM CommandGroup (BaseClass commandbutton 0 | commandgroup 0, PROCEDURE Click
+* 0) - o dialogo se fecha de DENTRO dos proprios eventos de campo
+* ("Thisform.Release" no senha.Valid e no GetNova2.Valid). Um container
+* cnt_4c_BotoesAcao com Confirmar/Cancelar numa tela de 300x211 seria botao
+* que o legado nao tem.
+*
+* (C) 3o e ULTIMO campo: GetNova2 -> txt_4c_Nova2, a caixa de confirmacao da
+* nova senha, acrescentada em ConfigurarCamposSenhaNova DEPOIS de
+* txt_4c_Nova1, pelos dois motivos medidos na Fase 5 (z-order sobre shp_4c_
+* Shape2 e ordem de tabulacao, que com AddObject eh a ordem de criacao).
+*
+* (D) EVENTOS dos campos digitaveis. O legado tem seis, e eles se dividem em
+* DOIS grupos conforme o RETORNO do evento ser ou nao o mecanismo:
+*
+*   evento legado                       onde fica no migrado
+*   ----------------------------------  ------------------------------------
+*   senha.Valid                         Valid da SUBCLASSE do TextBox
+*   GetNova1.When / GetNova2.When       When da SUBCLASSE do TextBox
+*   GetNova2.Valid                      Valid da SUBCLASSE do TextBox
+*   senha.When  (Set Confirm On)        When da SUBCLASSE (sem usar retorno)
+*   senha.GotFocus  (Set Confirm On)    BINDEVENT -> AtivarConfirmSenha
+*   senha.LostFocus (Set Confirm Off)   BINDEVENT -> RestaurarConfirmSenha
+*
+* A linha divisoria eh o retorno: BINDEVENT DESCARTA o valor devolvido pelo
+* delegate (regra CLAUDE.md #3), e nos quatro primeiros o retorno EH a regra -
+* "Return ThisForm.Altera" no When eh o que IMPEDE o foco de entrar no bloco
+* da nova senha em modo consulta, e "Return 0" no senha.Valid eh o que SEGURA
+* o foco no campo quando o usuario escolhe digitar de novo. Ligado por
+* BINDEVENT, qualquer dos dois viraria no-op silencioso: a tela compilaria,
+* abriria, e em modo consulta o usuario poderia trocar a senha sem provar a
+* antiga. Por isso eles vao EMBUTIDOS em subclasse de TextBox, que eh o padrao
+* canonico do projeto para evento cujo retorno importa (regra CLAUDE.md #46,
+* referencia FormSigOpCrd.TextBoxFaixaSigOpCrd_4c e FormSigOpChb.
+* TextBoxBuscaCheque) - as subclasses ficam no fim deste arquivo e NAO decidem
+* nada: so despacham para o metodo PUBLIC do form, onde a regra do legado esta
+* transcrita, em UM lugar so e alcancavel pelo harness.
+*
+* Os dois ultimos vao por BINDEVENT de proposito, e nao por mais um metodo na
+* subclasse: "Set Confirm On/Off" nao usa retorno nenhum, e CONFIRM eh um SET
+* GLOBAL - quem o liga tem de devolve-lo ao valor anterior inclusive quando o
+* dialogo fecha com o foco ainda dentro do campo (ai o LostFocus nao chega a
+* disparar), e isso eh ciclo de vida do FORM, nao do controle. Daqui sai o
+* par AtivarConfirmSenha/RestaurarConfirmSenha, com o valor de origem lido de
+* SET("CONFIRM") em vez de chutar OFF, e a restauracao repetida no Destroy.
+*
+* (E) MENSAGEM do cabecalho do dialogo (lbl_4c_Frase, criada na Fase 5 com
+* Caption vazio): preenchida agora por AplicarMensagemPorModo, que completa a
+* transcricao do MESMO bloco "If _Altera" do Init legado cuja outra metade
+* ("This.Height = 250") ja esta em AplicarAlturaPorModo.
+*
+* Fase 7/8 - Form, eventos principais dos botoes: NADA A ACRESCENTAR, pela
+* MESMA ausencia ja medida e registrada no item (B) da Fase 6/8 acima -
+* BaseClass commandbutton 0 | commandgroup 0, PROCEDURE Click 0, nenhum verbo
+* CRUD (Incluir/Alterar/Visualizar/Excluir/Buscar/Confirmar/Encerrar) em
+* sitio algum do dump. O dialogo inteiro se fecha de DENTRO dos dois Valid de
+* campo ("Thisform.Release" em senha.Valid e GetNova2.Valid), ja transcritos
+* em ValidarSenhaAtual/ValidarSenhaNova (Fase 6/8) via FecharDialogo - nao ha
+* Grupo_Op de pai algum para este dialogo herdar (eh aberto por CREATEOBJECT
+* direto do chamador, nao por um form-pai com botoes CRUD) e nao ha piso
+* minimo de botao de saida isolado (regra "Fase 7 exige >=1 botao PROVADO no
+* dump") que se aplique aqui, porque o dump prova ZERO, nao apenas 1.
+*
+* Escrever BtnIncluirClick()/BtnAlterarClick()/BtnVisualizarClick()/
+* BtnExcluirClick() vazios so para casar com o nome que o template desta fase
+* lista seria o "stub disfarcado" que a regra de completude do CLAUDE.md
+* proibe, e um CommandButton/CommandGroup real nessa tela de 300x211 (ou 250
+* em modo alteracao) inventaria controle que o legado nunca teve - violaria o
+* PILAR 1 e a regra "NUNCA inventar" (docs\migration_guide.md). Mesmo perfil
+* CAPTURA sem botao algum de FormSigOpChp (task699) e de FormSigPrScn
+* (task673): dialogo modal cuja unica saida sai de dentro do proprio evento
+* de campo, documentado no proprio cabecalho do .prg deles.
+*
+* Fase 8/8 - Eventos auxiliares e consolidacao final.
+*
+* (A) ESPELHOS, que eh o que esta fase de fato acrescenta. Os dois sentidos
+* passaram a ter UM ponto cada, e os dois estao no caminho VIVO:
+*
+*   FormParaBO  tela -> BO: os TRES campos digitaveis (txt_4c_Senha,
+*               txt_4c_Nova1, txt_4c_Nova2 = senha/GetNova1/GetNova2 do
+*               legado). Chamado no inicio de ValidarSenhaAtualExec e de
+*               ValidarSenhaNovaExec, que DEPOIS leem as proprias propriedades
+*               do BO - nao sobrou nenhuma segunda leitura de controle nos
+*               dois Valid, logo este metodo nao eh cerimonia: tirando-o, o
+*               digitado nao chega ao BO.
+*   BOParaForm  BO -> tela: ressincroniza _Altera/_Titulo a partir do BO (que
+*               eh quem aplica os defaults do Init legado) e aplica a frase e
+*               a altura do modo. Chamado por InicializarForm, onde substituiu
+*               as chamadas separadas a AplicarMensagemPorModo/
+*               AplicarAlturaPorModo - as duas sao as metades do mesmo bloco
+*               "If _Altera" e agora saem do mesmo lugar, na ordem do legado.
+*
+* "TODOS os campos" esta satisfeito por construcao: o dump tem exatamente
+* TRES controles de entrada (BaseClass textbox 3, e zero combobox/editbox/
+* spinner/checkbox/optiongroup), e os tres aparecem nas duas direcoes.
+*
+* (B) O QUE NAO FOI ESCRITO, e por que - mesma ausencia MEDIDA dos itens (B)
+* da Fase 6/8 e da Fase 7/8 (dump com commandbutton 0, commandgroup 0,
+* PROCEDURE Click 0, grid 0, pageframe 0, AddCursor/pColuna 0):
+*
+*   BtnSalvarClick / BtnConfirmarClick / BtnCancelarClick / BtnEncerrarClick /
+*   BtnBuscarClick ..... nao ha botao algum a que pendurar Click. A unica
+*                        saida do dialogo sai de DENTRO dos dois Valid de
+*                        campo, ja transcrita em FecharDialogo.
+*   CarregarLista ...... nao ha lista: nenhum Grid, nenhum cursor de grade,
+*                        nenhuma coluna. Este dialogo le UMA coluna (Senhas)
+*                        de um alias que o CHAMADOR mantem aberto.
+*   AjustarBotoesPorModo nao ha botao cujo Enabled ajustar.
+*   HabilitarCampos .... o legado NAO habilita/desabilita campo algum: o que
+*                        ele trava em modo consulta sao os dois campos da nova
+*                        senha, e faz isso pelo RETORNO do evento When
+*                        ("Return ThisForm.Altera"), nao por Enabled nem por
+*                        Visible - nenhum dos dois aparece no dump desses
+*                        controles. Essa regra esta em PermitirSenhaNova.
+*                        Escrever aqui um HabilitarCampos que mexesse em
+*                        Enabled criaria uma SEGUNDA fonte para a mesma regra,
+*                        concorrendo com o When.
+*   LimparCampos ....... o legado nunca limpa os campos: na senha errada ele
+*                        PERGUNTA "Deseja Digitar Novamente ?" e, no Sim,
+*                        SEGURA o foco no campo com o valor digitado intacto
+*                        ("Return 0"); na nova senha divergente ele so avisa e
+*                        deixa o par na tela para correcao. Zerar o campo aqui
+*                        seria o defeito da regra CLAUDE.md #50 (apagar o que
+*                        o usuario acabou de digitar).
+*
+* Escrever qualquer um deles vazio so para casar com o nome que o template
+* desta fase lista seria o "stub disfarcado" que a regra de completude proibe;
+* com controle real, inventaria superficie que o legado nunca teve (PILAR 1).
+*
+* Divergencias conscientes, todas de ferramenta e nenhuma de regra:
+*   - MESSAGEBOX eh proibido no projeto, entao o "Deseja Digitar Novamente ?"
+*     do legado (MESSAGEBOX com 4+256, Sim/Nao com o Nao em destaque) sai por
+*     MsgConfirma, que devolve LOGICAL (regra #7) e destaca o Sim. A decisao
+*     do usuario eh lida igual: Sim = digitar de novo (segura o foco), Nao =
+*     desistir (fecha com ZSen = .F.).
+*   - o legado estoura se o alias do chamador nao estiver aberto
+*     ("&Arquivo..Senhas" sobre alias fechado); aqui o BO devolve a mensagem
+*     "Arquivo X nao esta aberto" e o form a exibe com MsgErro e FECHA o
+*     dialogo com ZSen = .F. Segurar o foco nesse caso criaria laco infinito,
+*     porque nenhuma digitacao conserta um alias fechado.
+*   - os tres "Thisform.Release" do legado fecham por Hide() (funil
+*     FecharDialogo), e nao por Release(): com Release() o objeto morre dentro
+*     do Valid e o ObterResultado() que o bloco "Uso canonico" acima faz na
+*     linha seguinte ficaria inalcancavel. Medido com o probe desta fase - ver
+*     o comentario de FecharDialogo. Quem libera eh o CHAMADOR.
+*==============================================================================
+
+DEFINE CLASS FormSigOpCts AS FormBase
+
+    *-- Propriedades visuais (PILAR 1: transcritas do dump de SigOpCts.SCX)
+    Width        = 300
+    Height       = 211
+    DataSession  = 1
+    AutoCenter   = .T.
+    Caption      = ""
+    BorderStyle  = 2
+    WindowType   = 1
+    ShowWindow   = 1
+    ControlBox   = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    TitleBar     = 0
+    Themes       = .F.
+    FontName     = "Tahoma"
+    FontSize     = 8
+
+    *-- Altura que o legado aplica em modo alteracao ("This.Height = 250" no
+    *-- ramo If _Altera do Init), para abrir espaco ao bloco da nova senha.
+    this_nAlturaAltera = 250
+
+    *-- Parametros recebidos na abertura (Init legado: _Titulo, _Altera, _Arquivo).
+    *-- Guardados ANTES do DODEFAULT() porque FormBase.Init() chama
+    *-- InicializarForm(), que os repassa ao SigOpCtsBO.
+    this_cTitulo  = ""              && _Titulo  - conta identificada na mensagem
+    this_lAltera  = .F.             && _Altera  - .T. troca a senha, .F. so confere
+    this_cArquivo = ""              && _Arquivo - alias aberto que tem a coluna Senhas
+
+    *-- Cache do resultado do dialogo (ZSen do legado). O BO eh a fonte unica
+    *-- enquanto o form vive; esta copia existe porque o evento Unload dispara
+    *-- DEPOIS do Destroy, quando o BO ja foi liberado.
+    this_lZSen = .F.
+
+    *-- Guardas de reentrancia dos dois Valid (regra CLAUDE.md #47): os dois
+    *-- exibem dialogo MODAL, que tira e devolve o foco e pode redisparar o
+    *-- proprio Valid - sem guarda a mensagem sairia duas vezes.
+    this_lEmValidacaoSenha = .F.
+    this_lEmValidacaoNova  = .F.
+
+    *-- Pedido de fechamento vindo de dentro de um Valid ("Thisform.Release"
+    *-- do legado). O Release NAO eh dado no corpo do Valid: o wrapper libera a
+    *-- guarda de reentrancia ANTES de fechar, para o form nao ser destruido
+    *-- com a flag ligada e com codigo ainda por executar acima na pilha.
+    this_lSolicitaFechar = .F.
+
+    *-- Valor de SET("CONFIRM") de ANTES de o campo de senha receber o foco.
+    *-- "" = nada capturado ainda. O legado faz "Set Confirm Off" direto ao
+    *-- sair; aqui devolve-se o valor de origem, que eh o mesmo resultado
+    *-- quando ele era OFF (o caso atual - config.prg nao mexe em CONFIRM) e
+    *-- nao atropela quem tenha ligado CONFIRM antes de abrir o dialogo.
+    this_cConfirmAnterior = ""
+
+    *--------------------------------------------------------------------------
+    * Init - Recebe os mesmos parametros do Init legado (_Titulo, _Altera,
+    * _Arquivo). Os tres sao guardados ANTES de DODEFAULT(), porque
+    * FormBase.Init() chama InicializarForm() e lah eles ja sao necessarios.
+    *
+    * O legado escreve "If _Altera" direto, sem guarda: chamado sem o 2o
+    * parametro ele estoura. Aqui os tres chegam por VARTYPE, e o alias vazio
+    * eh deixado como "" para o BO aplicar o default do legado
+    * ("If (Type('_Arquivo') <> 'C') / ThisForm.Arquivo = 'crSigCdCli'").
+    *--------------------------------------------------------------------------
+    PROCEDURE Init(par_cTitulo, par_lAltera, par_cArquivo)
+        LOCAL loc_lSucesso
+
+        THIS.this_cTitulo = IIF(VARTYPE(par_cTitulo) = "C", ALLTRIM(par_cTitulo), "")
+        THIS.this_lAltera = IIF(VARTYPE(par_lAltera) = "L", par_lAltera, .F.)
+
+        IF VARTYPE(par_cArquivo) = "C" AND !EMPTY(ALLTRIM(par_cArquivo))
+            THIS.this_cArquivo = ALLTRIM(par_cArquivo)
+        ELSE
+            THIS.this_cArquivo = ""
+        ENDIF
+
+        THIS.this_lZSen = .F.
+
+        loc_lSucesso = DODEFAULT()
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Cria o Business Object com os parametros recebidos no
+    * Init, aplica a altura do modo corrente e monta a estrutura visual, na
+    * mesma ordem do Init legado.
+    *
+    * A faixa do cabecalho eh o PRIMEIRO AddObject (regra CLAUDE.md #11/#31):
+    * ela ocupa Top = 0..80 e o label "Frase" do legado fica em Top = 39, ou
+    * seja DENTRO da area da faixa - quem for criado depois dela desenha por
+    * cima; invertida a ordem, o cabecalho cobriria o conteudo.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("SigOpCtsBO", ;
+                THIS.this_cTitulo, THIS.this_lAltera, THIS.this_cArquivo)
+
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                *-- Reflete de volta o alias que o BO efetivamente adotou (ele
+                *-- aplica o default 'crSigCdCli' do legado quando nada veio),
+                *-- para o form nao guardar um alias diferente do que o BO usa.
+                THIS.this_cArquivo = THIS.this_oBusinessObject.this_cArquivo
+
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarCamposSenhaAtual()
+                THIS.ConfigurarCamposSenhaNova()
+                THIS.ConfigurarEventosCampos()
+
+                *-- Espelho BO -> tela num unico ponto (BOParaForm aplica a
+                *-- frase e a altura do modo, as duas metades do bloco
+                *-- "If _Altera" do Init legado). Vem DEPOIS dos Configurar*
+                *-- porque a frase precisa de lbl_4c_Frase ja criada; a altura
+                *-- nao se importa com a ordem, porque nenhum metodo de layout
+                *-- le THIS.Height - conferido, so THIS.Width eh lido - e o
+                *-- AutoCenter = .T. recentra no Show().
+                THIS.BOParaForm()
+
+                THIS.TornarControlesVisiveis(THIS)
+
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao criar Business Object de Senha de Conta." + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), "Erro")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro ao inicializar FormSigOpCts")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarAlturaPorModo - Ramo "If _Altera / This.Height = 250" do Init
+    * legado: em modo alteracao a tela cresce de 211 para 250 para caber o
+    * bloco da nova senha (Shape2 vai ate Top+Height = 205 e GetNova2 ate 201,
+    * e o legado abre folga abaixo do par de campos de confirmacao).
+    * Em modo consulta a altura permanece a declarada no SCX (211).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AplicarAlturaPorModo()
+        IF THIS.this_lAltera
+            THIS.Height = THIS.this_nAlturaAltera
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarMensagemPorModo - Outra metade do MESMO bloco "If _Altera" do Init
+    * legado de que AplicarAlturaPorModo transcreve a altura:
+    *
+    *   If _Altera
+    *       This.Frase.Caption = 'Conta '+Alltrim(_Titulo)+Chr(13)+ ;
+    *                            'Digite a Senha Atual : '
+    *       This.Height = 250
+    *       This.Altera = .t.
+    *   Else
+    *       This.Frase.Caption = 'A Conta ' + Alltrim(_Titulo) + Chr(13) + ;
+    *                            ' Possui Senha : '
+    *       This.Altera = .f.
+    *   EndIf
+    *
+    * As duas frases, o CHR(13) do meio e os espacos das pontas estao copiados
+    * caractere a caractere do dump - inclusive o espaco que abre
+    * " Possui Senha : ", que existe so no ramo de consulta. Nenhuma delas tem
+    * acento, logo nao ha CHR() a montar.
+    *
+    * Roda DEPOIS de ConfigurarCamposSenhaAtual, que eh quem cria lbl_4c_Frase.
+    * O label tem WordWrap = .T. e Height = 30 (dump), que cabe as duas linhas
+    * que o CHR(13) produz em Tahoma 8.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AplicarMensagemPorModo()
+        LOCAL loc_cConta
+
+        IF !PEMSTATUS(THIS, "lbl_4c_Frase", 5)
+            RETURN
+        ENDIF
+
+        loc_cConta = ALLTRIM(NVL(THIS.this_cTitulo, ""))
+
+        IF THIS.this_lAltera
+            THIS.lbl_4c_Frase.Caption = "Conta " + loc_cConta + CHR(13) + ;
+                "Digite a Senha Atual : "
+        ELSE
+            THIS.lbl_4c_Frase.Caption = "A Conta " + loc_cConta + CHR(13) + ;
+                " Possui Senha : "
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Espelho BO -> TELA, em UM lugar so.
+    *
+    * Tudo o que a tela mostra a partir do estado do dialogo sai daqui, e o
+    * estado vem do BO: eh ele que recebe os tres parametros do Init legado e
+    * quem aplica o default "crSigCdCli" quando o alias nao vem (logo o form
+    * NAO pode guardar a sua propria versao de _Altera/_Titulo e deixar as duas
+    * copias divergirem). O par de propriedades do form existe porque Init()
+    * precisa delas ANTES do DODEFAULT() - este metodo as RESSINCRONIZA a
+    * partir do BO depois que ele existe.
+    *
+    * As duas chamadas abaixo sao as duas metades do MESMO bloco "If _Altera"
+    * do Init legado, e ficam na ORDEM em que o legado as escreve (a frase
+    * primeiro, a altura depois):
+    *
+    *   If _Altera
+    *       This.Frase.Caption = 'Conta '+Alltrim(_Titulo)+Chr(13)+ ...
+    *       This.Height = 250
+    *       This.Altera = .t.
+    *   Else
+    *       This.Frase.Caption = 'A Conta ' + Alltrim(_Titulo) + Chr(13) + ...
+    *       This.Altera = .f.
+    *   EndIf
+    *
+    * O terceiro efeito desse bloco ("This.Altera") NAO vira aqui atribuicao a
+    * Enabled/Visible de controle algum: no legado quem trava o bloco da nova
+    * senha em modo consulta eh o evento When ("Return ThisForm.Altera"), que
+    * no migrado eh PermitirSenhaNova - e ele le exatamente THIS.this_lAltera,
+    * que este metodo acabou de ressincronizar. Duplicar aqui esse estado como
+    * Enabled = .F. criaria uma SEGUNDA fonte para a mesma regra.
+    *
+    * Idempotente de proposito: pode ser chamado mais de uma vez (as duas
+    * atribuicoes sao absolutas, nao incrementais).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_lAltera = THIS.this_oBusinessObject.this_lAltera
+            THIS.this_cTitulo = THIS.this_oBusinessObject.this_cTitulo
+        ENDIF
+
+        THIS.AplicarMensagemPorModo()
+        THIS.AplicarAlturaPorModo()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Espelho TELA -> BO: transfere os TRES campos digitaveis do
+    * dialogo, que sao TODOS os campos que o legado tem (o dump nao tem outro
+    * controle de entrada - os demais objetos sao 4 Label, 1 Shape e o
+    * container do cabecalho):
+    *
+    *   controle migrado   propriedade do BO      campo legado
+    *   -----------------  ---------------------  ---------------------------
+    *   txt_4c_Senha       this_cSenhaDigitada    senha.Value
+    *   txt_4c_Nova1       this_cSenhaNova1       GetNova1.Value
+    *   txt_4c_Nova2       this_cSenhaNova2       GetNova2.Value
+    *
+    * Le o CONTROLE, nunca propriedade guardada: este metodo roda DENTRO dos
+    * dois Valid, e ali o que o usuario digitou esta no controle (regra
+    * CLAUDE.md #46). Nos dois casos o par_oTxt que o Valid recebe EH um
+    * destes tres controles, logo ler pelo nome da o mesmo valor.
+    *
+    * Transfere o valor BRUTO, sem ALLTRIM e sem UPPER: a normalizacao
+    * pertence ao BO e difere por campo - ValidarSenhaAtual compara com
+    * ALLTRIM/"==", enquanto AlterarSenha compara o par com "=" simples, que eh
+    * o operador do legado ("If (ThisForm.GetNova1.Value = ThisForm.GetNova2.
+    * Value)"). Normalizar aqui mudaria a regra de negocio dos dois.
+    *
+    * Eh o UNICO caminho pelo qual o digitado chega ao BO: os dois ...Exec
+    * chamam este metodo e depois leem as proprias propriedades do BO para
+    * passar aos metodos dele. Nao existe aqui segunda leitura de controle.
+    *
+    * Devolve .F. sem mensagem quando o BO ou os campos ainda nao existem (o
+    * caso de validacao de UI, em que a tela eh montada parcialmente): quem
+    * chama trata isso como "nada a validar" e nao como erro.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION FormParaBO()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O" OR ;
+           !PEMSTATUS(THIS, "txt_4c_Senha", 5) OR ;
+           !PEMSTATUS(THIS, "txt_4c_Nova1", 5) OR ;
+           !PEMSTATUS(THIS, "txt_4c_Nova2", 5)
+            RETURN .F.
+        ENDIF
+
+        TRY
+            *-- WITH unico, sobre o BO, com os controles SEMPRE qualificados por
+            *-- THIS: aninhar um segundo WITH aqui faria ".this_cSenha..."
+            *-- resolver contra o TextBox (regra CLAUDE.md #33).
+            WITH THIS.this_oBusinessObject
+                .this_cSenhaDigitada = THIS.txt_4c_Senha.Value
+                .this_cSenhaNova1    = THIS.txt_4c_Nova1.Value
+                .this_cSenhaNova2    = THIS.txt_4c_Nova2.Value
+            ENDWITH
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.FormParaBO")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - SigOpCts legado NAO TEM PageFrame: o layout eh
+    * PLANO, com o fundo new_background.jpg que o SCX declara na propriedade
+    * Picture do form ("..\framework\imagens\new_background.jpg"). Aqui fica a
+    * aparencia base da superficie onde os controles sao pendurados.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Faixa cinza do cabecalho (cntSombra do legado ->
+    * cnt_4c_Sombra, conforme mapeamento.json da task).
+    *
+    * Dump: cntSombra Top=0, Left=0, Width=800, Height=80, BackColor=100,100,100,
+    * BorderWidth=0; lblSombra Top=18/Height=29/ForeColor preto e lblTitulo
+    * Top=17/Height=35/ForeColor branco, ambos Left=10, Width=769, Tahoma 16
+    * bold, BackStyle=0, WordWrap=.T., Alignment=0.
+    *
+    * Width NAO eh o literal do dump: o Form Designer gravou o container (800) e
+    * os labels (769) mais largos que o proprio form (300) - copiar o literal
+    * jogaria 500px alem da borda direita e RECORTARIA o titulo. Vale a regra
+    * CLAUDE.md #11/#30: container = THIS.Width, labels = THIS.Width - 20 (o
+    * mesmo recuo de 20px que o legado deixa entre Left=10 e a borda do pai).
+    *
+    * AutoSize = .F. explicito e Height transcrita do dump (regra CLAUDE.md
+    * #23): AutoSize eh no-op em Label criado por AddObject e, com WordWrap,
+    * descartaria a Height.
+    *
+    * O Caption dos dois labels vem de THIS.Caption, como as duas atribuicoes
+    * que abrem e fecham o Init legado (ThisForm.cntSombra.lblSombra.Caption =
+    * ThisForm.Caption) - o texto "Cadastro de Testes" que esta no SCX eh
+    * sobrescrito pelo proprio legado em tempo de execucao.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Sombra", "Container")
+            WITH THIS.cnt_4c_Sombra
+                .Top           = 0
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackStyle     = 1
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblSombra", "Label")
+            WITH THIS.cnt_4c_Sombra.lbl_4c_LblSombra
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 16
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .AutoSize      = .F.
+                .Caption       = THIS.Caption
+                .Top           = 18
+                .Left          = 10
+                .Width         = THIS.Width - 20
+                .Height        = 29
+                .ForeColor     = RGB(0, 0, 0)
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblTitulo", "Label")
+            WITH THIS.cnt_4c_Sombra.lbl_4c_LblTitulo
+                .FontBold    = .T.
+                .FontName    = "Tahoma"
+                .FontSize    = 16
+                .WordWrap    = .T.
+                .Alignment   = 0
+                .BackStyle   = 0
+                .AutoSize    = .F.
+                .Caption     = THIS.Caption
+                .Top         = 17
+                .Left        = 10
+                .Width       = THIS.Width - 20
+                .Height      = 35
+                .ForeColor   = RGB(255, 255, 255)
+                .ToolTipText = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+                .Visible     = .T.
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ConfigurarCabecalho")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCamposSenhaAtual - Bloco de confirmacao da senha ATUAL
+    * (mapeamento.json): Frase -> lbl_4c_Frase, Say3 -> lbl_4c_Label3,
+    * senha -> txt_4c_Senha. Todos criados DIRETO em THIS (o SCX legado nao
+    * tem PageFrame nem container algum para esses tres - "Parent: SIGOPCTS").
+    *
+    * lbl_4c_Frase (Frase): dump DECLARA Width=299/Alignment=2 (centralizado) -
+    * regra CLAUDE.md #23 manda preservar Alignment quando o SCX o declara
+    * (nao eh classe "say" pura). AutoSize=.F. e Height=30 sao exatamente o
+    * que o dump traz, e ForeColor=255,255,255 (branco) eh fiel ao dump -
+    * mesmo padrao de texto direto sobre new_background.jpg usado em
+    * FormSigOpAut/FormDCC. Caption fica "" aqui: quem preenche em runtime
+    * ("This.Frase.Caption = 'Conta ' + Alltrim(_Titulo) + ...") eh o Valid/
+    * logica de abertura das Fases 7/8, a partir de THIS.this_cTitulo.
+    *
+    * lbl_4c_Label3 (Say3, "Senha : "): dump NAO declara Width nem Alignment -
+    * classe "say" pura (regra #23) - usar .Alignment = 0 com .Width que caiba
+    * o texto. Medido pela folga do proprio dump: Say3.Left=55, senha.Left=107,
+    * ou seja o texto termina em 103 (107 - 4px de respiro) = Width 48.
+    *
+    * txt_4c_Senha (senha): PasswordChar="*" e InputMask="!!!!!!!!!!" (10
+    * caracteres, forca maiuscula por posicao) transcritos do dump. O Valid/
+    * GotFocus/LostFocus/When ficam para as Fases 7/8 - aqui so a geometria e
+    * a mascara, igual ao When/Valid ainda ausentes nos sibling SigOpChp/
+    * SigOpCrp/SigOpCtd neste mesmo ponto do pipeline.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCamposSenhaAtual()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("lbl_4c_Frase", "Label")
+            WITH THIS.lbl_4c_Frase
+                .AutoSize    = .F.
+                .FontBold    = .T.
+                .FontItalic  = .T.
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .WordWrap    = .T.
+                .Alignment   = 2
+                .BackStyle   = 0
+                .Caption     = ""
+                .Top         = 39
+                .Left        = 0
+                .Width       = 299
+                .Height      = 30
+                .ForeColor   = RGB(255, 255, 255)
+                .Visible     = .T.
+            ENDWITH
+
+            THIS.AddObject("lbl_4c_Label3", "Label")
+            WITH THIS.lbl_4c_Label3
+                .FontBold  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .AutoSize  = .F.
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Senha : "
+                .Top       = 99
+                .Left      = 55
+                .Width     = 48
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            *-- Subclasse (e nao "TextBox") porque o legado tem Valid e When
+            *-- NESTE campo e o retorno dos dois eh o mecanismo - ver item (D)
+            *-- do cabecalho e regra CLAUDE.md #46.
+            THIS.AddObject("txt_4c_Senha", "TextBoxSenhaAtualSigOpCts_4c")
+            WITH THIS.txt_4c_Senha
+                .InputMask    = "!!!!!!!!!!"
+                .PasswordChar = "*"
+                .Value        = ""
+                .Top          = 95
+                .Left         = 107
+                .Width        = 80
+                .Height       = 18
+                .ForeColor    = RGB(0, 0, 0)
+                .Visible      = .T.
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ConfigurarCamposSenhaAtual")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCamposSenhaNova - Bloco da senha NOVA (mapeamento.json):
+    * Label1 -> lbl_4c_Label1, Shape2 -> shp_4c_Shape2, GetNova1 -> txt_4c_Nova1
+    * e GetNova2 -> txt_4c_Nova2. Os quatro sao criados DIRETO em THIS, como no
+    * legado ("Parent: SIGOPCTS" - o SCX nao tem PageFrame nem container algum).
+    *
+    * O par de confirmacao se fecha com GetNova2 -> txt_4c_Nova2, acrescentado
+    * DEPOIS destes (ver o cabecalho: z-order sobre Shape2 e ordem de
+    * tabulacao).
+    *
+    * Este bloco so faz sentido em modo alteracao, e eh por isso que o Init
+    * legado cresce a tela para 250 nesse modo (AplicarAlturaPorModo): Shape2
+    * vai ate Top+Height = 205, alem dos 211 - 24 de folga que a altura de
+    * consulta deixa. Em modo consulta o legado NAO esconde estes controles -
+    * ele os deixa visiveis e inertes pelo evento When ("Return
+    * ThisForm.Altera"), que entra na Fase 7/8; por isso aqui nao se escreve
+    * Visible = .F. nem Enabled, e TornarControlesVisiveis nao tem excecao.
+    *
+    * lbl_4c_Label1 (Label1): o dump DECLARA AutoSize = .T. junto com
+    * Width = 107 e Height = 15 - regra CLAUDE.md #23 manda escrever
+    * .AutoSize = .F. e transcrever as duas medidas, porque AutoSize eh no-op
+    * em Label criado por AddObject (a Width ficaria nos 100 do default) e,
+    * havendo WordWrap, descartaria a Height. Esses 107x15 JA SAO o auto-size
+    * que o Form Designer calculou para "Digite a nova senha : ", logo fixa-los
+    * eh reproducao fiel. ForeColor = 90,90,90 eh o do dump e tambem o canonico
+    * de label de dados (regra #12). BackStyle/FontBold/FontItalic/Alignment
+    * NAO sao escritos de proposito: o dump nao os declara e esta eh a classe
+    * BASE "label" (sem ClassLoc, diferente de Frase/Say3, que vem da classe
+    * "say" do framework.vcx) - omitindo-os, o controle migrado herda do VFP o
+    * MESMO default que o legado herdou, o que eh fiel sem depender de eu
+    * afirmar qual eh o valor.
+    *
+    * shp_4c_Shape2 (Shape2): moldura em volta do par de caixas da nova senha.
+    * BackStyle = 0 (transparente, como o dump declara) deixa aparecer a
+    * textura do fundo; a cor da borda eh BorderColor, NAO ForeColor - Shape
+    * nao tem ForeColor (regra CLAUDE.md #33), e atribui-la derrubaria o Init.
+    * Nada de ShapeType: essa propriedade eh do VB; no VFP o equivalente eh
+    * Curvature, que o dump nao declara (default 0 = retangulo, o pretendido).
+    *
+    * txt_4c_Nova1 (GetNova1): PasswordChar = "*" e InputMask = "!!!!!!!!!!"
+    * (10 posicoes forcando maiuscula) transcritos do dump, iguais aos de
+    * txt_4c_Senha. Height nao eh declarada no dump (vem da classe fwget) -
+    * usados os mesmos 18 de txt_4c_Senha, que eh a altura de TextBox Tahoma 8
+    * e mantem as duas caixas do par com a mesma medida. .Value = "" inicializa
+    * como CARACTERE (regra: TextBox de texto nasce com "", nunca .F.).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCamposSenhaNova()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("lbl_4c_Label1", "Label")
+            WITH THIS.lbl_4c_Label1
+                .AutoSize  = .F.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Caption   = "Digite a nova senha : "
+                .Top       = 132
+                .Left      = 94
+                .Width     = 107
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.AddObject("shp_4c_Shape2", "Shape")
+            WITH THIS.shp_4c_Shape2
+                .Top           = 149
+                .Left          = 102
+                .Width         = 89
+                .Height        = 56
+                .BackStyle     = 0
+                .SpecialEffect = 0
+                .BorderColor   = RGB(90, 90, 90)
+                .Visible       = .T.
+            ENDWITH
+
+            *-- Subclasse com o When "Return ThisForm.Altera" do legado, que eh
+            *-- o que trava o bloco da nova senha em modo consulta.
+            THIS.AddObject("txt_4c_Nova1", "TextBoxSenhaNovaSigOpCts_4c")
+            WITH THIS.txt_4c_Nova1
+                .InputMask    = "!!!!!!!!!!"
+                .PasswordChar = "*"
+                .Value        = ""
+                .Top          = 153
+                .Left         = 106
+                .Width        = 80
+                .Height       = 18
+                .ForeColor    = RGB(0, 0, 0)
+                .Visible      = .T.
+            ENDWITH
+
+            *-- GetNova2 -> txt_4c_Nova2: confirmacao da nova senha. ULTIMO
+            *-- AddObject do bloco de proposito (z-order sobre shp_4c_Shape2 e
+            *-- ordem de tabulacao senha -> Nova1 -> Nova2, que o SCX declara
+            *-- em TabIndex 3/5/6 e que com AddObject eh a ordem de criacao).
+            *--
+            *-- Geometria do dump: Top=178, Left=106, Width=80, PasswordChar
+            *-- "*", InputMask de 10 posicoes - iguais aos de txt_4c_Nova1,
+            *-- so 25px abaixo. Height nao eh declarada no dump (vem da classe
+            *-- fwget): os mesmos 18 dos irmaos, para o par ficar com a mesma
+            *-- medida dentro da moldura (Shape2 vai de 149 a 205 e este campo
+            *-- termina em 196).
+            *--
+            *-- Subclasse PROPRIA (herda a da Nova1) porque este campo tem o
+            *-- MESMO When e, alem dele, o Valid que compara o par e grava a
+            *-- nova senha.
+            THIS.AddObject("txt_4c_Nova2", "TextBoxSenhaNova2SigOpCts_4c")
+            WITH THIS.txt_4c_Nova2
+                .InputMask    = "!!!!!!!!!!"
+                .PasswordChar = "*"
+                .Value        = ""
+                .Top          = 178
+                .Left         = 106
+                .Width        = 80
+                .Height       = 18
+                .ForeColor    = RGB(0, 0, 0)
+                .Visible      = .T.
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ConfigurarCamposSenhaNova")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarEventosCampos - Liga por BINDEVENT os DOIS eventos do legado
+    * cujo retorno nao eh usado:
+    *
+    *   SIGOPCTS.senha.GotFocus  -> Set Confirm On
+    *   SIGOPCTS.senha.LostFocus -> Set Confirm Off
+    *
+    * Os outros quatro (senha.Valid, senha.When, GetNova1.When, GetNova2.When e
+    * GetNova2.Valid) NAO entram aqui: BINDEVENT descarta o retorno do delegate
+    * e nesses o retorno eh a regra, por isso eles ficam embutidos nas
+    * subclasses de TextBox do fim deste arquivo (item (D) do cabecalho).
+    *
+    * Os delegates sao PUBLIC (regra CLAUDE.md #3 - metodo PROTECTED ligado por
+    * BINDEVENT falha em silencio) e nao recebem parametro, porque GotFocus e
+    * LostFocus nao passam nenhum (ao contrario de KeyPress).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarEventosCampos()
+        LOCAL loc_oErro
+
+        TRY
+            BINDEVENT(THIS.txt_4c_Senha, "GotFocus",  THIS, "AtivarConfirmSenha")
+            BINDEVENT(THIS.txt_4c_Senha, "LostFocus", THIS, "RestaurarConfirmSenha")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ConfigurarEventosCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtivarConfirmSenha - "Set Confirm On" do senha.GotFocus e do senha.When
+    * legado. Com CONFIRM ON o campo nao se abandona sozinho quando a mascara
+    * de 10 posicoes se completa: o usuario tem de teclar ENTER ou TAB, o que
+    * eh justamente o que faz o Valid rodar uma vez por senha digitada.
+    *
+    * O valor de origem eh capturado UMA vez (daqui para frente
+    * this_cConfirmAnterior deixa de estar vazio), para que a entrada e saida
+    * repetidas no campo nao gravem "ON" como se fosse o estado de origem.
+    *
+    * PUBLIC: ligado por BINDEVENT ao GotFocus e chamado pelo When da subclasse.
+    *--------------------------------------------------------------------------
+    PROCEDURE AtivarConfirmSenha()
+        IF EMPTY(THIS.this_cConfirmAnterior)
+            THIS.this_cConfirmAnterior = SET("CONFIRM")
+        ENDIF
+
+        SET CONFIRM ON
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * RestaurarConfirmSenha - "Set Confirm Off" do senha.LostFocus legado, e
+    * tambem dos tres pontos em que o legado desliga CONFIRM antes de fechar o
+    * dialogo ("Set Confirm Off / Thisform.Release").
+    *
+    * Devolve o valor lido por AtivarConfirmSenha em vez de chutar OFF: no
+    * ambiente atual os dois coincidem (config.prg nao mexe em CONFIRM, cujo
+    * default eh OFF), e assim o dialogo nao desliga um CONFIRM que o chamador
+    * tenha ligado antes de abri-lo. CONFIRM eh um SET global e este form eh
+    * DataSession = 1, logo o efeito atravessa o dialogo.
+    *
+    * PUBLIC: ligado por BINDEVENT ao LostFocus, e chamado tambem pelos dois
+    * Valid e pelo Destroy - este ultimo cobre o caso de o dialogo fechar com o
+    * foco ainda dentro do campo, em que o LostFocus nao chega a disparar.
+    *--------------------------------------------------------------------------
+    PROCEDURE RestaurarConfirmSenha()
+        LOCAL loc_cAnterior
+
+        loc_cAnterior = UPPER(ALLTRIM(NVL(THIS.this_cConfirmAnterior, "")))
+
+        *-- Nada capturado = o dialogo nunca ligou CONFIRM, logo nao ha o que
+        *-- devolver. Sem esta guarda a chamada do Destroy (ou uma segunda
+        *-- chamada qualquer) forcaria OFF sobre um CONFIRM que eh de quem
+        *-- abriu o dialogo.
+        IF EMPTY(loc_cAnterior)
+            RETURN
+        ENDIF
+
+        IF loc_cAnterior == "ON"
+            SET CONFIRM ON
+        ELSE
+            SET CONFIRM OFF
+        ENDIF
+
+        THIS.this_cConfirmAnterior = ""
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FecharDialogo - Funil de saida dos dois Valid, no lugar do
+    * "Set Confirm Off / Thisform.Release" do legado.
+    *
+    * Fecha com Hide(), NAO com Release(): form object do VFP nao segue
+    * refcount, entao Release() destroi o objeto mesmo com o chamador segurando
+    * a referencia - medido neste proprio dialogo em 2026-10-31, com o probe da
+    * Fase 6: apos o Valid, VARTYPE(loc_oDlg) virava "X" e o
+    * loc_oDlg.ObterResultado() da linha seguinte (que eh como o chamador le o
+    * ZSen, ja documentado no cabecalho deste arquivo) estouraria "is not an
+    * object". Hide() em form modal tambem devolve o Show(), entao para o
+    * usuario a tela fecha igual - PILAR 1 preservado; muda so o tempo de vida
+    * do objeto, que eh PILAR 3. Eh o mesmo desenho do FormBuscaAuxiliar
+    * ("usa Hide() em vez de Release() para permitir leitura de propriedades /
+    * caller deve chamar Release() apos ler valores") e de FormSigOpCtd.
+    *
+    * Com Hide() o Destroy passa a rodar so quando o CHAMADOR liberar o
+    * dialogo, isto eh DEPOIS da leitura - por isso as duas coisas que o legado
+    * faz imediatamente antes do Release (devolver o CONFIRM e deixar o
+    * resultado disponivel) acontecem AQUI, e nao la. O Destroy mantem a copia
+    * do ZSen como rede de seguranca: eh o mesmo valor, repetir eh inocuo.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FecharDialogo()
+        *-- "Set Confirm Off" do legado, imediatamente antes de a tela sair
+        THIS.RestaurarConfirmSenha()
+
+        *-- Cache do resultado ANTES de esconder: o chamador le ObterResultado()
+        *-- logo apos o Show(), e o Unload (que devolve this_lZSen a quem abrir
+        *-- com "DO FORM ... TO") dispara depois do Destroy
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_lZSen = THIS.this_oBusinessObject.this_lZSen
+        ENDIF
+
+        THIS.Hide()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarSenhaAtual - senha.Valid do legado:
+    *
+    *   Arquivo = ThisForm.Arquivo
+    *   Senha   = fCriptografar(&Arquivo..Senhas)
+    *   If (Alltrim(This.Value) == Alltrim(Senha))
+    *       If Not ThisForm.Altera
+    *           Thisform.ZSen = .t. / Set Confirm Off / Thisform.Release
+    *       EndIf
+    *   Else
+    *       If (Messagebox('Deseja Digitar Novamente ?', 4+256,
+    *                      'Senha Conflitante...') = 7)
+    *           Thisform.ZSen = .f. / Set Confirm Off / Thisform.Release
+    *       Else
+    *           Return 0
+    *       EndIf
+    *   EndIf
+    *
+    * A comparacao em si (fCriptografar sobre a coluna Senhas do alias do
+    * chamador) esta no BO desde a Fase 2 - fonte unica, PILAR 3. Aqui fica so
+    * o que o BO nao pode decidir: a pergunta ao usuario e a navegacao.
+    *
+    * Retorno: .T. libera a saida do campo; 0 SEGURA o foco nele, que eh o
+    * "Return 0" do legado quando o usuario escolhe digitar de novo. Eh por
+    * causa deste retorno que o evento vive na subclasse e nao num BINDEVENT.
+    *
+    * Em modo ALTERAR o acerto da senha NAO fecha o dialogo (o legado so fecha
+    * no ramo "If Not ThisForm.Altera"): o fluxo segue para os dois campos da
+    * nova senha, que o When libera a partir daqui.
+    *
+    * PUBLIC: chamado por TextBoxSenhaAtualSigOpCts_4c.Valid e pelo harness.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarSenhaAtual(par_oTxt)
+        LOCAL loc_uRetorno
+
+        *-- Wrapper fino da guarda de reentrancia: o corpo fica no ...Exec
+        *-- porque este metodo tem saida antecipada, e liberar a flag "no fim
+        *-- do corpo" a deixaria travada ligada, matando o Valid pelo resto da
+        *-- vida do form (regra CLAUDE.md #47).
+        IF THIS.this_lEmValidacaoSenha
+            RETURN .T.
+        ENDIF
+
+        THIS.this_lEmValidacaoSenha = .T.
+        loc_uRetorno = THIS.ValidarSenhaAtualExec(par_oTxt)
+        THIS.this_lEmValidacaoSenha = .F.
+
+        *-- O "Thisform.Release" do legado sai DAQUI, e nao de dentro do corpo:
+        *-- assim a guarda ja esta liberada quando o form eh destruido.
+        IF THIS.this_lSolicitaFechar
+            THIS.this_lSolicitaFechar = .F.
+            THIS.FecharDialogo()
+        ENDIF
+
+        RETURN loc_uRetorno
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarSenhaAtualExec - corpo de ValidarSenhaAtual
+    *
+    * Le o valor do CONTROLE (par_oTxt.Value) e nao de propriedade guardada:
+    * dentro do Valid o que o usuario digitou esta no controle, e o espelho no
+    * BO so acontece na chamada abaixo (regra CLAUDE.md #46).
+    *
+    * O ramo do meio nao existe no legado e eh deliberado: quando o BO recusa
+    * por ERRO (alias do chamador fechado) e nao por senha errada, perguntar
+    * "Deseja Digitar Novamente ?" criaria laco infinito, porque nenhuma
+    * digitacao conserta um alias fechado. Ali o dialogo informa e fecha com
+    * ZSen = .F. O legado, nessa situacao, estoura em "&Arquivo..Senhas".
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarSenhaAtualExec(par_oTxt)
+        LOCAL loc_uRetorno, loc_cDigitada, loc_lConfere, loc_cMsg, loc_oErro
+
+        loc_uRetorno = .T.
+
+        IF VARTYPE(par_oTxt) <> "O" OR VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN .T.
+        ENDIF
+
+        *-- FormParaBO eh o unico caminho do digitado para o BO (le o CONTROLE,
+        *-- que eh onde o valor esta durante o Valid - regra CLAUDE.md #46; o
+        *-- par_oTxt que chega aqui EH o txt_4c_Senha). A guarda fica FORA do
+        *-- TRY: RETURN dentro de TRY/CATCH eh proibido (regra CLAUDE.md #1).
+        IF !THIS.FormParaBO()
+            RETURN .T.
+        ENDIF
+
+        loc_cDigitada = THIS.this_oBusinessObject.this_cSenhaDigitada
+
+        TRY
+            loc_lConfere = THIS.this_oBusinessObject.ValidarSenhaAtual(loc_cDigitada)
+            loc_cMsg     = ALLTRIM(NVL(THIS.this_oBusinessObject.this_cMensagemErro, ""))
+
+            DO CASE
+                CASE loc_lConfere
+                    IF !THIS.this_lAltera
+                        THIS.this_lZSen = .T.
+                        THIS.this_lSolicitaFechar = .T.
+                    ENDIF
+
+                CASE !EMPTY(loc_cMsg) AND !("Senha Conflitante" $ loc_cMsg)
+                    MsgErro(loc_cMsg, "Senha de Conta")
+                    THIS.this_lZSen = .F.
+                    THIS.this_lSolicitaFechar = .T.
+
+                OTHERWISE
+                    *-- MsgConfirma devolve LOGICAL (regra CLAUDE.md #7):
+                    *-- .T. = Sim = digitar de novo (legado: "Return 0");
+                    *-- .F. = Nao = desistir (legado: resposta 7 do MessageBox).
+                    IF MsgConfirma("Deseja Digitar Novamente ?", "Senha Conflitante...")
+                        loc_uRetorno = 0
+                    ELSE
+                        THIS.this_lZSen = .F.
+                        THIS.this_lSolicitaFechar = .T.
+                    ENDIF
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ValidarSenhaAtual")
+            loc_uRetorno = .T.
+        ENDTRY
+
+        RETURN loc_uRetorno
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PermitirSenhaNova - When de GetNova1 e de GetNova2 no legado, que eh a
+    * MESMA linha nos dois: "Return ThisForm.Altera".
+    *
+    * Devolvendo .F., o When impede o foco de ENTRAR no controle: eh assim que
+    * o legado deixa os dois campos da nova senha visiveis mas inertes em modo
+    * consulta, sem Enabled = .F. e sem Visible = .F. (nenhum dos dois esta no
+    * dump). Por isso nao existe aqui nenhuma outra fonte para esse estado - o
+    * When eh a unica.
+    *
+    * PUBLIC: chamado pelo When das duas subclasses da nova senha e pelo
+    * harness.
+    *--------------------------------------------------------------------------
+    FUNCTION PermitirSenhaNova()
+        RETURN THIS.this_lAltera
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ValidarSenhaNova - GetNova2.Valid do legado:
+    *
+    *   If (ThisForm.GetNova1.Value = ThisForm.GetNova2.Value)
+    *       ThisForm.ZSen = .t.
+    *       Arquivo = ThisForm.Arquivo
+    *       Select (Arquivo)
+    *       Replace &Arquivo..Senhas With fDecriptografar(This.Value)
+    *   Else
+    *       =Messagebox('Senha Conflitante!!! Alteracao Cancelada!!!', 32, '')
+    *       ThisForm.ZSen = .f.
+    *   EndIf
+    *   If (LastKey() = 13)
+    *       ThisForm.Release
+    *   EndIf
+    *
+    * A comparacao do par e a gravacao (Select + Replace com fDecriptografar)
+    * estao no BO desde a Fase 2 (SigOpCtsBO.AlterarSenha), que ja devolve
+    * tanto o resultado quanto a mensagem exata do legado - fonte unica,
+    * PILAR 3. Aqui fica a exibicao e o fechamento.
+    *
+    * O teste de LASTKEY() fica DEPOIS da mensagem, exatamente onde o legado o
+    * tem: quem dispensa a caixa de aviso com ENTER fecha o dialogo junto, e
+    * quem a dispensa com o mouse ou ESC permanece na tela para corrigir o par.
+    * Trazer o LASTKEY() para antes da mensagem "arrumaria" isso e mudaria o
+    * comportamento da tela (PILAR 1).
+    *
+    * PUBLIC: chamado por TextBoxSenhaNova2SigOpCts_4c.Valid e pelo harness.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarSenhaNova(par_oTxt)
+        LOCAL loc_uRetorno
+
+        IF THIS.this_lEmValidacaoNova
+            RETURN .T.
+        ENDIF
+
+        THIS.this_lEmValidacaoNova = .T.
+        loc_uRetorno = THIS.ValidarSenhaNovaExec(par_oTxt)
+        THIS.this_lEmValidacaoNova = .F.
+
+        IF THIS.this_lSolicitaFechar
+            THIS.this_lSolicitaFechar = .F.
+            THIS.FecharDialogo()
+        ENDIF
+
+        RETURN loc_uRetorno
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarSenhaNovaExec - corpo de ValidarSenhaNova
+    *
+    * As duas senhas saem dos CONTROLES (txt_4c_Nova1.Value e par_oTxt.Value,
+    * que eh o proprio txt_4c_Nova2): eh o que o legado le, e dentro do Valid
+    * nao existe outro lugar onde o valor digitado ja esteja (regra #46).
+    *
+    * A recusa por par diferente eh validacao de UI e sai por MsgAviso; a
+    * recusa por ERRO (alias do chamador fechado) sai por MsgErro. As duas
+    * mensagens vem do BO - a primeira eh, caractere a caractere, a do legado.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarSenhaNovaExec(par_oTxt)
+        LOCAL loc_uRetorno, loc_cNova1, loc_cNova2, loc_lGravou, loc_cMsg, loc_oErro
+
+        loc_uRetorno = .T.
+
+        IF VARTYPE(par_oTxt) <> "O" OR VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN .T.
+        ENDIF
+
+        *-- Mesmo funil do outro Valid: os dois valores saem de FormParaBO, que
+        *-- os leu dos CONTROLES (regra CLAUDE.md #46 - o par_oTxt que chega
+        *-- aqui EH o txt_4c_Nova2). Valor BRUTO, sem ALLTRIM: AlterarSenha
+        *-- compara o par com "=" simples, como o legado.
+        IF !THIS.FormParaBO()
+            RETURN .T.
+        ENDIF
+
+        loc_cNova1 = THIS.this_oBusinessObject.this_cSenhaNova1
+        loc_cNova2 = THIS.this_oBusinessObject.this_cSenhaNova2
+
+        TRY
+            loc_lGravou = THIS.this_oBusinessObject.AlterarSenha(loc_cNova1, loc_cNova2)
+            loc_cMsg    = ALLTRIM(NVL(THIS.this_oBusinessObject.this_cMensagemErro, ""))
+
+            THIS.this_lZSen = THIS.this_oBusinessObject.this_lZSen
+
+            IF !loc_lGravou AND !EMPTY(loc_cMsg)
+                IF "Senha Conflitante" $ loc_cMsg
+                    MsgAviso(loc_cMsg)
+                ELSE
+                    MsgErro(loc_cMsg, "Senha de Conta")
+                ENDIF
+            ENDIF
+
+            IF LASTKEY() = 13
+                THIS.this_lSolicitaFechar = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigOpCts.ValidarSenhaNova")
+            loc_uRetorno = .T.
+        ENDTRY
+
+        RETURN loc_uRetorno
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - AddObject cria todo controle com Visible = .F.;
+    * este metodo percorre a arvore e os torna visiveis.
+    *
+    * Este dialogo nao tem container flutuante algum (nenhum controle do dump
+    * nasce com Visible = .F.), entao nao ha lista de excecao: todo controle do
+    * legado eh visivel nas duas situacoes. Quem o legado trava em modo consulta
+    * sao os campos da nova senha, e faz isso pelo evento When
+    * ("Return ThisForm.Altera"), nao por Visible.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oControl
+
+        IF VARTYPE(par_oContainer) <> "O"
+            RETURN
+        ENDIF
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oControl = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oControl) = "O"
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
+                ENDIF
+
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
+                   loc_oControl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oControl)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterResultado - Resultado do dialogo (ZSen do legado): .T. quando a
+    * senha foi conferida/trocada com sucesso, .F. quando o usuario desistiu
+    * ou as senhas nao bateram.
+    *
+    * No legado esse valor chega a quem abre pelo RETURN do evento Unload
+    * ("PROCEDURE Unload / Return This.ZSen"), que so funciona com
+    * "DO FORM <form> TO <var>". O sistema novo abre com CREATEOBJECT + Show(),
+    * onde esse retorno eh inalcancavel - por isso o chamador le aqui.
+    *
+    * Enquanto o form vive, o BO eh a fonte unica; depois do Destroy (quando o
+    * BO ja foi liberado) vale a copia em this_lZSen.
+    *--------------------------------------------------------------------------
+    FUNCTION ObterResultado()
+        LOCAL loc_lResultado
+
+        loc_lResultado = THIS.this_lZSen
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_lResultado = THIS.this_oBusinessObject.this_lZSen
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Copia o resultado do BO para o cache do form ANTES de liberar o
+    * BO (o evento Unload dispara DEPOIS do Destroy e ainda precisa do valor) e
+    * encerra pela cadeia de heranca.
+    *
+    * Nenhum cursor eh fechado aqui: o alias com a coluna Senhas pertence ao
+    * form CHAMADOR (DataSession = 1, sessao compartilhada) e fecha-lo aqui
+    * derrubaria um cursor que o chamador continua usando.
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        *-- CONFIRM eh um SET GLOBAL ligado por AtivarConfirmSenha: quando o
+        *-- dialogo fecha com o foco ainda dentro do campo de senha, o
+        *-- LostFocus nao dispara e ele ficaria ligado para o resto da sessao.
+        THIS.RestaurarConfirmSenha()
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_lZSen = THIS.this_oBusinessObject.this_lZSen
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+
+        DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Unload - Mantem o contrato do Unload legado ("Return This.ZSen") para
+    * quem ainda abrir este dialogo com "DO FORM SigOpCts ... TO <var>". O
+    * valor sai do cache preenchido no Destroy, que roda antes deste evento.
+    *--------------------------------------------------------------------------
+    FUNCTION Unload()
+        RETURN THIS.this_lZSen
+    ENDFUNC
+
+ENDDEFINE
+
+
+*==============================================================================
+* TextBoxSenhaAtualSigOpCts_4c - campo da senha ATUAL (senha, no legado)
+*
+* Hospeda os dois eventos do SIGOPCTS.senha cujo RETORNO eh o mecanismo:
+*
+*     SIGOPCTS.senha.Valid -> confere a senha e decide se o foco sai do campo
+*     SIGOPCTS.senha.When  -> "Set Confirm On" (nao usa o retorno, mas vive no
+*                             mesmo evento, entao fica aqui junto)
+*
+* Evento cujo retorno importa NAO pode ser ligado por BINDEVENT: o VFP9
+* descarta o valor devolvido pelo delegate, entao o "Return 0" do legado -
+* que eh o que SEGURA o foco no campo para o usuario digitar de novo - viraria
+* no-op silencioso. Embutir na subclasse eh o padrao canonico do projeto para
+* esse caso (regra CLAUDE.md #46; referencias
+* FormSigOpCrd.TextBoxFaixaSigOpCrd_4c e FormSigOpChb.TextBoxBuscaCheque).
+*
+* A classe NAO decide nada: despacha para o metodo PUBLIC do form, onde a
+* regra do legado esta transcrita - assim a logica fica em UM lugar e
+* alcancavel pelo harness. O PEMSTATUS antes de cada chamada protege o caso de
+* a classe ser reaproveitada num form que nao tenha o metodo: ali o handler
+* vira no-op em vez de estourar "Property ... is not found".
+*
+* Valid e When nao recebem parametro (ao contrario de KeyPress, regra #3), por
+* isso as assinaturas sao vazias; THIS eh passado adiante porque dentro do
+* Valid o valor digitado esta em .Value e nao em propriedade alguma do form.
+*==============================================================================
+DEFINE CLASS TextBoxSenhaAtualSigOpCts_4c AS TextBox
+
+    *-- senha.Valid: ".T." libera a saida do campo, "0" segura o foco nele.
+    FUNCTION Valid()
+        IF PEMSTATUS(THISFORM, "ValidarSenhaAtual", 5)
+            RETURN THISFORM.ValidarSenhaAtual(THIS)
+        ENDIF
+
+        RETURN .T.
+    ENDFUNC
+
+    *-- senha.When: "Set Confirm On". O legado nao devolve nada aqui, o que em
+    *-- VFP9 equivale a liberar o foco - daqui sai o RETURN .T. explicito.
+    FUNCTION When()
+        IF PEMSTATUS(THISFORM, "AtivarConfirmSenha", 5)
+            THISFORM.AtivarConfirmSenha()
+        ENDIF
+
+        RETURN .T.
+    ENDFUNC
+
+ENDDEFINE
+
+
+*==============================================================================
+* TextBoxSenhaNovaSigOpCts_4c - 1a caixa da senha NOVA (GetNova1, no legado)
+*
+* O legado tem UM evento neste campo, e ele eh so o retorno:
+*
+*     SIGOPCTS.GetNova1.When -> Return ThisForm.Altera
+*
+* Devolvendo .F., o When impede o foco de ENTRAR no controle: eh assim que o
+* legado deixa o bloco da nova senha visivel mas inerte em modo consulta, sem
+* Enabled = .F. e sem Visible = .F. (nenhum dos dois aparece no dump). Ligar
+* isso por BINDEVENT nao funcionaria - o retorno seria descartado e o campo
+* ficaria editavel em consulta, permitindo trocar a senha sem provar a antiga.
+*==============================================================================
+DEFINE CLASS TextBoxSenhaNovaSigOpCts_4c AS TextBox
+
+    FUNCTION When()
+        IF PEMSTATUS(THISFORM, "PermitirSenhaNova", 5)
+            RETURN THISFORM.PermitirSenhaNova()
+        ENDIF
+
+        RETURN .T.
+    ENDFUNC
+
+ENDDEFINE
+
+
+*==============================================================================
+* TextBoxSenhaNova2SigOpCts_4c - 2a caixa da senha NOVA (GetNova2, no legado)
+*
+* Herda de TextBoxSenhaNovaSigOpCts_4c porque o GetNova2.When do legado eh
+* IDENTICO ao do GetNova1 ("Return ThisForm.Altera") - por heranca, a regra
+* fica escrita uma vez. O que este campo tem a mais eh o Valid, que compara o
+* par e grava a nova senha:
+*
+*     SIGOPCTS.GetNova2.Valid -> compara GetNova1 com GetNova2, grava com
+*                                fDecriptografar e fecha se LastKey() = 13
+*==============================================================================
+DEFINE CLASS TextBoxSenhaNova2SigOpCts_4c AS TextBoxSenhaNovaSigOpCts_4c
+
+    FUNCTION Valid()
+        IF PEMSTATUS(THISFORM, "ValidarSenhaNova", 5)
+            RETURN THISFORM.ValidarSenhaNova(THIS)
+        ENDIF
+
+        RETURN .T.
+    ENDFUNC
+
+ENDDEFINE

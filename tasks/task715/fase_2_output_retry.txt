@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\SigOpCtdBO.prg` (445 linhas).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`, linha 8213) ├®:
+
+```
+$conteudo -match "CarregarDoCursor" -and (($conteudo -match "Inserir" -and $conteudo -match "Atualizar") -or $boSomenteLeitura)
+```
+
+O `-and "CarregarDoCursor"` est├í **fora** do `-or`: o token ├® exigido **sempre**, mesmo com a exce├º├úo "BO somente-leitura" ativa. Medido no arquivo do passe anterior: `Inserir`=1, `Atualizar`=1, **`CarregarDoCursor`=0**. Era s├│ isso ÔÇö o resto do BO estava correto.
+
+Conferi tamb├®m que as 4 provas da exce├º├úo passam neste dump (`SigOpCtd_form_codigo_fonte.txt`): zero `TABLEUPDATE(`, zero `.AddCursor(`, **zero** alvos de `Insert Into`/`Update`/`Delete From`, e nenhum `SQLEXEC` de escrita no BO. Logo `$boSomenteLeitura = .T.` e `Inserir()`/`Atualizar()` seguem legitimamente herdados.
+
+## O que acrescentei
+
+**`CarregarDoCursor(par_cAliasCursor)` ÔÇö override real, n├úo stub.** A vers├úo de `BusinessBase` (linha 252) devolve `.T.` sem ler nada: num BO sem tabela isso **anuncia sucesso** e esconde o erro do chamador. O override recusa ÔÇö `.F.` + motivo em `this_cMensagemErro` ÔÇö no mesmo padr├úo que a base j├í usa em `Inserir()`/`Atualizar()`. N├úo inventei tabela, coluna nem SQL (regra #22). Preferi isso a s├│ citar o token em coment├írio, porque para `CarregarDoCursor` **n├úo existe** exce├º├úo no `.ps1` por tr├ís.
+
+**Nota de arquitetura estendida**, nomeando `ObterChavePrimaria()` e `RegistrarAuditoria()`: a base devolve chave vazia ÔåÆ `RegistrarAuditoria` sai com `.F.` antes do INSERT em `LogAuditoria`. J├í ├® o resultado certo; sobrescrever exigiria inventar a `this_cTabela` que o pr├│prio BO deixa vazia.
+
+## Verifica├º├úo executada (VFP9 real)
+
+Ao contr├írio do que a mem├│ria `feedback_vfp9_compila_e_sai_sem_executar_nesta_sessao` registrou (task673), **o VFP9 executa nesta sess├úo** ÔÇö o smoke test de 4 linhas gravou o arquivo de sa├¡da. Ent├úo o probe ├® prova de verdade, n├úo infer├¬ncia de `.FXP`:
+
+| | resultado |
+|---|---|
+| `COMPILE` | `.FXP` gerado, **sem `.ERR`** |
+| `CREATEOBJECT("SigOpCtdBO", 'Procura No Grupo "001"', "  maria  ", 40)` | `VARTYPE = "O"`, modo default **1**, tamanho **40** |
+| modo 1 / 2 / 3 | `maria%` / `%maria` / `%maria%`, operador `Like` |
+| modo 4 | `maria` + brancos at├® **len=40**, operador `=` |
+| `Cancelar()` | retorno `0`, confirmou `.F.`, termo limpo |
+| `CarregarDoCursor(...)` com e sem argumento | `.F.` + mensagem explicativa |
+| `Inserir()` / `Atualizar()` / `RegistrarAuditoria("I")` | `.F.` (recusa herdada) |
+
+O modo 4 confirma o detalhe do legado que a mem├│ria do projeto manda preservar: no `Desc. Exata` o termo vai ao servidor **preenchido com brancos** at├® a largura da coluna (40 em `contato`, 50 em `rclis`/`razaos`).
+
+Gate e completude, re-medidos no arquivo final: `CarregarDoCursor`/`Inserir`/`Atualizar` presentes ÔåÆ **gate passa**; 0 TODO/FIXME, 0 indicadores de pend├¬ncia, 0 stub-`MsgAviso`, 0 procedure vazia, **0 bytes > 127** (acentos todos via `CHR()`).
+
+CRLF restaurado ap├│s o `Edit` (`CR=445 LF=445`), via arquivo `.ps1` ÔÇö n├úo inline, conforme a mem├│ria que registra o comando inline zerando o `.prg`. O `diff` contra a c├│pia de seguran├ºa mostra **46 linhas `+` e 1 `-`** (um `.` que virou `;`), ou seja a mudan├ºa ├® exatamente a pretendida. Arquivos tempor├írios e `.fxp` que gerei foram removidos; os `tmp_*.FXP` que restam no repo s├úo de sess├Áes anteriores.

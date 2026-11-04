@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í conclu├¡da e validada. O resumo:
+
+## O que estava errado ÔÇö era o GATE, n├úo o form
+
+O form entregue na tentativa anterior **j├í estava correto e completo**. O que reprovava era um falso positivo no gate.
+
+`SIGOPCRP` ├® um di├ílogo modal 520x200 ("Procura" do extrato de Conta Corrente), sem PageFrame e **sem grade nenhuma**. O ramo certo ├® **CAPTURA** (sem lista + campos edit├íveis). Medi os predicados: `BaseClass grid|pageframe`=False, `ListBoxLigaLista`=False, `AddCursorLigaGrade`=False, `ControlSourceLigaLista`=False. O ├║nico termo que dava `True` era o **token cru** `\bgrd`, casando estas duas linhas:
+
+```
+ThisForm.FormPai.Page.Hist.grd_lancamento.Refresh
+ThisForm.FormPai.Page.Hist.grd_lancamento.SetFocus
+```
+
+Isso ├® a grade do **form PAI**. Contada como lista, derrubava o ramo CAPTURA ÔÇö e sobrava inventar Grid/PageFrame (viola o PILAR 1) ou escrever m├®todo vazio (proibido). Mesma fam├¡lia j├í registrada: o predicado largo consumindo a pr├│pria prova de que o ramo se aplica.
+
+**Corre├º├úo:** helper `Test-LegadoTokenGradeProprioForm`, que consome a cadeia ancorada em form estrangeiro e testa o restante. Apliquei nos **6** sites do teste estrito ÔÇö Fases 4, 5, 6 e 8 ÔÇö porque o predicado ├® id├¬ntico e a Fase 5 bateria na mesma parede em minutos. Allowlist expl├¡cito (medido: `ParentForm`/`oParentForm`/`ThisParent`/`FormPai`/`FormParent`); curinga `\w*Pai\w*` casaria `getPaises`, `optpais`, `Get_DespAI` e esconderia a grade do pr├│prio form.
+
+**Medi├º├Áes:** 661 forms, `passavam_antes=652 ÔåÆ passam_depois=653`, `mudaram=1`, **regress├Áes=0** (a conta fecha). O helper difere do regex em 10 dumps, mas 7 t├¬m grid/pageframe real ÔÇö o teste estrito segue `True` pelo primeiro termo e o veredito n├úo muda. Controle negativo: o `case 4` da c├│pia baseline reproduz a mensagem exata que reprovou a fase.
+
+## Um defeito real que encontrei e corrigi
+
+O `.TabIndex = 4` no CommandGroup (literal do dump) **quebrava a ordem de tabula├º├úo**. Medido no VFP9: Lancamento=3, **CommandGroup=4**, Valor=6, Historico=8 ÔÇö o Tab saltava de "Data" direto para os bot├Áes, pulando Valor e Hist├│rico.
+
+O literal do dump tamb├®m n├úo servia de alvo: simulando o load do SCX, no legado ele sofre o mesmo clamp e a ordem efetiva ├® `Lancamento=1, Valor=2, Historico=3, ÔÇª, Commandgroup1=5` ÔÇö os bot├Áes v├¬m **por ├║ltimo**. Transcrever o `4` era fiel ao arquivo e infiel ├á tela. Movi para `AplicarOrdemTabulacao()`, chamado ap├│s todos os `AddObject`. Reconfirmado: **1/2/3/4**.
+
+## Provas (smoke test passou, ent├úo runtime ├® verific├ível)
+
+- `COMPILE`: form e BO com `.FXP` e **sem `.ERR`** ÔÇö com **controle negativo** que acusou s├│ as linhas injetadas (598ÔÇô599), provando que o detector funciona.
+- `CREATEOBJECT("FormSigOpCrp")`: `VARTYPE=O`, 520x200, 8 controles, captions `\<Procurar`/`Encerrar` fi├®is.
+- Regra #51: os 12 membros do BO chamados de fora existem e s├úo PUBLIC (`PEMSTATUS(...,2)=.F.`).
+- Zero bytes acentuados, CRLF restaurado (CR=LF), sem TODO/stub/`MESSAGEBOX`/`ISEMPTY`/`this_*.Value`/`.Self`/`Controls("nome")`.
+- Orquestrador: BOM preservado, bytes>127 **id├¬ntico ao baseline (2965)**, 0 LF solto, 0 erros de parse; diff isolado em 42 linhas de helper + 6 trocas de uma linha.
+
+## Uma ressalva que importa
+
+O `RunLoop.ps1` vivo (PID 20544, iniciado 17:21:41) **precede o fix** (22:36:44). O PowerShell parseia o script inteiro na invoca├º├úo, ent├úo esse run vai re-validar a Fase 4 com a c├│pia velha em mem├│ria e **reprovar de novo**, gerando outro `fase_4_prompt_force.md` ÔÇö apesar de form e gate estarem corretos. A corre├º├úo s├│ vale a partir da pr├│xima invoca├º├úo do orquestrador; para valer agora, o loop precisa ser relan├ºado. Essa ├® decis├úo sua ÔÇö n├úo mexi no processo.
+
+Registrei a li├º├úo em `feedback_token_grade_de_outro_form_derruba_ramo_captura.md` com o ponteiro em `MEMORY.md`.

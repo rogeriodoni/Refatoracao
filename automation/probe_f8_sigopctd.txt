@@ -1,0 +1,22 @@
+CK1 inicio (probe v2 - subclasse)
+CK2 config.prg OK
+CK3 dependencias OK
+CK4 antes do CREATEOBJECT
+CK5 instancia=O
+CK6 abertura: OptionGroup.Value=1 BO.this_nOpcaoSelecionada=1  (esperado 1 / 1)
+CK7 BO=3 (tela em 1) -> ret=.T. OptionGroup.Value=3  (esperado .T. / 3)
+CK8a BO=0 -> OptionGroup.Value=1  (esperado 1, NUNCA 0)
+CK8b BO=9 -> OptionGroup.Value=1  (esperado 1)
+CK9 tela=1 -> ret=.T. BO=1  (esperado .T. / 1)
+CK9 tela=2 -> ret=.T. BO=2  (esperado .T. / 2)
+CK9 tela=3 -> ret=.T. BO=3  (esperado .T. / 3)
+CK9 tela=4 -> ret=.T. BO=4  (esperado .T. / 4)
+CK10 Procurar opt=1 -> ret=1 oper=[Like] termo=[MARIA%] len=6 confirmou=.T.
+CK10 Procurar opt=2 -> ret=2 oper=[Like] termo=[%MARIA] len=6 confirmou=.T.
+CK10 Procurar opt=3 -> ret=3 oper=[Like] termo=[%MARIA%] len=7 confirmou=.T.
+CK10 Procurar opt=4 -> ret=4 oper=[=] termo=[MARIA                                             ] len=50 confirmou=.T.
+CK10 Encerrar -> ret=0 oper=[] termo=[] confirmou=.F.  (esperado 0 / vazio / vazio / .F.)
+CK11 FormParaBO protegido=.T. BOParaForm protegido=.T.  (esperado .T. / .T. - herdado de FormBase)
+CK12 BtnProcurarClick protegido=.F. BtnEncerrarClick protegido=.F.  (esperado .F. / .F.)
+CK13 form vivo apos os Click: VARTYPE(loForm)=O VARTYPE(BO)=O
+CK14 FIM

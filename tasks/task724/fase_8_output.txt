@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpDpe.prg` (2317 linhas) e `SigOpDpeBO.prg` (1293 linhas).
+
+## O que entreguei
+
+**Hooks de consolida├º├úo acrescentados ao Form**, no mesmo desenho j├í revisado do di├ílogo-irm├úo `FormSigOpCrd.prg` (mesmo form pai, mesma estrutura), adaptado ├ás 3 colunas desta grade:
+
+| M├®todo | Escopo | O que faz |
+|---|---|---|
+| `BtnEncerrarClick` | p├║blico | alias fino ÔåÆ `CmdEncerrarClick` (nome que o teste `BtnEncerrarExiste` da 06b procura) |
+| `FormParaBO` | PROTECTED | flush da c├®lula em edi├º├úo + linha ÔåÆ BO |
+| `BOParaForm` | PROTECTED | BO ÔåÆ linha corrente, com guarda de identidade pela `cidchaves` |
+| `HabilitarCampos` | p├║blico | abre/fecha grade + as 3 colunas; aus├¬ncia de argumento testada por `PCOUNT()` |
+| `LimparCampos` | PROTECTED | zera a linha compondo os dois hooks, sem perder `cidchaves`/`dopes` |
+| `AtualizarEstadoControles` | p├║blico | override do hook que `FormBase.Init()` chama no fim (na base ├® vazio e presume form CRUD) |
+
+## Defeito real encontrado e corrigido
+
+`SigOpDpeBO.CarregarDoCursor` s├│ tinha `IF USED(...)`, sem `IF EOF()`. Em VFP, ler campo com o ponteiro em EOF **n├úo d├í erro** ÔÇö devolve o valor em branco. O probe mediu o retorno `.T.` em EOF: as 5 properties eram zeradas e o m├®todo relatava sucesso sem haver linha. Pior, com `this_cCidChaves` vazia a **guarda de identidade do `BOParaForm` virava no-op** e a escrita passaria a atingir qualquer linha. O BO do irm├úo (`SigOpCrdBO`) j├í tinha o guard ÔÇö era diverg├¬ncia entre dois arquivos da mesma fam├¡lia. Corrigido e re-medido.
+
+## Medi├º├Áes (n├úo leitura de c├│digo)
+
+- **Compila limpo**: `BO_FXP=SIM ERROS=0`, `FORM_FXP=SIM ERROS=0`, sem `.err` (`automation\CompilarF8SigOpDpe724.prg`)
+- **Instancia**: `VARTYPE=O`, 600x349, Caption din├ómico correto; todos os 8 itens do probe batem com o esperado (`automation\Probe724F8.prg` ÔåÆ `probe_724f8.txt`), incluindo escopo real via `PEMSTATUS(...,2)` e a recusa de chamada direta dos PROTECTED
+- **Gate da Fase 8**: `VEREDITO=PASSA` ÔÇö e agora **sem precisar da dispensa** de `FormParaBO`/`BOParaForm` pelo ramo FLUXO-├ÜNICO, que era como passava antes
+- **ValidadorSQLSchema**: nenhuma coluna inv├ílida; o `INSERT` cobre as 5 colunas `NOT NULL` de `SigOpDup`
+- Varredura mec├ónica limpa: 0 acentos literais, 0 `RETURN` dentro de `TRY`, 0 `.Self`, 0 `Controls(<nome>)`, 0 `MESSAGEBOX`, 0 TODO/stub
+
+## N├úo gerei, e por qu├¬
+
+`BtnSalvarClick`, `BtnCancelarClick`, `BtnBuscarClick`, `BtnIncluirClick` ÔÇö nenhum tem referente no SCX. O dump tem s├│ `cmdExcluir` e `cmdSair`; n├úo h├í PageFrame, Page2, modo cancel├ível, filtro, nem bot├úo de inserir (a linha nova entra pelo `inserelinha`, chamado dos `LostFocus` de c├®lula). Ger├í-los inventaria bot├Áes que o legado nunca teve. A decis├úo est├í documentada no cabe├ºalho do arquivo.
+
+## Pend├¬ncia que deixei em aberto (fora do escopo desta task)
+
+**Nada no projeto abre este di├ílogo ainda.** O bot├úo que o chamaria ├® o "Deprecia├º├úo" do cadastro de Tipos de Opera├º├úo, e `FormOPE.BtnDepreciaClick` ├® um dos **19 stubs da "Fase B"** daquele form (`MsgAviso "Em desenvolvimento"` ÔÇö padr├úo que o CLAUDE.md pro├¡be). N├úo mexi: ├® um bloco coordenado da migra├º├úo do `FormOPE`, n├úo desta task, e os tr├¬s di├ílogos-irm├úos (`SigOpCrd`, `SigOpCcl`, `SigOpDoc`) est├úo na mesma situa├º├úo, o que confirma ser pend├¬ncia de l├í. O contrato da liga├º├úo est├í registrado no cabe├ºalho do form: `CREATEOBJECT("FormSigOpDpe", THIS, <Dopes da linha corrente>, THIS.this_cModoAtual)` + `.Show()`, sem necessidade de `GarantirClasse` (o ├¡ndice resolve `CREATEOBJECT` literal dentro de Form).

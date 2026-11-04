@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpCocBO.prg` criado (5.162 bytes), compilado no VFP9 sem erro.
+
+## Por que a tentativa anterior falhou
+
+N├úo foi erro de gera├º├úo: o log mostra o Claude CLI recebendo s├│ os avisos de permiss├úo do `settings.local.json` e respondendo *"you haven't told me what you'd like me to do yet"* em 13s. O corpo do prompt n├úo chegou ÔÇö falha de infraestrutura do invoker, n├úo da fase.
+
+## O que foi gerado
+
+`SigOpCocBO AS BusinessBase`, tabela `SigCdOpt`, PK `operacaos` (confirmado em `docs/schema.sql` lido como UTF-16, regra #14).
+
+| Grupo | Propriedades |
+|---|---|
+| Dados (SigCdOpt) | `this_cOperacaos` char(15), `this_cCabs` text, `this_cRods` text |
+| Valores de entrada | `this_cCabsOriginal`, `this_cRodsOriginal` ÔÇö o `Sair.Click` legado descarta a edi├º├úo |
+| Protocolo do di├ílogo | `this_cEscolha` (pcEscolha), `this_nDataSession` (pDatasession), `this_lSomenteLeitura`, `this_lConfirmado` |
+| Liga├º├úo com a origem | `this_cCursorOrigem` = `"CrSigCdOpt"`, `this_oBOOrigem` (OptBO do form pai) |
+
+`Init()` com `DODEFAULT()` + tabela/chave + reset das flags; `ObterChavePrimaria()` devolvendo `ALLTRIM(this_cOperacaos)`.
+
+## Decis├Áes que afetam as pr├│ximas fases
+
+**Este di├ílogo n├úo grava no banco.** O dump legado tem apenas `Replace Cabs With ..., Rods With ...` no cursor ÔÇö nenhum `Insert Into`/`Update`/`Delete From`, nenhum `TABLEUPDATE`, nenhum `.AddCursor`. Quem persiste em `SigCdOpt` ├® o form pai (`FormOpt`/`OptBO`, que j├í declara `this_cCabs`/`this_cRods`). Ou seja, na Fase 2 ele se qualifica na exce├º├úo fail-closed de BO somente-leitura do gate ÔÇö sobrescrever `Inserir()`/`Atualizar()` seria inventar SQL que o legado n├úo tem (regra #22).
+
+**`CrSigCdOpt` n├úo existe como cursor global nesta migra├º├úo** (`FormSigOpChi.prg:3346`). Por isso a liga├º├úo can├┤nica ├® `this_oBOOrigem` (refer├¬ncia ao `OptBO`), com o alias como caminho alternativo quando estiver aberto.
+
+**Ponto de integra├º├úo j├í existe e est├í em stub**: `FormOpt.BtnCartaClick` hoje s├│ exibe `MsgAviso("Funcionalidade SigOpCoc nao migrada ainda.")`. Na Fase 8 esse handler precisa passar a abrir o di├ílogo e aplicar o retorno ÔÇö sen├úo o form migrado nunca ├® alcan├º├ível pelo usu├írio.
+
+## Verifica├º├Áes executadas
+
+- Regexes reais do `Test-CompletudeCodigo` (05d): `todoPattern`, `laterPattern`, `stubMsgPattern` e procedures vazias ÔÇö todos em 0. Peguei e corrigi um falso-positivo real: o coment├írio dizia "sem altera├º├úo **pendente**", e `laterPattern` casa `\bpendente` em qualquer linha de coment├írio.
+- Zero caracteres n├úo-ASCII (regra #4); sem `RETURN` em TRY/CATCH; sem `PUBLIC` em `DEFINE CLASS`.
+- `COMPILE` no VFP9: `.fxp` gerado, nenhum `.err`. Artefatos tempor├írios e o `.fxp` removidos.
+
+N├úo registrei `SET PROCEDURE` no `config.prg` ÔÇö a carga ├® sob demanda via `indice_classes.txt`, regenerado sozinho.

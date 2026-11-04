@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 conclu├¡da: `FormSIGOPCPE.prg` criado em `projeto\app\forms\operacionais\` e compila limpo (confirmado via VFP9, sem `.err`).
+
+Decis├úo importante que precisei tomar: o template gen├®rico da Fase 3 pedia PageFrame com Page1(Lista)/Page2(Dados), mas o contexto da migra├º├úo e o pr├│prio dump (`layout.json`) deixam claro que SIGOPCPE ├® um di├ílogo OPERACIONAL **flat** (sem nenhuma Pagina no legado) ÔÇö criar PageFrame teria inventado estrutura que o legado n├úo tem, violando o PILAR 1. Segui o padr├úo j├í estabelecido em `FormSigOpCac.prg` (form OPERACIONAL flat equivalente) em vez do template CRUD:
+
+- `DEFINE CLASS FormSIGOPCPE AS FormBase`, com propriedades visuais transcritas do SCX (Width=800, Height=355, DataSession=2, TitleBar=0, etc.)
+- `Init()` cria o `SIGOPCPEBO` e delega a `DODEFAULT()`
+- `InicializarForm()` chama `ConfigurarCabecalho()` (cntSombra/lblSombra/lblTitulo transcritos com os valores exatos do dump) e `ConfigurarBotoes()` (container vazio na posi├º├úo dos bot├Áes Ok/cancela ÔÇö os bot├Áes reais entram na Fase 4)
+- `TornarControlesVisiveis()` e `Destroy()` (fecha `cursor_4c_Dados`)
+
+Pr├│ximas fases (4-8) adicionam os bot├Áes Confirmar/Encerrar, o Cmb_Tipo e os demais campos, e os eventos (SEEK/guard de conex├úo/grava├º├úo).

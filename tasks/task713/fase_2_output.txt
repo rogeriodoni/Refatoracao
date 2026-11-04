@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 2 complete. `SigOpCrdBO.prg` went from 253 ÔåÆ 1471 lines, compiles clean (`.fxp` generated, no `.err`), CRLF preserved so the diff shows only the 1221 added lines.
+
+## O que entrou
+
+**M├®todos CRUD exigidos pela fase:** `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao` (PROTECTED, regra #51), `ValidarDados`, `LimparDados`, `RegistrarAuditoria` chamado nos tr├¬s; `ObterChavePrimaria` j├í vinha da Fase 1.
+
+**Camada de dados que o modelo do legado exige** ÔÇö a tela n├úo grava linha a linha, acumula no cursor e persiste tudo no `cmdSair.Click`: `CriarCursorDados`, `CarregarFaixas`, `InserirLinhaCursor` (`inserelinha`), `ExcluirLinhaCursor` (`cmdExcluir.Click`), `HaAlteracaoPendente`, `GravarFaixas` + os montadores de SQL. S├úo essas as properties que a Fase 1 declarou (`this_cLoteGravacao`, os tr├¬s contadores) e que ficariam mortas sem isto.
+
+**Decis├Áes que valem registro:**
+- **INSERT cobre as 6 colunas** ÔÇö todas `NOT NULL` sem `DEFAULT` no `docs/schema.sql` (lido com `Get-Content -Raw`, UTF-16). `cidchaves` e `dopes` n├úo aparecem na tela e s├úo gravadas igual, como o `AddCursor` do legado fazia.
+- **Reconcilia├º├úo expl├¡cita via marcador `lnovos`** ÔÇö o `poDataMgr.UpDate` do cursor *remoto* distinguia INSERT/UPDATE/DELETE sozinho; `CREATE CURSOR` comum n├úo, ent├úo a distin├º├úo ├® carregada numa coluna de controle que o `APPEND FROM DBF` deixa `.F.` em toda linha vinda do servidor.
+- **Lote num `SQLEXEC` ├║nico** com `SAVE TRANSACTION`/`THROW`: a conex├úo nasce com `Transactions = 2` e `@@TRANCOUNT` j├í vale 1, ent├úo `BEGIN`/`COMMIT` separados s├│ aninhariam. Sem `SQLROLLBACK` no erro ÔÇö o `BEGIN CATCH` j├í desfez at├® o savepoint, e um rollback aqui derrubaria a transa├º├úo do resto da aplica├º├úo no mesmo `gnConnHandle`.
+- **`DataSession = 2`**: `ZAP` guardado por `SET SAFETY` (sen├úo a tela congela no di├ílogo "Are you sure?") e `SET DELETED ON` reposto em `CriarCursorDados` (sen├úo o Excluir marca a linha e ela continua na grade).
+
+## Um ponto que deixei fiel, n├úo consertado
+
+O guard do legado ├® `If (lHouveExcl Or lHouveIns)`. Edi├º├úo que **n├úo passa pela Column4** n├úo liga nenhum dos dois marcadores e portanto **n├úo ├® gravada**. Na pr├ítica quase n├úo acontece ÔÇö o `LostFocus` da Column4 chama `inserelinha`, que liga `lHouveIns`, sempre que n├úo existe linha em branco, e nenhuma linha vinda do servidor tem `faixafs = 0`. Transcrevi como est├í e documentei no m├®todo, porque alargar o guard mudaria o que a tela grava (regras #17/#21). Se quiser que ele cubra edi├º├úo pura, ├® uma linha ÔÇö mas ├® decis├úo de comportamento, n├úo de migra├º├úo.
+
+## Limite da verifica├º├úo
+
+Compila├º├úo verificada de fato. O caminho de grava├º├úo **n├úo foi executado**: nesta sess├úo o VFP9 compila e sai sem rodar, e o SQL Server `192.168.200.10` ├® inalcan├º├ível desta m├íquina. Instanciar o BO tamb├®m n├úo prova a grava├º├úo ÔÇö provar exige `RECCOUNT` depois do `CarregarFaixas` e conferir o registro em processo separado (`Transactions = 2` faz o `SELECT` na mesma conex├úo mentir).

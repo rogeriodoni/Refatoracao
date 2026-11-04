@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. Criado `projeto/app/classes/SigOpCopBO.prg` (145 linhas, 20 propriedades + `Init()`).
+
+## O que a tela faz (para as fases seguintes)
+
+`SIGOPCOP` n├úo ├® CRUD ÔÇö ├® um **duplicador de opera├º├úo**: l├¬ um registro de `SigCdOpe` e regrava tudo sob um nome novo, propagando para **14 tabelas filhas** e registrando as permiss├Áes do programa novo em `SigCdPrg`. ├Ünico bot├úo de a├º├úo (Copiar) + Encerrar.
+
+## Propriedades declaradas
+
+| Grupo | Propriedades | Origem no legado |
+|---|---|---|
+| Opera├º├Áes | `this_cOperacaoOrigem/Destino` | `lcOpeOri` / `lcOpeDes` |
+| Chaves novas | `this_nNDopes`, `this_cProgramas` | `fGerUniqueKey("SigCdOpe")` + `Padl(...,8,'0')` |
+| Campos da origem | `this_cMenus/cSubMenus/cArqIcones` | lidos de `crSigCdOpe` |
+| `SigCdPrg` | `this_cProg`, `cDescPrograma`, `cSubMenuPrg`, `cBarraForm`, `cBarraPict`, `cPrefixoMenu` | `_Prog`, `_Desc`, `lcSubMenus`, `m.lcBarraForm` |
+| Log | `this_cTransacao` | `fGravarLog('C',...,'COPIA',...)` |
+| Progresso | `this_cEtapaAtual`, `nTabelasCopiadas`, `nRegistrosCopiados` | ÔÇö |
+| Cursores | `this_cCursorOrigem/Aux/Busca` | ÔÇö |
+
+`Init()`: `DODEFAULT()` + `this_cTabela = "SigCdOpe"` + `this_cCampoChave = "dopes"`. Sem SQL ÔÇö `Init` de BO que devolve `.F.` destr├│i o objeto e o form nunca abre.
+
+## Verifica├º├Áes feitas
+
+- **15 tabelas confirmadas** em `docs/schema.sql` (lido com `Get-Content -Raw`, UTF-16 ÔÇö regra #14). A confer├¬ncia rendeu um achado ├║til para a Fase 2: as tabelas que o legado alimenta com `m.cIdChaves = fUniqueIds()` s├úo **exatamente** as que t├¬m coluna `cidchaves`, e a grafia da coluna de opera├º├úo varia (`dopes` ├ù `cdopes`) ÔÇö documentei tabela por tabela no cabe├ºalho, porque o prefixo do nome n├úo permite deduzir (regra #48).
+- **`SigCdPrg` tem as 6 colunas `NOT NULL`** ÔÇö e o `INSERT` legado omite `barrapict` em v├írios ramos. Registrado no cabe├ºalho: na Fase 2 todo `INSERT` precisa das 6 (regra #22).
+- `fUniqueIds` e `fGerUniqueKey` **existem** em `utils/functions.prg` (regra #13); `fGravarLog` tem wrapper.
+- Validador de completude (`Test-CompletudeCodigo`, os 4 padr├Áes reais) ÔåÆ **`[OK]`**.
+- Zero bytes n├úo-ASCII, zero `RETURN` dentro de `TRY`, zero `PUBLIC` em `DEFINE CLASS`.
+- **Compila├º├úo provada**: `vfp9.exe -T` gerou `.FXP` sem `.ERR`. Rodei o controle negativo obrigat├│rio (c├│pia com `PUBLIC PROCEDURE` injetado): o `.ERR` apareceu apontando **s├│** as linhas 145ÔÇô147 injetadas, o que prova de uma vez que o detector funciona e que as 144 linhas do BO est├úo limpas. Artefatos removidos depois. Isso prova **compila├º├úo, n├úo runtime**.
+
+## Observa├º├Áes para as fases seguintes
+
+1. **Fase 2 ÔÇö c├│pia server-side, n├úo `Scatter/Gather`.** `SigCdOpe` tem 254 colunas, `SigOpCdc` 254 e `SigOpCdd` 245. Trazer isso ao VFP para devolver ├® o anti-padr├úo; o equivalente fiel ├® `INSERT ... SELECT` pela interse├º├úo de colunas, com `fUniqueIds()` **por linha** nas tabelas de detalhe (um `INSERT` em conjunto colidiria no ├¡ndice ├║nico).
+2. **Transcrever literalmente** (regra #17) o `m.ConfigGers = Substr(...,1,161) + Space(30) + Substr(...,192,59)` de `SigOpCdd` ÔÇö confirmei que `configgers` ├® `char(250)` e 161+30+59 = 250, ou seja ├® um branqueamento das posi├º├Áes 162..191, n├úo um truncamento.
+3. **`descricaos` ├® `char(150)`** e o legado concatena descri├º├Áes longas ÔÇö vai precisar de `LEFT(...,150)`.
+4. `ChkRegister` n├úo existe em `BusinessBase` ÔÇö as 14 checagens de permiss├úo viram `SELECT COUNT(*)` + `NVL(...,0) > 0`.
+5. O legado enfileira tudo em cursores e s├│ descarrega num `Commit()` final. Gravando via `SQLEXEC` por passo, a **ordem** importa e a atomicidade se perde ÔÇö vale avaliar transa├º├úo expl├¡cita na Fase 2, lembrando que a conex├úo nasce com `Transactions = 2` (manual).

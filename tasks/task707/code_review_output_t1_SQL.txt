@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 5 achados do pass SQL e **nenhum ├® defeito real** ÔÇö todos s├úo o falso positivo j├í catalogado em mem├│ria (`feedback_sql_filtro_inventado_locate_cursor_local.md`, 16 ocorr├¬ncias anteriores): o extrator do pass compara qualquer identificador perto de `WHERE`/`LOCATE`/coment├írio contra o WHERE da query principal, sem distinguir SQL Server de cursor VFP local nem coment├írio de c├│digo.
+
+Conferido por grep exaustivo nos dois arquivos:
+
+| Coluna acusada | Onde realmente aparece | Veredito |
+|---|---|---|
+| `CODS` | `cursor_4c_Ocorrencias.cods` ÔÇö campo de cursor **LOCAL** (`CREATE CURSOR`/`LOCATE FOR`), nunca WHERE de SQL Server | falso positivo |
+| `NOCCORS` | nome de property/vari├ível (`this_nNoccors`, `loc_nNoccors`) e coluna de `INSERT`/`UPDATE SET` ÔÇö nunca em WHERE | falso positivo |
+| `CIDCHAVES` | `WHERE cidchaves = ...` em `Atualizar`/`ExecutarExclusao` ÔÇö ├® a **PK** (`this_cCampoChave = "cidchaves"`, confirmada pelo coment├írio `.AddCursor('SigNfCor','cidchaves',...)`) | falso positivo ÔÇö remover quebraria o UPDATE/DELETE (atingiria a tabela inteira) |
+| `CORRECS` | s├│ existe dentro de **coment├írios** que documentam uma funcionalidade explicitamente **n├úo portada** (pend├¬ncia registrada no cabe├ºalho de `BtnConfirmarClick`) | falso positivo ÔÇö n├úo h├í SQL real |
+| `DO` | fragmento de `DO CASE`/`DO WHILE` (palavra-chave VFP), n├úo coluna | falso positivo |
+
+Nenhum arquivo foi alterado ÔÇö mudar qualquer um desses pontos introduziria regress├úo (principalmente o `WHERE cidchaves`, que ├® obrigat├│rio para o UPDATE/DELETE atingirem s├│ o registro certo). Registrei esta ocorr├¬ncia na mem├│ria do projeto para refor├ºar o padr├úo j├í documentado.

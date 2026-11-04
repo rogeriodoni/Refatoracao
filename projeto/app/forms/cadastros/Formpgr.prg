@@ -632,7 +632,7 @@ DEFINE CLASS Formpgr AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 43
+            .Top         = 27
             .Left        = 841
             .Width       = 165
             .Height      = 85

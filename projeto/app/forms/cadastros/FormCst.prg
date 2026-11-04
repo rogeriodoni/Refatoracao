@@ -423,7 +423,7 @@ DEFINE CLASS FormCst AS FormBase
             *-- Original: Left=820, Top=8 -> Migrado: Top=37 (8+29)
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPagina.cnt_4c_BotoesAcao
-                .Top         = 37
+                .Top         = 27
                 .Left        = 820
                 .Width       = 160
                 .Height      = 85

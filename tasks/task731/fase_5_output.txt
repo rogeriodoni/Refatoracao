@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 5/8 conclu├¡da.** O gate passa pelo ramo FLAT (OPERACIONAL): sem `pgf_4c_`, com `.ControlSource =` presente.
+
+## O que foi entregue
+
+**`projeto\app\forms\operacionais\FormSigOpEnt.prg`** (807 ÔåÆ 1167 linhas)
+
+- **`ConfigurarCamposPrazo()`** ÔÇö os 4 controles de dados que faltavam, transcritos do dump: `lbl_4c_PrazoAtual` (Say1, 315/110), `txt_4c_PrazoAtual` (getAtual, 315/124), `lbl_4c_PrazoNovo` (Say2, 315/161), `txt_4c_PrazoNovo` (getNova, 315/175). O que o dump n├úo declara veio das classes `say` (Tahoma 8, BackStyle 0, Height 15, ForeColor 90,90,90) e `fweditdata` (80x23, `Alignment = 3`, `Value = {}` DATE, `Themes = .F.`).
+- **`SincronizarCamposPrazo()`** ÔÇö funil ├║nico BOÔåöcampos. O legado repete o mesmo par no `Init` e no `altera.Valid`, ent├úo virou um m├®todo s├│, que a Fase 7 reusa depois de gravar.
+- **`AplicarBloqueioAlteracao()`** / **`Activate()`** ÔÇö as duas metades do `If ThisForm.Bloquear` do Init legado.
+- **`AplicarOrdemTabulacao()`** ÔÇö o passe de TabIndex do dump, pend├¬ncia que a Fase 4 anotou.
+
+**`tasks\task731\mapeamento.json`** ÔÇö os 4 objetos novos, mais `lblSombra`/`lblTitulo`, que apontavam para `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` e n├úo existem com esse nome no `.prg` desde a Fase 3 (2 falsos "objeto n├úo encontrado" no ValidarUIFidelity).
+
+## Decis├Áes que valem registro
+
+- **N├úo h├í "parte 2" de campos para a Fase 6.** O enunciado pede metade dos campos, mas o SCX tem exatamente 2 `BaseClass: textbox` fora das colunas da grade ÔÇö dividir 4 controles em 2+2 deixaria r├│tulo sem campo. Entreguei a superf├¡cie completa; a Fase 6 fica com as valida├º├Áes do `getNova.Valid` (faixa m├¡n/m├íx contra `SigCdOpe.DtEntrs` e a autoriza├º├úo `LIBPRZENT`).
+- **`When / Return .f.` do getAtual ÔåÆ `ReadOnly = .T.` + `TabStop = .F.`**, n├úo `BINDEVENT("When")` (BINDEVENT descarta o retorno, n├úo bloquearia nada) nem `Enabled = .F.` (pintaria o valor com a cor de desabilitado; o dump pede ForeColor 0,0,0).
+- **`Width` dos r├│tulos medida, n├úo chutada**: `AutoSize` ├® no-op em Label de `AddObject` (medido: 100x17 com e sem). Os textos renderizam 60px e 58px, ent├úo 70 cobre os dois e termina em 385, dentro da faixa do campo.
+- **SetFocus foi para o `Activate`**, n├úo para o `InicializarForm`: aqui ele roda dentro do `CREATEOBJECT`, antes de qualquer `Show()`. One-shot por flag, sen├úo o retorno do di├ílogo `SigOpSen` roubaria o foco no meio da confirma├º├úo.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.FXP` presente e `.ERR` ausente no Form e no BO. **Controle negativo** na mesma rodada: c├│pia com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` apontando **s├│** as linhas 1168-1169 acrescentadas ÔÇö as 1167 reais est├úo limpas.
+- **Probe de runtime (3 inst├óncias)**: TabIndex saiu exatamente `1/2/3/4/5/6/7` do dump; geometria id├¬ntica ao dump; `ForeColor = 5921370 = RGB(90,90,90)`; sem sobreposi├º├úo (grade termina em 278 < 315; faixa termina em 80 < 110) e dentro da borda (395 < 500, 198 < 300); `getAtual` recebeu `pPrz` e exibiu `11/11/2026` com `DataSessionId=2` + `DATE=DMY/CENTURY=ON`; o funil converteu DATETIMEÔåÆDATE (tipo `D`) e limpou `getNova` nas duas c├│pias; `pBlqAlt=.T.` desligou getNova e Confirmar mantendo o Cancelar; inst├óncia sem par├ómetro nenhum tamb├®m abre. Arquivo de erro do FormBase ficou **ausente**.
+- **Est├íticos**: zero bytes n├úo-ASCII, zero `RETURN` dentro de `TRY` (TRY/ENDTRY e WITH/ENDWITH balanceados), zero `PUBLIC PROCEDURE`, zero `this_x .Value`, zero TODO, todos os `THIS.<membro>` declarados ou criados. CRLF preservado.
+
+**Um bug real foi pego pelo probe e corrigido**: `AplicarBloqueioAlteracao()` estava sendo chamado do fim de `ConfigurarCamposPrazo()`, antes de `ConfigurarBotoesAcao()` criar o `cmd_4c_Confirmar` ÔÇö `Unknown member CMD_4C_CONFIRMAR` dentro do TRY do `InicializarForm`, `CREATEOBJECT` devolvendo `.F.` e **a tela n├úo abria**. Compilava limpo; s├│ instanciar pegou. O m├®todo passou a rodar no `InicializarForm` depois de todos os `AddObject`, com o motivo registrado em coment├írio nos dois lugares.

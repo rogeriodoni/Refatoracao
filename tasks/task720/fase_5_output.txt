@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö n├úo havia campos a acrescentar
+
+Executei a fase, mas **a entrega literal dela n├úo existe neste legado**, e documentei isso em vez de inventar. O `SIGOPDET.SCX` tem **exatamente 14 objetos**, e os ├║nicos 3 `BaseClass: textbox` do dump s├úo o `Text1` **nativo** das 3 `Column` da grade (`Parent: SIGOPDET.Grade.ColumnN` ÔÇö regra #18), j├í entregues na Fase 4 como subclasses. Fora deles: a faixa do cabe├ºalho (`cntSombra` + 2 Label) e os 2 CommandGroup. **Zero campo/Label solto**, zero `AddObject`/`AddProperty` em runtime, e os ├║nicos `ControlSource` do legado s├úo os das 3 colunas.
+
+Criar `ConfigurarPaginaDados` seria m├®todo vazio (proibido pela regra de completude) e inventar campo violaria o PILAR 1 ÔÇö por isso n├úo fiz nenhum dos dois.
+
+### Auditoria do que j├í estava entregue (tudo limpo)
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| 14 objetos do `layout.json` | todos cobertos |
+| Propriedades do cabe├ºalho/grade/colunas/`Text1` | conferidas **linha a linha** contra o dump ÔÇö batem (FontSize 18, Top 18/17, Width 769, grade 88/74/600/405, larguras 155/155/255, `BorderStyle=0`/`Margin=0`/cores) |
+| `MaxLength = 20` (regra #19) | confirmado no schema can├┤nico: `sigmvftc.ccars/.ctits/.resps` s├úo `char(20)` |
+| Cursor placeholder vs. schema | as 7 colunas batem, inclusive `empdopnums C(29)` |
+| INSERT do BO (regra #22) | cobre **todas** as 7 colunas NOT NULL, com `fUniqueIds()` na PK |
+| M├®todos do BO chamados pelo form (regra #51) | os 5 s├úo PUBLIC |
+| `FormBuscaSimples` | assinatura casa com os call sites |
+| `VerificarFuncoesNaoDefinidas` / `MetodoProtegidoChamadoDeFora` / `LookupEmKeyPress` / `InsertNotNull` | **limpos para este form** |
+
+### O que mudei
+
+S├│ o cabe├ºalho: **+25 linhas de coment├írio, 0 remo├º├Áes**, nenhuma linha de c├│digo tocada. Registrei a contabilidade da Fase 5 e fechei o ├║nico m├®todo do dump que n├úo tinha contrapartida documentada: o `PROCEDURE Load` (`=fConfigGeral()`), que fica **corretamente** de fora pela decis├úo j├í registrada em `SigOpClpBO.prg` (era inicializa├º├úo global do Fortyus, hoje feita por `config.prg`/`main.prg`; o wrapper em `utils\` existe s├│ para o p-code dos VCX). Encoding preservado: ASCII puro, sem BOM, LF.
+
+Dois trope├ºos meus no caminho, ambos corrigidos e verificados: a primeira reda├º├úo continha o literal `ConfigurarPaginaDados`, que fazia o gate passar **por um coment├írio** em vez da estrutura real, e usava "TODO" no sentido portugu├¬s de *todo/cada*, que um validador grepando `\bTODO\b` leria como marcador pendente. Reescrevi as duas; o gate agora passa pelo ramo FLAT leg├¡timo (`temLayoutFlat = True`, `temPaginaDados = False`) e a contagem de `TODO` voltou ├ás 3 pr├®-existentes (nome do m├®todo `CriarCursorItensPlaceholder`).
+
+### Dois pontos que voc├¬ precisa decidir
+
+**1. O guard de NO-OP vai for├ºar retry opus nesta fase.** Medi o predicado real extra├¡do do orquestrador: `Test-LegadoSemCampoNemLista` = **False**, porque exige aus├¬ncia de lista **e** de campos ÔÇö e este legado *tem* grade. O gate de conte├║do passa, mas o guard roda antes dele. ├ë o defeito j├í documentado (SIGPRGST/task699), e o conserto ├® no **guard**, n├úo no `.prg`.
+
+**N├úo editei o orquestrador**, pelas mesmas duas raz├Áes das recorr├¬ncias anteriores, re-medidas agora: ele tem **1062 inser├º├Áes n├úo commitadas** (trabalho em voo), e h├í um `RunLoop` **vivo (PID 20544, 30/10 17:21)** anterior ao mtime do arquivo (31/10 06:29) ÔÇö `& script.ps1` parseia na invoca├º├úo, ent├úo a edi├º├úo n├úo valeria para a execu├º├úo em curso. Mexer ali agora colidiria com trabalho seu em andamento.
+
+**2. N├úo consegui provar compila├º├úo.** O VFP9 trava nesta sess├úo: escreve a primeira linha do log e n├úo retorna (matei o processo; dois timeouts). A valida├º├úo acima ├® toda est├ítica. A compila├º├úo ainda precisa ser confirmada quando o VFP estiver utiliz├ível.

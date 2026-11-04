@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigopecm.prg` criado (366 linhas).
+
+## Por que a tentativa anterior falhou
+
+N├úo foi o c├│digo: o subprocesso do Claude CLI **nunca executou o prompt** ÔÇö `fase_3_output.txt` cont├®m s├│ avisos de regra de permiss├úo e a frase "What would you like me to work on?". Nenhum arquivo foi gerado.
+
+## O que foi entregue
+
+Form **OPERACIONAL FLAT**, n├úo CRUD paginado. O dump prova: objeto raiz ├® `Class: form` gen├®rico (n├úo `frmcadastro`), **zero** `BaseClass: pageframe`, e um ├║nico container (`cntSombra`). Criar `pgf_4c_*` aqui seria inventar PageFrame inexistente (PILAR 1), ent├úo `ConfigurarPageFrame()` ├® s├│ o orquestrador que encadeia os blocos do SCX ÔÇö nesta fase, `ConfigurarCabecalho()`.
+
+Decis├Áes que fogem do template e t├¬m motivo:
+
+- **`DataSession` fica no default (1)**, n├úo 2. Este ├® um di├ílogo filho que consome `crImagens` montado pelo chamador (`Init` recebe `oFrm`); em sess├úo privada o cursor ficaria invis├¡vel e o processamento n├úo acharia produto nenhum.
+- **`Closable` n├úo foi declarado.** O dump declara `TitleBar=0`/`ControlBox=.F.`/`MaxButton`/`MinButton`, mas **n├úo** `Closable` ÔÇö inventar `.F.` tiraria o Alt+F4, a ├║nica forma de desistir sem gerar arquivo.
+- **`ValidarParametros()` PUBLIC com bypass de ModoTeste/ValidandoUI no topo**, e cria├º├úo do BO **sem** gate de `gnConnHandle` ÔÇö o harness usa `gnConnHandle = 0` como sentinela.
+- **`AtualizarProgresso()` PUBLIC** fecha o contrato que o BO da Fase 2 j├í exige (`this_oFormUI.AtualizarProgresso`), guardando o texto em property para o progresso reportado antes de `lbl_4c_LblResults` existir (Fase 5) n├úo se perder.
+- **Labels com `AutoSize = .F.`** + Width/Height do dump: com `WordWrap = .T.`, `AutoSize` descarta a Height e corta o texto.
+
+## Verifica├º├úo (executada, n├úo inferida)
+
+O VFP9 **executa** nesta sess├úo hoje ÔÇö confirmei com smoke test antes de confiar em qualquer resultado (mem├│ria anterior dizia que n├úo; voltou a funcionar).
+
+- **Compila limpo**: `.FXP` gerado, nenhum `.err`.
+- **Instancia de verdade**: `VARTYPE = "O"`, `BaseClass = Form`, 800x220, `TitleBar=0`, `Closable=.T.`, Picture resolvida e existente, BO criado com `this_oFormUI` apontando de volta.
+- **Cabe├ºalho montado**: `cnt_4c_Sombra` 0/0/800/80, `BackColor` exatamente `RGB(100,100,100)`, 2 filhos vis├¡veis com Top 18/17, ForeColor preto/branco.
+- **`pgf_4c_Paginas` n├úo existe** (correto).
+- **M├®todos PUBLIC chamados de fora de verdade** (n├úo `PEMSTATUS`, que mente sobre escopo): todos retornaram OK, `Release()` limpo.
+- **Nenhum di├ílogo suprimido** ÔåÆ nenhum erro engolido por CATCH.
+- Gate real da Fase 3 (extra├¡do do `OrquestradorMigracao.ps1`): **passa**. `Test-CompletudeCodigo`: **True**. `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes`: **limpos**. Zero acentos literais, zero `RETURN` dentro de `TRY`, CRLF sem BOM.
+
+Apaguei o `.fxp` do form junto com os tempor├írios, para o harness da pr├│xima etapa n├úo rodar c├│digo velho.
+
+**Pendente para as fases seguintes** (fora do escopo desta): `ConfigurarBotoes()` (Shape1, Processa, Cancela) e `ConfigurarCampos()` (Say1, getArqTXT, btnGetArqO, chkImagens, Shape2, lblResults) ainda n├úo s├úo chamados por `ConfigurarPageFrame` ÔÇö ser├úo adicionados nas Fases 4-5, junto com os handlers nas 7-8.

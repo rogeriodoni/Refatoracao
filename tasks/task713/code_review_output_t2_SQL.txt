@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed via a background search of `docs/schema.sql`: both findings are false positives from this pass's SQL-filter detector, which only compares against literal `WHERE` text in the child form's legacy dump ÔÇö it can't see the two mechanisms actually driving these filters in the legacy code.
+
+**`DOPES`** (`CarregarFaixas`, `WHERE dopes = ...`): the legacy `SigOpCrd` dialog never writes SQL itself ÔÇö it calls `SigCdOpe.poDatamgr.ReQuery('crSigOpCrr')`, repopulating a cursor whose query is defined in the **parent** form's `AddCursor` (found at `docs/schema.sql:54209`):
+```
+.AddCursor('SigOpCrr','cidchaves','crSigOpCrr','cidchaves',.f.,
+  [Select a.* From SigOpCrr a inner join SigCdOpe b on a.dopes = b.Dopes
+   Where a.Dopes = ?crSigCdOpe.Dopes Order by a.Dopes,a.faixais])
+```
+The filter by `Dopes` always existed ÔÇö it just never appears as text in the child form's own dump.
+
+**`CIDCHAVES`** (`MontarUpdateLinha`/`MontarDeleteLinha`, `WHERE cidchaves = ...`): `cidchaves` is `SigOpCrr`'s actual primary key (constraint `sigopcrr_cidchaves` in `docs/schema.sql`), and the same `AddCursor` call declares it as the cursor's key field. The legacy grava everything via `SigCdOpe.poDataMgr.UpDate('crSigOpCrr')` ÔÇö a buffered `TableUpdate` that generates a `WHERE cidchaves = ...` implicitly per changed row. There's no literal UPDATE/DELETE text in the legacy to compare against.
+
+The pass's reference list only picked up `FAIXAFS` (from `Delete For Empty(Dopes) or Empty(faixafs)`, the one `Where`-like text visible in the child dump) and flagged everything else as invented. Removing either filter would be a serious regression ÔÇö the first would load every operation's faixas into this dialog, the second would turn single-row UPDATE/DELETE into whole-table UPDATE/DELETE on `SigOpCrr`.
+
+I did not modify `FormSigOpCrd.prg` or `SigOpCrdBO.prg` ÔÇö no fix is needed. I documented this as the 47th confirmed variant of this exact false-positive pattern in `feedback_sql_filtro_inventado_lookup_outra_tabela.md` (memory), since this project has now hit it dozens of times across forms.

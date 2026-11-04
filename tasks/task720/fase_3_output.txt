@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All counts balance: 6 PROCEDUREs / 6 ENDPROC, 2 TRY/ENDTRY, 3 WITH/ENDWITH, 2 FOR/ENDFOR, 1 ENDDEFINE. The file is syntactically well-formed.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSigOpDet.prg` (Fase 3/8) following the OPERACIONAL pattern (the task context explicitly flags this as a flat modal dialog, not a CRUD PageFrame form ÔÇö I used `FormSigMvAte.prg` as the closest existing precedent rather than the generic CRUD skeleton template, since that skeleton didn't match the form's actual nature):
+
+- `DEFINE CLASS FormSigOpDet AS FormBase` with the legacy SIGOPDET visual properties (Width=800, Height=500, modal/AlwaysOnTop/no titlebar, etc.) and the 4 parent-context properties (`this_cModoOperacao`, `this_cGrupo`, `this_cCpros`, `this_cEmpDopNums`) mirroring the BO's `Init` signature exactly (naming consistency per the BO-property-mismatch lesson).
+- `Init(par_cModoOperacao, par_cGrupo, par_cCpros, par_cEmpDopNums)` ÔÇö stores params, creates `SigOpDetBO` passing the same 4 args, then `DODEFAULT()` outside any TRY/CATCH return.
+- `InicializarForm()` ÔÇö sets background/Caption, calls `ConfigurarPageFrame()`, propagates the title to the header labels, makes the tree visible.
+- `ConfigurarPageFrame()` ÔåÆ `ConfigurarCabecalho()` ÔÇö builds `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo` (labels added outside the container's WITH block, per the WITH-aninhado pitfall).
+- `TornarControlesVisiveis()` ÔÇö standard recursive visibility fixer.
+- `Destroy()` ÔÇö just `DODEFAULT()` (restores menu popups; no cursors to release yet).
+
+Left for Fase 4 (per the phase scope): the grade (Caracteristica/Complemento/Outros columns) and the Confirmar/Cancelar/Inserir/Excluir button groups.

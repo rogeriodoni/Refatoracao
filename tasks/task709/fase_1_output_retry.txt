@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1 CONCLU├ìDA** ÔÇö `C:\4c\projeto\app\classes\SIGOPCPEBO.prg` criado (242 linhas, CRLF).
+
+## O que foi entregue
+
+**TODAS as 17 colunas** de `SIGSYCOM` (todas `NOT NULL` ÔÇö conferido no `docs/schema.sql` lido com `Get-Content -Raw`, regra #14) viraram propriedade, com o tipo VFP correto para o tipo SQL:
+
+| Coluna | Tipo SQL | Propriedade | Controle legado |
+|---|---|---|---|
+| tipos | char(20) | `this_cTipos` | Cmb_Tipo (sem ControlSource) |
+| cidchaves | char(20) **PK** | `this_cCidchaves` | ÔÇö (fUniqueIds) |
+| portas | numeric(1,0) | `this_nPortas` | Spinner1 |
+| hands / settings | char(20) | `this_cHands` / `this_cSettings` | Cmb_Hand / Get_Set |
+| dtrs / rtss | **bit** | `this_lDtrs` / `this_lRtss` | chk_dtr / chk_rts |
+| inbufs/outbufs/inlens | numeric(8,0) | `this_nInbufs`/`this_nOutbufs`/`this_nInlens` | Get_inbuf/outbuf/inlen |
+| inmodes | numeric(1,0) | `this_nInmodes` | Get_inmode |
+| tplechqs | char(1) | `this_cTplechqs` | Get_TpLeChq (Style=2) |
+| tpbarras | numeric(1,0) | `this_nTpbarras` | Opt_leitor (3 bot├Áes) |
+| bompara/nominal/cruzado | numeric(1,0) | `this_nBompara`/`this_nNominal`/`this_nCruzado` | 3 CheckBox |
+| nomeimp | char(40) | `this_cNomeimp` | ÔÇö (invis├¡vel na tela) |
+
+Decis├Áes de tipo que seguem as regras e ficaram documentadas no arquivo: `bit` ÔåÆ LOGICAL (`this_l*`), `numeric(1,0)` ÔåÆ NUMERIC (`this_n*`); `tpbarras` ├® **├¡ndice 1-based** do OptionGroup (1=Serial, 2=Teclado, 3=Paralelo), sem `+1/-1`; `nomeimp` declarada apesar de n├úo ter controle, porque ├® `NOT NULL` e o INSERT da Fase 2 tem de cobri-la (regra #22).
+
+`Init()`: `DODEFAULT("SigSyCom")`, `this_cCampoChave = "cidchaves"` (a PK real da constraint `sigsycom_cidchaves` ÔÇö **n├úo** o `cods` que o esqueleto gerado sugeria, coluna que n├úo existe nessa tabela), monta a lista dos 6 tipos fixos com `CHR(231)` no lugar da cedilha, e zera o estado. Flag `loc_lResultado` com `RETURN` ├║nico fora do TRY/CATCH, `CATCH` com `MsgErro` + `LineNo`.
+
+## Verifica├º├úo
+
+- Compilou no VFP9: `.fxp` gerado, **nenhum `.err`**.
+- Instanciado de fato (probe com `SET PROCEDURE` de dataaccess/businessbase/messages/functions): `VARTYPE=O`, `Tabela=[SigSyCom]`, `Chave=[cidchaves]`, lista dos 6 tipos correta, `ObterTipoPorIndice(1)`=Balan├ºa / `(6)`=Gaveta Serial / `(7)` e `("x")` devolvem vazio sem erro.
+- `PEMSTATUS` confirmou o escopo: `ObterTipoPorIndice` ├® PUBLIC (o form chama de fora ÔÇö regra #51) e `ObterChavePrimaria` continua PROTECTED.
+- Artefatos tempor├írios de compila├º├úo/probe removidos; o ├║nico arquivo novo no git ├® o `.prg`.
+
+Dois pontos para as fases seguintes, que anotei no cabe├ºalho do arquivo: o legado chama `fGrvSettings('CrSigSyCom')` no `Ok.Click`, e essa fun├º├úo global do Fortyus **n├úo existe** em `projeto\app\utils\` ÔÇö vai precisar de wrapper (regra #27); e a semeadura dos 6 registros faltantes (`Insert Into` + `fUniqueIds()` + `Settings = '9600,n,8,1'`) ├® l├│gica de carga que entra na Fase 2.

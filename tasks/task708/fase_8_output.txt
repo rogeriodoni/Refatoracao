@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCot.prg` ÔÇö 24 m├®todos, 2139 linhas (+313).
+
+## O que a fase entregou
+
+**Os dois hooks, reais e ligados** ÔÇö `FormParaBO` / `BOParaForm` sobre a **linha corrente da grade**, que ├® a ├║nica superf├¡cie edit├ível desta tela (n├úo h├í ficha de campos soltos). N├úo s├úo inven├º├úo: o bloco existe no SCX, sem esse nome.
+
+| hook | legado transcrito |
+|---|---|
+| `FormParaBO` | `Init`: `CursorQuery([SigCdUsu],ÔÇª)` + `When` da c├®lula: `AntValue = This.Value` e `CursorQuery([SigCdMoe],ÔÇª,TmpCot.CMoes)` |
+| `BOParaForm` | `btnCotacao.Click`: `Replace Valos ÔÇª` + fim do `Load`: `Go Top` + `Init`: `btnCotacao.Visible` |
+
+Entraram como **fonte ├║nica** nos tr├¬s lugares que j├í faziam esse trabalho inline (`ValidarAcessoCotacao`, `BtnCotacaoClick`, `CarregarLista`) ÔÇö hook que ningu├®m chama ├® stub disfar├ºado.
+
+**Uma corre├º├úo de fidelidade:** o `Init` legado resolve o cargo *antes* de calcular `btnCotacao.Visible`. At├® a Fase 7 a permiss├úo era resolvida s├│ por demanda, ent├úo na abertura `this_lAltCots` era `.F.` e o bot├úo Alterar aparecia para todo usu├írio ÔÇö inclusive para quem no legado nem o veria (o `NOT` do Init).
+
+## Corre├º├úo de rumo durante a fase
+
+Escrevi os hooks como `PROCEDURE` e o probe **pendurou**. Causa: `FormBase` declara `PROTECTED PROCEDURE FormParaBO/BOParaForm` e VFP9 n├úo deixa a subclasse alargar escopo herdado ÔÇö `PEMSTATUS(...,5)` responde `.T.` e a chamada de fora estoura. Troquei para `PROTECTED` expl├¡cito (omitir mente para quem l├¬, o m├®todo fica protegido de qualquer jeito) e documentei o medido. Todas as 5 chamadas s├úo `THIS.`, de dentro da classe.
+
+## Verifica├º├úo executada (n├úo inferida)
+
+Smoke test passou, ent├úo houve prova real: `COMPILE` de form e BO ÔåÆ `FXP=SIM / ERR=NAO`; e um probe (`automation\ProbeF8SigOpCot.prg`) que instanciou o form com form pai falso e cursor real, exercitando os hooks por subclasse ÔÇö **7 asserts, todos OK, nenhum erro em modo teste**:
+
+- grade ligada: `recsrc=cur_pai_cot`, 2 colunas, `c1w=40 c2w=101`, headers `Moeda`/`Cota├º├úo`
+- **guard de escrita**: BO vazio **n├úo zerou** a cota├º├úo do pai (5,25 preservado, retorno `.F.`) ÔÇö era o risco real, gravar o zero do BO novo apagaria o documento em sil├¬ncio
+- round-trip linhaÔåÆBOÔåÆlinha fecha (USD 5,25 ÔåÆ grava 9,123456), troca de linha acompanhada (EUR), linha 2 n├úo contamina a linha 1
+- `Cancelar` desfaz por `avalos`; `Confirmar` marca a sa├¡da sem tocar no cursor
+
+├ìndice de classes regenerado ÔÇö `FormSigOpCot` entrou com o fecho de depend├¬ncias (`SigOpCotBO`, `TextBoxGridLookup`, `FormSigOpAlC`). Artefatos de build do probe limpos, CRLF preservado (`CR=LF=2139`), zero acentos literais, zero `MESSAGEBOX`, zero TODO/stub.
+
+**N├úo adicionei item de menu**: ├® di├ílogo filho que exige form pai (`Do Form SigOpCot With ThisForm, ldDatas`) ÔÇö mesmo tratamento do `FormSigOpAlC`, que tamb├®m n├úo est├í no menu. O prompt gen├®rico pedia entrada em `popMovimentos`; abrir esta tela pelo menu, sem pai, n├úo teria cursor para editar.

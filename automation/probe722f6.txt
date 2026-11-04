@@ -1,0 +1,48 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+CK01 instanciou OK
+CK02 lbl_4c_Conta       T/L/W/H = 228/125/86/15  (esperado 228/125/86/15)
+CK03 txt_4c_Conta       T/L/W/H = 223/214/80/25  MaxLen=10  Fmt=[K!]  (esperado 223/214/80/25 MaxLen=10 Fmt=K!)
+CK04 txt_4c_DConta      T/L/W/H = 223/294/271/25  MaxLen=40  (esperado 223/294/271/25 MaxLen=40)
+CK05 grd_4c_Fases       T/L/W/H = 254/108/492/260  Cols=5  RowH=20  (esperado 254/108/492/260 Cols=5 RowH=20)
+CK06 cmd_4c_InserirFase T/L/W/H = 338/607/40/40  PicFile=.T.  (esperado 338/607/40/40 PicFile=.T.)
+CK07 cmd_4c_ExcluirFase T/L/W/H = 381/607/40/40  PicFile=.T.  (esperado 381/607/40/40 PicFile=.T.)
+CK08 cursor_4c_Fases USED=.T.  FCOUNT=8  (esperado .T. / 8)
+CK09 RecordSource=[cursor_4c_Fases]
+CK10.1 Col1 CS=[cursor_4c_Fases.ordems] Hdr=[Ordem] W=40 CurCtrl=[TXT_4C_CEL] Sparse=.F. Cel=[ORDEM] MaxLen=3
+CK10.2 Col2 CS=[cursor_4c_Fases.grupos] Hdr=[Fase] W=75 CurCtrl=[TXT_4C_CEL] Sparse=.F. Cel=[FASE] MaxLen=10
+CK10.3 Col3 CS=[cursor_4c_Fases.contas] Hdr=[Funcionário] W=75 CurCtrl=[TXT_4C_CEL] Sparse=.F. Cel=[FUNCIONARIO] MaxLen=10
+CK10.4 Col4 CS=[cursor_4c_Fases.tpops] Hdr=[Tipo Operação] W=100 CurCtrl=[TXT_4C_CEL] Sparse=.F. Cel=[TPOP] MaxLen=15
+CK10.5 Col5 CS=[cursor_4c_Fases.operas] Hdr=[E/S] W=30 CurCtrl=[TXT_4C_CEL] Sparse=.F. Cel=[ES] MaxLen=1
+CK11 visibilidade:
+     31 metodos conferidos; TODOS existem e sao PUBLIC
+CK12 InserirLinhaFase=.T.  RECCOUNT=1
+CK13 linha1 nome=[DEMO TESTE] cidchaves vazio=.F. len=19 ordems=0  (cidchaves vazio tem de ser .F. - regra #22)
+CK14 apos BtnInserirFaseClick RECCOUNT=2  cidchaves distintas=.T.  (esperado .T.)
+CK15 apos BtnExcluirFaseClick linhas vivas=1  (esperado 1)
+CK16 modo LISTA: Inserir ignorado=.T.  (esperado .T.)
+CK17 CelulaWhen LISTA=.F. ALTERAR=.T.  (esperado .F. / .T.)
+CK18 Ordem 1500 -> 0  (esperado 0)
+CK19 Ordem 7 -> 7  (esperado 7)
+CK20 E/S [X] -> [ ]  (esperado espaco)
+CK21 E/S [h] -> [H]  (esperado H)
+CK22 E/S [T] -> [T]  (esperado T)
+CK23 operas gravado no cursor=[]  (esperado T)
+CK24 lookups sem conexao: nenhuma excecao
+CK25 Grupo vazio -> DGrupo=[]  (esperado vazio)
+CK26 ALTERAR cod vazio: Grupo.RO=.F. DGrupo.RO=.F. Conta.RO=.F. DConta.RO=.F.  (esperado .F./.F./.F./.F.)
+CK27 ALTERAR cod cheio: DGrupo.RO=.T. DConta.RO=.T.  (esperado .T./.T.)
+CK28 LISTA: Grupo.RO=.T. Conta.RO=.T.  (esperado .T./.T.)
+CK29 TabIndex Salva/Nome/Grupo/DGrupo/Conta/DConta/Lbl2/Grade/Ins/Exc = 1/4/5/6/7/8/9/10/11/12  (esperado 1/4/5/6/7/8/9/10/11/12)
+CK30 menor Top dos campos da ficha = 175  (tem de ser >= 109)
+CK31 Grade dir=600 Excluir dir=647 Form.Width=1000 Excluir base=421 Form.Height=600
+CK32 AlternarPagina(2) modo=[LISTA] ActivePage=2
+CK33 AlternarPagina(1) modo=[LISTA] Incluir.Enabled=.T.  (esperado LISTA / .T.)
+CK34 Release OK
+
+DIALOGOS SUPRIMIDOS:
+[31/10/2026 13:17:45] FormSigOpDmp: Entre com um valor entre 1 e 999...
+[31/10/2026 13:17:45] FormSigOpDmp: Informe [E]NTRADA / [S]AÍDA / [P]OSIÇÃO ATUAL...
+
+Z: fim

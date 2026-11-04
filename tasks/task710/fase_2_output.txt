@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file closes correctly with `ENDDEFINE`. Phase 2 is complete.
+
+**Summary of SigOpCpoBO.prg Phase 2 additions:**
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps every column of the current `cursor_4c_Grade` row into the `this_*` properties.
+- `CarregarProduto(par_cCpros)` ÔÇö validates the parent product against `SigCdPro` (equivalent to the legacy `CursorQuery` in `Init`).
+- `CarregarComposicao()` ÔÇö runs the `SigPrCpo`/`SigCdPro` join into a temp cursor, then copies rows into `cursor_4c_Grade` (never binding SQLEXEC directly to the grid alias), replicating `SelecionaDados`.
+- `CarregarTipos()` (PROTECTED) ÔÇö builds `cursor_4c_Tipos` from `SigCdTpc WHERE custos = 2`, including the blank-item logic.
+- `AplicarFiltroTipo()`, `AtualizarTotais()`, `ConfirmarSelecao()`, `CancelarSelecao()`, `DecodificarImagem()` ÔÇö port the remaining legacy behavior (`Set Filter`, `AtuaTotas`, `btnConfirmar`/`btnSair` clicks, image decode).
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()` were deliberately **not** overridden, with a comment explaining why: this dialog is read-only against the database ÔÇö only the parent form persists data ÔÇö so BusinessBase's default (refuse the operation) is already correct, per the project's documented "BO somente-leitura" pattern.

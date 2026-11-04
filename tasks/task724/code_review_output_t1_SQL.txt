@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado: os 4 achados s├úo falsos positivos ÔÇö nenhuma altera├º├úo feita
+
+Conferi com `grep -n WHERE` nos dois arquivos (`FormSigOpDpe.prg` e `SigOpDpeBO.prg`). S├│ existem **3 WHERE reais** no c├│digo, e nenhum ├® inven├º├úo:
+
+| Coluna acusada | O que existe de fato | Veredito |
+|---|---|---|
+| `DOPES` | `WHERE dopes = EscaparSQL(...)` em `CarregarFaixas` (BO:411) | **Leg├¡timo** ÔÇö filtra as faixas pela opera├º├úo dona, ├® o pr├│prio acoplamento do legado (que lia via `Set DataSession to pnDataSes`) reproduzido como filtro SQL. Documentado extensivamente nos coment├írios do form (linhas 49-54). |
+| `CIDCHAVES` | `WHERE cidchaves = EscaparSQL(...)` em `MontarUpdateLinha`/`MontarDeleteLinha` (BO:1046, 1063) | **Leg├¡timo e obrigat├│rio** ÔÇö ├® a PK. Remov├¬-lo faria o UPDATE/DELETE atingir TODAS as linhas de `SigOpDup`, um bug grave e silencioso. |
+| `LHOUVEINS` | N├úo existe em nenhum WHERE. S├│ aparece numa linha de **coment├írio** (FormSigOpDpe.prg:180) descrevendo que `lhouveexcl`/`lhouveins` s├úo *custom properties do FORM legado* (RESERVED3 do dump) ÔÇö prosa, n├úo SQL. | **Falso positivo** |
+| `DO` | N├úo existe como coluna em WHERE nenhum. S├│ aparece como `DO CASE` (estrutura de controle VFP) e dentro da palavra "FORA DO ESCOPO". | **Falso positivo** |
+
+A refer├¬ncia "WHERE original usa: QTDDFS" que o validador citou vem de `Delete For Empty(Dopes) or Empty(Qtddfs)` do legado ÔÇö um `FOR`-clause de `DELETE` sobre um **cursor local** (VFP), n├úo um `WHERE` de SQL remoto. O extrator do validador parece ter lido isso como "a" refer├¬ncia ├║nica e depois varrido o arquivo inteiro ├á ca├ºa de qualquer token perto de "WHERE", inclusive dentro de coment├írios.
+
+Aplicar as corre├º├Áes sugeridas (remover os WHERE de `dopes`/`cidchaves`) teria introduzido bugs reais de grava├º├úo em massa. N├úo toquei no c├│digo.
+
+Registrei essa variante de falso positivo do validador `SQL-FILTRO-INVENTADO` em mem├│ria (`feedback_sql_filtro_inventado_comentario_prop_legado.md`), j├í que o projeto tem v├írias li├º├Áes documentadas sobre esse mesmo validador confundir contexto ÔÇö essa ├® uma nova forma: confundir prosa/coment├írio com SQL real.

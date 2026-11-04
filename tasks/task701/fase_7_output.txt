@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada em `projeto/app/forms/operacionais/Formsigopcim.prg`.
+
+## Os 4 `BtnXxxClick` N├âO foram criados ÔÇö e isso ├® a entrega correta
+
+O SIGOPCIM n├úo tem superf├¡cie CRUD alguma. Medido no dump `tasks/task701/sigopcim_form_codigo_fonte.txt`:
+
+| evid├¬ncia que o gate procura | ocorr├¬ncias |
+|---|---|
+| `frmcadastro` (classe base do cadastro) | **0** ÔÇö o SCX herda de `form` puro |
+| `Grupo_Op` (barra CRUD do framework) | **0** |
+| `pcEscolha` (vari├ível de modo) | **0** |
+| `(btn\|cmd\|Command)(Incluir\|Alterar\|Visualizar)` | **0** |
+| `<verbo>.Click` | **0** |
+
+Os **├║nicos** dois bot├Áes do legado s├úo `Excluiitem` e `Sa├¡da` (dois `commandbutton` no `layout.json`), e os eventos principais deles ÔÇö `CmdExcluiitemClick` / `CmdSaidaClick` ÔÇö j├í estavam completos. Criar os quatro nomes can├┤nicos significaria inventar bot├Áes que o legado n├úo tem (viola o PILAR 1) ou deixar quatro m├®todos vazios (proibido pela regra de completude). O gate da Fase 7 cobre exatamente esse caso: `legadoSemCrud` + piso de 2 handlers, e o form tem 2.
+
+## O que a fase fez: auditou os dois `Click` e corrigiu 2 defeitos de runtime
+
+1. **`CmdExcluiitemClick` limpava `txt_4c_Barra` com `""`** ÔåÆ agora `0`. O legado faz `Get_Barra.Value = ''`, mas aqui o controle nasce **num├®rico** (`Value = 0` no SCX, transcrito) e `SigIvTrh.cbars` ├® `numeric(14,0)`. Atribuir `""` troca o tipo do controle no meio da sess├úo, e o `SEEK` de `AtualizarCrInvHPorBarra` passa a receber chave caractere ÔåÆ *Operator/operand type mismatch* dentro do TRY de `ValidarBarra`. Efeito para o usu├írio: **depois de clicar Excluir uma vez, toda leitura de barra seguinte virava caixa de erro** em vez de registrar a leitura.
+
+2. **`SEEK` por produto usava o valor TRIMADO contra o ├¡ndice `cpros` `char(14)`** ÔåÆ agora `PADR(ALLTRIM(...), 14)`. Com o `SET EXACT ON` global do `config.prg` (linha 231) o SEEK exige a chave inteira, ent├úo falhava **sempre**: no handler isso inseria uma c├│pia duplicada no cursor **global** `Historico` (que o form pai continua usando depois do di├ílogo fechar), e no irm├úo `AtualizarCrInvHPorProduto` reinseria as mesmas leituras na grade a cada `LostFocus` do campo Produto (linhas duplicadas). Corrigi nos dois s├¡tios ÔÇö o segundo ├® c├│digo da Fase 6, mesmo defeito, e preferi consertar a deixar diagnosticado e quebrado.
+
+O `WHERE` do `DELETE`/`SELECT` n├úo precisava de ajuste: SQL do VFP segue `SET ANSI`, que est├í OFF.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `COMPILE` do Form e do BO com `.fxp` apagado antes ÔÇö `FXP_FORM=SIM`, `FXP_BO=SIM`, `ERR_FORM=[]`, `ERR_BO=[]`, `COMPILE_OK` (`automation/CompileCheckCim701F7.prg` / `compile_check_cim701_f7.txt`).
+- **Completude** (as 4 regex de `Test-...Completude` rodadas isoladas, sem dot-source do Orquestrador): `COMPLETUDE_OK` no Form e no BO.
+- **Diff limpo**: 55 linhas `+` / 7 `-` contra a c├│pia de seguran├ºa ÔÇö s├│ o cabe├ºalho da Fase 7 e os 3 s├¡tios citados; nada mais reescrito. Arquivo segue ASCII puro (sem acento literal) e com o mesmo line-ending das fases anteriores (LF, `CR=0`).
+
+N├úo toquei em `task_state.json` ÔÇö isso ├® do Orquestrador.

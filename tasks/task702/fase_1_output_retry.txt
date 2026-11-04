@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\sigopcksBO.prg` criado (292 linhas, CRLF, 100% ASCII).
+
+A tentativa anterior falhou porque o Claude CLI recebeu s├│ os arquivos de contexto, sem a tarefa ÔÇö ele respondeu "no actual request yet". N├úo era problema do c├│digo.
+
+## O que ├® o form
+
+`SIGOPCKS` n├úo ├® CRUD: ├® o **di├ílogo modal de autoriza├º├úo** do Fortyus. Recebe um TIPO de libera├º├úo, pede usu├írio+senha e devolve se a opera├º├úo foi autorizada. O tipo decide o texto da tela, **qual permiss├úo de cargo/usu├írio ├® exigida** e se a senha conferida ├® a cadastrada ou a **senha do dia** calculada.
+
+## Entregue
+
+- `this_cTabela = "SigCdUsu"` / `this_cCampoChave = "usuarios"` (o usu├írio que autoriza ├® a entidade)
+- **38 propriedades** em 8 blocos: 8 par├ómetros de entrada (`_Tipo`.. `_Valor`), 2 textos derivados, **as 12 flags de tipo** do `ClassInfo` do SCX, 2 credenciais, 3 colunas de `SigCdUsu`, 2 par├ómetros de sistema (`liblcreds`/`senhdemps`), 4 de senha-do-dia, 4 de resultado
+- `Init()` s├│ define tabela/chave e normaliza valores ÔÇö **sem SQL**, porque `Init` de BO devolvendo `.F.` destr├│i o objeto e a tela nunca abre (nem em valida├º├úo de UI com `gnConnHandle = -1`)
+- `podatamgr` n├úo virou propriedade: na arquitetura nova a conex├úo ├® `gnConnHandle`. Confirmei que `SigOpSen` **n├úo ├® tabela** ÔÇö ├® o nome de programa passado ao `fSqlConector`
+- BO somente-leitura (o legado n├úo grava em tabela alguma; o ├║nico registro ├® via `fGravarLog`), ent├úo `Inserir`/`Atualizar`/`ExecutarExclusao` n├úo s├úo sobrescritos
+
+## Verificado, n├úo presumido
+
+- **Compila no VFP9**: FXP gerado, zero erros, sem `.err`
+- **Instancia**: `VARTYPE = "O"` (prova que `Init` devolveu `.T.`), tabela/chave corretas, `this_dDatDoc = 29/10/2026`, `this_lZSen = .F.` (fail-closed), **46 propriedades `this_`** = 38 minhas + 8 herdadas
+- Gates do `05d_validarCompletude`: zero TODO/FIXME/PLACEHOLDER, zero match do `laterPattern` (inclusive a armadilha `\bpendente`), zero stub `MsgAviso`, sem `PUBLIC` em `DEFINE CLASS`, sem `RETURN` dentro de TRY/CATCH, sem acentos literais
+- Tempor├írios de teste removidos
+
+## Dois achados para a Fase 2
+
+**1. Duas colunas do legado n├úo existem no schema can├┤nico.** Medido no `schema.sql` (UTF-16, lido com `Get-Content -Raw` ÔÇö regra #14): o `Valid` legado consulta `a.LibvOpes` (tipo `DTVALIDA`) e `a.LibLmPss` (tipo `LIBLIMITADOR`) em `SigCdUsu`, mas **zero ocorr├¬ncias** em todo o schema, em tabela nenhuma. `SigCdUsu` tem 17 colunas e nenhuma ├® essas. As outras 10 colunas consultadas conferem.
+
+Pela regra #14 isso ├® dump **mais novo que o banco** (mesma fam├¡lia do `LeadCad`/`RazObr` da regra #45), n├úo erro de grafia ÔÇö n├úo h├í candidata por met├ítese. Deixei as duas documentadas nas propriedades `this_lLibValida` e `this_lLibLimitador`. Transcrever fiel faz esses 2 dos 19 tipos estourarem *"Nome de coluna inv├ílido"* em runtime; inventar outro nome violaria o PILAR 2. Vale conferir no `INFORMATION_SCHEMA` do banco real antes da Fase 2 decidir.
+
+**2. `fCriptografar` e `fGerPswDiario` n├úo foram portadas** e, por serem valor-de-c├ílculo (hash de senha), pela regra #27 **devem continuar ausentes** ÔÇö stub autenticaria quem n├úo devia, em sil├¬ncio. A Fase 2 deve transcrever as chamadas literalmente dentro do TRY/CATCH, como j├í faz o `SigOpAlCBO.ValidarSenha` (precedente can├┤nico que usei de refer├¬ncia).

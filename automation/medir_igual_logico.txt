@@ -1,0 +1,10 @@
+=== operador = entre logicos ===
+   literal .T. = .T.                  -> .T.
+   local .T. = local .T.              -> .T.
+   local .T. = literal .T.            -> .T.
+   local .T. == local .T.             -> .T.
+   PEMSTATUS(...,5) = .T.             -> .T.
+   PEMSTATUS(...,2) = .F.             -> .T.
+   parametro .T. = parametro .T.   ->  = devolve .T.   == devolve .T.
+   parametro .F. = parametro .F.   ->  = devolve .T.   == devolve .T.
+   parametro .T. = parametro .F.   ->  = devolve .F.   == devolve .F.

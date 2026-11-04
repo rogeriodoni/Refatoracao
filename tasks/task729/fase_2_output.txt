@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced: 6 PROCEDURE/ENDPROC pairs, 4 FUNCTION/ENDFUNC pairs, 3 TRY/ENDTRY, 23 IF/ENDIF. FASE 2 is complete.
+
+**Summary of `SigOpEmpBO.prg` (FASE 2 ÔÇö m├®todos CRUD/BO) for FormSigOpEmp (Empenho):**
+
+Since the legacy source (`SigOpEmp_form_codigo_fonte.txt`) confirms this is a **read-only child dialog** (no Insert/Update/Delete anywhere ÔÇö the only button just does `ThisForm.Release()`), I followed the established project pattern for consulta-only OPERACIONAL BOs (same as `SigMvSbnBO`):
+
+- `CarregarDoCursor()` ÔÇö maps the current grid row (Emps/Dopes/Numes/Datas/GrupoDs/ContaDs/Qtds) to `this_*`, plus resolves the two lookup descriptions.
+- `ObterChavePrimaria()` / `MontarChaveEmpDopNums()` ÔÇö the posicional `EmpDopNums` key (char 3+20+6=29), per CLAUDE.md regra #42.
+- `Inserir()`/`Atualizar()` ÔÇö overridden PROTECTED to explicitly refuse grava├º├úo (tela de consulta), avoiding a fake INSERT/UPDATE that would violate PILAR 2.
+- `BuscarEmpenhosDoProduto()` ÔÇö the real functional method reconstructing the legacy `CrEmpenhado` cursor (SigMvCab Ôïê SigMvItn by `EmpDopNums`, filtered by product), since the parent form that originally built it (`SigMvEtr`) isn't in this task's acervo.
+- `CriarCursorEmpenhado()` ÔÇö single `CREATE CURSOR` point for the grid placeholder.
+- `ObterDescricaoGrupo()` / `ObterDescricaoConta()` ÔÇö replace the legacy `CursorQuery` lookups against `SigCdGcr.descrs` / `SigCdCli.rclis` (verified against `docs/schema.sql`).
+
+File is syntactically balanced (6 PROCEDURE/ENDPROC, 4 FUNCTION/ENDFUNC, 3 TRY/ENDTRY, 23 IF/ENDIF). Ready for FASE 3 (Form creation).

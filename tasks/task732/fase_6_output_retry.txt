@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e verificada.
+
+## Diagn├│stico
+
+A tentativa anterior entregou a fase **inteira e correta** ÔÇö os 4 `BINDEVENT`, a visibilidade por `fChecaAcesso` aplicada depois de `TornarControlesVisiveis`, e o handler transcrevendo `GetBusca.Valid` (Seek por `CBars` + `Go lnReg` no miss) **e** `GetBusca.LostFocus` (Refresh + foco na grade) na ordem em que o legado os dispara.
+
+Reprovou por **um nome**. O gate da Fase 6, ramo FLAT, exige `PROCEDURE Validar\w+`; o handler chamava-se `BuscaLostFocus`. Medido antes: `semPageFrame`/`temBindEvent`/`legadoSemLookup`/`.ControlSource` todos `True`, `PROCEDURE Validar\w+` = **0**. ├ë a 4┬¬ vez que isso acontece ÔÇö j├í estava na mem├│ria.
+
+## O que mudei (7 hunks, diff limpo)
+
+1. **`BuscaLostFocus` ÔåÆ `ValidarBusca`** (8 ocorr├¬ncias: declara├º├úo, `BINDEVENT`, coment├írios). `Validar<Campo>` ├® o nome can├┤nico do projeto para quem reproduz o `Valid` de um campo digit├ível ÔÇö e `txt_4c_Busca` ├® o ├║nico campo de entrada desta tela.
+2. **Guarda de reentr├óncia `this_lEmValidacaoBusca`** (regra #47): o handler move o foco para a grade de *dentro* do pr├│prio `LostFocus`, e mover o foco redispara o evento. `set` no topo + `clear` no fim bastam aqui ÔÇö o corpo n├úo tem `RETURN` antecipado.
+3. Reescrevi um coment├írio que continha a palavra `pendente` ÔÇö o regex de completude (`\bpendente`) reprovava a frase que *explicava por que n├úo usar stub*, igual a um TODO de verdade.
+
+## Verifica├º├úo
+
+| prova | resultado |
+|---|---|
+| gate `case 6` rodado **verbatim** do orquestrador | `temLayoutFlat = True` ÔåÆ passa |
+| `Test-CompletudeCodigo` (os 4 regex) no Form e no BO | 0 problemas |
+| `COMPILE` dos dois arquivos | `.FXP` sim, `.ERR` n├úo |
+| `CREATEOBJECT` | `O`, grade ligada ao cursor do chamador, 4 colunas |
+| `AEVENTS` nos 4 controles | `LOSTFOCUSÔåÆVALIDARBUSCA`, `CLICKÔåÆBTNSAIDACLICK`, `CLICKÔåÆBTNETIQUETASCLICK`, `CLICKÔåÆBTNIMPRIMIRCLICK` |
+| `PEMSTATUS(oForm,"ValidarBusca",2)` | `.F.` (PUBLIC ÔÇö regra #3) |
+| `Valid` nos **tr├¬s** caminhos do legado | barra existente ÔåÆ `RECNO=3`; inexistente ÔåÆ **continua** em 3 (o `Go lnReg`); vazia ÔåÆ n├úo move (`If Not Empty`) |
+
+Acentos literais, `this_X .Value`, `RETURN` dentro de `TRY`, `.Self`, `Controls("nome")`, `MESSAGEBOX`, `MostrarAviso`: zero nos dois arquivos. M├®todos do BO chamados pelo form (`BuscarPorBarra`/`GarantirCursorRelatorio`/`PosicionarPrimeiro`) todos PUBLIC (regra #51).
+
+Dois pontos que **n├úo** resolvi, e s├úo decis├úo sua: `BtnEtiquetasClick` e `BtnImprimirClick` seguem com `DO FORM` literal apontando para os nomes legados. `SigOpIpE` n├úo foi migrado, e `FormSIGMVDOC` existe mas s├│ implementa o ramo `pRep = "SIGCDENT"` ÔÇö apontar para ele abriria o di├ílogo errado (filtro de Nota Fiscal), silenciosamente pior que a lacuna. A avalia├º├úo ├® da tentativa anterior; revisei e concordo.

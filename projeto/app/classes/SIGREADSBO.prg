@@ -787,7 +787,15 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF !THIS.PrepararDados()
-                THIS.this_cMensagemErro = "Erro ao preparar dados para o relat" + CHR(243) + "rio"
+                *-- NAO sobrescrever uma mensagem que PrepararDados ja escreveu.
+                *-- Ela e o diagnostico de verdade - "Nenhum registro encontrado
+                *-- com os filtros informados." ou o texto da excecao. Trocar pelo
+                *-- generico "Erro ao preparar dados" faz o usuario ler falha de
+                *-- processamento onde o caso e simplesmente ausencia de dado, e
+                *-- manda o diagnostico para o lado errado (Erro311).
+                IF EMPTY(THIS.this_cMensagemErro)
+                    THIS.this_cMensagemErro = "Erro ao preparar dados para o relat" + CHR(243) + "rio"
+                ENDIF
                 loc_lSucesso = .F.
             ELSE
                 loc_cFrx = IIF(THIS.this_nTipoRel = 3, "SigReAd2", "SigReAd1")
@@ -939,24 +947,32 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
     * Delega para ImprimirRelatorio(.F.) e registra auditoria de impressao
     *--------------------------------------------------------------------------
     PROCEDURE Inserir()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lValido
         loc_lSucesso = .F.
         TRY
+            *-- loc_lValido e separado de loc_lSucesso de proposito: as duas
+            *-- guardas abaixo so atribuiam loc_lSucesso = .F. e a linha seguinte
+            *-- o sobrescrevia com o retorno de ImprimirRelatorio - ou seja a
+            *-- validacao montava a mensagem e NAO impedia nada (o relatorio
+            *-- rodava assim mesmo, sem periodo ou sem moeda).
+            loc_lValido = .T.
             IF EMPTY(THIS.this_dDtInicial) OR EMPTY(THIS.this_dDtFinal)
                 THIS.this_cMensagemErro = "Per" + CHR(237) + "odo (data inicial/final) " + ;
                                           " obrigat" + CHR(243) + "rio para gerar relat" + ;
                                           CHR(243) + "rio"
-                loc_lSucesso = .F.
+                loc_lValido = .F.
             ENDIF
-            IF EMPTY(THIS.this_cMoeda)
+            IF loc_lValido AND EMPTY(THIS.this_cMoeda)
                 THIS.this_cMensagemErro = "Moeda obrigat" + CHR(243) + "ria para gerar relat" + ;
                                           CHR(243) + "rio"
-                loc_lSucesso = .F.
+                loc_lValido = .F.
             ENDIF
 
-            loc_lSucesso = THIS.ImprimirRelatorio(.F.)
-            IF loc_lSucesso
-                THIS.RegistrarAuditoria("IMPRESSAO")
+            IF loc_lValido
+                loc_lSucesso = THIS.ImprimirRelatorio(.F.)
+                IF loc_lSucesso
+                    THIS.RegistrarAuditoria("IMPRESSAO")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -971,24 +987,32 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
     * Delega para ImprimirRelatorio(.T.) e registra auditoria de visualizacao
     *--------------------------------------------------------------------------
     PROCEDURE Atualizar()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lValido
         loc_lSucesso = .F.
         TRY
+            *-- loc_lValido e separado de loc_lSucesso de proposito: as duas
+            *-- guardas abaixo so atribuiam loc_lSucesso = .F. e a linha seguinte
+            *-- o sobrescrevia com o retorno de ImprimirRelatorio - ou seja a
+            *-- validacao montava a mensagem e NAO impedia nada (o relatorio
+            *-- rodava assim mesmo, sem periodo ou sem moeda).
+            loc_lValido = .T.
             IF EMPTY(THIS.this_dDtInicial) OR EMPTY(THIS.this_dDtFinal)
                 THIS.this_cMensagemErro = "Per" + CHR(237) + "odo (data inicial/final) " + ;
                                           " obrigat" + CHR(243) + "rio para visualizar relat" + ;
                                           CHR(243) + "rio"
-                loc_lSucesso = .F.
+                loc_lValido = .F.
             ENDIF
-            IF EMPTY(THIS.this_cMoeda)
+            IF loc_lValido AND EMPTY(THIS.this_cMoeda)
                 THIS.this_cMensagemErro = "Moeda obrigat" + CHR(243) + "ria para visualizar relat" + ;
                                           CHR(243) + "rio"
-                loc_lSucesso = .F.
+                loc_lValido = .F.
             ENDIF
 
-            loc_lSucesso = THIS.ImprimirRelatorio(.T.)
-            IF loc_lSucesso
-                THIS.RegistrarAuditoria("VISUALIZACAO")
+            IF loc_lValido
+                loc_lSucesso = THIS.ImprimirRelatorio(.T.)
+                IF loc_lSucesso
+                    THIS.RegistrarAuditoria("VISUALIZACAO")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

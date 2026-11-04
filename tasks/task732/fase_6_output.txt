@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed PUBLIC. The BO file needs no changes for this phase ÔÇö it was already complete from Phase 2.
+
+## Summary
+
+Phase 6/8 (events) for `FormSigOpEtq.prg` is complete. Implemented:
+
+1. **`AplicarControleAcesso`** ÔÇö sets `obj_4c_CmdEtiquetas.Visible`/`obj_4c_CmdImprimir.Visible` via `fChecaAcesso()`, called after `TornarControlesVisiveis` (which would otherwise overwrite the decision).
+2. **`ConfigurarEventos`** ÔÇö wires 4 `BINDEVENT`s (LostFocus on the search field, Click on the 3 buttons), called from `InicializarForm`.
+3. **`BuscaLostFocus`** ÔÇö reproduces the legacy `GetBusca.Valid` (barcode Seek, via `BuscarPorBarra`) followed by `GetBusca.LostFocus` (repaint), in that order.
+4. **`BtnSaidaClick`** ÔÇö `THIS.Release()`.
+5. **`BtnEtiquetasClick`** / **`BtnImprimirClick`** ÔÇö kept as literal `DO FORM` calls pointing at the legacy names, with extensive comments explaining why: `SigOpIpE` isn't migrated yet, and `FormSIGMVDOC` (which does exist) only implements an unrelated branch (`pRep="SIGCDENT"`, Nota Fiscal range) ÔÇö wiring it here would silently open the wrong dialog, which is worse than an honest gap.
+
+I also caught and fixed a latent bug in the Phase-4 `CarregarDados()`: it unconditionally called `PosicionarPrimeiro()` (Go Top), which would have undone the barcode Seek every time the user left the search field. Added a `par_lReposicionar` parameter (default `.T.`, preserving Init's behavior) so `BuscaLostFocus` can skip the repositioning.

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 2/8 conclu├¡da.** `SigOpCrpBO.prg`: 551 ÔåÆ 712 linhas, 161 linhas acrescentadas, nenhuma removida.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1:8060`) ├®:
+
+```powershell
+$conteudo -match "CarregarDoCursor" -and (($conteudo -match "Inserir" -and $conteudo -match "Atualizar") -or $boSomenteLeitura)
+```
+
+Medi as 4 provas de "BO somente-leitura" contra o dump legado: zero `TABLEUPDATE`, zero `.AddCursor(`, **zero** alvos de escrita, zero `SQLEXEC` de escrita ÔåÆ `$boSomenteLeitura = .T.`. Mas a exce├º├úo relaxa s├│ o conjunto `Inserir`/`Atualizar`; **`CarregarDoCursor` continua exigido incondicionalmente**, e esse token n├úo existia no arquivo (`Inserir` e `Atualizar` j├í casavam por substring). Era o ├║nico bloqueio.
+
+## O que fiz
+
+Em vez de stub ou men├º├úo em coment├írio, implementei um `CarregarDoCursor` **real** ÔÇö ├® literalmente o contrato que a `BusinessBase` documenta no pr├│prio stub (`EVALUATE(pcCursor + ".col")`): ler a linha corrente do alias para as properties. Aqui l├¬ `Datas`/`Valors`/`Hists` da linha onde o `LOCATE`/`CONTINUE` parou, e ├® chamado do `BuscarRegistro` no caminho de sucesso, ent├úo n├úo ├® c├│digo morto.
+
+**A decis├úo de projeto que importa**: carreguei em properties **separadas** (`this_dDatasAchado`/`this_nValorsAchado`/`this_cHistsAchado`), n├úo nas de crit├®rio. Carregar sobre as de crit├®rio seria um bug silencioso ÔÇö o `DO CASE` do `BuscarRegistro` escolhe o crit├®rio *testando* essas properties, ent├úo uma busca por Valor viraria busca por Data na itera├º├úo seguinte (a coluna `Datas` da linha achada nunca est├í vazia). Tamb├®m adicionei `LimparRegistroAchado()`, chamado no `Init` e na entrada do `BuscarRegistro`, para o `LOCATE` que falha n├úo deixar o registro anterior para tr├ís.
+
+Colunas conferidas nas duas pontas (`Formsigopind.prg:1802`: `Datas D`, `Valors N(11,2)`, `Hists C(60)`). Usei `TratarNulo(x, {})`/`0`/`""` ÔÇö o 2┬║ argumento ├® o **valor padr├úo**, n├úo c├│digo de tipo; `ConverterParaData` em vez de `TTOD` (a coluna chega `D` do cursor do pai e `T` da tabela); `TYPE()` e n├úo `PEMSTATUS` para checar campo de cursor; `SELECT (alias)` antes de qualquer leitura.
+
+## Verifica├º├úo
+
+- Gate: `CarregarDoCursor` 6├ù, `Inserir` 1├ù, `Atualizar` 6├ù ÔÇö satisfeito
+- `Test-CompletudeCodigo`: rodei os 4 regexes reais isolados ÔåÆ **sem problemas** (n├úo dot-sourcei o orquestrador, isso dispararia uma migra├º├úo)
+- Balanceamento: 10 `PROCEDURE`/10 `ENDPROC`, 21 `IF`/21 `ENDIF`, 1 `DO CASE`/1 `ENDCASE`, 1 `DEFINE`/1 `ENDDEFINE`
+- Zero `TRY` (sem risco de `RETURN` dentro de TRY), zero acentos literais, zero `PUBLIC`/`PROTECTED` indevido
+- Helpers: `ConverterParaData` e `TratarNulo` confirmados em `functions.prg`; o ├║nico `MsgAviso` est├í em coment├írio
+- `COMPILE` no VFP9: `.fxp` gerado, **nenhum `.err`**
+- CRLF preservado (CR=LF=712, medido por contagem de bytes); `diff` puramente aditivo
+
+Duas ressalvas honestas: o `vfp9.exe` nesta sess├úo **compila e sai sem executar**, ent├úo isso prova compila├º├úo, n├úo runtime ÔÇö n├úo posso alegar PROBE_OK. E o arquivo est├í `??` (untracked), como esperado no meio do pipeline.
+
+**Ponto para depois, fora do escopo desta fase**: a raiz ├® o gate exigir `CarregarDoCursor` incondicionalmente. Mover esse conjunto para dentro do `-or $boSomenteLeitura` resolveria a classe inteira ÔÇö mas corrigir o `.ps1` agora n├úo valeria para esta execu├º├úo (o gate j├í carregado ├® o antigo) e ├® script compartilhado, ent├úo n├úo mexi.

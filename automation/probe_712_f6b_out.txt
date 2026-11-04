@@ -1,0 +1,16 @@
+=== RECUSA: BO reporta destino DUPLICADO ===
+  ValidarDestino rodou sem excecao
+  BO foi consultado    = .T. (esperado .T.)
+  valor recebido pelo BO = [PROC JA EXISTE] (esperado PROC JA EXISTE)
+  Value preservado     = [PROC JA EXISTE] (NUNCA apagar - regra #50)
+  guarda liberada      = .F. (esperado .F.)
+
+=== REENTRANCIA: guarda ligada bloqueia 2a entrada ===
+  BO consultado com guarda ligada = .F. (esperado .F.)
+  guarda intacta = .T. (esperado .T. - nao liberou)
+
+=== ESC (LASTKEY 27) e campo VAZIO nao consultam ===
+  campo vazio -> BO consultado = .F. (esperado .F.)
+
+=== DIALOGOS capturados ===
+[30/10/2026 18:22:13] Atenção: Processo Já Cadastrado!!!

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpEtq.prg`.
+
+## O que faltava
+
+A tentativa anterior entregou a grade e os bot├Áes, mas **reprovou no gate** porque o ramo FLAT da Fase 4 (`OrquestradorMigracao.ps1`, `case 4`) exige tr├¬s coisas e s├│ duas estavam presentes:
+
+| exig├¬ncia | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£ö `grd_4c_Dados` | Ô£ö |
+| `AddObject("cmd_4c_` / `cmg_4c_` | Ô£ö `cmd_4c_Saida` | Ô£ö |
+| `CarregarLista` / `CarregarDados` / `MontaGrade` | Ô£ÿ **ausente** | Ô£ö `CarregarDados` |
+
+O m├®todo que faltava n├úo ├® adaptador para casar com regex: ├® o **funil de repintura** da regra #21. O legado repete `Select csRelatorio / Go Top / Grade.Refresh / Column1.Text1.SetFocus` em dois lugares (`Init` e `GetBusca.LostFocus`), e o cabe├ºalho do pr├│prio arquivo dizia que esse trio "chega com a grade" ÔÇö ou seja, era trabalho desta fase que ficou de fora.
+
+## Mudan├ºas
+
+- **`VincularGrade()`** (PUBLIC) ÔÇö todo o v├¡nculo de dados num bloco ├║nico, na ordem obrigat├│ria `ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Header1.Caption ÔåÆ Width`. Saiu de dentro de `ConfigurarGrade` porque ├® exatamente o bloco que o funil precisa reaplicar quando o alias do pai muda; duplicar faria as c├│pias divergirem. `ColumnCount` s├│ ├® atribu├¡do quando difere de 4 (reatribuir recria os `Column`). Sem cursor aberto n├úo toca na grade e devolve `.F.` ÔÇö ligar `ControlSource` a alias inexistente derrubaria o `Init` (regra #41).
+- **`CarregarDados()`** (PUBLIC) ÔÇö resolve o alias de novo, religa s├│ se divergiu, delega `Select`/`Go Top` ao `PosicionarPrimeiro()` do BO (fonte ├║nica) e chama `Grade.Refresh`. Cursor vazio **n├úo** ├® falha: o legado tamb├®m n├úo avisa nada.
+- **`ConfigurarGrade()`** ÔÇö ficou s├│ com geometria/apar├¬ncia + `ReadOnly` do grid (antes do das colunas, regra #18). `LOCAL loc_cCursor`, agora morto, removido.
+- **`InicializarForm()`** ÔÇö chama o funil **depois** de `TornarControlesVisiveis`: `Refresh` em controle invis├¡vel n├úo pinta.
+- Cabe├ºalhos do arquivo e dos m├®todos atualizados para descrever o que foi entregue (nada de "pr├│xima fase" sobrando sobre o `Grade.Refresh`).
+
+O `SetFocus` ficou em `IF` **aninhado**, n├úo num `AND` de uma linha: medi no VFP9 que `EOF("")` e `EOF(<alias inexistente>)` estouram *"Alias is not found"*. O VFP9 de fato curto-circuita `AND` (medido com vari├ível, com controle negativo provando que o termo direito ├® avaliado quando alcan├ºado), mas aninhar remove a depend├¬ncia disso.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: limpa, sem `.err`, nos dois arquivos.
+- **Instancia├º├úo real** (probe com depend├¬ncias carregadas ├á m├úo ÔÇö `ConfigurarAmbiente()` pendura nesta m├íquina): form abre; grade ligada a `CsRelatorio`; headers `[Barra] [Data Entrada] [Descri├º├úo] [Local]` e larguras `108/70/370/40` sobreviveram ao bind; o `Go Top` do funil moveu o ponteiro de RECNO 2 ÔåÆ 1 e o BO publicou a linha (`7891234567890`, `PRODUTO DE TESTE UM`); `CarregarDados()` e `VincularGrade()` chamados **de fora da classe** funcionam (prova que s├úo PUBLIC, regras #3/#51); religar n├úo resetou header nem largura; `Release()` n├úo fechou o cursor do chamador.
+- **Gate Fase 4** simulado com os regex do orquestrador: `temLayoutFlat = True`.
+- **Completude** (regex de `Test-CompletudeCodigo`): sem marcador, sem procedure vazia, sem pend├¬ncia, sem stub com `MsgAviso`.
+- Blocos balanceados (12/12 WITH, 29/29 IF, 3/3 TRY, 13/13 PROC), zero byte acentuado literal, CRLF preservado, nenhum `PUBLIC PROCEDURE` dentro de `DEFINE CLASS`.
+
+Tempor├írios e `.fxp` removidos. Permanecem fora do escopo desta fase, como j├í documentado no arquivo: o campo `GetBusca` e o r├│tulo "Barra :" (fases de campos) e os eventos ÔÇö `Valid` da busca, os dois `btn*.Valid` dos di├ílogos netos e o `Click` da sa├¡da ÔÇö, com as duas metades da busca j├í prontas (`BuscarPorBarra` no BO, `CarregarDados` aqui).

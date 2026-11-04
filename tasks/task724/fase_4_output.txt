@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files are structurally balanced (Form has `FormSigOpDpe` + the `TextBoxCelulaSigOpDpe_4c` helper class, both correctly closed).
+
+## Summary
+
+Implemented **Fase 4/8** for `FormSigOpDpe` (Tabela de Deprecia├º├úo da Opera├º├úo), following the already-reviewed sibling dialog `FormSigOpCrd.prg` pattern instead of the generic phase template (which assumed a Page1/Page2 CRUD layout with 6 buttons ÔÇö this legacy form is a FLAT modal dialog with a 3-column editable grid and only 2 buttons, so inventing CRUD buttons/pages would have violated PILAR 1).
+
+**`FormSigOpDpe.prg`** ÔÇö added:
+- `ConfigurarPaginaLista`/`ConfigurarPaginaDados`, `ConfigurarShapeDecorativo`, `ConfigurarGrade`/`ConfigurarColunasGrade` (3 columns: Qtd Dias Inicial/Final, %), `ConfigurarBotoes` (Excluir/Encerrar, transcribed from the dump)
+- Grid load/bind: `CarregarLista`, `VincularGrade`, `RepintarGrade`
+- Cell handlers transcribed from the legacy `LostFocus` events: `InstalarCelulasDpe` + `TextBoxCelulaSigOpDpe_4c` subclass, `ValidarQtddFinal`, `ValidarPercs`
+- Row lifecycle: `InserirLinhaCursor`/`InserirLinha`, `CmdExcluirClick`, `CmdEncerrarClick` (faithfully closes even on save failure, matching the legacy quirk)
+
+**`SigOpDpeBO.prg`** ÔÇö extended (needed for the grid to actually be editable/saveable) with the READWRITE cursor infrastructure, `CarregarFaixas`, `InserirLinhaCursor`/`ExcluirLinhaCursor`, and `GravarFaixas` (atomic transactional batch save), mirroring `SigOpCrdBO.prg`'s proven architecture.
+
+Verified structural balance (PROCEDURE/ENDPROC, IF/ENDIF, TRY/ENDTRY, WITH/ENDWITH, SCAN/ENDSCAN, DO CASE/ENDCASE) in both files, and checked for stray non-ASCII/CHR() issues (found and fixed 3 comment typos). No VFP9 runtime available here to actually instantiate the form ÔÇö that should be verified in a real VFP9 session before considering the phase closed.

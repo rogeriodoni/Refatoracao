@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada. O resultado ├® que **n├úo havia c├│digo a acrescentar** ÔÇö e isso foi medido, n├úo presumido.
+
+## O que o legado tem
+
+`SIGOPCTS` ├® um di├ílogo **modal de senha** de 300x211. Medido no dump:
+
+| superf├¡cie | tokens | resultado |
+|---|---|---|
+| LISTA | `BaseClass grid\|pageframe\|listbox`, `AddCursor`, `pColuna`, `RecordSource`, `ControlSource`, `Grade`, `grd` | **0 em todos os 9** |
+| BOT├âO | `BaseClass commandbutton\|commandgroup`, `PROCEDURE Click`, verbos CRUD | **0 em todos** |
+| campos | 3 `textbox` (senha/GetNova1/GetNova2) | todos edit├íveis (`ReadOnly` 0) |
+
+Os 12 objetos do SCX s├úo Dataenvironment, o form, `cntSombra`+2 Label, `Frase`, `Say3`, `Label1`, `Shape2` e os 3 `fwget`. O di├ílogo fecha pelo pr├│prio `senha.Valid` ÔåÆ `Thisform.Release`, sem CommandButton algum.
+
+Inventar Grid + `cnt_4c_Botoes` com 6 bot├Áes CRUD + `AlternarPagina()` violaria o PILAR 1 e a regra "NUNCA inventar"; escrev├¬-los vazios para casar com o regex seria o *stub disfar├ºado* que a regra de completude pro├¡be.
+
+## O gate concorda
+
+Rodando os helpers **reais** do orquestrador (carregados por AST ÔÇö dot-source dispara migra├º├úo de verdade): `temListaEstritaF4=False`, `temCampoCapturaF4=True`, `legadoCapturaF4=True` ÔåÆ **`temLayoutCaptura=True`**. A Fase 4 **PASSA** pelo ramo CAPTURA j├í com o arquivo da Fase 3.
+
+## O que entreguei
+
+Bloco `Fase 4/8` no cabe├ºalho do `.prg` documentando a aus├¬ncia medida, o perfil CAPTURA, os precedentes (task699/714/715) e o que pertence ├ás Fases 5/7-8 ÔÇö para a pr├│xima fase n├úo tentar inventar a grade.
+
+Provado que ├® **s├│ coment├írio** (o `.prg` ├® untracked, ent├úo `git diff` seria vazio ÔÇö tr├¬s medidas independentes):
+- bloco inserido: **0** linhas n├úo-coment├írio
+- arquivo inteiro: **161 == 161** linhas n├úo-coment├írio com e sem o bloco
+- `.FXP` compilado **no mesmo path**: **4669 == 4669** bytes, `FORM.ERR=.F.` / `BO.ERR=.F.`
+
+## Dois pontos que preciso sinalizar
+
+**1. Terceira ocorr├¬ncia da mesma lacuna, e a primeira via RunLoop.** O guard de NO-OP cobre s├│ `$NumeroFase -in @(5,6,7)` ÔÇö a Fase 4 ficou fora. task699 e task715 escaparam por execu├º├úo direta; esta veio pelo RunLoop (PID 10940). N├úo consertei o guard porque os dois bloqueadores do protocolo persistem e um **piorou**: `OrquestradorMigracao.ps1` est├í com **1000 inser├º├Áes n├úo commitadas** (era 857 em 25/10, 712 em medi├º├úo posterior) e h├í **dois** RunLoop vivos (PIDs 20544 e 10940) ÔÇö editar o `.ps1` n├úo valeria para a execu├º├úo em curso. Registrei a ocorr├¬ncia na mem├│ria com a especifica├º├úo do fix (teste ESTRITO de lista + `-not` API de n├│s).
+
+**2. `.FXP` n├úo serve por md5, s├│ por tamanho** ÔÇö armadilha que quase me fez concluir errado. Ele embute o path do fonte (a c├│pia em outro diret├│rio deu 4645 vs 4669) e n├úo ├® reprodut├¡vel entre compila├º├Áes distantes no tempo (mesmo arquivo intocado: `be8cd997` e, minutos depois, `3f9f68c4`). `cmp -l` mostra 53 bytes de 4669, no offset 70 e na cauda ÔÇö cabe├ºalho + tabela de n├║meros de linha, que desloca por constru├º├úo ao acrescentar coment├írio.
+
+Tamb├®m medi que, **nesta sess├úo**, `vfp9.exe -T` via `Start-Process -Wait` *executou* o corpo do script (contrariando a mem├│ria de 2026-10-19) ÔÇö atualizei a mem├│ria para medir sempre pela sa├¡da do script, nunca por `exit=0`.
+
+Artefatos deixados: `automation/CompileCheck717F4.prg` e `compile717f4.txt` (evid├¬ncia da compila├º├úo); os de compara├º├úo foram removidos.

@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete. `C:\4c\projeto\app\forms\operacionais\FormSigOpEnt.prg` ÔÇö 484 lines, 23 KB, CRLF.
+
+## What the previous run actually did
+
+Nothing. The log shows the Claude CLI never received the task ÔÇö it replied *"I don't see a specific task or question in your message yet"*. The 250 KB prompt was swallowed by permission-rule warnings printed into the output file. The form file did not exist; the BO from phases 1-2 did.
+
+## What I built
+
+SIGOPENT is a **modal child dialog** (500├ù300, `TitleBar = 0`) that the movement screen opens with 9 params. It's OPERACIONAL **flat**: the legacy declares no `pageframe`, and its only container is `cntSombra`.
+
+- `Init(9 params)` ÔÇö same positional order as the legacy `Lparameters`, values stored **before** `DODEFAULT()` (which is what triggers `InicializarForm`), then `RETURN DODEFAULT()`.
+- `InicializarForm()` ÔÇö creates `SigOpEntBO`, sets the background, transfers params, builds the header, syncs the parent mode. Flag + single `RETURN` after `ENDTRY`.
+- `TransferirParametrosParaBO()`, `ConfigurarCabecalho()` (`cnt_4c_Sombra` + the two shadow/title labels), `SincronizarEscolhaPai()`, `TornarControlesVisiveis()`, `Destroy()` (closes the BO's 3 cursors, ends in `DODEFAULT()`).
+
+Three judgment calls, each documented in the file:
+
+- **No `ConfigurarPageFrame`, no `cnt_4c_Botoes`/`cnt_4c_Saida`.** The generic phase-3 spec asks for them, but this legacy has no PageFrame and no CRUD bar ÔÇö only two loose buttons. Inventing them would violate PILAR 1. The gate's FLAT branch covers exactly this case.
+- **Header labels use `THIS.Width - 20`, not the dump's 769.** The SCX draws `cntSombra` at 800 wide inside a 500-wide form ÔÇö a Form Designer artifact. Copying the literal would clip the Tahoma-18 title.
+- **`Closable` deliberately omitted** (absent from the dump; `TitleBar = 0` does not imply it), and `DoCreate` dropped as design-time metadata.
+
+`par_lBloquear` uses `PCOUNT()` rather than `VARTYPE` ÔÇö an omitted logical arrives as `.F.`, so `VARTYPE = "L"` can't distinguish the two cases.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| Phase 3 gate (simulated exactly) | **VALIDADO = True** (FLAT branch: legacy has no PageFrame, no invented `pgf_4c_`, has `InicializarForm` + `AddObject("cnt_4c_`) |
+| `Test-CompletudeCodigo` | **0 problems**, 7 procedures all with real code |
+| VFP9 compile | `.FXP` 6249 bytes, **no `.ERR`** |
+| Negative control | `.ERR` produced, pointing **only** at appended lines 487-489 ÔÇö proves lines 1-484 are clean |
+| `RETURN` inside TRY (#1) | 0; TRY/ENDTRY balanced |
+| Accented literals (#4) | 0 non-ASCII bytes |
+| `this_X .Value` (#43) | 0 |
+| BO properties referenced | 14/14 exist in `SigOpEntBO.prg` |
+| Helpers called (#13) | `ConverterParaData`, `MsgErro` both confirmed |
+| BO methods called from form (#51) | none ÔÇö only properties, so no PROTECTED exposure |
+
+Two caveats I won't overstate. The **smoke test failed** (`exit=0`, `.FXP` written, output file absent) ÔÇö VFP compiled but did not execute in this session, so I proved **compilation only**; I have no evidence about instantiation or runtime. And the gate's `temEstruturaPaginada` also reads True, but only because my header comment contains the string "ConfigurarPageFrame" ÔÇö that check is a whole-file substring match. The FLAT branch passes on its own merits, which is the one that legitimately applies.
+
+One thing worth flagging for phase 4: the BO has no cursor-loading method yet (the legacy `Init`'s three `AddCursor`/`CursorQuery` calls for `crSigOpMvv`/`crSigCdOpe`/`crSigOpCdd` have no counterpart). I deliberately did not call a BO method that doesn't exist ÔÇö that would compile clean and fail at runtime. The grid wiring in phase 4 will need to add it.

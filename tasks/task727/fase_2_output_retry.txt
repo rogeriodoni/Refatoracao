@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## FASE 2/8 conclu├¡da ÔÇö `sigopecmBO.prg` (633 linhas)
+
+**Por que a tentativa anterior reprovou**: o gate da Fase 2 (`case 2` do `OrquestradorMigracao.ps1`) exige o token `CarregarDoCursor` **sempre** ÔÇö a exce├º├úo "BO somente-leitura" s├│ dispensa `Inserir`/`Atualizar`. O BO gerado n├úo tinha o m├®todo, e s├│ isso reprovava.
+
+### O que foi acrescentado
+
+| M├®todo | Papel |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | l├¬ a linha corrente de um cursor para as properties ÔÇö ├® o que o legado fazia espalhado em `LocalGrupo.<col>` / `LocalProds.<col>` / `LocalCaracs.<col>`. Atende os 3 cursores do processo **e** o `crImagens` do form chamador; cada coluna s├│ ├® lida se existir (`TYPE(alias+".col") != "U"`, nunca `PEMSTATUS` sobre alias); restaura o alias de entrada (├® chamado de dentro de `SCAN`s); devolve `.F.` em EOF/alias inexistente |
+| `LimparDados()` | zera a linha corrente (com `DODEFAULT()`), chamado no in├¡cio de `GerarArquivoExportacao` ÔÇö o form fica aberto entre um Processar e outro |
+| 18 properties | tipadas pela **coluna** no `docs/schema.sql` (lido com `Get-Content -Raw`, UTF-16): `ids` numeric(10,0), `pesoms` numeric(8,3), `pvens` numeric(11,5), `dtincs` datetime NULL, `figjpgs` text NULL etc. |
+
+`GerarArquivoExportacao` foi religado ├ás properties (grupo, produto, cole├º├Áes e imagem), ent├úo o loader **├® usado**, n├úo decora├º├úo. `Inserir`/`Atualizar`/`ExecutarExclusao` seguem herdados: o dump legado n├úo tem `TABLEUPDATE` nem `.AddCursor`, e o ├║nico alvo de escrita (`Insert Into crGrupos`) ├® cursor local ÔÇö inventar INSERT violaria a regra #22.
+
+### Verificado (n├úo inferido)
+
+- **Gate Fase 2 simulado**: `boSomenteLeitura=True`, `CarregarDoCursor=True` ÔåÆ `GATE VALIDADO = True`
+- **Completude (05d)**: 0 problemas; acentos literais = 0; `this_X .Value` = 0; nenhum `RETURN` dentro de `TRY` (contagem por profundidade)
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas parseadas, 6 statements, 0 coluna inv├ílida
+- **Compila├º├úo no VFP9**: `.FXP` presente / `.ERR` ausente, com **controle negativo** na mesma rodada (c├│pia + `IF .T.` solto gerou `.ERR` apontando s├│ as 2 linhas acrescentadas) ÔÇö repetido depois de restaurar o CRLF do arquivo
+- **Runtime** (smoke test passou, ent├úo deu para instanciar): `CarregarDoCursor` provado nos 3 cursores + guardas de EOF/alias inexistente/par├ómetro n├úo-char; alias restaurado (`[CS_CAR]`); `Cpros` do produto preservado ao ler cole├º├Áes; `datetime` NULL ÔåÆ `DTOC` com 10 chars (largura do layout td03); os 3 m├®todos chamados de fora s├úo PUBLIC (regra #51)
+
+Um detalhe medido que vale registrar: `PADL` de **coluna** num├®rica converte com as decimais declaradas, de **vari├ível** usaria `SET DECIMALS` ÔÇö troquei por `PADL(ALLTRIM(STR(..., n, dec)), 8, "0")` com as decimais do schema e provei no probe que o resultado ├® id├¬ntico ao legado (`0001,500` / `12,50000`), para o campo de largura fixa n├úo depender de `SET DECIMALS`.

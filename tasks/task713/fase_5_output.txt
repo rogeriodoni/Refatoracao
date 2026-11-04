@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpCrd.prg` (+129 linhas, 1438 no total).
+
+## O problema com a fase, dito antes do resultado
+
+Esta tela **n├úo tem campo nenhum para acrescentar**. O SCX ├® FLAT (sem PageFrame) e seus ├║nicos controles de entrada s├úo os quatro `Text1` das colunas da grade, entregues na Fase 4 ÔÇö metade de zero campos ├® zero. As duas sa├¡das ├│bvias eram proibidas: inventar uma Page2 com campos (viola o PILAR 1) ou deixar `ConfigurarPaginaDados()` com corpo `THIS.Refresh()` (stub disfar├ºado). Ent├úo gastei a fase no trabalho que de fato sobra num FLAT ÔÇö auditar propriedade por propriedade o que a cria├º├úo em massa da Fase 4 derrubou.
+
+## O que a auditoria achou
+
+Cruzei **as 150 propriedades do dump** com o `.prg`, mecanicamente. Faltavam tr├¬s:
+
+| Propriedade | Gravidade |
+|---|---|
+| **`TitleBar = 0`** (form) | **real** ÔÇö estava s├│ no coment├írio da Fase 3, que afirmava t├¬-la transcrito; a declara├º├úo n├úo existia. Com o default 1 a tela desenhava barra de t├¡tulo que o legado n├úo tem. N├úo d├í erro, n├úo entra em log, n├úo quebra compila├º├úo: s├│ aparece na tela |
+| `Rotation = 0` (2 labels) | cosm├®tica ÔÇö ├® o default; transcrita por fidelidade literal |
+| `TabIndex` | estava dentro do `WITH` da grade, no meio da montagem |
+
+O `TitleBar` quase escapou: meu primeiro cross-check passou, porque o `grep` casou a palavra **no coment├írio**. S├│ refazendo contra linhas de c├│digo ele apareceu.
+
+N├úo entram, com motivo medido ÔÇö n├úo por omiss├úo: `DoCreate` (flag de design-time, n├úo ├® property de `Form` ÔÇö conferido em `propriedades_baseclasses.txt`), `Column<N>.Name` (renomear Column quebra toda refer├¬ncia `.ColumnN`) e o `Dataenvironment` inteiro.
+
+## `ConfigurarPaginaDados()` com conte├║do real
+
+Criado e **ligado ao `InicializarForm` depois do ├║ltimo `AddObject`** ÔÇö um m├®todo que existe mas ningu├®m chama ├® c├│digo morto que nenhum gate percebe, porque o m├®todo existe.
+
+O conte├║do ├® a ordem de tabula├º├úo. O alvo **n├úo ├® o literal do dump**: o VFP aplica o `TabIndex` no instante em que cria cada objeto e clampa no total de tab-ables existentes ali. Simulei o load na ordem dos registros do SCX e a ordem efetiva do legado ├® `grade=1, cabe├ºalho=2, Excluir=3, Encerrar=4` ÔÇö o `1` da grade sobrevive e empurra o cabe├ºalho, ou seja o Tab do legado come├ºa na grade, o ├║nico lugar onde se digita. `Shape` n├úo entra na conta: medi, nem tem `TabIndex`.
+
+Medi lado a lado que atribuir no `WITH` da grade (como estava) e atribuir no fim d├úo **resultado id├¬ntico** ÔÇö ent├úo isto n├úo muda comportamento. Torna a ordem expl├¡cita e protege contra algu├®m reordenar os `AddObject`, que era o ├║nico motivo de ela estar certa antes.
+
+## Verifica├º├úo
+
+O smoke test de VFP9 **passou**, ent├úo o que segue ├® medido, n├úo inferido:
+
+- `COMPILE` do form e do BO: `FXP=SIM, ERR=N├âO` ÔÇö com **controle negativo** (c├│pia com `PUBLIC PROCEDURE` colado no fim), que gerou `.ERR` apontando s├│ as linhas acrescentadas: prova de uma vez que o detector funciona e que as 1438 linhas est├úo limpas
+- `CREATEOBJECT` real: `VARTYPE=O`, `BaseClass=Form`, 600x349, 5 controles
+- `TitleBar=0` lido de volta; `Rotation=0` nos dois labels com geometria intacta (580x40 / 580x46)
+- `TABINDEX grd=1 cnt=2 Excluir=3 Encerrar=4` ÔÇö exatamente a ordem efetiva do legado
+- Geometria do dump intacta: grade 103/118/363/227, `ColumnCount=4`, larguras 100/100/48/80, header `[Faixa Inicial]`
+- `PEMSTATUS(..., "ConfigurarPaginaDados", 2) = .F.` (PUBLIC, regra #3) e idempotente ao ser chamado de fora
+- CRLF preservado (CR=LF=1438), zero bytes >127, zero `RETURN` dentro de `TRY`, zero `TODO`/stub; os dois `MessageBox` s├úo coment├írios citando o legado. `.fxp` do teste removidos
+
+O diff de c├│digo s├úo **20 linhas**; o resto ├® coment├írio documentando as medi├º├Áes.
+
+Uma ressalva honesta: provei compila├º├úo e instancia├º├úo, n├úo uso interativo. Que o Tab de fato ande nessa ordem na m├úo do usu├írio eu inferi do `TabIndex` lido de volta ÔÇö n├úo exercitei teclado.
+
+Fica para as fases de evento o `inserelinha` disparado pelo `LostFocus` da Column4 (├® como o usu├írio ganha linha nova) e o `LostFocus` da Column2 que joga o foco no Encerrar.

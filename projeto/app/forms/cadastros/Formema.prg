@@ -422,7 +422,7 @@ DEFINE CLASS Formema AS FormBase
         *-- Container botoes Salvar/Cancelar (Grupo_Salva: L=812, Top=24+29=53)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 53       && 24 + 29
+            .Top         = 28       && Erro303: era 24+29=53; 28 poe os botoes dentro da faixa 30..110
             .Left        = 812
             .Width       = 175
             .Height      = 88

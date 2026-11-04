@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. Resumo do que foi feito e do que foi provado.
+
+## O que a Fase 8 entregou
+
+O `FormSigOpClp.prg` j├í estava estruturalmente completo (Fases 3ÔÇô7). Os nomes que o template da fase pede ÔÇö a dupla de transfer├¬ncia campoÔåöBO, o bot├úo que descarta edi├º├úo, o de busca, habilitar/limpar campos e ajustar bot├Áes por modo ÔÇö **n├úo t├¬m a que se aplicar**: o dump tem zero campo fora de grade, zero lookup, zero bot├úo al├®m do Encerrar, zero modo de edi├º├úo (`pcEscolha` n├úo existe) e zero escrita em tabela. Cri├í-los vazios seria stub; inventar os controles que pressup├Áem violaria o PILAR 1. Documentei isso no cabe├ºalho **em prosa, sem citar os nomes literalmente** ÔÇö cit├í-los faria o gate aprovar por "handler presente" em vez de pelo carve-out honesto.
+
+Os tr├¬s itens que de fato faltavam:
+
+1. **Integra├º├úo com o pai** ÔÇö `FormSigOpCcl.BtnConsultaClick` ainda executava `DO FORM SigOpClp` literal apontando para o SCX legado. Agora faz `CREATEOBJECT("FormSigOpClp", THIS, THIS.DataSessionId)` (mesmos dois argumentos do legado), com o **`Show()` FORA do TRY/CATCH** (regra #29) e reabilita├º├úo do pai em todos os caminhos que n├úo abrem a tela.
+2. **`WindowType = 1` em produ├º├úo** (no `Init`, 0 em teste/valida├º├úo de UI) ÔÇö n├úo ├® estilo, ├® tempo de vida de refer├¬ncia: `DO FORM` mantinha o form vivo sozinho; `CREATEOBJECT` devolve objeto em LOCAL, e sem `Show()` bloqueante a refer├¬ncia cai e a tela seria destru├¡da na hora. Mesmo padr├úo do irm├úo `FormSigOpCcl` e de `FormSIGPRCIC`.
+3. **Evento auxiliar da grade** ÔÇö `BINDEVENT AfterRowColChange` ÔåÆ `GradeAfterRowColChange` ÔåÆ `BO.CarregarLinhaCorrente()`, fechando o contrato que a Fase 2 declarou e nenhuma fase ligou. Sem filtro de coluna (regra #46), s├│ leitura do cursor para o BO: nenhuma mudan├ºa vis├¡vel.
+
+Al├®m disso: guard do `SetFocus` ampliado para as **duas** flags de teste (antes s├│ `gb_4c_ValidandoUI`; em `gb_4c_ModoTeste` um erro ali cairia no CATCH do `InicializarForm` e o `CREATEOBJECT` devolveria `.F.` ÔÇö "falha ao instanciar" sem defeito real), e `indice_classes.txt` regerado, registrando a depend├¬ncia `FormSigOpCcl ÔåÆ FormSigOpClp` (o `CREATEOBJECT` ├® literal dentro de form, ent├úo n├úo h├í `GarantirClasse` a escrever). `config.prg` n├úo foi tocado e **nenhum item de menu foi criado** ÔÇö o legado abre esta tela s├│ de dentro do pai.
+
+## O que foi verificado
+
+- **Compila├º├úo**: `vfp9.exe -T` gerou `.FXP` para os dois `.prg`, sem `.ERR`. Com **controle negativo** (c├│pia do form + `PUBLIC PROCEDURE`, regra #9.1) o `.ERR` apareceu apontando s├│ as 3 linhas acrescentadas ÔÇö prova de que o detector funciona e que as 1.537 linhas est├úo limpas.
+- **Gate da Fase 8 rodado standalone** (helpers extra├¡dos, sem dot-source do orquestrador): `legadoVisualizadorF8 = True` (sem CRUD, sem bot├úo de gravar, `Test-LegadoSomenteLeitura = True`, 1 bot├úo no SCX, superf├¡cie entregue) ÔåÆ `metodosFaltantes` vazio ÔåÆ **PASSA**.
+- **Est├íticos**: 0 literais acentuados, 0 `this_X .Value`, 0 `RETURN` dentro de TRY, 0 procedure vazia, 0 marcador de completude. CRLF preservado (`CR == LF`), diffs cir├║rgicos (152/13 e 57/17 linhas).
+- Removi o `formsigopclp.FXP` de 00:31 (pr├®-Fase 8) para o harness n├úo rodar c├│digo velho.
+
+**N├úo foi poss├¡vel provar runtime**: o smoke test do VFP9 nesta sess├úo falhou (`exit=0`, `.FXP` criado, arquivo de sa├¡da ausente) ÔÇö ele compila e sai sem executar. Instancia├º├úo, abertura da tela pelo pai e o comportamento do modal/`SetFocus` n├úo foram verificados em execu├º├úo.

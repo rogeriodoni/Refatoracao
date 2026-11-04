@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigopcks.prg` criado (19,9 KB, 394 linhas, CRLF/ASCII sem BOM).
+
+## Por que o retry anterior falhou
+N├úo foi o c├│digo: o log `05_migracao_fase3.log` mostra o Claude CLI abortando em 12s com um aviso de regra de permiss├úo (`settings.local.json`) ÔÇö o arquivo do Form nunca chegou a ser escrito.
+
+## Decis├úo estrutural: form FLAT, sem PageFrame
+SIGOPCKS **n├úo ├® cadastro**. O dump prova raiz `Class: form` gen├®rico (n├úo `frmcadastro`), sem `BaseClass: pageframe`, sem Grid e sem barra CRUD ÔÇö ├® um di├ílogo modal de autoriza├º├úo (recebe um TIPO de libera├º├úo, pede Representante + Senha). Fabricar `pgf_4c_*`/Page1-Lista/Page2-Dados violaria o PILAR 1. O gate da Fase 3 tem exatamente esse ramo FLAT, e ele valida: `legadoSemPageFrame=True`, sem `AddObject("pgf_4c_`, com `InicializarForm` e com `AddObject("cnt_4c_Sombra")` ÔåÆ **PASSA** (tamb├®m satisfaz o ramo paginado, porque o m├®todo se chama `ConfigurarPageFrame` por conven├º├úo do orquestrador).
+
+## O que foi entregue
+- Propriedades visuais transcritas do SCX (1000x600, `DataSession=2`, `TitleBar=0`, `WindowType=1`, `AlwaysOnTop`, `ControlBox=.F.`, `MaxButton=.F.`, `Movable=.F.`). `Closable`/`MinButton` **n├úo** foram inventados ÔÇö o dump n├úo os declara.
+- `Init` com os 8 par├ómetros do Init legado, repassados crus ao `sigopcksBO.DefinirTipo` (que j├í normaliza, roda o DO CASE e carrega SigCdPam/SigCdPac), `Caption` resolvido **antes** do `DODEFAULT` porque a faixa espelha `THIS.Caption`. Cria├º├úo do BO **sem** gate de `gnConnHandle` (o harness for├ºa 0 de prop├│sito).
+- `InicializarForm`, `ConfigurarPageFrame` (faixa `cnt_4c_Sombra` + os dois labels, como 1┬║ `AddObject`), `TornarControlesVisiveis`, `Destroy` com `DODEFAULT()` por ├║ltimo.
+- Estado mora s├│ no BO (fonte ├║nica) ÔÇö o Form n├úo duplica as 12 flags nem os 8 par├ómetros.
+
+Dois pontos onde n├úo copiei o literal, documentados no arquivo: `cntSombra.Width = 1100` com form em 1000 ├® artefato do Form Designer ÔåÆ `THIS.Width`; e `AutoSize = .F.` expl├¡cito nos labels com `WordWrap` (regra #23).
+
+## Verifica├º├Áes executadas
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 3 (predicado real do orquestrador) | PASSA |
+| Compila├º├úo VFP9 | `.FXP` gerado, **sem `.err`** |
+| Completude (regexes reais do `Test-CompletudeCodigo`) | OK ÔÇö 0 TODO/stub/procedure vazia |
+| `VerificarPropriedadesInexistentes` | OK |
+| `VerificarFuncoesNaoDefinidas` (├írvore toda, 1055 .prg) | 0 chamadas ├│rf├ús |
+| TRY/ENDTRY, WITH/ENDWITH, IF/ENDIF, FOR/ENDFOR | balanceados |
+| `RETURN` dentro de TRY / acento literal / `PUBLIC` em DEFINE CLASS | nenhum |
+
+Duas ressalvas honestas: **n├úo consegui provar instancia├º├úo** ÔÇö nesta sess├úo o `vfp9.exe` compila e sai sem executar o corpo (o `.FXP` prova compila├º├úo, n├úo execu├º├úo); o processo ficou pendurado no IDE e foi encerrado, e removi o `.FXP` para o harness n├úo rodar c├│digo velho. E o cabe├ºalho lista, objeto a objeto, o que as Fases 4-8 ainda devem acrescentar (os 7 controles ÔÇö Shape1/Image1/Frase/Say2/usuario/Say3/senha ÔÇö, os eventos `Valid`/`When`/`KeyPress`, e o contrato de retorno do `Unload`), para nada ficar silenciosamente perdido.

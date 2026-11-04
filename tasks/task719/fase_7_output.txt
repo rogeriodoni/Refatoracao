@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All the BINDEVENT wiring is in place and the implementation is complete. Let me give a summary.
+
+## Summary
+
+I implemented the Fase 7/8 events for `FormSigOpDes` (dialog "Sele├º├úo de Descontos"), the pieces the file's own header had explicitly flagged as pending:
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigOpDes.prg`**
+- `BtnSairClick` / `BtnConfirmarClick` ÔÇö wired to `cmg_4c_Botoes.Buttons(1)/(2)`. Sair just releases the dialog; Confirmar (`ConfirmarSelecaoExec`) deletes the item's previous discounts and re-inserts one `SigMvItd` row per marked type (transcribing the legacy's `DELETE ALL for descos=0` + `SCAN ... Selecao=1` as a single `SCAN FOR Selecao=1 AND Descos<>0`).
+- `ChkSelecaoClick/MouseDown/MouseUp/KeyPress` + `ChkSelecaoToggle(Exec)` ÔÇö the 4-handler grid-checkbox pattern (NODEFAULT + manual REPLACE) this codebase already uses elsewhere, carrying the authorization logic for gerente/supervisor/diretoria discount types via `DO FORM SigOpSen`, applied **fail-closed** per the established project convention (dialog unavailable ÔçÆ not authorized, error surfaced via `MsgErro`, never silently granted).
+- `Header1Click` ÔÇö select-all/none toggle on the grid header, transcribed literally (no authorization check and no `CalcularTotais()` call, matching the legacy's actual ÔÇö looser ÔÇö behavior).
+
+**`C:\4c\projeto\app\classes\SigOpDesBO.prg`**
+- Added `ExcluirDescontosDoItem()`, needed by the Confirmar flow to replace the legacy's `DELETE ALL FOR cpros=... AND citens=...` on the (now nonexistent) global cursor.
+
+Both files pass a keyword-balance check (TRY/ENDTRY, PROCEDURE/ENDPROC, IF/ENDIF, FUNCTION/ENDFUNC, SCAN/ENDSCAN, DEFINE CLASS/ENDDEFINE all match). I also tidied the file's own header comments that referenced this work as "pending" so they now reflect what's delivered.
+
+One thing worth flagging: I didn't have VFP9 available to actually compile/run this, so this is reviewed by static inspection only ÔÇö worth a smoke test in the real environment before calling it done.

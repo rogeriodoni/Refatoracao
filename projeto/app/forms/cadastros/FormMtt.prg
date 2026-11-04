@@ -416,7 +416,7 @@ DEFINE CLASS FormMtt AS FormBase
 		*-- Container de botoes Confirmar/Cancelar (Grupo_Salva: Left=821, Top=8)
 		loc_oPagina.AddObject("cnt_4c_Salva", "Container")
 		WITH loc_oPagina.cnt_4c_Salva
-			.Top         = 8 + 29
+			.Top         = 27        && Erro303: era 8+29=37, botoes (Top=5,H=75) transbordavam a faixa 29..109
 			.Left        = 821
 			.Width       = 160
 			.Height      = 85

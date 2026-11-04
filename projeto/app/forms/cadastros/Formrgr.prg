@@ -430,7 +430,7 @@ DEFINE CLASS Formrgr AS FormBase
         *-- Container Salvar/Cancelar (Grupo_Salva: Left=638, Top=8+27=35)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 35
+            .Top         = 27
             .Left        = 638
             .Width       = 160
             .Height      = 85

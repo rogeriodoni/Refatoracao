@@ -1,0 +1,79 @@
+=== PROBE Formsigopcim - Fase 8 (consolidacao) ===
+
+1) Instanciacao nos dois modos
+   [OK]    instancia em modo EXCLUSAO (par_lExcluir = .T.)
+   Caption = [Exclusão de Barras]
+   [OK]    Caption do modo exclusao
+   [OK]    botao de excluir item VISIVEL em modo exclusao
+   [OK]    Shape2 visivel / Shape3 oculto em modo exclusao
+   [OK]    instancia em modo CONSULTA (par_lExcluir = .F.)
+   [OK]    Caption do modo consulta
+   [OK]    botao de excluir item OCULTO em modo consulta
+   [OK]    Shape3 visivel / Shape2 oculto em modo consulta
+
+2) Escopo dos metodos (atributo 2 = Protected)
+   CarregarLista            existe=.T.  protected=.F.  esperado=.F.
+   [OK]    CarregarLista existe com o escopo esperado (publico)
+   HabilitarCampos          existe=.T.  protected=.F.  esperado=.F.
+   [OK]    HabilitarCampos existe com o escopo esperado (publico)
+   AjustarBotoesPorModo     existe=.T.  protected=.F.  esperado=.F.
+   [OK]    AjustarBotoesPorModo existe com o escopo esperado (publico)
+   FormParaBO               existe=.T.  protected=.T.  esperado=.T.
+   [OK]    FormParaBO existe com o escopo esperado (protegido)
+   BOParaForm               existe=.T.  protected=.T.  esperado=.T.
+   [OK]    BOParaForm existe com o escopo esperado (protegido)
+   DesvincularGrade         existe=.T.  protected=.T.  esperado=.T.
+   [OK]    DesvincularGrade existe com o escopo esperado (protegido)
+   MontaGrade               existe=.T.  protected=.T.  esperado=.T.
+   [OK]    MontaGrade existe com o escopo esperado (protegido)
+   [OK]    a property do codigo de barras do BO e NUMERICA (this_nBarra)
+   [OK]    a property char antiga do codigo de barras NAO existe mais
+   [OK]    o BO tem o flag de falha de conexao
+
+3) Fim do Init legado
+   txt_4c_Barra.Value = [0]  tipo = N
+   [OK]    campo Barra limpo e NUMERICO (0, nunca string vazia)
+   [OK]    cursor de historico aberto e posicionado no topo
+
+4) HabilitarCampos - When de Get_Produto
+   [OK]    Barra vazio -> campo Produto HABILITADO
+   [OK]    Barra preenchido -> campo Produto DESABILITADO
+
+5) AjustarBotoesPorModo
+   [OK]    repoe as 3 visibilidades pelo modo (consulta)
+
+6) Transferencia nos dois sentidos
+   [OK]    FormParaBO devolveu .T.
+   BO: this_nBarra = 98765432109876  this_cProduto = [ABC123]
+   [OK]    FormParaBO levou a barra como NUMERO
+   [OK]    FormParaBO levou o produto
+   [OK]    FormParaBO aguenta o campo Barra em CARACTERE (sem estourar)
+   [OK]       e converte para 0
+   [OK]    BOParaForm devolveu .T.
+   tela: Produto=[XYZ999]  Descricao=[PRODUTO DE TESTE]  Peso=[12,345]  Linha=[LINHA DE TESTE]
+   [OK]    BOParaForm preencheu Produto
+   [OK]    BOParaForm preencheu Descricao
+   [OK]    BOParaForm preencheu Peso
+   [OK]    BOParaForm preencheu Linha
+   [OK]    foto ausente deixa a imagem OCULTA
+
+7) CarregarLista - repintura e rebind
+   [OK]    CarregarLista devolveu .T. com cursor aberto
+   RecordSource=[cursor_4c_InvH]  ColumnCount=5  RECCOUNT=2  RECNO=1
+   [OK]    grade ligada ao cursor da grade
+   [OK]    as 2 linhas inseridas estao no cursor
+   [OK]    CarregarLista reposicionou no topo (GO TOP do legado)
+   bind derrubado: RecordSource=[]  Col1.Width=108  Col4.CurrentControl=[EDT_4C_OBS]
+   [OK]    CarregarLista devolveu .T. no religamento
+   religado: RecordSource=[cursor_4c_InvH]  ColumnCount=5  Col1.Width=108  Col4.CurrentControl=[EDT_4C_OBS]  Col4.Sparse=.F.  Col1.Header=[Barras]
+   [OK]    rebind: grade volta ao cursor
+   [OK]    rebind: 5 colunas preservadas
+   [OK]    rebind: Width da coluna 1 reaplicado
+   [OK]    rebind: EditBox da Observacao rearmado
+   [OK]    rebind: Sparse da Observacao em .F.
+   [OK]    rebind: cabecalho reaplicado
+   [OK]    rebind: ControlSource da coluna 1
+   [OK]    nenhuma linha perdida no religamento
+   [OK]    Release nao deixa o cursor da grade aberto
+
+PROBE_FALHAS=0

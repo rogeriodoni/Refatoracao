@@ -1,0 +1,23 @@
+=== PROBE Fase 8 - FormSigOpEmb (Quantidade de embalagens) ===
+1) CREATEOBJECT -> VARTYPE=O
+2) grade: ColumnCount=4 RecordSource=[cursor_4c_Embalagens] USED=.T.
+   Top/Left/W/H=84/84/380/143  RecordMark=.F. DeleteMark=.F.
+   Col1: CS=[cursor_4c_Embalagens.qtds] W=52 Hdr=[Qtde] RO=.F. Sparse=.F. CurCtl=[TXT_4C_QTDE]
+   Col2: CS=[cursor_4c_Embalagens.descs] W=130 Hdr=[Embalagem] RO=.T. Sparse=.F. CurCtl=[TXT_4C_DESCRICAO]
+   Col3: CS=[cursor_4c_Embalagens.pesoembs] W=87 Hdr=[Peso] RO=.T. Sparse=.F. CurCtl=[TXT_4C_PESOUNITARIO]
+   Col4: CS=[cursor_4c_Embalagens.pesos] W=87 Hdr=[Peso Total] RO=.T. Sparse=.F. CurCtl=[TXT_4C_PESOTOTAL]
+3) When: Col1=.T. Col2=.F. Col3=.F. Col4=.F.
+4) CarregarLista              existe=.T. PROTECTED=.F.
+4) BtnConfirmarClick          existe=.T. PROTECTED=.F.
+4) FecharDialogo              existe=.T. PROTECTED=.F.
+4) ValidarQuantidadeGrade     existe=.T. PROTECTED=.F.
+4) ObterPesoTotalEmbalagens   existe=.T. PROTECTED=.F.
+4) Activate                   existe=.T. PROTECTED=.F.
+5) L1 qtds=4 pesoembs=2,50 pesos=10
+5) L2 qtds=2 pesos=2,500
+5) L3 qtds=0 pesos=0
+6) total=12,50 (esperado 12,500)  linhas c/qtde=2 (esperado 2)
+7) pai.pesoemb APOS Init = 0 (esperado 0)
+8) apos Release: USED(cursor_4c_Embalagens)=.F.
+
+RESULTADO: OK

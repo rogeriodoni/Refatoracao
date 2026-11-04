@@ -1403,10 +1403,16 @@ DEFINE CLASS Formsigprite AS FormBase
     *==========================================================================
     * BtnEntregaClick - Abre o form de Entrega/Previsao do documento,
     * equivalente a "Do Form SigOpDen With <Emps>, <Dopes>, <Nums>" do
-    * legado. FormSigOpDen ainda NAO foi migrado neste acervo (nao existe em
-    * projeto\app\forms) - o CATCH informa a falha real (classe ausente) em
-    * vez de fingir sucesso ou abrir tela quebrada; assim que SigOpDen for
-    * migrado em outra task, este botao passa a funcionar sem alteracao.
+    * legado. SigOpDen FOI migrado (task718) como classe Formsigopden, em
+    * projeto\app\forms\operacionais\Formsigopden.prg, com Init de TRES
+    * parametros na MESMA ordem do legado (par_cEmps, par_cDopes,
+    * par_nNumes) - o CREATEOBJECT abaixo nao precisou de alteracao nenhuma
+    * (nome de classe em VFP9 nao diferencia maiuscula de minuscula).
+    * GarantirClasse tambem nao eh necessario: o CREATEOBJECT eh LITERAL,
+    * entao start\indice_classes.txt ja traz a dependencia no fecho deste
+    * form. O TRY cobre SO a criacao, com o Show() FORA dele (regra #29) -
+    * e o CATCH segue util para qualquer falha de Init (conexao, chave sem
+    * movimento), informando o erro real em vez de abrir tela quebrada.
     *==========================================================================
     PROCEDURE BtnEntregaClick()
         LOCAL loc_oForm, loc_oErro

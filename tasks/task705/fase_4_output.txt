@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4/8 conclu├¡da ÔÇö `FormSigOpCoc.prg` (303 ÔåÆ 499 linhas)
+
+### O que o legado realmente tem
+
+O prompt pede *Grid + container `cnt_4c_Botoes` com 6 bot├Áes CRUD*. O `SIGOPCOC` **n├úo tem nada disso**: a ├írvore do dump tem 11 objetos, com **zero** `BaseClass: grid|pageframe|listbox`, **zero** `AddCursor`/`pColuna`/`Grade`/`grd`. ├ë um di├ílogo modal de captura ÔÇö dois `fwmemo` (Cabe├ºalho/Rodap├®) e o `Grupo_Saida` com OK/Cancelar.
+
+Antes de tocar no `.prg`, medi o gate (helpers extra├¡dos por AST, sem dot-source do orquestrador): ele **j├í dispensa** Grid+CRUD aqui pelo ramo *layout captura* ÔÇö `temLayoutCaptura = True`. Diferente das 7 recorr├¬ncias anteriores dessa fam├¡lia, **o harness n├úo precisou de conserto**. Fabricar barra CRUD violaria o PILAR 1 e a regra "NUNCA inventar".
+
+### O que entreguei
+
+A superf├¡cie de bot├Áes que o legado **de fato tem**, e que a Fase 3 havia explicitamente deixado marcada como `(Fase 4/7)`:
+
+- **`obj_4c_Grupo_Saida`** (CommandGroup, `ButtonCount = 2`) com `.Buttons(2)` = OK e `.Buttons(1)` = Cancelar ÔÇö geometria, ├¡cones, fonte, cores, `TabIndex` e `Cancel = .T.` transcritos do dump; endere├ºado por ├¡ndice, n├úo por `.Name`.
+- **`AplicarModoNosBotoesSaida`** ÔÇö aplica o `If InList(pcEscolha,'CONSULTAR','EXCLUIR','PROCURAR')` do `Init` legado, em valor **absoluto** (`base ┬▒ 64`) com ramo `ELSE`, porque o funil `AplicarModoEscolha` ├® PUBLIC e reentrante ÔÇö incremental, o grupo derivaria 64px por chamada.
+- Ordem corrigida no `InicializarForm`: grupo **depois** da faixa (`Top = -2` invade o cabe├ºalho, regra #11) e modo **depois** de `TornarControlesVisiveis`, que for├ºa `Visible = .T.` em tudo e apagaria o `Visible = .F.` do OK.
+
+### Verifica├º├úo (medida, n├úo presumida)
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 4 reavaliado com o `.prg` novo | **VALIDADA = True** (captura) |
+| `Test-CompletudeCodigo` (validador real) | **True** ÔÇö nenhum TODO/stub/procedure vazia |
+| Propriedades contra `propriedades_baseclasses.txt` (#33) | 33 conferidas, **0 inexistentes** |
+| Compila├º├úo VFP9 (`.FXP` apagado antes) | `.FXP` gerado, **`.ERR` ausente** |
+| **Instancia├º├úo real** | `VARTYPE=O`, 545x291, grupo em 389/-2/160x85, OK e Cancelar 75x75, ├¡cones `EXISTE`, Cancelar termina em **544** (dentro dos 545) |
+| Modo CONSULTAR | `Left=453`, OK **oculto**, Cancelar em `Left=5` |
+| Reentr├óncia (2x `AplicarModoEscolha`) | 389/160/80 ÔÇö **sem deriva** |
+| CRLF / acentos literais | `CR=LF=499`, 0 bytes >127 |
+
+Regras #1, #9.1, #13, #15, #34, #38 e `MESSAGEBOX` direto: 0 ocorr├¬ncias.
+
+### Achado medido no VFP9
+
+`AutoSize = .T.` num CommandGroup faz o VFP **descartar em sil├¬ncio toda atribui├º├úo a `.Width`** (`160` e depois `96` ficaram ambos em 94 num grupo de teste; com `AutoSize = .F.` colam). Ou seja: o `Width - 64` do pr├│prio legado **nunca surtiu efeito l├í tamb├®m** ÔÇö transcrevi as 4 linhas e documentei o no-op em vez de deixar linha morta sem explica├º├úo. N├úo troquei por `AutoSize = .F.`: desviaria do dump sem ganho (o grupo ├® `BackStyle=0`/`BorderStyle=0`, n├úo desenha nada de si). Como subproduto, o AutoSize derivou `160x85` a partir dos bot├Áes ÔÇö exatamente o que o dump declara, o que **confirma** a geometria interna. Registrei na mem├│ria `feedback_membro_interno_commandgroup_nome_proprio` (atualizada, n├úo duplicada).
+
+### Fora de escopo, de prop├│sito
+
+Os **handlers de clique** ficam na Fase 7: o `Click` do OK l├¬ `getCabs`/`getRods`, que s├│ existem a partir da Fase 5 ÔÇö escrev├¬-los agora criaria m├®todo referenciando controle inexistente. Os dois EditBox e os dois `Say` seguem para a Fase 5, como o cabe├ºalho do arquivo j├í registra.
+
+### Um ponto do pipeline que vale olhar
+
+O `tasks/task705/fase_4_output.txt` mostra que a invoca├º├úo anterior da Fase 4 **n├úo recebeu tarefa alguma** ÔÇö a resposta registrada ├® *"I don't see a specific task or question in your message yet"*, seguida de coment├írios sobre o git status. O `fase_4_prompt.md` existe (175 KB), ent├úo o prompt foi gerado mas n├úo chegou ao CLI naquela execu├º├úo. O form n├úo foi tocado por ela. Como o arquivo est├í **untracked** (`??`), nada foi commitado ÔÇö n├úo commitei, j├í que n├úo foi pedido.

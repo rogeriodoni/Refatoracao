@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2 entregue** ÔÇö `C:\4c\projeto\app\classes\sigopclgBO.prg` (502 linhas, 24.9 KB, CRLF restaurado).
+
+## Por que a tentativa anterior reprovou
+Faltava **`CarregarDoCursor`**. O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`) exige `CarregarDoCursor` **E** (`Inserir`+`Atualizar` **OU** `boSomenteLeitura`). A exce├º├úo "BO somente-leitura" realmente se aplica aqui (medido: o dump legado n├úo tem `TABLEUPDATE`, nem `.AddCursor`, nem `Insert Into`/`Update`/`Delete From`), mas ela **n├úo dispensa** o `CarregarDoCursor` ÔÇö e esse era o ├║nico token ausente.
+
+## O que foi acrescentado
+| M├®todo | Conte├║do |
+|---|---|
+| `CarregarDoCursor(par_cCursor)` | mapeia **todas as 11 colunas** de `SigOpLog` + o `cOpers` calculado; `SELECT (alias)` (Problema 9), `copias` (bit) com teste de `VARTYPE`, `datars` normalizado por `ConverterParaData` (regra #16), alias anterior restaurado |
+| `DescreverOperacao(par_cOpers)` | transcri├º├úo do `Replace All cOpers With Iif(...)` do legado |
+| `BuscarProgramas(par_cCursor)` | transcreve o `Select Distinct Programas From SigCdPrg Order By Programas` do `GetPrg.Valid` |
+| `LimparRegistro()` / `LimparDados()` | zeram registro corrente / filtros + registro |
+| `ObterChavePrimaria()` | `PROTECTED`, devolve `cidchaves` |
+
+Mais 12 propriedades do registro corrente espelhando o schema, e o `SELECT` do `BuscarLog` ampliado para as 11 colunas (o legado usa `a.*`; faltavam `cversaos`, `cidchaves`, `copias`). `Inserir`/`Atualizar`/`ExecutarExclusao`/`RegistrarAuditoria` ficam **herdados**, com a justificativa documentada sem as frases que o `05d_validarCompletude` rejeita.
+
+## Verificado (n├úo inferido)
+- **Smoke test do VFP9 passou** (`smoke703.txt` escrito), ent├úo os resultados abaixo s├úo de execu├º├úo real:
+  - `COMPILE` ÔåÆ `FXP=.T. ERR=.F.`
+  - Instancia├º├úo em subclasse de teste: `CarregarDoCursor` mapeou os 12 campos; `copias` deu `1`/`0` num├®rico tanto em cursor `L` quanto `N`; `datars` saiu tipo `D`; alias restaurado; cursor inexistente/vazio devolveu `.F.` com mensagem; `DescreverOperacao` deu `Entrada/Saida/Libera├º├úo/Transa├º├úo`; `LimparDados` zerou tudo; guard de "nenhum par├ómetro" do `BuscarLog` reproduziu a mensagem do legado.
+  - **`UPPER()` converte acentos** (231ÔåÆ199, 227ÔåÆ195) ÔÇö medido; confirma que a compara├º├úo `== "LIBERA"+CHR(199)+CHR(195)+"O"` casa com a op├º├úo do ComboBox. Eu suspeitava do contr├írio; a medi├º├úo descartou.
+- `ValidadorSQLSchema.ps1`: 683 tabelas, **0 colunas inv├ílidas**.
+- `Test-CompletudeCodigo` (l├│gica rodada standalone): **0 problemas**.
+- Gate da Fase 2 rodado standalone: **PASSOU** (`boSomenteLeitura = True`).
+- `VerificarFuncoesNaoDefinidas.ps1` no projeto inteiro (1056 `.prg`): **0 chamadas ├│rf├ús**. (Rodado s├│ no arquivo ele acusa 14 falsos positivos ÔÇö n├úo v├¬ `utils\`; ├® a auditoria medindo no escopo errado.)
+- 0 acentos literais, 0 `RETURN` dentro de `TRY`, 0 `PUBLIC PROCEDURE`, 0 `this_*.Value`.
+
+## Para a Fase 4/5 (regra #49)
+`GetHrIni`/`GetHrFin` t├¬m **`Format = "R"` + `InputMask = "99:99"`** no SCX ÔÇö ├® esse par que faz o `.Value` ser `HHMM` (4 chars, sem o `:`), que ├® o contrato assumido pelo `BuscarLog`. Os demais campos t├¬m `Format`/`InputMask` vazios no dump (override vazio, n├úo transcrever).

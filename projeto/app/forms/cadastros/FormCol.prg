@@ -409,7 +409,7 @@ DEFINE CLASS FormCol AS FormBase
             *-- Container salvar/cancelar (Grupo_Salva legado: Left=820, Top=8, Width=160)
             loc_oPagina.AddObject("cnt_4c_Salva", "Container")
             WITH loc_oPagina.cnt_4c_Salva
-                .Top         = 37
+                .Top         = 27
                 .Left        = 820
                 .Width       = 160
                 .Height      = 85

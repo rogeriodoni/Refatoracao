@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete and verified.
+
+## Entregue
+
+`projeto/app/forms/operacionais/FormSigOpCot.prg` ÔÇö 29.132 bytes, 630 linhas, ASCII puro + CRLF.
+
+**Por que a tentativa anterior falhou:** a sub-invoca├º├úo do Claude CLI n├úo recebeu a tarefa ÔÇö o output salvo ├® s├│ avisos de permiss├úo seguidos de *"I don't see an actual task or question in your message yet"*. N├úo havia defeito no c├│digo; nenhum arquivo tinha sido criado.
+
+## O que a fase entrega
+
+`DEFINE CLASS FormSigOpCot AS FormBase` com as propriedades visuais transcritas do SCX, as de estado (espelhos de `ParentForm` / `dDatas` / `AntValue` do ClassInfo), `Init(par_oFormPai, par_dDatas)`, `ValidarParametros`, `InicializarForm`, `ResolverContextoPai`, `ConfigurarDecoracao`, `ConfigurarCabecalho` (o `cntSombra` + os dois labels), `TornarControlesVisiveis` e `Destroy`.
+
+Duas decis├Áes que valem registrar, porque divergem do form irm├úo `FormSIGPRCOT`:
+
+- **`DataSession = 1`** (n├úo 2). Esta tela existe para editar o cursor `TmpCot` que o **pai** abriu; em sess├úo privada esse cursor n├úo existiria e o di├ílogo n├úo teria o que editar nem o que devolver.
+- **Sem gate de `gnConnHandle`** no `InicializarForm`. O harness define `gnConnHandle = 0` de prop├│sito, e quem trata a falta de conex├úo ├® o pr├│prio BO ÔÇö gate ali reprovaria a instancia├º├úo sempre.
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou (`VIVO` gravado), ent├úo deu para provar compila├º├úo **e** runtime:
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 3 (ramo FLAT, `case 3` real) | passou ÔÇö `FormType=OPERACIONAL`, legado sem PageFrame, `AddObject("cnt_4c_` presente, sem `pgf_4c_` inventado |
+| `Test-CompletudeCodigo` (05d) | 0 problemas no form e no BO |
+| `COMPILE` BO + Form | `.FXP` presente, `.ERR` ausente nos dois |
+| **Controle negativo** | c├│pia com `PUBLIC PROCEDURE` injetado gerou `.ERR` apontando **s├│** as linhas 630-632 ÔÇö prova que o detector funciona e que as 629 linhas reais est├úo limpas |
+| `CREATEOBJECT` com pai falso | devolveu objeto; Caption `Altera├º├úo de C├ómbio`, 1000x600, WindowType 1, DataSession 1, TitleBar 0, Themes .F. |
+| Contexto do pai | `pcEscolha=ALTERAR` e os dois alias de cursor chegaram ao BO |
+| Cabe├ºalho | `0/0/1000/80`, BackColor 6579300 = RGB(100,100,100); labels com `AutoSize=.F.` mantendo Height 40/46 (regra #23) |
+| Ordem de cria├º├úo | `Controls(1) = CNT_4C_SOMBRA` ÔÇö faixa ├® o primeiro AddObject (regra #11) |
+| M├®todos PUBLIC | `PEMSTATUS(...,2) = .F.` nos tr├¬s, e chamados de fora com sucesso |
+| Auditorias do projeto | `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`: OK. `LookupEmKeyPress` e `TableRevertSemBuffering` acusam s├│ arquivos pr├®-existentes de outras tasks |
+
+Apaguei os `.FXP` gerados para as fases seguintes n├úo rodarem c├│digo velho. O probe ficou em `automation/vfp_helpers/probe708_f3.prg` com o resultado ao lado.
+
+Uma ressalva honesta: o header documenta o que cada fase de 4 a 8 deve entregar (grade, Shape, CommandGroup, bot├úo Alterar, eventos), mas **nada disso est├í no arquivo** ÔÇö ├® o escopo desta fase. A tela ainda n├úo ├® us├ível.

@@ -1,0 +1,853 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCop.SCX
+* Data/Hora: 30/10/2026 02:37:46
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCOP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCOP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPCOP
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPCOP
+  Class: label
+  BaseClass: label
+
+Objeto: GetOrigem
+  Parent: SIGOPCOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDestino
+  Parent: SIGOPCOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Commandgroup1
+  Parent: SIGOPCOP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 187
+  Width = 600
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cópia de Movimentação "
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 36,84,155
+  Name = "SIGOPCOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Movimentação Atual : "
+  Height = 15
+  Left = 169
+  Top = 110
+  Width = 109
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nova Movimentação : "
+  Height = 15
+  Left = 169
+  Top = 136
+  Width = 109
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.GetOrigem
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!"
+  Height = 23
+  Left = 280
+  MaxLength = 20
+  TabIndex = 3
+  Top = 107
+  Width = 150
+  Name = "GetOrigem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.GetDestino
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!"
+  Height = 23
+  Left = 280
+  MaxLength = 20
+  TabIndex = 4
+  Top = 134
+  Width = 150
+  Name = "GetDestino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCOP.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 445
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 5
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_subnivel_60.jpg
+  Command1.Caption = "\<Copiar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CmdCopia"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "CmdExit"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCOP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters poForm, pOperacao
+
+ThisForm.ParentForm = poForm
+ThisForm.DataSessionId = poForm.DataSessionId
+ThisForm.poDatamgr = poForm.poDataMgr
+ThisForm.GetOrigem.Value = pOperacao
+ThisForm.GetOrigem.Refresh
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOP.GetOrigem
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdOpe','csSigCdOpe','Dopes',This.Value,'Operações',.t.,'Dopes')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Dopes', '', 'Operação', .t.)
+		xBrox.Show()
+	EndIf 
+	This.Value = Iif( LastKey() # 27, Evaluate('csSigCdOpe.Dopes'), '' )
+Else
+	If Lastkey() <> 27
+		MessageBox("Operação Deve ser informada !!!",16,"")
+		Return .f.
+	Endif
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOP.GetDestino
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If NOt Empty(This.Value) And Not Lastkey() = 27
+	ThisForm.poDatamgr.Sqlexecute([Select dopes from SigCdOpe Where Dopes = ']+this.Value+['],'csSigCdOpe')
+	Select csSigCdOpe
+	If ! Eof()
+		MessageBox('Operação já Cadastrada !!!',16,'')
+		Return .f.
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCOP.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CmdCopia.Click
+------------------------------------------------------------
+PROCEDURE CmdCopia.Click
+If Empty(ThisForm.GetOrigem.Value)
+	MessageBox('Origem Invalida !!!',16,'')
+	Return
+EndIf
+
+If Empty(ThisForm.GetDestino.Value)
+	MessageBox('Destino Invalido !!!',16,'')
+	Return
+EndIf
+
+lcOpeOri = ThisForm.GetOrigem.Value
+lcOpeDes = ThisForm.GetDestino.Value
+
+lnNDopes = fGerUniqueKey("SigCdOpe")	
+lcProgramas = Padl(lnNDopes, 8, '0')
+
+Zap In crSigCdOpe
+Zap In crSigOpCdc
+Zap In crSigOpCdi
+Zap In crSigOpCsn
+Zap In crSigOpCrr
+Zap In crSigOpDup
+Zap In crSigCdPrg
+Zap In crSigOpCdd
+Zap In crSigMvCxs
+Zap In crSigCcCpe
+Zap In crSigCdMop
+Zap In crSigOpFpO
+Zap In crSigOpTrf
+Zap In crSigOpFin
+Zap In crSigOpLso
+
+ThisForm.poDatamgr.SqlExecute([Select * From SigCdOpe Where Dopes = ']+lcOpeOri+['],'csSigCdOpe')
+
+Select csSigCdOpe
+Scatter MemVar Memo
+m.Dopes     = lcOpeDes
+m.nDopes    = lnNDopes
+m.Programas = lcProgramas
+
+Select crSigCdOpe
+Append Blank
+Gather MemVar Memo
+
+ThisForm.poDatamgr.SqlExecute([Select * From SigOpCdc Where Dopes = ']+lcOpeOri+['],'csSigOpCdc')
+
+Select csSigOpCdc
+Scatter MemVar Memo
+m.Dopes = lcOpeDes
+
+Select crSigOpCdc
+Append Blank
+Gather MemVar Memo
+
+ThisForm.poDatamgr.SqlExecute([Select * From SigOpCdi Where Dopes = ']+lcOpeOri+['],'csSigOpCdi')
+
+Select csSigOpCdi
+
+Scan
+	Scatter MemVar Memo
+	m.Dopes = lcOpeDes
+
+	Select crSigOpCdi
+	Append Blank
+	Gather MemVar Memo
+
+	Select csSigOpCdi
+EndScan
+
+ThisForm.poDatamgr.SqlExecute([Select a.*,b.nDopes From SigOpCsn a inner join SigCdOpe b on a.cnivels = b.Dopes Where a.cDopes = ']+lcOpeOri+['],'csSigOpCsn')
+
+Select csSigOpCsn
+
+Scan
+	Scatter MemVar Memo
+	m.cDopes    = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+
+	Select crSigOpCsn
+	Append Blank
+	Gather MemVar Memo
+
+	Select csSigOpCsn
+EndScan
+
+ThisForm.poDatamgr.SqlExecute([Select a.* From SigOpCrr a inner join SigCdOpe b on a.dopes = b.Dopes Where a.Dopes = ']+lcOpeOri+['],'csSigOpCrr')
+
+Select csSigOpCrr
+
+Scan
+	Scatter MemVar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+
+	Select crSigOpCrr
+	Append Blank
+	Gather MemVar Memo
+
+	Select csSigOpCrr
+EndScan
+
+ThisForm.poDatamgr.SqlExecute([Select a.* From SigOpDup a inner join SigCdOpe b on a.dopes = b.Dopes Where a.Dopes = ']+lcOpeOri+['],'csSigOpDup')
+
+Select csSigOpDup
+
+Scan
+	Scatter MemVar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+
+	Select crSigOpDup
+	Append Blank
+	Gather MemVar Memo
+
+	Select csSigOpDup
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigOpCdd ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalOpe2]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpe2)])
+	Return 0
+EndIf
+Select LocalOpe2
+Scan
+	Scatter Memvar Memo
+	m.Dopes = lcOpeDes
+	m.ConfigGers = Substr(m.ConfigGers, 1, 161) + Space(30) + Substr(m.ConfigGers, 192, 59)
+	Insert Into crSigOpCdd From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigMvCxs ] + ;
+		   [Where CDopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSqOpe]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalSqOpe)])
+	Return 0
+EndIf
+Select LocalSqOpe
+Scan
+	Scatter Memvar Memo
+	m.CDopes    = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigMvCxs From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigCcCpe ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCCOpe]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCCOpe)])
+	Return 0
+EndIf
+Select LocalCCOpe
+Scan
+	Scatter Memvar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigCcCpe From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigCdMop ] + ;
+		   [Where CDopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMuOpe]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMuOpe)])
+	Return 0
+EndIf
+Select LocalMuOpe
+Scan
+	Scatter Memvar Memo
+	m.CDopes    = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigCdMop From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigOpFpO ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalFPagO]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalFPagO)])
+	Return 0
+EndIf
+Select LocalFPagO
+Scan
+	Scatter Memvar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigOpFpO From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigOpTrf ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalOpTrf]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpTrf)])
+	Return 0
+EndIf
+Select LocalOpTrf
+Scan
+	Scatter Memvar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigOpTrf From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigOpFin ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalOpFin]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpFin)])
+	Return 0
+EndIf
+Select LocalOpFin
+Scan
+	Scatter Memvar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigOpFin From Memvar
+EndScan
+
+lcQuery = [Select * ] + ;
+		    [From SigOpLso ] + ;
+		   [Where Dopes = '] + lcOpeOri + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalOpLso]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpLso)])
+	Return 0
+EndIf
+Select LocalOpLso
+Scan
+	Scatter Memvar Memo
+	m.Dopes     = lcOpeDes
+	m.cIdChaves = fUniqueIds()
+	Insert Into crSigOpLso From Memvar
+EndScan
+
+_Prog = Padr( Padl( crSigCdOpe.NDopes, 8, '0' ), 15 )
+
+If !IsEmpty(crSigCdOpe.SubMenus)
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper(Allt(crSigCdOpe.SubMenus))
+	lcSubMenus = '_' + Upper(Left(crSigCdOpe.SubMenus,14))
+	m.lcBarraForm = Space(50)
+
+	If (InList(Upper(Alltrim(crSigCdOpe.menus)),'SISTEMA','CAIXA') Or Upper(Alltrim(crSigCdOpe.menus))=='ESTOQUE')
+		m.lcBarraForm = ([SigMvExp WITH "]+Upper(Alltrim(crSigCdOpe.dopes))+[","E"])
+	EndIf 
+	If !ThisForm.podatamgr.ChkRegister('SigCdPrg','Programas',lcSubMenus)
+		Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves, BarraForms ) ;
+					  values ( _Desc, '', lcSubMenus, fUniqueIds(),Space(50) )
+	EndIf
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper(Allt(crSigCdOpe.SubMenus)) + ' - ' + Proper(Allt(crSigCdOpe.Dopes))
+Else
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper( Allt( crSigCdOpe.Dopes ) )
+EndIf
+m.lcBarraForm = Space(50)
+
+If (InList(Upper(Alltrim(crSigCdOpe.menus)),'SISTEMA','CAIXA') Or Upper(Alltrim(crSigCdOpe.menus))=='ESTOQUE')
+	m.lcBarraForm = ([SigMvExp WITH "]+Upper(Alltrim(crSigCdOpe.dopes))+[","E"])
+EndIf 
+
+DECLARE laProgs[2,2]
+
+laProgs[1,1]="Programas"
+laProgs[1,2]=_Prog
+laProgs[2,1]="Parametros"
+laProgs[2,2]=Space(10)
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves, BarraForms, BarraPict  ) ;
+			    	values ( _Desc, '', _Prog, fUniqueIds(), m.lcBarraForm, crSigCdOpe.cArqIcones )
+Else
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+[', BarraForms = ']+m.lcBarraForm+[',BarraPict=']+crSigCdOpe.cArqIcones+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = ']+Space(10)+[']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+DECLARE laProgs[2,2]
+
+laProgs[1,1]="Programas"
+laProgs[1,2]=_Prog
+laProgs[2,1]="Parametros"
+laProgs[2,2]='INSERIR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Inserir]', 'INSERIR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Inserir ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'INSERIR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='ALTERAR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Alterar]', 'ALTERAR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Alterar ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'ALTERAR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='EXCLUIR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Excluir]', 'EXCLUIR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Excluir ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'EXCLUIR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='LISTAR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Listar]', 'LISTAR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Listar ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'LISTAR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='COTACAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Cotação]', 'COTACAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Cotacao ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'COTACAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+Endif
+
+laProgs[2,2]='FORMAPAG'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Altera Forma de Pagamento]', 'FORMAPAG', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Forma Pagamento ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'FORMAPAG']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='COMISSAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Comissão]', 'COMISSAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Comissao ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'COMISSAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='ALTPRECO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Altera Preço]', 'ALTPRECO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Altera Preco ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'ALTPRECO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='CANCITEM'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Cancela Item]', 'CANCITEM', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Cancela Item ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'CANCITEM']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='SERVICOS'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Servicos]', 'SERVICOS', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Serviços ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'SERVICOS']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='QUITACAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Quitação]', 'QUITACAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Quitação ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'QUITACAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='SUBNIVEL'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [SubNivel]', 'SUBNIVEL', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [SubNivel ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'SUBNIVEL']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='DADOSCOMPL'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Dados Complementares]', 'DADOSCOMPL', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Dados complementares ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'DADOSCOMPL']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+lcTransacao = crSigCdOpe.Dopes
+fGravarLog( 'C', Thisform.Name, 'COPIA', lcTransacao )
+
+ThisForm.poDatamgr.UpDate('crSigCdOpe')
+ThisForm.poDatamgr.UpDate('crSigOpCdc')
+ThisForm.poDatamgr.UpDate('crSigOpCdi')
+ThisForm.poDatamgr.UpDate('crSigOpCrr')
+ThisForm.poDatamgr.UpDate('crSigOpDup')
+ThisForm.poDatamgr.UpDate('crSigCdPrg')
+ThisForm.poDatamgr.UpDate('crSigOpCsn')
+ThisForm.poDatamgr.UpDate('crSigOpCdd')
+ThisForm.poDatamgr.UpDate('crSigMvCxs')
+ThisForm.poDatamgr.UpDate('crSigCcCpe')
+ThisForm.poDatamgr.UpDate('crSigCdMop')
+ThisForm.poDatamgr.UpDate('crSigOpFpO')
+ThisForm.poDatamgr.UpDate('crSigOpTrf')
+ThisForm.poDatamgr.UpDate('crSigOpFin')
+ThisForm.poDatamgr.UpDate('crSigOpLso')
+
+ThisForm.poDatamgr.Commit()
+
+ThisForm.Release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CmdExit.Click
+------------------------------------------------------------
+PROCEDURE CmdExit.Click
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCOP
+RESERVED3 (ClassInfo): parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

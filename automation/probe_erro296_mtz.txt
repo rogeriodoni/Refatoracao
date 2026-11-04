@@ -1,0 +1,26 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+D: CREATEOBJECT -> VARTYPE=O
+   Caption=[Matriz de Saldos por Centro de Custo] Width=1105 Height=600 ActivePage=1 Modo=LISTA
+E: Page1 Cabecalho Top=31 Height=80 | Botoes Top=29 Left=542 Width=390 | Saida Top=29 Left=917 BackStyle=0
+F: Grade Lista Top=150 Left=11 Width=1044 Height=475 ColumnCount=6 FontName=[Tahoma]
+G: Page1 z-order: CNT_4C_CABECALHO | CNT_4C_BOTOES | CNT_4C_SAIDA | GRD_4C_LISTA
+H: Grade Lista acima da faixa? .F.
+I: CarregarLista() = .F. | USED(cursor_4c_Dados)=.F.
+J: VincularGradeLista() = .F.
+K: Colunas Lista: [Header1/45] [Header1/45] [Header1/45] [Header1/45] [Header1/45] [Header1/45] 
+L: CriarCursorDetalheVazio = .T. | USED(cursor_4c_MtI)=.T. RECCOUNT=1
+M: FormatarGradeDetalhe() ...
+   FormatarGradeDetalhe OK
+N: Column28.ControlSource=[cursor_4c_MtI.ChkValida] CurrentControl=[CHK_4C_CHECK1] Sparse=.F. Width=43 chk.Width=10 chk.Centered=.T.
+O: ColumnOrder/Width modo INCLUIR: 1=>1(w90) 2=>2(w90) 3=>4(w85) 4=>6(w85) 5=>8(w85) 6=>10(w85) 7=>12(w85) 8=>14(w85) 9=>16(w85) 10=>18(w85) 11=>20(w85) 12=>22(w85) 13=>24(w85) 14=>26(w85) 15=>28(w90) 16=>5(w0) 17=>7(w0) 18=>9(w0) 19=>11(w0) 20=>13(w0) 21=>15(w0) 22=>17(w0) 23=>19(w0) 24=>21(w0) 25=>23(w0) 26=>25(w0) 27=>27(w0) 28=>3(w43) 
+P: modo ALTERAR -> Column16.Width=85 Column27.Width=85 Column16.Header=[Janeiro] Column27.Header=[Dezembro]
+Q: BtnIncluirClick() = .F. ActivePage=1 Modo=ALTERAR
+R: Release OK
+DIALOGOS: [04/11/2026 09:51:55] mtzBO.Buscar: Connection handle is invalid.
+[04/11/2026 09:51:55] mtzBO.Buscar: Connection handle is invalid.
+[04/11/2026 09:51:55] mtzBO.GerarProximoCodigo: Connection handle is invalid.
+[04/11/2026 09:51:55] mtzBO.NovoRegistro: Impossível gerar código para nova matriz.
+
+Z: fim

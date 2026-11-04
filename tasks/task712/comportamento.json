@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fkChaves = '] + Padr", "fUniqueIds", "fGerUniqueKey"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCPR",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "Lparameters poForm, pOperacao, pComissao\n\nThisForm.ParentForm = poForm\nThisForm.DataSessionId = poForm.DataSessionId\nThisForm.poDatamgr = poForm.poDataMgr\nThisForm.pComis = pComissao\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.GetOrigem.Width  \t  = 150\nThisForm.GetOrigem.MaxLength  = 20\nThisForm.getDestino.Width \t  = 150\nThisForm.getDestino.MaxLength = 20\nIf ThisForm.pComis\n\tThisForm.GetOrigem.Width  \t  = 290\n\tThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPR.GetOrigem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCPR.GetDestino",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Lastkey() = 27\n\tIf ThisForm.pComis\n\t\tlcQuery = [Select * ] + ;\n\t\t\t\t    [From SigCmCab ] + ;\n\t\t\t\t   [Where Cods = '] + Padr(This.Value, 40) + [']\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])\n\t\t\tReturn 0\n\t\tEndIf\n\t\tGo Top In LocalBus\n\t\tIf Not Eof([LocalBus])\n\t\t\t=MessageBox([Descrição do Cadastro de Comissão Já Informado!!!], 0+16, [Atenção!!!])\n\t\t\tReturn .f.\n\t\tEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCPR.Commandgroup1",
+      "evento": "Click",
+      "linhas": 89,
+      "codigoOriginal": "If Empty(ThisForm.GetDestino.Value)\n\tMessageBox('Destino Invalido !!!',16,'')\n\tReturn\nEndIf\n\nlcOpeOri = ThisForm.GetOrigem.Value\nlcOpeDes = ThisForm.GetDestino.Value\n\nIf ThisForm.pComis\n\tlcQuery = [Select * ] + ;\n\t\t\t    [From SigCmCab ] + ;\n\t\t\t   [Where Cods = '] + Padr(Thisform.getOrigem.Value, 40) + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmCab]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmCab)])\n\t\tReturn 0\n\tEndIf\n\tGo Top In LocalCmCab\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fkChaves = '] + Padr,fUniqueIds,fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute,UpDate,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCPR.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Release Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

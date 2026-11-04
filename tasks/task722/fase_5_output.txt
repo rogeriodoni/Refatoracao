@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 executada: `ConfigurarPaginaDados()` do `FormSigOpDmp.prg` recebeu a **parte 1** dos campos da Page2 (5 controles de 8), transcritos do dump do SCX.
+
+**Campos entregues** (Top com a compensa├º├úo +29 do `pgf_4c_Paginas.Top = -29`):
+
+| Legado | Migrado | Top/Left | W├ùH | MaxLength | Format |
+|---|---|---|---|---|---|
+| `Say1` "Nome : " | `lbl_4c_Nome` | 178 / 172 | 39├ù15 | ÔÇö | ÔÇö |
+| `GetNome` (fwget) | `txt_4c_Nome` | 175 / 214 | 150├ù23 | 20 | `K` |
+| `Label1` "Grupo Sd Inicial : " | `lbl_4c_Grupo` | 203 / 125 | 86├ù15 | ÔÇö | ÔÇö |
+| `Get_Grupo` | `txt_4c_Grupo` | 198 / 214 | 80├ù25 | 10 | `K!` |
+| `Get_DGrupo` | `txt_4c_DGrupo` | 198 / 294 | 271├ù25 | 20 | `K!` |
+
+A linha Conta Sd Inicial (`Label2`/`Get_Conta`/`Get_DConta`), a grade de fases (`SigCdDpr`, 5 colunas) com Inserir/Excluir de linha e os lookups ficaram para a Fase 6, conforme o escopo dela.
+
+Regras aplicadas: `Format`/`InputMask` transcritos (#49), `MaxLength` da **coluna do schema** e n├úo do `Width` em pixels (#19, conferido em `schema.sql` lido com `Get-Content -Raw`), `AutoSize = .F.` com Width/Height do dump (#23), `ForeColor RGB(90,90,90)` nos labels (#12 ÔÇö branco seria invis├¡vel sobre a Picture clara), `ZOrderSet` descartado (#33), labels criados antes dos campos vizinhos, nada abaixo do fim da faixa (109).
+
+**Defeito que a verifica├º├úo pegou e que eu corrigi:** atribuir `TabIndex` dentro do `WITH` de cada controle **n├úo funciona** em cria├º├úo incremental ÔÇö medido no VFP9, cada atribui├º├úo reposiciona o controle e empurra os de ├¡ndice ÔëÑ N, e o `txt_4c_Nome` sa├¡a com 4 e terminava com **7**, atr├ís do `txt_4c_DGrupo` (o Tab pularia "Nome :" direto para o grupo). Movi a numera├º├úo para um `AjustarOrdemTabulacao()` ├║nico, em ordem crescente com a p├ígina j├í montada, seguindo a sequ├¬ncia do dump (`Grupo_Salva=1, Say1=2, Label1=3, GetNome=4, Get_Grupo=5, Get_DGrupo=6ÔÇª`) e com `PEMSTATUS` para a Fase 6 estender.
+
+Tamb├®m corrigi uma **colis├úo de nomes no `mapeamento.json`**: `Say1` e `Label1` apontavam os dois para `lbl_4c_Label1` ÔÇö o segundo `AddObject` estouraria "object already exists". Passaram a `lbl_4c_Nome` e `lbl_4c_Grupo`.
+
+**Verifica├º├úo executada** (`automation/CompilarF5SigOpDmp722.prg` e `automation/Probe722F5.prg`):
+- compila sem `.ERR` (Form e BO);
+- `CREATEOBJECT` devolve objeto, os 5 controles existem e est├úo `Visible = .T.`, com geometria/fonte/MaxLength/Format conferidos um a um contra o dump;
+- `ForeColor = 5921370` = `RGB(90,90,90)`;
+- sem sobreposi├º├úo label├ùcampo nem campo├ùcampo (211 < 214, 294 = 294) e nada sob a faixa (109 < 175);
+- TabIndex final **2/3/4/5/6**, igual ao legado;
+- `AlternarPagina(2)` ÔåÆ `BtnCancelarClick()` continua voltando para a Lista com os bot├Áes CRUD reabilitados.
+
+Auditorias do projeto sem apontamento neste form: `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarLookupEmKeyPress` (os 28 avisos s├úo do `Formsigopcgp`, pr├®-existentes), `VerificarMetodoProtegidoChamadoDeFora`. Checagem de completude: zero TODO/stub/procedure vazia e zero `RETURN` dentro de `TRY`.

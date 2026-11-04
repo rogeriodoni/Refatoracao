@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 ÔÇö `FormSigOpCrp` (task714)
+
+**N├úo alterei o form nem o BO.** A Fase 5 j├í estava correta; a reprova├º├úo ├® artefato de *self-reference* do gate. Medi antes de tocar em qualquer coisa.
+
+### A reprova├º├úo n├úo ├® do artefato ÔÇö ├® do gate em mem├│ria
+
+`RunLoop` invocou o orquestrador para este SCX ├ás **21:49**; o PowerShell parseia o `.ps1` inteiro nessa invoca├º├úo. O `OrquestradorMigracao.ps1` foi gravado ├ás **22:41:28** ÔÇö *depois* do in├¡cio da task. Logo o processo que validou ├ás 22:55 rodava o gate **velho**.
+
+Rodei o gate da Fase 5 standalone nas duas vers├Áes:
+
+| | `temListaEstritaF5` | `legadoCapturaF5` | veredito |
+|---|---|---|---|
+| **PRE** (21:49, em mem├│ria) | **True** | False | **REPROVA** |
+| **POS** (22:41, em disco) | False | True | **PASSA** (ramo CAPTURA, 3 campos ÔëÑ piso 2) |
+
+O termo que inverte ├® o token cru `(pColuna|\bGrade\b|\bgrd)`, e as **duas ├║nicas** linhas do dump que ele casa s├úo:
+
+```
+ThisForm.FormPai.Page.Hist.grd_lancamento.Refresh
+ThisForm.FormPai.Page.Hist.grd_lancamento.SetFocus
+```
+
+Isso ├® a grade do form **PAI** ÔÇö n├úo h├í grade nem PageFrame neste di├ílogo (520x200, `TitleBar=0`, `WindowType=1`). O helper `Test-LegadoTokenGradeProprioForm`, escrito pela pr├│pria Fase 4 ├ás 22:41, consome essa cadeia e corrige. A Fase 4 **previu isso por escrito** no `fase_4_output_retry.txt` ("vai reprovar de novo... a corre├º├úo s├│ vale a partir da pr├│xima invoca├º├úo").
+
+Satisfazer o gate velho exigiria inventar Grid/PageFrame (viola o PILAR 1 e "NUNCA inventar") ou escrever um `ConfigurarPaginaDados` vazio (stub disfar├ºado, proibido). Por isso n├úo mexi.
+
+### N├úo consegui provar compila├º├úo nem instancia├º├úo
+
+O smoke test obrigat├│rio (`STRTOFILE` + `QUIT`) **falhou duas vezes**: `exit=0` e `.FXP` criado, mas **arquivo de sa├¡da ausente** ÔÇö o VFP9 compila e sai sem executar nesta sess├úo. Ent├úo n├úo afirmo COMPILE_OK nem PROBE_OK; o `.FXP` n├úo prova execu├º├úo. Os resultados de `CREATEOBJECT` no relat├│rio anterior s├úo da sess├úo dele, n├úo reverifiquei.
+
+### O que provei estaticamente
+
+`Test-CompletudeCodigo` (o real, do orquestrador) = **True** nos dois arquivos ┬À acentos literais 0 ┬À `this_*.Value` 0 ┬À `RETURN` dentro de `TRY` 0 (contagem de profundidade) ┬À todo helper resolve (`MsgErro`, `TratarNulo`, `ConverterParaData` ÔåÆ `utils\`; resto ├® m├®todo pr├│prio) ┬À regra #51: os 7 m├®todos do BO chamados pelo form s├úo PUBLIC e as 5 properties est├úo declaradas ┬À `VerificarPropriedadesInexistentes` = OK ┬À `VerificarFormatInputMask -Form FormSigOpCrp` = **0 faltando** (o dump n├úo declara nenhum para os 3 campos).
+
+Conferi as 5 corre├º├Áes da Fase 5 contra `docs/FRAMEWORK_class_codigo_fonte.txt` e **todas batem**: `fweditdata` = Tahoma/8, `Alignment=3`, `Height=23`, `Themes=.F.` e **sem `Format`** (corretamente omitido em Lancamento); `fwget` = Tahoma/8, `Format="K"`, `Height=23`, `Themes=.F.`. A omiss├úo de `DisabledBackColor/ForeColor` se justifica: nem o legado nem o migrado desabilitam campo algum (0 ocorr├¬ncias de `.Enabled`/`.ReadOnly` nos dois).
+
+Duas medi├º├Áes minhas deram errado antes de eu confiar nelas, e as duas acusavam o artefato: meu `grep -iE "TODO"` deu 7+6 marcadores porque **`metodo` cont├®m `todo`**; e `Test-CompletudeCodigo -CaminhoArquivo` (o par├ómetro ├® `-FilePath`) devolveu `False` em sil├¬ncio. Registrei nas li├º├Áes.
+
+### O que isso implica ÔÇö decis├úo sua
+
+Este retry **vai reprovar de novo**, pelo mesmo motivo. E o patch entrou nos 6 sites do teste estrito (Fases 4, 5, 6 e 8), ent├úo a mesma invers├úo PRE/POS vale para as Fases 6 e 8 desta task ÔÇö elas tendem a reprovar igual, por self-reference e n├úo por defeito. Para o conserto valer agora, o loop precisa ser relan├ºado; n├úo toquei no processo.
+
+Atualizei `feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma.md` (5┬¬ confirma├º├úo) com o detalhe novo: o raio de um conserto de gate mid-run n├úo ├® a fase que o escreveu, ├® **toda fase posterior da mesma task que consome o helper** ÔÇö e ler o `fase_<N-1>_output*.txt` ├® o atalho de diagn├│stico.

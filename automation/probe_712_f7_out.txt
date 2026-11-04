@@ -1,0 +1,37 @@
+=== 1. ABERTURA com o BO REAL ===
+  VARTYPE(loF)          = O (esperado O)
+  BtnCopiarClick existe = .T.
+  this_lEmCopia existe  = .T.
+  origem na tela        = [PROC ORIGEM 1]
+  binds em Buttons(1)   = 1 (esperado 1)  ev=CLICK dg=BTNCOPIARCLICK
+  binds em Buttons(2)   = 1 (esperado 1)  ev=CLICK dg=BTNENCERRARCLICK
+
+=== 2. DESTINO VAZIO (guard da nota 34) ===
+  rodou sem excecao
+  ExecutarCopia chamado = .F. (esperado .F.)
+  pai recarregado       = 0 (esperado 0)
+  form ainda vivo       = .T. (esperado .T.)
+  guarda liberada       = .F. (esperado .F.)
+
+=== 3. REENTRANCIA (nota 35) ===
+  ExecutarCopia chamado = .F. (esperado .F.)
+  guarda intacta        = .T. (esperado .T.)
+
+=== 4. RECUSA do BO (regra #20) ===
+  ExecutarCopia chamado = .T. (esperado .T.)
+  pai recarregado       = 0 (esperado 0)
+  form ainda vivo       = .T. (esperado .T.)
+  guarda liberada       = .F. (esperado .F.)
+  Value preservado      = [PROC NOVO 1] (NUNCA apagar)
+
+=== 5. SUCESSO (notas 33, 36 e 37) ===
+  ConfigurarModalidade  = .T. (esperado .T.)
+    origem recebida     = [PROC ORIGEM 1] (esperado PROC ORIGEM 1)
+    comissao recebida   = .F. (esperado .F.)
+  ExecutarCopia chamado = .T. (esperado .T.)
+    destino recebido    = [PROC NOVO 1] (esperado PROC NOVO 1)
+  pai recarregado       = 1 (esperado 1)
+    metodo usado        = [CarregarLista] (esperado CarregarLista)
+  form fechado (ISNULL) = .T. (esperado .T.)
+
+=== FIM ===

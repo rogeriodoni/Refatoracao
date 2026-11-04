@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCpo.prg` est├í completo (1778 linhas), compila sem `.err` e foi **instanciado e exercitado** no VFP9.
+
+## O que a Fase 8 acrescentou
+
+**`CarregarLista()`** (PUBLIC ÔÇö n├úo existe em `FormBase`, logo ├® p├║blico de verdade): o trecho **final** do `PROCEDURE selecionadados` legado que a migra├º├úo tinha perdido ÔÇö `Go Top In crGrade` / `grdItens.Refresh` / `grdItens.Column1.SetFocus` / `Go Top In crRodape` / `grdRodape.Refresh`. Sem ele o cursor abria cheio e a grade aparecia vazia (regra #21). N├úo re-consulta o banco (a carga ├® de `CarregarDados()`, que roda antes das grades existirem ÔÇö regra #41); re-vincula a grade s├│ quando o `RecordSource` n├úo aponta mais para o cursor certo.
+
+**`FormParaBO()` / `BOParaForm()`** (`PROTECTED` **expl├¡cito**): `FormBase` declara os dois como `PROTECTED` e em VFP9 a subclasse n├úo alarga escopo ÔÇö medi nesta tela: chamados de script solto devolvem `.F.` sem executar o corpo; via `THIS.` rodam normal. Cobrem as tr├¬s coisas edit├íveis do di├ílogo (combo de tipo, linha corrente da grade via `CarregarDoCursor`, c├®lulas do rodap├®) e o caminho de volta (total do rodap├®, `Buttons(1).Enabled`, imagem do componente, caption, combo).
+
+**`AtualizarRodape()`** virou o funil ├║nico `FormParaBO() ÔåÆ AtualizarTotais() ÔåÆ BOParaForm()`, com guarda de reentr├óncia (`this_lEmAtualizacao`), e `GradeItensAfterRowColChange` deixou de duplicar a l├│gica de imagem/`EVALUATE`. O v├¡nculo da grade saiu para **`VincularGradeItens()`**, reusado pelos dois caminhos.
+
+## Dois defeitos reais encontrados ao instanciar
+
+1. **A tela n├úo abria**: `REPLACE Totas WITH ...` sem `IN (<alias>)` em `CarregarDados()` ÔÇö `AtualizarTotais()` do BO fecha o cursor tempor├írio da soma e deixa a *work area* vazia, ent├úo o `REPLACE` estourava `No table is open in the current work area.` dentro do `TRY` do `InicializarForm`, que devolvia `.F.`. Corrigido com alias expl├¡cito (aqui e no `BOParaForm`).
+2. `WITH` aninhado + `AddObject` no CheckBox da `Column1` (padr├úo que o VFP9 resolve mal, descartando propriedades em sil├¬ncio) ÔÇö reescrito com caminho completo.
+
+## Verifica├º├úo executada (VFP9, com BO stubado porque `192.168.200.10` n├úo tem rota desta m├íquina)
+
+```
+VARTYPE=O                      Caption=[Composi├º├úo de Produtos - PRODX - PRODUTO DE PROBE]
+ProbeFormParaBO=.T.            ProbeBOParaForm=.T.        CarregarLista=.T.
+linha 2 -> BO.Mats=[COMP02] BO.Dpros=[COMPONENTE DOIS]
+toggle linha2: Total 20 -> 35  Rodape=35  BtnOK=.T.
+grd RecordSource=[cursor_4c_Grade] Col1.CurrentControl=[CHK_4C_MARCA] Col3.Width=394 Col3.Header=[Descri├º├úo]
+RELEASE OK                     (nenhum di├ílogo/erro registrado)
+```
+
+Total 35 = 20 + 15 confirma o crit├®rio `Where Marcas` do legado; as larguras e headers sobrevivem ao re-v├¡nculo (Problema 48). Completude: OK. CRLF restaurado (CR=LF=1778), ASCII puro. Gate da Fase 8 satisfeito: `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` + `BtnConfirmarClick` (bot├úo de a├º├úo).
+
+**Duas coisas que o prompt pedia e eu deliberadamente n├úo fiz**, com o motivo:
+
+- **`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo`/`BtnBuscarClick`/`BtnEncerrarClick`**: s├úo conven├º├úo de form CRUD. O SCX legado n├úo tem modo de edi├º├úo, n├úo tem campo a limpar e tem exatamente dois bot├Áes (OK/Cancelar, j├í entregues na Fase 7). Cri├í-los exigiria inventar modos e bot├Áes (viola PILAR 1) ou entregar m├®todos vazios (proibido). O gate da Fase 8 n├úo os exige ÔÇö registrei a decis├úo em coment├írio no `.prg`.
+- **Item de menu em `popMovimentos`**: `SIGOPCPO` ├® di├ílogo **filho** ÔÇö `Init` legado recebe `(pFrm, pKey)` e faz `.poDataMgr = .ParentForm.ParentForm.poDataMgr`, ou seja depende de uma cadeia pai/av├┤. Aberto pelo menu n├úo teria produto nem pai e exibiria "O Produto Informado N├úo Existe". O `indice_classes.txt` j├í registra as duas classes e a depend├¬ncia `FormSigOpCpo ÔåÆ SigOpCpoBO`, que ├® o que o carregamento sob demanda precisa; a entrada de menu, se o time quiser uma, ├® decis├úo de UX nova, n├úo migra├º├úo.

@@ -18,6 +18,11 @@ DEFINE CLASS FormMPD AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
 
+    *-- Guarda de reentrancia dos lookups da aba Estoque: fAcessoContab/
+    *-- fAcessoContas abrem FormBuscaSimples MODAL, o foco sai e volta e o
+    *-- proprio LostFocus redispara, empilhando um segundo dialogo (regra #37).
+    this_lEmLookupEst    = .F.
+
     PROCEDURE Init()
         RETURN DODEFAULT()
     ENDPROC
@@ -303,41 +308,65 @@ DEFINE CLASS FormMPD AS FormBase
                 .Visible  = .T.
             ENDWITH
             BINDEVENT(loc_oCnt.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+            *-- Os tres botoes proprios do SCX (CadOpe/btnExpXML/btnImpXML, Lista
+            *-- 1587-1652): Width 75 (nao 60 - com 60 sobrava um vao de 15px entre
+            *-- eles, que no legado ficam encostados: 324+75=399, 399+75=474),
+            *-- Picture/ToolTipText/PicturePosition/ForeColor/Themes transcritos
+            *-- do dump (regra #25 - .Picture ausente nao da erro, o botao so sai
+            *-- sem icone). ZOrderSet NAO se transcreve (regra #33).
             loc_oPg.AddObject("cmd_4c_CadOpe", "CommandButton")
             WITH loc_oPg.cmd_4c_CadOpe
-                .Top      = 33
-                .Left     = 324
-                .Width    = 60
-                .Height   = 75
-                .Caption  = "Estoque"
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Themes   = .T.
-                .Visible  = .T.
+                .Top         = 33
+                .Left        = 324
+                .Width       = 75
+                .Height      = 75
+                .Caption     = "Estoque"
+                .Picture     = gc_4c_CaminhoIcones + "geral_selecionar_60.jpg"
+                .PicturePosition = 7
+                .ToolTipText = "Cadastro de Operacoes de Estoque para Geracao autom" + CHR(225) + "tica"
+                .FontName    = "Comic Sans MS"
+                .FontSize    = 8
+                .FontBold    = .T.
+                .FontItalic  = .T.
+                .ForeColor   = RGB(90, 90, 90)
+                .Themes      = .F.
+                .Visible     = .T.
             ENDWITH
             loc_oPg.AddObject("cmd_4c_ExpXML", "CommandButton")
             WITH loc_oPg.cmd_4c_ExpXML
-                .Top      = 33
-                .Left     = 399
-                .Width    = 60
-                .Height   = 75
-                .Caption  = "Exporta XML"
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Themes   = .T.
-                .Visible  = .T.
+                .Top         = 33
+                .Left        = 399
+                .Width       = 75
+                .Height      = 75
+                .Caption     = "Exporta XML"
+                .Picture     = gc_4c_CaminhoIcones + "exportar_48.png"
+                .PicturePosition = 7
+                .ToolTipText = "Exporta Opera" + CHR(231) + CHR(227) + "o Para Um Arquivo XML"
+                .FontName    = "Comic Sans MS"
+                .FontSize    = 8
+                .FontBold    = .T.
+                .FontItalic  = .T.
+                .ForeColor   = RGB(90, 90, 90)
+                .Themes      = .F.
+                .Visible     = .T.
             ENDWITH
             loc_oPg.AddObject("cmd_4c_ImpXML", "CommandButton")
             WITH loc_oPg.cmd_4c_ImpXML
-                .Top      = 33
-                .Left     = 474
-                .Width    = 60
-                .Height   = 75
-                .Caption  = "Importa XML"
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Themes   = .T.
-                .Visible  = .T.
+                .Top         = 33
+                .Left        = 474
+                .Width       = 75
+                .Height      = 75
+                .Caption     = "Importa XML"
+                .Picture     = gc_4c_CaminhoIcones + "importar_48.png"
+                .PicturePosition = 7
+                .ToolTipText = "Importa Opera" + CHR(231) + CHR(227) + "o De Um Arquivo XML"
+                .FontName    = "Comic Sans MS"
+                .FontSize    = 8
+                .FontBold    = .T.
+                .FontItalic  = .T.
+                .ForeColor   = RGB(90, 90, 90)
+                .Themes      = .F.
+                .Visible     = .T.
             ENDWITH
             loc_oPg.AddObject("grd_4c_Lista", "Grid")
             WITH loc_oPg.grd_4c_Lista
@@ -548,7 +577,6 @@ DEFINE CLASS FormMPD AS FormBase
         LOCAL loc_oPg, loc_oCnt
         loc_oPg = THIS.pgf_4c_Paginas.Page2
         TRY
-            loc_oPg.cnt_4c_Cabecalho.Visible = .F.
             loc_oCnt = loc_oPg.cnt_4c_BotoesAcao
             loc_oCnt.AddObject("cmd_4c_Salvar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Salvar
@@ -578,10 +606,18 @@ DEFINE CLASS FormMPD AS FormBase
                 .Visible  = .T.
             ENDWITH
             BINDEVENT(loc_oCnt.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
-            * Campos de cabecalho da aba Dados (top + 29 compensa pgf_4c_Paginas.Top=-29)
+            * Campos de cabecalho da aba Dados (top + 29 compensa pgf_4c_Paginas.Top=-29).
+            * Os Top do legado (Say1=45, Get_desc=41, cmdGarqicone=40) cairiam DENTRO
+            * da faixa do cabecalho, que vai de 29 a 109 - por isso o migrador a tinha
+            * ESCONDIDO (cnt_4c_Cabecalho.Visible = .F.), unico form do projeto a fazer
+            * isso. A regra #11 manda o contrario: faixa visivel nas DUAS paginas e o
+            * bloco de dados DESLOCADO para baixo dela. Deslocamento de +46 sobre o
+            * valor ja compensado, levando o primeiro controle a 115 (6px abaixo da
+            * faixa); o pgf_4c_PagDados continua em 150 e nada muda de tamanho, porque
+            * o bloco ocupa ate 140 e ainda sobram 10px ate o PageFrame interno.
             loc_oPg.AddObject("lbl_4c_Label1", "Label")
             WITH loc_oPg.lbl_4c_Label1
-                .Top       = 74
+                .Top       = 120
                 .Left      = 64
                 .Width     = 58
                 .Height    = 15
@@ -592,7 +628,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("txt_4c_Desc", "TextBox")
             WITH loc_oPg.txt_4c_Desc
-                .Top       = 70
+                .Top       = 116
                 .Left      = 132
                 .Width     = 150
                 .Height    = 23
@@ -601,7 +637,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("lbl_4c_Label25", "Label")
             WITH loc_oPg.lbl_4c_Label25
-                .Top       = 74
+                .Top       = 120
                 .Left      = 332
                 .Width     = 71
                 .Height    = 15
@@ -612,7 +648,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("txt_4c_Nope", "TextBox")
             WITH loc_oPg.txt_4c_Nope
-                .Top      = 70
+                .Top      = 116
                 .Left     = 416
                 .Width    = 29
                 .Height   = 23
@@ -621,7 +657,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("lbl_4c_Label28", "Label")
             WITH loc_oPg.lbl_4c_Label28
-                .Top       = 74
+                .Top       = 120
                 .Left      = 466
                 .Width     = 44
                 .Height    = 15
@@ -632,7 +668,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("txt_4c_Ordem", "TextBox")
             WITH loc_oPg.txt_4c_Ordem
-                .Top     = 71
+                .Top     = 117
                 .Left    = 518
                 .Width   = 27
                 .Height  = 21
@@ -640,7 +676,7 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("obj_4c_CmdGarqicone", "CommandButton")
             WITH loc_oPg.obj_4c_CmdGarqicone
-                .Top     = 69
+                .Top     = 115
                 .Left    = 287
                 .Width   = 25
                 .Height  = 25
@@ -2633,14 +2669,23 @@ DEFINE CLASS FormMPD AS FormBase
                 ENDIF
             ENDIF
             * BINDEVENTs lookups Estoque
+            *-- O legado valida no Valid, ou seja ao SAIR do campo: sem o
+            *-- LostFocus o usuario digitava e nada acontecia, so o F5 abria
+            *-- alguma coisa (Erro292). BINDEVENT em "Valid" de TextBox nao eh
+            *-- confiavel - o canonico do projeto eh LostFocus (regra #47).
+            BINDEVENT(loc_oPg.txt_4c_GrupoOrig, "LostFocus", THIS, "ValidarGrupoOrig")
             BINDEVENT(loc_oPg.txt_4c_GrupoOrig, "KeyPress", THIS, "GrupoOrigKeyPress")
             BINDEVENT(loc_oPg.txt_4c_GrupoOrig, "DblClick", THIS, "AbrirLookupGrupoOrig")
+            BINDEVENT(loc_oPg.txt_4c_ContaOrig, "LostFocus", THIS, "ValidarContaOrig")
             BINDEVENT(loc_oPg.txt_4c_ContaOrig, "KeyPress", THIS, "ContaOrigKeyPress")
             BINDEVENT(loc_oPg.txt_4c_ContaOrig, "DblClick", THIS, "AbrirLookupContaOrig")
+            BINDEVENT(loc_oPg.txt_4c_GrupoDest, "LostFocus", THIS, "ValidarGrupoDest")
             BINDEVENT(loc_oPg.txt_4c_GrupoDest, "KeyPress", THIS, "GrupoDestKeyPress")
             BINDEVENT(loc_oPg.txt_4c_GrupoDest, "DblClick", THIS, "AbrirLookupGrupoDest")
+            BINDEVENT(loc_oPg.txt_4c_ContaDest, "LostFocus", THIS, "ValidarContaDest")
             BINDEVENT(loc_oPg.txt_4c_ContaDest, "KeyPress", THIS, "ContaDestKeyPress")
             BINDEVENT(loc_oPg.txt_4c_ContaDest, "DblClick", THIS, "AbrirLookupContaDest")
+            BINDEVENT(loc_oPg.txt_4c_GrupoVend, "LostFocus", THIS, "ValidarGrupoVend")
             BINDEVENT(loc_oPg.txt_4c_GrupoVend, "KeyPress", THIS, "GrupoVendKeyPress")
             BINDEVENT(loc_oPg.txt_4c_GrupoVend, "DblClick", THIS, "AbrirLookupGrupoVend")
             * BINDEVENTs comportamento interativo Estoque
@@ -3813,7 +3858,7 @@ DEFINE CLASS FormMPD AS FormBase
             BINDEVENT(loc_oPg.txt_4c_TpPadrao, "DblClick", THIS, "AbrirLookupTpPadrao")
             BINDEVENT(loc_oPg.txt_4c_Retalho,  "KeyPress", THIS, "RetalhoKeyPress")
             BINDEVENT(loc_oPg.txt_4c_Retalho,  "DblClick", THIS, "AbrirLookupRetalho")
-            BINDEVENT(loc_oPg.txt_4c_GrupoPcc, "KeyPress", THIS, "GrupoPccKeyPress")
+            BINDEVENT(loc_oPg.txt_4c_GrupoPcc, "LostFocus", THIS, "ValidarGrupoPcc")
             BINDEVENT(loc_oPg.txt_4c_GrupoPcc, "DblClick", THIS, "AbrirLookupGrupoPcc")
             BINDEVENT(loc_oPg.txt_4c__produto,  "KeyPress", THIS, "ProdutoKeyPress")
             BINDEVENT(loc_oPg.txt_4c__produto,  "DblClick", THIS, "AbrirLookupProduto")
@@ -4476,15 +4521,15 @@ DEFINE CLASS FormMPD AS FormBase
             BINDEVENT(loc_oPg.txt_4c_ObsInis,   "DblClick", THIS, "AbrirLookupObsInis")
             BINDEVENT(loc_oPg.txt_4c_ObsFins,   "KeyPress", THIS, "ObsFinsKeyPress")
             BINDEVENT(loc_oPg.txt_4c_ObsFins,   "DblClick", THIS, "AbrirLookupObsFins")
-            BINDEVENT(loc_oPg.txt_4c_GruFin,    "KeyPress", THIS, "GruFinKeyPress")
+            BINDEVENT(loc_oPg.txt_4c_GruFin,    "LostFocus", THIS, "ValidarGruFin")
             BINDEVENT(loc_oPg.txt_4c_GruFin,    "DblClick", THIS, "AbrirLookupGruFin")
             BINDEVENT(loc_oPg.txt_4c_OpConta,   "KeyPress", THIS, "OpContaKeyPress")
             BINDEVENT(loc_oPg.txt_4c_OpConta,   "DblClick", THIS, "AbrirLookupOpConta")
             BINDEVENT(loc_oPg.txt_4c_TpOp,      "KeyPress", THIS, "TpOpKeyPress")
             BINDEVENT(loc_oPg.txt_4c_TpOp,      "DblClick", THIS, "AbrirLookupTpOp")
-            BINDEVENT(loc_oPg.txt_4c__gruccus,  "KeyPress", THIS, "GruccusKeyPress")
+            BINDEVENT(loc_oPg.txt_4c__gruccus,  "LostFocus", THIS, "ValidarGruccus")
             BINDEVENT(loc_oPg.txt_4c__gruccus,  "DblClick", THIS, "AbrirLookupGruccus")
-            BINDEVENT(loc_oPg.txt_4c__contaccus,"KeyPress", THIS, "ContaccusKeyPress")
+            BINDEVENT(loc_oPg.txt_4c__contaccus,"LostFocus", THIS, "ValidarContaccus")
             BINDEVENT(loc_oPg.txt_4c__contaccus,"DblClick", THIS, "AbrirLookupContaccus")
             BINDEVENT(loc_oPg.txt_4c_Semi,      "KeyPress", THIS, "SemiKeyPress")
             BINDEVENT(loc_oPg.txt_4c_Semi,      "DblClick", THIS, "AbrirLookupSemi")
@@ -4507,8 +4552,15 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPDiv = loc_oPD.pgf_4c_PagDados.Page5
             * Header
             THIS.this_oBusinessObject.this_cDopps  = ALLTRIM(loc_oPD.txt_4c_Desc.Value)
-            THIS.this_oBusinessObject.this_nNdopps = ALLTRIM(STR(loc_oPD.txt_4c_Nope.Value))
-            THIS.this_oBusinessObject.this_nOrdes  = ALLTRIM(STR(loc_oPD.txt_4c_Ordem.Value))
+            *-- Os campos numericos vem do controle com o TIPO que o ultimo
+            *-- caminho deixou: LimparCampos e BOParaForm atribuem NUMERO, e os
+            *-- lookups de Obs. atribuiam CARACTERE. ALLTRIM() sobre numero
+            *-- dispara o erro 11 "Function argument value, type, or count is
+            *-- invalid" em RUNTIME (Erro291, ao Confirmar) - compila limpo.
+            *-- ConverterParaNumero() (utils\functions.prg) aceita os dois e
+            *-- devolve sempre numerico, que eh o tipo das colunas no schema.
+            THIS.this_oBusinessObject.this_nNdopps = ConverterParaNumero(loc_oPD.txt_4c_Nope.Value)
+            THIS.this_oBusinessObject.this_nOrdes  = ConverterParaNumero(loc_oPD.txt_4c_Ordem.Value)
             * Aba Operacao
             THIS.this_oBusinessObject.this_nImagems    = loc_oPOp.obj_4c_Op_imagem.Value
             THIS.this_oBusinessObject.this_nBoletos    = loc_oPOp.obj_4c_Op_boleto.Value
@@ -4545,8 +4597,8 @@ DEFINE CLASS FormMPD AS FormBase
             THIS.this_oBusinessObject.this_nNumeras    = loc_oPEst.obj_4c_Op_Numeracao.Value
             THIS.this_oBusinessObject.this_nOrigems    = loc_oPEst.obj_4c_Op_origem.Value
             THIS.this_oBusinessObject.this_nEstorigs   = loc_oPEst.obj_4c_Op_EstOrig.Value
-            THIS.this_oBusinessObject.this_nFixgorigs  = IIF(loc_oPEst.chk_4c_Chk_Grupoo.Value = 1, 1, 0)
-            THIS.this_oBusinessObject.this_nFixcorigs  = IIF(loc_oPEst.chk_4c_Chk_Contao.Value = 1, 1, 0)
+            THIS.this_oBusinessObject.this_nFixgorigs  = IIF(ConverterParaLogico(loc_oPEst.chk_4c_Chk_Grupoo.Value), 1, 0)
+            THIS.this_oBusinessObject.this_nFixcorigs  = IIF(ConverterParaLogico(loc_oPEst.chk_4c_Chk_Contao.Value), 1, 0)
             THIS.this_oBusinessObject.this_nConosubs   = loc_oPEst.obj_4c_Op_ConOSub.Value
             THIS.this_oBusinessObject.this_nBxoests    = loc_oPEst.obj_4c_Op_BxOEst.Value
             THIS.this_oBusinessObject.this_nSenhaos    = IIF(loc_oPEst.chk_4c_ChkSenhaO.Value = 1, 1, 0)
@@ -4554,14 +4606,14 @@ DEFINE CLASS FormMPD AS FormBase
             THIS.this_oBusinessObject.this_nDestinos   = loc_oPEst.obj_4c_Op_destino.Value
             THIS.this_oBusinessObject.this_nCrepls     = loc_oPEst.obj_4c_Get_Repete.Value
             THIS.this_oBusinessObject.this_nEstdests   = loc_oPEst.obj_4c_Op_EstDest.Value
-            THIS.this_oBusinessObject.this_nFixgdests  = IIF(loc_oPEst.chk_4c_Chk_Grupod.Value = 1, 1, 0)
-            THIS.this_oBusinessObject.this_nFixcdests  = IIF(loc_oPEst.chk_4c_Chk_Contad.Value = 1, 1, 0)
+            THIS.this_oBusinessObject.this_nFixgdests  = IIF(ConverterParaLogico(loc_oPEst.chk_4c_Chk_Grupod.Value), 1, 0)
+            THIS.this_oBusinessObject.this_nFixcdests  = IIF(ConverterParaLogico(loc_oPEst.chk_4c_Chk_Contad.Value), 1, 0)
             THIS.this_oBusinessObject.this_nCondsubs   = loc_oPEst.obj_4c_Op_ConDSub.Value
             THIS.this_oBusinessObject.this_nBxdests    = loc_oPEst.obj_4c_Op_BxDEst.Value
             THIS.this_oBusinessObject.this_nSenhads    = IIF(loc_oPEst.chk_4c_ChkSenhaD.Value = 1, 1, 0)
             THIS.this_oBusinessObject.this_cMascds     = ALLTRIM(loc_oPEst.txt_4c_Mascds.Value)
             THIS.this_oBusinessObject.this_nVends      = loc_oPEst.obj_4c_Op_vende.Value
-            THIS.this_oBusinessObject.this_nFixgvends  = IIF(loc_oPEst.chk_4c_Chk_Grupov.Value = 1, 1, 0)
+            THIS.this_oBusinessObject.this_nFixgvends  = IIF(ConverterParaLogico(loc_oPEst.chk_4c_Chk_Grupov.Value), 1, 0)
             THIS.this_oBusinessObject.this_cGruorigs   = ALLTRIM(loc_oPEst.txt_4c_GrupoOrig.Value)
             THIS.this_oBusinessObject.this_cConorigs   = ALLTRIM(loc_oPEst.txt_4c_ContaOrig.Value)
             THIS.this_oBusinessObject.this_cGrudests   = ALLTRIM(loc_oPEst.txt_4c_GrupoDest.Value)
@@ -4578,9 +4630,9 @@ DEFINE CLASS FormMPD AS FormBase
             THIS.this_oBusinessObject.this_nBxpedfins  = loc_oPCom.obj_4c_OptBxPedFins.Value
             THIS.this_oBusinessObject.this_nGrodns     = loc_oPCom.obj_4c_Op_GrTrans.Value
             THIS.this_oBusinessObject.this_nNcarqtds   = IIF(loc_oPCom.chk_4c_ChkCarQtde.Value = 1, 1, 0)
-            THIS.this_oBusinessObject.this_nDiflancs   = ALLTRIM(loc_oPCom.txt_4c_Difp.Value)
-            THIS.this_oBusinessObject.this_nLimqtds    = ALLTRIM(loc_oPCom.txt_4c__limqtd.Value)
-            THIS.this_oBusinessObject.this_nDifpesags  = ALLTRIM(loc_oPCom.txt_4c_DifPeso.Value)
+            THIS.this_oBusinessObject.this_nDiflancs   = ConverterParaNumero(loc_oPCom.txt_4c_Difp.Value)
+            THIS.this_oBusinessObject.this_nLimqtds    = ConverterParaNumero(loc_oPCom.txt_4c__limqtd.Value)
+            THIS.this_oBusinessObject.this_nDifpesags  = ConverterParaNumero(loc_oPCom.txt_4c_DifPeso.Value)
             THIS.this_oBusinessObject.this_cTppadraos  = ALLTRIM(loc_oPCom.txt_4c_TpPadrao.Value)
             THIS.this_oBusinessObject.this_cRetalhos   = ALLTRIM(loc_oPCom.txt_4c_Retalho.Value)
             THIS.this_oBusinessObject.this_cPccfases   = ALLTRIM(loc_oPCom.txt_4c_GrupoPcc.Value)
@@ -4615,9 +4667,9 @@ DEFINE CLASS FormMPD AS FormBase
             THIS.this_oBusinessObject.this_nDckresu    = loc_oPDoc.obj_4c_Optiongroup3.Value
             * Aba Diversas
             THIS.this_oBusinessObject.this_nCasqtds    = loc_oPDiv.obj_4c_Spn_NCqtd.Value
-            THIS.this_oBusinessObject.this_nObspads    = ALLTRIM(loc_oPDiv.txt_4c_Obspads.Value)
-            THIS.this_oBusinessObject.this_nObsinis    = ALLTRIM(loc_oPDiv.txt_4c_ObsInis.Value)
-            THIS.this_oBusinessObject.this_nObsfins    = ALLTRIM(loc_oPDiv.txt_4c_ObsFins.Value)
+            THIS.this_oBusinessObject.this_nObspads    = ConverterParaNumero(loc_oPDiv.txt_4c_Obspads.Value)
+            THIS.this_oBusinessObject.this_nObsinis    = ConverterParaNumero(loc_oPDiv.txt_4c_ObsInis.Value)
+            THIS.this_oBusinessObject.this_nObsfins    = ConverterParaNumero(loc_oPDiv.txt_4c_ObsFins.Value)
             THIS.this_oBusinessObject.this_nChkunis    = loc_oPDiv.obj_4c_Fwoption1.Value
             THIS.this_oBusinessObject.this_nEnvelopes  = loc_oPDiv.obj_4c_Fwoption2.Value
             THIS.this_oBusinessObject.this_nAcenvs     = loc_oPDiv.obj_4c_Fwoption3.Value
@@ -4630,9 +4682,9 @@ DEFINE CLASS FormMPD AS FormBase
             THIS.this_oBusinessObject.this_cDopsemis   = ALLTRIM(loc_oPDiv.txt_4c_Semi.Value)
             THIS.this_oBusinessObject.this_nChkpesotot = loc_oPDiv.obj_4c_Fwoption5.Value
             THIS.this_oBusinessObject.this_nTpsenexc   = loc_oPDiv.obj_4c_Optiongroup1.Value
-            THIS.this_oBusinessObject.this_nPccs       = IIF(loc_oPDiv.chk_4c_Chk_Pcc.Value = 1, 1, 0)
-            THIS.this_oBusinessObject.this_nPesmatps   = IIF(loc_oPDiv.chk_4c_Chk_imp.Value = 1, 1, 0)
-            THIS.this_oBusinessObject.this_nInibAlts   = IIF(loc_oPDiv.chk_4c_Chk_InibAlt.Value = 1, 1, 0)
+            THIS.this_oBusinessObject.this_nPccs       = IIF(ConverterParaLogico(loc_oPDiv.chk_4c_Chk_Pcc.Value), 1, 0)
+            THIS.this_oBusinessObject.this_nPesmatps   = IIF(ConverterParaLogico(loc_oPDiv.chk_4c_Chk_imp.Value), 1, 0)
+            THIS.this_oBusinessObject.this_nInibAlts   = IIF(ConverterParaLogico(loc_oPDiv.chk_4c_Chk_InibAlt.Value), 1, 0)
             THIS.this_oBusinessObject.this_nChkctdes   = IIF(loc_oPDiv.chk_4c_Fwcheckbox1.Value = 1, 1, 0)
             THIS.this_oBusinessObject.this_nChksenexc  = IIF(loc_oPDiv.chk_4c_Fwcheckbox8.Value = 1, 1, 0)
             THIS.this_oBusinessObject.this_nChkoplts   = IIF(loc_oPDiv.chk_4c_ChkOpLote.Value = 1, 1, 0)
@@ -4694,8 +4746,15 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPEst.obj_4c_Op_Numeracao.Value = IIF(loc_oBO.this_nNumeras > 0, loc_oBO.this_nNumeras, 1)
             loc_oPEst.obj_4c_Op_origem.Value    = IIF(loc_oBO.this_nOrigems > 0, loc_oBO.this_nOrigems, 2)
             loc_oPEst.obj_4c_Op_EstOrig.Value   = IIF(loc_oBO.this_nEstorigs > 0, loc_oBO.this_nEstorigs, 1)
-            loc_oPEst.chk_4c_Chk_Grupoo.Value   = loc_oBO.this_nFixgorigs
-            loc_oPEst.chk_4c_Chk_Contao.Value   = loc_oBO.this_nFixcorigs
+            *-- As 8 colunas `bit` de SigCdOpd (fixgorigs/fixcorigs/fixgdests/
+            *-- fixcdests/fixgvends/pccs/pesmatps/inibalts) chegam do SQL Server
+            *-- como LOGICO, e estes CheckBox nascem com .Value = 0 (numerico):
+            *-- atribuir o logico cru dava "Data type mismatch" e abortava o
+            *-- BOParaForm no meio, deixando o resto da tela sem carregar.
+            *-- ConverterParaLogico() normaliza logico/numerico/char e o IIF
+            *-- devolve o 0/1 numerico que o controle espera (regra #13).
+            loc_oPEst.chk_4c_Chk_Grupoo.Value   = IIF(ConverterParaLogico(loc_oBO.this_nFixgorigs), 1, 0)
+            loc_oPEst.chk_4c_Chk_Contao.Value   = IIF(ConverterParaLogico(loc_oBO.this_nFixcorigs), 1, 0)
             loc_oPEst.obj_4c_Op_ConOSub.Value   = IIF(loc_oBO.this_nConosubs > 0, loc_oBO.this_nConosubs, 1)
             loc_oPEst.obj_4c_Op_BxOEst.Value    = IIF(loc_oBO.this_nBxoests > 0, loc_oBO.this_nBxoests, 2)
             loc_oPEst.chk_4c_ChkSenhaO.Value    = loc_oBO.this_nSenhaos
@@ -4703,14 +4762,14 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPEst.obj_4c_Op_destino.Value   = IIF(loc_oBO.this_nDestinos > 0, loc_oBO.this_nDestinos, 2)
             loc_oPEst.obj_4c_Get_Repete.Value   = IIF(loc_oBO.this_nCrepls > 0, loc_oBO.this_nCrepls, 2)
             loc_oPEst.obj_4c_Op_EstDest.Value   = IIF(loc_oBO.this_nEstdests > 0, loc_oBO.this_nEstdests, 1)
-            loc_oPEst.chk_4c_Chk_Grupod.Value   = loc_oBO.this_nFixgdests
-            loc_oPEst.chk_4c_Chk_Contad.Value   = loc_oBO.this_nFixcdests
+            loc_oPEst.chk_4c_Chk_Grupod.Value   = IIF(ConverterParaLogico(loc_oBO.this_nFixgdests), 1, 0)
+            loc_oPEst.chk_4c_Chk_Contad.Value   = IIF(ConverterParaLogico(loc_oBO.this_nFixcdests), 1, 0)
             loc_oPEst.obj_4c_Op_ConDSub.Value   = IIF(loc_oBO.this_nCondsubs > 0, loc_oBO.this_nCondsubs, 1)
             loc_oPEst.obj_4c_Op_BxDEst.Value    = IIF(loc_oBO.this_nBxdests > 0, loc_oBO.this_nBxdests, 2)
             loc_oPEst.chk_4c_ChkSenhaD.Value    = loc_oBO.this_nSenhads
             loc_oPEst.txt_4c_Mascds.Value        = loc_oBO.this_cMascds
             loc_oPEst.obj_4c_Op_vende.Value     = IIF(loc_oBO.this_nVends > 0, loc_oBO.this_nVends, 2)
-            loc_oPEst.chk_4c_Chk_Grupov.Value   = loc_oBO.this_nFixgvends
+            loc_oPEst.chk_4c_Chk_Grupov.Value   = IIF(ConverterParaLogico(loc_oBO.this_nFixgvends), 1, 0)
             loc_oPEst.txt_4c_GrupoOrig.Value     = loc_oBO.this_cGruorigs
             loc_oPEst.txt_4c_ContaOrig.Value     = loc_oBO.this_cConorigs
             loc_oPEst.txt_4c_GrupoDest.Value     = loc_oBO.this_cGrudests
@@ -4785,12 +4844,13 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPDiv.txt_4c_Semi.Value          = loc_oBO.this_cDopsemis
             loc_oPDiv.obj_4c_Fwoption5.Value     = IIF(loc_oBO.this_nChkpesotot > 0, loc_oBO.this_nChkpesotot, 1)
             loc_oPDiv.obj_4c_Optiongroup1.Value  = IIF(loc_oBO.this_nTpsenexc > 0, loc_oBO.this_nTpsenexc, 1)
-            loc_oPDiv.chk_4c_Chk_Pcc.Value      = loc_oBO.this_nPccs
-            loc_oPDiv.chk_4c_Chk_imp.Value       = loc_oBO.this_nPesmatps
-            loc_oPDiv.chk_4c_Chk_InibAlt.Value  = loc_oBO.this_nInibAlts
+            loc_oPDiv.chk_4c_Chk_Pcc.Value      = IIF(ConverterParaLogico(loc_oBO.this_nPccs), 1, 0)
+            loc_oPDiv.chk_4c_Chk_imp.Value       = IIF(ConverterParaLogico(loc_oBO.this_nPesmatps), 1, 0)
+            loc_oPDiv.chk_4c_Chk_InibAlt.Value  = IIF(ConverterParaLogico(loc_oBO.this_nInibAlts), 1, 0)
             loc_oPDiv.chk_4c_Fwcheckbox1.Value   = loc_oBO.this_nChkctdes
             loc_oPDiv.chk_4c_Fwcheckbox8.Value   = loc_oBO.this_nChksenexc
             loc_oPDiv.chk_4c_ChkOpLote.Value     = loc_oBO.this_nChkoplts
+            THIS.AplicarRegrasEstoque()
         CATCH TO loException
             MostrarErro(loException, "FormMPD.BOParaForm")
         ENDTRY
@@ -4866,6 +4926,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPDiv.txt_4c__contaccus.Value = ""
             loc_oPDiv.txt_4c__dcontaccus.Value = ""
             loc_oPDiv.txt_4c_Semi.Value = ""
+            THIS.AplicarRegrasEstoque()
         CATCH TO loException
             MostrarErro(loException, "FormMPD.LimparCampos")
         ENDTRY
@@ -4970,169 +5031,265 @@ DEFINE CLASS FormMPD AS FormBase
     * ============================================================
     * LOOKUP HANDLERS - Estoque
     * ============================================================
+    * ============================================================
+    * LOOKUPS DA ABA ESTOQUE - Grupo/Conta contabeis
+    *
+    * O legado NAO faz um SELECT proprio aqui: os Valid dos cinco campos
+    * (SIGCDMPD 8302-8440) chamam duas funcoes GLOBAIS do Framework, que
+    * fazem a consulta FILTRADA pelo que o usuario digitou, abrem a lista
+    * quando o codigo nao casa exato e preenchem codigo + descricao:
+    *
+    *   Get_grupoo/d/v.Valid -> fAcessoContab(Usuar, 'C', This.Value,
+    *                                         This, This.Parent.Get_dgrupoX)
+    *   Get_contao/d.Valid   -> fAcessoContas(Usuar, grupo, 'C', This.Value,
+    *                                         This, This.Parent.Get_dcontaX)
+    *
+    * A migracao tinha trocado as DUAS por um "SELECT codigos, descrs FROM
+    * SigCdGcr" sem WHERE nenhum, IGUAL nos cinco campos (Erro292). Dai os
+    * dois sintomas: digitar um caractere nao trazia lista (o SELECT nao
+    * filtrava e so abria no F5) e a lista da CONTA mostrava os GRUPOS -
+    * conta nao esta em SigCdGcr, esta no universo que fAcessoContas conhece,
+    * e ainda depende do grupo ja escolhido.
+    *
+    * Ligacao em LostFocus, nao em KeyPress: o legado valida no Valid, ou
+    * seja ao SAIR do campo (regra #47). O F5 e o DblClick chamam o MESMO
+    * funil. Como os dialogos sao MODAIS, o corpo fica em <X>Exec() e o
+    * wrapper libera a flag mesmo quando o corpo faz RETURN antecipado.
+    * ============================================================
     PROCEDURE GrupoOrigKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGrupoOrig()
+            THIS.ValidarGrupoOrig()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGrupoOrig()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
+        THIS.ValidarGrupoOrig()
+    ENDPROC
+
+    PROCEDURE ValidarGrupoOrig()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGrupoOrigExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoOrigExec()
+        LOCAL loc_oPg
         TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoO")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_GrupoO"
-                loc_oFrm.DefinirCursor("cursor_4c_GrupoO", "codigos", "descrs", "Grupo Orig.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
-                    loc_oPg.txt_4c_GrupoOrig.Value = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_Dgrupoo.Value   = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_GrupoO")
-                    USE IN cursor_4c_GrupoO
-                ENDIF
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoOrig.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c_GrupoOrig.Value), ;
+                               loc_oPg.txt_4c_GrupoOrig, loc_oPg.txt_4c_Dgrupoo)
             ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
+                *-- Legado: limpar o grupo derruba a conta e as duas marcacoes
+                loc_oPg.txt_4c_Dgrupoo.Value    = ""
+                loc_oPg.chk_4c_Chk_Grupoo.Value = 0
+                loc_oPg.chk_4c_Chk_Contao.Value = 0
+                loc_oPg.txt_4c_ContaOrig.Value  = ""
+                loc_oPg.txt_4c_Dcontao.Value    = ""
             ENDIF
+            THIS.AjustarContaPorGrupo()
         CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGrupoOrig")
+            MostrarErro(loc_oErro, "FormMPD.ValidarGrupoOrigExec")
         ENDTRY
     ENDPROC
 
     PROCEDURE ContaOrigKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupContaOrig()
+            THIS.ValidarContaOrig()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupContaOrig()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
+        THIS.ValidarContaOrig()
+    ENDPROC
+
+    PROCEDURE ValidarContaOrig()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarContaOrigExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaOrigExec()
+        LOCAL loc_oPg, loc_cGrupo
         TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaO")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_ContaO"
-                loc_oFrm.DefinirCursor("cursor_4c_ContaO", "codigos", "descrs", "Conta Orig.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
-                    loc_oPg.txt_4c_ContaOrig.Value = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_Dcontao.Value   = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_ContaO")
-                    USE IN cursor_4c_ContaO
+            loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_GrupoOrig.Value)
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_ContaOrig.Value))
+                IF !fAcessoContas(Usuar, loc_cGrupo, "C", ALLTRIM(loc_oPg.txt_4c_ContaOrig.Value), ;
+                                  loc_oPg.txt_4c_ContaOrig, loc_oPg.txt_4c_Dcontao)
+                    MsgAviso("Acesso Negado !!", "")
+                    loc_oPg.txt_4c_ContaOrig.Value = ""
+                    loc_oPg.txt_4c_Dcontao.Value   = ""
                 ENDIF
             ELSE
-                MsgErro("Erro ao buscar contas.", "Erro")
+                loc_oPg.chk_4c_Chk_Contao.Value = 0
+                loc_oPg.txt_4c_Dcontao.Value    = ""
             ENDIF
         CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupContaOrig")
+            MostrarErro(loc_oErro, "FormMPD.ValidarContaOrigExec")
         ENDTRY
     ENDPROC
 
     PROCEDURE GrupoDestKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGrupoDest()
+            THIS.ValidarGrupoDest()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGrupoDest()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
+        THIS.ValidarGrupoDest()
+    ENDPROC
+
+    PROCEDURE ValidarGrupoDest()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGrupoDestExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoDestExec()
+        LOCAL loc_oPg
         TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoD")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_GrupoD"
-                loc_oFrm.DefinirCursor("cursor_4c_GrupoD", "codigos", "descrs", "Grupo Dest.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
-                    loc_oPg.txt_4c_GrupoDest.Value = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_Dgrupod.Value   = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_GrupoD")
-                    USE IN cursor_4c_GrupoD
-                ENDIF
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoDest.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c_GrupoDest.Value), ;
+                               loc_oPg.txt_4c_GrupoDest, loc_oPg.txt_4c_Dgrupod)
             ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
+                loc_oPg.txt_4c_Dgrupod.Value    = ""
+                loc_oPg.chk_4c_Chk_Grupod.Value = 0
+                loc_oPg.chk_4c_Chk_Contad.Value = 0
+                loc_oPg.txt_4c_ContaDest.Value  = ""
+                loc_oPg.txt_4c_Dcontad.Value    = ""
             ENDIF
+            THIS.AjustarContaPorGrupo()
         CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGrupoDest")
+            MostrarErro(loc_oErro, "FormMPD.ValidarGrupoDestExec")
         ENDTRY
     ENDPROC
 
     PROCEDURE ContaDestKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupContaDest()
+            THIS.ValidarContaDest()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupContaDest()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
+        THIS.ValidarContaDest()
+    ENDPROC
+
+    PROCEDURE ValidarContaDest()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarContaDestExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaDestExec()
+        LOCAL loc_oPg, loc_cGrupo
         TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaD")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_ContaD"
-                loc_oFrm.DefinirCursor("cursor_4c_ContaD", "codigos", "descrs", "Conta Dest.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
-                    loc_oPg.txt_4c_ContaDest.Value = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_Dcontad.Value   = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_ContaD")
-                    USE IN cursor_4c_ContaD
+            loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_GrupoDest.Value)
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_ContaDest.Value))
+                IF !fAcessoContas(Usuar, loc_cGrupo, "C", ALLTRIM(loc_oPg.txt_4c_ContaDest.Value), ;
+                                  loc_oPg.txt_4c_ContaDest, loc_oPg.txt_4c_Dcontad)
+                    MsgAviso("Acesso Negado !!", "")
+                    loc_oPg.txt_4c_ContaDest.Value = ""
+                    loc_oPg.txt_4c_Dcontad.Value   = ""
                 ENDIF
             ELSE
-                MsgErro("Erro ao buscar contas.", "Erro")
+                loc_oPg.chk_4c_Chk_Contad.Value = 0
+                loc_oPg.txt_4c_Dcontad.Value    = ""
             ENDIF
         CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupContaDest")
+            MostrarErro(loc_oErro, "FormMPD.ValidarContaDestExec")
         ENDTRY
     ENDPROC
 
+    *-- When do legado (Get_contao/Get_contad): a Conta so aceita digitacao
+    *-- com o Grupo correspondente ja preenchido.
+    PROCEDURE AjustarContaPorGrupo()
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            *-- When legado de Get_contao/Get_contad: a Conta so aceita foco
+            *-- com o Grupo correspondente preenchido. O Enabled do proprio
+            *-- GRUPO carrega a outra metade do When (o "Tem Origem/Destino =
+            *-- Sim" que OpOrigemChange/OpDestinoChange aplicam), entao partir
+            *-- dele compoe com essa regra em vez de sobrescreve-la.
+            loc_oPg.txt_4c_ContaOrig.Enabled = loc_oPg.txt_4c_GrupoOrig.Enabled AND ;
+                !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoOrig.Value))
+            loc_oPg.txt_4c_ContaDest.Enabled = loc_oPg.txt_4c_GrupoDest.Enabled AND ;
+                !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoDest.Value))
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "FormMPD.AjustarContaPorGrupo")
+        ENDTRY
+    ENDPROC
     PROCEDURE GrupoVendKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGrupoVend()
+            THIS.ValidarGrupoVend()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGrupoVend()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
+        THIS.ValidarGrupoVend()
+    ENDPROC
+
+    PROCEDURE ValidarGrupoVend()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGrupoVendExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoVendExec()
+        LOCAL loc_oPg
         TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoV")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_GrupoV"
-                loc_oFrm.DefinirCursor("cursor_4c_GrupoV", "codigos", "descrs", "Grupo Venda")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
-                    loc_oPg.txt_4c_GrupoVend.Value = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_Dgrupov.Value   = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_GrupoV")
-                    USE IN cursor_4c_GrupoV
-                ENDIF
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoVend.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c_GrupoVend.Value), ;
+                               loc_oPg.txt_4c_GrupoVend, loc_oPg.txt_4c_Dgrupov)
             ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
+                *-- Legado (Get_Grupov.Valid): aqui NAO ha conta associada,
+                *-- entao so a descricao e a marcacao do proprio grupo caem.
+                loc_oPg.txt_4c_Dgrupov.Value    = ""
+                loc_oPg.chk_4c_Chk_Grupov.Value = 0
             ENDIF
         CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGrupoVend")
+            MostrarErro(loc_oErro, "FormMPD.ValidarGrupoVendExec")
         ENDTRY
     ENDPROC
 
     * ============================================================
     * COMPORTAMENTO INTERATIVO - Estoque
     * ============================================================
+    *-- Funil das regras de dependencia da aba Estoque, chamado no fim de
+    *-- LimparCampos e de BOParaForm.
+    *--
+    *-- Reaplica SO o When das contas. Os tres OptionGroup (Op_origem/
+    *-- Op_destino/Op_vende) tem a habilitacao no proprio Valid do legado,
+    *-- ou seja ela so roda quando o USUARIO mexe no grupo de opcoes - ao
+    *-- carregar um registro o legado nao reavalia nada, e os campos ficam
+    *-- habilitados mesmo com "Tem Origem = Nao". Chamar OpOrigemChange()
+    *-- aqui corrigiria isso, mas TIRARIA do usuario campos que hoje ele
+    *-- edita: eh mudanca de comportamento, nao conserto do Erro292.
+    *-- O When, ao contrario, o legado avalia a cada tentativa de foco -
+    *-- reproduzi-lo no carregamento eh fiel.
+    PROCEDURE AplicarRegrasEstoque()
+        THIS.AjustarContaPorGrupo()
+    ENDPROC
+
     PROCEDURE OpOrigemChange()
         LOCAL loc_oPg, loc_lSim
         TRY
@@ -5145,6 +5302,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPg.chk_4c_Chk_Grupoo.Enabled  = loc_lSim
             loc_oPg.chk_4c_Chk_Contao.Enabled  = loc_lSim
             loc_oPg.obj_4c_Op_ConOSub.Enabled  = loc_lSim
+            THIS.AjustarContaPorGrupo()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormMPD.OpOrigemChange")
         ENDTRY
@@ -5163,6 +5321,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oPg.chk_4c_Chk_Grupod.Enabled  = loc_lSim
             loc_oPg.chk_4c_Chk_Contad.Enabled  = loc_lSim
             loc_oPg.obj_4c_Op_ConDSub.Enabled  = loc_lSim
+            THIS.AjustarContaPorGrupo()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormMPD.OpDestinoChange")
         ENDTRY
@@ -5278,35 +5437,35 @@ DEFINE CLASS FormMPD AS FormBase
 
     PROCEDURE GrupoPccKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGrupoPcc()
+            THIS.ValidarGrupoPcc()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGrupoPcc()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
-        TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoPcc")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_GrupoPcc"
-                loc_oFrm.DefinirCursor("cursor_4c_GrupoPcc", "codigos", "descrs", "Fase PCC")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page3
-                    loc_oPg.txt_4c_GrupoPcc.Value = loc_oFrm.cCodigoSelecionado
-                ENDIF
-                IF USED("cursor_4c_GrupoPcc")
-                    USE IN cursor_4c_GrupoPcc
-                ENDIF
-            ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGrupoPcc")
-        ENDTRY
+        THIS.ValidarGrupoPcc()
     ENDPROC
 
+    PROCEDURE ValidarGrupoPcc()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGrupoPccExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoPccExec()
+        LOCAL loc_oPg, loc_cGrupo
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page3
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_GrupoPcc.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c_GrupoPcc.Value), ;
+                               loc_oPg.txt_4c_GrupoPcc)
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "FormMPD.ValidarGrupoPccExec")
+        ENDTRY
+    ENDPROC
     PROCEDURE ProdutoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
             THIS.AbrirLookupProduto()
@@ -5359,7 +5518,7 @@ DEFINE CLASS FormMPD AS FormBase
                 loc_oFrm.Mostrar()
                 IF loc_oFrm.this_lSelecionou
                     loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c_Obspads.Value = loc_oFrm.cCodigoSelecionado
+                    loc_oPg.txt_4c_Obspads.Value = VAL(loc_oFrm.cCodigoSelecionado)
                 ENDIF
                 IF USED("cursor_4c_ObsPad")
                     USE IN cursor_4c_ObsPad
@@ -5390,7 +5549,7 @@ DEFINE CLASS FormMPD AS FormBase
                 loc_oFrm.Mostrar()
                 IF loc_oFrm.this_lSelecionou
                     loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c_ObsInis.Value = loc_oFrm.cCodigoSelecionado
+                    loc_oPg.txt_4c_ObsInis.Value = VAL(loc_oFrm.cCodigoSelecionado)
                 ENDIF
                 IF USED("cursor_4c_ObsIni")
                     USE IN cursor_4c_ObsIni
@@ -5421,7 +5580,7 @@ DEFINE CLASS FormMPD AS FormBase
                 loc_oFrm.Mostrar()
                 IF loc_oFrm.this_lSelecionou
                     loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c_ObsFins.Value = loc_oFrm.cCodigoSelecionado
+                    loc_oPg.txt_4c_ObsFins.Value = VAL(loc_oFrm.cCodigoSelecionado)
                 ENDIF
                 IF USED("cursor_4c_ObsFin")
                     USE IN cursor_4c_ObsFin
@@ -5436,36 +5595,37 @@ DEFINE CLASS FormMPD AS FormBase
 
     PROCEDURE GruFinKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGruFin()
+            THIS.ValidarGruFin()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGruFin()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
-        TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruFin")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_GruFin"
-                loc_oFrm.DefinirCursor("cursor_4c_GruFin", "codigos", "descrs", "Grupo Financeiro")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c_GruFin.Value  = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c_DGruFin.Value = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_GruFin")
-                    USE IN cursor_4c_GruFin
-                ENDIF
-            ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGruFin")
-        ENDTRY
+        THIS.ValidarGruFin()
     ENDPROC
 
+    PROCEDURE ValidarGruFin()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGruFinExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGruFinExec()
+        LOCAL loc_oPg, loc_cGrupo
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_GruFin.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c_GruFin.Value), ;
+                               loc_oPg.txt_4c_GruFin, loc_oPg.txt_4c_DGruFin)
+            ELSE
+                loc_oPg.txt_4c_DGruFin.Value = ""
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "FormMPD.ValidarGruFinExec")
+        ENDTRY
+    ENDPROC
     PROCEDURE OpContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
             THIS.AbrirLookupOpConta()
@@ -5530,68 +5690,77 @@ DEFINE CLASS FormMPD AS FormBase
 
     PROCEDURE GruccusKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupGruccus()
+            THIS.ValidarGruccus()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGruccus()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
-        TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Gruccus")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_Gruccus"
-                loc_oFrm.DefinirCursor("cursor_4c_Gruccus", "codigos", "descrs", "Grupo C.C.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c__gruccus.Value  = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c__dgruccus.Value = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_Gruccus")
-                    USE IN cursor_4c_Gruccus
-                ENDIF
-            ELSE
-                MsgErro("Erro ao buscar grupos.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupGruccus")
-        ENDTRY
+        THIS.ValidarGruccus()
     ENDPROC
 
+    PROCEDURE ValidarGruccus()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarGruccusExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGruccusExec()
+        LOCAL loc_oPg, loc_cGrupo
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c__gruccus.Value))
+                =fAcessoContab(Usuar, "C", ALLTRIM(loc_oPg.txt_4c__gruccus.Value), ;
+                               loc_oPg.txt_4c__gruccus, loc_oPg.txt_4c__dgruccus)
+            ELSE
+                loc_oPg.txt_4c__dgruccus.Value   = ""
+                loc_oPg.txt_4c__contaccus.Value  = ""
+                loc_oPg.txt_4c__dcontaccus.Value = ""
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "FormMPD.ValidarGruccusExec")
+        ENDTRY
+    ENDPROC
     PROCEDURE ContaccusKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
-            THIS.AbrirLookupContaccus()
+            THIS.ValidarContaccus()
         ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupContaccus()
-        LOCAL loc_oFrm, loc_cSQL, loc_nResult, loc_oPg
-        TRY
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Contaccus")
-            IF loc_nResult >= 0
-                loc_oFrm = CREATEOBJECT("FormBuscaAuxiliar")
-                loc_oFrm.this_cCursorDestino = "cursor_4c_Contaccus"
-                loc_oFrm.DefinirCursor("cursor_4c_Contaccus", "codigos", "descrs", "Conta C.C.")
-                loc_oFrm.Mostrar()
-                IF loc_oFrm.this_lSelecionou
-                    loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
-                    loc_oPg.txt_4c__contaccus.Value  = loc_oFrm.cCodigoSelecionado
-                    loc_oPg.txt_4c__dcontaccus.Value = loc_oFrm.cDescricaoSelecionada
-                ENDIF
-                IF USED("cursor_4c_Contaccus")
-                    USE IN cursor_4c_Contaccus
-                ENDIF
-            ELSE
-                MsgErro("Erro ao buscar contas.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MostrarErro(loc_oErro, "FormMPD.AbrirLookupContaccus")
-        ENDTRY
+        THIS.ValidarContaccus()
     ENDPROC
 
+    PROCEDURE ValidarContaccus()
+        IF THIS.this_lEmLookupEst
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEst = .T.
+        THIS.ValidarContaccusExec()
+        THIS.this_lEmLookupEst = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaccusExec()
+        LOCAL loc_oPg, loc_cGrupo
+        TRY
+            loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page5
+            loc_cGrupo = ALLTRIM(loc_oPg.txt_4c__gruccus.Value)
+            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c__contaccus.Value))
+                IF !fAcessoContas(Usuar, loc_cGrupo, "C", ALLTRIM(loc_oPg.txt_4c__contaccus.Value), ;
+                                  loc_oPg.txt_4c__contaccus, loc_oPg.txt_4c__dcontaccus)
+                    MsgAviso("Acesso Negado !!", "")
+                    loc_oPg.txt_4c__contaccus.Value  = ""
+                    loc_oPg.txt_4c__dcontaccus.Value = ""
+                ENDIF
+            ELSE
+                loc_oPg.txt_4c__dcontaccus.Value = ""
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "FormMPD.ValidarContaccusExec")
+        ENDTRY
+    ENDPROC
     PROCEDURE SemiKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF par_nKeyCode = 116
             THIS.AbrirLookupSemi()

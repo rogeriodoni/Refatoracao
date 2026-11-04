@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 done. The form already had its three real button handlers, but two of them were dead code ÔÇö so phase 7's actual work was making the main button events function.
+
+## What changed
+
+**`projeto/app/forms/operacionais/FormSigOpEtq.prg`** ÔÇö the two action handlers
+- `BtnImprimirClick` (`FormSigOpEtq.prg:1611`) was `DO FORM SigMvDoc WITH ...`. There is no `.scx` anywhere in `projeto\`, so that call could only ever raise *"File 'sigmvdoc.scx' does not exist"* ÔÇö the Imprimir button never printed anything. It now opens the real dialog via `CREATEOBJECT`, with `Show()` outside the `TRY` (regra #29, the dialog is modal).
+- `BtnEtiquetasClick` (`:1560`) had the same dead `DO FORM SigOpIpE`. `SigOpIpE.SCX` is still in `ProximasMigracoes\` with no migrated class, so it now says so plainly instead of accusing a missing file. Documented, with the exact `CREATEOBJECT` + `Show()` replacement to drop in once that screen is migrated.
+
+**`projeto/app/forms/operacionais/FormSigOpEtqDoc.prg`** (new) ÔÇö the generic branch of `SIGMVDOC` (`pRep <> 'SIGCDENT'`), which is what this screen actually calls: the frmrelatorio toolbar (Visualizar / Imprimir / Arquivos Email / Encerrar), geometry transcribed from the dump. `FormSIGMVDOC` could not be reused ÔÇö its `Init` takes no parameters (no way to pass `NomeRepo`/`pTit`), it implements only the Nota Fiscal branch, and it's `DataSession = 2`, so it cannot see this screen's cursor. The new class is `DataSession = 1`, which is also what the legacy SCX declares.
+
+**`projeto/app/classes/SigOpEtqBO.prg`** ÔÇö `ExecutarReportForm` (canonical pattern: FRX guard, locale isolation, menu restore) plus `Visualizar` / `Imprimir` / `GerarExcel`, mapping to the legacy `visualizacao` / `impressao` / `DocExcel`. The `SELECT` + `GO TOP` sit immediately before `REPORT FORM` because the FRX reads the current work area ÔÇö its expressions (`Contas`/`CBars`/`Tipos`/`datas`/`cpros`/`DPros`) carry no alias prefix.
+
+**`projeto/app/reports/SigOpEtq.frx` + `.frt`** ÔÇö copied from the legacy install; they had never been ported, so every print path would have failed on the FRX guard.
+
+## Verified
+- All three `.prg` compile clean in VFP9 (`.fxp` produced, no `.err`).
+- Phase-7 gate: dump has no CRUD evidence (no `frmcadastro`, `Grupo_Op`, `pcEscolha`, CRUD verb names) ÔåÆ `legadoSemCrud`; 3 legacy buttons ÔåÆ floor of 2; form has 3 `Btn*Click` handlers. Passes.
+- Completeness validator patterns (TODO markers, empty procedures, pendency phrases, `MsgAviso` stubs): 0 findings.
+- Audits clean for these files: inexistent properties, undefined functions, protected-method-called-from-outside, lookup-in-KeyPress.
+- Icons confirmed present in `vbmp\`; CRLF restored on all touched files (CR = LF on each).
+- Class index regenerated ÔÇö `FormSigOpEtqDoc` now registers as a dependency of `FormSigOpEtq`, so on-demand loading picks it up. No pre-existing index entries lost.
+
+## Left out, deliberately
+`sigreinrBO.prg:1345` and `:1467` still have `DO FORM SigOpEtq WITH THIS` ÔÇö which means **FormSigOpEtq itself is currently unreachable** from the inventory report (option 5), with the same `.scx`-not-found failure. The fix is `CREATEOBJECT("FormSigOpEtq", THIS)` with `Show()` moved out of those methods' `TRY` blocks, but both sites are inside a `DO CASE` inside `TRY` in another already-validated BO, so restructuring its control flow blind belongs to that form's own fix rather than to this phase. Worth queuing ÔÇö until it's done, the print flow built here can't be exercised end to end.

@@ -161,7 +161,10 @@ DEFINE CLASS FormOET AS FormBase
         *-- Container Botoes CRUD (Grupo_op no legado) - canonico: Left=542
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top       = 28
+            *-- 29 e nao 28: com 28 os botoes CRUD ficavam 1px acima do
+            *-- cmd_4c_Encerrar do cnt_4c_Saida (que ja esta em 29), deixando a
+            *-- barra do topo desalinhada entre si (Erro303).
+            .Top       = 29
             .Left      = 542
             .Width     = 390
             .Height    = 85
@@ -410,10 +413,17 @@ DEFINE CLASS FormOET AS FormBase
 
 
         *-- Container BotoesAcao (Grupo_Salva no legado)
-        *-- Legado: Left=619, Top=8 -> com compensacao +29: Top=37
+        *-- Legado: Left=619, Top=8 -> com compensacao +29 daria Top=37, e era
+        *-- isso que estava aqui: transcricao FIEL do SCX. So que o legado NAO
+        *-- tem faixa de cabecalho na pagina Dados - ela e decisao do projeto
+        *-- (regra #11, que prevalece sobre o PILAR 1). Com a faixa em 29..109,
+        *-- o Top legado jogava os botoes para 13..88 na tela contra uma faixa
+        *-- de 0..80: 13px de folga em cima e 8px TRANSBORDANDO por baixo
+        *-- (Erro303). Top = 29 + botao .Top = 3 reproduz a folga da pagina
+        *-- Lista (3px acima, 2px abaixo) - mesmo conserto do Formmtz/Erro299.
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top       = 37
+            .Top       = 29
             .Left      = 619
             .Width     = 172
             .Height    = 85
@@ -427,7 +437,7 @@ DEFINE CLASS FormOET AS FormBase
             .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 13
-            .Top             = 5
+            .Top             = 3     && centraliza na faixa da Dados (Erro303)
             .Left            = 12
             .Width           = 75
             .Height          = 75
@@ -449,7 +459,7 @@ DEFINE CLASS FormOET AS FormBase
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
-            .Top             = 5
+            .Top             = 3     && mesma folga do cmd_4c_Confirmar (Erro303)
             .Left            = 88
             .Width           = 75
             .Height          = 75

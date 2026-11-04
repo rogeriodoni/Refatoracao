@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 4/8 conclu├¡da.** O gate passa pelo ramo FLAT (OPERACIONAL): `temGrade=True temBotoes=True temCarga=True`.
+
+## O que foi entregue
+
+**`projeto\app\forms\operacionais\FormSigOpEnt.prg`** (+334 linhas)
+- **`ConfigurarGradeHistorico()`** ÔÇö `grd_4c_Dados` (a `Gradevenc` legada), transcrita do dump: Top 99 / Left 105 / 173x184, `ColumnCount=2`, `ReadOnly=.T.`, colunas 70px `Movable/Resizable=.F.`, headers `Hist├│rico`/`Usu├írio` (Tahoma 8, Alignment 2), `Text1` com BorderStyle 0 / Margin 0 / ForeColor preto / BackColor branco. O que o dump n├úo declara veio da classe `fwgrade`. `Column1.ControlSource` ├® a express├úo literal do legado ÔÇö `TTOD(cursor_4c_Dados.vencs)`.
+- **`ConfigurarBotoesAcao()`** ÔÇö `cmd_4c_Confirmar` (`altera`) e `cmd_4c_Cancelar` (`sair`), nomeados pela **a├º├úo** e n├úo pelo `Name` legado; `Enabled` do Confirmar vem de `this_lBloquear` j├í no nascimento.
+- **`CarregarLista()`** ÔÇö funil ├║nico de carga/repinte (`GO TOP` + `Refresh`), sem rebind (o BO recarrega por ZAP+APPEND, ent├úo largura e legendas sobrevivem).
+
+**`projeto\app\classes\SigOpEntBO.prg`** (+200 linhas) ÔÇö faltavam as duas pe├ºas de dados da grade: `CriarCursorHistorico()` (fonte **├║nica** da estrutura), `CarregarHistorico()` (o `Select * From SigOpMvv Where EmpDopNcs = ... Order By Vencs` do Init legado, via cursor tempor├írio) e `LimparCursorHistorico()` (ZAP com guarda de `SET SAFETY` ÔÇö obrigat├│ria aqui porque o form ├® `DataSession = 2`).
+
+**`tasks\task731\mapeamento.json`** ÔÇö os dois bot├Áes renomeados e as entradas das Columns, que estavam colididas (`Column1` e `Column2` apontavam ambas para `"Page_4c_1"`).
+
+## Decis├Áes que divergem do enunciado da fase
+
+O prompt pedia `cnt_4c_Botoes` com 6 bot├Áes CRUD e `AlternarPagina()`. **N├úo criei nenhum dos dois**: o SCX legado n├úo tem PageFrame (zero `BaseClass: pageframe`) nem barra CRUD ÔÇö ├® um di├ílogo filho modal com grade, 2 campos e 2 bot├Áes. Invent├í-los violaria o PILAR 1, e um `AlternarPagina` que n├úo alterna nada seria stub disfar├ºado. O layout FLAT ├® o caso previsto pelo pr├│prio gate, e est├í documentado no cabe├ºalho do arquivo.
+
+Um desvio deliberado de geometria: `fwbtng` tem 80x100 por default, o que nos `Left` 350/425 do SCX faria os bot├Áes se sobreporem em 5px e o Cancelar passar 5px da borda (sobreposi├º├úo herdada do SCX). Com os 75x75 can├┤nicos os `Left` do legado fecham exatos ÔÇö medido: `CANCELAR direita=500 / Form.Width=500`.
+
+**Fora de escopo, anotado em coment├írio:** o passe de `TabIndex` (os valores do dump s├│ podem ser aplicados depois de *todos* os `AddObject`, ou seja na Fase 5) e a outra metade do `If ThisForm.Bloquear`, que toca `getNova` e decide o `SetFocus` inicial ÔÇö `getNova` nasce na Fase 5.
+
+## Verifica├º├úo
+
+- **Smoke test do VFP9 passou** (`VIVO`, exit=0), ent├úo compila├º├úo e runtime foram de fato provados nesta sess├úo.
+- `COMPILE` de BO e Form: `.FXP` presente, `.ERR` ausente nos dois. **Controle negativo** feito na mesma rodada: c├│pia do form com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` apontando *s├│* as linhas 808-809 acrescentadas ÔÇö o detector funciona e as 807 linhas reais est├úo limpas.
+- **Probe de instancia├º├úo**: `CREATEOBJECT` devolveu objeto, `DataSessionId=2`; grade com a geometria exata do dump, `RecordSource` ligado, larguras 70/70 e legendas sobrevivendo ao `RecordSource`; bot├Áes em 3/350 e 3/425 com `PicOk=.T.` nos dois ├¡cones; `CarregarLista()=.T.` com cursor de 8 campos na ordem do `CREATE CURSOR`, `vencs`/`datas` ambos tipo `T` (logo o `TTOD` ├® v├ílido); `RECCOUNT=0` sem conex├úo, como projetado. Segunda inst├óncia com `pBlqAlt=.T.` ÔåÆ `Confirmar.Enabled=.F.`
+- O ZAP dentro da datasession privada **n├úo congelou** (probe chegou ao `CK99`), e o arquivo de di├ílogos suprimidos ficou **vazio** ÔÇö nenhuma mensagem engolida por CATCH.
+- Est├íticos: zero bytes n├úo-ASCII, zero `RETURN` dentro de `TRY` (TRY/ENDTRY balanceado), zero `this_x .Value`, zero TODO real, todos os `THIS.<membro>` declarados, e os dois m├®todos do BO chamados pelo form s├úo PUBLIC (regra #51). CRLF preservado nos tr├¬s arquivos.

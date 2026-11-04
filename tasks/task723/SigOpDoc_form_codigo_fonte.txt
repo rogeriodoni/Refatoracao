@@ -1,0 +1,971 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpDoc.SCX
+* Data/Hora: 31/10/2026 14:25:42
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDOC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape3
+  Parent: SIGOPDOC
+  Class: shape
+  BaseClass: shape
+
+Objeto: shpAlterar
+  Parent: SIGOPDOC
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGOPDOC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPDOC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPDOC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnForm
+  Parent: SIGOPDOC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape1
+  Parent: SIGOPDOC
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say31
+  Parent: SIGOPDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getObsArqs
+  Parent: SIGOPDOC
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdArquivos
+  Parent: SIGOPDOC
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDOC.grdArquivos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDOC.grdArquivos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnInsArqs
+  Parent: SIGOPDOC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnOpnArqs
+  Parent: SIGOPDOC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: imgArqJpg
+  Parent: SIGOPDOC
+  Class: image
+  BaseClass: image
+
+Objeto: btnExcArqs
+  Parent: SIGOPDOC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatas
+  Parent: SIGOPDOC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUsuars
+  Parent: SIGOPDOC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnOpnDirs
+  Parent: SIGOPDOC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 131
+  Left = 31
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 640
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Relação de Arquivos e Documentos"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  ForeColor = 36,84,155
+  arqchaves = .F.
+  pcescolha = .F.
+  podatamgr = .F.
+  Name = "SIGOPDOC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.Shape3
+------------------------------------------------------------
+  Top = 262
+  Left = 823
+  Height = 31
+  Width = 25
+  BackStyle = 0
+  BorderStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.shpAlterar
+------------------------------------------------------------
+  Top = 113
+  Left = 822
+  Height = 31
+  Width = 25
+  BackStyle = 0
+  BorderStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "shpAlterar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.cmdBtnForm
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 840
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 8
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Tahoma"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Sair"
+  Command1.TabIndex = 3
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Tahoma"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "Confirmar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.Shape1
+------------------------------------------------------------
+  Top = 392
+  Left = 8
+  Height = 231
+  Width = 395
+  BackStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  BorderColor = 231,254,253
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.Say31
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Observação Sobre o Arquivo"
+  Height = 15
+  Left = 411
+  Top = 391
+  Width = 162
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say31"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.getObsArqs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 181
+  Left = 411
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 407
+  Width = 580
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 100,100,100
+  ControlSource = "crSigOpArq.ObsArqs"
+  NullDisplay = "  "
+  Name = "getObsArqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.grdArquivos
+------------------------------------------------------------
+  ColumnCount = 1
+  FontName = "Arial"
+  DeleteMark = .F.
+  Height = 288
+  Left = 5
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 96
+  Width = 810
+  Name = "grdArquivos"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Enabled = .T.
+  Column1.Width = 778
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.grdArquivos.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Arquivos Relacionados [Incluindo Diretório, Caminho de Rede, Mapeamento, etc]"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.grdArquivos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.btnInsArqs
+------------------------------------------------------------
+  Top = 96
+  Left = 833
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_adicao_60.jpg
+  Caption = "Inserir Arquivo"
+  TabIndex = 9
+  ToolTipText = "Inserir Um Link de Arquivo"
+  PicturePosition = 7
+  Name = "btnInsArqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.btnOpnArqs
+------------------------------------------------------------
+  Top = 172
+  Left = 833
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_arquivo_60.jpg
+  Caption = "Abrir Arquivo"
+  TabIndex = 11
+  ToolTipText = "Abrir Arquivo (Caso o Computado Suporte)"
+  PicturePosition = 7
+  Name = "btnOpnArqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.imgArqJpg
+------------------------------------------------------------
+  Anchor = 0
+  Stretch = 1
+  Enabled = .T.
+  Height = 227
+  Left = 10
+  Top = 394
+  Visible = .F.
+  Width = 391
+  ZOrderSet = 10
+  ToolTipText = "Imagem do Produto (Clique Duplo Para Zoom)"
+  Name = "imgArqJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.btnExcArqs
+------------------------------------------------------------
+  Top = 96
+  Left = 908
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir Arquivo"
+  TabIndex = 10
+  ToolTipText = "Excluir Um Link de Arquivo (Não Apaga o Arquivo Fisicamente)"
+  PicturePosition = 7
+  Name = "btnExcArqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.getDatas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigOpArq.Datas"
+  Enabled = .F.
+  Left = 772
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 595
+  Width = 143
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "getDatas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.getUsuars
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigOpArq.Usuars"
+  Enabled = .F.
+  Left = 535
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 595
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Usuário de Inclusão :"
+  Height = 15
+  Left = 414
+  Top = 599
+  Width = 119
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Data de Inclusão :"
+  Height = 15
+  Left = 667
+  Top = 599
+  Width = 103
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDOC.btnOpnDirs
+------------------------------------------------------------
+  Top = 172
+  Left = 908
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_pasta_60.jpg
+  Caption = "Abrir Diretório"
+  TabIndex = 12
+  ToolTipText = "Abrir a Pasta Onde o Arquivo Está Gravado"
+  PicturePosition = 7
+  Name = "btnOpnDirs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 3, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDOC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE salvardados
+------------------------------------------------------------
+PROCEDURE salvardados
+Local llOks
+
+llOks = .t.
+If Not ThisForm.poDataMgr.Update([crSigOpArq])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpArq)])
+	llOks = .f.
+EndIf
+
+If llOks And (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+	llOks = .f.
+EndIf
+
+If Not llOks
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+Return llOks
+* Fim ********************************************************************************* 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pKey, pEsc
+* Função: Mostrar Arquivos (Endereços de Rede) Relacionados a Chave Passada
+* pKey = Chave de Amarração 30 Posições (EmpDopNums, CPros, IClis, etc...) 
+* pEsc = Equivalente ao .pcEscolha
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+If Empty(pKey) Or Empty(pEsc)
+	=Messagebox([Parâmetros Inválidos!!!], 0+16, [Erro!!!])
+	Return .f.
+EndIf
+
+lcQryOpArq = [Select * From SigOpArq Where fkChaves = '] + Padr(pKey, 30) + [']
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	.ArqChaves = pKey
+	.pcEscolha = pEsc
+
+	If (.poDataMgr.pnIdconn > 0)
+		.poDataMgr.AddCursor([SigOpArq], [pkChaves], [crSigOpArq], [], [], lcQryOpArq)
+
+		.poDataMgr.Requery([crSigOpArq])
+		Select crSigOpArq
+		Update crSigOpArq Set ObsArqs = Nvl(ObsArqs, [])
+		Go Top In crSigOpArq
+
+		If Not InList(.pcEscolha, [INSERIR], [ALTERAR])
+			.shpAlterar.Visible = .f.
+			.btnInsArqs.Visible = .f.
+			.btnExcArqs.Visible = .f.
+			.cmdBtnForm.btnConfirmar.Enabled = .f.
+		EndIf
+
+		* Acertando a Grade de Arquivos
+		With ThisForm.grdArquivos
+			.AllowHeaderSizing      = .f.
+			.AllowRowSizing         = .f.
+			.ColumnCount            =  1
+			.DeleteMark             = .f.
+			.RecordSource           = [crSigOpArq]
+
+			.Column1.ControlSource  = [crSigOpArq.Arquivos]
+			.Column1.Movable   		= .f.
+			.Column1.Resizable 		= .f.
+		EndWith
+		
+		.grdArquivos.Column1.SetFocus
+		.grdArquivos.AfterRowColChange()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [Conexão Inválida])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.cmdBtnForm
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+If ThisForm.SalvarDados()
+	ThisForm.Release
+Else
+	Return .f.
+EndIf
+* Fim ********************************************************************************* 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.getObsArqs
+* Classe: fwmemo (Base: editbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.grdArquivos
+* Classe: fwgrade (Base: grid)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+Local lcArq
+
+lcArq = Alltrim(crSigOpArq.Arquivos)
+
+With ThisForm
+	Clear Resources
+	.imgArqJpg.Picture = []
+	.imgArqJpg.Visible = .f.
+
+	If Not Empty(lcArq) And InList(Alltrim(Upper(Substr(lcArq, At([.],lcArq), 5))), [.JPG], [.ICO], [.BMP], [.JPEG])
+		.imgArqJpg.Picture = (lcArq)
+		.imgArqJpg.Visible = .t.
+	EndIf
+EndWith
+
+ThisForm.getDatas.Refresh 
+ThisForm.getUsuars.Refresh 
+ThisForm.getObsArqs.Refresh 
+* Fim ********************************************************************************* 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.grdArquivos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.btnInsArqs
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq
+
+lcArq = GetFile([], [Selecione o Arquivo], [Selecione o Arquivo], 0, [Seleção de Arquivos])
+If Not IsEmpty(lcArq)
+	Insert Into crSigOpArq (fkChaves, pkChaves, Arquivos, ObsArqs, Usuars, Datas) ;
+				    Values (ThisForm.ArqChaves, fUniqueIds(), Upper(lcArq), [], Usuar, Datetime())
+EndIf
+ThisForm.grdArquivos.Refresh
+ThisForm.grdArquivos.Column1.SetFocus 
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.btnOpnArqs
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq
+
+lcArq = Alltrim(crSigOpArq.Arquivos)
+
+If Not Empty(lcArq) And File(lcArq)
+	loApp = CreateObject([Shell.Application])
+	loApp.Open(lcArq)
+Else
+	=MessageBox([Arquivo Não Encontrado!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.imgArqJpg
+* Classe: image (Base: image)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArq
+
+lcArq = Alltrim(crSigOpArq.Arquivos)
+
+If Not Empty(lcArq) And File(lcArq) And InList(Alltrim(Upper(Substr(lcArq, At([.],lcArq), 5))), [.JPG], [.ICO], [.BMP], [.JPEG])
+	Do Form SigOpZom With lcArq, [Arquivo : ] + lcArq
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.btnExcArqs
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Not Empty(crSigOpArq.Arquivos)
+	ThisForm.grdArquivos.Enabled = .f.
+	lnReg = Recno([crSigOpArq])
+	Delete In crSigOpArq
+	Go Top In crSigOpArq
+	If Not Eof([crSigOpArq])
+		Go lnReg In crSigOpArq
+	EndIf
+	ThisForm.grdArquivos.Enabled = .t.
+EndIf
+ThisForm.grdArquivos.SetFocus 
+ThisForm.grdArquivos.Column1.SetFocus 
+ThisForm.grdArquivos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.getDatas
+* Classe: fweditdata (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDOC.btnOpnDirs
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq
+
+lcArq = Alltrim(crSigOpArq.Arquivos)
+
+If Not Empty(lcArq) And File(lcArq)
+	loApp = CreateObject([Shell.Application])
+	loApp.Open(JustPath(lcArq))
+Else
+	=MessageBox([Arquivo Não Encontrado!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPDOC
+RESERVED3 (ClassInfo): arqchaves
+pcescolha
+podatamgr
+*salvardados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 19
+================================================================================

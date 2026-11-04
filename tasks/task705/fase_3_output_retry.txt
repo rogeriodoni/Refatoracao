@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCoc.prg` criado (303 linhas, 14,2 KB, CRLF, ASCII puro).
+
+## Por que a tentativa anterior falhou
+
+N├úo foi o form: o `fase_3_output.txt` cont├®m apenas avisos de permiss├úo seguidos de *"I don't see an actual request yet"* ÔÇö o CLI n├úo recebeu a tarefa e **nenhum arquivo foi gerado**. Confirmei tamb├®m que n├úo era auto-refer├¬ncia de gate: o `OrquestradorMigracao.ps1` foi gravado 00:18:42 e a task come├ºou 01:01:55, logo o gate que rodou ├® o do disco.
+
+## O que foi entregue
+
+O legado ├® **FLAT**: raiz `Class: form` gen├®rico, **zero PageFrame**, um ├║nico Container (`cntSombra`). Por isso n├úo existem `ConfigurarPaginaLista/Dados` nem a compensa├º├úo `+29` ÔÇö os `Top` do SCX entram literais. N├úo inventei PageFrame.
+
+- **Propriedades visuais transcritas**: `Width=545`, `Height=291`, `BorderStyle=2`, `AutoCenter`, `ControlBox=.F.`, `TitleBar=0`, `WindowType=1`, Caption via `CHR()`. `Closable`/`MaxButton`/`MinButton` **n├úo** foram inventados ÔÇö o dump n├úo os declara, e fix├í-los removeria o Alt+F4 como ├║nica sa├¡da de aborto.
+- **`Init(par_nDataSession, par_cEscolha)`** ÔÇö par├ómetros opcionais (os harness instanciam sem argumento), guardados *antes* do `DODEFAULT()`, que ├® quem chama `InicializarForm`.
+- **`InicializarForm`** ÔÇö instancia o BO, desenha a faixa como **primeiro `AddObject`**, resolve o modo e torna controles vis├¡veis. **Sem gate de `gnConnHandle`**: o di├ílogo n├úo consulta SQL, ent├úo exigir conex├úo s├│ impediria a tela de abrir em teste.
+- **`ConfigurarCabecalho`** ÔÇö `cnt_4c_Sombra` + os dois labels, nomes conforme `mapeamento.json`. Usei `THIS.Width` / `THIS.Width - 20` em vez dos literais 800/769 do dump (container desenhado 255px mais largo que a janela ÔÇö copiar cortaria o t├¡tulo).
+- **`AplicarModoEscolha`** (PUBLIC) ÔÇö deriva `this_lSomenteLeitura` de CONSULTAR/EXCLUIR/PROCURAR e propaga o protocolo ao BO. A aplica├º├úo nos controles fica para as Fases 4ÔÇô5, quando eles existirem.
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 3 (predicados reais do orquestrador) | **True** pelos dois ramos (paginada + flat) |
+| `Test-CompletudeCodigo` (extra├¡da por AST) | OK ÔÇö nenhum TODO/stub/procedure vazia |
+| `VerificarPropriedadesInexistentes.ps1` (regra #33) | exit 0 ÔÇö nenhuma propriedade inexistente |
+| Regras #1, #13, #34, #38, #43, #9.1, acentos literais | 0 ocorr├¬ncias cada |
+| Membros do BO usados pelo form (#51) | 6/6 declarados, nenhum PROTECTED |
+| **Compila├º├úo VFP9** | `.FXP` gerado, `.ERR` ausente |
+| **Controle negativo** | `.ERR` apontando s├│ as linhas 306ÔÇô308 injetadas ÔåÆ detector funciona |
+
+Dois pontos a registrar com honestidade: o **smoke test do VFP9 falhou** nesta sess├úo (compila e sai sem executar), ent├úo provei **compila├º├úo, n├úo instancia├º├úo/runtime** ÔÇö a tela s├│ se prova aberta instanciando de verdade. E o `.FXP` foi apagado ao final, para nenhuma fase seguinte rodar c├│digo velho.
+
+Fases 1ÔÇô2 (`SigOpCocBO.prg`) j├í estavam no lugar e n├úo foram tocadas. N├úo h├í entrada de menu a criar: ├® di├ílogo filho aberto pelo form pai, e o `CREATEOBJECT` literal j├í ├® resolvido pelo ├¡ndice de classes.

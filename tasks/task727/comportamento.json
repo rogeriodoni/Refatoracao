@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPECM",
+      "evento": "Procedure",
+      "linhas": 195,
+      "codigoOriginal": "Local lcArq, lcChr, lcGru, lcDes, lcUni\n\nIf (MessageBox([Confirma a Geração dos Arquivos?], 32+4, [Geração de Arquivos]) <> 6)\n\tReturn .f.\nEndIf\n\nlcArq = Alltrim(ThisForm.getArqTXT.Value)\n\nIf Empty(lcArq)\n\t=MessageBox([O Arquivo a Ser Gerado Não Foi Informado!!!], 0+16, [Atenção!!!])\n\tThisForm.btnGetArqO.SetFocus\n\tReturn .f.\nEndIf\n\n=StrToFile([], lcArq, 0)\n\nIf Not File(lcArq)\n\t=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])\n\tThisForm.btnGetArqO.SetFocus\n\tReturn .f.\nEndIf\n\nSel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPECM",
+      "evento": "Init",
+      "linhas": 4,
+      "codigoOriginal": "Parameters oFrm\n\nThisForm.poObjForm = oFrm\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPECM.Cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPECM.Processa",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Processamento",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPECM.getArqTXT",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPECM.btnGetArqO",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lcArq\n\nlcArq = GetFile([TXT], [Arquivo TXT:], [Criar], 0, [Informe o Nome do Arquivo TXT])\n\nIf Not Empty(lcArq)\n\tThisForm.getArqTXT.Value = Alltrim(lcArq)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

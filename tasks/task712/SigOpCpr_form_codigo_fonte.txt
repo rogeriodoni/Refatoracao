@@ -1,0 +1,490 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCpr.SCX
+* Data/Hora: 30/10/2026 17:21:45
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCPR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Label1
+  Parent: SIGOPCPR
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPCPR
+  Class: label
+  BaseClass: label
+
+Objeto: GetOrigem
+  Parent: SIGOPCPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDestino
+  Parent: SIGOPCPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntSombra
+  Parent: SIGOPCPR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup1
+  Parent: SIGOPCPR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 157
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cópia de Processo"
+  ControlBox = .F.
+  FontName = "Courier New"
+  TitleBar = 0
+  WindowType = 1
+  pcomis = .F.
+  Name = "SIGOPCPR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Processo Atual :"
+  Height = 15
+  Left = 122
+  Top = 97
+  Width = 92
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Novo Processo :"
+  Height = 15
+  Left = 124
+  Top = 123
+  Width = 90
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.GetOrigem
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "!"
+  Height = 23
+  Left = 216
+  MaxLength = 20
+  TabIndex = 3
+  Top = 94
+  Width = 142
+  Name = "GetOrigem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.GetDestino
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "!"
+  Height = 23
+  Left = 216
+  MaxLength = 20
+  TabIndex = 4
+  Top = 122
+  Width = 142
+  Name = "GetDestino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCPR.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 5
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_duplicar_60.jpg
+  Command1.Caption = "\<Copiar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CmdCopia"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "CmdExit"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCPR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters poForm, pOperacao, pComissao
+
+ThisForm.ParentForm = poForm
+ThisForm.DataSessionId = poForm.DataSessionId
+ThisForm.poDatamgr = poForm.poDataMgr
+ThisForm.pComis = pComissao
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.GetOrigem.Width  	  = 150
+ThisForm.GetOrigem.MaxLength  = 20
+ThisForm.getDestino.Width 	  = 150
+ThisForm.getDestino.MaxLength = 20
+If ThisForm.pComis
+	ThisForm.GetOrigem.Width  	  = 290
+	ThisForm.GetOrigem.MaxLength  = 40
+	ThisForm.getDestino.Width 	  = 290
+	ThisForm.getDestino.MaxLength = 40
+EndIf
+
+ThisForm.GetOrigem.Value = pOperacao
+ThisForm.GetOrigem.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCPR.GetOrigem
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCPR.GetDestino
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Lastkey() = 27
+	If ThisForm.pComis
+		lcQuery = [Select * ] + ;
+				    [From SigCmCab ] + ;
+				   [Where Cods = '] + Padr(This.Value, 40) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+			Return 0
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=MessageBox([Descrição do Cadastro de Comissão Já Informado!!!], 0+16, [Atenção!!!])
+			Return .f.
+		EndIf
+	Else
+		ThisForm.poDatamgr.Sqlexecute([Select Processos from SigPcOop Where Processos = '] + Padr(this.Value, 20) +['],'LocalBus')
+		Select LocalBus
+		If ! Eof()
+			MessageBox('Processo Já Cadastrado!!!',16,'Atenção!!!')
+			Return .f.
+		EndIf
+	EndIf 
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCPR.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CmdCopia.Click
+------------------------------------------------------------
+PROCEDURE CmdCopia.Click
+If Empty(ThisForm.GetDestino.Value)
+	MessageBox('Destino Invalido !!!',16,'')
+	Return
+EndIf
+
+lcOpeOri = ThisForm.GetOrigem.Value
+lcOpeDes = ThisForm.GetDestino.Value
+
+If ThisForm.pComis
+	lcQuery = [Select * ] + ;
+			    [From SigCmCab ] + ;
+			   [Where Cods = '] + Padr(Thisform.getOrigem.Value, 40) + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmCab]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmCab)])
+		Return 0
+	EndIf
+	Go Top In LocalCmCab
+	If Not Eof([LocalCmCab])
+		lcQuery = [Select * ] + ;
+				    [From SigCmItn ] + ;
+				   [Where fkChaves = '] + Padr(LocalCmCab.pkChaves, 20) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmItn]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmItn)])
+			Return 0
+		EndIf
+		Go Top In LocalCmItn
+
+		lcKey = fUniqueIds()
+		Select LocalCmCab
+		Scatter Memvar Memo
+		Insert Into crSigCmCab From Memvar
+		Replace CODS 	 With ThisForm.getDestino.Value, ;
+				PKCHAVES With lcKey, ;
+				USUARS 	 With Usuars, ;
+				DATAS 	 With Datetime() In crSigCmCab
+
+		Select LocalCmItn
+		Scan
+			Scatter Memvar Memo
+			Insert Into crSigCmItn From Memvar
+			Replace FKCHAVES With lcKey, ;
+					PKCHAVES With fUniqueIds() In crSigCmItn
+		EndScan
+
+		ThisForm.poDatamgr.UpDate([crSigCmCab])
+		ThisForm.poDatamgr.UpDate([crSigCmItn])
+	EndIf
+Else
+	lnNDopes = fGerUniqueKey('SigPcOoP')
+
+	Zap In crSigPcOop
+	Zap In crSigPcOoI
+
+	ThisForm.poDatamgr.SqlExecute([Select * From SigPcOop Where Processos = ']+lcOpeOri+['],'csSigPcOop')
+
+	Select csSigPcOop
+	Scatter MemVar Memo
+	m.Processos = lcOpeDes
+	m.Codigos   = lnNDopes
+
+	Select crSigPcOop
+	Append Blank
+	Gather MemVar Memo
+
+	ThisForm.poDatamgr.SqlExecute([Select * From SigPcOoI Where Processos = ']+lcOpeOri+['],'csSigPcOoI')
+
+	Select csSigPcOoI
+	Scan
+		Scatter MemVar Memo
+		m.Processos = lcOpeDes
+		m.cIdChaves = fUniqueIds()
+		m.Codigos   = lnNDopes
+
+		Select crSigPcOoI
+		Append Blank
+		Gather MemVar Memo
+	EndScan
+
+	fGravarLog([C], Thisform.Name, [COPIA], crSigPcOop.Processos)
+
+	ThisForm.poDatamgr.UpDate('crSigPcOop')
+	ThisForm.poDatamgr.UpDate('crSigPcOoI')
+EndIf
+
+ThisForm.poDatamgr.Commit()
+
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CmdExit.Click
+------------------------------------------------------------
+PROCEDURE CmdExit.Click
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCPR
+RESERVED3 (ClassInfo): parentform
+pcomis
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

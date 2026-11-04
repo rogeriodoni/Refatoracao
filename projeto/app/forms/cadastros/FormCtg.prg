@@ -425,7 +425,7 @@ DEFINE CLASS FormCtg AS FormBase
         *-- Container BotoesAcao - Grupo_Salva no legado (Left=817, Top=11+29=40)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 40
+            .Top         = 27
             .Left        = 817
             .Width       = 160
             .Height      = 85

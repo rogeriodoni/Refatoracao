@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPEMP",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "With ThisForm\n\tWith .grdItens\n\t\t.ColumnCount \t   = 7\n\t\t.RecordSource \t   = 'CrEmpenhado'\n\t\t.DeleteMark \t   = .f.\n\t\t.RecordMark \t   = .f.\n\t\t.ReadOnly \t\t   = .t.\n\t\t.Scrollbars \t   = 2\n\t\t.AllowHeaderSizing = .f.\n\t\t.AllowRowSizing    = .f.\n\n\t\t.Column1.ControlSource  = 'CrEmpenhado.Emps'\n\t\t.Column2.ControlSource  = 'CrEmpenhado.Dopes'\n\t\t.Column3.ControlSource  = 'CrEmpenhado.Numes'\n\t\t.Column3.InputMask \t    = '999999'\n\t\t.Column4.ControlSource  = 'CrEmpenhado.Datas'\n\t\t.Column5.ControlSource  = 'CrEmpe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPEMP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPEMP",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "LParameters poForm, pnDatSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\tSet DataSession to pnDatSes\n\tthisform.ParentForm = poForm\n\t\n\t.Icon = '\\vbmp\\4Control1.ico'\n\n\t.Caption = [Empenho - ] + Alltrim(crSigMvEtr.Cpros)\n\n\tthisform.montagrades()\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "montagrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPEMP.ok",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPEMP.get_NGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPEMP.Get_NConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPEMP.grdItens",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nthisform.get_NGrupo.Value = Iif(thisform.parentform.poDatamgr.CursorQuery('SigCdGcr','crSigCdGcr','codigos',crEmpenhado.GrupoDs,[Descrs]),evaluate('crSigCdGcr.Descrs'),'')\nthisform.get_NConta.Value = Iif(thisform.parentform.poDatamgr.CursorQuery('SigCdCli','crSigCdCli','iclis',crEmpenhado.ContaDs,[Rclis]),evaluate('crSigCdCli.Rclis'),'')\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "get_NGrupo,get_NConta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

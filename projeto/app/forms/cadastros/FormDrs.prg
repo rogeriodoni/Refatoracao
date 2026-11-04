@@ -637,7 +637,7 @@ DEFINE CLASS FormDrs AS FormBase
         *-- Original grupo_salva: Top=9. Compensado: Top=38 (9+29)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 38
+            .Top         = 27
             .Left        = 840
             .Width       = 160
             .Height      = 85

@@ -1,0 +1,21 @@
+CK1 inicio (probe v1 - subclasse)
+CK2 config.prg OK
+CK3 dependencias OK
+CK4 antes do CREATEOBJECT
+CK5 instancia=O
+CK6 FormParaBO ret=.T. senha=[1234] digitos=[9876] cartao=[4111111111111111] codseg=[321]  (esperado .T. / 1234 / 9876 / 4111111111111111 / 321)
+CK7 campos vazios ret=.T. senha=[1234] digitos=[9876] cartao=[4111111111111111] codseg=[321]  (esperado PRESERVADOS: 1234 / 9876 / 4111111111111111 / 321)
+CK8 BOParaForm ret=.T. senha=[1234] digitos=[9876] cartao=[4111111111111111] codseg=[321] valor=150,75  (esperado .T. / 1234 / 9876 / 4111111111111111 / 321 / 150.75)
+CK9a Label5 antes=[4 Ultimos Digitos :]
+CK9b cartao=S -> Label5=[Digite a Validade]  (esperado 'Digite a Validade')
+CK10a generico('1234') LEN=2000 prefixo=[1234] this_cBuffer LEN=2000  (esperado 2000 / 1234 / 2000)
+CK10b literal('9876',1996) LEN=2000 prefixo=[9876]  (esperado 2000 / 9876)
+CK10c coincidem p/ 4 chars = .T.  (esperado .T.)
+CK10d generico('123456') LEN=2000  (esperado 2000)
+CK10e vazio LEN=2000  (esperado 2000)
+CK10f numerico LEN=2000 prefixo=[0]  (esperado 2000 / 0)
+CK11 FormParaBO protegido=.T. BOParaForm protegido=.T.  (esperado .T. / .T. - herdado de FormBase)
+CK12 BtnCancelaClick protegido=.F.  (esperado .F.)
+CK13 MontarBufferSiTef existe=.T. protegido=.F.  (esperado .T. / .F.)
+CK14 form vivo: VARTYPE(loForm)=O VARTYPE(BO)=O
+CK15 FIM
