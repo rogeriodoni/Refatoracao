@@ -1,0 +1,29 @@
+[1] dependencias carregadas
+[2] VARTYPE(loForm) = O
+    Caption      = [Ficha de Complementos da Movimentação]
+    BaseClass    = [Form]
+    Width/Height = 800x500
+    DataSession  = 1
+    CriouForm    = .T.
+    BO           = O
+[3] metodos da Fase 8:
+    CarregarLista            existe=.T.  protected=.F.  esperado=PUBLIC
+    HabilitarCampos          existe=.T.  protected=.F.  esperado=PUBLIC
+    BtnCancelarClick         existe=.T.  protected=.F.  esperado=PUBLIC
+    FormParaBO               existe=.T.  protected=.T.  esperado=PROTECTED
+    BOParaForm               existe=.T.  protected=.T.  esperado=PROTECTED
+    ObterControleResposta    existe=.T.  protected=.T.  esperado=PROTECTED
+[4] duble montado: cursor_4c_Ficha com 2 linha(s) + 2 campos
+[5] CarregarFichaTecnica (BOParaForm):
+    texto .Value = [AZUL ESCURO                                                                                                                                                                                                                                                   ]  esperado [AZUL ESCURO]
+    data  .Value = [15/03/2026]  tipo=D  esperado [15/03/2026] tipo D
+[6] HabilitarCampos(.F.): ReadOnly texto=.T. data=.T.  esperado .T. .T.
+    HabilitarCampos(.T.): ReadOnly texto=.F. data=.F.  esperado .F. .F.
+    Tag=FIXA + HabilitarCampos(.T.): ReadOnly texto=.T.  esperado .T.
+[7] ValidarFichaTecnica:
+    com resposta cheia  = .T.  esperado .T.
+    com 3 chars (Mins 5) = .F.  esperado .F.
+[8] GravarFichaTecnica (sem banco) = .F.  esperado .F. (CarregarRespostasGravadas falha sem conexao)
+[9] CarregarLista (sem banco) = .F.  esperado .F. (CarregarOperacaoComFicha falha sem conexao)
+[10] BtnCancelarClick executado (Release)
+RESULTADO: probe concluido sem travar

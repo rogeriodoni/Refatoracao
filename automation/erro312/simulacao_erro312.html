@@ -1,0 +1,267 @@
+<title>Erro312 — Faixa do FormACE</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#eef0f2; --panel:#fff; --panel-2:#f6f8f9;
+  --ink:#16191d; --fg:#20242a; --muted:#5e6670; --faint:#89919b;
+  --line:#d4d9de; --line-soft:#e5e9ec;
+  --bad:#a8341f; --good:#1d6b4f;
+  --sans:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101317; --panel:#171b20; --panel-2:#1c2128;
+  --ink:#e7eaee; --fg:#dde1e6; --muted:#8e97a2; --faint:#6b7480;
+  --line:#2a3139; --line-soft:#232931;
+  --bad:#e08270; --good:#5cbd98;
+}}
+:root[data-theme="dark"]{
+  --paper:#101317; --panel:#171b20; --panel-2:#1c2128;
+  --ink:#e7eaee; --fg:#dde1e6; --muted:#8e97a2; --faint:#6b7480;
+  --line:#2a3139; --line-soft:#232931;
+  --bad:#e08270; --good:#5cbd98;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin-inline:auto;padding:30px 20px 60px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+h1{font-size:clamp(22px,3vw,30px);font-weight:600;letter-spacing:-.015em;margin:0 0 10px;color:var(--ink)}
+.lede{max-width:70ch;margin:0;color:var(--muted)}
+.lede b{color:var(--fg);font-weight:600}
+code{font-family:var(--mono);font-size:.92em;background:var(--panel);border:1px solid var(--line-soft);padding:1px 4px;color:var(--fg)}
+h2{font-size:11.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-family:var(--mono);margin:36px 0 4px}
+.sub{margin:0 0 14px;color:var(--faint);font-size:12.5px;max-width:74ch}
+
+/* --- render --- */
+.render{border:1px solid var(--line);background:var(--panel);overflow-x:auto}
+.tag{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line-soft);background:var(--panel-2)}
+.tag b{font-size:12.5px}
+.tag .st{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;color:#fff}
+.tag .nota{font-family:var(--mono);font-size:11px;color:var(--faint);margin-left:auto;white-space:nowrap}
+.stage{position:relative;width:1000px;height:118px;
+  background:#f3f3f3 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><radialGradient id='g' cx='.7' cy='.3'><stop offset='0' stop-color='%23ffffff'/><stop offset='1' stop-color='%23e9ebed'/></radialGradient><rect width='120' height='120' fill='url(%23g)'/></svg>") repeat;}
+.band{position:absolute;left:0;top:2px;width:1000px;height:80px;background:#646464}
+.band span{position:absolute;left:10px;top:16px;font:700 21px/1 Tahoma,var(--sans);color:#fff}
+.cnt{position:absolute;top:0;height:85px}
+.cnt.opaco{background:#353535}
+.btn{position:absolute;top:5px;width:75px;height:75px;background:#fff;border:1px solid #767676;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.btn i{font-style:normal;font-size:21px;color:#111;line-height:1}
+.btn em{font:italic 700 10px/1 Tahoma,var(--sans);color:#5a5a5a}
+.grid{position:absolute;left:26px;top:88px;width:880px;height:30px;background:#fff;border:1px solid #9aa0a6}
+.grid b{display:block;font:600 10px/16px Tahoma,var(--sans);color:#111;border-bottom:1px solid #9aa0a6;padding-left:4px}
+
+/* marcações de sobra */
+.leak{position:absolute;background:repeating-linear-gradient(45deg,rgba(220,60,30,.85) 0 4px,rgba(220,60,30,.35) 4px 8px);outline:1px solid rgba(190,40,15,.9)}
+.callout{position:absolute;font-family:var(--mono);font-size:10px;color:#fff;background:#a8341f;padding:1px 5px;white-space:nowrap}
+
+/* --- tabela --- */
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+td{padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+td.m{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.tbox{border:1px solid var(--line);background:var(--panel);overflow-x:auto}
+.was{color:var(--bad)}
+.now{color:var(--good)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;margin-top:10px}
+.cols p,.cols li{font-size:12.5px;color:var(--muted);margin:0 0 7px;max-width:58ch}
+.cols h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 7px;font-weight:600}
+.cols ul{margin:0;padding-left:16px}
+pre{font-family:var(--mono);font-size:11.5px;background:var(--panel);border:1px solid var(--line-soft);padding:10px 12px;overflow-x:auto;margin:0;color:var(--fg)}
+.del{color:var(--bad)}
+.add{color:var(--good)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Erro312 · FormACE · Acesso de Empresas</p>
+  <h1>A faixa do cabeçalho e o bloco de botões</h1>
+  <p class="lede">O container dos botões <b>Incluir / Visualizar / Alterar / Excluir / Buscar</b> era opaco e mais escuro que a faixa, então desenhava um anel em volta do grupo e vazava 2&nbsp;px acima e 3&nbsp;px abaixo dela. Abaixo, a faixa desenhada nas coordenadas reais medidas no form instanciado — antes e depois.</p>
+
+  <h2>Antes</h2>
+  <p class="sub">Como o form estava: <code>cnt_4c_Botoes</code> com <code>BackStyle = 1</code> e <code>BackColor = RGB(53,53,53)</code>.</p>
+  <div class="render">
+    <div class="tag">
+      <span class="st" style="background:#a8341f">defeito</span>
+      <b>Container opaco por cima da faixa</b>
+      <span class="nota">hachurado = o que aparecia e não devia</span>
+    </div>
+    <div class="stage" id="antes"></div>
+  </div>
+
+  <h2>Depois</h2>
+  <p class="sub">Com a correção: <code>BackStyle = 0</code>, sem <code>BackColor</code> — igual ao <code>cnt_4c_Saida</code>, que já renderizava certo, e ao canônico <code>FormCor</code>.</p>
+  <div class="render">
+    <div class="tag">
+      <span class="st" style="background:#1d6b4f">corrigido</span>
+      <b>Botões direto sobre a faixa</b>
+      <span class="nota">faixa contínua de ponta a ponta</span>
+    </div>
+    <div class="stage" id="depois"></div>
+  </div>
+
+  <h2>Geometria medida no form instanciado</h2>
+  <p class="sub">Valores lidos em runtime pelo probe, não do código-fonte. Coordenadas da Page; a faixa é criada primeiro, os botões depois, por cima dela.</p>
+  <div class="tbox">
+    <table>
+      <thead><tr><th>Objeto</th><th>Top</th><th>Left</th><th>Width</th><th>Height</th><th>Ocupa em Y</th><th>BackStyle</th><th>BackColor</th></tr></thead>
+      <tbody id="geo"></tbody>
+    </table>
+  </div>
+
+  <h2>A mudança</h2>
+  <pre>  WITH loc_oBotoes
+      .Top         = 29
+      .Left        = 542
+      .Width       = 390
+      .Height      = 85
+<span class="del">-     .BackColor   = RGB(53, 53, 53)</span>
+<span class="del">-     .BackStyle   = 1</span>
+<span class="add">+     .BackStyle   = 0</span>
+      .BorderWidth = 0
+      .Visible     = .T.
+  ENDWITH</pre>
+
+  <h2>O mesmo defeito em outros 65 forms</h2>
+  <p class="sub">A varredura achou <b>65 outros</b> <code>cnt_4c_Botoes</code> gerados opacos — todos em <code>cadastros</code>, todos com faixa de cabeçalho na mesma página. Corrigidos no mesmo passe, 66 arquivos no total.</p>
+  <div class="tbox" style="padding:0">
+    <table>
+      <thead><tr><th>BackColor que estava no container</th><th>Forms</th><th>Como aparecia na tela</th></tr></thead>
+      <tbody>
+        <tr><td class="m was">RGB(53, 53, 53)</td><td class="m">42</td><td>anel escuro em volta dos botões — o caso da imagem</td></tr>
+        <tr><td class="m was">RGB(255, 255, 255)</td><td class="m">21</td><td>bloco branco no lugar do trecho de faixa</td></tr>
+        <tr><td class="m">RGB(100, 100, 100)</td><td class="m">2</td><td>mesma cor da faixa; só as sobras de 2&nbsp;px e 3&nbsp;px vazavam</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:14px">Verificação do passe: varredura pós-correção devolve <b>0</b> ocorrências restantes; o diff tem forma idêntica nos 66 (duas linhas de comentário, <code>BackColor</code> removido, <code>BackStyle</code> de 1 para 0) e nada mais; <b>62 forms foram instanciados</b> e reportaram <code>BackStyle = 0</code> lido do objeto vivo, nenhum ainda opaco.</p>
+  <div class="tbox" style="padding:12px 14px"><div id="lista" style="font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--muted)"></div></div>
+
+  <div class="cols">
+    <div>
+      <h3>Por que era isso</h3>
+      <p>O container é 390×85 e os seis botões ocupam 75×75 a partir de (5,5). Sobram 5&nbsp;px de container exposto em cada borda — invisíveis quando ele é transparente, um anel escuro quando é opaco.</p>
+      <p>E como ele começa em <code>Top&nbsp;=&nbsp;29</code> contra <code>Top&nbsp;=&nbsp;31</code> da faixa, e é 5&nbsp;px mais alto, as sobras de cima e de baixo caíam fora da faixa, sobre a textura clara da Page.</p>
+    </div>
+    <div>
+      <h3>Quem confirma o valor certo</h3>
+      <ul>
+        <li>O <code>Grupo_op</code> do <code>SIGCDACE.SCX</code> legado <b>não declara</b> <code>BackColor</code> nem <code>BackStyle</code> — o bloco escuro foi invenção da migração.</li>
+        <li>O canônico <code>FormCor</code> usa <code>BackStyle = 0</code> sem <code>BackColor</code>.</li>
+        <li>O <code>cnt_4c_Saida</code> do próprio FormACE já era <code>BackStyle = 0</code> — e é o único bloco que aparecia certo na tela reportada.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>O que esta simulação não é</h3>
+      <p>É um desenho em HTML nas coordenadas reais, não uma captura do VFP. Os ícones são aproximações; o que está em escala 1:1 são posições, tamanhos e cores.</p>
+      <p>A conferência de verdade é abrir a tela: <code>automation\erro312\TestarFormACE.bat</code>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const BTNS = [["Incluir","⊕"],["Visualizar","▤"],["Alterar","✎"],["Excluir","⌧"],["Buscar","⌽"]];
+
+function montar(id, opaco){
+  const st = document.getElementById(id);
+
+  const band = document.createElement("div");
+  band.className = "band";
+  const t = document.createElement("span");
+  t.textContent = "Acesso de Empresas";
+  band.append(t);
+  st.append(band);
+
+  // container dos 5 botoes CRUD: Left=542 W=390 Top=29 H=85 -> y de form 0..85
+  const cnt = document.createElement("div");
+  cnt.className = "cnt" + (opaco ? " opaco" : "");
+  cnt.style.left = "542px"; cnt.style.width = "390px";
+  st.append(cnt);
+
+  BTNS.forEach(([cap, ico], i) => {
+    const b = document.createElement("div");
+    b.className = "btn";
+    b.style.left = (542 + 5 + i*75) + "px";
+    const ic = document.createElement("i"); ic.textContent = ico;
+    const em = document.createElement("em"); em.textContent = cap;
+    b.append(ic, em);
+    st.append(b);
+  });
+
+  // container Encerrar: Left=917 W=90 -> sempre transparente
+  const sai = document.createElement("div");
+  sai.className = "cnt";
+  sai.style.left = "917px"; sai.style.width = "90px";
+  st.append(sai);
+  const be = document.createElement("div");
+  be.className = "btn"; be.style.left = "922px";
+  const ie = document.createElement("i"); ie.textContent = "⏻";
+  const ee = document.createElement("em"); ee.textContent = "Encerrar";
+  be.append(ie, ee);
+  st.append(be);
+
+  // grade logo abaixo
+  const g = document.createElement("div");
+  g.className = "grid";
+  const h = document.createElement("b");
+  h.textContent = "Empresa          Descrição";
+  g.append(h);
+  st.append(g);
+
+  if(opaco){
+    // sobra de cima: y 0..2 ; sobra de baixo: y 82..85 ; bordas laterais
+    const marcas = [
+      {l:542, t:0,  w:390, h:2,  cap:"2 px acima da faixa"},
+      {l:542, t:82, w:390, h:3,  cap:"3 px abaixo da faixa"},
+      {l:542, t:2,  w:5,   h:80, cap:""},
+      {l:922, t:2,  w:10,  h:80, cap:""}
+    ];
+    marcas.forEach(m=>{
+      const d = document.createElement("div");
+      d.className = "leak";
+      d.style.left = m.l+"px"; d.style.top = m.t+"px";
+      d.style.width = m.w+"px"; d.style.height = m.h+"px";
+      st.append(d);
+    });
+    const c1 = document.createElement("div");
+    c1.className = "callout"; c1.style.left = "600px"; c1.style.top = "90px";
+    c1.textContent = "anel escuro RGB(53,53,53) em volta dos 5 botões";
+    st.append(c1);
+  }
+}
+montar("antes", true);
+montar("depois", false);
+
+const CORRIGIDOS = ("FormACE FormARV FormAli FormBCC FormBch FormBlq FormCAD FormCAF FormCCJ FormCEP "
+ + "FormCLC FormCOM FormCVE FormCargo FormCat FormCec FormCeg FormCfb FormCla FormCol "
+ + "FormCsi FormCst FormDIC FormENR FormEVE FormEmb FormEvt FormFct FormGpe FormIBP "
+ + "FormLin FormLpr FormNcf FormOCO FormOTI FormObs FormPMC FormPai FormPcp FormPec "
+ + "FormPrm FormRss FormSigPrCtr FormSre FormSrv FormSto FormTCL FormTam FormTbO FormTbv "
+ + "FormTpa FormUSA FormUsu Formacu Formccr Formcfi Formche Formcrf Formfnl Formlch "
+ + "Formlct Formmpp Formorl Formprc Formsigprpre Formsoc").split(" ");
+const lst = document.getElementById("lista");
+lst.textContent = CORRIGIDOS.join("  ·  ") + "   (" + CORRIGIDOS.length + " forms)";
+
+const GEO = [
+  ["cnt_4c_Cabecalho (faixa)", 31, 0, 1000, 80, "31 – 111", "1", "RGB(100,100,100)", "ok"],
+  ["cnt_4c_Botoes — antes",    29, 542, 390, 85, "29 – 114", "1", "RGB(53,53,53)", "was"],
+  ["cnt_4c_Botoes — depois",   29, 542, 390, 85, "29 – 114", "0", "— (transparente)", "now"],
+  ["cmd_4c_Incluir … Buscar",   5, "5…305", 75, 75, "34 – 109", "—", "RGB(255,255,255)", "ok"],
+  ["cnt_4c_Saida",             29, 917, 90, 85, "29 – 114", "0", "— (transparente)", "ok"],
+  ["cmd_4c_Encerrar",           5, 5, 75, 75, "34 – 109", "—", "RGB(255,255,255)", "ok"]
+];
+const tb = document.getElementById("geo");
+GEO.forEach(r=>{
+  const tr = document.createElement("tr");
+  r.slice(0,8).forEach((v,i)=>{
+    const td = document.createElement("td");
+    if(i>0) td.className = "m";
+    if(i===0 && r[8]==="was") td.className = "was";
+    if(i===0 && r[8]==="now") td.className = "now";
+    if(i===6 || i===7){ td.className = "m " + (r[8]==="was" ? "was" : r[8]==="now" ? "now" : ""); }
+    td.textContent = String(v);
+    tr.append(td);
+  });
+  tb.append(tr);
+});
+</script>

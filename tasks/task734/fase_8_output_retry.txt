@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 8 (`case 8` do `OrquestradorMigracao.ps1`) exige **quatro nomes can├┤nicos** no `.prg`: `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. A rodada anterior implementou os dois hooks com **nome pr├│prio** ÔÇö `PainelParaBO()` e `AtualizarCamposCliente()` ÔÇö ent├úo `faltantes = 2` e a fase caiu. O c├│digo estava correto; s├│ o nome n├úo era o que o gate procura.
+
+## O que fiz
+
+1. **Renomeei os dois hooks** para os nomes can├┤nicos (`PainelParaBO` ÔåÆ `FormParaBO`, `AtualizarCamposCliente` ÔåÆ `BOParaForm`). Ambos j├í eram `PROTECTED`, que ├® o que `FormBase` declara ÔÇö VFP9 n├úo permite alargar escopo, e os dois s├│ s├úo chamados de dentro do form, ent├úo continuam alcan├º├íveis.
+
+2. **Completei o `FormParaBO`** com os 4 campos edit├íveis de `cnt_4c_Contato` (DDD/Tel1/Tel2/e-mail), que antes s├│ eram lidos direto dos controles no `BtnEncerrarClick`. A Fase 8 pede explicitamente os hooks com *todos* os campos, e isso torna o BO fonte ├║nica.
+
+3. **Corrigi uma perda silenciosa de dados que a renomea├º├úo exp├┤s.** `CarregarLista()` chama `BOParaForm()`, e `BtnSalvarClick()` chama `CarregarLista()` depois de gravar. O usu├írio digitava um telefone novo, clicava Confirmar, e o `BOParaForm` reescrevia os 4 campos com o valor relido do banco ÔÇö a├¡ o Encerrar gravava o valor revertido. Sem erro, sem log. No legado isso n├úo existia: o `lcQryCli` roda uma ├║nica vez no `Init` e os campos ficam em `ControlSource`; reler a cada grava├º├úo ├® artefato da migra├º├úo em camadas. Agora o bloco **edit├ível** s├│ ├® espelhado na primeira carga (flag `this_lContatoCarregado`); o bloco **derivado** (Grupo/Conta/Raz├úo Social) continua repintando sempre.
+
+## Verifica├º├úo ÔÇö o que ficou provado e o que n├úo
+
+| Prova | Resultado |
+|---|---|
+| Gate Fase 8 rodado standalone | `faltantes = 0`, `acaoGravar = True` |
+| Gate sobre c├│digo **sem coment├írios** | `faltantes = 0` ÔÇö passa pelo c├│digo real, n├úo por nome citado em coment├írio |
+| `Test-CompletudeCodigo` (form e BO) | 0 problemas ÔÇö sem TODO/stub/procedure vazia |
+| Compila├º├úo do form | `.FXP` presente, `.ERR` **ausente** |
+| **Controle negativo** | `.ERR` gerado apontando s├│ as linhas 2142-2144 acrescentadas (form tem 2141) ÔÇö prova que o detector funciona e que as 2141 linhas reais est├úo limpas |
+| Regras est├íticas | acentos literais=0, `this_X .Value`=0, `.Self`=0, `Controls("nome")`=0, `PUBLIC PROCEDURE`=0, `RETURN` dentro de `TRY`=0 |
+| Regra #51 (visibilidade) | os 11 m├®todos do BO chamados pelo form s├úo todos PUBLIC |
+| Regra #13 (helpers) | todas as chamadas resolvem (4 "achados" eram falso positivo do meu regex: `INSERT INTO SigCdClh (`, `VALUES (`, `CREATE CURSOR cursor_4c_Branco (`, e `MostrarErro` que vive em `classes/FormErro.prg`) |
+
+**N├úo ficou provado: runtime.** O smoke test do VFP9 **falhou** nesta sess├úo (`exit=0`, `.FXP` gerado, arquivo de sa├¡da ausente) ÔÇö o VFP compila mas n├úo executa o corpo do script. Portanto n├úo houve como instanciar o form nem exercitar `FormParaBO`/`BOParaForm` de verdade; a corre├º├úo do item 3 est├í validada por leitura do fluxo (`BtnSalvarClick ÔåÆ Salvar ÔåÆ CarregarLista ÔåÆ CarregarDadosCliente ÔåÆ BOParaForm`) e por compila├º├úo, n├úo por execu├º├úo.
+
+Tamb├®m registrei a li├º├úo do item 3 na mem├│ria, porque ├® generaliz├ível: qualquer form OPERACIONAL cujo `CarregarLista` reexecute a resolu├º├úo de contexto tem o mesmo defeito latente, e comparar migrado x legado nunca o pega ÔÇö o legado n├úo tem esse caminho.

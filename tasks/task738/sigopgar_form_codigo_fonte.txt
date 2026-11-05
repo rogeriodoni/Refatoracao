@@ -1,0 +1,987 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopgar.SCX
+* Data/Hora: 05/11/2026 01:02:34
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPGAR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPGAR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPGAR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPGAR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: CntTXT
+  Parent: SIGOPGAR
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGOPGAR.CntTXT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getArqTXT
+  Parent: SIGOPGAR.CntTXT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnGetArqO
+  Parent: SIGOPGAR.CntTXT
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: chkImagens
+  Parent: SIGOPGAR.CntTXT
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape2
+  Parent: SIGOPGAR.CntTXT
+  Class: shape
+  BaseClass: shape
+
+Objeto: lblResults
+  Parent: SIGOPGAR.CntTXT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGOPGAR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cancela
+  Parent: SIGOPGAR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processa
+  Parent: SIGOPGAR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkXml
+  Parent: SIGOPGAR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: CntXml
+  Parent: SIGOPGAR
+  Class: container
+  BaseClass: container
+
+Objeto: btnDirs
+  Parent: SIGOPGAR.CntXml
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_arquivo
+  Parent: SIGOPGAR.CntXml
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDirs
+  Parent: SIGOPGAR.CntXml
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPGAR.CntXml
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 300
+  Width = 799
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Gera Arquivo"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPGAR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT
+------------------------------------------------------------
+  Top = 155
+  Left = 102
+  Width = 595
+  Height = 127
+  BackStyle = 0
+  Name = "CntTXT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  Caption = "Arquivo a Ser Gerado"
+  Left = 11
+  Top = 6
+  TabIndex = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.getArqTXT
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 11
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Arquivo XML a Ser Importado"
+  Top = 23
+  Width = 540
+  BorderColor = 100,100,100
+  Name = "getArqTXT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.btnGetArqO
+------------------------------------------------------------
+  Top = 18
+  Left = 552
+  Height = 32
+  Width = 40
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  Picture = ..\framework\imagens\geral_pasta_16.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Seleciona o Arquivo Que Será Processado"
+  SpecialEffect = 2
+  PicturePosition = 13
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnGetArqO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.chkImagens
+------------------------------------------------------------
+  Top = 53
+  Left = 11
+  FontBold = .T.
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Exportar Imagens"
+  Value = 1
+  SpecialEffect = 1
+  TabIndex = 4
+  Name = "chkImagens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.Shape2
+------------------------------------------------------------
+  Top = 77
+  Left = 11
+  Height = 36
+  Width = 560
+  BackStyle = 0
+  BorderStyle = 6
+  BorderWidth = 1
+  Curvature = 12
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntTXT.lblResults
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  Caption = ""
+  Height = 15
+  Left = 19
+  Top = 88
+  Width = 543
+  TabIndex = 1
+  Name = "lblResults"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 615
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 724
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 649
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.chkXml
+------------------------------------------------------------
+  Top = 90
+  Left = 108
+  Height = 15
+  Width = 152
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Geração de Arquivo em XML"
+  ForeColor = 90,90,90
+  Name = "chkXml"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntXml
+------------------------------------------------------------
+  Top = 109
+  Left = 102
+  Width = 595
+  Height = 47
+  BackStyle = 0
+  Name = "CntXml"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntXml.btnDirs
+------------------------------------------------------------
+  Top = 6
+  Left = 500
+  Height = 32
+  Width = 40
+  Picture = ..\framework\imagens\geral_pasta_26.jpg
+  Caption = ""
+  TabIndex = 15
+  ToolTipText = "Carregar o Diretório / Pasta de Gravação do Arquivo"
+  PicturePosition = 13
+  Name = "btnDirs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntXml.Get_arquivo
+------------------------------------------------------------
+  Format = "K!"
+  Left = 78
+  MaxLength = 20
+  TabIndex = 1
+  Top = 11
+  Width = 150
+  Name = "Get_arquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntXml.getDirs
+------------------------------------------------------------
+  Height = 23
+  Left = 78
+  SpecialEffect = 1
+  TabIndex = 14
+  ToolTipText = "Diretório / Pasta de gravação do Arquivo"
+  Top = 11
+  Width = 421
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getDirs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGAR.CntXml.Say1
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Arquivo :"
+  Left = 30
+  Top = 15
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 1, 10, 7, 16, 13, 29, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPGAR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE exportaproduto
+------------------------------------------------------------
+PROCEDURE exportaproduto
+Parameters pcArq
+
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(pcArq)
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([cpros], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([csArqXMl])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In csArqXMl
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lnXml
+lnXml = Thisform.chkXml.Value
+
+If Used('Tmp_Gpec')
+	Use In Tmp_Gpec
+Endif
+
+If Used([csArqXMl])
+	Use In csArqXMl
+Endif
+
+If lnXml <> 1
+
+*!*		lcArquivo = Thisform.cntXml.Get_Arquivo.Value
+
+
+*!*		Thisform.poObjForm.poDataMgr.SqlExecute([Select a.* From SigOpGcp a Where a.codigos = ']+lcArquivo+[' ],'Tmp_Gpec')
+
+*!*		Select Tmp_Gpec
+*!*		Go Top
+*!*		If !Eof()
+*!*			Messagebox('Arquivo já Gerado !!',48,'ERRO')
+*!*			Thisform.cntXml.Get_Arquivo.SetFocus
+*!*			Return
+*!*		Endif
+
+*!*		Wait Window 'Aguarde Gerando Arquivo !' Nowait
+
+*!*		Select CrSigOpGcp
+*!*		Zap
+
+*!*		Select CrImagens
+*!*		Go Top
+*!*		Scan
+*!*			Insert Into CrSigOpGcp (Codigos,CPros,CIdChaves) Values (lcArquivo,CrImagens.CPros,fUniqueIds())
+*!*		Endscan
+
+*!*		If Thisform.poObjForm.poDataMgr.Update('CrSigOpGcp')
+*!*			Thisform.poObjForm.poDataMgr.Commit()
+*!*			Messagebox('Arquivo Gerado com Sucesso',64,'Geração de Arquivo')
+*!*		Else
+*!*			Thisform.poObjForm.poDataMgr.Rollback()
+*!*			Messagebox('Falha na Geração do Arquivo. Reinicie o Processo...',48,'')
+*!*		Endif
+
+*!*		Wait Clear
+
+	Select CrImagens
+	Go Top
+
+	thisform.processatxt() 
+Else
+
+	*--Arquivo XML
+	lcArquivo = Thisform.cntXml.getDirs.Value
+
+	If Empty(lcArquivo)
+		Messagebox([Arquivo não informado!!!],0+48,[Atenção])
+		Thisform.cntXml.btnDirs.SetFocus()
+		Return .F.
+	Endif
+
+	If Upper(Justext(lcArquivo)) <> [XML]
+		Messagebox([Arquivo com Extensão inválida!!!],0+48,[Atenção])
+		Thisform.cntXml.btnDirs.SetFocus()
+		Return .F.
+	Endif
+
+	Create Cursor csArqXMl(Produto c(14), Descricao c(254), Grupo c(3), Unidade c(3), Modelo c(3), Foto w, DataAlt t)
+	Index On Produto Tag Produto
+
+	Select CrImagens
+	Go Top
+	Scan
+
+		Select CrImagens
+		
+		m.Produto 	= CrImagens.Cpros
+		m.Descricao = []
+		m.Grupo 	= CrImagens.Cgrus
+		m.Unidade 	= CrImagens.Cunis
+		m.Modelo 	= []
+		m.Foto 		= Nvl(CrImagens.FigJpgs,[])
+		m.DataAlt 	= Ctod('')
+
+		lcSql = [Select a.DPro3s, a.CodFinP, b.DataAlts from SigCdPro a join SigCdPrc b on a.cpros = b.cpros where a.cpros = ']+CrImagens.Cpros+[' ]
+		If Thisform.poObjForm.poDataMgr.SqlExecute(lcSql,[crTProd])<1
+			Messagebox('Falha na Geração do Arquivo. Reinicie o Processo...',48,'Select (crTProd)')
+			Return .F.
+		Endif
+
+		Select crTProd
+		If Reccount()>0
+			m.Descricao = Alltrim(Left(Nvl(crTProd.DPro3s,[]),254))
+			m.Modelo 	= crTProd.CodFinP
+			m.DataAlt 	= crTProd.DataAlts
+		EndIf 
+		
+		Select csArqXMl
+		Append Blank
+		Gather Memvar Memo
+	Endscan
+
+	Select csArqXMl
+	Go Top
+	=Thisform.ExportaProduto(lcArquivo)
+
+	If File(lcArquivo)
+		Messagebox('Arquivo Gerado com Sucesso',64,'Geração de Arquivo')
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processatxt
+------------------------------------------------------------
+PROCEDURE processatxt
+Local lcArq, lcChr, lcGru, lcDes, lcUni
+
+*!*	If (MessageBox([Confirma a Geração dos Arquivos?], 32+4, [Geração de Arquivos]) <> 6)
+*!*		Return .f.
+*!*	EndIf
+
+lcArq = Alltrim(ThisForm.cntTxt.getArqTXT.Value)
+
+If Empty(lcArq)
+	=MessageBox([O Arquivo a Ser Gerado Não Foi Informado!!!], 0+16, [Atenção!!!])
+	ThisForm.cntTxt.btnGetArqO.SetFocus
+	Return .f.
+EndIf
+
+=StrToFile([], lcArq, 0)
+
+If Not File(lcArq)
+	=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])
+	ThisForm.cntTxt.btnGetArqO.SetFocus
+	Return .f.
+EndIf
+
+Select Distinct CGrus From crImagens Into Cursor crGrus Order By CGrus
+
+lcChr = Chr(13) + Chr(10)
+
+lnQtd = Reccount([crGrus])
+lnCnt = 0
+
+ThisForm.cntTxt.lblResults.Caption = [Processando ] + Alltrim(Str(lnQtd, 10)) + [ Grupo] + Iif(lnQtd = 1, [], [s]) + [ / ] + ;
+							  [Produtos Gerados : ] + Alltrim(Str(lnCnt, 10))
+
+Create Cursor crGrupos (Grupo n(8))
+Index On Grupo Tag Grupo
+
+Select crGrus
+Scan
+	lcQuery = [Select CGrus, DGrus, Ids ] + ;
+			    [From SigCdGrp ] + ;
+			   [Where CGrus = '] + crGrus.CGrus + [' And ] + ;
+			   		 [Ids > 0]
+
+	If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalGrupo]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGrupo)])
+		Return .f.
+	EndIf
+	Select LocalGrupo
+	Go Top In LocalGrupo
+	If Not Eof([LocalGrupo])
+		lcGru = Padl(LocalGrupo.Ids, 8, [0])
+		lcDes = Padr(Alltrim(LocalGrupo.DGrus), 40)
+		lcUni = Padr([], 4)
+		
+		* td01 - Tabela de Grupos
+		lcStr = [td01] + ;			&& Tipo - "td01" - Constante - Caracter(4)
+				lcGru + ;			&& ID - Numérico (8)
+				lcDes + ;			&& Descrição - Caracter(40)
+				lcUni + lcChr		&& Unidade - Caracter(4)
+
+		=StrToFile(lcStr, lcArq, .t.)
+
+		If Not Seek(LocalGrupo.Ids, [crGrupos], [Grupo])
+			Insert Into crGrupos (Grupo) Values (LocalGrupo.Ids)
+		EndIf
+
+		Select Distinct CPros ;
+		  From crImagens ;
+		 Where CGrus = crGrus.CGrus ;
+		  Into Cursor crPros ;
+		 Order By CPros
+
+		Select crPros
+		Scan
+			lcQuery = [Select CPros, DPros, CUnis, DtIncs, Situas, PesoMs, Icms, ] + ;
+							 [AliqIpis, ClFiscals, SitTrIcms, Pvens, FigJpgs ] + ;
+					    [From SigCdPro ] + ;
+					   [Where CPros = '] + crPros.Cpros + [']
+
+			If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalProds]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalProds)])
+				Return .f.
+			EndIf
+			Select LocalProds
+			Go Top In LocalProds
+			If Not Eof([LocalProds])
+				lcRef = Padr(Chrtran(LocalProds.Cpros, [ */\:?"'<>|], []), 25)
+				lcDes = Padr(Alltrim(LocalProds.DPros), 60)
+				lcUni = Padr(Alltrim(LocalProds.CUnis), 3)
+				lcDat = Dtoc(Ttod(LocalProds.DtIncs))
+				lcSit = Iif(LocalProds.Situas = 2, [i], [a])
+				lcPes = Strtran(Padl(LocalProds.PesoMs, 8, [0]), [.], [,])
+				lcIpi = Padl(Int(LocalProds.AliqIpis), 2, [0])
+				lcIcm = Padl(Int(LocalProds.Icms), 2, [0])
+				lcClf = Padr(Chrtran(LocalProds.ClFiscals, [ .], []), 8)
+				lcTri = Padr(LocalProds.SitTrIcms, 3)
+				lcVal = Strtran(Padl(LocalProds.PVens, 8, [0]), [.], [,])
+				lcPre = Padr([00000000] + lcVal + [0000^], 400)
+
+				lcGvd = [] && Colocar as coleções
+				
+				lcQuery = [Select b.Descrs, b.Ordens ] + ;
+						    [From SigPrCar a, SigCrRap b ] + ;
+						   [Where a.CPros = '] + LocalProds.CPros + [' And ] + ;
+						   		 [a.Codigos = b.Codigos]
+
+				If (ThisForm.poObjForm.poDataMgr.SqlExecute(lcQuery, [LocalCaracs]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCaracs)])
+					Return .f.
+				EndIf
+				Select LocalCaracs
+				Scan
+					If Not Empty(LocalCaracs.Ordens)
+						If Not Seek(LocalCaracs.Ordens, [crGrupos], [Grupo])
+							Insert Into crGrupos (Grupo) Values (LocalCaracs.Ordens)
+							lcGr1 = Padl(LocalCaracs.Ordens, 8, [0])
+							lcDe1 = Padr(Alltrim(LocalCaracs.Descrs), 40)
+							lcUn1 = Padr([], 4)
+
+							* td01 - Tabela de Grupos
+							lcStr = [td01] + ;			&& Tipo - "td01" - Constante - Caracter(4)
+									lcGr1 + ;			&& ID - Numérico (8)
+									lcDe1 + ;			&& Descrição - Caracter(40)
+									lcUn1 + lcChr		&& Unidade - Caracter(4)
+
+							=StrToFile(lcStr, lcArq, .t.)
+						EndIf
+						lcGvd = lcGvd + Alltrim(Str(LocalCaracs.Ordens, 8)) + [^]
+					EndIf
+				EndScan
+				lcGvd = Padr(Alltrim(lcGvd), 60)
+
+				* --> Vamos usar o último campo da tabela td03 para isso. O campo se chama "Material/Complemento"... 
+				* as coleções vc envia na td01, como se fossem grupos, e neste campo mencionado vc me envia de quais 
+				* grupos o item faz parte... usa ^ como separador... ex. Anel código 001 faz parte das coleções 
+				* (td01: 1 = Brilhante e 4 = Primavera)... vc adiciona no campo 1^4... qtas necessárias.. 
+				* no campo id_grupo da tabela td03 vc coloca somente a coleção principal do item dai.
+				
+				* td03 - Tabela de Produtos
+				lcStr = [td03] + ;			&& Tipo - "td03" - Constante - Caracter(4)
+						Space(8) + ;		&& RESERVADO - Caracter(8)
+						lcRef + ;			&& Referência - Caracter(25)
+						lcDes + ;			&& Descrição - Caracter(60)
+						lcUni + ;			&& Unidade - Caracter(3)
+						lcGru + ;			&& ID Grupo - Numérico(8)
+						[00000000] + ;		&& ID Subgrupo - Numérico(8)
+						lcDat + ;			&& Data do produto - Data(10)
+						[ ] + ;				&& Alternativo - Caracter(1)
+						[001] + ;			&& Multiplicador - Numérico(3)
+						Padr(lcRef, 20) + ;	&& Nome Foto Sem Extenção - Caracter(20)
+						lcSit + ;			&& Status Produto - a=ativo / i=inativo / e=problema estoque / s=saindo de linha - Caracter(1)
+						[00000000] + ;		&& Desconto Máximo em porcentagem - Numérico(8)
+						[00] + ;			&& Tabela - Caracter(2)
+						lcPes + ;			&& Peso - Numérico(8)
+						[ ] + ;				&& Status Foto - Caracter(1)
+						[ ] + ;				&& Lançamento - Caracter(1)
+						lcIpi + ;			&& % do IPI - Numérico(2)
+						[00000000] + ;		&& Valor IPI - Numérico(8)
+						lcIcm + ;			&& % ICMS - Numérico(2)
+						[00000000] + ;		&& Valor ICMS - Numérico(8)
+						lcClf + ;			&& Classificação Fiscal - Caracter(8)
+						lcTri + ;			&& Situação Tributária - Caracter(3)
+						Space(8) + ;		&& RESERVADO - Caracter(8)
+						[00000000] + ;		&& Estoque - Numérico(8)
+						lcPre + ;			&& Lista (8) + Preço (8) + Qtde Minima (4) + ^ - Caracter(400)
+						Space(20) + ;		&& Código de Barras - Caracter(20)
+						Space(64) + ;		&& RESERVADO - Caracter(64)
+						Space(400) + ;		&& Características dos produtos - O Separador de linhas é o "#13" - Caracter(400)
+						lcGvd + lcChr		&& Material/Complemento - Caracter(60)
+
+				=StrToFile(lcStr, lcArq, .t.)
+
+				lnCnt = lnCnt + 1
+
+				ThisForm.cntTxt.lblResults.Caption = [Processando ] + Alltrim(Str(lnQtd, 10)) + [ Grupo] + Iif(lnQtd = 1, [], [s]) + [ / ] + ;
+											  [Produtos Gerados : ] + Alltrim(Str(lnCnt, 10))
+				
+				* Exportando as Imagens
+				If Not Empty(LocalProds.FigJpgs) And Not IsNull(LocalProds.FigJpgs)
+					lcImg = Alltrim(JustPath(lcArq)) + [\] + Alltrim(lcRef) + [.Jpg]
+					lcFoto=Strconv(Strtran(Strtran(Strtran(LocalProds.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+					=StrToFile(lcFoto, lcImg)
+				EndIf
+			EndIf
+		EndScan
+	EndIf
+EndScan
+
+If (lnCnt > 0)
+	=MessageBox([Arquivo de Produtos Gerado Com Sucesso!!!], 0+64, [Processamento Finalizado])
+Else
+	=MessageBox([Atenção!!! Arquivo Gerado Sem Produtos!!!], 0+48, [Processamento Finalizado])
+EndIf
+
+ThisForm.Cancela.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters oObjForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.poObjForm = oObjForm
+
+Thisform.cntXml.getDirs.Value = []
+Thisform.cntXml.Get_arquivo.Value = []
+
+Thisform.cntTxt.getArqTXT.Value = []
+
+thisform.chkXml.Value = 0
+Thisform.cntXml.visible = .F.
+Thisform.cntTXT.visible = .T.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.CntTXT.getArqTXT
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.CntTXT.btnGetArqO
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq
+
+lcArq = GetFile([TXT], [Arquivo TXT:], [Criar], 0, [Informe o Nome do Arquivo TXT])
+
+If Not Empty(lcArq)
+	ThisForm.cntTxt.getArqTXT.Value = Alltrim(lcArq)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.Processa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lnConfirma = Messagebox('Confirma Geração do Arquivo ?',32+4,'')
+If lnConfirma <> 6
+	Return(.F.)
+Endif
+
+Thisform.Processamento()
+
+
+Thisform.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.chkXml
+* Classe: checkbox (Base: checkbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Thisform.cntXml.getDirs.Value = []
+Thisform.cntXml.Get_arquivo.Value = []
+
+Thisform.cntTxt.getArqTXT.Value = []
+
+If This.Value = 1
+	Thisform.cntXml.visible = .T.
+	Thisform.cntTXT.visible = .F.
+Else
+	Thisform.cntXml.visible = .F.
+	Thisform.cntTXT.visible = .T.
+Endif
+
+This.Refresh 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.CntXml.btnDirs
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcDir
+
+lcDir = Alltrim(ThisForm.cntXml.getDirs.Value)
+
+lcDir = Putfile([],[],[XML]) &&Alltrim(GetDir(lcDir, [Selecione o Diretório / Pasta De Gravação do Arquivo], [Seleção de Diretórios], 2))
+
+If Not Empty(lcDir)
+	ThisForm.cntXml.getDirs.Value = lcDir
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGAR.CntXml.getDirs
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPGAR
+RESERVED3 (ClassInfo): poobjform
+*exportaproduto 
+*processamento 
+*processatxt 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

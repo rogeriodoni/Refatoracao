@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7 conclu├¡da** ÔÇö `projeto\app\forms\operacionais\FormSigOpFlp.prg` (1187 ÔåÆ 1799 linhas), compilando limpo e exercitado em runtime.
+
+## O que entrou
+
+Os eventos dos 4 bot├Áes da barra de a├º├úo (`cmg_4c_Botoes` = `cmdApagaitem` do legado), transcritos do dump:
+
+| handler | legado | o que faz |
+|---|---|---|
+| `BtnIncluirClick` | `cmdInserir.Click` | abre o painel com os defaults do ramo INSERIR (`DateTime()`, usu├írio logado, `fDtoSQL(Date(),'00:00:00')`) |
+| `BtnAlterarClick` | `cmdAlterar.Click` | carrega a linha corrente pelo BO e copia para o painel, inclusive `BtnOk.Enabled = (autor OR plAcesso)` |
+| `BtnExcluirClick` | `cmdApagar.Click` | confirma e delega para `BO.Excluir()` (as duas guardas ÔÇö autor e hist├│rico autom├ítico ÔÇö j├í s├úo fonte ├║nica no BO) |
+| `BtnImprimirClick` | `cmdListar.Click` | `CREATEOBJECT("FormSigOpFlu", ...)` com `Show()` fora do TRY (regra #29) |
+
+Mais a infraestrutura que eles exigem: `AjustarBotoesPorModo` (funil ├║nico de estado ÔÇö painel aberto Ôçö grade/barra/Encerrar/Obs/Agenda escondidos, com o caminho de volta, regra #40), `HabilitarCampos` (o `When` dos campos do painel), `AplicarAcessos`/`AjustarAcoesPorAcesso`/`ObterAcesso` (o bloco `fChecaAcesso` do `Init` legado, com o reempilhamento `lcPos=5/lcLrg=80`), `TemLinhaSelecionada`, `FocarCelulaDataHora`, `LimparPainelInsercao`, `PreencherPainelDaLinhaSelecionada`.
+
+**Lacuna da Fase 6 corrigida**: `txt_4c_Agenda` + `lbl_4c_LblAgenda` (legado `Cnt_Inserir.GetAgenda`/`lblAgenda`) n├úo existiam ÔÇö e os dois Click que esta fase transcreve atribuem valor a eles.
+
+## Evid├¬ncia
+
+- `COMPILE` sem `.ERR` (BO e Form).
+- Probe de runtime (`automation\probef7sigopflp734.prg`): forma instancia; os 7 m├®todos chamados de fora s├úo PUBLIC (`protegido=.F.`); estado inicial com bot├Áes em 5/85/165/245 e `Width=330` (a aritm├®tica do `Init` legado); Incluir sem conta recusa e n├úo abre o painel; Alterar sem linha avisa; Excluir sem linha ├® no-op como o legado; Incluir com conta abre o painel e esconde a consulta; o caminho de volta restaura tudo e volta a travar os campos.
+- Gate da Fase 7: **PASSA**, pelo caminho certo ÔÇö `SoPainelDeLinha=True` + 4 handlers reais, n├úo por token em coment├írio (`BtnVisualizarClick` segue ausente: o legado n├úo tem esse verbo).
+
+## Dois pontos para voc├¬ decidir
+
+1. **Alterei o `OrquestradorMigracao.ps1`** (nona exce├º├úo do gate): `Test-VerbosCrudSaoTodosDePainelDeLinha` s├│ casava a forma *qualificada* do Click (`ThisForm.cnt_inserir.Visible = .t.`, do SigOpCfl); o SIGOPFLP escreve o mesmo Click dentro de `With ThisForm.Cnt_Inserir`, e por isso a dispensa nunca acontecia. Nova fun├º├úo `Expand-BlocosWithDoCorpoLegado` resolve os WITH por pilha. Medido nos **733 dumps**: muda **1** veredicto (`task734/SigOpFlp`, s├│ no sentido da dispensa), **zero regress├úo** ÔÇö CSVs em `automation\_m734\`.
+2. **Incidente no caminho**: a primeira tentativa de patch gravou o `.ps1` em latin-1 e trocou por `?` os caracteres n├úo-ASCII de ~20 blocos de prompt (`ReadAllText` honra o BOM UTF-8 e ignora o encoding passado). Revertido do backup (`git status` voltou a limpo) e refeito em UTF-8 com BOM; diff final tem 3 hunks / 83 inser├º├Áes. A ressalva ficou registrada na mem├│ria junto da receita de CRLF.
+
+**Desvio consciente, documentado no c├│digo**: no Excluir a confirma├º├úo fica *antes* das duas guardas do BO (no legado vem depois) ÔÇö manter a ordem exigiria expor as guardas ao form, duplicando regra de neg├│cio.
+
+**Fica para a Fase 8**: Confirmar (`BtnOk`) e Cancelar (`BtnCancela`) do painel, `FormParaBO`/`BOParaForm`, Encerrar (UPDATE de telefones/e-mail em `SigCdCli`), atualiza├º├úo de `cnt_4c_Agenda`/`cnt_4c_Obs` pela linha corrente (`AfterRowColChange`) e os atalhos F2/F3/F4/F6 das c├®lulas. E o Imprimir s├│ funcionar├í quando `SIGOPFLU` (hoje em `origem\`) for migrado ÔÇö a falha ├® vis├¡vel de prop├│sito, sem guard que a silencie.

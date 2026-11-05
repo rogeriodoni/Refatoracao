@@ -1,0 +1,24 @@
+VARTYPE(loForm) = O
+INSTANCIACAO     = OK
+BaseClass        = Form
+Caption          = Ficha de Complementos da Movimentação
+Width x Height   = 800 x 500
+CriouForm        = .T.
+TipoAcao         = [INSERIR]
+Operacao         = [VENDA]
+IClis            = [0000000001]
+--- PEMSTATUS dos eventos principais ---
+  ChecarFichaTecnica       = .T.  protegido=.F.
+  MostrarForm              = .T.  protegido=.F.
+  OcultarForm              = .T.  protegido=.F.
+  MontarFichaTecnica       = .T.  protegido=.F.
+  CarregarFichaTecnica     = .T.  protegido=.F.
+  DesmontarFichaTecnica    = .T.  protegido=.F.
+  ValidarFichaTecnica      = .T.  protegido=.F.
+--- chamadas reais de fora ---
+  ValidarFichaTecnica()   -> .T.
+  DesmontarFichaTecnica() -> OK
+  OcultarForm()           -> OK (AreaFicha.Visible=.F.)
+  ChecarFichaTecnica('X') -> .F.
+--- dialogos suprimidos ---
+[05/11/2026 00:24:26] Falha na Conexão (cursor_4c_Operacao): Favor Reinicializar o Processo!!!

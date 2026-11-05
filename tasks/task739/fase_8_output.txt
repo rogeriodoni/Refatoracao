@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada. O arquivo final est├í em `projeto/app/forms/operacionais/FormSigOpGco.prg` (1627 ÔåÆ 1745 linhas).
+
+## O que a Fase 8 fez
+
+O dump do SIGOPGCO j├í estava inteiramente portado ao fim da Fase 7 (8 objetos da SE├ç├âO 1, 5 m├®todos da SE├ç├âO 3). A consolida├º├úo foi uma **confer├¬ncia do conjunto**, e ela achou **tr├¬s defeitos reais**, todos corrigidos:
+
+1. **`InicializarForm` chamava `GerarGrafico()` tamb├®m sob o validador de UI.** `ValidarUIFidelity` instancia o form com `gb_4c_ValidandoUI = .T.` e sem form pai ÔåÆ `crFinal`/`Cabecalho` n├úo existem ÔåÆ `MsgAviso` sai como **MESSAGEBOX modal** e trava o harness at├® o timeout. `messages.prg` s├│ se auto-suprime em `gb_4c_ModoTeste`, n├úo em `gb_4c_ValidandoUI`. Guard can├┤nico aplicado (`FormSigOpGco.prg:338`); `gb_4c_ModoTeste` ficou fora de prop├│sito, porque l├í o probe precisa exercitar o gr├ífico.
+
+2. **Vazamento de cursores na data session do PAI.** O coment├írio do `Destroy` afirmava que "o BO fecha os cursores que ele mesmo cria" ÔÇö era **falso**: o `SigOpGcoBO` n├úo tinha `Destroy` nem m├®todo de limpeza. `cursor_4c_Grafico` + os tr├¬s cursores de trabalho (Meses/Grupos/Percentuais) ficavam abertos; e como este form entra na sess├úo do pai, n├úo morriam com a tela. Adicionei `LimparCursores()` ao BO (PUBLIC, regra #51; guard de `Buffering` antes do `TABLEREVERT`, regra #52) e passei a cham├í-lo do `Destroy`, que tamb├®m fecha o cursor do gr├ífico. `crFinal`/`Cabecalho` continuam intocados ÔÇö s├úo do pai.
+
+3. **`CmdImprimirClick` sem o guard que o `MostrarGrafico` j├í tinha.** Com `APPEND GENERAL` falhando, `AnexarGraficoAoCursor` apaga a linha ÔÇö mas `DELETE` s├│ marca, e `RECCOUNT()` conta registro exclu├¡do com `SET DELETED OFF`. O `RECCOUNT = 0` do `ExecutarReportForm` n├úo segurava e sa├¡a relat├│rio em branco na impressora. Agora usa o mesmo `this_lGraficoGerado`.
+
+Os quatro nomes que o roteiro da Fase 8 pede n├úo t├¬m referente aqui: as BaseClass do dump s├úo, na ├¡ntegra, `form + dataenvironment + container + 2 label + shape + oleboundcontrol + 2 commandbutton` ÔÇö zero grid, zero pageframe, zero controle de entrada. Documentei isso no cabe├ºalho sem citar os nomes por extenso (eles s├úo procurados como substring pelo gate).
+
+## Verifica├º├úo
+
+- **Confer├¬ncia est├ítica** (balanceamento de TRY/IF/WITH/FOR/PROCEDURE, `RETURN` dentro de TRY, `PUBLIC` em `DEFINE CLASS`, `ISEMPTY`, `MESSAGEBOX` direto, `.Self`, `Controls("nome")`, `VAL(SET(...))`, `TABLEREVERT` sem guard, acento literal, CATCH silencioso, CRLF): **sem achados** nos dois arquivos.
+- **Compila├º├úo N├âO foi verificada.** Rodei o smoke test obrigat├│rio primeiro (`STRTOFILE` + `QUIT`): `exit=0`, `.FXP` gerado, **arquivo de sa├¡da ausente** ÔÇö o `vfp9.exe` desta sess├úo compila e sai sem executar. N├úo posso alegar COMPILE_OK nem PROBE_OK.
+
+## Uma pend├¬ncia que n├úo ├® do form ÔÇö o gate da Fase 8 reprova
+
+Rodei o bloco `case 8` real do orquestrador (`automation/VerificarGateFase8Task739.ps1`, por AST): **VEREDITO=REPROVA**. O ramo de exce├º├úo GR├üFICO n├úo alcan├ºa esta tela, e as duas provas que falham s├úo justamente por ela ser *mais simples* que a tela que motivou o ramo (SIGPRGF2):
+
+| prova | resultado |
+|---|---|
+| 3 sem grade / 4 legado tem `oleboundcontrol` / 6a OLE no migrado / 7 handler de Click | **True** |
+| 5 `Test-LegadoSomenteLeitura` | **False** ÔÇö ele faz `if ($campos.Count -eq 0) { return $false }`: com **zero** controles de entrada n├úo h├í como provar "todo campo somente-leitura" |
+| 6b `temSuperficieGrafF8` | **False** ÔÇö exige `AddObject(..., "ComboBox"\|"ListBox")` no migrado, e o legado **n├úo tem** combo de sele├º├úo para reproduzir |
+
+N├úo mexi no orquestrador: seria fora do escopo da fase e, pela regra "gate corrigido na fase n├úo vale para ela mesma", n├úo desbloquearia esta execu├º├úo. Se quiser, abro isso como li├º├úo propagada (ampliar o ramo GR├üFICO para o caso "gr├ífico sem controle de sele├º├úo"), medindo antes o blast radius nos dumps de `tasks/`.

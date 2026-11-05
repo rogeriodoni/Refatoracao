@@ -1,0 +1,26 @@
+=== PROBE Fase 4-b - FormSigOpFpg (task736) ===
+[1] Setup OK - datasession do probe = 1
+[2] Form instanciado OK - DataSessionID=2 | pai.Enabled=.F. | OpEscolha=[INSERIR]
+[3] cursor_4c_Dados existe (datasession privada) - campos: 5
+    FPAGS C(12,0)
+    VALOS N(14,2)
+    VENCS D(8,0)
+    MOEFPGS C(3,0)
+    COTFPGS N(11,6)
+    ALIAS corrente = [CURSOR_4C_DADOS] RECNO=1 RECCOUNT=0
+[4] 3 linhas inseridas - RECNO antes do funil = 3
+[4] CarregarDados() retornou .T. - RECNO depois = 1 (esperado 1) | RECCOUNT=3 | ALIAS corrente = [CURSOR_4C_DADOS]
+[5] grd_4c_Dados - ColumnCount=5 RecordSource=[cursor_4c_Dados] ReadOnly=.F. TabIndex=2 Visible=.T.
+    Col1 CS=[cursor_4c_Dados.FPags] W=94 Ord=1 RO=.T. Fnt=[Courier New] Txt1RO=.T. Txt1Brd=0 Hdr=[Cond. Pagto]
+    Col2 CS=[cursor_4c_Dados.Valos] W=108 Ord=2 RO=.F. Mask=[999,999,999.99] Hdr=[Valor]
+    Col3 CS=[cursor_4c_Dados.Vencs] W=80 Ord=5 RO=.F. Hdr=[Vencimento]
+    Col4 CS=[cursor_4c_Dados.MoeFpgs] W=33 Ord=3 RO=.F. Hdr=[Moe]
+    Col5 CS=[cursor_4c_Dados.CotFpgs] W=74 Ord=4 RO=.F. Mask=[999.9999] Hdr=[Cotação]
+[6] Apos 2o VincularGrade - W1=94 W2=108 W3=80 W4=33 W5=74 | Ord3=5 Ord4=3 Ord5=4 | Hdr1=[Cond. Pagto] Hdr5=[Cotação]
+[7] OpEscolha=[INSERIR  ] -> cmd_4c_Apaga.Visible=.T. | Ok.Visible=.T. Cancela.Visible=.T. Cancela.Cancel=.T.
+[7] OpEscolha=[ALTERAR  ] -> cmd_4c_Apaga.Visible=.T. | Ok.Visible=.T. Cancela.Visible=.T. Cancela.Cancel=.T.
+[7] OpEscolha=[CONSULTAR] -> cmd_4c_Apaga.Visible=.F. | Ok.Visible=.T. Cancela.Visible=.T. Cancela.Cancel=.T.
+[7] OpEscolha=[EXCLUIR  ] -> cmd_4c_Apaga.Visible=.F. | Ok.Visible=.T. Cancela.Visible=.T. Cancela.Cancel=.T.
+[7] OpEscolha=[         ] -> cmd_4c_Apaga.Visible=.F. | Ok.Visible=.T. Cancela.Visible=.T. Cancela.Cancel=.T.
+[8] NENHUM dialogo de erro/aviso disparado
+[9] Form liberado - pai.Enabled=.T. - FIM

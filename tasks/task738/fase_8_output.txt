@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigopgar.prg` (1473 linhas, 72,76 KB).
+
+## O que entrou
+
+Medi o dump antes de escrever: este legado ├® um di├ílogo filho que grava em **arquivo** (TXT/XML), sem Grid, sem `pColuna`/`AddCursor`, sem `frmcadastro` e sem modo CRUD. Dos nomes que o template da fase cobra, parte tinha referente real ÔÇö e foi implementada:
+
+| M├®todo | Conte├║do real |
+|---|---|
+| `LimparCampos()` *(PROTECTED)* | funil das 3 limpezas que o legado repete **id├¬nticas** no `Init` e no `chkXml.Valid`; zera tamb├®m as 3 properties do BO, sen├úo `BOParaForm` traria o caminho velho de volta |
+| `AplicarPainelPorModo()` | funil do 2┬║ bloco repetido nos mesmos dois lugares (qual painel fica vis├¡vel) |
+| `FormParaBO()` *(PROTECTED)* | os 5 controles de entrada ÔÇö at├® a Fase 7 a leitura morava **inline** em `BtnProcessarClickExec` |
+| `BOParaForm()` *(PROTECTED)* | caminho inverso (modo + "Exportar Imagens" + 3 caminhos) e fecha alternando o painel |
+| `CarregarLista()` | o `Init` legado na mesma ordem (`LimparCampos` ÔåÆ `BOParaForm`); chamado por `InicializarForm`, idempotente |
+| `BtnCancelarClick()` | **renomeado**: o objeto do legado ├® `Cancela` com `Cancel = .T.`; o handler agora segue o objeto, como nos outros 8 sites do projeto que ligam `cmd_4c_Cancela`. Caption segue "Encerrar" |
+
+Busca, o verbo can├┤nico de gravar, `HabilitarCampos` e `AjustarBotoesPorModo` **n├úo** entraram ÔÇö n├úo h├í referente no SCX, e os motivos est├úo no cabe├ºalho **sem escrever os identificadores por extenso**: o gate casa nome no arquivo inteiro, coment├írio inclu├¡do, ent├úo documentar pelo nome faria a fase passar pelo caminho errado.
+
+## Verificado (n├úo inferido)
+
+- **COMPILE** com `.FXP` apagado antes: `ERR=NAO` no form e no BO. Controle negativo numa c├│pia com erro proposital gerou `.ERR` ÔÇö o mecanismo de detec├º├úo realmente dispara.
+- **Runtime** (`automation\probe738f8.prg`, VFP9, 2026-11-05): instancia; estado inicial `xml=0 img=1 visTXT=.T. visXML=.F.` com os 3 campos vazios (igual ao `Init` legado); `CarregarLista` chamada de fora restaura a tela suja; `ChkXmlClick` alterna painel e limpa; `FormParaBO`/`BOParaForm` transferem os 5 valores nos dois sentidos; escopo medido com `PEMSTATUS(...,2)` ÔÇö os 3 hooks `.T.` (Protected), os 2 voltados ao harness `.F.`. Zero di├ílogos no log.
+- **Gate da Fase 8** (`automation\VerificarGateFase8Task738.ps1`, recorta o `case 8` real do orquestrador): `VEREDITO=PASSA`, com os 4 nomes `declarado=True` ÔÇö n├úo por cita├º├úo em coment├írio.
+- **Completude 05d**: `FORM=True BO=True`. **Auditoria da regra #51**: nenhum form chama m├®todo PROTECTED de BO.
+
+Dois pontos que vale voc├¬ saber:
+
+1. `AEVENTS(array, <CommandButton>, 1)` **pendura** o processo nesta sess├úo ÔÇö tive de matar o `vfp9.exe`. Tirei esse passo do probe e deixei a causa registrada no pr├│prio arquivo.
+2. Acrescentar `CarregarLista` num form OPERACIONAL muda a *autodetec├º├úo* do `TesteAutomatico.prg` (o `IF` que exige a aus├¬ncia dele). Conferi: o orquestrador passa o `FormType` do `task_state.json` como hint ÔÇö aqui `OPERACIONAL` ÔÇö e o hint entra antes da autodetec├º├úo, ent├úo n├úo h├í reclassifica├º├úo. Registrei isso no coment├írio do m├®todo.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleanup confirmed ÔÇö no leftover temp files.
+
+## Resumo da Fase 2/8
+
+A task735 ├® um **frmrelatorio** (confirmado em `task_state.json` e no pr├│prio `fase_2_prompt.md`), ent├úo a "FASE 2: BO - M├®todos CRUD" gen├®rica n├úo se aplica literalmente (Inserir/Atualizar/ExecutarExclusao/Buscar s├úo proibidos para BO de relat├│rio). Completei `SIGOPFLUBO.prg` com o equivalente correto para REPORT, seguindo o padr├úo can├┤nico j├í usado em `sigrecrfBO.prg`/`SigReAtmBO.prg`:
+
+- **`PrepararDados()`** (PROTECTED) ÔÇö replica fielmente o `processamento()` do legado: valida Data Inicial/Final/Grupo (mesmas mensagens do `btnReport.Click`), monta `CsCabecalho` (Empresa/Titulo/SubTitulo/ImpData) e `CsFwUp` (JOIN `SigCdClh`+`SigCdCli` filtrado por per├¡odo/grupo/conta), nos mesmos aliases e colunas que o `SigOpFlu.frx` espera.
+- **`ExecutarReportForm()`** (PROTECTED, Pattern #117/#123) ÔÇö guard de FRX ausente, guard de cursor vazio, isolamento de locale/REPORTBEHAVIOR, restaura├º├úo do menu.
+- **`Visualizar()` / `Imprimir()` / `GerarExcel()`** ÔÇö trio obrigat├│rio que `RelatorioBase` n├úo fornece.
+- **`ObterMensagemErro()`, `ObterChavePrimaria()`, `CarregarDoCursor()`** e stubs de **`Inserir()`/`Atualizar()`** (retornam `.F.` com mensagem ÔÇö relat├│rio ├® somente leitura).
+- **`Destroy()`** liberando os cursores.
+
+Verifiquei a compila├º├úo com `vfp9.exe -T` + `COMPILE` direto no arquivo: `.FXP` gerado, sem `.ERR`, e confirmei com um controle negativo (c├│pia com erro de sintaxe injetado) que o `.ERR` aparece exatamente onde deveria ÔÇö ent├úo as 333 linhas atuais compilam limpo.
+
+Pr├│xima fase (3/8) deve criar `FormSIGOPFLU.prg` com os filtros e os bot├Áes Visualizar/Imprimir/Excel/Encerrar.

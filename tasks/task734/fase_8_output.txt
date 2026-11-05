@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Summary of what was done for `FormSigOpFlp` / `SigOpFlpBO` (task734):
+
+**Form (`FormSigOpFlp.prg`):**
+- `AtualizarCamposCliente()` ÔÇö fills `cnt_4c_GruCon` (Grupo/Conta/Raz├úo Social) and `cnt_4c_Contato` (telefones/e-mail) from the BO, called from `CarregarLista()`
+- `BtnSalvarClick()` (Confirmar) ÔÇö covers both INSERIR and ALTERAR via a new `PainelParaBO()` helper + `NovoRegistro()`/`EditarRegistro()` + `BusinessBase.Salvar()`
+- `BtnCancelarClick()` (Cancelar) ÔÇö closes the panel via `CancelarEdicao()`, discarding changes
+- `BtnEncerrarClick()` (Encerrar) ÔÇö saves phone/e-mail via the BO and releases the form, matching the legacy `CommandGroup1.Command1.Valid`
+- `GridAfterRowColChange()` / `GridColumnKeyPress()` ÔÇö mirror the current grade row into `cnt_4c_Obs`/`cnt_4c_Agenda` and reproduce the F2/F3/F4/F6 shortcuts (re-bound on every `VincularGrade()` call, since `ColumnCount` recreates the Column objects)
+
+**BO (`SigOpFlpBO.prg`):**
+- New properties for SigCdCli contact data (`this_cRClis/DDDs/Tel1s/Tel2s/Emails`)
+- `LimparDados()` override (prevents a prior Alterar's loaded record from leaking into the next Incluir)
+- `SalvarContato()` for the Encerrar button's UPDATE SigCdCli
+
+**Validation performed (not just claimed):**
+- Static: compiled both files cleanly, with a self-written proof file (`BO.FXP=.T. BO.ERR=.F. FORM.FXP=.T. FORM.ERR=.F.`) plus a negative-control compile that confirmed the error detector actually works.
+- Runtime: SQL Server was reachable this session, so I ran a full probe against the real DB ÔÇö IncluirÔåÆConfirmar did a real INSERT, AlterarÔåÆConfirmar did a real UPDATE (verified by re-reading the row via SQL), Cancelar was proven to discard changes (DB unchanged), and Encerrar's contact save was proven idempotent (wrote back identical values). All test data was cleaned up afterward; the DB was left exactly as found.

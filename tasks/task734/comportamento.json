@@ -1,0 +1,401 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fwBuscaInt", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPFLP",
+      "evento": "Init",
+      "linhas": 124,
+      "codigoOriginal": "LParameters pConta, pData, pNoper\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal lcPos, lcLrg, llContato\nPrivate lcCliente, _Grupo, _Conta, pCIdChave\n\nIf Type('pConta') # 'C'\n\tpConta = Space(10)\nEndIf\n\nIf Empty(pConta)\n\tReturn\nEndIf\n\nlcCliente = pConta\n_Grupo    = Space(10)\n_Conta    = Space(10)\npCIdChave = Space(20)\nThisForm.Noper = Iif(Type('pnOper') = [N],pNoper,0)\n\nlcQryCli  = [Select a.Grupos,a.IClis,a.RClis,a.DDDs,a.T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Noper = Iif,Requery,Conta  = Padr,SqlExecute,Visible = fChecaAcesso,plAcesso = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.GetAgenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.GetUsuario.Value = Usuar or ThisForm.plAcesso)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.GetUsuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.BtnOk",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "Local lcGrupo, lcConta\n\nlcGrupo = ThisForm.Grupo\nlcConta = ThisForm.Conta\nSelect CrSigCdClh\n\nDo Case\n\n\tCase ThisForm.Tipo = 'INSERIR'\n\t\tSelect CrSigCdClh\n\t\tldDatas  = This.Parent.GetData.Value\n\t\tldAgenda = This.Parent.GetAgenda.Value\n\t\tlcHists  = This.Parent.GetHist.Value\n\t\tlmObs    = This.Parent.GetObs.Value\n\t\tInsert Into CrSigCdClh (Grupos,IClis,GruContas,Datas,Usuars,DatAgens,Hists,Obs,CIdChaves,Nopers) ;\n\t\t\t\t\t\tValues (lcGrupo,lcConta,lcGrupo + lcConta,ldDatas,Usuar,ldAgenda,lcHists,lmObs,;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.BtnCancela",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "This.Parent.Visible = .F.\nThisForm.CntObs.Visible        = .T.\nThisForm.CntAgenda.Visible     = .T.\nThisForm.GridFollowUp.Visible  = .T.\nThisForm.CmdApagaItem.Visible  = .T.\nThisForm.CommandGroup1.Visible = .T.\nThisForm.GridFollowUp.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.CmdHist",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Local lCod, lFan, xObj, xBrow\n\nThisForm.poDatamgr.SqlExecute([Select * From SigOpIns Where Tipos = 3],\"crSigOpIns\")\n\nSelect crSigOpIns \nLOCATE FOR Descrs = ThisForm.Cnt_Inserir.GetHist.Value\nIf EOF()\n\txBrow = CreateObject('fwBuscaInt','crSigOpIns','Descrs',ThisForm.Cnt_Inserir.GetHist.Value,'Descrs',.t.)\n\txBrow.mAddColuna('Descrs','','Históricos',.t.)\n\txBrow.Show\t\t\nENDIF\n\nIF LASTKEY()<>27\n\tThisForm.Cnt_Inserir.GetHist.Value = crSigOpIns.Descrs\n\tThisForm.Cnt_Inserir.GetObs.Value = crSigOpIns.Mens... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.GetObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.GetUsuario.Value = Usuar or ThisForm.plAcesso)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.GetData",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.GetUsuario.Value = Usuar or ThisForm.plAcesso)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.Cnt_Inserir.GetHist",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.GetUsuario.Value = Usuar or ThisForm.plAcesso)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.CommandGroup1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Private lcTel1, lcTel2, lcDDDs,lcEMail\nlcTel1  = ThisForm.CntContato.GetTel1.Value\nlcTel2  = ThisForm.CntContato.GetTel2.Value\nlcDDDs  = ThisForm.CntContato.GetDDDs.Value\nlcEMail = ThisForm.CntContato.GetEMail.Value\n\nlcUpdate  = [Update SigCdCli Set Tel1s = ?lcTel1,Tel2s = ?lcTel2,DDDs = ?lcDDDs,EMails = ?lcEMail ]+;\n\t\t\t[Where IClis = ']+CrSigCdCli.IClis+[']\n\t\nlnErro = ThisForm.poDataMgr.SqlExecute(lcUpdate,'')\nIf lnErro > 0\n\tThisForm.poDataMgr.Commit()\nEndIf\n\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "Local llRet\n\nllRet = .T.\nSelect CrSigCdClh\nIf !Eof()\n\tIf CrSigCdClh.Usuars <> Usuar\n\t\tMessageBox('Registro Inserido/Alterado por outro usuário !!!',48,'Impossível Excluir')\n\t\tllRet = .F.\n\tEndIf\n\t\n\tIf llRet\n\t\tIf !CrSigCdClh.Autos Or Empty(CrSigCdClh.Obs) Or Empty(CrSigCdClh.Datas)\n\t\t\tIf MessageBox('Deseja realmente excluir este registro ???',4+32+256,'Confirma Exclusão') = 6\n\t\t\t\tIf ThisForm.poDataMgr.SqlExecute([Delete From SigCdClh Where CIdChaves = ']+CrSigCdClh.CIdChaves+[' ],'') < 1\n\t\t\t\t\tMess... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "* Chamada da Impressão do FollowUp\n\nDo Form SigOpFlu With ThisForm.DataSessionId, ThisForm.CntGruCon.GetGrupo.Value, ThisForm.CntGruCon.GetConta.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.Tipo = 'INSERIR'\nThisForm.CntObs.Visible        = .F.\nThisForm.CntAgenda.Visible     = .F.\nThisForm.GridFollowUp.Visible  = .F.\nThisForm.CmdApagaItem.Visible  = .F.\nThisForm.CommandGroup1.Visible = .F.\nWith ThisForm.Cnt_Inserir\n\t.Visible          = .T.\n\t.GetData.Value    = DateTime()\n\t.GetUsuario.Value = Usuar\n\t.GetAgenda.Value  = fDtoSQL(Date(),'00:00:00')\n\t.GetHist.Value    = ''\n\t.GetObs.Value     = ''\n\t.Refresh\n\t.GetData.SetFocus\nEndWith\nThisForm.Draw",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "ThisForm.Tipo = 'ALTERAR'\nThisForm.CntObs.Visible       = .F.\nThisForm.CntAgenda.Visible    = .F.\nThisForm.GridFollowUp.Visible = .F.\nThisForm.CmdApagaItem.Visible  = .F.\nThisForm.CommandGroup1.Visible = .F.\nWith ThisForm.Cnt_Inserir\n\t.Visible          = .T.\n\t.GetData.Value    = CrSigCdClh.Datas\n\t.GetUsuario.Value = CrSigCdClh.Usuars\n\t.GetAgenda.Value  = Iif(!Empty(CrSigCdClh.DatAgens),CrSigCdClh.DatAgens,fDtoSQL(Date(),'00:00:00'))\n\t.GetHist.Value    = CrSigCdClh.Hists\n\t.GetObs.Value     = CrSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.CntAgenda.GetUsuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.CntAgenda.GetAgenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.CntObs.GetObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.GridFollowUp",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nColIndex\n\nWith ThisForm.CntObs\n\t.GetObs.Value = CrSigCdClh.Obs\n\t.Refresh\nEndWith\n\nWith ThisForm.CntAGenda\n\t.GetUSuario.Value = CrSigCdClh.Usuars\n\t.GetAgenda.Value  = Nvl(CrSigCdClh.DatAgens,{})\n\t.Refresh\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.GridFollowUp.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 25,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal loGrupo\n\nWith ThisForm.CmdApagaItem\n\tDo Case\n\n\t\tCase nKeyCode = -1 And .CmdInserir.Enabled = .T.   && F2\n\t\t\tNoDefault\n\t\t\t.CmdInserir.Click()\n\n\t\tCase nKeyCode = -2 And .CmdAlterar.Enabled = .T.   && F3\n\t\t\tNoDefault\n\t\t\t.CmdAlterar.Click()\n\n\t\tCase nKeyCode = -3 And .CmdApagar.Enabled  = .T.   && F4\n\t\t\tNoDefault\n\t\t\t.CmdApagar.Click()\n\n\t\tCase nKeyCode = -5 And .CmdListar.Enabled  = .T.   && F6\n\t\t\tNoDefault\n\t\t\t.CmdListar.Click()\n\n\tEndCase\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLP.GridFollowUp.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 25,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal loGrupo\n\nWith ThisForm.CmdApagaItem\n\tDo Case\n\n\t\tCase nKeyCode = -1 And .CmdInserir.Enabled = .T.   && F2\n\t\t\tNoDefault\n\t\t\t.CmdInserir.Click()\n\n\t\tCase nKeyCode = -2 And .CmdAlterar.Enabled = .T.   && F3\n\t\t\tNoDefault\n\t\t\t.CmdAlterar.Click()\n\n\t\tCase nKeyCode = -3 And .CmdApagar.Enabled  = .T.   && F4\n\t\t\tNoDefault\n\t\t\t.CmdApagar.Click()\n\n\t\tCase nKeyCode = -5 And .CmdListar.Enabled  = .T.   && F6\n\t\t\tNoDefault\n\t\t\t.CmdListar.Click()\n\n\tEndCase\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPFLP.Cnt_Inserir.BtnOk.Click",
+      "queryOriginal": "\t\tInsert Into CrSigCdClh (Grupos,IClis,GruContas,Datas,Usuars,DatAgens,Hists,Obs,CIdChaves,Nopers) ; \t\t\t\t\t\tValues (lcGrupo,lcConta,lcGrupo + lcConta,ldDatas,Usuar,ldAgenda,lcHists,lmObs,; \t... [TRUNCADO]",
+      "tabelas": "CrSigCdClh",
+      "colunas": "Grupos,IClis,GruContas,Datas,Usuars,DatAgens,Hists,Obs,CIdChaves,Nopers",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFLP.Cnt_Inserir.CmdHist.Click",
+      "queryOriginal": "ThisForm.poDatamgr.SqlExecute([Select * From SigOpIns Where Tipos = 3],\"crSigOpIns\")",
+      "tabelas": "SigOpIns",
+      "colunas": "Tipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFLP.CommandGroup1.Valid",
+      "queryOriginal": "lcUpdate  = [Update SigCdCli Set Tel1s = ?lcTel1,Tel2s = ?lcTel2,DDDs = ?lcDDDs,EMails = ?lcEMail ]+; \t\t\t[Where IClis = ']+CrSigCdCli.IClis+['] \t",
+      "tabelas": "SigCdCli",
+      "colunas": "Tel1s,Tel2s,DDDs,EMails",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFLP.cmdApagaitem.Click",
+      "queryOriginal": "\t\t\t\tIf ThisForm.poDataMgr.SqlExecute([Delete From SigCdClh Where CIdChaves = ']+CrSigCdClh.CIdChaves+[' ],'') < 1 \t\t\t\t\tMess... [TRUNCADO]",
+      "tabelas": "SigCdClh",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigCdClh", "SigOpIns", "SigCdCli", "SigCdClh"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

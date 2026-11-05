@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4 conclu├¡da. `FormSIGOPFLU.prg` atualizado (175 ÔåÆ 618 linhas).
+
+## O que foi adicionado
+
+Este ├® um form **REPORT** (`frmrelatorio`), n├úo CRUD: n├úo existe Grid nem CRUD no legado. Segui o padr├úo can├┤nico de REPORT do projeto (`Formsigrecrf`, `Formsigrecnt`, `FormSigReAac`), em que `ConfigurarPaginaLista()` ├® a **p├ígina de Filtros** (Page1 ├║nica) e `AlternarPagina()` ├® o funil de navega├º├úo de p├ígina ├║nica ÔÇö os dois nomes que o gate da Fase 4 exige, sem inventar grade nem bot├Áes CRUD que o SCX n├úo tem.
+
+**`ConfigurarBotoes()`** ÔÇö barra de a├º├úo (`cmg_4c_Botoes`, CommandGroup de 4 bot├Áes: Visualizar / Imprimir / Arquivos Email / Encerrar com `Cancel=.T.`). Geometria **do SCX**, que sobrep├Áe os defaults do framework: grupo `Top=-2 Left=495 Width=310 Height=85`, bot├Áes `75x75` em `Lefts 5/80/155/230` (230+75=305 Ôëñ 310, nenhum corta). Criado **depois** de `cnt_4c_Cabecalho` para desenhar por cima da faixa.
+
+**`ConfigurarPaginaLista()`** ÔÇö os 11 controles de filtro transcritos do dump, com `Top` do legado menos 85 (offset do PageFrame):
+
+| legado | migrado | Left / Top | obs |
+|---|---|---|---|
+| Say2 / getDtInicial / Say3 / getDtFinal | `lbl_4c_Label2`, `txt_4c_DtInicial`, `lbl_4c_Label3`, `txt_4c_DtFinal` | 195/16, 242/13, 328/16, 341/13 | datas 80x23 (classe `fweditdata`), `.Value = DATE()` como o Init legado; separador `CHR(224)` |
+| Say1 / getGrupo / getDGrupo | `lbl_4c_Label1`, `txt_4c_Grupo`, `txt_4c_DGrupo` | 202/43, 242/39, 324/39 | `MaxLength` 10/20 e `Format="K"` do SCX |
+| lbl_estoque / getConta / getDConta | `lbl_4c_Lbl_estoque`, `txt_4c_Conta`, `txt_4c_DConta` | 202/70, 242/66, 324/66 | `MaxLength` 10/40 |
+| ChkData | `chk_4c_ChkData` | 242/106 | `.Value = 0` (num├®rico) |
+
+Nomes exatamente os do `mapeamento.json` (para o `ValidarUIFidelity` da etapa 07). Labels com `AutoSize = .F.` + Width/Height do SCX e `ForeColor = RGB(90,90,90)` (regras #12/#23 ÔÇö a classe `say` n├úo declara cor e branco ficaria invis├¡vel sobre a textura clara); CheckBox tamb├®m com `AutoSize = .F.`. Nenhum label invade o campo vizinho (`Left+Width` = 240 contra campo em 242; 336 contra 341).
+
+**`AjustarEnabledGrupo()`** (PUBLIC) ÔÇö reproduz as duas ├║ltimas linhas do `Init` legado (`GetGrupo.Enabled = Empty(GetGrupo.Value)`). Regra de **carga**, n├úo de digita├º├úo: chamada ao montar a p├ígina, nunca por tecla ÔÇö sen├úo o campo se desabilitaria no meio da digita├º├úo do pr├│prio grupo. ├ë por isso que **n├úo** transcrevi o `Enabled = .F.` cru do SCX: ele ├® sobrescrito pelo Init, e fix├í-lo travaria o campo Grupo, que ├® obrigat├│rio na valida├º├úo do `btnReport.Click`.
+
+**`AlternarPagina(par_nPagina)`** (PUBLIC, regra #3/TesteAutomatico) ÔÇö normaliza ├¡ndice inv├ílido para 1, ativa a p├ígina e foca `txt_4c_DtInicial` (TabIndex 1 do legado) sob guarda de `THIS.Visible`, porque `SetFocus` em form ainda oculto durante o Init dispara erro.
+
+`InicializarForm` agora chama `ConfigurarCabecalho ÔåÆ ConfigurarBotoes ÔåÆ ConfigurarPageFrame ÔåÆ AlternarPagina(1)`; `ConfigurarPageFrame` chama `ConfigurarPaginaLista()`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo provada**: `.FXP` gerado (11.278 bytes) e **sem `.ERR`**. Com **controle negativo** ÔÇö c├│pia do form com `IF .T.` + `PUBLIC PROCEDURE` colados no fim ÔÇö o `.ERR` saiu apontando **s├│** as linhas 619-620 acrescentadas, o que prova que o detector funciona e que as 618 linhas est├úo limpas.
+- **N├úo provei runtime**: o smoke test do VFP9 nesta sess├úo **falhou** (`exit=0`, `.FXP` criado, `STRTOFILE` n├úo escrito) ÔÇö o VFP compila mas n├úo executa agora. Instancia├º├úo e layout real ficam para a etapa 06.
+- Est├íticos: zero bytes >127 (acentos s├│ via `CHR()`), zero `TODO/FIXME` pelo regex real do `Test-CompletudeCodigo`, zero `RETURN` dentro de `TRY`, zero `.Self`, zero `Controls("nome")`, zero `this_X .Value`. `VerificarPropriedadesInexistentes.ps1`: OK. `VerificarFormatInputMask.ps1 -Form FormSIGOPFLU`: `ALTA=0 MEDIA=0 BAIXA=0`. Os 5 arquivos de ├¡cone/fundo referenciados existem em `vbmp\`.
+- Gate da Fase 4 (ramo paginado): `ConfigurarPaginaLista` Ô£ô + `AlternarPagina` Ô£ô.
+
+Lookups (`fAcessoContas`/`fAcessoContab` em Grupo e Conta), os `When` de `getDConta`/`getDGrupo`, os `Btn*Click` e as 4 valida├º├Áes do `btnReport.Click` s├úo das Fases 6-8 ÔÇö n├úo entraram aqui.

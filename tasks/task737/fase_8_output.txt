@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `Formsigopftc.prg` est├í completo (1992 linhas, 28 m├®todos), compila limpo e passa o gate real.
+
+## O que a Fase 8 acrescentou
+
+Os quatro nomes que o `case 8` exige foram **implementados de verdade** ÔÇö n├úo dispensados por ramo de exce├º├úo, porque todos t├¬m conte├║do real neste legado:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarLista()` **PUBLIC** | o bloco `If llOks / If Not Empty(Operacao)` de `checarfichatecnica` (query + `Go Top` + `MontaFichaTecnica`), extra├¡do para ponto ├║nico de recarga |
+| `FormParaBO()` PROTECTED | `lcVal = loObjForm1.&lcObj..Value` + os campos do `Insert Into crSigCdCeT` de `gravafichatecnica` |
+| `BOParaForm()` PROTECTED | o corpo de `carregafichatecnica` |
+| `BtnCancelarClick()` | renomeado de `BtnSairClick` ÔÇö o objeto ├® `btnSair` mas o Caption ├® `"\<Cancelar"`, e o handler leva o nome da **a├º├úo** (PILAR 3) |
+
+Mais tr├¬s auxiliares que eliminam duplica├º├úo real: `ObterControleResposta` (o par `PEMSTATUS`+`EVALUATE` estava repetido em 5 m├®todos ÔÇö divergir na montagem do nome seria falha silenciosa), `LerRespostaDaTela` (a convers├úo `Dtoc` estava triplicada: validar com uma e gravar com outra aprova o que depois n├úo entra), `CarregarLinhaFichaNoBO`, e `HabilitarCampos` **PUBLIC** (o `ReadOnly = Not InList(pcEscolha,'INSERIR','ALTERAR')` com fonte ├║nica, respeitando resposta FIXA via `.Tag`).
+
+**N├úo implementei** `BtnBuscar/Encerrar/Salvar/Incluir/Alterar/Visualizar/ExcluirClick`, `LimparCampos` nem `AjustarBotoesPorModo` ÔÇö o SCX tem 2 bot├Áes e zero superf├¡cie CRUD; cada um teria de ser inventado (PILAR 1) ou vazio (regra de completude). O cabe├ºalho do form documenta nome por nome o porqu├¬.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: form e BO, 0 erros, sem `.ERR`
+- **Gate Fase 8**: `VerificarGateFase8Task737.ps1` recorta e **executa o `case 8` real** do orquestrador ÔåÆ `VEREDITO=PASSA`; os 4 nomes conferidos por declara├º├úo ancorada, n├úo s├│ substring (a armadilha do coment├írio)
+- **Probe de runtime** (`ProbeF8SigOpFtc737.prg`): form instancia, escopos corretos (`CarregarLista`/`HabilitarCampos` PUBLIC, hooks PROTECTED), e com uma ficha dubl├¬ os caminhos novos entregam o esperado ÔÇö `BOParaForm` escreve DATE no campo de data e char no de texto, `HabilitarCampos` respeita `Tag="FIXA"`, `ValidarFichaTecnica` reprova 3 chars com `Mins=5`
+- **Completude, SQL-schema (683 tabelas), fun├º├Áes n├úo definidas, propriedades inexistentes, m├®todo PROTECTED chamado de fora**: todos limpos
+- **CorretorAutomatico em c├│pia** (regra #44 item 5): antes ele injetava um `IF VARTYPE = "L"` **aninhado** dentro de um ramo que j├í provara `"N"` ÔÇö c├│digo morto a cada sweep. Reescrevi na forma can├┤nica que o guard de idempot├¬ncia dele reconhece; agora duas passadas n├úo alteram nada
+- ├ìndice de classes regenerado: `formsigopftc`, `sigopftcbo` e as depend├¬ncias registradas
+
+## Pend├¬ncias que declaro
+
+- **Grava├º├úo n├úo foi exercida de ponta a ponta**: o SQL Server 192.168.200.10 ├® inalcan├º├ível desta m├íquina. O probe prova que `GravarFichaTecnica`/`CarregarLista` n├úo estouram e que o erro ├® reportado (n├úo engolido), mas o `INSERT` em `SigCdCet` precisa de teste manual com banco.
+- **Diverg├¬ncia deliberada**: `CarregarLista` come├ºa por `DesmontarFichaTecnica()`. O legado, chamado com `[GRUPO_OP]` e `pcEscolha <> INSERIR`, remontaria sobre controles existentes ÔåÆ `Object ... is already defined` mata o di├ílogo. A chamada ├® no-op no caminho em que o legado j├í desmonta; s├│ age no caminho quebrado. Est├í documentada no cabe├ºalho.
+- **Limite herdado das fases anteriores** (n├úo ├® regress├úo): `frmbarcta` (a janela com barra de rolagem) n├úo foi portada ÔÇö ficha com muitas caracter├¡sticas fica recortada em `cnt_4c_AreaFicha`.
+- **N├úo adicionei entrada de menu**: o `Init` legado exige `pCnx, pcTipo, pcDopes` do form pai, e nenhum dump do acervo referencia SIGOPFTC ÔÇö o form pai de movimenta├º├úo ainda n├úo foi migrado. Uma entrada em `popMovimentos` abriria o di├ílogo sem contexto (ficha vazia). A carga sob demanda resolve a classe pelo ├¡ndice quando o pai existir.

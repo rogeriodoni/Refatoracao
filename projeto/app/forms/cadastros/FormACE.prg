@@ -167,6 +167,11 @@ DEFINE CLASS FormACE AS FormBase
         ENDWITH
 
         *-- Container botoes CRUD (canonico: Top=29, Left=542, Width=390)
+        *-- TRANSPARENTE: o container eh 85x390 e os botoes ocupam 75x375 a partir
+        *-- de (5,5), entao qualquer BackColor opaco aparece como ANEL escuro em
+        *-- volta dos 5 botoes, por cima da faixa cinza do cabecalho (Erro312).
+        *-- O Grupo_op do SCX legado nao declara BackColor nem BackStyle, e o
+        *-- canonico (FormCor) usa BackStyle = 0 - sem BackColor nenhum.
         loc_oPg1.AddObject("cnt_4c_Botoes", "Container")
         loc_oBotoes = loc_oPg1.cnt_4c_Botoes
         WITH loc_oBotoes
@@ -174,8 +179,7 @@ DEFINE CLASS FormACE AS FormBase
             .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackColor   = RGB(53, 53, 53)
-            .BackStyle   = 1
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH

@@ -178,7 +178,9 @@ DEFINE CLASS Formcrf AS FormBase
             .Width         = 390
             .Height        = 85
             .BackColor     = RGB(53, 53, 53)
-            .BackStyle     = 1
+            *-- TRANSPARENTE (Erro312): container opaco pinta um anel em volta dos
+            *-- botoes, por cima da faixa do cabecalho. Canonico: FormCor.
+            .BackStyle     = 0
             .BorderWidth   = 0
             .SpecialEffect = 0
             .Visible       = .T.
@@ -197,7 +199,6 @@ DEFINE CLASS Formcrf AS FormBase
                 .FontBold        = .T.
                 .FontItalic      = .T.
                 .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
                 .SpecialEffect   = 0
                 .MousePointer    = 15
                 .WordWrap        = .T.

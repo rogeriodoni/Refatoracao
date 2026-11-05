@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 entregue em `projeto\app\forms\operacionais\FormSigOpFpg.prg` (compila limpo, instancia├º├úo e handlers exercitados em runtime).
+
+## O que entrou
+
+**Handlers de Click dos 5 bot├Áes que o SCX legado realmente tem** (`ConfigurarEventosBotoes`, chamado no fim de `ConfigurarEstruturaBase`, depois de todos os `AddObject`):
+
+| legado | migrado |
+|---|---|
+| `Apaga.Click` | `CmdApagaClick` ÔÇö guarda de modo + `Select xPar/Zap` + zera os 8 campos + `MostraObs` + repintura + foco |
+| `Ok.Click` | `CmdOkClick` ÔÇö `SCAN` por linha com FPags preenchido e Vencs vazio ÔåÆ aviso "Vencimento Inv├ílido !" e foco na coluna Vencimento; aprovado, fecha |
+| `Cancela.Click` | `CmdCancelaClick` |
+| `alteracotacao.Click` | `CmdAlteraCotacaoClick` + `PodeAlterarCotacao` (o `When` do bot├úo) |
+| `CntCCred.Confirma.Click` | `CmdConfirmaCartaoClick` |
+
+**As tr├¬s rotinas do legado que eles acionam**: `mostraobs` ÔåÆ `MostrarObservacao` + `CarregarInfoFormaPagamento` (o `Seek` em `CrSigOpFp` virou SELECT em `SigOpFp` ÔÇö DataSession=2 n├úo alcan├ºa cursor da sess├úo do pai); `mcartaocred` ÔåÆ `CartaoCredito`; `return` ÔåÆ `FecharDialogo`. Properties novas: `this_lConfirmado`, `this_nCotacaoAnterior` (o `peantvalue` da fwget), `this_cInfoForma`, `this_lObsForma`.
+
+Pontos onde o legado pedia cuidado: `ZAP` guardado por `SET("SAFETY")` (├® escopado por data session e congelaria a tela), `Do Form SigOpAlC` virou `CREATEOBJECT` + `Show()` fora do TRY com a refer├¬ncia do BO guardada antes (o FormSigOpAlC fecha com `Release`), e `FecharDialogo` fecha com `Hide()` para o form pai conseguir ler o resultado.
+
+## Verifica├º├úo
+
+- Compila├º├úo: `.FXP` 43.517 bytes, **zero `.ERR`**.
+- Probe em runtime (`automation\probef7sigopfpg736.prg`): os 5 handlers existem e s├úo PUBLIC (`protected=.F.`), `AEVENTS` confirma 1 bind `CLICK/CMD*CLICK` em cada bot├úo; `CmdApagaClick` recusa fora de INSERIR/ALTERAR e, em INSERIR, zera o cursor (`reccount 2 ÔåÆ 0`) sem travar; `CmdOkClick` recusa com vencimento vazio (ponteiro fica na linha ofensora, recno=2) e aprova depois de preenchido, com `this_lConfirmado=.T.` e o form vivo; `CartaoCredito` inverte os `Enabled` como o legado.
+- Gate `case 7` do orquestrador: **PASSA** pela exce├º├úo leg├¡tima ÔÇö `[i] Fase 7: legado sem botao CRUD algum - validado pelos 5 handler(s)`. Reescrevi o coment├írio de cabe├ºalho para **n├úo** citar os nomes `BtnIncluirClick/...`: com eles escritos, o gate passava pelo texto do coment├írio (falso positivo conhecido), n├úo pelo m├®rito.
+- Completude (regexes da etapa 05d): 0 TODO, 0 pend├¬ncia, 0 procedure vazia. Auditorias de fun├º├úo ├│rf├ú e de m├®todo PROTECTED chamado de fora: limpas.
+
+## O que ficou explicitamente para a Fase 8
+
+Eventos de **campo** e a transfer├¬ncia FormÔåöBO: c├ílculo de parcelas/encargo e o bloco de cota├º├úo/c├ómbio dos `Valid` de Get_vpar/GetPorc/fweditdata_venc (`fCarregarCambio`), o leitor serial de cheques (`inchequeserial`/`VerificaCheque`/`limpa_che`), `FormParaBO`/`BOParaForm` (inclusive data de entrada e valor total do t├¡tulo, que v├¬m do pai) e as valida├º├Áes de cheque/cart├úo. O cabe├ºalho do arquivo foi atualizado com essa divis├úo.
+
+Uma ressalva de verifica├º├úo: o trecho do `CmdAlteraCotacaoClick` que **abre** o FormSigOpAlC n├úo foi exercitado ÔÇö `Show()` de modal bloqueia em headless; no probe s├│ o caminho do `When` (que recusa e retorna sem abrir) foi medido.

@@ -1,0 +1,557 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpGco.SCX
+* Data/Hora: 05/11/2026 04:02:14
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPGCO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPGCO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPGCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPGCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPGCO
+  Class: shape
+  BaseClass: shape
+
+Objeto: OleGrafico
+  Parent: SIGOPGCO
+  Class: oleboundcontrol
+  BaseClass: oleboundcontrol
+
+Objeto: sair
+  Parent: SIGOPGCO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Imprimir
+  Parent: SIGOPGCO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Gráfico Comparativo"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPGCO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.Shape2
+------------------------------------------------------------
+  Top = 7
+  Left = 615
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.OleGrafico
+------------------------------------------------------------
+  Top = 141
+  Left = 12
+  Height = 418
+  Width = 770
+  TabIndex = 0
+  Enabled = .T.
+  AutoActivate = 0
+  Name = "OleGrafico"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.sair
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Caption = "Encerrar"
+  Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPGCO.Imprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 647
+  Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Caption = "\<Imprimir"
+  Name = "Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPGCO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mostragrafico
+------------------------------------------------------------
+PROCEDURE mostragrafico
+Local Array laMeses(1),laGrupos(1),laTpgra1(2,3)
+Local laTpgra1,lnConta1,lnNmeses,lnNgrupos,lcOnErroCmd1,llOnErro1
+
+Thisform.LockScreen = .t.
+
+m.lcOnErroCmd1 = On('Error')
+
+On Error m.llOnErro1 = .t.
+
+Declare m.laMeses(1),m.laGrupos(1),laTpGra1(2,3)
+
+m.laMeses = ''
+m.laGrupos = ''
+
+Select Distinct Mes;
+  From crFinal ;
+  Into Array laMeses
+
+Select Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos ;
+  From crFinal ;
+  Into Array laGrupos
+
+m.lnNmeses  = Alen(m.laMeses,  1)
+m.lnNgrupos = Alen(m.laGrupos, 1)
+
+lcTpReg = 'COLUNA'
+laTpgra1 [1,1] = -4100 && Coluna...
+laTpgra1 [1,2] = 4
+laTpgra1 [1,3] = 'COLUNA'
+laTpgra1 [2,1] = -4102 && Pizza...
+laTpgra1 [2,2] = 7
+laTpgra1 [2,3] = 'PIZZA'
+lnConta1 = ((At(AllTrim(lcTpReg),'COLUNAPIZZA ')+5)/6)
+lnTmX = Iif(Type('lnTmX')=='N',lnTmX,0)
+
+lcTitulo   = 'Gráfico Comparativo'
+lcStitulo  = Cabecalho.pRelTitulo
+lcStitulo2 = Cabecalho.pPeriodo
+lcStitulo3 = 'Todas as Empresas'
+lcTitulod  = ''
+lcTitulov  = 'Desempenho'
+
+With ThisForm.OleGrafico
+	.ControlSource = 'gGraficos'
+	.autoformat(laTpgra1 [lnConta1,1],laTpgra1 [lnConta1,2])
+	.chartarea.font.name = "Arial"
+	.chartarea.font.size = 8
+	.chartarea.font.bold = .t.
+	.HasLegend = .T.
+	.Legend.Position = 1
+	.Legend.Shadow = .t.
+	.hastitle = .t.
+	.chartarea.font.name = "Arial"
+	.charttitle.font.size = 9
+	.charttitle.font.bold = .t.
+	.charttitle.font.italic = .f.
+	.charttitle.text = lcTitulo+Chr(13)+lcStitulo+Chr(13)+lcStitulo2+Chr(13)+lcStitulo3
+	.ChartArea.interior.color = Rgb(192,192,192)
+	.PlotArea.interior.color = Rgb(222,222,222)
+	.displayblanksas = 3
+	.chartarea.interior.color = Rgb(255,255,255)
+	.chartarea.border.color = Rgb(0,0,0)
+	.chartarea.shadow = .t.
+	.plotarea.interior.color = Rgb(255,255,255)
+
+	If m.lnConta1==1
+		.plotarea.width = 610
+		.plotarea.left = 1
+		.axes(2).maximumscaleisauto = .t.
+		.axes(2).hastitle = .t.
+		.axes(2).axistitle.caption = m.lcTituloV
+
+		If .Not.IsEmpty(m.lcTituloV)
+			.axes(2).axistitle.orientation = 90
+			.axes(2).ticklabels.orientation = 0
+		EndIf
+		.axes(1).hastitle = .t.
+		.axes(1).axistitle.caption = m.lcTituloD
+
+		If .Not.IsEmpty(m.lcTituloD)
+			.axes(1).ticklabels.orientation = Iif((m.lnTmX>5),90,0)
+			.axes(1).ticklabels.font.size = 6
+		EndIf
+		.chartgroups(1).hasserieslines = .t.
+
+		With .ChartGroups(1)
+			.HasSeriesLines = .f.
+			.GapWidth = 10
+			.Overlap = (.GapWidth/2*-1)
+			If Thisform.Parentform.Comparativo.Value==1
+				For m.lnConta1=1 To m.lnNgrupos
+					If Type('ThisForm.OleGrafico.ChartGroups(1).SeriesCollection(m.lnConta1)')=='O'
+					    With .SeriesCollection(m.lnConta1)
+					        .ApplyDataLabels = .t.
+					        .ApplyDataLabels.Type = 2
+							For m.lnConta2=1 To m.lnNmeses
+								If Type('ThisForm.OleGrafico.ChartGroups(1).SeriesCollection(m.lnConta1).Points(m.lnConta2).DataLabel')=='O'
+									With .Points(m.lnConta2).DataLabel
+										.Top = (.Top-10)
+										.Caption = Iif(InList(m.lnConta1,2,4),AllTrim(Str(m.laPerc(m.lnConta1,m.lnConta2),20,0)),'')
+										.Font.Name = 'Arial '
+										.Font.Size = 8
+										.Font.Bold = .t.
+								        .Font.Shadow = .f.
+									EndWith
+								EndIf
+							EndFor
+						EndWith
+					EndIf
+				EndFor
+			EndIf
+		EndWith
+	EndIf
+	If m.lnConta1==2
+		.plotarea.width = 240
+		.plotarea.top = 63
+		.plotarea.left = 110
+	EndIf
+	Select Graph
+EndWith
+
+On Error &lcOnErroCmd1.
+
+Thisform.LockScreen = .f.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS pForm, datses
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set DataSession To DatSes
+ThisForm.ParentForm = pForm
+
+Local laTpgra1,lnConta1,lcTitulo
+
+Declare m.laMeses(1),m.laGrupos(1),laTpGra1(2,3)
+
+m.laMeses  = ''
+m.laGrupos = ''
+
+Select Distinct Mes;
+  From crFinal ;
+  Into Array laMeses
+
+Select Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos;
+  From crFinal ;
+  Into Array laGrupos
+
+m.lnNmeses  = Alen(m.laMeses,  1)
+m.lnNgrupos = Alen(m.laGrupos, 1)
+
+Declare m.laPerc(m.lnNgrupos,m.lnNmeses)
+
+m.laPerc = 0
+
+Create Cursor Graph (gGraficos Gen (4))
+
+#Define TAB CHR(9)
+#Define CRLF CHR(13)+CHR(10)
+
+Declare laTpGra1 [2,3]
+
+laTpgra1 [1,1] = -4100 && Coluna...
+laTpgra1 [1,2] = 4
+laTpgra1 [1,3] = 'COLUNA'
+laTpgra1 [2,1] = -4102 && Pizza...
+laTpgra1 [2,2] = 7
+laTpgra1 [2,3] = 'PIZZA'
+
+lcTpReg = 'COLUNA'
+lnConta1 = ((At(AllTrim(lcTpReg),'COLUNAPIZZA ')+5)/6)
+lnTmX = Iif(Type('lnTmX')=='N',lnTmX,0)
+
+Select Cabecalho
+Go Top
+
+Select crFinal
+Set order to Grupom
+Go Top
+
+lcStrg = '' 
+lnmes = crFinal.Mes 
+Scan 
+	Do Case
+		Case CrFinal.Mes = 1
+			_Mes = "Janeiro"
+		Case CrFinal.Mes = 2
+			_Mes = "Fevereiro"
+		Case CrFinal.Mes = 3
+			_Mes = "Março"
+		Case CrFinal.Mes = 4
+			_Mes = "Abril"
+		Case CrFinal.Mes = 5
+			_Mes = "Maio"
+		Case CrFinal.Mes = 6
+			_Mes = "Junho"
+		Case CrFinal.Mes = 7
+			_Mes = "Julho"
+		Case CrFinal.Mes = 8
+			_Mes = "Agosto"
+		Case CrFinal.Mes = 9
+			_Mes = "Setembro"
+		Case CrFinal.Mes = 10
+			_Mes = "Outubro"
+		Case CrFinal.Mes = 11
+			_Mes = "Novembro"
+		Case CrFinal.Mes = 12
+			_Mes = "Dezembro"
+	Endcase
+	lcStrg = lcStrg +  TAB + alltrim(_Mes)
+	Do While crFinal.Mes = lnMes And Not Eof()
+		If Not Eof()
+			Skip
+		EndIf
+	EndDo
+	lnMes = crFinal.Mes 
+EndScan
+lcStrg = lcStrg + CRLF
+
+Select crFinal
+Set Order To Imp
+Go Top
+
+Do While Not Eof()
+	If Thisform.Parentform.Comparativo.value = 1
+		lcStrg = lcStrg + ALLTRIM(crFinal.Grupos)+str(crFinal.ano,4)
+		lcgrupo = crFinal.Grupos+str(crFinal.ano,4)
+		Scan While lcgrupo = crFinal.Grupos+str(crFinal.ano,4)
+		   	lcStrg = (lcStrg+TAB+str(crFinal.Total))
+		   	Set Exact On
+		   	m.lnMespos = Ascan(laMeses,crFinal.mes)
+		   	m.lnGrupopos = Ascan(laGrupos,(Str(crFinal.ordem,1)+Str(crFinal.ano,4)))
+		   	
+		   	If (m.lnMespos>0.And.;
+		   		m.lnGrupopos>0)
+		   		m.laPerc(lnGrupopos,lnMespos) = crFinal.npercs
+		   	EndIf
+		   	Set Exact Off
+		EndScan
+	Else
+		lcStrg = lcStrg + Alltrim(crFinal.Grupos)
+		lcgrupo = crFinal.Grupos
+		Scan While lcgrupo = crFinal.Grupos
+		   	lcStrg = (lcStrg+TAB+str(crFinal.Total))
+		EndScan
+	Endif
+	lcStrg = lcStrg + CRLF
+	Select crFinal
+EndDo
+
+Select CrFinal
+Go Top
+
+If Not Empty(lcStrg)
+	Select Graph
+	Append Blank
+	Append General gGraficos Class 'MsGraph.Chart' Data lcStrg
+	Thisform.MostraGrafico()
+Endif
+
+Select CrFinal
+Go Top
+
+Select Graph
+Go Top
+
+Thisform.parentform.Aguarde.visible = .f.
+* Fim **************************************************************************************
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGCO.sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPGCO.Imprimir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select Graph
+Go Top
+Report Form SigOpGrc To Printer Prompt NoConsole
+
+Select Graph
+Go Top
+Thisform.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPGCO
+RESERVED3 (ClassInfo): parentform
+*mostragrafico 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

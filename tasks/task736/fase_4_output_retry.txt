@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpFpg.prg` (486 ÔåÆ 708 linhas).
+
+## O que estava faltando
+
+A grade (`grd_4c_Dados`, 5 colunas) e os bot├Áes (`cmd_4c_Apaga`/`cmd_4c_Ok`/`cmd_4c_Cancela`) j├í existiam e estavam fi├®is ao dump ÔÇö o gate reprovava por **falta do m├®todo de carga**. E a aus├¬ncia era real, n├úo burocr├ítica: o `Init` legado tem o funil, no bloco `With ThisForm.Grade / .RecordSource='xPar' / ...controlsource... / .refresh / EndWith` seguido de `Select xPar / Go Top`.
+
+## O que foi acrescentado
+
+| M├®todo | Papel |
+|---|---|
+| `GarantirCursorDados()` | ├║nica `CREATE CURSOR` do form ÔÇö fonte ├║nica da lista e da **ordem** dos campos (regra de OPERACIONAL) |
+| `VincularGrade()` | o bloco `With ThisForm.Grade` legado. `ColumnCount` s├│ se diferente de 5 (reatribuir recria as Columns e mataria `Column.AddObject` da fase de lookup), `RecordSource` ÔåÆ `ControlSource` ÔåÆ fonte/m├íscara/`Width`/`ColumnOrder` ÔåÆ **headers por ├║ltimo**, porque o `RecordSource` reseta largura e caption |
+| `CarregarDados()` | `VincularGrade` + `SELECT (cursor)` + `GO TOP` + `Grid.Refresh` ÔÇö o funil que as fases de eventos (Apaga/Zap, Valor.Valid, gera├º├úo de parcelas) v├úo chamar. `RETURN` ├║nico fora do `TRY` |
+| `AjustarBotoesPorModo()` | `ThisForm.Apaga.Visible = Inlist(Op_Escolha,'INSERIR','ALTERAR')` |
+
+Tamb├®m transcrevi do dump o que faltava: `Grade.TabIndex = 10` e `BorderStyle`/`Margin`/`ForeColor`/`BackColor` do `Text1` de cada coluna. O bloco `Ok.Left`/`Ok.Cancel`/`Cancela` por `llAltDireta` est├í comentado (`*!*`) no SCX e por isso **n├úo** foi portado.
+
+## Defeito encontrado e corrigido de passagem
+
+`TornarControlesVisiveis` for├ºa `Visible = .T.` em tudo, ent├úo apagava a regra de modo do legado ÔÇö `cmd_4c_Apaga` ficava vis├¡vel em CONSULTAR e EXCLUIR. `AjustarBotoesPorModo()` agora roda **depois** dele, e `CarregarDados()` depois tamb├®m (Refresh em controle invis├¡vel n├úo pinta).
+
+## Verifica├º├úo no VFP9 real
+
+- **Compila├º├úo**: BO e Form sem `.ERR` (`.fxp` 1728 / 10548), com os `.fxp` apagados antes.
+- **Probe de runtime** (`automation\probef4sigopfpg736b.prg`, com pai simulado e `SET DATASESSION TO` a sess├úo privada do form ÔÇö sem isso o `USED()` n├úo v├¬ o cursor e o probe anterior reportava falha inexistente):
+  - cursor com os 5 campos na ordem certa; 3 linhas inseridas, `RECNO` em 3 ÔåÆ `CarregarDados()` devolve `.T.` e deixa `RECNO = 1`, `RECCOUNT = 3`;
+  - colunas ap├│s o rebind: larguras 94/108/80/33/74, `ColumnOrder` 3ÔåÆ5, 4ÔåÆ3, 5ÔåÆ4, m├íscaras e headers (`Cond. Pagto`/`Valor`/`Vencimento`/`Moe`/`Cota├º├úo`) intactos; `VincularGrade()` reexecutado ├® idempotente;
+  - `Apaga.Visible` = `.T.` em INSERIR/ALTERAR e `.F.` em CONSULTAR/EXCLUIR/vazio;
+  - nenhum di├ílogo disparado; pai reabilitado no `Release`.
+- **Gates reproduzidos com os regexes do orquestrador**: Fase 4 ramo flat **PASSA** (`temGrade`/`temBotoes`/`temCarga` todos `True`) e completude **OK** nos dois arquivos.
+
+Uma observa├º├úo sobre o `TabIndex`: o probe mede 2, n├úo 10 ÔÇö o VFP limita o valor ao n├║mero de controles j├í existentes no container. A ordem final de tabula├º├úo s├│ se estabelece quando os campos das Fases 5/6 existirem; deixei a atribui├º├úo do dump com coment├írio explicando, para n├úo parecer defeito numa revis├úo.

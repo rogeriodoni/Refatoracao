@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 of FormSigOpFpg is complete. Summary of what was implemented:
+
+**Core additions to `FormSigOpFpg.prg`** (grew from 2996 ÔåÆ 4750 lines):
+- Two local TextBox subclasses (`TextBoxCelulaValorFpg`/`TextBoxCelulaVencFpg`) for grid-cell validation per regra #46
+- `DefinirDadosTitulo()` ÔÇö public API for the parent form to supply DtEnts/ValTots/Emps (this dialog has its own DataSession, so it can't read the parent's cursor directly)
+- `CarregarCambio`/`MoedaPermiteCotacao`/`CargoTemAltCots` ÔÇö SQL-based replacements for the legacy's pre-loaded global cursors (crSigCdMoe/crUsuario/crSigCdCrg)
+- `TxtFweditdataVencLostFocus` ÔÇö the installment generator (holiday-skip, Fixed/Corridos vencimento, carne key generation, cart├úo-cr├®dito propagation)
+- `TxtVparLostFocus`/`TxtPorcLostFocus`/`TxtPEncargoLostFocus`/`TxtNparLostFocus` ÔÇö troco/percentage/encargo calculations
+- `VerificaCheque`/`LimpaChe`/`InChequeSerial` ÔÇö cheque duplicate-check and leitora-serial handling (degrades gracefully since no OLE ReadComm control exists in this architecture, matching the precedent already set in `Formsigopcim.prg`)
+- Fixed a latent Fase-5 bug: `txt_4c_MoeOper` was typed as a numeric amount field instead of the char(3) currency code it actually holds (`SigCdPam.MoedaCheqs`) ÔÇö added `ResolverMoedaOperacao()` to resolve it correctly
+
+**`SigOpFpgBO.prg`**: added `this_cEmps`/`this_nEntradas`/`this_nDias`/`this_cTvens`/`this_cDcarts` properties consumed by the generator.
+
+**`functions.prg`**: added `fChkDigitos` and `fValidaCards` (Luhn) helpers the legacy code calls but that were never ported.
+
+Both files compile with zero errors, and I ran targeted runtime probes (grid-cell validation, parcel generation, troco/percentage math, cheque checks, graceful SQL-failure degradation) plus re-ran the Fase 7 probe to confirm no regression ÔÇö all passed.

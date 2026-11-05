@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All four memory files are now corrected and consistent with the project's established format.
+
+**Summary:** All 15 findings in this FUNCTIONAL pass for `FormSigOpFpg.prg` are false positives, verified directly against the code:
+
+- **CONTAINER-VISIVEL**: `TornarControlesVisiveis()` already excludes the 5 floating panels correctly; `CNT_4C_SOMBRA` (header) is intentionally always visible.
+- **11├ù METODO-INEXISTENTE**: all defined as `FUNCTION` (not `PROCEDURE`) ÔÇö the detector's known blind spot.
+- **THIS.Controls()**: native VFP array, correctly indexed by the numeric loop variable `loc_nI`.
+- **THIS.Value()**: zero occurrences of `THIS.Value(` anywhere in the file ÔÇö fabricated/stale finding.
+- **GRID-WITH**: `VincularGrade`'s `WITH` block follows the exact canonical order (ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width), which is correct since `WITH` never defers execution in VFP9.
+
+No changes were made to `FormSigOpFpg.prg` or `SigOpFpgBO.prg` ÔÇö both are already correct. I appended this reincidence to the four relevant memory files (`feedback_container_visivel_cabecalho_falso_positivo`, `feedback_metodo_inexistente_funcao_nao_reconhecida`, `feedback_controls_indexado_por_numero`, `feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco`) so future sessions recognize this pattern immediately for this file.

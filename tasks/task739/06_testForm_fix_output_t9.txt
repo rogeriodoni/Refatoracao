@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmado: isso **n├úo ├® um bug de c├│digo**. O erro 1526 DBNETLIB ("SQL Server inexistente ou acesso negado") ├® falha de rede/ambiente da m├íquina do pipeline, n├úo um defeito em `FormSigOpGco.prg` ou `SigOpGcoBO.prg`.
+
+Testei agora mesmo:
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433
+TcpTestSucceeded: False
+```
+
+Isso confirma a mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): essa rota ├® **intermitente** nesta m├íquina (funcionou em 2026-11-04, caiu de novo em 2026-11-05 ÔÇö e reincidiu agora pouco em task738/FormSigOpGar e task739/FormSigOpGco, o mesmo form desta tarefa). A mesma mem├│ria registra explicitamente: *"NAO editar FormSigOpGco.prg/SigOpGcoBO.prg para 'corrigir' isto"*.
+
+Analisando o c├│digo em si, o par Form/BO est├í corretamente estruturado (conex├úo via `gnConnHandle`, cursores do form pai, guards de buffering, etc. ÔÇö nada no fluxo de `InicializarForm`/`Init` for├ºa uma conex├úo nova al├®m da j├í estabelecida pelo `config.prg`). O teste falha na **ETAPA 1B** antes mesmo de instanciar o form, no pr├®-flight de conex├úo do pr├│prio `TestFormWrapper.prg` ÔÇö nada relacionado ├á l├│gica deste form espec├¡fico.
+
+**N├úo vou alterar os arquivos**, porque:
+1. N├úo h├í defeito de c├│digo a corrigir ÔÇö editar `.prg` aqui seria uma mudan├ºa sem causa real, violando a regra "corrigir APENAS o erro indicado".
+2. A mem├│ria do projeto j├í documenta esse exato padr├úo de falso positivo nesta etapa do pipeline.
+
+**A├º├úo recomendada**: re-executar a etapa `06_testForm` quando a rota de rede para `192.168.200.10:1433` estiver dispon├¡vel novamente (ela j├í alternou entre dispon├¡vel/indispon├¡vel nos ├║ltimos dias). Se quiser, posso atualizar a mem├│ria do projeto com esta nova reincid├¬ncia (2026-11-05, task739) para refor├ºar o padr├úo.

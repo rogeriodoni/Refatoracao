@@ -1,0 +1,1062 @@
+<title>Telas Alteradas Pós-Migração</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root {
+  --paper:#eceff3; --panel:#ffffff; --panel-2:#f6f8fa;
+  --ink:#141922; --fg:#1d2430; --muted:#5d6878; --faint:#8b95a4;
+  --line:#d2d8e1; --line-soft:#e3e8ee;
+  --ambos:#2b4c7e; --codigo:#1a6b66; --layout:#9d6b12; --coment:#7b8495;
+  --ghost:#c6ccd6;
+  --sans:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --serif:"IBM Plex Serif",Georgia,serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#0f131a; --panel:#161c25; --panel-2:#1b222d;
+    --ink:#e6eaf1; --fg:#dde3ec; --muted:#8e9aab; --faint:#6c7889;
+    --line:#2a333f; --line-soft:#222a35;
+    --ambos:#7ea6dc; --codigo:#58b8b1; --layout:#d4a44a; --coment:#98a2b2;
+    --ghost:#333c49;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#0f131a; --panel:#161c25; --panel-2:#1b222d;
+  --ink:#e6eaf1; --fg:#dde3ec; --muted:#8e9aab; --faint:#6c7889;
+  --line:#2a333f; --line-soft:#222a35;
+  --ambos:#7ea6dc; --codigo:#58b8b1; --layout:#d4a44a; --coment:#98a2b2;
+  --ghost:#333c49;
+}
+* { box-sizing:border-box; }
+body { background:var(--paper); color:var(--fg); font-family:var(--sans); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:1380px; margin-inline:auto; padding:34px 22px 72px; }
+
+/* ---- cabeçalho ---- */
+.head { border-bottom:2px solid var(--ink); padding-bottom:18px; margin-bottom:0; }
+.eyebrow { font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 10px; }
+h1 { font-family:var(--serif); font-weight:600; font-size:clamp(26px,3.4vw,38px); line-height:1.1; margin:0 0 12px; color:var(--ink); text-wrap:balance; letter-spacing:-.01em; }
+.lede { max-width:68ch; margin:0; color:var(--muted); font-size:14.5px; }
+.lede b { color:var(--fg); font-weight:600; }
+.meta { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:16px; font-family:var(--mono); font-size:11px; color:var(--faint); }
+.meta span::before { content:"› "; color:var(--line); }
+
+/* ---- faixa de indicadores: um bloco, filetes internos ---- */
+.kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(176px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-top:none; }
+.kpi > div { background:var(--panel); padding:18px 18px 16px; display:flex; flex-direction:column; gap:3px; }
+.kpi .n { font-family:var(--serif); font-size:34px; font-weight:600; line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.kpi .k { font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); font-weight:500; }
+.kpi .s { font-size:12px; color:var(--faint); font-family:var(--mono); }
+.kpi .bar { height:3px; margin-top:9px; background:var(--ghost); }
+.kpi .bar i { display:block; height:100%; }
+
+/* ---- seções ---- */
+section { margin-top:40px; }
+h2 { font-size:12px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin:0 0 4px; font-family:var(--mono); }
+.sub { margin:0 0 18px; color:var(--faint); font-size:13px; max-width:74ch; }
+.band { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:30px; }
+@media (max-width:900px) { .band { grid-template-columns:minmax(0,1fr); gap:38px; } }
+
+/* ---- barras tipo×natureza ---- */
+.tipos { display:flex; flex-direction:column; gap:16px; }
+.tipo-row .tl { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+.tipo-row .tn { font-size:13.5px; font-weight:600; color:var(--fg); }
+.tipo-row .tv { font-family:var(--mono); font-size:11.5px; color:var(--faint); font-variant-numeric:tabular-nums; }
+.stack { display:flex; height:26px; background:var(--panel-2); border:1px solid var(--line-soft); }
+.stack i { display:block; height:100%; position:relative; }
+.stack i + i { border-left:1px solid var(--panel); }
+.stack i span { position:absolute; inset:0; display:grid; place-items:center; font-family:var(--mono); font-size:10.5px; color:#fff; font-weight:500; }
+
+/* ---- barras de categoria ---- */
+.cats { display:flex; flex-direction:column; gap:2px; }
+.cat { display:grid; grid-template-columns:152px minmax(0,1fr) 44px; align-items:center; gap:10px; padding:4px 6px; border:none; background:none; color:inherit; font:inherit; text-align:left; cursor:pointer; width:100%; }
+.cat:hover { background:var(--panel-2); }
+.cat[aria-pressed="true"] { background:var(--panel); box-shadow:inset 2px 0 0 var(--ambos); }
+.cat .cl { font-size:12.5px; color:var(--fg); }
+.cat .cl em { display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; color:var(--faint); font-style:normal; }
+.cat .ct { height:14px; background:var(--ghost); }
+.cat .ct i { display:block; height:100%; background:var(--ambos); }
+.cat .cv { font-family:var(--mono); font-size:12px; text-align:right; font-variant-numeric:tabular-nums; color:var(--fg); }
+.cat:focus-visible { outline:2px solid var(--ambos); outline-offset:1px; }
+
+/* ---- filtros ---- */
+.tools { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 14px; background:var(--panel); border:1px solid var(--line); }
+.tools input[type=search] { font-family:var(--mono); font-size:12.5px; padding:7px 10px; border:1px solid var(--line); background:var(--panel-2); color:var(--fg); min-width:210px; flex:1 1 210px; }
+.tools input[type=search]:focus-visible { outline:2px solid var(--ambos); outline-offset:-1px; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; }
+.chip { font-family:var(--mono); font-size:11px; padding:5px 9px; border:1px solid var(--line); background:var(--panel-2); color:var(--muted); cursor:pointer; letter-spacing:.02em; }
+.chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+.chip:focus-visible { outline:2px solid var(--ambos); outline-offset:1px; }
+.clearbtn { font-family:var(--mono); font-size:11px; padding:5px 9px; border:1px dashed var(--line); background:none; color:var(--muted); cursor:pointer; }
+.count { font-family:var(--mono); font-size:11.5px; color:var(--faint); margin-left:auto; white-space:nowrap; }
+
+/* ---- tabela ---- */
+.tablebox { border:1px solid var(--line); border-top:none; background:var(--panel); max-height:min(72vh,780px); overflow:auto; }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+thead th { position:sticky; top:0; z-index:2; background:var(--panel-2); border-bottom:1px solid var(--line); text-align:left; padding:9px 10px; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600; white-space:nowrap; cursor:pointer; user-select:none; }
+thead th:hover { color:var(--fg); }
+thead th[aria-sort] { color:var(--ink); }
+thead th[aria-sort]::after { content:" ▲"; font-size:8px; }
+thead th[aria-sort="descending"]::after { content:" ▼"; }
+tbody td { padding:7px 10px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+tbody tr:hover td { background:var(--panel-2); }
+td.f { font-family:var(--mono); font-size:11.5px; color:var(--ink); white-space:nowrap; }
+td.t { min-width:170px; color:var(--fg); }
+td.num { font-family:var(--mono); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--fg); }
+td.d { font-family:var(--mono); font-size:11px; color:var(--faint); white-space:nowrap; }
+td.e { font-family:var(--mono); font-size:11px; color:var(--muted); max-width:150px; }
+.pill { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.04em; padding:2px 6px; white-space:nowrap; color:#fff; }
+.tags { display:flex; flex-wrap:wrap; gap:3px; min-width:200px; }
+.tag { font-family:var(--mono); font-size:9.5px; letter-spacing:.05em; padding:2px 4px; border:1px solid currentColor; opacity:.92; }
+.tag.lay { color:var(--layout); }
+.tag.cod { color:var(--codigo); }
+.dash { color:var(--ghost); }
+
+/* ---- método ---- */
+.method { margin-top:44px; border-top:1px solid var(--line); padding-top:22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:26px; }
+.method h3 { font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 7px; font-weight:600; }
+.method p, .method li { font-size:12.5px; color:var(--muted); margin:0 0 7px; max-width:60ch; }
+.method code { font-family:var(--mono); font-size:11.5px; background:var(--panel); border:1px solid var(--line-soft); padding:1px 4px; color:var(--fg); }
+.method ul { margin:0; padding-left:16px; }
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="head">
+    <p class="eyebrow">Migração VFP9 → arquitetura em camadas · auditoria de histórico</p>
+    <h1>Telas alteradas pós-migração</h1>
+    <p class="lede">Das <b>523</b> telas migradas, <b>430</b> tiveram o código alterado depois da migração e <b>93</b> seguem exatamente como saíram do pipeline. Para cada tela, a linha de base é o commit que a migrou — nos casos de migração multi-fase, o último <code>feat(task…)</code> dela — e o que veio depois está classificado abaixo por natureza do ajuste.</p>
+    <p class="meta">
+      <span>Apurado em 05/11/2026</span>
+      <span>HEAD e484a3cdf · 254 commits</span>
+      <span>projeto/app/forms + projeto/app/classes</span>
+      <span>diff ignorando CRLF e espaços</span>
+    </p>
+  </header>
+
+  <div class="kpi" id="kpi"></div>
+
+  <section class="band">
+    <div>
+      <h2>Natureza do ajuste por tipo de tela</h2>
+      <p class="sub">Cada barra é o universo daquele tipo. A faixa cinza à direita são as telas intactas.</p>
+      <div class="tipos" id="tipos"></div>
+    </div>
+    <div>
+      <h2>O que foi mexido</h2>
+      <p class="sub">Uma tela conta em todas as categorias que seu diff tocou — por isso a soma passa de 430. Clique para filtrar a tabela.</p>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Todas as telas alteradas</h2>
+    <p class="sub">Linhas = total de linhas adicionadas e removidas no form e no seu BO. Fixes = commits de correção dirigidos àquela tela. Erros = números de Erro registrados nas mensagens de commit.</p>
+    <div class="tools">
+      <input type="search" id="q" placeholder="buscar tela, arquivo ou nº de Erro" aria-label="Buscar">
+      <div class="chips" id="chipTipo"></div>
+      <div class="chips" id="chipNat"></div>
+      <button class="clearbtn" id="clear">limpar filtros</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr id="hrow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>As 93 telas intactas</h2>
+    <p class="sub">Nenhuma linha mudou no form nem no BO desde o commit que as migrou — nem código, nem layout, nem comentário. <b>82 das 93 são operacionais</b>, e 65 foram migradas de 20/10 para cá: o lote mais recente, que ainda não passou pela homologação alfabética. Apenas 4 datam de julho.</p>
+    <div class="band" style="align-items:start">
+      <div>
+        <h2 style="font-size:11px">Quando foram migradas</h2>
+        <p class="sub">Cada barra é um commit de migração. A largura é a fatia das 93.</p>
+        <div class="cats" id="cohort"></div>
+      </div>
+      <div>
+        <h2 style="font-size:11px">Por tipo</h2>
+        <p class="sub">Comparado à fatia que cada tipo tem no total de 523 telas migradas.</p>
+        <div class="tipos" id="intTipos"></div>
+      </div>
+    </div>
+    <div class="tools" style="margin-top:24px">
+      <input type="search" id="qi" placeholder="buscar entre as intactas" aria-label="Buscar nas intactas">
+      <div class="chips" id="chipTipoI"></div>
+      <span class="count" id="counti"></span>
+    </div>
+    <div class="tablebox" style="max-height:min(60vh,620px)">
+      <table>
+        <thead><tr id="hrowi"></tr></thead>
+        <tbody id="tbodyi"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="method">
+    <div>
+      <h3>Como foi medido</h3>
+      <p>Para cada arquivo de form, o primeiro commit em que ele aparece define a versão migrada. Diff dessa versão contra o HEAD com <code>--ignore-cr-at-eol</code>: ou o conteúdo mudou, ou não mudou. O mesmo para o <code>*BO.prg</code> da tela, onde moram <code>Inserir</code>, <code>Atualizar</code>, <code>ExecutarExclusao</code> e <code>ValidarDados</code>.</p>
+      <p>Rodado também com <code>-w --ignore-blank-lines</code>: o total não se move. Nenhuma das 430 é mudança só de formatação.</p>
+    </div>
+    <div>
+      <h3>Como as categorias são atribuídas</h3>
+      <p>Cada linha do diff é lida e marcada pelos termos que carrega — <code>INSERT</code>/<code>UPDATE</code>/<code>SQLEXEC</code> para gravação, <code>ValidarDados</code>/<code>MsgAviso</code>/<code>EMPTY()</code> para validação, <code>.Left</code>/<code>.ForeColor</code>/<code>AddObject</code> para layout, e assim por diante. Linhas de comentário entram em categoria própria.</p>
+      <p>É classificação por evidência textual, não por leitura do propósito: um fix de tipo de coluna três linhas antes do <code>INSERT</code> pode não entrar em CRUD. Serve para ordem de grandeza e para achar a tela, não como laudo linha a linha.</p>
+    </div>
+    <div>
+      <h3>Limites conhecidos</h3>
+      <ul>
+        <li>O git rastreia 531 arquivos em <code>forms\</code>; 8 deles são harness de teste (<code>TesteForm*</code>, <code>RunnerFormProduto</code>, <code>TestMinimal</code>) e não são telas. Daí 523. Nenhum dos 8 foi alterado, então todos caem no grupo intacto.</li>
+        <li>86 forms já existiam no commit inicial (08/07/2026) — a linha de base deles é o marco zero do git, não a migração real. Alteração anterior a isso é invisível, então 430 pode estar subestimado, nunca superestimado.</li>
+        <li>37 commits bulk (o maior com 46.926 arquivos) misturam migração nova e correção manual. O diff de conteúdo atravessa isso; a contagem de <em>fixes dirigidos</em> não.</li>
+        <li>A medição é por caminho de arquivo. Uma tela renomeada conta duas vezes: <code>FormSET</code> aparece entre as alteradas e <code>FormSetor</code>, seu novo nome, entre as intactas.</li>
+        <li>6 BOs não casam com nenhum form pelo nome (<code>ccp</code>, <code>fer</code>, <code>for</code>, <code>planocontas</code>, <code>sigmvcom</code>, <code>sigrebct</code>); mudanças neles não foram atribuídas a nenhuma tela.</li>
+        <li>43 telas não declaram <code>Caption</code> alcançável e aparecem pelo nome do arquivo.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA =
+[
+["Formsigpres2","Pressupostos (consulta movimentos)","cadastros","2026-07-16",3794,"ambos",[1,1,1,1,1,1,1,1,1],1,"152"],
+["FormRop","Restrições Por Operação","cadastros","2026-08-23",3178,"ambos",[1,1,1,1,1,1,1,1,1],1,""],
+["Formint","Tratamento de Inventario (SIGCDINT)","cadastros","2026-08-11",65,"ambos",[1,0,0,0,0,0,0,1,0],1,"279"],
+["FormSigReAiv","Analise Entre Inventários","relatorios","2026-07-08",112,"codigo",[0,1,1,1,0,0,0,1,1],0,""],
+["Formsigreffn","Relatório de Fluxo Financeiro - Sintético","relatorios","2026-07-08",544,"codigo",[0,1,1,1,1,1,1,0,1],2,"263 267"],
+["FormFPP","Desconto por No. de Parcelas","operacionais","2026-08-11",81,"ambos",[1,0,1,1,0,1,1,0,0],0,""],
+["FormSIGREDIR","Demonstrativo de Retenção de Impostos - CSLL, COFINS e PIS/PASEP","relatorios","2026-07-08",109,"codigo",[0,1,1,1,0,1,1,0,1],0,""],
+["Formsigrehbr","Códigos de Barras Por Estoque","relatorios","2026-07-08",418,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["FormCeg","Cadastro de Prioridade de Estoque p/Globalização","cadastros","2026-07-28",99,"ambos",[1,0,1,0,0,0,1,1,0],1,"196"],
+["FormSigReEsp","Estatística de Pedidos","relatorios","2026-07-08",306,"ambos",[1,1,1,1,0,1,1,0,1],2,"198 263"],
+["FormICO","Cadastro de Ícones","operacionais","2026-08-11",296,"codigo",[0,1,1,1,0,1,0,0,0],1,"279"],
+["FormCHM","Cadastro de Configuracao do Cheque - Matricial","cadastros","2026-07-29",183,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["Formpgr","Contas a Pagar e Receber","cadastros","2026-08-22",148,"ambos",[1,1,0,1,0,1,1,0,0],2,"152 198"],
+["FormSigPrGst","Geração de Movimentações de Estoque","operacionais","2026-07-21",3022,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormCliente","Cadastro de Cliente","operacionais","2026-07-29",2419,"ambos",[1,1,1,1,1,1,1,1,1],9,"148 163 165 166 167 168"],
+["FormSigReGla","Form1","operacionais","2026-07-08",4,"codigo",[0,0,0,1,0,0,0,0,0],0,""],
+["FormSigReEqT","Estoque Retroativo","relatorios","2026-07-08",40,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormOCO","Cadastro de Ocorrencias","cadastros","2026-08-22",100,"ambos",[1,1,0,1,0,0,1,1,1],0,""],
+["FormSigPrCar","Características do Produto","operacionais","2026-07-21",2633,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigPrCtc","Cotacoes por Operacoes (standalone)","operacionais","2026-07-08",1523,"ambos",[1,1,1,1,1,1,1,1,1],1,""],
+["FormCOC","cadastro de Ocorrencias de Titulos","cadastros","2026-07-30",154,"ambos",[1,0,1,1,0,0,1,1,0],1,"148"],
+["FormDrs","Fichas Técnicas","cadastros","2026-08-01",771,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigMvVde","Vendedores","operacionais","2026-09-30",398,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormOTI","Operações de Títulos","cadastros","2026-08-22",1218,"ambos",[1,1,1,1,1,0,1,1,0],2,"152 204"],
+["FormCVI","Cadastro de Comissões de Vendedores Individuais","cadastros","2026-08-11",159,"ambos",[1,1,1,1,1,0,1,1,0],0,""],
+["Formsigrecmc","Relatório de Clientes que Mais/Menos/Não Compram em Valores e Quantidades","relatorios","2026-07-08",184,"ambos",[1,1,1,1,0,1,1,1,1],1,"263"],
+["FormSIGREEVV","Estoque Por Valor de Venda","relatorios","2026-07-08",275,"codigo",[0,1,1,1,1,0,0,1,1],0,""],
+["FormSigPrDsc","Montagem de Descricao de Produtos","operacionais","2026-07-08",2823,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormRelPlanoContas","Relatório do Plano de Contas","relatorios","2026-07-08",12,"codigo",[0,0,0,0,0,0,0,0,1],0,""],
+["Formlct","Cadastro de Lancamentos","cadastros","2026-08-19",73,"ambos",[1,1,0,1,0,0,0,0,1],0,""],
+["Formsigpdmp2","Componentes","operacionais","2026-07-08",432,"ambos",[1,1,1,1,1,1,1,1,0],1,"188"],
+["FormCNQ","Cadastro de Conquilhas","cadastros","2026-07-30",105,"ambos",[1,1,1,1,0,0,1,1,1],1,"148"],
+["FormSigReEch","FormSigReEch","operacionais","2026-07-08",77,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["Formpaf","PAF-ECF","cadastros","2026-08-22",148,"ambos",[1,0,1,1,0,0,1,1,1],0,""],
+["Formsigprcom","Estoque Máximo","cadastros","2026-07-21",4330,"ambos",[1,1,1,1,1,1,1,1,1],1,"152"],
+["FormSIGREFUN","Relação tubos fundição","relatorios","2026-07-08",55,"codigo",[0,0,1,1,0,0,1,0,1],0,""],
+["FormSigPdMp4","Desagregar Componentes Agregados","operacionais","2026-07-08",70,"codigo",[0,1,0,1,0,1,1,1,1],0,""],
+["FormICM","Cadastro de Índices de Comissão","cadastros","2026-08-11",34,"ambos",[1,0,0,1,0,0,1,0,0],1,"196"],
+["Formsigprdis","Formsigprdis","cadastros","2026-07-08",3431,"ambos",[1,1,1,1,1,1,1,1,1],1,"145"],
+["Formsoc","Formsoc","cadastros","2026-09-09",2,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormGr1","Geracao de Grupos de Acesso","operacionais","2026-08-11",2,"coment",[0,0,0,0,0,0,0,0,0],1,"279"],
+["FormHOR","Cadastro de Carga Horária","operacionais","2026-08-11",12,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["Formsigprdft","Sitef - Cartão de Débito","operacionais","2026-07-21",3822,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormCargo","Cadastro de Cargos","cadastros","2026-07-08",5347,"ambos",[1,1,1,1,1,1,1,1,1],1,"152"],
+["FormSigPrMlu","Unificação de Mala Direta","operacionais","2026-07-21",2648,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSIGPRLNC","Cadastro de Lancamentos","cadastros","2026-07-21",855,"ambos",[1,1,1,1,1,1,1,1,1],3,"148 190"],
+["FormCat","Categorias de Produto","cadastros","2026-07-28",59,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigPrRss","Recálculo de Saldos","operacionais","2026-07-21",6,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormSigReInv","Relatório de Inventário de Estoque","relatorios","2026-07-08",74,"codigo",[0,0,1,1,0,0,0,0,1],2,"198 263"],
+["FormSigPrGloT","Form1","operacionais","2026-07-08",3281,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["Formcfo","Cadastro de CFOP","cadastros","2026-07-08",6604,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormJUS","Cadastro de Justificativas","cadastros","2026-08-11",84,"ambos",[1,0,0,1,0,1,0,1,0],2,"283 284"],
+["FormFTF","Finalizadoras (Tef)","cadastros","2026-08-11",55,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormSIGPRTFH","SiTef - Consulta de Cheque","operacionais","2026-07-21",4226,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["Formmpp","Complementos de Caracteristicas","cadastros","2026-08-19",65,"ambos",[1,0,0,1,0,0,0,1,0],0,""],
+["FormFpm","Valor Minimo por Condicao de Pagamento ","operacionais","2026-08-11",171,"ambos",[1,1,1,1,0,1,0,1,0],1,"148"],
+["FormTbd","Tabelas de Desconto","operacionais","2026-09-09",2,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["FormFornecedor","Cadastro de Formas de Pagamento","cadastros","2026-08-11",99,"ambos",[1,1,0,1,0,0,1,0,1],0,""],
+["FormSigReIpr","Relatório de Mailing","relatorios","2026-07-08",63,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormSigReIfv","Relatório de Fechamento de Inventário","relatorios","2026-07-08",116,"ambos",[1,1,1,1,0,1,1,1,1],1,"198"],
+["Formsigprenv","Formsigprenv","operacionais","2026-07-21",1438,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormSigPrItb","Integração Contábil Total","operacionais","2026-07-21",2233,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormCAD","Cadastros Gerais","cadastros","2026-07-28",99,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormIBP","Cadastro do IBPT","cadastros","2026-08-11",75,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormUSA","Usuários Automáticos","cadastros","2026-09-23",2,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["Formsigprmdp","Substituição de Referências de Produtos","operacionais","2026-07-21",2979,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["formsigacgct","Acesso Lancamentos","cadastros","2026-07-08",195,"ambos",[1,0,1,0,0,0,1,0,0],0,""],
+["FormTCL","Cadastro de Classes","cadastros","2026-09-10",21,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["FormGpe","Grupos Operacionais","cadastros","2026-08-11",85,"ambos",[1,0,0,1,0,0,1,1,0],0,""],
+["FormMoe","Cadastro de Moedas","cadastros","2026-08-19",238,"ambos",[1,1,1,1,0,0,1,1,1],4,"152 204 288"],
+["FormICD","Duplicação dos Tipo de Tributação","operacionais","2026-08-11",31,"ambos",[1,0,0,1,1,0,1,0,0],1,"279"],
+["Formsigopdiv","Reinicia Industrialização","operacionais","2026-07-08",329,"codigo",[0,1,1,1,0,1,1,1,0],1,"148"],
+["Formsigprite","Itens","operacionais","2026-07-21",2879,"ambos",[1,0,1,1,0,1,1,1,1],0,""],
+["FormSigPdM13","FormSigPdM13","operacionais","2026-07-08",5,"codigo",[0,0,0,1,0,0,0,1,0],0,""],
+["FormROM","Romaneio XML","cadastros","2026-08-22",281,"ambos",[1,1,1,0,0,1,1,1,0],3,"148 152 198"],
+["Formsigreegp","Relatório de Posição de Estoque por Grupo de Produto","relatorios","2026-07-08",385,"codigo",[0,1,1,1,1,0,0,1,1],0,""],
+["FormSIGPRIFF","Form1","operacionais","2026-07-21",1099,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormSigReIr1","Inventário nº ","relatorios","2026-07-08",244,"codigo",[0,0,1,1,0,0,0,0,1],2,"204 267"],
+["FormSIGRECTP","Relatório de Cotação de Compras","relatorios","2026-07-08",348,"codigo",[0,1,1,1,1,0,0,1,1],0,""],
+["FormSIGPRVTX","Cadastro de Testes","operacionais","2026-07-21",1914,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formsigopcgp","Consulta Global de Produtos","operacionais","2026-07-08",3374,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigPrGlx","Previa da Globalizacao / Reserva Automatica","operacionais","2026-07-08",11345,"ambos",[1,1,1,1,1,1,1,1,1],1,"279"],
+["FormEnd","Cadastro de Enderecos","operacionais","2026-08-11",126,"codigo",[0,1,0,0,0,0,0,0,0],0,""],
+["Formsigregli","Impressão de Relações e Etiquetas","operacionais","2026-07-08",161,"ambos",[1,0,1,0,0,0,0,0,1],1,"204"],
+["FormSigReAac","Relatório do Log de Acessos","relatorios","2026-07-08",72,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["Formema","Cadastro de Email","cadastros","2026-08-11",118,"ambos",[1,0,0,1,0,1,0,1,1],1,""],
+["Formsigreato","Relatório de Análise de Estoque Por Tipo de Operação","relatorios","2026-07-08",361,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormUfd","ICMS Interestadual","cadastros","2026-09-23",132,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormSre","Cadastro de Série de Nota Fiscal","cadastros","2026-09-09",56,"codigo",[0,0,1,0,0,0,1,0,0],1,"501"],
+["FormFop","Fornecedores do Produto","operacionais","2026-08-11",170,"ambos",[1,1,1,1,0,1,1,0,0],0,""],
+["FormEVE","Cadastro de Eventos","cadastros","2026-08-11",226,"ambos",[1,1,1,1,1,0,1,1,1],2,"198"],
+["FormPub","Cadastro de Publicidade","cadastros","2026-08-23",87,"ambos",[1,1,1,1,0,0,1,0,1],0,""],
+["FormSigPdMpf","Movimentações de produção por funcionário","operacionais","2026-07-08",57,"codigo",[0,0,1,0,0,0,1,0,0],0,""],
+["FormSigPrGf2","Gráfico de Falha X Recuperação Mensal","operacionais","2026-07-08",2065,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSigPrIns","Informações do Serviço","operacionais","2026-07-21",1010,"ambos",[1,0,1,1,0,0,1,1,1],0,""],
+["FormSigPrCcc","Recálculo de Saldos","operacionais","2026-07-16",4825,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormSigPrRet","Estoque","operacionais","2026-07-21",16,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigPdMp9","Pesagem de Peças","operacionais","2026-07-08",478,"codigo",[0,1,1,1,0,1,0,0,1],0,""],
+["FormPrl","Cadastro de Localização","cadastros","2026-08-23",45,"ambos",[1,0,0,1,0,0,1,0,0],0,""],
+["FormCNF","Correção de Notas Fiscais","cadastros","2026-07-29",102,"ambos",[1,0,1,0,0,0,1,1,0],0,""],
+["FormSigPdMp1","Componentes Agregados","operacionais","2026-07-08",6,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormSigReInf","Impressão de Nota Fiscal","relatorios","2026-07-08",40,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormLOC","Cadastro de Locais","cadastros","2026-08-19",97,"ambos",[1,1,1,1,0,0,1,0,1],0,""],
+["FormGcp","Grupos / Contas Permitidas","cadastros","2026-08-11",50,"ambos",[1,1,0,1,0,1,0,0,0],1,""],
+["FormSIGPDPNS","Pendentes","operacionais","2026-07-08",83,"ambos",[1,0,1,1,0,1,1,0,0],0,""],
+["Formsigrecmm","Relatório de Mapa de Comissão Por Vendedor","relatorios","2026-07-08",533,"ambos",[1,1,1,1,0,0,0,0,1],0,""],
+["Formcnl","Contagem de Produtos por Localização","cadastros","2026-07-29",65,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormSIGRECND","Posição de Lançamentos Não Conciliados","relatorios","2026-07-08",147,"codigo",[0,0,1,1,0,0,0,1,1],9,"94 96 97 98 99 100 101 102"],
+["FormBCC","Cadastro de Bandeiras de Cartão de Crédito","cadastros","2026-07-28",55,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["Formsigrepes","Relatório de Posição de Estoque","relatorios","2026-07-08",100,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["Formsigrehtc","Relatório de Cheques Emitidos","relatorios","2026-07-08",146,"ambos",[1,1,1,1,0,0,0,0,1],1,"198"],
+["FormSigPrSdd","Senha do dia","operacionais","2026-07-21",9,"codigo",[0,0,1,0,0,0,0,0,0],0,""],
+["FormMrc","Cadastro de Demonstrativos","cadastros","2026-08-19",47,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormScl","Situação de Contas","cadastros","2026-09-02",51,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["Formsigprema","Processamento e Geraçao de Email","operacionais","2026-07-08",2674,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormTbO","Tabelas de Desconto por Operações","cadastros","2026-09-09",44,"codigo",[0,0,1,1,0,0,1,0,0],0,""],
+["Formgem","Grupo Empresarial","cadastros","2026-08-11",50,"ambos",[1,1,0,0,0,0,0,1,0],1,"148"],
+["Formsigrectc","Relatório Movimentação de Cartões","relatorios","2026-07-08",129,"codigo",[0,0,1,1,1,0,0,1,1],1,"263"],
+["FormSIGPRPRO","Características de Produtos","operacionais","2026-07-21",4,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormMun","Cadastro de Municipios","cadastros","2026-08-22",64,"ambos",[1,0,0,1,0,0,1,1,0],0,""],
+["FormENR","Endereços","cadastros","2026-08-11",52,"ambos",[1,0,0,0,0,0,0,1,0],0,""],
+["FormTam","Cadastro de Tamanhos","cadastros","2026-07-08",1672,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormOps","Cadastro Simplificado de Movimentações","cadastros","2026-08-22",606,"ambos",[1,1,1,1,0,0,0,1,1],1,"152"],
+["FormSigPrEtq","Impressão de Etiquetas Selecionadas","operacionais","2026-07-16",7000,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigReJob","Impressão de ","relatorios","2026-07-08",44,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormProduto","Cadastro de Produtos","cadastros","2026-07-08",27337,"ambos",[1,1,1,1,1,1,1,1,1],2,"188"],
+["FormSigReEtl","Estoque Por Localização","relatorios","2026-07-08",671,"codigo",[0,1,1,1,1,0,0,1,1],2,"198 264"],
+["Formsigprtef","Administração do TEF","operacionais","2026-07-21",318,"ambos",[1,0,1,0,1,0,1,1,1],0,""],
+["FormRPT","Cadastro Customizado de Relatórios 4Report","cadastros","2026-08-28",6359,"ambos",[1,1,1,1,0,1,1,1,1],1,"204"],
+["Formsigreipe","Impressão de Etiquetas","relatorios","2026-07-08",166,"ambos",[1,1,1,1,0,1,1,0,1],0,""],
+["FormSIGPRNSE","Integração de NF-e Municipal","operacionais","2026-07-18",726,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["Formacg","Acesso de Grupos","cadastros","2026-07-08",4627,"ambos",[1,1,1,1,1,1,1,1,1],4,"144 145"],
+["FormFpb","Cadastro de BIN","operacionais","2026-08-11",65,"ambos",[1,0,1,1,0,1,1,0,0],0,""],
+["FormSIGREHPE","Resumo de Cheques Pendentes","relatorios","2026-07-08",58,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["Formsigproef","Seleção da Transação","operacionais","2026-07-21",23,"codigo",[0,1,0,1,0,0,0,0,1],0,""],
+["FormTme","Cadastro de Transporte de Movimentação de Estoque","cadastros","2026-09-10",58,"ambos",[1,0,1,0,0,1,1,0,0],1,"204"],
+["FormLpr","Listas de Precificacao","cadastros","2026-08-19",516,"ambos",[1,1,1,1,1,1,1,1,1],2,"152 190"],
+["FormRAN","Registro de Análises","cadastros","2026-08-28",234,"ambos",[1,1,1,1,0,0,1,1,1],1,"198"],
+["FormSIGRECPM","Listagem de Composição por OP","relatorios","2026-07-08",121,"codigo",[0,0,1,1,0,0,1,1,1],1,"267"],
+["FormSigPrGlp","Prévia da Globalização","operacionais","2026-07-08",12342,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormDES","Cadastro de Cotas de Desconto por período","cadastros","2026-08-11",227,"ambos",[1,1,1,1,1,0,1,1,1],1,"198"],
+["FormOrg","Cadastro de Origens","cadastros","2026-08-22",53,"ambos",[1,0,0,0,0,1,0,1,0],0,""],
+["FormSIGPRINT","Cadastro de Instruções","cadastros","2026-07-21",1425,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormMtt","Cadastro de Metal/Teor","cadastros","2026-08-19",51,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormCtg","Cadastro de Categorias","cadastros","2026-08-11",144,"ambos",[1,1,0,1,0,0,1,1,1],1,"148"],
+["FormTBI","Relatório de Tabelas de Referência","operacionais","2026-09-09",2,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormSigReCgc","Relatório Genérico de Compras","relatorios","2026-07-08",184,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["formcor","formcor","cadastros","2026-07-08",1642,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigPrHpr","Histórico de Produtos","operacionais","2026-07-21",3966,"ambos",[1,1,1,1,0,1,1,1,1],1,""],
+["FormCRC","Cadastro de Caracteristicas de Contas","cadastros","2026-07-30",128,"ambos",[1,1,1,1,0,0,1,0,1],1,"198"],
+["Formepd","Finalização Antecipada","cadastros","2026-08-11",470,"ambos",[1,1,1,1,0,1,1,1,1],3,"152"],
+["FormSIGMVCMV","Processamento para o Lançamentos de Centro de Custos não lançados","operacionais","2026-09-25",1,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["FormCOM","Cadastro de Comissoes","cadastros","2026-07-30",194,"ambos",[1,0,1,1,0,0,1,1,0],3,"148 152 196"],
+["FormSigPdM10","Resumo da Movimentacao","operacionais","2026-07-08",645,"codigo",[0,1,1,1,0,0,1,1,1],0,""],
+["Formsigrecnt","Relação de Contagem por Localização","relatorios","2026-07-08",63,"ambos",[1,0,1,1,0,0,0,1,0],0,""],
+["FormSIGREGDP","Emissão Global de Duplicatas/Boletos","relatorios","2026-07-08",116,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSigPrCfn","Cálculo de Juros","operacionais","2026-07-21",3446,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormDpi","Cadastro de Departamentos do Site","cadastros","2026-08-11",59,"ambos",[1,0,0,0,0,0,1,1,0],0,""],
+["Formche","Carteira de Cheques","cadastros","2026-07-29",2263,"ambos",[1,1,1,1,1,1,1,1,1],2,"152 198"],
+["Formmtz","Matriz de Saldos por Centro de Custo","cadastros","2026-08-22",1233,"ambos",[1,1,1,1,1,1,1,1,1],2,"148 204"],
+["Formsigredoc","Impressão de Documento","relatorios","2026-07-08",431,"ambos",[1,1,1,1,0,1,1,0,1],0,""],
+["FormSIGREFXV","Relatório de Posição de Estoque  por Grupo de Produto/Faixa de Valor","relatorios","2026-07-08",68,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["FormSigReCsp","Pesquisa operações","relatorios","2026-07-08",129,"codigo",[0,0,1,1,0,1,1,0,1],0,""],
+["FormSIGREHCP","Relatório de Histórico de Custo de Produtos","relatorios","2026-07-08",189,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["FormSIGPGCNB","Geração de Arquivos CNAB - Pagamentos","operacionais","2026-07-08",226,"codigo",[0,1,1,1,0,1,1,1,1],0,""],
+["FormSigPrChr","Consulta e Cancelamento de Cheques","operacionais","2026-07-16",7691,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormRec","Cadastro Financeiro de Recebimentos","cadastros","2026-08-28",119,"ambos",[1,0,1,1,0,0,1,1,0],0,""],
+["FormDIC","Cadastro de Idioma","cadastros","2026-08-11",71,"ambos",[1,0,0,0,0,0,0,1,0],1,"148"],
+["FormICN","Icones de Acesso (SigCdPrg)","operacionais","2026-08-11",4,"codigo",[0,0,0,0,0,0,1,0,0],1,"279"],
+["FormSigPrFem","Analise de Producao","operacionais","2026-07-08",6860,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigReCmg","FormSigReCmg","operacionais","2026-07-08",185,"ambos",[1,0,1,1,0,0,1,0,1],0,""],
+["FormBch","Balanço de Cheques","cadastros","2026-07-28",266,"ambos",[1,1,1,1,1,0,1,1,1],1,"155"],
+["FormBAL","Inventário Processo","cadastros","2026-07-28",741,"ambos",[1,1,1,1,0,1,1,1,0],2,"152 204"],
+["FormDup","Configuração de Séries de Duplicatas","cadastros","2026-08-11",514,"ambos",[1,0,0,1,0,1,0,1,0],0,""],
+["Formsigrecrt","Relatório de Cheques Da Carteira","relatorios","2026-07-08",87,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["FormImp","Cadastro de Impressoras","cadastros","2026-08-11",221,"ambos",[1,1,0,1,0,0,1,1,1],4,"148 283 284"],
+["FormIct","Tipo de Tributacao do ICMS","cadastros","2026-08-11",395,"ambos",[1,1,1,1,1,0,1,1,1],4,"279 281 282"],
+["Formsigrechp","Relatório de Cheques Pendentes","relatorios","2026-07-08",329,"ambos",[1,1,1,1,0,1,1,1,1],2,"270"],
+["FormFBI","Cadastro de Fabricação","cadastros","2026-08-11",195,"ambos",[1,0,0,1,0,1,0,1,0],1,"251"],
+["Formsigrefc2","Fechamento de Caixa","relatorios","2026-07-08",187,"codigo",[0,1,1,1,1,0,0,1,0],1,"198"],
+["FormSIGREAUP","Relatório de Tipos de Autorizações de Produção","relatorios","2026-07-08",164,"codigo",[0,1,1,1,0,0,0,0,1],1,"267"],
+["FormSigPrCtc","Cotacoes por Operacoes (standalone)","cadastros","2026-07-21",2006,"ambos",[1,1,1,1,1,1,1,1,1],1,""],
+["FormSIGPRCPR","Conferência e Reserva de Produção","operacionais","2026-07-21",3133,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSigRePlc","Relatório do Plano de Contas","relatorios","2026-07-08",126,"ambos",[1,0,1,1,0,0,1,0,1],1,"263"],
+["Formsigrefec","Fechamento de Caixa","relatorios","2026-07-08",123,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["FormEvt","Cadastro de Eventos","cadastros","2026-08-11",149,"ambos",[1,1,0,1,0,1,1,1,1],2,""],
+["FormMPL","Cadastro de Complementos de Caracteristicas","cadastros","2026-08-19",51,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["Formsigprpdf","Geracao de PDF e E-mail","operacionais","2026-07-21",18,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["Formsigreeun","Posição de Estoque por Unidade","relatorios","2026-07-08",260,"codigo",[0,1,1,1,0,0,0,0,1],1,"263"],
+["FormSigReIiv","Impressão de Invoice","relatorios","2026-07-08",128,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["Formsigmvcab","Movimentação","cadastros","2026-07-08",4211,"ambos",[1,1,1,1,1,1,1,1,1],1,"152"],
+["FormPgb","Histórico dos barras","operacionais","2026-08-22",34,"ambos",[1,0,0,1,0,1,1,0,0],1,""],
+["FormMPD","Movimentações de Produção","cadastros","2026-08-19",868,"ambos",[1,1,1,1,1,1,1,1,1],1,"289"],
+["FormSigReIdt","Impressão de Documento de Título (","relatorios","2026-07-08",61,"codigo",[0,0,1,1,0,0,0,0,1],1,"267"],
+["FormMda","Cadastro de Motivos de Desconto / Acrescimo","cadastros","2026-08-19",96,"ambos",[1,1,0,1,0,1,1,0,1],1,"145"],
+["Formcfi","ICMS - Cupom Fiscal","cadastros","2026-07-28",61,"ambos",[1,0,0,1,0,0,0,1,1],0,""],
+["FormSIGREADS","Relatório de Apuração de Descontos/Acréscimos","relatorios","2026-07-08",501,"ambos",[1,1,1,1,1,1,0,1,1],1,"264"],
+["FormSIGREEGG","Posição de Estoque por Grande Grupo","relatorios","2026-07-08",260,"codigo",[0,1,1,1,1,0,0,1,1],2,"264 267"],
+["FormPcp","Planejamento e Controle da Produção","cadastros","2026-08-22",56,"ambos",[1,0,0,1,0,0,1,1,0],2,"152"],
+["FormSigPdMp3","FormSigPdMp3","operacionais","2026-07-08",528,"ambos",[1,1,1,1,0,1,1,0,1],0,""],
+["FormSIGPREST","FormSIGPREST","operacionais","2026-07-08",2063,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormPAT","Pedido de Atendimento","cadastros","2026-08-22",330,"ambos",[1,0,1,1,1,0,0,1,1],1,"198"],
+["FormFte","Cadastro de Fichas Técnicas","cadastros","2026-08-11",8,"codigo",[0,0,0,1,0,0,0,0,0],0,""],
+["FormVEN","Cadastro de Presenca de Vendedores","cadastros","2026-09-23",11,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["FormSigReIfp","Relatório de Falhas / Perdas","relatorios","2026-07-08",132,"codigo",[0,0,1,1,0,0,1,0,1],0,""],
+["FormSigReDif","Diferenças Encontradas","relatorios","2026-07-08",49,"codigo",[0,0,1,1,0,0,0,0,1],1,"267"],
+["FormFAPF","Form1","operacionais","2026-08-11",6,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormCAF","Cancelamento de OP da Fundicao","cadastros","2026-07-28",47,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSIGBLCTA","Processamento para Bloqueio de Contas","operacionais","2026-07-08",8,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormDepartamento","Cadastro de Departamentos","cadastros","2026-07-08",779,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["Formsigprima","Formsigprima","operacionais","2026-07-21",1532,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormTpe","Tipos de Etiquetas de Produto","cadastros","2026-09-23",35,"codigo",[0,0,1,0,1,0,1,0,0],0,""],
+["FormSigOpCcl","FormSigOpCcl","operacionais","2026-10-20",72,"codigo",[0,0,1,0,0,0,0,0,0],0,""],
+["FormTfi","Cadastros de Tipos","cadastros","2026-09-10",3,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["FormCCJ","Cálculo de Juros","cadastros","2026-07-28",374,"ambos",[1,1,1,1,0,1,1,1,1],4,"152 157"],
+["FormGrupo","FormGrupo","operacionais","2026-08-11",79,"ambos",[1,0,0,1,1,1,0,0,0],0,""],
+["FormSIGPRMEI","Integração SIS E-Commerce","operacionais","2026-07-21",594,"ambos",[1,0,0,0,0,0,1,1,1],0,""],
+["FormLin","Cadastro de Linhas","cadastros","2026-08-19",1270,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormCco","Cadastro de Classificacao de Contas","cadastros","2026-07-28",258,"ambos",[1,1,1,1,0,1,1,1,1],5,"148 152 158"],
+["FormTri","Tributação de Icms","cadastros","2026-09-23",2,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["Formcrf","Contagem de Referência","cadastros","2026-07-30",163,"ambos",[1,1,1,1,0,0,1,1,1],2,"152 198"],
+["Formsigreanr","Relatório de Resultados","relatorios","2026-07-08",266,"ambos",[1,0,1,0,0,0,0,1,0],0,""],
+["Formsigprsen","4Control","operacionais","2026-07-21",2,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormEmb","Cadastro de Embalagens","cadastros","2026-08-11",10,"codigo",[0,0,0,1,0,0,1,0,0],0,""],
+["FormUsu","Cadastro de Usuários","cadastros","2026-09-23",1,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["Formsigredcu","Impressão de Documento","relatorios","2026-07-08",178,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["FormCec","Cadastro de Acesso a Consulta Generica de Situacao","cadastros","2026-07-28",155,"ambos",[1,0,1,0,0,0,1,1,0],0,""],
+["FormOcc","cadastro de Ocorrencias de Correcao","cadastros","2026-08-22",63,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormSIGPRCCR","FormSIGPRCCR","relatorios","2026-07-21",742,"ambos",[1,1,1,1,0,0,1,1,1],1,""],
+["FormSed","Etiquetas de Sedex","operacionais","2026-09-02",13,"ambos",[1,0,0,0,0,0,0,1,0],1,"148"],
+["Formsigrecpe","Divergências em estoques","relatorios","2026-07-08",87,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormCES","Cadastro de Classificação de Estoque","cadastros","2026-07-28",135,"ambos",[1,0,1,0,0,0,1,0,0],0,""],
+["FormOCS","Cadastro de Ocasião","cadastros","2026-08-22",47,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigPdM12","Funcionário : ","operacionais","2026-07-08",28,"codigo",[0,0,0,1,0,1,1,1,0],0,""],
+["Formemp","Cadastro de Empresas","cadastros","2026-08-11",145,"ambos",[1,0,0,1,0,0,1,1,1],1,"152"],
+["Formsigtosen","Acesso ao Sistema","operacionais","2026-07-08",244,"ambos",[1,1,1,1,0,0,1,0,0],1,"196"],
+["FormCla","Cadastro de Classificacao de Produto","cadastros","2026-07-29",311,"ambos",[1,1,1,1,1,1,1,0,1],0,""],
+["FormFpr","Cadastro de Modelos de Produtos","cadastros","2026-08-11",75,"ambos",[1,1,0,1,0,0,0,0,1],0,""],
+["Formsigrefcd","Informativo de Vendas Diarias","relatorios","2026-07-08",123,"codigo",[0,0,1,1,0,0,1,0,1],0,""],
+["FormUfs","Cadastro de Estados","cadastros","2026-07-08",3160,"ambos",[1,1,1,1,1,1,1,1,1],1,"501"],
+["Formsigprrcu","Recálculo de Custos de Produto","operacionais","2026-07-21",4,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormSigPrTar","ACB","operacionais","2026-07-21",1256,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSigAcCcr","Acesso a Conta Corrente","cadastros","2026-07-08",137,"ambos",[1,0,1,0,0,0,1,0,0],0,""],
+["FormDCC","Descontos Concedido no Caixa","operacionais","2026-08-11",230,"ambos",[1,1,1,1,1,1,0,0,0],0,""],
+["Formsigrehpr","Relatório de Histórico de Produtos","relatorios","2026-07-08",404,"ambos",[1,1,1,1,1,0,0,1,1],0,""],
+["Formsigprccp","Recalculo de Precos","operacionais","2026-07-16",9377,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigReFtp","Ficha Técnica do Produto","relatorios","2026-07-08",183,"ambos",[1,1,1,1,0,1,1,0,1],0,""],
+["FormSIGREAGV","Acompanhamento Por Grupo de Venda","relatorios","2026-07-08",70,"ambos",[1,1,1,1,0,0,0,0,1],1,"263"],
+["Formsigreche","Relatório de Cheques","relatorios","2026-07-08",380,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormNfl","Configuracao de Nota Fiscal","cadastros","2026-08-22",414,"ambos",[1,1,1,1,1,0,1,0,0],1,"152"],
+["FormCVE","Cadastro de Comissoes de Vendedores por Cargos","cadastros","2026-08-11",295,"ambos",[1,1,1,1,1,1,1,1,0],0,""],
+["Formsigrecpr","Cheques Prorrogados","relatorios","2026-07-08",175,"ambos",[1,0,1,1,0,0,0,0,1],1,"270"],
+["FormFNF","Finalizadoras nao Fiscal","cadastros","2026-08-11",52,"ambos",[1,0,0,0,0,1,0,0,0],0,""],
+["FormTbv","Tabelas de Descontos","cadastros","2026-09-09",142,"ambos",[1,1,0,1,0,1,0,1,0],1,"501"],
+["FormPai","Cadastro de Paises","cadastros","2026-08-22",68,"ambos",[1,0,0,1,0,0,1,1,0],0,""],
+["FormSigPdAco","Acompanhamento de Material por Grupo","operacionais","2026-07-08",6,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["Formale","Alerta","operacionais","2026-07-21",204,"codigo",[0,1,0,0,0,1,1,0,0],0,""],
+["FormTgp","Cadastro de Tipos de Geração de O.P.","cadastros","2026-09-10",30,"ambos",[1,0,1,0,0,0,1,0,0],0,""],
+["FormSigPrGf1","Falha X Recuperação por Mês da Empresa","operacionais","2026-07-21",2033,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormSigPdMp8","FormSigPdMp8","operacionais","2026-07-08",144,"codigo",[0,1,1,1,1,1,0,1,0],1,"198"],
+["Formsigpdmp7","Movimentação por Funcionário","cadastros","2026-07-08",169,"ambos",[1,1,1,1,0,0,1,1,1],1,"152"],
+["FormCst","Cadastro de Constantes","cadastros","2026-08-11",103,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormSIGPRSTF","Senha de Risco","operacionais","2026-07-21",6,"codigo",[0,0,0,0,0,0,1,1,0],1,"148"],
+["FormSigPdMfa","FormSigPdMfa","operacionais","2026-07-08",23,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormSIGPRIMP","Importação de dados","operacionais","2026-07-21",1210,"ambos",[1,1,1,1,0,0,1,0,1],0,""],
+["FormFpo","Condicao de Pagamento Por Operacao","cadastros","2026-08-11",1745,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormNcf","Cadastro de Nao-Conformidades","cadastros","2026-08-22",47,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormLGR","Dados Gerenciais Fiscais","cadastros","2026-08-19",289,"ambos",[1,0,1,1,0,1,1,1,1],2,"285/286 287"],
+["Formsigrecrf","Relação de Contagem por Referencia","relatorios","2026-07-08",24,"codigo",[0,0,1,0,0,0,0,0,0],0,""],
+["FormGps","Grupos de Produtos ","operacionais","2026-08-11",151,"ambos",[1,1,1,1,0,1,0,0,0],0,""],
+["FormVca","Cadastro de Testes","operacionais","2026-09-23",6,"coment",[0,0,0,0,0,0,0,0,0],1,"279"],
+["FormARV","Tipos de Árvore","cadastros","2026-07-28",63,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigReHev","Histórico de Envelopes","relatorios","2026-07-08",43,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["Formsigrecop","Comissões por Recebimento","relatorios","2026-07-08",295,"ambos",[1,0,1,1,0,0,0,1,1],0,""],
+["FormFis","Cadastro da Impressora Fiscal","operacionais","2026-08-11",4,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormSER","Cadastro de Servicos dos Produtos","cadastros","2026-09-02",49,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigReDpD","Análise de Produção","relatorios","2026-07-08",99,"codigo",[0,1,1,1,0,1,1,0,1],0,""],
+["FormSigPrIct","Integração Contábil","operacionais","2026-07-21",4776,"ambos",[1,1,1,1,0,0,1,1,1],0,""],
+["FormSIGREDES","Cotas de Desconto","relatorios","2026-07-08",118,"codigo",[0,1,1,1,0,1,1,0,1],0,""],
+["FormSigPrGmi","Geração de Pedido de Estoque Mínimo","operacionais","2026-07-21",3315,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["Formsigreifx","Documento","relatorios","2026-07-08",111,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormOPE","Cadastro de Movimentações de Estoque","cadastros","2026-08-22",151,"ambos",[1,1,1,0,0,0,0,0,1],1,""],
+["FormCfb","Configuração de Boletos Bancários","cadastros","2026-07-28",437,"ambos",[1,1,1,1,0,0,1,1,0],0,""],
+["Formsigprnfe","Processamento de NF-e","operacionais","2026-07-21",163,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formsigrecgp","Relatório de Composição de Produtos","relatorios","2026-07-08",203,"ambos",[1,1,1,1,0,0,0,0,1],1,""],
+["FormTml","Tipos de Material","cadastros","2026-09-10",10,"coment",[0,0,0,0,0,0,0,0,0],1,"501"],
+["FormMTV","Cadastro de Motivos","cadastros","2026-08-22",67,"ambos",[1,1,0,1,0,0,0,1,0],1,"148"],
+["FormFAPP","Form1","operacionais","2026-08-11",6,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormCTA","Cadastro de Contas","cadastros","2026-08-11",424,"ambos",[1,0,1,1,1,1,1,1,1],3,"152 167 168"],
+["FormFea","Balanço","cadastros","2026-08-11",522,"ambos",[1,1,0,1,0,1,1,1,1],3,"252 253"],
+["FormTop","Cadastro de Tipos de Operações","cadastros","2026-09-10",26,"codigo",[0,1,0,1,0,0,1,1,0],0,""],
+["FormCol","Cadastro de Grupo de Venda","cadastros","2026-07-08",2375,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigPrGlo","Processamento de O.P.","operacionais","2026-07-08",4632,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["Formsigprico","Form1","operacionais","2026-07-21",1318,"ambos",[1,1,1,1,0,0,1,0,1],0,""],
+["FormSigPrPcp","Priorização de Operações para Planejamento de Produção","operacionais","2026-07-21",217,"codigo",[0,1,1,1,0,1,0,0,0],0,""],
+["FormSIGMDETQ","Muda Cor / Tamanho Etiqueta","operacionais","2026-07-08",6,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["Formgpr","Cadastro de Grande Grupo","cadastros","2026-08-11",210,"ambos",[1,1,0,1,0,0,0,1,1],1,"148"],
+["FormJrn","Jornadas de Trabalho","cadastros","2026-08-11",72,"ambos",[1,0,1,0,0,0,0,0,0],3,"198 283"],
+["FormSIGRECMV","CMV - Custo Médio de Venda","relatorios","2026-07-08",319,"ambos",[1,0,1,1,0,0,0,1,1],1,"94"],
+["Formsigprpre","Cadastro de Alteracao de Precos","cadastros","2026-07-21",53,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["Formrgr","Regras de E-Commerce","cadastros","2026-08-28",135,"ambos",[1,0,0,1,0,0,0,1,0],1,"152"],
+["FormSIGPRALE","FormSIGPRALE","operacionais","2026-07-14",914,"ambos",[1,1,1,1,0,0,1,0,1],0,""],
+["FormSigPrGl2","Operações Selecionadas","operacionais","2026-07-16",3974,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formfnl","Tabela de Finalizacoes","cadastros","2026-08-11",110,"ambos",[1,0,0,0,0,0,1,1,0],1,"148"],
+["FormSigReDct","Impressão de Documento","relatorios","2026-07-08",210,"codigo",[0,1,1,1,0,0,0,0,1],0,""],
+["Formsigopind","Individual","operacionais","2026-07-08",1318,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formccr","Grupos de Contas","cadastros","2026-07-08",10920,"ambos",[1,1,1,1,1,1,1,1,1],1,"190"],
+["FormSigPrIbb","Impressão de Boleto Bancário","operacionais","2026-07-21",3113,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormClf","Cadastro de Classificacao Fiscal","cadastros","2026-07-29",485,"ambos",[1,0,1,1,1,1,1,1,0],2,"152 188"],
+["FormCEP","Cadastro de CEP","cadastros","2026-07-28",115,"ambos",[1,0,1,1,1,0,0,1,0],1,"197"],
+["Formsigprtam","Peso médio por tamanho","operacionais","2026-07-21",3026,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["Formlch","Lote de Cheques","cadastros","2026-08-11",683,"ambos",[1,1,1,1,1,0,1,1,1],6,"152 155 198 279"],
+["Formsigprftp","Transferência e Recebimento de arquivos via FTP","operacionais","2026-07-21",5079,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigPrEs1","Posição Por Movimentação","operacionais","2026-07-16",4261,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormSIGRECTL","Relatório Mensal de Acessos","relatorios","2026-07-08",169,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["Formsigrecsm"," Relatório de Comissão por Condição de Pagamento ","relatorios","2026-07-08",53,"ambos",[1,0,1,1,0,0,1,1,1],0,""],
+["FormFpg","Cadastro Financeiro de Pagamentos","cadastros","2026-08-11",172,"ambos",[1,1,1,1,1,0,1,1,1],2,"257"],
+["FormSIGREAEG","Análise de Estoque por Grande Grupo","relatorios","2026-07-08",374,"codigo",[0,1,1,1,1,0,0,1,1],2,"264 265"],
+["FormOET","Cadastro de Ocorrências de Etiquetas","cadastros","2026-08-22",77,"ambos",[1,0,0,1,0,0,0,0,0],1,"204"],
+["FormUpd","Unidade Produtiva","cadastros","2026-09-23",136,"ambos",[1,0,1,1,0,0,1,0,1],1,"278"],
+["Formsigprila","Importação de Planilha","operacionais","2026-07-21",7111,"ambos",[1,1,1,1,0,1,1,1,1],1,"148"],
+["FormSigReJur","FormSigReJur","operacionais","2026-07-08",91,"codigo",[0,1,0,1,0,1,0,0,1],1,"198"],
+["FormSigReAtm","Análise por Tipo de Material","relatorios","2026-07-08",256,"ambos",[1,1,1,1,0,1,1,1,1],2,"145 268"],
+["FormSigPrAop","Alteração de Quantidade da O.P.","operacionais","2026-07-08",2163,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formpag","Cadastro de Condições de Pagamento","cadastros","2026-08-22",133,"ambos",[1,0,0,1,0,0,0,1,0],1,"152"],
+["Formsigprdis","Formsigprdis","operacionais","2026-07-21",2910,"ambos",[1,1,1,1,1,1,1,1,1],1,"145"],
+["FormSigPdMp5","FormSigPdMp5","operacionais","2026-07-08",2,"codigo",[0,0,0,1,0,0,0,0,0],0,""],
+["FormSigPrCtr","Controle de Movimentações por XML","cadastros","2026-07-16",7048,"ambos",[1,1,1,1,1,1,1,1,1],3,"148 152"],
+["FormObs","Cadastro de Observacoes","cadastros","2026-08-22",86,"layout",[1,0,0,0,0,0,0,0,0],1,"152"],
+["FormEsp","Cadastro de Especies","cadastros","2026-08-11",67,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormSrv","Serviços de Saídas","cadastros","2026-07-08",7226,"ambos",[1,1,1,1,1,1,1,1,1],2,"152 204"],
+["FormCsi","Cadastro de Categoria do Site","cadastros","2026-07-30",87,"ambos",[1,1,0,1,0,0,0,1,1],0,""],
+["FormBlq","Cadastro de Bloqueios por Periodo","cadastros","2026-07-28",76,"ambos",[1,0,0,0,0,0,0,1,1],1,"193"],
+["Formsigrefc1","Fechamento de Caixa","relatorios","2026-07-08",29,"codigo",[0,0,1,0,0,0,0,1,0],0,""],
+["FormAcessoGrupo","Acesso de Grupos","cadastros","2026-07-08",51,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormFpd","Cond.Pagto Por Tab.Desconto","cadastros","2026-08-11",6,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSIGPRCIC","FormSIGPRCIC","operacionais","2026-07-08",1228,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSIGREEQR","Relatório de Posição de Estoque Retroativo","relatorios","2026-07-08",179,"codigo",[0,1,1,1,0,1,1,1,1],0,""],
+["Formsigrecom","Relatório de Comissão","relatorios","2026-07-08",344,"ambos",[1,0,1,1,0,0,1,0,1],1,"267"],
+["Formsigregnf","Emissão Global de Nota Fiscal","relatorios","2026-07-08",134,"ambos",[1,1,1,1,0,1,1,0,1],0,""],
+["FormFUN","Cadastro de Fundições","cadastros","2026-08-11",226,"ambos",[1,0,0,1,0,1,1,1,0],5,"152 198 275 276"],
+["Formsigmvcot","Cotação de Compras","operacionais","2026-09-25",82,"codigo",[0,0,1,0,0,1,1,1,0],0,""],
+["FormSEG","Cadastro de Segmentos de Contas","cadastros","2026-09-02",59,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormPrm","Cadastro de Promocoes","cadastros","2026-08-23",126,"ambos",[1,0,1,1,0,0,1,1,0],0,""],
+["FormACE","Acesso de Empresas","cadastros","2026-07-21",23,"ambos",[1,0,1,0,0,0,1,1,0],0,""],
+["Formcrp","Cadastro de Caracteristicas de Produtos","cadastros","2026-07-30",75,"ambos",[1,1,0,1,0,0,0,1,1],0,""],
+["FormSigPrApr","Reajuste de Precificação","operacionais","2026-07-16",5275,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["Formsigproer","Reimpressao do SiTef","operacionais","2026-07-21",14,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["FormPEN","Cadastro de Penalidades de Comissão","cadastros","2026-08-22",138,"ambos",[1,0,1,1,0,0,0,1,1],3,"155 198"],
+["FormPzo","Prazo / Conta de Entrega","operacionais","2026-08-28",192,"codigo",[0,1,1,1,0,1,0,0,0],0,""],
+["Formsigrebal","Relatório de Balanço","relatorios","2026-07-08",70,"ambos",[1,0,1,1,0,0,1,0,1],1,"269"],
+["Formsigmvdis","Distribuição por Movimentação de Produtos","cadastros","2026-09-25",250,"codigo",[0,0,1,0,0,1,1,1,0],0,""],
+["FormTpt","Cadastro de Transportes","cadastros","2026-09-23",19,"codigo",[0,0,0,0,0,0,0,1,0],1,"204"],
+["FormSET","FormSET","cadastros","2026-09-02",1420,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["Formorl","Cadastro de Origem","cadastros","2026-08-23",75,"ambos",[1,0,0,1,0,0,0,0,0],0,""],
+["FormSigReIpc","Impressão da Relação","relatorios","2026-07-08",113,"codigo",[0,0,1,1,0,0,1,0,1],1,"267"],
+["FormSigReEvd","Demonstrativo de Envelopes Duplicados","relatorios","2026-07-08",281,"codigo",[0,1,1,1,1,0,0,0,1],1,"198"],
+["FormSigPrSer","Serviços lançados","operacionais","2026-07-21",30,"codigo",[0,0,0,0,0,0,1,0,0],0,""],
+["FormOrc","Orcamento","cadastros","2026-08-22",165,"ambos",[1,0,1,1,0,0,1,1,0],0,""],
+["FormMtp","Modelos de Trabalho de Producao","cadastros","2026-08-19",150,"ambos",[1,0,1,0,0,0,1,1,0],2,"148 204"],
+["Formsigrevto","Relatório Total Por Operação","relatorios","2026-07-08",65,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormPec","Cadastro de Posicao Empresarial","cadastros","2026-08-22",437,"ambos",[1,1,1,1,0,1,1,0,0],1,"152"],
+["Formsigreapp","Relatório de Análise a Pagar / Receber","relatorios","2026-07-08",439,"ambos",[1,0,1,1,0,0,0,0,1],1,"267"],
+["Formsigreimc","Impressão de Cartas","relatorios","2026-07-08",89,"codigo",[0,0,1,1,0,0,1,0,1],0,""],
+["FormFpN","Tabelas de Desconto","operacionais","2026-08-11",8,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormACJ","Cadastro de Acessos de JOB","cadastros","2026-07-21",132,"ambos",[1,0,1,1,0,0,1,0,1],2,"148 204"],
+["FormCrt","Cadastro de Retrabalhos","cadastros","2026-07-30",133,"ambos",[1,0,1,1,1,0,1,0,0],1,""],
+["Formsigredco","Impressão de Documento","relatorios","2026-07-08",82,"ambos",[1,0,1,1,0,0,0,0,1],0,""],
+["FormCmr","Itens","cadastros","2026-07-29",47,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigPrSlp","Seleção Lista de Preço","operacionais","2026-07-21",66,"ambos",[1,1,0,1,0,1,1,0,0],0,""],
+["Formsigrecgr","Relatório de Rastreabilidade","relatorios","2026-07-08",124,"ambos",[1,0,1,1,0,0,0,0,1],1,"263"],
+["FormSigPdM14","Rateio de Componentes","operacionais","2026-07-08",15,"codigo",[0,0,0,0,0,0,0,1,0],0,""],
+["FormSIGPRIBL","Impressão de Boleto Bancário","operacionais","2026-07-21",2475,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormSIGREVIS","Relatório de Visitas","relatorios","2026-07-08",259,"codigo",[0,1,1,1,0,0,0,1,1],1,"263"],
+["Formsigprcpd","Capacidade Produtiva","operacionais","2026-07-16",2578,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSIGPRTRF","Relação de Produtos","operacionais","2026-07-21",2263,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSIGPRCOT","Cotação do ","operacionais","2026-07-08",2081,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["Formsigreeqe","Posição de Etiquetas por Empresa","relatorios","2026-07-08",97,"codigo",[0,0,1,1,0,0,0,0,1],2,"198 267"],
+["Formdmo","Desmontagem","operacionais","2026-08-11",154,"ambos",[1,1,0,0,0,0,1,0,0],0,""],
+["Formsigreimp","Relatório Comparativo de Impostos","relatorios","2026-07-08",193,"codigo",[0,1,1,1,0,1,1,1,1],0,""],
+["Formtra","Cadastro de Transportadoras","cadastros","2026-09-23",49,"codigo",[0,0,1,0,0,1,1,1,0],1,"204"],
+["FormInf","Cadastro de Informacoes Complementares","cadastros","2026-08-11",68,"ambos",[1,0,1,0,0,0,1,1,1],1,"285"],
+["Formsigreffi","Relatório de Fluxo Financeiro - Analítico","relatorios","2026-07-08",654,"ambos",[1,1,1,1,1,1,1,0,1],0,""],
+["FormSIGREIPS","Impressão de Etiquetas","relatorios","2026-07-08",167,"codigo",[0,0,1,1,0,0,1,0,1],0,""],
+["FormReg","Cadastro de Regioes","cadastros","2026-08-28",57,"ambos",[1,0,0,0,0,0,1,1,0],0,""],
+["FormSigPrSnd","Senhas livres","operacionais","2026-07-21",2,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["FormSIGREIDC","Relatório de Identificaçao de Contas","relatorios","2026-07-08",198,"codigo",[0,0,1,1,0,0,0,0,1],0,""],
+["FormOcb","Ocorrências do Balanço","cadastros","2026-08-22",84,"ambos",[1,0,1,1,0,0,1,0,0],0,""],
+["FormCLC","Cadastro de Comparativos Entre Locais","cadastros","2026-07-29",586,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["Formsigredtv","Demonstrativo","relatorios","2026-07-08",107,"ambos",[1,1,1,1,0,1,1,0,1],2,"145 263"],
+["FormRss","Restrição de Setores","cadastros","2026-09-02",123,"ambos",[1,0,1,0,0,0,1,0,0],0,""],
+["FormSigPdM11","FormSigPdM11","operacionais","2026-07-08",394,"codigo",[0,1,1,1,1,0,0,1,1],0,""],
+["Formrst","Exclusividade Por Contas","cadastros","2026-09-02",114,"ambos",[1,0,0,1,0,0,0,0,0],2,"152 198"],
+["Formsigrecrp","Relatório de Débitos/Créditos Pendentes","relatorios","2026-07-08",81,"codigo",[0,1,1,1,0,0,1,1,1],0,""],
+["Formsigatcrp","Analítico de Atendimentos / Pendências","relatorios","2026-07-08",288,"ambos",[1,0,1,1,1,0,0,1,1],0,""],
+["FormSIGREAPR","Relatório de Alterações de Produtos","relatorios","2026-07-08",37,"codigo",[0,0,1,1,0,0,0,1,1],0,""],
+["FormSIGPRCNB","Geração de Arquivos CNAB","operacionais","2026-07-08",5680,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSigReCmp","Listagem de Composição Por Movimentação/OP","relatorios","2026-07-08",596,"ambos",[1,1,1,1,1,1,1,1,1],1,"263"],
+["Formsigrecor","Comissão Pendente por Vendedor","relatorios","2026-07-08",83,"codigo",[0,0,1,1,0,0,0,1,1],1,"263"],
+["Formsigreinr"," Inventário nº ","relatorios","2026-07-08",791,"ambos",[1,1,1,1,1,1,1,0,1],1,"267"],
+["Formsigrefcx","Fechamento de Caixa","relatorios","2026-07-08",84,"codigo",[0,1,1,0,0,1,1,1,0],1,"263"],
+["FormSigPrEml","ALERTA - Email","operacionais","2026-07-21",3165,"ambos",[1,1,1,1,0,1,1,1,1],1,"148"],
+["FormFre","Cadastro de Fretes x Cidades","cadastros","2026-08-11",93,"ambos",[1,1,1,1,1,0,0,1,0],1,"148"],
+["Formsigmvccr","Conta Corrente Geral","cadastros","2026-07-08",6332,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormSto","Cadastro de Status de Operação","cadastros","2026-09-09",32,"coment",[0,0,0,0,0,0,0,0,0],1,"204"],
+["FormPMC","Tabela de promocoes por periodo","cadastros","2026-08-22",94,"ambos",[1,0,1,0,1,0,0,0,0],0,""],
+["FormOpt","Movimentações de Cheques","cadastros","2026-08-22",618,"ambos",[1,1,1,1,0,0,1,1,1],1,"152"],
+["Formsigpdmp6","Movimentação de Indústria","cadastros","2026-07-08",322,"ambos",[1,1,1,0,0,0,1,1,0],3,"148 152 198"],
+["FormSigPrEop","Operações","operacionais","2026-07-21",1932,"ambos",[1,1,1,1,0,1,1,1,1],0,""],
+["FormSigPrRsa","Recalculo de Saldos de Produto","operacionais","2026-07-21",4,"ambos",[1,0,0,0,0,0,1,0,0],0,""],
+["FormUep","Cadastro de Usuarios Fixos Por Empresa","cadastros","2026-09-23",9,"ambos",[1,0,0,0,0,1,0,0,0],0,""],
+["FormFti","Cadastro de Feitios","cadastros","2026-08-11",542,"ambos",[1,1,1,1,0,1,1,1,0],7,"152 271 272 273 274"],
+["Formprc","Cadastro de Movimentações Para Cópia","cadastros","2026-08-22",824,"ambos",[1,1,1,1,1,1,1,1,1],2,"152"],
+["FormFap","Envio para Recuperacao","cadastros","2026-08-11",456,"ambos",[1,0,1,1,0,0,1,1,1],3,"198"],
+["FormOpd","cadastro de Operacoes de Pedido","cadastros","2026-08-22",174,"ambos",[1,1,1,1,1,0,1,1,1],0,""],
+["FormSigReDdp","Demonstrativo de Balanço","relatorios","2026-07-08",106,"codigo",[0,1,1,1,0,0,0,0,1],0,""],
+["FormRcc","Rateio de Centros de Custos","cadastros","2026-08-28",95,"ambos",[1,0,0,1,0,1,0,1,0],1,"198"],
+["Formsigreani","Relatório de Aniversariantes","relatorios","2026-07-08",137,"ambos",[1,1,1,1,0,0,0,0,1],1,"266"],
+["FormTAN","Tipos de Análises","cadastros","2026-09-09",2,"coment",[0,0,0,0,0,0,0,0,0],0,""],
+["FormSigPrMdc","Muda Conta","operacionais","2026-07-21",2666,"ambos",[1,1,1,1,1,1,1,1,1],0,""],
+["FormFct","Cadastro de Perfis","cadastros","2026-08-11",63,"layout",[1,0,0,0,0,0,0,0,0],0,""],
+["FormSigPdMen","Mensagens","operacionais","2026-07-08",8,"codigo",[0,0,0,1,0,0,1,0,0],0,""],
+["FormDsp","Cadastro de Disponibilidades","cadastros","2026-08-11",119,"ambos",[1,0,1,0,1,0,1,1,0],0,""],
+["Formsigrecog","Relatório de Comissão por Grupo de Produto","relatorios","2026-07-08",288,"ambos",[1,1,1,1,1,0,0,1,0],0,""],
+["Formacu","Cadastro de Usuarios","cadastros","2026-07-21",820,"ambos",[1,1,1,1,0,1,1,1,1],1,"196"],
+["FormAli","Cadastro de Alíneas","cadastros","2026-07-21",121,"ambos",[1,1,1,1,0,1,1,1,0],1,"148"],
+["Formcmp","Cadastro de Compra Para","cadastros","2026-07-29",71,"ambos",[1,1,0,1,0,0,0,0,1],0,""],
+["Formgpd","Cadastro de Grupo de Produto","cadastros","2026-08-11",4591,"ambos",[1,1,1,1,1,1,1,1,1],1,"152"],
+["Formmod","Cadastro de Modalidades","cadastros","2026-08-19",51,"ambos",[1,0,0,0,0,0,0,1,0],0,""],
+["FormEmn","Estoque Alvo","cadastros","2026-08-11",1398,"ambos",[1,1,1,1,1,1,1,1,1],3,"198"]
+]
+;
+const CATS = [
+  ["consulta","Consulta / SELECT","SELECT · WHERE · Buscar · CarregarLista",3],
+  ["validacao","Validação","ValidarDados · MsgAviso · EMPTY()",2],
+  ["layout","Layout / visual","Left · Top · ForeColor · AddObject",0],
+  ["eventos","Eventos / fluxo","BINDEVENT · AlternarPagina · modo CRUD",6],
+  ["mascara","Máscara / formato","Format · InputMask · MaxLength · EscaparSQL",7],
+  ["calcerro","Cálculo / tratamento de erro","ROUND · aritmética · TRY · CATCH",8],
+  ["crud","CRUD de gravação","INSERT · UPDATE · DELETE · SQLEXEC",1],
+  ["grid","Grid","ColumnCount · RecordSource · CurrentControl",5],
+  ["lookup","Lookup","FormBuscaAuxiliar · AbrirBusca · AbrirLookup",4]
+];
+const TAGS = [
+  ["LAY","lay",0],["CRU","cod",1],["VAL","cod",2],["SQL","cod",3],["LKP","cod",4],
+  ["GRD","cod",5],["EVT","cod",6],["FMT","cod",7],["CLC","cod",8]
+];
+const NAT = {
+  ambos:  {label:"Layout + código", color:"var(--ambos)"},
+  codigo: {label:"Somente código",  color:"var(--codigo)"},
+  layout: {label:"Somente layout",  color:"var(--layout)"},
+  coment: {label:"Só comentário",   color:"var(--coment)"}
+};
+const TIPOS = [
+  ["cadastros","Cadastros",205],
+  ["operacionais","Operacionais",215],
+  ["relatorios","Relatórios",103]
+];
+const INTACTAS =
+[
+["Formsigmvitn","Caixa","operacionais","2026-09-25",7699],
+["Formsigopcgv","Pesquisa Global de Vendas","operacionais","2026-10-27",6300],
+["FormSIGOPCGF","Consulta Global Financeira","operacionais","2026-10-27",5923],
+["Formsigmvits","Caixa","operacionais","2026-09-25",5890],
+["FormSigOpDmp","Cadastro de Demonstrativos de Balanço","cadastros","2026-11-04",4218],
+["FormSigOpChi","Histórico de Cheques","operacionais","2026-10-27",4114],
+["Formsigopcgc","Consulta Genérica de Compras","operacionais","2026-10-27",3822],
+["Formsigopdtf","Sitef - Cartão de Débito","operacionais","2026-11-04",3699],
+["Formsigopcgb","Pesquisa Global de Codigo de Barras","operacionais","2026-10-27",3027],
+["FormSigOpDes","Seleção de Descontos","operacionais","2026-11-04",2785],
+["Formsigopacc","Formsigopacc","operacionais","2026-10-20",2680],
+["FormSIGMVMVT","Acompanhamento Operacional","operacionais","2026-09-25",2578],
+["Formsigopets","Impressão de Etiquetas de Produto","operacionais","2026-11-04",2413],
+["FormSigOpDpe","Tabela de Depreciação","operacionais","2026-11-04",2317],
+["FormSigOpCrd","Geração de Certificado de Crédito","operacionais","2026-11-04",2317],
+["FormSIGOPCPE","Porta de Comunicação","operacionais","2026-11-04",2305],
+["FormSigOpCot","Alteração de Câmbio","operacionais","2026-11-04",2139],
+["FormSigOpCtf","Cancelamento de SiTef","operacionais","2026-11-04",2137],
+["FormSigOpEnt","Alteração de Data de Entrega","operacionais","2026-11-04",2133],
+["FormSigOpCbl","Configuração de Boletos Bancários","operacionais","2026-10-20",2052],
+["Formsigopclg","Consulta do Log","operacionais","2026-11-04",2032],
+["FormSigOpCfl","Consulta de FollowUp de Cheques","operacionais","2026-10-27",1979],
+["FormSigOpCpr","FormSigOpCpr","operacionais","2026-11-04",1853],
+["FormSigOpCpo","FormSigOpCpo","operacionais","2026-11-04",1821],
+["FormSigOpCgr","Pesquisa Global de Rastreabilidade","operacionais","2026-10-27",1804],
+["FormSigOpEtq","FormSigOpEtq","operacionais","2026-11-04",1753],
+["FormSIGOPCFE","Pesquisa de Saldos por Funcionário","operacionais","2026-10-27",1718],
+["FormSigOpEnc","Encerramento de Contas","operacionais","2026-11-04",1708],
+["Formuni","Cadastro de Unidades","cadastros","2026-09-23",1706],
+["FormSigOpCop","FormSigOpCop","operacionais","2026-11-04",1706],
+["Formsigopcim","Formsigopcim","operacionais","2026-11-04",1695],
+["FormSigMvSbn","Subníveis","operacionais","2026-09-25",1688],
+["FormSIGOPCOR","FormSIGOPCOR","operacionais","2026-11-04",1687],
+["FormSigOpClp","FormSigOpClp","operacionais","2026-11-04",1538],
+["FormVis","Cadastro de Visitas","cadastros","2026-09-23",1534],
+["FormTpc","Cadastro de Tipos de Composição","cadastros","2026-09-10",1486],
+["FormSetor","Cadastro de Setores","cadastros","2026-09-25",1475],
+["FormSIGOPDVM","Diferenças Vendas x Mapa Resumo","operacionais","2026-11-04",1456],
+["FormSigOpAut","Autenticação","operacionais","2026-10-20",1448],
+["FormSigOpCts","FormSigOpCts","operacionais","2026-11-04",1442],
+["FormSigOpDoc","Relação de Arquivos e Documentos","operacionais","2026-11-04",1431],
+["Formsigopcks","Formsigopcks","operacionais","2026-11-04",1411],
+["FormSigOpCoc","Carta de Operações de Cheques","operacionais","2026-11-04",1400],
+["FormTPR","Subtipos de Transportes","cadastros","2026-09-23",1381],
+["FormSigOpDet","Seleção de Detalhes","operacionais","2026-11-04",1380],
+["FormSIGOPCHR","Relação de Cheques","relatorios","2026-10-27",1360],
+["FormSigOpChb","Procurar","operacionais","2026-10-27",1308],
+["FormSigOpEmb","Quantidade de embalagens","operacionais","2026-11-04",1299],
+["FormSigOpCcj","Procura de Contas por Cônjuge","operacionais","2026-10-20",1280],
+["FormSigOpCfa","Pesquisa de Falhas por Fase","operacionais","2026-10-20",1270],
+["FormSigMvAte","Registra os atendimentos dos vendedores","operacionais","2026-09-25",1257],
+["FormSIGOPCCO","FormSIGOPCCO","operacionais","2026-10-20",1168],
+["FormSIGOPCAU","Consulta de Acessos de Usuário","operacionais","2026-10-20",1157],
+["FormTot","Cadastro de Tipos de Operações de Produção","cadastros","2026-09-10",1149],
+["Formsigopbus","Formsigopbus","operacionais","2026-10-20",1143],
+["Formsigopden","Dados de Entrega","operacionais","2026-11-04",1091],
+["FormSigOpCfp","Cfop's p/: ","operacionais","2026-10-27",1066],
+["FormSigMvTta","Impostos Gerados na Movimentação","operacionais","2026-09-30",1054],
+["FormSigOpAtu","Operação para Atualização","operacionais","2026-10-20",1050],
+["FormSigOpCac","Consulta de Acesso a Programas","operacionais","2026-10-20",1050],
+["FormSigPrPpc","Produtos Por Conta","operacionais","2026-07-21",1045],
+["FormTPD","Cadastro de Tipos de Documentos","cadastros","2026-09-10",1037],
+["FormSigOpCtd","FormSigOpCtd","operacionais","2026-11-04",1026],
+["FormSigOpC44","Geração do Arquivo da CAT 44/2008","operacionais","2026-10-20",993],
+["FormTpa","Cadastro de Tipo de Acabamento","cadastros","2026-09-10",990],
+["FormSigOpCrp","Procura","operacionais","2026-11-04",962],
+["FormSigMvChv","Chaves","operacionais","2026-09-25",950],
+["Formsigopecm","Geração de Arquivo de Exportação Para e-Commerce","operacionais","2026-11-04",949],
+["Formsigopagr","Seleção de Localização","operacionais","2026-10-20",938],
+["FormTPG","Tipos de Transporte Automático","operacionais","2026-09-23",925],
+["FormSigOpBlo","Bloqueio","operacionais","2026-10-20",918],
+["FormSigOpBcb","FormSigOpBcb","operacionais","2026-10-20",906],
+["FormSIGMVDOC","Emissão do Documento","relatorios","2026-09-25",896],
+["FormSigOpArq","Geração de Arquivos","operacionais","2026-10-20",892],
+["FormSigOpChp","Prorrogar","operacionais","2026-10-27",888],
+["FormSigOpEmp","Empenho","operacionais","2026-11-04",882],
+["FormSIGMVCTH","Histórico de Cotações","operacionais","2026-09-25",853],
+["FormSIGPRPPP","Pesquisa de Produtos por Conta","operacionais","2026-07-21",830],
+["FormSIGMVTI2","Títulos Gerados","operacionais","2026-09-25",807],
+["FormSigReEtp","Impressão de Etiquetas de Operações","operacionais","2026-07-08",801],
+["FormSigOpAlC","Alteração de Cotação","operacionais","2026-10-20",765],
+["FormSigOpChc","Histórico da Carteira","operacionais","2026-10-27",728],
+["FormSIGOPBOL","FormSIGOPBOL","operacionais","2026-10-20",692],
+["FormSigOpCbx","Baixa de Cadastros","operacionais","2026-10-20",678],
+["FormSigOpCgl","FormSigOpCgl","operacionais","2026-10-27",667],
+["Formsigmvtit","Títulos Gerados - Movimentação : ","operacionais","2026-09-25",624],
+["Formsigmvpen","Pendentes","operacionais","2026-09-25",624],
+["FormSigMvMen","Mensagens","operacionais","2026-09-25",547],
+["FormSIGOPBIN","FormSIGOPBIN","operacionais","2026-10-20",498],
+["FormSigOpEtqDoc","FormSigOpEtqDoc","operacionais","2026-11-04",478],
+["FormSigPrScn","Liberação de Acesso ao Sistema","operacionais","2026-07-21",472],
+["FormSigMvExp","FormSigMvExp","operacionais","2026-09-25",367],
+["FormSigMvPdt","FormSigMvPdt","operacionais","2026-09-25",357]
+]
+;
+const F={FORM:0,TELA:1,TIPO:2,DATA:3,LINHAS:4,NAT:5,FLAGS:6,FIXES:7,ERROS:8};
+
+const el = id => document.getElementById(id);
+const txt = (tag, cls, s) => { const n=document.createElement(tag); if(cls) n.className=cls; if(s!=null) n.textContent=s; return n; };
+
+/* ---------- indicadores ---------- */
+(function kpis(){
+  const n = k => DATA.filter(r=>r[F.NAT]===k).length;
+  const tiles = [
+    {n:DATA.length, k:"Telas alteradas", s:"de 523 migradas", w:DATA.length/523, c:"var(--ink)"},
+    {n:n("ambos"),  k:"Layout + código", s:"mexeram nas duas frentes", w:n("ambos")/DATA.length, c:"var(--ambos)"},
+    {n:n("codigo"), k:"Somente código",  s:"nenhuma mudança visual", w:n("codigo")/DATA.length, c:"var(--codigo)"},
+    {n:n("layout"), k:"Somente layout",  s:"nenhuma mudança de lógica", w:n("layout")/DATA.length, c:"var(--layout)"},
+    {n:INTACTAS.length, k:"Intactas", s:"como saíram do pipeline", w:INTACTAS.length/523, c:"var(--ghost)"}
+  ];
+  const box = el("kpi");
+  tiles.forEach(t=>{
+    const d = txt("div");
+    const num = txt("div","n", String(t.n)); num.style.color = t.c === "var(--ghost)" ? "var(--muted)" : t.c;
+    d.append(num, txt("div","k",t.k), txt("div","s",t.s));
+    const bar = txt("div","bar"); const i = txt("i");
+    i.style.width = (t.w*100).toFixed(1)+"%"; i.style.background = t.c;
+    bar.append(i); d.append(bar); box.append(d);
+  });
+})();
+
+/* ---------- barras tipo × natureza ---------- */
+(function tipos(){
+  const box = el("tipos");
+  TIPOS.forEach(([key,label,total])=>{
+    const rows = DATA.filter(r=>r[F.TIPO]===key);
+    const seg = Object.keys(NAT).map(k=>({k, v:rows.filter(r=>r[F.NAT]===k).length}));
+    const intactas = total - rows.length;
+    const row = txt("div","tipo-row");
+    const tl = txt("div","tl");
+    tl.append(txt("span","tn",label), txt("span","tv", rows.length+" de "+total+" alteradas"));
+    const st = txt("div","stack");
+    seg.forEach(s=>{
+      if(!s.v) return;
+      const i = txt("i"); i.style.width=(s.v/total*100)+"%"; i.style.background=NAT[s.k].color;
+      i.title = NAT[s.k].label+": "+s.v+" telas";
+      if(s.v/total > .07) i.append(txt("span",null,String(s.v)));
+      st.append(i);
+    });
+    if(intactas>0){
+      const i = txt("i"); i.style.width=(intactas/total*100)+"%"; i.style.background="var(--ghost)";
+      i.title="Intactas: "+intactas+" telas";
+      if(intactas/total > .07){ const sp=txt("span",null,String(intactas)); sp.style.color="var(--muted)"; i.append(sp); }
+      st.append(i);
+    }
+    row.append(tl, st); box.append(row);
+  });
+})();
+
+/* ---------- barras de categoria ---------- */
+const catFilter = new Set();
+(function cats(){
+  const box = el("cats");
+  const counts = CATS.map(c=>[c, DATA.filter(r=>r[F.FLAGS][c[3]]===1).length]);
+  const max = Math.max(...counts.map(c=>c[1]));
+  counts.forEach(([c,v])=>{
+    const b = txt("button","cat"); b.type="button"; b.setAttribute("aria-pressed","false");
+    const l = txt("div","cl", c[1]); l.append(txt("em",null,c[2]));
+    const track = txt("div","ct"); const fill = txt("i");
+    fill.style.width = (v/max*100)+"%";
+    fill.style.background = c[0]==="layout" ? "var(--layout)" : "var(--codigo)";
+    track.append(fill);
+    b.append(l, track, txt("div","cv", String(v)));
+    b.addEventListener("click", ()=>{
+      const on = b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", on?"false":"true");
+      if(on) catFilter.delete(c[3]); else catFilter.add(c[3]);
+      render();
+    });
+    box.append(b);
+  });
+})();
+
+/* ---------- filtros ---------- */
+const state = { q:"", tipo:new Set(), nat:new Set(), sort:F.LINHAS, dir:-1 };
+function mkChips(boxId, items, set){
+  const box = el(boxId);
+  items.forEach(([v,label])=>{
+    const b = txt("button","chip",label); b.type="button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", ()=>{
+      const on = b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", on?"false":"true");
+      if(on) set.delete(v); else set.add(v);
+      render();
+    });
+    box.append(b);
+  });
+}
+mkChips("chipTipo", TIPOS.map(t=>[t[0],t[1].toLowerCase()]), state.tipo);
+mkChips("chipNat", Object.entries(NAT).map(([k,v])=>[k,v.label.toLowerCase()]), state.nat);
+el("q").addEventListener("input", e=>{ state.q = e.target.value.toLowerCase().trim(); render(); });
+el("clear").addEventListener("click", ()=>{
+  state.q=""; el("q").value=""; state.tipo.clear(); state.nat.clear(); catFilter.clear();
+  document.querySelectorAll('[aria-pressed="true"]').forEach(b=>b.setAttribute("aria-pressed","false"));
+  render();
+});
+
+/* ---------- tabela ---------- */
+const COLS = [
+  ["Arquivo", F.FORM, "f"], ["Tela", F.TELA, "t"], ["Tipo", F.TIPO, "d"],
+  ["Migrada em", F.DATA, "d"], ["Linhas", F.LINHAS, "num"], ["Natureza", F.NAT, "n"],
+  ["Ajustes no código", null, "tags"], ["Fixes", F.FIXES, "num"], ["Erros", F.ERROS, "e"]
+];
+(function header(){
+  const tr = el("hrow");
+  COLS.forEach((c,idx)=>{
+    const th = txt("th", null, c[0]);
+    if(c[1]!==null){
+      th.addEventListener("click", ()=>{
+        if(state.sort===c[1]) state.dir = -state.dir; else { state.sort=c[1]; state.dir = (c[2]==="num") ? -1 : 1; }
+        render();
+      });
+    } else { th.style.cursor="default"; }
+    tr.append(th);
+  });
+})();
+
+function passes(r){
+  if(state.tipo.size && !state.tipo.has(r[F.TIPO])) return false;
+  if(state.nat.size && !state.nat.has(r[F.NAT])) return false;
+  for(const i of catFilter) if(r[F.FLAGS][i]!==1) return false;
+  if(state.q){
+    const hay = (r[F.FORM]+" "+r[F.TELA]+" "+r[F.TIPO]+" "+r[F.ERROS]).toLowerCase();
+    if(!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+
+function render(){
+  const rows = DATA.filter(passes).sort((a,b)=>{
+    const x=a[state.sort], y=b[state.sort];
+    const c = (typeof x==="number") ? x-y : String(x).localeCompare(String(y),"pt");
+    return c*state.dir;
+  });
+  document.querySelectorAll("#hrow th").forEach((th,i)=>{
+    const c = COLS[i];
+    if(c[1]!==null && c[1]===state.sort) th.setAttribute("aria-sort", state.dir<0?"descending":"ascending");
+    else th.removeAttribute("aria-sort");
+  });
+  const tb = el("tbody"); tb.textContent="";
+  const frag = document.createDocumentFragment();
+  rows.forEach(r=>{
+    const tr = document.createElement("tr");
+    tr.append(txt("td","f", r[F.FORM]));
+    tr.append(txt("td","t", r[F.TELA]));
+    tr.append(txt("td","d", r[F.TIPO]));
+    tr.append(txt("td","d", r[F.DATA]));
+    tr.append(txt("td","num", r[F.LINHAS].toLocaleString("pt-BR")));
+    const tdn = txt("td"); const p = txt("span","pill", NAT[r[F.NAT]].label);
+    p.style.background = NAT[r[F.NAT]].color;
+    if(r[F.NAT]==="coment") p.style.color="var(--panel)";
+    tdn.append(p); tr.append(tdn);
+    const tdt = txt("td"); const tags = txt("div","tags");
+    TAGS.forEach(([lbl,cls,i])=>{ if(r[F.FLAGS][i]===1) tags.append(txt("span","tag "+cls, lbl)); });
+    if(!tags.childElementCount) tags.append(txt("span","dash","—"));
+    tdt.append(tags); tr.append(tdt);
+    tr.append(txt("td","num", r[F.FIXES] ? String(r[F.FIXES]) : "·"));
+    const tde = txt("td","e", r[F.ERROS] || "—");
+    if(!r[F.ERROS]) tde.classList.add("dash");
+    tr.append(tde);
+    frag.append(tr);
+  });
+  tb.append(frag);
+  el("count").textContent = rows.length===DATA.length
+    ? DATA.length+" telas"
+    : rows.length+" de "+DATA.length+" telas";
+}
+render();
+
+/* ================= telas intactas ================= */
+const I={FORM:0,TELA:1,TIPO:2,DATA:3,LINHAS:4};
+
+/* barras por commit de migração */
+(function cohort(){
+  const box = el("cohort");
+  const by = {};
+  INTACTAS.forEach(r=>{ by[r[I.DATA]] = (by[r[I.DATA]]||0)+1; });
+  const keys = Object.keys(by).sort().reverse();
+  const max = Math.max(...keys.map(k=>by[k]));
+  keys.forEach(k=>{
+    const [y,m,d] = k.split("-");
+    const row = txt("div","cat"); row.style.cursor="default";
+    const l = txt("div","cl", d+"/"+m+"/"+y);
+    const recente = k >= "2026-10-20";
+    l.append(txt("em",null, recente ? "lote recente" : "migrada há meses"));
+    const track = txt("div","ct"); const fill = txt("i");
+    fill.style.width = (by[k]/max*100)+"%";
+    fill.style.background = recente ? "var(--coment)" : "var(--layout)";
+    track.append(fill);
+    row.append(l, track, txt("div","cv", String(by[k])));
+    box.append(row);
+  });
+})();
+
+/* barras por tipo: intactas contra o universo do tipo */
+(function intTipos(){
+  const box = el("intTipos");
+  TIPOS.forEach(([key,label,total])=>{
+    const n = INTACTAS.filter(r=>r[I.TIPO]===key).length;
+    const row = txt("div","tipo-row");
+    const tl = txt("div","tl");
+    tl.append(txt("span","tn",label), txt("span","tv", n+" intactas de "+total));
+    const st = txt("div","stack");
+    if(n){
+      const i = txt("i"); i.style.width=(n/total*100)+"%"; i.style.background="var(--muted)";
+      i.title = n+" intactas";
+      if(n/total > .07) i.append(txt("span",null,String(n)));
+      st.append(i);
+    }
+    const rest = txt("i"); rest.style.width=((total-n)/total*100)+"%"; rest.style.background="var(--ghost)";
+    rest.title = (total-n)+" alteradas";
+    st.append(rest);
+    row.append(tl, st); box.append(row);
+  });
+})();
+
+/* tabela das intactas */
+const COLSI = [["Arquivo",I.FORM,"f"],["Tela",I.TELA,"t"],["Tipo",I.TIPO,"d"],["Migrada em",I.DATA,"d"],["Linhas do .prg",I.LINHAS,"num"]];
+const si = { q:"", tipo:new Set(), sort:I.DATA, dir:-1 };
+(function headerI(){
+  const tr = el("hrowi");
+  COLSI.forEach(c=>{
+    const th = txt("th", null, c[0]);
+    th.addEventListener("click", ()=>{
+      if(si.sort===c[1]) si.dir = -si.dir; else { si.sort=c[1]; si.dir = (c[2]==="num"||c[2]==="d") ? -1 : 1; }
+      renderI();
+    });
+    tr.append(th);
+  });
+})();
+(function chipsI(){
+  const box = el("chipTipoI");
+  TIPOS.forEach(([v,label])=>{
+    const b = txt("button","chip",label.toLowerCase()); b.type="button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", ()=>{
+      const on = b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", on?"false":"true");
+      if(on) si.tipo.delete(v); else si.tipo.add(v);
+      renderI();
+    });
+    box.append(b);
+  });
+})();
+el("qi").addEventListener("input", e=>{ si.q = e.target.value.toLowerCase().trim(); renderI(); });
+
+function renderI(){
+  const rows = INTACTAS.filter(r=>{
+    if(si.tipo.size && !si.tipo.has(r[I.TIPO])) return false;
+    if(si.q && !(r[I.FORM]+" "+r[I.TELA]+" "+r[I.TIPO]).toLowerCase().includes(si.q)) return false;
+    return true;
+  }).sort((a,b)=>{
+    const x=a[si.sort], y=b[si.sort];
+    const c = (typeof x==="number") ? x-y : String(x).localeCompare(String(y),"pt");
+    return c*si.dir;
+  });
+  document.querySelectorAll("#hrowi th").forEach((th,i)=>{
+    if(COLSI[i][1]===si.sort) th.setAttribute("aria-sort", si.dir<0?"descending":"ascending");
+    else th.removeAttribute("aria-sort");
+  });
+  const tb = el("tbodyi"); tb.textContent="";
+  const frag = document.createDocumentFragment();
+  rows.forEach(r=>{
+    const tr = document.createElement("tr");
+    tr.append(txt("td","f", r[I.FORM]));
+    tr.append(txt("td","t", r[I.TELA]===r[I.FORM] ? "—" : r[I.TELA]));
+    tr.append(txt("td","d", r[I.TIPO]));
+    tr.append(txt("td","d", r[I.DATA].split("-").reverse().join("/")));
+    tr.append(txt("td","num", r[I.LINHAS].toLocaleString("pt-BR")));
+    frag.append(tr);
+  });
+  tb.append(frag);
+  el("counti").textContent = rows.length===INTACTAS.length
+    ? INTACTAS.length+" telas intactas"
+    : rows.length+" de "+INTACTAS.length+" intactas";
+}
+renderI();
+</script>

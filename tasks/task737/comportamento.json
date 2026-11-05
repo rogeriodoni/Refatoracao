@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base\nLocal lcVal, lcObj, loObjForm1\n\nIf ThisForm.CriouForm\n\tloObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide\n\n\tSelect crTmpFicha\n\tScan\n\t\tIf( crTmpFicha.cTpDados <> [D] )\n\t\t\tlcVal = Nvl(crTmpFicha.Resps, [])\n\t\tElse\n\t\t\tlcVal = Nvl(Ctod(crTmpFicha.Resps),Ctod(''))\n\t\tEndif\t\t\t\n\n\t\tlcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))\n\n\t\tloObjForm1.&lcObj..Value = lcVal\n\t\tloObjForm1.&lcObj..Refresh\n\tEndScan\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 42,
+      "codigoOriginal": "Lparameters pTip\nLocal lcArea\n\nlcArea = Alias()\n\nllOks = .f.\n\nIf ((pTip = [GRUPO_OP]) And (ThisForm.pcEscolha <> [INSERIR]))\n\tllOks = .t.\nEndIf\n\nIf Not llOks And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR], [CONSULTAR]) And ThisForm.PrimeiraEntrada And ThisForm.CriouForm\n\tThis.DesmontaFichaTecnica \n\tThisForm.PrimeiraEntrada = .f.\n\tllOks = .t.\nEndIf\n\nIf llOks\n\tIf Not Empty(ThisForm.Operacao)\t\t\n\t\tlcQuery = [Select Distinct a.Dopes, a.TitOpes, b.CGrus as TemDados ] + ;\n\t\t   \t\t\t[From SigCdOpe a ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "With ThisForm\n\t.poWindowOpe = CreateObject('frmbarcta', ThisForm)\n\tWith .poWindowOpe\n\t\t.Visible = .t.\n*!*\t\t\t.Move((This.Left + 5), ;\n*!*\t\t\t\t  (This.Top + 600),;\n*!*\t\t\t\t  (This.Width ),;\n*!*\t\t\t\t  (This.Height - 140))\n\t\t.Name = [frmFTecnicaOpe]\n\t\t.Show\n\tEndWith \n\t.CriouForm = .T.\nEndWith \n\nActivate Window ([frmFTecnicaOpe]) In Window (ThisForm.Name)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "* Rotina Para Remover os Campos Criados no Formulário de Ficha Técnica\nLocal lcCar, lcObj, loObjForm1\n\nIf ThisForm.CriouForm And Used('crTmpFicha') And (ThisForm.pcEscolha <> [PROCURAR]) And ThisForm.MontouCampos\n\tloObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide\n\tlcCar = []\n\n\tSelect crTmpFicha\n\tScan\n\t\tIf (lcCar <> crTmpFicha.CCars)\n\t\t\tlcCar = crTmpFicha.CCars\n\n\t\t\t* Destruindo o Shape e Seu Respectivo Label\n\t\t\tlcObj = [sayFicha] + Alltrim(Str(crTmpFicha.COrds))\n\t\t\tloObjForm1.Remov... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriouForm And Used",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base\nLocal loObjForm1\n\nIf ThisForm.CriouForm And Used('crTmpFicha')\n\tloObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide\n\n\tZap in crSigCdCeT\n\n\tSelect crTmpFicha\n\tScan\n\t\tlcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))\n\n\t\tlcVal = loObjForm1.&lcObj..Value\n\t\tIf( crTmpFicha.cTpDados == [D] )\n\t\t\tlcVal = Dtoc(lcVal)\n\t\tEndif\n\n\t\tIf Not Empty(lcVal)\n\t\t\tSelect crSigCdCeT\n\t\t\tGo Top In crSigCdCeT\n\t\t\tLocate For IClis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriouForm And Used",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 182,
+      "codigoOriginal": "* Rotina Para Criar os Campos no Formulário de Ficha Técnica\nLparameters pDop\nLocal lcDopes, lcQuery, lnTop, lnLef, lnWid, lcCar, lcObj, loObjForm1, lcArea, lcPerg\nlcArea = Alias()\n\nIf ThisForm.CriouForm And (ThisForm.pcEscolha <> [PROCURAR])\n\tlcDopes = Padr(pDop, 20)\n\n\tllFaz = .t.\t\t\n\tIf llFaz\n\t\tlcQuery = [Select a.CCars, a.CTits, a.CLins, a.COrds, a.Maxs, a.Mins, a.nChkCxas, a.cSelecaos, a.cTpDados, b.Resps, c.Descrs ] + ;   \n\t\t\t\t\t[From SigCdFtc a ] + ;  \n\t\t\t\t    [Left Join SigOpFtc b On '] + l... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriouForm And,SqlExecute",
+        "controlesReferenciados": "ChkCxas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "* Rotina Para Exibir o Formulário de Ficha Técnica\nIf ThisForm.CriouForm\n\tThisForm.ChecarFichaTecnica([MOSTRARFORM])\n\t\n\tThisForm.Top = This.Top + 60\n\tThisForm.ZOrder(1)\n\tThisForm.Refresh\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecarFichaTecnica,ZOrder",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "* Rotina Para Ocultar o Formulário de Ficha Técnica\nIf ThisForm.CriouForm\n\tThisForm.poWindowOpe.Top = This.Top + 600\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loObjForm1\n\nloObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide\n\nIf Used('crTmpFicha')\n\tSelect crTmpFicha\n\tScan\n\t\tlcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))\n\n\t\tlcVal = loObjForm1.&lcObj..Value\n\t\tIf( crTmpFicha.cTpDados == [D] )\n\t\t\tlcVal = Dtoc(lcVal)\n\t\tEndif\n\n\t\tIf Len(Alltrim(lcVal)) < crTmpFicha.Mins\n\t\t\tlcMsgs = 'O Titulo ' + Alltrim(crTmpFicha.CTits) + ;\n\t\t\t         ' da Caracteristica ' + Alltrim(crTmpFicha.CCars) + Chr(13) + Chr(10) +;\n\t\t\t         'deve conter no ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Do Parametros_Iniciais",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "lParameters pCnx, pcTipo, pcDopes\n\nThisform.poDataMgr = pCnx\nThisForm.pcEscolha = pcTipo\nThisForm.Operacao = pcDopes\n\n*-- Propriedades da Ficha Tecnica\nThisform.CriouForm = .F.\nThisform.PrimeiraEntrada = .T.\nThisform.powindowope = ''\nThisform.MontouCampos = .F.\n\nThisForm.CriarForm()\n\nThisform.MostrarForm()\nThis.Refresh() ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriarForm,MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFTC.cntBotoes",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If( ThisForm.CriouForm )\n\tThis.Gravafichatecnica()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPFTC.Procedure",
+      "queryOriginal": "\t\tlcQuery = [Select a.CCars, a.CTits, a.CLins, a.COrds, a.Maxs, a.Mins, a.nChkCxas, a.cSelecaos, a.cTpDados, b.Resps, c.Descrs ] + ; \t\t\t\t\t[From SigCdFtc a ] + ; \t\t\t\t    [Left Join SigOpFtc b On '] + l... [TRUNCADO]",
+      "tabelas": "SigOpFtc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpFtc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

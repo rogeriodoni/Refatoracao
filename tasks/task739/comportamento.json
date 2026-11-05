@@ -1,0 +1,129 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 2,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPGCO",
+      "evento": "Procedure",
+      "linhas": 126,
+      "codigoOriginal": "Local Array laMeses(1),laGrupos(1),laTpgra1(2,3)\nLocal laTpgra1,lnConta1,lnNmeses,lnNgrupos,lcOnErroCmd1,llOnErro1\n\nThisform.LockScreen = .t.\n\nm.lcOnErroCmd1 = On('Error')\n\nOn Error m.llOnErro1 = .t.\n\nDeclare m.laMeses(1),m.laGrupos(1),laTpGra1(2,3)\n\nm.laMeses = ''\nm.laGrupos = ''\n\nSelect Distinct Mes;\n  From crFinal ;\n  Into Array laMeses\n\nSelect Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos ;\n  From crFinal ;\n  Into Array laGrupos\n\nm.lnNmeses  = Alen(m.laMeses,  1)\nm.lnNgrupos = Alen(m.laG... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChartGroups",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGCO",
+      "evento": "Init",
+      "linhas": 146,
+      "codigoOriginal": "LPARAMETERS pForm, datses\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession To DatSes\nThisForm.ParentForm = pForm\n\nLocal laTpgra1,lnConta1,lcTitulo\n\nDeclare m.laMeses(1),m.laGrupos(1),laTpGra1(2,3)\n\nm.laMeses  = ''\nm.laGrupos = ''\n\nSelect Distinct Mes;\n  From crFinal ;\n  Into Array laMeses\n\nSelect Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos;\n  From crFinal ;\n  Into Array laGrupos\n\nm.lnNmeses  = Alen(m.laMeses, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostraGrafico",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGCO",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGCO.sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGCO.Imprimir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select Graph\nGo Top\nReport Form SigOpGrc To Printer Prompt NoConsole\n\nSelect Graph\nGo Top\nThisform.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPGCO.Procedure",
+      "queryOriginal": "Select Distinct Mes; From crFinal ; Into Array laMeses",
+      "tabelas": "crFinal,Array",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPGCO.Procedure",
+      "queryOriginal": "Select Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos ; From crFinal ; Into Array laGrupos",
+      "tabelas": "crFinal,Array",
+      "colunas": "4))",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPGCO.Init",
+      "queryOriginal": "Select Distinct Mes; From crFinal ; Into Array laMeses",
+      "tabelas": "crFinal,Array",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPGCO.Init",
+      "queryOriginal": "Select Distinct (Str(Ordem, 1) + Str(Ano, 4)) as cGrupos; From crFinal ; Into Array laGrupos",
+      "tabelas": "crFinal,Array",
+      "colunas": "4))",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crFinal", "Array"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

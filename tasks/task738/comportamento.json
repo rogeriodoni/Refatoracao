@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPGAR",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Parameters pcArq\n\nLocal loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(pcArq)\n\nWith loXml\n\t.RespectCursorCP = .t.\n\t.RespectNesting  = .t.\n\t.UTF8Encoded     = .t. \t\n\t.FormattedOutput = .t.\n\t.XMLName         = Strconv([cpros], 12)\n\n\t* Adiciona as Tabelas a Serem Enviadas Para o XML\n\t.AddTableSchema([csArqXMl])\n\n\t* Gera a String com o XML\n\t.ToXML([lcStr])\n\n\t* Grava a String com o XML Em Um Arquivo\n\t=StrToFile(lcStr, lcArq, 0)\n\n\tUse In csArqXMl\n\n\tloXml = Null\nEndWith\n* Fim *... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR",
+      "evento": "Procedure",
+      "linhas": 112,
+      "codigoOriginal": "Local lnXml\nlnXml = Thisform.chkXml.Value\n\nIf Used('Tmp_Gpec')\n\tUse In Tmp_Gpec\nEndif\n\nIf Used([csArqXMl])\n\tUse In csArqXMl\nEndif\n\nIf lnXml <> 1\n\n*!*\t\tlcArquivo = Thisform.cntXml.Get_Arquivo.Value\n\n\n*!*\t\tThisform.poObjForm.poDataMgr.SqlExecute([Select a.* From SigOpGcp a Where a.codigos = ']+lcArquivo+[' ],'Tmp_Gpec')\n\n*!*\t\tSelect Tmp_Gpec\n*!*\t\tGo Top\n*!*\t\tIf !Eof()\n*!*\t\t\tMessagebox('Arquivo já Gerado !!',48,'ERRO')\n*!*\t\t\tThisform.cntXml.Get_Arquivo.SetFocus\n*!*\t\t\tReturn\n*!*\t\tEndif\n\n*!*\t\tWait Wi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "processatxt,SetFocus,SqlExecute,ExportaProduto",
+        "controlesReferenciados": "chkXml",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPGAR",
+      "evento": "Procedure",
+      "linhas": 195,
+      "codigoOriginal": "Local lcArq, lcChr, lcGru, lcDes, lcUni\n\n*!*\tIf (MessageBox([Confirma a Geração dos Arquivos?], 32+4, [Geração de Arquivos]) <> 6)\n*!*\t\tReturn .f.\n*!*\tEndIf\n\nlcArq = Alltrim(ThisForm.cntTxt.getArqTXT.Value)\n\nIf Empty(lcArq)\n\t=MessageBox([O Arquivo a Ser Gerado Não Foi Informado!!!], 0+16, [Atenção!!!])\n\tThisForm.cntTxt.btnGetArqO.SetFocus\n\tReturn .f.\nEndIf\n\n=StrToFile([], lcArq, 0)\n\nIf Not File(lcArq)\n\t=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])\n\tThisForm.cntTxt.btnGetArq... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPGAR",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "Parameters oObjForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poObjForm = oObjForm\n\nThisform.cntXml.getDirs.Value = []\nThisform.cntXml.Get_arquivo.Value = []\n\nThisform.cntTxt.getArqTXT.Value = []\n\nthisform.chkXml.Value = 0\nThisform.cntXml.visible = .F.\nThisform.cntTXT.visible = .T.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_arquivo,chkXml",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.CntTXT.getArqTXT",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.CntTXT.btnGetArqO",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lcArq\n\nlcArq = GetFile([TXT], [Arquivo TXT:], [Criar], 0, [Informe o Nome do Arquivo TXT])\n\nIf Not Empty(lcArq)\n\tThisForm.cntTxt.getArqTXT.Value = Alltrim(lcArq)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.Cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.Processa",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "lnConfirma = Messagebox('Confirma Geração do Arquivo ?',32+4,'')\nIf lnConfirma <> 6\n\tReturn(.F.)\nEndif\n\nThisform.Processamento()\n\n\nThisform.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.chkXml",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Thisform.cntXml.getDirs.Value = []\nThisform.cntXml.Get_arquivo.Value = []\n\nThisform.cntTxt.getArqTXT.Value = []\n\nIf This.Value = 1\n\tThisform.cntXml.visible = .T.\n\tThisform.cntTXT.visible = .F.\nElse\n\tThisform.cntXml.visible = .F.\n\tThisform.cntTXT.visible = .T.\nEndif\n\nThis.Refresh ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_arquivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.CntXml.btnDirs",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Local lcDir\n\nlcDir = Alltrim(ThisForm.cntXml.getDirs.Value)\n\nlcDir = Putfile([],[],[XML]) &&Alltrim(GetDir(lcDir, [Selecione o Diretório / Pasta De Gravação do Arquivo], [Seleção de Diretórios], 2))\n\nIf Not Empty(lcDir)\n\tThisForm.cntXml.getDirs.Value = lcDir\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGAR.CntXml.getDirs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

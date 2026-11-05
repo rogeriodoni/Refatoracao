@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö port 1433 on 192.168.200.10 is still unreachable from this machine right now.
+
+This is **not a code bug**. The failure happens in ETAPA 1B ("Conectando ao banco de dados"), before `FormSigOpGco`/`SigOpGcoBO` even run any of their own logic ÔÇö it's the test harness's pre-flight SQL connection check failing with DBNETLIB error 1526 ("SQL Server inexistente ou acesso negado"), which is always a network/environment condition, never a `.prg` defect (per `docs/schema.sql`/pipeline conventions and reconfirmed in project memory).
+
+Notably, memory already has a record of this *exact* situation ÔÇö task739, `FormSigOpGco`, same error, same root cause ÔÇö logged just now today (2026-11-05), explicitly stating: "NAO editar FormSigOpGco.prg/SigOpGcoBO.prg para 'corrigir' isto" (don't edit these files to "fix" this).
+
+I re-verified live: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded = False`, confirming the route to the SQL Server is currently down from this machine (it has flapped between reachable/unreachable repeatedly over the past weeks per the historical record).
+
+**I'm not modifying `FormSigOpGco.prg` or `SigOpGcoBO.prg`** ÔÇö doing so would not fix anything (the code never gets a chance to run) and would risk introducing an unjustified change per the project's own documented lesson. The correct action here is to retry the `06_testForm` step once network/VPN connectivity to `192.168.200.10:1433` is restored, not to patch the form code.
+
+If you want, I can:
+- Re-run the connectivity check on a cadence and retry the test once the route is back, or
+- Flag this to whoever manages network/VPN access to the pipeline machine.
+
+Let me know which you'd prefer.

@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 conclu├¡da ÔÇö `FormSigOpGco`
+
+### O que entrou no form (`projeto/app/forms/operacionais/FormSigOpGco.prg`, 361 ÔåÆ 671 linhas)
+
+Os **2 CommandButton `fwbtng`** que o SCX tem como filhos diretos do form, com os Click **completos**:
+
+| m├®todo | conte├║do |
+|---|---|
+| `ConfigurarBotoes` | `cmd_4c_Imprimir` (Top=3/Left=647, `geral_impressora_normal_60.jpg`) e `cmd_4c_Sair` (Top=3/Left=723, `cadastro_sair_60.jpg`), 75x75, `Themes=.T.` + `DisabledPicture` (standalone com Picture ÔÇö #99), criados **depois** do cabe├ºalho (regra #11) |
+| `ConfigurarEventos` | os dois `BINDEVENT` de Click, por ├║ltimo (s├│ resolve objeto que j├í existe) |
+| `CmdImprimirClick` | transcri├º├úo do legado: `Select Graph` / `Go Top` / report / **volta ao topo** / `Refresh` ÔÇö o 2┬║ `GO TOP` existe porque o REPORT deixa o cursor em EOF e o OleBoundControl l├¬ o General do registro corrente |
+| `CmdSairClick` | `THIS.Release()` |
+| `ExecutarReportForm` | helper can├┤nico (#117/#147): guard de `FILE()` no FRX, guard de cursor vazio, isolamento de locale, reconstru├º├úo do menu |
+
+Os Click estavam no roteiro da Fase 7/8, mas o gate exige o handler e stub ├® proibido ÔÇö o legado deles tem 7 e 1 linha, ent├úo foram entregues inteiros. `Width`/`Height` n├úo v├¬m da classe `fwbtng` (80x100 sobrep├Áe os bot├Áes e vaza do form); 75x75 casa com o passo de 76px dos dois `Left` e com o mesmo Shape 173x110 do `FormSIGOPCGF`.
+
+**N├úo criei Grid, PageFrame Lista/Dados nem os 6 bot├Áes CRUD**: a ├írvore do SCX tem zero `BaseClass grid|pageframe` e zero controle de entrada. Qualquer um deles seria inventado.
+
+### O gate da Fase 4 estava insatisfaz├¡vel ÔÇö corrigido no harness
+
+O ramo DESPACHANTE era **auto-anul├ível**: exigia `-not $temListaLegado`, e esse predicado ├® o regex largo que casa o token cru `ControlSource` ÔÇö justamente o `.ControlSource = 'gGraficos'` do OleBoundControl. Mesmo defeito que o ramo EXIBICAO levou em task681. Passou a usar o teste **estrito** (a composi├º├úo que EXIBICAO/CAPTURA j├í usam), calculada uma vez; `$temListaLegado` deixou de existir.
+
+Medido nas duas dire├º├Áes (o estrito n├úo ├® subconjunto do largo):
+
+- predicado, 738 dumps: muda em **7 tasks = 3 legados** (`SigOpGco`, `SIGPRMEI`, `SigPrRss`), todos ganhando dispensa, **0 perdendo**;
+- veredito do `case 4` real, 686 forms: `passavam_antes = 677` ÔåÆ `passam_depois = 678`, `mudaram = 1` (s├│ o `FormSigOpGco`), **0 regress├Áes**.
+
+`FormSIGPRMEI` e `FormSigPrRss` passam hoje pelo ramo PAGINADO com `ConfigurarPaginaLista`+`AlternarPagina` e **zero `grd_4c_`** ÔÇö ou seja o gate aprovava a vers├úo inventada e reprovava a fiel, 3┬¬ inst├óncia do padr├úo de task140/task681.
+
+### Verifica├º├úo em VFP9 (executou de verdade ÔÇö smoke test com arquivo de sa├¡da passou)
+
+`COMPILE` sem `.err`; `CREATEOBJECT` ÔåÆ `VARTYPE=O`, `BaseClass=Form`, 800x600, `ControlCount=3`; bot├Áes em 3/647/75/75 e 3/723/75/75, captions `\<Imprimir` e `Encerrar`, os dois `.Picture` existem em `vbmp\`; `CmdImprimirClick`/`CmdSairClick`/`ExecutarReportForm` com `PEMSTATUS(...,2) = .F.` (PUBLIC); clicar Imprimir sem gr├ífico gerado avisou *"Gr├ífico ainda n├úo foi gerado"* e n├úo imprimiu, sem exce├º├úo. Arquivo com 0 bytes >127 e CRLF preservado.
+
+### Pend├¬ncia que n├úo depende de mim
+
+H├í um `RunLoop.ps1` vivo desde 04/11 17:47 e o orquestrador foi gravado hoje 04:50 ÔÇö o PowerShell parseia o script na invoca├º├úo, ent├úo **a corre├º├úo do gate s├│ vale a partir da pr├│xima invoca├º├úo**. Se a execu├º├úo em curso revalidar a Fase 4 com a c├│pia velha, ela vai reprovar outra vez e gerar `fase_4_prompt_force.md` mesmo com o form correto; relan├ºar o loop resolve.
+
+Registrei a li├º├úo em mem├│ria (`feedback_gate_fase4_despachante_largo_autoanula`) e n├úo commitei nada ÔÇö o `OrquestradorMigracao.ps1` j├í tinha altera├º├Áes de outras sess├Áes no working tree.

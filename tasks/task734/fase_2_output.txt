@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. FASE 2/8 is complete.
+
+**Summary:** Completed `SigOpFlpBO.prg` with the CRUD methods built from the legacy `SIGOPFLP.Cnt_Inserir.BtnOk.Click` / `cmdApagaitem.cmdApagar.Click` logic:
+
+- **`ObterChavePrimaria()`** ÔÇö returns `cidchaves` for auditoria.
+- **`CarregarDoCursor()`** ÔÇö maps all 15 columns of `SigCdClh`, with defensive `TYPE()` guards for `ccargs`/`tplancs`/`codsits` (columns the legacy history cursor doesn't always select) and `ConverterParaLogico()` for the `autos` bit column.
+- **`ValidarDados()`** ÔÇö requires Grupo/Conta and Hist├│rico (matches what the legacy screen enforces).
+- **`Inserir()`** ÔÇö generates `cidchaves` via `fUniqueIds()`, defaults `emps` to `go_4c_Sistema.cCodEmpresa`, builds `grucontas` as `PADR(Grupos,10)+PADR(IClis,10)` (positional key, regra #42), and covers all 12 NOT NULL columns of `SigCdClh` in the INSERT.
+- **`Atualizar()`** ÔÇö transcribes the legacy `Case Tipo='ALTERAR'` branch literally: only `datas/usuars/datagens/hists/obs` are updated, leaving Grupos/IClis/GruContas/Autos/Emps/Nopers/Ccargs/Tplancs/Codsits untouched (matches the `Replace` statement exactly).
+- **`AntesDeExcluir()` + `ExecutarExclusao()`** ÔÇö reproduce the two delete guards from `cmdApagar.Click` (ownership check, and the "hist├│rico autom├ítico" block).
+- `RegistrarAuditoria()` is called on INSERT/UPDATE/DELETE as required.
+
+Verified the file compiles cleanly against VFP9 (no `.err` output), then cleaned up the temporary compile script/artifacts.

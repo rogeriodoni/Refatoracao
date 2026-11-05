@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 5 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpGco.prg` atualizado (671 ÔåÆ 864 linhas, CRLF preservado, zero acento literal).
+
+## O que a fase entregou
+
+O SIGOPGCO ├® **FLAT e sem campos**: a ├írvore do SCX tem 8 objetos, todos filhos diretos do form, com **zero** TextBox/EditBox/ComboBox/CheckBox/OptionGroup/Spinner e zero PageFrame. "Metade dos campos" de zero campos ├® zero ÔÇö inventar Page2 ou campo violaria o PILAR 1. Ent├úo o `ConfigurarPaginaDados()` recebeu corpo **real**: a superf├¡cie de dados desta tela s├úo os dois ├║ltimos objetos da ├írvore, que faltavam.
+
+| Entregue | Conte├║do |
+|---|---|
+| `ConfigurarPaginaDados()` | `shp_4c_Shape2` (7/615/173/110, BackStyle=0, BorderStyle=0, BorderColor=136,189,188) e `obj_4c_OleGrafico` (OleBoundControl 141/12/770/418, Enabled=.T., AutoActivate=0) ÔÇö fecha os 8 objetos do SCX |
+| `AjustarOrdemTabulacao()` | os 4 TabIndex na ordem efetiva do legado |
+| `ConfigurarCabecalho()` | `Rotation = 0` dos 2 labels (o que a Fase 3 descartou) |
+| `ConfigurarPageFrame()` | ordem das chamadas = ordem dos registros do SCX |
+
+Tr├¬s decis├Áes que exigiram leitura do legado, n├úo transcri├º├úo mec├ónica:
+
+1. **`.ControlSource` nasce vazio.** O legado s├│ liga `gGraficos` dentro do `mostragrafico`, depois do `Create Cursor Graph` + `Append General`. Apontar para `cursor_4c_Grafico` aqui estouraria *Alias not found* no TRY do `InicializarForm` e a tela n├úo abriria (regra #41). O bind fica no m├®todo de desenho (Fase 7/8), onde o legado o faz.
+2. **A chamada entra ANTES de `ConfigurarBotoes`.** O Shape ocupa 7..117 / 615..788 ÔÇö exatamente a ├írea dos dois bot├Áes. Criado depois deles ficaria na frente e, mesmo transparente, interceptaria o clique em Imprimir/Encerrar.
+3. **`TabIndex = 0` do dump n├úo foi transcrito** ÔÇö est├í fora da faixa 1..N e o VFP o descarta em sil├¬ncio.
+
+## Verifica├º├úo medida no VFP9 (smoke test passou)
+
+- **Compila├º├úo**: `.FXP` gerado, `.ERR` ausente, com **controle negativo** (c├│pia + `IF .T.` solto) produzindo `.ERR` s├│ nas 2 linhas acrescentadas ÔÇö prova que o detector funciona e que as 864 linhas est├úo limpas.
+- **Instancia├º├úo**: `CREATEOBJECT` devolveu objeto, `ControlCount = 5`, nenhum di├ílogo no log. Geometria lida de volta bate com o dump; `BorderColor = 12369288 = RGB(136,189,188)`.
+- **Z-order real**: `cnt_4c_Sombra ÔåÆ shp_4c_Shape2 ÔåÆ obj_4c_OleGrafico ÔåÆ cmd_4c_Imprimir ÔåÆ cmd_4c_Sair` ÔÇö o Shape atr├ís dos bot├Áes, como no SCX.
+- **TabIndex lido de volta**: cnt=1, ole=2, **Sair=3, Imprimir=4**. O controle negativo (mesmo form sem a chamada) devolveu **Imprimir=3, Sair=4** ÔÇö os bot├Áes trocados. O passe n├úo ├® inerte: sem ele o Encerrar cairia depois do Imprimir no ciclo do Tab, ao contr├írio do legado.
+- `Shape.TabIndex` existe? **`.F.`** ÔÇö confirma que a faixa ├® 1..4 e n├úo 1..5, como documentado.
+
+Gates: completude **OK** (form e BO), `VerificarPropriedadesInexistentes` **OK**, e o gate da Fase 5 passa pelos **dois** ramos (`temPaginaDados = True` e `temLayoutFlat = True`) sem precisar de altera├º├úo no orquestrador.
+
+**O que resta** (registrado no cabe├ºalho): Fase 6 n├úo tem trabalho real ÔÇö zero campo de entrada e zero lookup no dump (`fwBuscaExt`/`fwBuscaSel`/`sigacess`/`mAddColuna` n├úo aparecem). Fase 7/8 ├® o `mostragrafico` (Create Cursor + Append General + bind do ControlSource + autoformat/t├¡tulos/eixos/ChartGroups/r├│tulos de percentual); os 2 Click j├í foram entregues na Fase 4. Vale notar que o `APPEND GENERAL CLASS "MsGraph.Chart"` n├úo ├® verific├ível nesta m├íquina ÔÇö o OLE server n├úo est├í registrado, o mesmo limite que o FormSigPrGf2 enfrentou.

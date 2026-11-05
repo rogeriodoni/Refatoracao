@@ -1,0 +1,3073 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpFpg.SCX
+* Data/Hora: 04/11/2026 21:03:55
+* Total de registros: 78
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPFPG
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: CntCCred
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: Get_cred
+  Parent: SIGOPFPG.CntCCred
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGOPFPG.CntCCred
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPFPG.CntCCred
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cartao
+  Parent: SIGOPFPG.CntCCred
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label8
+  Parent: SIGOPFPG.CntCCred
+  Class: label
+  BaseClass: label
+
+Objeto: Confirma
+  Parent: SIGOPFPG.CntCCred
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cntSombra
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPFPG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPFPG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPFPG
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_fpg
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_MoeOper
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Line1
+  Parent: SIGOPFPG
+  Class: line
+  BaseClass: line
+
+Objeto: Say23
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGOPFPG
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPFPG.Grade.fpagto
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPFPG.Grade.fpagto
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPFPG.Grade.valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPFPG.Grade.valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPFPG.Grade.venc
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPFPG.Grade.venc
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPFPG.Grade.moeda
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPFPG.Grade.moeda
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPFPG.Grade.cotfpg
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPFPG.Grade.cotfpg
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: AvisoPortaM
+  Parent: SIGOPFPG
+  Class: image
+  BaseClass: image
+
+Objeto: Say20
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say24
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ValTotChqs
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetObs
+  Parent: SIGOPFPG
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SayObs
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_npar
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_vpar
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fweditdata_venc
+  Parent: SIGOPFPG
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_COTACAO
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: alteracotacao
+  Parent: SIGOPFPG
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say12
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say19
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say18
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say17
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_Cotacao
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGOPFPG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_VEncargo
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_PEncargo
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetPorc
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_MoeOcr
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntCCredFP
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: Get_cred
+  Parent: SIGOPFPG.CntCCredFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGOPFPG.CntCCredFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPFPG.CntCCredFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cartao
+  Parent: SIGOPFPG.CntCCredFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntCarneFP
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: Get_carne
+  Parent: SIGOPFPG.CntCarneFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPFPG.CntCarneFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntOutrosFP
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: Say9
+  Parent: SIGOPFPG.CntOutrosFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_OBS
+  Parent: SIGOPFPG.CntOutrosFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntChequeFP
+  Parent: SIGOPFPG
+  Class: container
+  BaseClass: container
+
+Objeto: Get_num
+  Parent: SIGOPFPG.CntChequeFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGOPFPG.CntChequeFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPFPG.CntChequeFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPFPG.CntChequeFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPFPG.CntChequeFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPFPG.CntChequeFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_age
+  Parent: SIGOPFPG.CntChequeFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_bco
+  Parent: SIGOPFPG.CntChequeFP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_TotForma
+  Parent: SIGOPFPG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: AvisoPortaT
+  Parent: SIGOPFPG
+  Class: image
+  BaseClass: image
+
+Objeto: AvisoPortaS
+  Parent: SIGOPFPG
+  Class: image
+  BaseClass: image
+
+Objeto: Apaga
+  Parent: SIGOPFPG
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Ok
+  Parent: SIGOPFPG
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGOPFPG
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Forma de Pagamento"
+  ControlBox = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowState = 0
+  AlwaysOnTop = .F.
+  Name = "SIGOPFPG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred
+------------------------------------------------------------
+  Top = 216
+  Left = 304
+  Width = 400
+  Height = 74
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 12
+  BackColor = 255,255,255
+  BorderColor = 36,84,155
+  Name = "CntCCred"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Get_cred
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.nocreditos"
+  InputMask = "XXXXXXXXXX"
+  Left = 264
+  TabIndex = 2
+  Top = 35
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "Get_cred"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Crédito :"
+  Left = 218
+  Top = 39
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cartão :"
+  Left = 9
+  Top = 39
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Get_cartao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.cartaos"
+  Format = "K"
+  InputMask = "99999999999999999999"
+  Left = 53
+  TabIndex = 1
+  Top = 35
+  Width = 150
+  ForeColor = 0,0,0
+  Name = "Get_cartao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cartão Crédito"
+  Height = 15
+  Left = 4
+  Top = 5
+  Width = 84
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCred.Confirma
+------------------------------------------------------------
+  Top = 24
+  Left = 348
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_escudo_ok_32.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Confirmar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Confirma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 622
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_fpg
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 181
+  TabIndex = 1
+  ToolTipText = "Digite a forma de pagamento"
+  Top = 123
+  Width = 94
+  Name = "Get_fpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_MoeOper
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  FontSize = 9
+  ControlSource = ""
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 429
+  TabIndex = 17
+  Top = 122
+  Width = 31
+  Name = "Get_MoeOper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 0
+  Left = 429
+  Top = 173
+  Width = 108
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say23
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Total Forma Pagto : "
+  Left = 327
+  Top = 179
+  TabIndex = 27
+  ForeColor = 90,90,90
+  Name = "Say23"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 149
+  Left = 89
+  ReadOnly = .F.
+  RecordSource = "XPAR"
+  ScrollBars = 2
+  TabIndex = 10
+  Top = 304
+  Width = 425
+  Name = "Grade"
+  Column1.FontName = "Courier New"
+  Column1.ControlSource = ""
+  Column1.Width = 94
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "fpagto"
+  Column2.FontName = "Courier New"
+  Column2.ControlSource = ""
+  Column2.Width = 108
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "valor"
+  Column3.FontName = "Courier New"
+  Column3.ColumnOrder = 5
+  Column3.ControlSource = ""
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Name = "venc"
+  Column4.FontName = "Courier New"
+  Column4.ColumnOrder = 3
+  Column4.ControlSource = ""
+  Column4.Width = 33
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.Name = "moeda"
+  Column5.FontName = "Courier New"
+  Column5.ColumnOrder = 4
+  Column5.ControlSource = ""
+  Column5.Width = 74
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.InputMask = "999.9999"
+  Column5.Name = "cotfpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.fpagto.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cond. Pagto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.fpagto.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.valor.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.valor.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.venc.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.venc.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.moeda.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.moeda.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.cotfpg.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cotação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Grade.cotfpg.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.AvisoPortaM
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alpham.bmp
+  Stretch = 0
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 556
+  Top = 117
+  Width = 25
+  ColorSource = 4
+  Name = "AvisoPortaM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say20
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda dos Cheques : "
+  Left = 318
+  Top = 128
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 56
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say24
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Total dos Cheques : "
+  Left = 326
+  Top = 152
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 56
+  Name = "Say24"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_ValTotChqs
+------------------------------------------------------------
+  Comment = ""
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigChLcq.ValTots"
+  Height = 20
+  InputMask = "999,999,999.99"
+  Left = 429
+  Margin = 0
+  TabIndex = 28
+  Top = 148
+  Width = 108
+  ZOrderSet = 57
+  Name = "Get_ValTotChqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.GetObs
+------------------------------------------------------------
+  Height = 138
+  Left = 519
+  TabIndex = 36
+  Top = 314
+  Visible = .F.
+  Width = 192
+  ForeColor = 0,0,0
+  ControlSource = "xPar.Obs"
+  Name = "GetObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.SayObs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Observação"
+  Left = 521
+  Top = 297
+  Visible = .F.
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "SayObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_npar
+------------------------------------------------------------
+  InputMask = "99"
+  Left = 181
+  TabIndex = 2
+  ToolTipText = "Número de Parcelas"
+  Top = 148
+  Width = 24
+  Name = "Get_npar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_vpar
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  InputMask = "999,999,999.99"
+  Left = 181
+  TabIndex = 6
+  ToolTipText = "Valor de cada Parcela"
+  Top = 198
+  Width = 108
+  Name = "Get_vpar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.fweditdata_venc
+------------------------------------------------------------
+  Left = 181
+  TabIndex = 9
+  ToolTipText = "Data de Vencimento"
+  Top = 273
+  Width = 80
+  Name = "fweditdata_venc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_COTACAO
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  FontSize = 9
+  ControlSource = ""
+  InputMask = "999.9999"
+  Left = 181
+  TabIndex = 4
+  Top = 173
+  Visible = .F.
+  Width = 74
+  Name = "Get_COTACAO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.alteracotacao
+------------------------------------------------------------
+  Top = 172
+  Left = 261
+  Height = 24
+  Width = 28
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = 
+  Caption = "\<C$"
+  TabIndex = 5
+  TabStop = .F.
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "alteracotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cond. Pagto : "
+  Left = 108
+  Top = 127
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say19
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor Encargo : "
+  Left = 102
+  Top = 253
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say19"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say18
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento : "
+  Left = 113
+  Top = 277
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say18"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Enc. Financ. : "
+  Left = 109
+  Top = 228
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say17
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor : "
+  Left = 144
+  Top = 203
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say17"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say_Cotacao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cotação : "
+  Left = 128
+  Top = 177
+  Visible = .F.
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say_Cotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Say13
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Qtde. Parcelas : "
+  Left = 97
+  Top = 152
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_VEncargo
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  InputMask = "999,999,999.99"
+  Left = 181
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 248
+  Width = 108
+  Name = "Get_VEncargo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_PEncargo
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = "999,999.99 %"
+  Left = 181
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 223
+  Width = 96
+  Name = "Get_PEncargo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.GetPorc
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = "999.9%"
+  Left = 235
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 148
+  Width = 54
+  Name = "GetPorc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_MoeOcr
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  FontSize = 9
+  ControlSource = ""
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 181
+  TabIndex = 16
+  Top = 148
+  Width = 31
+  Name = "Get_MoeOcr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCredFP
+------------------------------------------------------------
+  Top = 462
+  Left = 91
+  Width = 344
+  Height = 42
+  SpecialEffect = 0
+  TabIndex = 12
+  BackColor = 255,255,255
+  Name = "CntCCredFP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCredFP.Get_cred
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.nocreditos"
+  InputMask = "XXXXXXXXXX"
+  Left = 253
+  TabIndex = 18
+  Top = 8
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "Get_cred"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCredFP.Say8
+------------------------------------------------------------
+  Caption = "Credito"
+  Left = 214
+  Top = 12
+  TabIndex = 31
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCredFP.Say7
+------------------------------------------------------------
+  Caption = "Cartão"
+  Left = 10
+  Top = 12
+  TabIndex = 29
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCCredFP.Get_cartao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.cartaos"
+  InputMask = "99999999999999999999"
+  Left = 47
+  TabIndex = 17
+  Top = 8
+  Width = 150
+  ForeColor = 0,0,0
+  Name = "Get_cartao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCarneFP
+------------------------------------------------------------
+  Top = 510
+  Left = 197
+  Width = 154
+  Height = 42
+  SpecialEffect = 0
+  TabIndex = 13
+  BackColor = 255,255,255
+  Name = "CntCarneFP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCarneFP.Get_carne
+------------------------------------------------------------
+  ControlSource = "xpar.ncarnes"
+  Left = 46
+  TabIndex = 16
+  Top = 6
+  ForeColor = 0,0,0
+  Name = "Get_carne"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntCarneFP.Say6
+------------------------------------------------------------
+  Caption = "Carne"
+  Left = 13
+  Top = 9
+  TabIndex = 28
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntOutrosFP
+------------------------------------------------------------
+  Top = 510
+  Left = 370
+  Width = 230
+  Height = 42
+  SpecialEffect = 0
+  TabIndex = 14
+  BackColor = 255,255,255
+  Name = "CntOutrosFP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntOutrosFP.Say9
+------------------------------------------------------------
+  Caption = "Observação"
+  Left = 11
+  Top = 11
+  TabIndex = 19
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntOutrosFP.Get_OBS
+------------------------------------------------------------
+  ControlSource = "xpar.outros"
+  Height = 23
+  Left = 73
+  TabIndex = 11
+  Top = 7
+  Width = 150
+  ForeColor = 0,0,0
+  Name = "Get_OBS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP
+------------------------------------------------------------
+  Top = 462
+  Left = 455
+  Width = 230
+  Height = 42
+  SpecialEffect = 0
+  TabIndex = 11
+  BackColor = 255,255,255
+  Name = "CntChequeFP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Get_num
+------------------------------------------------------------
+  ControlSource = "xpar.numeros"
+  Height = 23
+  Left = 166
+  TabIndex = 15
+  Top = 13
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_num"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Get_conta
+------------------------------------------------------------
+  ControlSource = "xpar.contas"
+  Height = 23
+  Left = 85
+  TabIndex = 14
+  Top = 13
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Bco"
+  Left = 8
+  Top = 1
+  TabIndex = 21
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Agencia"
+  Left = 44
+  Top = 1
+  TabIndex = 22
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Numero"
+  Left = 166
+  Top = 1
+  TabIndex = 26
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta"
+  Left = 86
+  Top = 1
+  TabIndex = 27
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Get_age
+------------------------------------------------------------
+  ControlSource = "xpar.agencias"
+  Height = 23
+  Left = 45
+  TabIndex = 13
+  Top = 13
+  Width = 38
+  ForeColor = 0,0,0
+  Name = "Get_age"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.CntChequeFP.Get_bco
+------------------------------------------------------------
+  BackStyle = 1
+  ControlSource = "xpar.bancos"
+  Height = 23
+  Left = 8
+  TabIndex = 12
+  Top = 13
+  Width = 36
+  ForeColor = 0,0,0
+  Name = "Get_bco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Get_TotForma
+------------------------------------------------------------
+  Comment = ""
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Format = "K"
+  Height = 20
+  InputMask = "999,999,999.99"
+  Left = 429
+  Margin = 0
+  TabIndex = 30
+  Top = 177
+  Width = 108
+  ZOrderSet = 33
+  Name = "Get_TotForma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.AvisoPortaT
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alphat.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 580
+  Top = 117
+  Width = 25
+  ColorSource = 4
+  Name = "AvisoPortaT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.AvisoPortaS
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alphas.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 604
+  Top = 117
+  Width = 25
+  ColorSource = 4
+  Name = "AvisoPortaS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Apaga
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Apagar"
+  ToolTipText = "Apagar"
+  Name = "Apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirmar"
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFPG.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPFPG
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE inchequeserial
+------------------------------------------------------------
+PROCEDURE inchequeserial
+Thisform.Leitor = .F.
+Thisform.ReadComm.leitura()
+Thisform.LeituraSerial=Thisform.readcomm.campo
+
+Thisform.CntChequeFP.Get_Bco.Valid()
+If Thisform.leitor
+	if not IsEmpty(xPar.bancos)
+		If Not Thisform.VerificaCheque(xPar.bancos,xPar.agencias,xPar.contas,xPar.numeros)
+			Replace bancos With '', agencias With '', contas With '', numeros With ''
+			With ThisForm.CntChequeFP
+				.get_bco.value = ''
+				.get_age.value = ''
+				.get_conta.value = ''
+				.get_num.value = ''
+				.get_bco.SetFocus
+			EndWith
+			Thisform.LeituraSerial = ''
+		Else
+			Thisform.CntChequeFP.get_num.SetFocus	
+		Endif
+	Endif
+Else
+	ThisForm.CntChequeFP.get_age.SetFocus
+Endif
+Thisform.leitor = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE limpa_che
+------------------------------------------------------------
+PROCEDURE limpa_che
+With ThisForm.CntChequeFP
+	.Get_Bco.Value = Space(3)
+	.Get_Bco.Refresh
+	.Get_Age.Value = Space(4)
+	.Get_Age.Refresh
+	.Get_Conta.Value = Space(10)
+	.Get_Conta.Refresh
+	.Get_Num.Value = Space(6)
+	.Get_Num.Refresh
+EndWith
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mcartaocred
+------------------------------------------------------------
+PROCEDURE mcartaocred
+LParameters plVisible
+
+Local lnI
+
+With ThisForm
+	For lnI = 1 to .ControlCount
+		.Controls(lnI).Enabled = Iif(.Controls(lnI).Name=='CntCCred',plVisible,Not plVisible)
+	EndFor
+	.CntCCred.Visible = plVisible
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mostraobs
+------------------------------------------------------------
+PROCEDURE mostraobs
+Local lcInfo, lcFPag
+
+lcFPag = xPar.FPags
+Select CrSigOpFp
+Set Order To FPags
+Seek lcFpag
+lcInfo = CrSigOpFp.Infos
+
+ThisForm.GetObs.Visible = ( CrSigOpFp.Obs = 1 )
+ThisForm.SayObs.Visible = ( CrSigOpFp.Obs = 1 )
+
+With Thisform.CntChequeFP
+	.Visible = (lcInfo == 'C')
+	If .Visible
+		.Get_Bco.Refresh
+		.Get_Age.Refresh
+		.Get_Conta.Refresh
+		.Get_Num.Refresh
+	EndIf
+EndWith
+
+Thisform.CntCarneFP.Visible  = (lcInfo == 'N')
+Thisform.CntOutrosFP.Visible = (lcInfo == 'O')
+With ThisForm.CntCCredFP
+	.Visible  = (lcInfo == 'T')
+	If .Visible
+		.Get_Cartao.Refresh
+		.Get_Cred.Refresh
+	EndIf
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE return
+------------------------------------------------------------
+PROCEDURE return
+Thisform.parentform.enabled = .T.
+Thisform.release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE verificacheque
+------------------------------------------------------------
+PROCEDURE verificacheque
+LParameter wbanco, wagenc, wconta, wnunch
+
+Local _Order, wBanco, wAgenc, wConta, wNunch
+
+lcTpLeChq=CrCfCom.TpLeChqs
+
+select xpar
+_order  = order()
+_recant = recno()
+
+goto top
+
+sd = .t.
+correto = .t.
+if correto
+	banco = wbanco
+  	agencia = wagenc
+  	numero = wconta
+  	conta = wnunch
+endif
+
+if correto
+	if !fChkDigitos(banco)
+    	correto = .f.
+	endif
+endif
+
+if correto
+	if !fChkDigitos(agencia)
+    	correto = .f.
+	endif
+endif
+
+if correto
+	if !fChkDigitos(numero)
+    	correto = .f.
+	endif
+endif
+
+if correto
+	if !fChkDigitos(conta)
+    	correto = .f.
+	endif
+endif
+
+if !correto
+	clear typeahead
+  	If lcTpLeChq = 'S'
+    	Messagebox('Leitura de cheque incorreta!',0+48,'')
+	Else
+    	fMensagemFixa('Leitura de cheque incorreta!',0+48,'','X ')
+	Endif
+	sd=.f.
+endif
+
+if sd
+	set order to chq
+	seek wbanco+wagenc+wconta+wnunch
+	if !eof() and _recant = recno()
+    	skip
+	endif
+	if !eof() and wbanco = bancos and wagenc = agencias and;
+		wconta = contas and wnunch = numeros
+		select xpar
+		set order to (_order)
+		if _recant <> 0
+			go _recant
+		endif
+		If lcTpLeChq = 'S'
+        	Messagebox('Cheque já lançado!!',0+48,'')
+		Else
+        	fMensagemFixa('Cheque já lançado !!',0+48,'','X ')
+		Endif
+     	sd = .f.
+  	endif
+endif
+
+if sd
+	lcBanco = wBanco
+	lcAgenc = wAgenc
+	lcConta = wConta
+	lcCheque= wNunch
+	lcwhere = [Select * From SigChe Where Bancos=?lcBanco And Agencias=?lcAGenc And ]+;
+			  [nContas=?lcConta And Ncheques=?lcCheque ]
+
+	lnErro = ThisForm.Parentform.PoDataMgr.SqlExecute(lcwhere,'CrCheque')
+
+	If lnErro > 0
+
+		Select CrCheque
+		Go Top
+	  	If Reccount() > 0
+	     	select xpar
+	     	set order to (_order)
+	     	if _recant <> 0
+	        	go _recant
+	     	endif
+	     	If Not Seek(wbanco+wagenc+wconta+wnunch,'TempChq','Cheque')
+		     	If lcTpLeChq = 'S'
+		        	MessageBox('Cheque já cadastrado !!',0+48,'')
+		     	Else
+		        	fMensagemFixa('Cheque já cadastrado !!',0+48,'','X ')
+		     	Endif
+		     	sd = .f.
+			Else
+				If xPar.Valos != CrCheque.Valors
+			     	If lcTpLeChq = 'S'
+			        	MessageBox('Valor do Cheque Incorreto !!',0+48,'')
+			     	Else
+			        	fMensagemFixa('Valor do Cheque Incorreto !!',0+48,'','X ')
+			     	Endif
+			     	sd = .f.
+				Endif	     
+			Endif	     
+	  	endif
+	Else
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		sd = .f.
+	Endif
+Endif
+
+if !sd
+	wait window('Passe o cheque pelo leitor,ou'+chr(13)+;
+           '<enter> para digitar manualmente !') nowait
+endif
+
+select xpar
+set order to (_order)
+if _recant <> 0
+	go _recant
+endif
+
+return sd
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+* executa os parâmetros set iniciais
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm, DatSes, llAltDireta
+
+Local lnLeft, lnCotOper, lnCotacao
+
+Set DataSession To DatSes
+Thisform.ParentForm = pForm
+Thisform.Op_Escolha = pForm.pcEscolha
+*!*	Thisform.Left       = pForm.Left
+*!*	Thisform.Top        = pForm.Top + pForm.Pagina.Dados.CntCarteira.Top + 48
+pForm.Enabled       = .F.
+Thisform.altdireta  = llaltdireta
+
+*!*	ThisForm.Ok.Left     = Iif( llAltDireta, 498, 540 )
+*!*	ThisForm.Ok.Cancel   = !llAltDireta
+
+*!*	If llAltDireta
+*!*		ThisForm.Cancela.Left = 562
+*!*		ThisForm.Cancela.Cancel = .t.
+*!*	Else
+*!*		ThisForm.Cancela.Visible = .f.
+*!*	Endif
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm.Grade
+	.RecordSource='xPar'
+	.fpagto.controlsource='xPar.FPags'
+	.Valor.controlsource='xPar.Valos'
+	.venc.controlsource='xPar.vencs'
+	.moeda.controlsource='xPar.moefpgs'
+	.cotfpg.controlsource='xPar.cotfpgs'
+	.refresh
+EndWith
+
+Thisform.CntChequeFP.Visible = .F.
+Thisform.CntCarneFP.Visible  = .F.
+Thisform.CntOutrosFP.Visible = .F.
+ThisForm.CntCCredFP.Visible  = .F.
+
+ThisForm.Total = Evaluate('crSigChLcq.ValTots')
+Thisform.digpar=.f.
+Thisform.cotusu=''
+
+=Seek( Padr( Alltrim( Usuar ), 10 ), 'crUsuario', 'Usuarios' )
+ThisForm.AlteraCotacao.Visible = ( ( !Seek( crUsuario.Ccargs, 'crSigCdCrg', 'Ccargs' ) Or crSigCdCrg.AltCots # 'S' ) And ;
+									Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) )
+
+ThisForm.Get_MoeOper.Value = Evaluate('crSigCdPam.MoedaCheqs')
+lnCotOper = fCarregarCambio( Thisform.Get_MoeOper.Value, crSigChLcq.DtEnts ) 
+
+ctotal = 0
+Select xPar
+Scan
+	=Seek( FPags, 'crSigOpFp', 'FPags' )
+	lnCotacao = fCarregarCambio( xPar.MoeFPgs, crSigChLcq.DtEnts ) 
+	If CrSigOpFp.Trocos = 1
+		ctotal = Round( ctotal - ( xPar.Valos * xPar.cotfpgs / lnCotOper ), 2 )
+	Else
+		ctotal = Round( ctotal + ( xPar.Valos * xPar.cotfpgs / lnCotOper ), 2 )
+	Endif
+Endscan
+
+If Not fLerSettings('CrSigSyCom',ThisForm.parentform.PodataMgr)
+	Return 0
+EndIf
+Select * From crSigSyCom Where Tipos = 'Leitora Cheques' Into Cursor CrCfcom
+Select CrCfCom
+Go Top
+
+TpLeChq=TpLeChqs
+If IsEmpty(TpLeChq)
+	TpLeChq='T'
+Endif
+Thisform.TipoLeitora=TpLeChq
+Thisform.LeituraSerial = ''
+
+Thisform.AvisoPortaM.Visible = .F.
+Thisform.AvisoPortaS.Visible = .F.
+Thisform.AvisoPortaT.Visible = .F.
+
+If TpLeChq='S'
+	Thisform.AvisoPortaS.Visible = .T.
+	Select CrCfCom
+	Thisform.ReadComm.Configura(crCfCom.Portas,crCfCom.Dtrs,crCfCom.Rtss,crCfCom.Hands,crCfCom.Settings,;
+								crCfCom.InBufs,crCfCom.OutBufs,crCfCom.InModes,crCfCom.InLens)
+	If Thisform.ReadComm.PortaError
+		Thisform.ReadComm.Enabled = .f.
+		Thisform.AvisoPortaM.Visible = .T.
+		Thisform.AvisoPortaS.Visible = .F.
+	Endif
+Else
+	Thisform.AvisoPortaT.Visible = .T.
+Endif
+
+With Thisform
+	.Get_TotForma.Value = ctotal
+	.Get_Fpg.Value = ''
+	.Get_NPar.Value = 0
+	.Get_VPar.Value = 0
+	.fweditdata_Venc.Value = {}
+	.Get_PEncargo.Value = 0
+	.Get_VEncargo.Value = 0
+	.Get_Cotacao.Value = 0
+	.Refresh
+	
+Endwith
+
+ThisForm.Apaga.Visible     = Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )
+
+vCond = [Inlist(crSigOpFp.Situas, "A", " ", "R")]
+
+Select * From crSigOpFp Where &vCond. Into Cursor csSigOpFp
+Index On Fpags Tag FPagsGru For !IsEmpty(grupods) .and. !IsEmpty(contads)
+
+Select xPar
+Go Top
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCCred.Get_cred
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If IsEmpty(Thisform.CntCCred.Get_Cartao.value)
+	Return(.f.)
+Else
+	Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCCred.Get_cartao
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value) And Not fValidaCards(This.Value)
+	messagebox('Número Cartão Inválido !!',0+48,'')
+	Return 0
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCCred.Confirma
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.mCartaoCred( .F. )
+
+ThisForm.Grade.Valor.Text1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_fpg
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+With ThisForm
+	.Get_Cotacao.Visible = .f.
+	.Say_Cotacao.Visible = .f.
+	.AlteraCotacao.Visible = .f.
+Endwith
+Return Inlist( Thisform.op_escolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj
+
+if lastkey()=9
+	keyboard "{CTRL+TAB}"
+else
+	If !IsEmpty( This.Value ) 
+		If !Seek( This.Value, 'csSigOpFp', 'FPagsGru' )
+			loBrowse = CreateObject( 'fwBuscaSel', 'csSigOpFp', 'FPagsGru', This.Value, 'Cadastro de Forma de Pagamento' )
+			loBrowse.AddColuna( 'FPags', '', 'Código', .t., 'FPagsGru' )
+			loBrowse.AddColuna( 'FParcs', '99', 'Parc' )
+			loBrowse.Show
+			This.Value = Iif( Lastkey() == 27, '', csSigOpFp.FPags )
+			If !IsEmpty(This.Value)
+				=Seek( This.Value, 'CrSigOpFp', 'FPags' )
+			Endif
+		Endif
+		
+		If !IsEmpty(This.Value)
+			=Seek( This.Value, 'crSigOpFp', 'FPags' )
+
+			ThisForm.Get_Fpg.Value = CrSigOpFp.FPags
+			ThisForm.Get_NPar.Value = CrSigOpFp.FParcs
+			ThisForm.Digpar = IsEmpty( CrSigOpFp.FParcs )
+			ThisForm.Get_PEncargo.Value = CrSigOpFp.Encargos
+			
+			=Seek( CrSigOpFp.Moefpgs, 'crSigCdMoe', 'CMoes' )
+			=Seek( Padr( Alltrim( Usuar ), 10 ), 'crUsuario', 'Usuarios' )
+			llCota = ( ( !Seek( CrUsuario.Ccargs, 'crSigCdCrg', 'Ccargs' ) Or crSigCdCrg.AltCots # 'S' ) And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And crSigCdMoe.Cotas )
+
+			ThisForm.Get_Cotacao.Visible = CrSigCdMoe.Cotas
+			ThisForm.Say_Cotacao.Visible = CrSigCdMoe.Cotas
+			ThisForm.AlteraCotacao.Visible = llCota
+			
+			ThisForm.Get_Cotacao.Value = 1
+			ThisForm.Get_Cotacao.Value  = fCarregarCambio( crSigOpFp.moefpgs, crSigChLcq.DtEnts ) 
+			ThisForm.Refresh
+		Else
+			Thisform.get_npar.Value = 0
+		EndiF
+	Else
+		Thisform.get_npar.Value = 0
+	Endif
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_MoeOper
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+Thisform.mostraobs
+ThisForm.GetObs.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade.fpagto.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade.valor.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+if Thisform.op_escolha='INSERIR' or Thisform.op_escolha='ALTERAR'
+	wait window 'TAB para preenchimento de dados' nowait
+	Return(.T.)
+else
+	Return(.f.)
+endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lnCotOper, cTotal, _Recno
+
+If lastkey()=9
+	Thisform.leitor=.f.
+	keyboard"{CTRL+TAB}"
+Else
+	ctotal=0
+	Select xPar
+	If Not Eof() And Not Bof()
+		_Recno = Recno()
+	Else
+		_RecNo = -1
+	EndIf
+	
+	Scan
+		=Seek( xPar.FPags, 'CrSigOpFp', 'FPags' )
+		lnCotOper = fCarregarCambio( ThisForm.Get_MoeOper.Value, crSigChLcq.DtEnts )
+		If CrSigOpFp.Trocos = 1
+			ctotal = Round( ctotal - ( xPar.Valos * xPar.cotfpgs / lnCotOper ), 2 )
+		Else
+			ctotal = Round( ctotal + ( xPar.Valos * xPar.cotfpgs / lnCotOper ), 2 )
+		Endif
+	Endscan
+	ThisForm.Get_TotForma.Value = ctotal
+	Select xPar
+	If _RecNo # -1
+		Goto (_Recno)
+	EndIf
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade.venc.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < CrSigChLcq.DtEnts
+	Messagebox( 'Vencimento não pode ser menor que a Data da Movimentação...', 32, '' )
+	Return 0
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade.moeda.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Grade.cotfpg.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_ValTotChqs
+* Classe: fwget (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_npar
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value) And Thisform.Digpar
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(this.value)
+	Return(.F.)
+endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_vpar
+* Classe: fwget (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart
+Local lnTroco, lnCotOper, lnCotacao
+
+If IsEmpty( This.Value )
+	lnCotOper = fCarregarCambio( Thisform.Get_MoeOper.value, CrSigChLcq.DtEnts ) 
+	lnCotacao = Thisform.Get_Cotacao.value
+	If CrSigOpFp.Trocos = 1
+		lnTroco = Round( ( CrSigChLcq.ValTots - ThisForm.Get_TotForma.Value ) * lnCotOper / lnCotacao, 2 ) * (-1)
+		If lnTroco < 0
+			This.Value = 0
+			Return 0
+		Else
+			This.Value = lnTroco
+		EndIf
+	Else
+		This.Value = Round( ( CrSigChLcq.ValTots - ThisForm.Get_TotForma.Value ) * lnCotOper / lnCotacao, 2 )
+	Endif
+	If !IsEmpty( ThisForm.Get_PEncargo.Value ) And !IsEmpty( This.Value )
+		ThisForm.Get_VEncargo.Value = Round( This.Value * ThisForm.Get_PEncargo.Value / 100, 2 )
+	Else
+		ThisForm.Get_VEncargo.Value = 0
+	Endif
+	ThisForm.Get_VEncargo.Refresh
+Else
+	If This.Value < 0
+		This.Value = 0
+		Return 0
+	EndIf	
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.fweditdata_venc
+* Classe: fweditdata (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If IsEmpty( This.Value ) And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )
+	This.Value = CrSigChLcq.DtEnts + CrSigOpFp.Entradas
+Endif
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart, lnParcs
+Local lnCotOper, lnCotacao
+
+If This.Value < CrSigChLcq.DtEnts And !IsEmpty( This.Value )
+	Messagebox( 'Vencimento não pode ser menor que a Data da Movimentação...', 32, '' )
+	Return 0
+Endif
+
+=Seek( ThisForm.Get_fpg.Value, 'CrSigOpFp', 'FPags' )
+
+ndia = CrSigOpFp.dias
+tven = CrSigOpFp.tvens   && F=Dias Fixos / C=Dias Corridos
+moefpg = CrSigOpFp.moefpgs
+dcart = CrSigOpFp.dcarts
+cartao = 0
+nocredito = 0
+
+lnCotacao  = Thisform.Get_Cotacao.value
+lnCotOper  = fCarregarCambio( Thisform.Get_MoeOper.value, crSigChLcq.DtEnts )
+
+nparc 	= ThisForm.Get_npar.Value
+total 	= ThisForm.Get_totforma.Value
+valpar 	= Round( ( ThisForm.Get_VPar.Value + ThisForm.Get_VEncargo.Value ) / nparc, 2 )
+totpar	= 0
+ncarne 	= 0
+nump 	= 1
+Select xPar
+
+dvenc  = this.value
+dvenci = this.value
+_parcelas = 1
+
+lnParcs = 1
+x=1
+do while nparc>0
+	lnFer = 0
+	Verd  = .t.
+	Select crSigCdFer
+	Set Order To Datas
+	Seek Dtos(DVenc)
+	Do While Verd .and. !Eof()
+		lnFer = lnFer + 1
+		Skip
+		If DVenc+lnFer # crSigCdFer.Datas .or. ;
+		   Dow(DVenc+lnFer)=1 .or. ;
+		   Dow(DVenc+lnFer)=7
+		   Verd = .f.
+		Endif
+	Enddo
+	DVenc = DVenc + lnFer
+
+	Select xPar
+	Append Blank
+	Replace Parcs	 With lnParcs, ;
+			Emps     With crSigChLcq.Emps, ;
+		 	Datas    With crSigChLcq.DtEnts, ;
+		 	Valos    With valpar, ;
+		 	moefpgs  With moefpg, ;
+		 	vencs    With dvenc, ;
+		 	fpags    With Thisform.get_fpg.value, ;
+		 	dcarts   With dcart, ;
+		 	cotfpgs  With lnCotacao, ;
+		 	cotusus  With Thisform.cotusu 
+	totpar = totpar + valpar
+
+	If Nparc = Nump && and IsEmpty(Thisform.get_vpar.value)
+		If totpar # ThisForm.Get_VPar.Value + ThisForm.Get_VEncargo.Value
+			_dif = ThisForm.Get_VPar.Value + ThisForm.Get_VEncargo.Value - totpar
+			Replace xPar.Valos With xPar.Valos + _dif
+		Endif
+	Endif
+
+	Thisform.mostraobs
+
+ 	if fpags='CARNE'
+ 		if ncarne=0
+			ncarne=fGerUniqueKey('CARNE')
+ 			Select xPar
+ 		endif
+ 		Replace ncarnes With trans(ncarne,'@L 999999')+'/'+str(x,1)
+ 		Thisform.get_carne.refresh
+ 		x=x+1
+ 	endif
+ 	if CrSigOpFp.Infos='T' 
+ 		if x=1
+	 		ThisForm.mCartaoCred( .T. )
+	 		Thisform.CntCCred.Refresh
+	 		
+	 		Select xPar
+	 		Replace cartaos With Thisform.CntCCredFP.get_cartao.value
+	 		Replace nocreditos With Thisform.CntCCredFP.get_cred.value
+	 		cartao=Thisform.CntCCredFP.get_cartao.value
+	 		nocredito=Thisform.CntCCredFP.get_cred.value
+	 		Thisform.CntCCredFP.get_cartao.refresh
+	 		Thisform.CntCCredFP.get_cred.refresh
+	 		x=x+1
+	 	else
+	 		Replace cartaos With cartao
+	 		Replace nocreditos With nocredito
+	 		Thisform.CntCCredFP.get_cartao.refresh
+	 		Thisform.CntCCredFP.get_cred.refresh
+	 		x=x+1
+	 	endif
+	endif
+
+	If TVen='F'
+		DVenc = GoMonth( DVenci, _Parcelas )
+		_Parcelas = _Parcelas + 1
+	Else
+		DVenc = DVenc + NDia
+	Endif
+
+	nparc = nparc - 1
+	lnParcs = lnParcs + 1
+
+	total = round( total + ( round( xPar.Valos * xPar.cotfpgs / lnCotOper, 2 ) * Iif( CrSigOpFp.Trocos = 1, -1, 1 ) ), 2 )
+enddo
+
+Select xPar
+With Thisform
+	If !IsEmpty( .Get_Fpg.Value )
+		_Enc = .Get_VEncargo.Value
+		If moefpg # Thisform.Get_MoeOper.value
+			_Enc = Round( _Enc * lnCotacao / lnCotoper, 2 )
+		Endif
+	Endif
+	.Get_TotForma.Value = total
+	.Get_Fpg.Value = ''
+	.Get_NPar.Value = 0
+	.Get_VPar.Value = 0
+	.fweditdata_Venc.Value = {}
+	.Get_PEncargo.Value = 0
+	.Get_VEncargo.Value = 0
+	.Get_Cotacao.Value = 0
+	.Get_Cotacao.Visible = .f.
+	.Say_Cotacao.Visible = .f.
+	.AlteraCotacao.Visible = .f.
+	.GetPorc.Value = 0
+Endwith
+
+ThisForm.Refresh
+ThisForm.Grade.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+wait window 'TAB para alterar valor' nowait
+Thisform.get_fpg.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_COTACAO
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+This.peantvalue = This.Value
+=Seek( Padr( Alltrim( Usuar ), 10 ), 'crUsuario', 'Usuarios' )
+=Seek( CrSigOpFp.Moefpgs, 'crSigCdMoe', 'CMoes' )
+Return( Seek( crUsuario.Ccargs, 'crSigCdCrg', 'Ccargs' ) And crSigCdCrg.AltCots = 'S' And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And crSigCdMoe.Cotas )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.alteracotacao
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value) && And Thisform.Digpar
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+With ThisForm
+	.Get_VPar.Value = 0
+	.Get_Cotacao.peantvalue = .Get_Cotacao.Value
+	Do Form SigOpAlC With CrSigOpFp.Moefpgs, .Get_Cotacao.Value, crSigChLcq.DtEnts to lcRetorno
+	If MLine( lcRetorno, 1 ) = 'OK'
+		.Get_Cotacao.Value = Val( MLine( lcRetorno, 2 ) )
+		.CotUsu = MLine( lcRetorno, 3 )
+	Else
+		.Get_Cotacao.Value = .Get_Cotacao.peantvalue 
+		.CotUsu = ''
+	Endif
+	.Get_VPar.SetFocus
+Endwith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_VEncargo
+* Classe: fwget (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_PEncargo
+* Classe: fwget (Base: textbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( ThisForm.Get_VPar.Value ) And !IsEmpty( This.Value )
+	ThisForm.Get_VEncargo.Value = Round( ThisForm.Get_VPar.Value * This.Value / 100, 2 )
+Else
+	ThisForm.Get_VEncargo.Value = 0
+Endif
+ThisForm.Get_VEncargo.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.GetPorc
+* Classe: fwget (Base: textbox)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lnCotOper, lnCotacao
+
+If !IsEmpty( This.Value )
+	lnCotOper = fCarregarCambio( Thisform.Get_MoeOper.value, crSigChLcq.DtEnts ) 
+	lnCotacao = Thisform.Get_Cotacao.value
+	If CrSigOpFp.Trocos = 1
+		lnTroco = Round( ( CrSigChLcq.ValTots - ThisForm.Get_TotForma.Value ) * lnCotOper / lnCotacao, 2 ) * (-1)
+		If lnTroco < 0
+			lnValor = 0
+			Return 0
+		Else
+			lnValor = lnTroco
+		EndIf
+	Else
+		lnValor = Round( CrSigChLcq.ValTots * This.Value / 100 * lnCotOper / lnCotacao, 2 )
+	Endif
+	If !IsEmpty( ThisForm.Get_PEncargo.Value ) And !IsEmpty( lnValor )
+		ThisForm.Get_VEncargo.Value = Round( lnValor * ThisForm.Get_PEncargo.Value / 100, 2 )
+	Else
+		ThisForm.Get_VEncargo.Value = 0
+	Endif
+	ThisForm.Get_VPar.Value = lnValor
+	ThisForm.Get_VPar.Refresh
+	ThisForm.Get_VEncargo.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_MoeOcr
+* Classe: fwget (Base: textbox)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCCredFP.Get_cred
+* Classe: fwget (Base: textbox)
+* Registro: 53
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If IsEmpty(Thisform.CntCCredFP.get_cartao.value)
+	Return(.f.)
+Else
+	Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR') And CrSigOpFp.carauts#'S')
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Thisform.Grade.Valor.Text1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCCredFP.Get_cartao
+* Classe: fwget (Base: textbox)
+* Registro: 56
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR') And CrSigOpFp.CarAuts#'S')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	if not fValidaCards(this.value)
+		messagebox('Número Cartão Inválido !!',0+48,'')
+		Return 0
+	endif
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntCarneFP.Get_carne
+* Classe: fwget (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntOutrosFP.Get_OBS
+* Classe: fwget (Base: textbox)
+* Registro: 62
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+if Thisform.op_escolha='CONSULTAR' or ;
+	Thisform.op_escolha='EXCLUIR'
+	Return(.f.)
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntChequeFP.Get_num
+* Classe: fwget (Base: textbox)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	if not  fChkDigitos(xPar.numeros) 
+		messagebox('Número Inválido !',0+48,'')
+		Return 0
+	endif
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select xPar
+
+if not IsEmpty(bancos+agencias+contas+numeros)
+	if !Thisform.VerificaCheque( bancos, agencias, contas, numeros)
+		Replace bancos With '', agencias With '', contas With '', numeros With ''
+		With ThisForm.CntChequeFP
+			.get_bco.value = ''
+			.get_age.value = ''
+			.get_conta.value = ''
+			this.value = ''
+			.get_bco.SetFocus
+		EndWith
+	else
+		Thisform.Grade.Valor.Text1.SetFocus	
+	endif
+else
+	Thisform.Grade.Valor.Text1.SetFocus	
+endif		
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntChequeFP.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 65
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	if not fChkDigitos(xPar.contas) 
+		messagebox('Conta Inválida !',0+48,'')
+		Return 0
+	endif
+endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntChequeFP.Get_age
+* Classe: fwget (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	if not fChkDigitos(xPar.agencias) 
+		messagebox('Agencia Inválida !',0+48,'')
+		Return 0
+	endif
+endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.CntChequeFP.Get_bco
+* Classe: fwget (Base: textbox)
+* Registro: 71
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+if Thisform.op_escolha='INSERIR' or Thisform.op_escolha='ALTERAR'
+	If Thisform.TipoLeitora = 'S' 
+		IF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError
+				Thisform.ReadComm.Ole_Comm.PortOpen = .t.
+		ENDIF
+		Wait Window 'Passe o cheque pela leitora !' nowait
+	Endif
+	Return(.t.)
+else
+	Return(.f.)
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Leitura, Tecla, Contador
+leitura = ''
+if Thisform.leitor=.f.
+	If Thisform.TipoLeitora = 'S'
+		If IsEmpty(Thisform.LeituraSerial)
+			IF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError
+					Thisform.ReadComm.Ole_Comm.PortOpen = .t.
+			EndIf
+			Wait Window 'Passe o cheque pela leitora !' nowait
+		Else
+			Leitura = Thisform.LeituraSerial
+			Thisform.LeituraSerial = ''
+		Endif
+	Else
+		Leitura=This.Value
+		Contador = 0
+		Do While lastkey()<>27 and len(Leitura)<33 and ;
+				lastkey()<>13 and lastkey()<>03 and ;
+				lastkey()<>05 and lastkey()<>18 and ;
+				lastkey()<>24 and lastkey()<>148
+			tecla = lastkey()
+			Contador = Contador + 1
+			read
+			if Contador > 1
+				Leitura = Leitura + chr(tecla)
+			endif
+		Enddo
+	Endif
+	If Len (Leitura)>=33
+		this.value=substr(Leitura,2,3)
+		ban = substr(Leitura,2,3)
+		age=substr(Leitura,5,4)
+		con=substr(Leitura,23,10)
+		che=substr(Leitura,14,6)
+		Replace ;
+			xPar.bancos   With ban ;
+			xPar.agencias With age ;
+			xPar.contas   With con ;
+			xPar.numeros  With che
+		With Thisform.CntChequeFP
+			.get_bco.value=ban
+			.get_bco.refresh
+			.get_age.value=age
+			.get_age.refresh
+			.get_conta.value=con
+			.Get_Conta.refresh
+			.get_num.value=che
+			.Get_Num.refresh
+		EndWith
+		Thisform.leitor=.t.
+	else
+		Thisform.leitor=.f. 	
+	endif
+
+	if not IsEmpty(this.value)
+		if not fChkDigitos(xPar.bancos) 
+			messagebox('Banco Inválido !',0+48,'')
+			Return
+		endif
+	endif
+endif
+Select xPar
+Set Order To
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+if lastkey()=9
+	Thisform.Grade.Valor.Text1.SetFocus
+else
+	if Thisform.leitor
+		if not IsEmpty(xPar.bancos)
+			If Not Thisform.VerificaCheque(xPar.bancos,xPar.agencias,xPar.contas,xPar.numeros)
+				Replace bancos With '', agencias With '', contas With '', numeros With ''
+				With Thisform.CntChequeFP
+					.get_age.value = ''
+					.get_conta.value = ''
+					.get_num.value = ''
+					this.value = ''
+				EndWith
+			else
+				Thisform.CntChequeFP.get_num.SetFocus	
+			endif
+		endif
+	else
+		Thisform.CntChequeFP.get_age.SetFocus
+	endif
+endif
+
+Thisform.leitor = .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Get_TotForma
+* Classe: fwget (Base: textbox)
+* Registro: 72
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Apaga
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 75
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )
+	
+	Select xPar
+	Zap
+	With Thisform
+		.Get_TotForma.Value = 0
+		.Get_Fpg.Value = ''
+		.Get_NPar.Value = 0
+		.Get_VPar.Value = 0
+		.fweditdata_Venc.Value = {}
+		.Get_PEncargo.Value = 0
+		.Get_VEncargo.Value = 0
+		.Get_Cotacao.Value = 0
+	Endwith
+	ThisForm.MostraObs
+	ThisForm.Refresh
+	ThisForm.Grade.Refresh
+	ThisForm.Get_Fpg.SetFocus
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 76
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+If Inlist( Thisform.op_escolha, 'INSERIR', 'ALTERAR' )
+	** verifica se existe valor ou vencs em branco
+	Select xPar
+	Scan
+		If !IsEmpty(xPar.FPags) And IsEmpty(xPar.vencs)
+			Messagebox( 'Vencimento Inválido !', 48, '' )
+			Thisform.Grade.Venc.Setfocus
+			Return 0
+		Endif
+	Endscan
+
+Endif
+
+ThisForm.Return
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFPG.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 77
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPFPG
+RESERVED3 (ClassInfo): altdireta
+cotusu
+digpar
+inicio
+leitor
+leituraserial
+limpache
+op_escolha
+parentform
+tipoleitora
+total
+valret
+*inchequeserial 
+*limpa_che 
+*mcartaocred 
+*mostraobs 
+*return 
+*verificacheque 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 60
+================================================================================

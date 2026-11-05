@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7 ÔÇö conclu├¡da
+
+A fase **j├í estava implementada** pela execu├º├úo anterior (a de 1443s). O retry disparou porque essa mesma execu├º├úo *tamb├®m corrigiu o gate* ÔÇö e gate corrigido durante uma fase n├úo vale para ela pr├│pria. Ent├úo n├úo reescrevi o trabalho: verifiquei tudo de forma independente, sem confiar nas afirma├º├Áes da execu├º├úo anterior.
+
+**Entrega**: `projeto/app/forms/operacionais/Formsigopftc.prg` (1531 linhas, 69 KB)
+
+Este form **n├úo tem ÔÇö e n├úo deve ter ÔÇö bot├Áes CRUD**. Confirmei na origem: `Grupo_Op` aparece **uma ├║nica vez** no dump inteiro, como literal de texto (`If ((pTip = [GRUPO_OP]) ...)`), n├úo como objeto. O SCX tem 4 objetos visuais e dois bot├Áes (Confirmar/Cancelar). Inventar Incluir/Alterar/Visualizar/Excluir violaria o PILAR 1. Os eventos principais s├úo os m├®todos do pr├│prio SCX, chamados pelo form pai de movimenta├º├úo ÔÇö todos PUBLIC (regra #51).
+
+### Verifica├º├Áes (todas rodadas por mim, do zero)
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 7 task737 | **PASSA** |
+| Compila├º├úo VFP9 (`.fxp` apagado antes) | **0 erros**, timestamp novo |
+| Probe de instancia├º├úo | `VARTYPE = O`, 7 eventos existem e `protegido=.F.`, chamadas reais de fora funcionam |
+| `ValidadorSQLSchema` (05f) | **PASSOU** ÔÇö 683 tabelas (UTF-16 OK), 5 statements, 0 coluna inv├ílida |
+| `VerificarLookupEmKeyPress` / `ColunaEmpresaSQL` | **ERRO=0** |
+| `FuncoesNaoDefinidas` / `MetodoProtegidoChamadoDeFora` | limpos |
+| Varredura de regras | 0 `RETURN` em TRY ┬À 0 acento literal ┬À sem `ISEMPTY`/`MostrarAviso`/`MESSAGEBOX`/`.Self`/`EVALUATE`-atribui├º├úo/`Controls("nome")`/`PUBLIC PROCEDURE` ┬À **7/7 `TABLEREVERT` guardados por `CURSORGETPROP("Buffering") > 1`** (regra #52) |
+| Stubs / TODOs / m├®todos vazios | nenhum |
+
+O ├║nico di├ílogo suprimido no probe ├® o `Favor Reinicializar o Processo!!!` do pr├│prio legado, disparando porque o probe n├úo tem banco ÔÇö transcri├º├úo fiel, e prova de que o CATCH n├úo ├® silencioso.
+
+### Altera├º├úo no orquestrador (gate compartilhado)
+
+A execu├º├úo anterior adicionou `Test-GrupoOpEhLiteralDeTexto` (fail-closed em 4 camadas, ligada ├ás Fases 7 e 8 pelo mesmo helper). Como mexe em infraestrutura de **todas** as migra├º├Áes futuras, re-medi: **736 dumps, 250 citam `Grupo_Op`, o helper libera exatamente 1** ÔÇö o pr├│prio sigopftc. Reproduzi o n├║mero exato. Gates 734/735/736/737 e Fase 8/735: todos **PASSA**.
+
+As 2 dele├º├Áes que o `git diff` mostra **n├úo s├úo** desta fase ÔÇö s├úo de outra altera├º├úo pendente no arquivo (`$corpo`ÔåÆ`$corpoExp` na exce├º├úo de "painel de linha").
+
+### Lacunas que deixo expl├¡citas (fora do escopo da Fase 7)
+
+1. **`frmbarcta` n├úo foi portada** ÔÇö a janela de scroll do legado s├│ existe como p-code nos VCX. Os campos s├úo empilhados em `cnt_4c_AreaFicha` (420px ├║teis); ficha mais alta que isso fica **recortada em sil├¬ncio** (regra #30). Isso n├úo ├® s├│ visual: pergunta obrigat├│ria invis├¡vel faz o validador bloquear a grava├º├úo citando um campo que o usu├írio n├úo consegue ver. ├ë trabalho de layout (Fase 3) e precisa de stub no padr├úo do `fwprogressbar` ÔÇö **registrei na mem├│ria** (fam├¡lia das "n├úo portadas"), porque reincide em qualquer form que use essa classe.
+2. **`ThisForm.Top = This.Top + 60` n├úo transcrito** ÔÇö ├® empilhamento de janela contra a `frmbarcta`; com `AutoCenter = .T.` faria a tela descer 60px por chamada.
+3. **`task_state.json`** n├úo foi tocado ÔÇö esse estado ├® mantido pelo orquestrador.
+
+N├úo expandi o escopo para criar a `frmbarcta`: a Fase 7 ├® "eventos principais", est├í completa, e a Fase 8 ainda roda. Reduzir ou ampliar o escopo ├® sua decis├úo ÔÇö se quiser que eu fa├ºa o stub agora, ├® um pedido s├│.

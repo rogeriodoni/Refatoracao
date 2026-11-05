@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmado por medi├º├úo agora: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` devolve `TcpTestSucceeded = False`.
+
+## Diagn├│stico
+
+Este erro **n├úo ├® um bug de c├│digo**. O log mostra que a falha ocorre na ETAPA 1B ("Conectando ao banco de dados"), *antes* de qualquer l├│gica do form ou do BO ser executada:
+
+```
+Codigo: 1526
+Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® o erro cl├íssico de rede/ambiente documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina do pipeline perde e recupera a rota para `192.168.200.10:1433` de forma intermitente ÔÇö alcan├º├ível em 2026-11-04, inalcan├º├ível de novo em 2026-11-05 (incluindo esta mesma task739, registrado horas atr├ís). A medi├º├úo que acabei de fazer confirma que o estado atual continua inalcan├º├ível.
+
+**Nenhuma edi├º├úo em `FormSigOpGco.prg` ou `SigOpGcoBO.prg` resolve isto** ÔÇö n├úo h├í nada de errado nesses arquivos relacionado a este erro. `FormSigOpGco.InicializarForm`/`SigOpGcoBO.Init` nem chegam a executar a l├│gica de neg├│cio; o `CREATEOBJECT` do BO (que herda de `BusinessBase`) falha na conex├úo SQL dentro do framework, antes do c├│digo espec├¡fico desta tela rodar.
+
+## O que n├úo vou fazer
+
+N├úo vou reescrever os arquivos com `Write` ÔÇö isso violaria a li├º├úo j├í registrada ("NAO editar FormSigOpGco.prg/SigOpGcoBO.prg para 'corrigir' isto") e n├úo teria efeito real, j├í que a causa ├® infraestrutura (rota de rede at├® o SQL Server), n├úo `.prg`.
+
+## Recomenda├º├úo
+
+Re-executar a etapa `06_testForm` quando a rota para `192.168.200.10:1433` estiver de volta (ela j├í oscilou nos dois sentidos em dias recentes). Se quiser, posso rodar `gb_4c_ModoTeste` + `gnConnHandle = 0` como alternativa de probe sem depender do banco, mas isso n├úo substitui o teste real de conex├úo desta etapa.

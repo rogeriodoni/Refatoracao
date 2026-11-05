@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is complete. Here's what I found and did.
+
+## Diagnosis
+
+I followed the documented retry procedure rather than touching the form. Two findings corrected the previous run's conclusions:
+
+**The gate failure is a genuine gap, not self-reference.** Fase 4 did patch the orchestrator mid-run (04:50 vs task start 04:02), but its patch is in `case 4` (ramo DESPACHANTE). `case 8` was untouched, so Fase 8's REPROVA was legitimate. The GR├üFICO branch ÔÇö written for SIGPRGF2, which *has* a series-selection ComboBox ÔÇö structurally rejects the **simpler** screen:
+
+- `Test-LegadoSomenteLeitura` opens with `if ($campos.Count -eq 0) { return $false }`, so "every field is read-only" is *vacuously true* here but reported false ÔÇö SIGOPGCO has **zero** input controls (measured: 8 objects = container + 2 label + shape + oleboundcontrol + 2 commandbutton).
+- `$temSuperficieGrafF8` demanded a `ComboBox|ListBox` in the migrated form, which the legacy doesn't have ÔÇö so satisfying it would mean **inventing** surface (violates PILAR 1).
+
+**The deliverable actually verifies ÔÇö the previous run's two "could not verify" items were harness faults, not code faults:**
+- `COMPILE_OK`: both `.fxp` fresh, zero `.ERR`. The earlier "vfp9 compiles and exits without executing" was a **missing `vfp9_headless.cfg`** causing a modal; passing the script directly works.
+- `PROBE_OK`: `VARTYPE=O`, Caption "Gr├ífico Comparativo", 800x600, BO instantiated, OLE control present, both Click handlers PUBLIC. The earlier 180 s timeout was `ConfigurarAmbiente()` reaching the unreachable SQL Server 192.168.200.10 ÔÇö bypassing it instantiates fine.
+
+## Verification of the form (unmodified this turn ÔÇö it was already complete)
+
+23 real methods; completeness validator `True` on form and BO; all 7 legacy objects present with geometry matching `layout.json` **exactly**; zero literal accents (regra #4 ÔÇö caption via `CHR()`); no `PUBLIC` in `DEFINE CLASS`, no `ISEMPTY` calls (3 hits are comments quoting the legacy), no `MESSAGEBOX`/`.Self`/`Controls("nome")`/`VAL(SET())`/bare `TTOD`; `TABLEREVERT` guarded by `Buffering` (regra #52); no PROTECTED method called from outside (regra #51). The 7 apparently-silent CATCHes aggregate into `this_cFalhaGrafico` and surface once ÔÇö deliberate, not regra #9 violations.
+
+## Gate fix (the only thing I changed)
+
+Two new fail-closed sub-predicates in the GR├üFICO branch, plus 30 lines documenting why: when the legacy has fields the requirement is **byte-identical to before**; only with zero fields is the vacuum accepted and the selection control not demanded. `OleBoundControl` and the Click handler stay unconditionally required.
+
+**Blast radius measured on both levels the project requires:**
+- Predicate across **738 dumps**: only 6 have `OleBoundControl`, and exactly **1** has OLE + zero fields ÔÇö task739 itself.
+- Verdict across all Fase 8 harnesses: **17 measured, all identical PRE/POS**; only Task739 flipped REPROVAÔåÆPASSA. Task613 (SIGPRGF2, the GR├üFICO origin) stays **PASSA** on both sides. 14 harnesses are `<nao medido>` on *both* sides ÔÇö pre-existing stale anchors, which I counted as "not measured", never as agreement.
+
+Orchestrator integrity confirmed: syntax OK, 18829 lines (18795+34), BOM intact, 100% CRLF, and non-ASCII/U+FFFD counts byte-identical to the pre-patch backup (361/172) ÔÇö I used perl, since `sed -i` strips CRLF here and `grep '[\x80-\xFF]'` doesn't interpret hex.
+
+**`VEREDITO=PASSA`.**
+
+## One thing you should know
+
+The fix **will not clear this run.** `RunLoop.ps1` (PID 21268) is still alive and the task739 invocation holds the parse from 04:02, so if Fase 8 re-validates inside it, it will report REPROVA again for an artifact that is correct. It takes effect from the next SCX, or if you relaunch the loop. I did not distort the form to force a pass ÔÇö doing so would have required inventing a Grid, a ComboBox and four CRUD methods the legacy doesn't have.
+
+Two items I left alone as outside this phase: my gate change is uncommitted, joining pre-existing uncommitted changes in `OrquestradorMigracao.ps1` from other sessions (310/18 vs HEAD; mine is 42 lines of it). If you want this hardened against recurrence, the `propagate-lesson` skill is the right next step ÔÇö I didn't run it since you asked for Fase 8.

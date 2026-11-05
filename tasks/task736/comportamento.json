@@ -1,0 +1,982 @@
+{
+  "resumo": {
+    "totalMetodos": 60,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 28,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fCarregarCambio", "fLerSettings", "fwBuscaSel", "fGerUniqueKey", "fValidaCards", "fChkDigitos"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Thisform.Leitor = .F.\nThisform.ReadComm.leitura()\nThisform.LeituraSerial=Thisform.readcomm.campo\n\nThisform.CntChequeFP.Get_Bco.Valid()\nIf Thisform.leitor\n\tif not IsEmpty(xPar.bancos)\n\t\tIf Not Thisform.VerificaCheque(xPar.bancos,xPar.agencias,xPar.contas,xPar.numeros)\n\t\t\tReplace bancos With '', agencias With '', contas With '', numeros With ''\n\t\t\tWith ThisForm.CntChequeFP\n\t\t\t\t.get_bco.value = ''\n\t\t\t\t.get_age.value = ''\n\t\t\t\t.get_conta.value = ''\n\t\t\t\t.get_num.value = ''\n\t\t\t\t.get_bco.SetFocus\n\t\t\tEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "leitura,Valid,VerificaCheque",
+        "controlesReferenciados": "Get_Bco,get_age,get_conta,get_num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "With ThisForm.CntChequeFP\n\t.Get_Bco.Value = Space(3)\n\t.Get_Bco.Refresh\n\t.Get_Age.Value = Space(4)\n\t.Get_Age.Refresh\n\t.Get_Conta.Value = Space(10)\n\t.Get_Conta.Refresh\n\t.Get_Num.Value = Space(6)\n\t.Get_Num.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Conta,Get_Num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "LParameters plVisible\n\nLocal lnI\n\nWith ThisForm\n\tFor lnI = 1 to .ControlCount\n\t\t.Controls(lnI).Enabled = Iif(.Controls(lnI).Name=='CntCCred',plVisible,Not plVisible)\n\tEndFor\n\t.CntCCred.Visible = plVisible\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Local lcInfo, lcFPag\n\nlcFPag = xPar.FPags\nSelect CrSigOpFp\nSet Order To FPags\nSeek lcFpag\nlcInfo = CrSigOpFp.Infos\n\nThisForm.GetObs.Visible = ( CrSigOpFp.Obs = 1 )\nThisForm.SayObs.Visible = ( CrSigOpFp.Obs = 1 )\n\nWith Thisform.CntChequeFP\n\t.Visible = (lcInfo == 'C')\n\tIf .Visible\n\t\t.Get_Bco.Refresh\n\t\t.Get_Age.Refresh\n\t\t.Get_Conta.Refresh\n\t\t.Get_Num.Refresh\n\tEndIf\nEndWith\n\nThisform.CntCarneFP.Visible  = (lcInfo == 'N')\nThisform.CntOutrosFP.Visible = (lcInfo == 'O')\nWith ThisForm.CntCCredFP\n\t.Visib... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =,Visible  =",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Conta,Get_Num,Get_Cartao,Get_Cred",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 134,
+      "codigoOriginal": "LParameter wbanco, wagenc, wconta, wnunch\n\nLocal _Order, wBanco, wAgenc, wConta, wNunch\n\nlcTpLeChq=CrCfCom.TpLeChqs\n\nselect xpar\n_order  = order()\n_recant = recno()\n\ngoto top\n\nsd = .t.\ncorreto = .t.\nif correto\n\tbanco = wbanco\n  \tagencia = wagenc\n  \tnumero = wconta\n  \tconta = wnunch\nendif\n\nif correto\n\tif !fChkDigitos(banco)\n    \tcorreto = .f.\n\tendif\nendif\n\nif correto\n\tif !fChkDigitos(agencia)\n    \tcorreto = .f.\n\tendif\nendif\n\nif correto\n\tif !fChkDigitos(numero)\n    \tcorreto = .f.\n\tendif\nendif\n\nif ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkDigitos(banco,ChkDigitos(agencia,ChkDigitos(numero,ChkDigitos(conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "* executa os parâmetros set iniciais\n=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG",
+      "evento": "Init",
+      "linhas": 118,
+      "codigoOriginal": "Lparameters pForm, DatSes, llAltDireta\n\nLocal lnLeft, lnCotOper, lnCotacao\n\nSet DataSession To DatSes\nThisform.ParentForm = pForm\nThisform.Op_Escolha = pForm.pcEscolha\n*!*\tThisform.Left       = pForm.Left\n*!*\tThisform.Top        = pForm.Top + pForm.Pagina.Dados.CntCarteira.Top + 48\npForm.Enabled       = .F.\nThisform.altdireta  = llaltdireta\n\n*!*\tThisForm.Ok.Left     = Iif( llAltDireta, 498, 540 )\n*!*\tThisForm.Ok.Cancel   = !llAltDireta\n\n*!*\tIf llAltDireta\n*!*\t\tThisForm.Cancela.Left = 562\n*!*\t\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCarregarCambio,fLerSettings",
+        "metodosFormChamados": "Total = Evaluate,Visible =,Value = Evaluate,Configura,Visible     = Inlist",
+        "controlesReferenciados": "Get_MoeOper,Get_TotForma,Get_Fpg,Get_NPar,Get_VPar,Get_PEncargo,Get_VEncargo,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCred.Get_cred",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If IsEmpty(Thisform.CntCCred.Get_Cartao.value)\n\tReturn(.f.)\nElse\n\tReturn(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cartao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCred.Get_cartao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCred.Get_cartao",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not IsEmpty(This.Value) And Not fValidaCards(This.Value)\n\tmessagebox('Número Cartão Inválido !!',0+48,'')\n\tReturn 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCred.Confirma",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.mCartaoCred( .F. )\n\nThisForm.Grade.Valor.Text1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mCartaoCred",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_fpg",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "With ThisForm\n\t.Get_Cotacao.Visible = .f.\n\t.Say_Cotacao.Visible = .f.\n\t.AlteraCotacao.Visible = .f.\nEndwith\nReturn Inlist( Thisform.op_escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_fpg",
+      "evento": "Valid",
+      "linhas": 45,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj\n\nif lastkey()=9\n\tkeyboard \"{CTRL+TAB}\"\nelse\n\tIf !IsEmpty( This.Value ) \n\t\tIf !Seek( This.Value, 'csSigOpFp', 'FPagsGru' )\n\t\t\tloBrowse = CreateObject( 'fwBuscaSel', 'csSigOpFp', 'FPagsGru', This.Value, 'Cadastro de Forma de Pagamento' )\n\t\t\tloBrowse.AddColuna( 'FPags', '', 'Código', .t., 'FPagsGru' )\n\t\t\tloBrowse.AddColuna( 'FParcs', '99', 'Parc' )\n\t\t\tloBrowse.Show\n\t\t\tThis.Value = Iif( Lastkey() == 27, '', csSigOpFp.FPags )\n\t\t\tIf !IsEmpty(This.Value)\n\t\t\t\t=Seek( This.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,fCarregarCambio",
+        "metodosFormChamados": "Digpar = IsEmpty,Value  = fCarregarCambio",
+        "controlesReferenciados": "Get_Fpg,Get_NPar,Get_PEncargo,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_MoeOper",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisform.mostraobs\nThisForm.GetObs.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.fpagto.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.valor.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "if Thisform.op_escolha='INSERIR' or Thisform.op_escolha='ALTERAR'\n\twait window 'TAB para preenchimento de dados' nowait\n\tReturn(.T.)\nelse\n\tReturn(.f.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.valor.Text1",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local lnCotOper, cTotal, _Recno\n\nIf lastkey()=9\n\tThisform.leitor=.f.\n\tkeyboard\"{CTRL+TAB}\"\nElse\n\tctotal=0\n\tSelect xPar\n\tIf Not Eof() And Not Bof()\n\t\t_Recno = Recno()\n\tElse\n\t\t_RecNo = -1\n\tEndIf\n\t\n\tScan\n\t\t=Seek( xPar.FPags, 'CrSigOpFp', 'FPags' )\n\t\tlnCotOper = fCarregarCambio( ThisForm.Get_MoeOper.Value, crSigChLcq.DtEnts )\n\t\tIf CrSigOpFp.Trocos = 1\n\t\t\tctotal = Round( ctotal - ( xPar.Valos * xPar.cotfpgs / lnCotOper ), 2 )\n\t\tElse\n\t\t\tctotal = Round( ctotal + ( xPar.Valos * xPar.cotfpgs / lnCotOper ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_MoeOper,Get_TotForma",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.venc.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.venc.Text1",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value < CrSigChLcq.DtEnts\n\tMessagebox( 'Vencimento não pode ser menor que a Data da Movimentação...', 32, '' )\n\tReturn 0\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Grade.cotfpg.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_ValTotChqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_npar",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value) And Thisform.Digpar\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_npar",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "if IsEmpty(this.value)\n\tReturn(.F.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_vpar",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_vpar",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart\nLocal lnTroco, lnCotOper, lnCotacao\n\nIf IsEmpty( This.Value )\n\tlnCotOper = fCarregarCambio( Thisform.Get_MoeOper.value, CrSigChLcq.DtEnts ) \n\tlnCotacao = Thisform.Get_Cotacao.value\n\tIf CrSigOpFp.Trocos = 1\n\t\tlnTroco = Round( ( CrSigChLcq.ValTots - ThisForm.Get_TotForma.Value ) * lnCotOper / lnCotacao, 2 ) * (-1)\n\t\tIf lnTroco < 0\n\t\t\tThis.Value = 0\n\t\t\tReturn 0\n\t\tElse\n\t\t\tThis.Value = lnTroco\n\t\tEndIf\n\tElse\n\t\tThis.Value = Round( ( CrSigC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "Value ) And !IsEmpty,Value = Round",
+        "controlesReferenciados": "Get_MoeOper,Get_Cotacao,Get_TotForma,Get_PEncargo,Get_VEncargo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.fweditdata_venc",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If IsEmpty( This.Value ) And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n\tThis.Value = CrSigChLcq.DtEnts + CrSigOpFp.Entradas\nEndif\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.fweditdata_venc",
+      "evento": "Valid",
+      "linhas": 143,
+      "codigoOriginal": "local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart, lnParcs\nLocal lnCotOper, lnCotacao\n\nIf This.Value < CrSigChLcq.DtEnts And !IsEmpty( This.Value )\n\tMessagebox( 'Vencimento não pode ser menor que a Data da Movimentação...', 32, '' )\n\tReturn 0\nEndif\n\n=Seek( ThisForm.Get_fpg.Value, 'CrSigOpFp', 'FPags' )\n\nndia = CrSigOpFp.dias\ntven = CrSigOpFp.tvens   && F=Dias Fixos / C=Dias Corridos\nmoefpg = CrSigOpFp.moefpgs\ndcart = CrSigOpFp.dcarts\ncartao = 0\nnocredito = 0\n\nlnCotacao  = Thisform.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCarregarCambio,fGerUniqueKey",
+        "metodosFormChamados": "mCartaoCred",
+        "controlesReferenciados": "Get_fpg,Get_Cotacao,Get_MoeOper,Get_npar,Get_totforma,Get_VPar,Get_VEncargo,get_carne,get_cartao,get_cred,Get_PEncargo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.fweditdata_venc",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "wait window 'TAB para alterar valor' nowait\nThisform.get_fpg.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_COTACAO",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "This.peantvalue = This.Value\n=Seek( Padr( Alltrim( Usuar ), 10 ), 'crUsuario', 'Usuarios' )\n=Seek( CrSigOpFp.Moefpgs, 'crSigCdMoe', 'CMoes' )\nReturn( Seek( crUsuario.Ccargs, 'crSigCdCrg', 'Ccargs' ) And crSigCdCrg.AltCots = 'S' And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And crSigCdMoe.Cotas )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.alteracotacao",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value) && And Thisform.Digpar\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.alteracotacao",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "With ThisForm\n\t.Get_VPar.Value = 0\n\t.Get_Cotacao.peantvalue = .Get_Cotacao.Value\n\tDo Form SigOpAlC With CrSigOpFp.Moefpgs, .Get_Cotacao.Value, crSigChLcq.DtEnts to lcRetorno\n\tIf MLine( lcRetorno, 1 ) = 'OK'\n\t\t.Get_Cotacao.Value = Val( MLine( lcRetorno, 2 ) )\n\t\t.CotUsu = MLine( lcRetorno, 3 )\n\tElse\n\t\t.Get_Cotacao.Value = .Get_Cotacao.peantvalue \n\t\t.CotUsu = ''\n\tEndif\n\t.Get_VPar.SetFocus\nEndwith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_VPar,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_VEncargo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_PEncargo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_PEncargo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty( ThisForm.Get_VPar.Value ) And !IsEmpty( This.Value )\n\tThisForm.Get_VEncargo.Value = Round( ThisForm.Get_VPar.Value * This.Value / 100, 2 )\nElse\n\tThisForm.Get_VEncargo.Value = 0\nEndif\nThisForm.Get_VEncargo.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value ) And !IsEmpty,Value = Round",
+        "controlesReferenciados": "Get_VPar,Get_VEncargo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.GetPorc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( Thisform.Get_fpg.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.GetPorc",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local lnCotOper, lnCotacao\n\nIf !IsEmpty( This.Value )\n\tlnCotOper = fCarregarCambio( Thisform.Get_MoeOper.value, crSigChLcq.DtEnts ) \n\tlnCotacao = Thisform.Get_Cotacao.value\n\tIf CrSigOpFp.Trocos = 1\n\t\tlnTroco = Round( ( CrSigChLcq.ValTots - ThisForm.Get_TotForma.Value ) * lnCotOper / lnCotacao, 2 ) * (-1)\n\t\tIf lnTroco < 0\n\t\t\tlnValor = 0\n\t\t\tReturn 0\n\t\tElse\n\t\t\tlnValor = lnTroco\n\t\tEndIf\n\tElse\n\t\tlnValor = Round( CrSigChLcq.ValTots * This.Value / 100 * lnCotOper / lnCotacao, 2 )\n\tEndif\n\tIf !IsEmpty( T... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "Value ) And !IsEmpty,Value = Round",
+        "controlesReferenciados": "Get_MoeOper,Get_Cotacao,Get_TotForma,Get_PEncargo,Get_VEncargo,Get_VPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_MoeOcr",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCredFP.Get_cred",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If IsEmpty(Thisform.CntCCredFP.get_cartao.value)\n\tReturn(.f.)\nElse\n\tReturn(InList(Thisform.op_escolha,'INSERIR','ALTERAR') And CrSigOpFp.carauts#'S')\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cartao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCredFP.Get_cred",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Grade.Valor.Text1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCredFP.Get_cartao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR') And CrSigOpFp.CarAuts#'S')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCCredFP.Get_cartao",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tif not fValidaCards(this.value)\n\t\tmessagebox('Número Cartão Inválido !!',0+48,'')\n\t\tReturn 0\n\tendif\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValidaCards",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntCarneFP.Get_carne",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntOutrosFP.Get_OBS",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "if Thisform.op_escolha='CONSULTAR' or ;\n\tThisform.op_escolha='EXCLUIR'\n\tReturn(.f.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_num",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_num",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tif not  fChkDigitos(xPar.numeros) \n\t\tmessagebox('Número Inválido !',0+48,'')\n\t\tReturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_num",
+      "evento": "LostFocus",
+      "linhas": 19,
+      "codigoOriginal": "Select xPar\n\nif not IsEmpty(bancos+agencias+contas+numeros)\n\tif !Thisform.VerificaCheque( bancos, agencias, contas, numeros)\n\t\tReplace bancos With '', agencias With '', contas With '', numeros With ''\n\t\tWith ThisForm.CntChequeFP\n\t\t\t.get_bco.value = ''\n\t\t\t.get_age.value = ''\n\t\t\t.get_conta.value = ''\n\t\t\tthis.value = ''\n\t\t\t.get_bco.SetFocus\n\t\tEndWith\n\telse\n\t\tThisform.Grade.Valor.Text1.SetFocus\t\n\tendif\nelse\n\tThisform.Grade.Valor.Text1.SetFocus\t\nendif\t\t\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "VerificaCheque",
+        "controlesReferenciados": "get_bco,get_age,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_conta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tif not fChkDigitos(xPar.contas) \n\t\tmessagebox('Conta Inválida !',0+48,'')\n\t\tReturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_age",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(Thisform.op_escolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_age",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tif not fChkDigitos(xPar.agencias) \n\t\tmessagebox('Agencia Inválida !',0+48,'')\n\t\tReturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_bco",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "if Thisform.op_escolha='INSERIR' or Thisform.op_escolha='ALTERAR'\n\tIf Thisform.TipoLeitora = 'S' \n\t\tIF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError\n\t\t\t\tThisform.ReadComm.Ole_Comm.PortOpen = .t.\n\t\tENDIF\n\t\tWait Window 'Passe o cheque pela leitora !' nowait\n\tEndif\n\tReturn(.t.)\nelse\n\tReturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_bco",
+      "evento": "Valid",
+      "linhas": 64,
+      "codigoOriginal": "Local Leitura, Tecla, Contador\nleitura = ''\nif Thisform.leitor=.f.\n\tIf Thisform.TipoLeitora = 'S'\n\t\tIf IsEmpty(Thisform.LeituraSerial)\n\t\t\tIF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError\n\t\t\t\t\tThisform.ReadComm.Ole_Comm.PortOpen = .t.\n\t\t\tEndIf\n\t\t\tWait Window 'Passe o cheque pela leitora !' nowait\n\t\tElse\n\t\t\tLeitura = Thisform.LeituraSerial\n\t\t\tThisform.LeituraSerial = ''\n\t\tEndif\n\tElse\n\t\tLeitura=This.Value\n\t\tContador = 0\n\t\tDo While lastkey()<>27 and len(Leitura)<33 and ;\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_bco,get_age,get_conta,get_num,ChkDigitos(xPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.CntChequeFP.Get_bco",
+      "evento": "LostFocus",
+      "linhas": 23,
+      "codigoOriginal": "if lastkey()=9\n\tThisform.Grade.Valor.Text1.SetFocus\nelse\n\tif Thisform.leitor\n\t\tif not IsEmpty(xPar.bancos)\n\t\t\tIf Not Thisform.VerificaCheque(xPar.bancos,xPar.agencias,xPar.contas,xPar.numeros)\n\t\t\t\tReplace bancos With '', agencias With '', contas With '', numeros With ''\n\t\t\t\tWith Thisform.CntChequeFP\n\t\t\t\t\t.get_age.value = ''\n\t\t\t\t\t.get_conta.value = ''\n\t\t\t\t\t.get_num.value = ''\n\t\t\t\t\tthis.value = ''\n\t\t\t\tEndWith\n\t\t\telse\n\t\t\t\tThisform.CntChequeFP.get_num.SetFocus\t\n\t\t\tendif\n\t\tendif\n\telse\n\t\tThisform.CntC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "VerificaCheque",
+        "controlesReferenciados": "get_age,get_conta,get_num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Get_TotForma",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Apaga",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "If Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n\t\n\tSelect xPar\n\tZap\n\tWith Thisform\n\t\t.Get_TotForma.Value = 0\n\t\t.Get_Fpg.Value = ''\n\t\t.Get_NPar.Value = 0\n\t\t.Get_VPar.Value = 0\n\t\t.fweditdata_Venc.Value = {}\n\t\t.Get_PEncargo.Value = 0\n\t\t.Get_VEncargo.Value = 0\n\t\t.Get_Cotacao.Value = 0\n\tEndwith\n\tThisForm.MostraObs\n\tThisForm.Refresh\n\tThisForm.Grade.Refresh\n\tThisForm.Get_Fpg.SetFocus\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_TotForma,Get_Fpg,Get_NPar,Get_VPar,Get_PEncargo,Get_VEncargo,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Ok",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Inlist( Thisform.op_escolha, 'INSERIR', 'ALTERAR' )\n\t** verifica se existe valor ou vencs em branco\n\tSelect xPar\n\tScan\n\t\tIf !IsEmpty(xPar.FPags) And IsEmpty(xPar.vencs)\n\t\t\tMessagebox( 'Vencimento Inválido !', 48, '' )\n\t\t\tThisform.Grade.Venc.Setfocus\n\t\t\tReturn 0\n\t\tEndif\n\tEndscan\n\nEndif\n\nThisForm.Return",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFPG.Cancela",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

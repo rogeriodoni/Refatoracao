@@ -1,0 +1,729 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopftc.SCX
+* Data/Hora: 04/11/2026 23:27:31
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPFTC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPFTC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPFTC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPFTC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOPFTC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFTC
+------------------------------------------------------------
+  DataSession = 1
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Ficha de Complementos da Movimentação"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  criouform = .F.
+  montoucampos = .F.
+  operacao = .F.
+  pcescolha = .F.
+  podatamgr = .F.
+  powindowope = .F.
+  primeiraentrada = .F.
+  Name = "SIGOPFTC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFTC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFTC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFTC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFTC.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPFTC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregafichatecnica
+------------------------------------------------------------
+PROCEDURE carregafichatecnica
+* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base
+Local lcVal, lcObj, loObjForm1
+
+If ThisForm.CriouForm
+	loObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide
+
+	Select crTmpFicha
+	Scan
+		If( crTmpFicha.cTpDados <> [D] )
+			lcVal = Nvl(crTmpFicha.Resps, [])
+		Else
+			lcVal = Nvl(Ctod(crTmpFicha.Resps),Ctod(''))
+		Endif			
+
+		lcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))
+
+		loObjForm1.&lcObj..Value = lcVal
+		loObjForm1.&lcObj..Refresh
+	EndScan
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE checarfichatecnica
+------------------------------------------------------------
+PROCEDURE checarfichatecnica
+Lparameters pTip
+Local lcArea
+
+lcArea = Alias()
+
+llOks = .f.
+
+If ((pTip = [GRUPO_OP]) And (ThisForm.pcEscolha <> [INSERIR]))
+	llOks = .t.
+EndIf
+
+If Not llOks And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR], [CONSULTAR]) And ThisForm.PrimeiraEntrada And ThisForm.CriouForm
+	This.DesmontaFichaTecnica 
+	ThisForm.PrimeiraEntrada = .f.
+	llOks = .t.
+EndIf
+
+If llOks
+	If Not Empty(ThisForm.Operacao)		
+		lcQuery = [Select Distinct a.Dopes, a.TitOpes, b.CGrus as TemDados ] + ;
+		   			[From SigCdOpe a ] + ;
+		   			[Left Join SigCdFtc b ] + ;
+		   	 		  [On a.Dopes = b.CGrus ] + ;
+		   	 	   [Where a.Dopes = '] + Padr(ThisForm.Operacao, 20) + [' And b.nTipos = 2 ] + ;
+		   		   [Order By a.Dopes]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'cnSigCdOpe') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (cnSigCdOpe)')
+			Return .f.
+		EndIf		
+
+		Select cnSigCdOpe
+		Go Top		
+		If Not This.MontaFichaTecnica(ThisForm.Operacao)
+			Select &lcArea
+			Return 0
+		EndIf
+	EndIf
+EndIf
+If !Empty(lcArea)
+	Select &lcArea
+Endif	
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE criarform
+------------------------------------------------------------
+PROCEDURE criarform
+With ThisForm
+	.poWindowOpe = CreateObject('frmbarcta', ThisForm)
+	With .poWindowOpe
+		.Visible = .t.
+*!*			.Move((This.Left + 5), ;
+*!*				  (This.Top + 600),;
+*!*				  (This.Width ),;
+*!*				  (This.Height - 140))
+		.Name = [frmFTecnicaOpe]
+		.Show
+	EndWith 
+	.CriouForm = .T.
+EndWith 
+
+Activate Window ([frmFTecnicaOpe]) In Window (ThisForm.Name)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE desmontafichatecnica
+------------------------------------------------------------
+PROCEDURE desmontafichatecnica
+* Rotina Para Remover os Campos Criados no Formulário de Ficha Técnica
+Local lcCar, lcObj, loObjForm1
+
+If ThisForm.CriouForm And Used('crTmpFicha') And (ThisForm.pcEscolha <> [PROCURAR]) And ThisForm.MontouCampos
+	loObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide
+	lcCar = []
+
+	Select crTmpFicha
+	Scan
+		If (lcCar <> crTmpFicha.CCars)
+			lcCar = crTmpFicha.CCars
+
+			* Destruindo o Shape e Seu Respectivo Label
+			lcObj = [sayFicha] + Alltrim(Str(crTmpFicha.COrds))
+			loObjForm1.RemoveObject(lcObj)
+
+			lcObj = [shpFicha] + Alltrim(Str(crTmpFicha.COrds))
+			loObjForm1.RemoveObject(lcObj)
+		EndIf
+
+		* Destruindo o Label
+		lcObj = [lblFicha] + Alltrim(Str(crTmpFicha.COrds))
+		loObjForm1.RemoveObject(lcObj)
+
+		* Destruindo o Memo
+		lcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))
+		loObjForm1.RemoveObject(lcObj)
+	EndScan
+
+	If (Reccount('crTmpFicha') > 0)
+		lcObj = [shpFichaFim]
+		loObjForm1.RemoveObject(lcObj)
+
+		lcObj = [sayFichaFim]
+		loObjForm1.RemoveObject(lcObj)
+	EndIf
+
+	ThisForm.MontouCampos = .f.
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gravafichatecnica
+------------------------------------------------------------
+PROCEDURE gravafichatecnica
+* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base
+Local loObjForm1
+
+If ThisForm.CriouForm And Used('crTmpFicha')
+	loObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide
+
+	Zap in crSigCdCeT
+
+	Select crTmpFicha
+	Scan
+		lcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))
+
+		lcVal = loObjForm1.&lcObj..Value
+		If( crTmpFicha.cTpDados == [D] )
+			lcVal = Dtoc(lcVal)
+		Endif
+
+		If Not Empty(lcVal)
+			Select crSigCdCeT
+			Go Top In crSigCdCeT
+			Locate For IClis + CCars + CTits = crSigCdCli.IClis + crTmpFicha.CCars + crTmpFicha.CTits
+			If Eof([crSigCdCeT])
+				Insert Into crSigCdCeT (IClis, CCars, CTits, Resps, CliCarTits, cIdChaves) ;
+								Values (crSigCdCli.IClis, crTmpFicha.CCars, crTmpFicha.CTits, lcVal, ;
+										crSigCdCli.IClis + crTmpFicha.CCars + crTmpFicha.CTits, NewIdChave())
+			EndIf 
+		EndIf 
+	EndScan
+EndIf
+
+Return(.t.)
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montafichatecnica
+------------------------------------------------------------
+PROCEDURE montafichatecnica
+* Rotina Para Criar os Campos no Formulário de Ficha Técnica
+Lparameters pDop
+Local lcDopes, lcQuery, lnTop, lnLef, lnWid, lcCar, lcObj, loObjForm1, lcArea, lcPerg
+lcArea = Alias()
+
+If ThisForm.CriouForm And (ThisForm.pcEscolha <> [PROCURAR])
+	lcDopes = Padr(pDop, 20)
+
+	llFaz = .t.		
+	If llFaz
+		lcQuery = [Select a.CCars, a.CTits, a.CLins, a.COrds, a.Maxs, a.Mins, a.nChkCxas, a.cSelecaos, a.cTpDados, b.Resps, c.Descrs ] + ;   
+					[From SigCdFtc a ] + ;  
+				    [Left Join SigOpFtc b On '] + lcDopes + [' + a.CCars + a.CTits = b.DopCarTits ] + ;  
+				    [Left Join SigPrCpP c on a.CTits = c.Codigos ] + ;  
+				   [Where a.CGrus = '] + lcDopes + [' ] + ;
+				   [And a.SGrus = Space(6) And a.nTipos = 2 ] + ;  
+				   [Order By a.COrds]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpFicha') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpFicha)')
+			Return .f.
+		EndIf
+	EndIf
+
+	loObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide
+	lnTop = 1
+	lnLef = 6
+	lnWid = ThisForm.poWindowOpe.Width - 14
+	lcCar = []
+
+	ThisForm.MontouCampos = .t.
+
+	Select crTmpFicha
+	Scan
+		If (lcCar <> crTmpFicha.CCars)
+			lcCar = crTmpFicha.CCars
+			lnTop = lnTop + 1
+
+			* Adicionando o Shape e Seu Respectivo Label
+			lcObj = [sayFicha] + Alltrim(Str(crTmpFicha.COrds))
+			loObjForm1.AddObject(lcObj, [Say])
+
+			With loObjForm1.&lcObj.
+				.Visible   = .t.
+				.Top	   = lnTop
+				.Left	   = 1
+				.Caption   = Proper(lcCar)
+				.FontBold  = .t.
+				.FontSize  = 9
+				.ForeColor = Rgb(0,0,128)
+				.AutoSize  = .t.
+
+				lnTop = lnTop + .Height
+			EndWith 
+
+			lcObj = [shpFicha] + Alltrim(Str(crTmpFicha.COrds))
+			loObjForm1.AddObject(lcObj, [Shape])
+
+			With loObjForm1.&lcObj.
+				.Visible   	   = .t.
+				.Top	       = lnTop
+				.Left	       = 1
+				.Width	       = lnWid + 9
+				.Height    	   = 2
+				.SpecialEffect = 0
+
+				lnTop = lnTop + .Height + 2
+			EndWith 
+		EndIf
+		
+		* Adicionando o Label
+		lcObj = [lblFicha] + Alltrim(Str(crTmpFicha.COrds))
+		loObjForm1.AddObject(lcObj, [Say])
+
+		With loObjForm1.&lcObj.
+			.Visible   = .t.
+			.Top	   = lnTop
+			.Left	   = lnLef + 4
+			.Caption   = Proper(Iif(!IsEmpty(crTmpFicha.Descrs),crTmpFicha.Descrs,crTmpFicha.CTits))
+			.FontBold  = .t.
+			.FontSize  = 8
+			.ForeColor = Rgb(0,0,128)
+			.AutoSize  = .t.
+			lcPerg     = .Caption
+		EndWith 
+		lnTop = lnTop + 12
+
+		* Adicionando o Memo
+		lnHei = Iif(crTmpFicha.CLins = 1, 23, ((crTmpFicha.CLins - 1) * 16) + 23)
+
+		lcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))
+
+		If( crTmpFicha.cTpDados <> [D] )	
+			llRespFixa = .F.
+			lcQryResp = [Select nResps from SigCdFtr where GruCarTits = ']+lcDopes + crTmpFicha.CCars + crTmpFicha.CTits+[']
+			If ThisForm.poDataMgr.SQLExecute(lcQryResp,[crResp]) < 1
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crResp)')
+				Return .f.				
+			EndIf
+			If !Eof([crResp]) and crResp.nResps == 1
+				llRespFixa = .T.
+			Endif
+		
+			lcMsk = Replicate([x], 100)
+		
+			loObjForm1.AddObject(lcObj, [fweditbox], ThisForm.poDataMgr.pnIdConn, [SigCdFtr], ;
+									    [Resps], lcMsk, [Respostas], [GruCarTits], ;
+									    lcDopes + crTmpFicha.CCars + crTmpFicha.CTits, ;
+									    ThisForm.pcEscolha, 254, .T.,lcPerg)
+			With loObjForm1.&lcObj.
+				.Visible   = .t.
+				.Top	   = lnTop
+				.Left	   = lnLef
+				.Width	   = lnWid
+				.Height    = lnHei
+				.ReadOnly  = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') or llRespFixa
+				.pnCaixa   = crTmpFicha.nChkCxas
+				.plSelecao = (crTmpFicha.cSelecaos = [S])
+
+				If (crTmpFicha.Maxs > 0)
+					.MaxLength = crTmpFicha.Maxs
+				EndIf
+			EndWith 
+		Else
+			lcMsk = [99/99/9999]
+			loObjForm1.AddObject(lcObj, [fwget])
+			With loObjForm1.&lcObj.
+				.Visible   = .T.
+				.Top       = lnTop
+				.Left      = lnLef
+				.Width     = 80
+				.Height    = lnHei
+				.ReadOnly  = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+				.MaxLength = 10
+				.InputMask = lcMsk
+				.Format    = [E]
+				.Value     = Ctod([])
+			EndWith						
+		Endif			
+
+		lnTop = lnTop + lnHei + 2
+	EndScan
+
+	If (Reccount('crTmpFicha') > 0)
+		lcObj = [shpFichaFim]
+		loObjForm1.AddObject(lcObj, [Shape])
+
+		With loObjForm1.&lcObj.
+			.Visible   	   = .t.
+			.Top	       = lnTop
+			.Left	       = 1
+			.Width	       = lnWid + 9
+			.Height    	   = 2
+			.SpecialEffect = 0
+		EndWith 
+
+		lcObj = [sayFichaFim]
+		loObjForm1.AddObject(lcObj, [Say])
+
+		With loObjForm1.&lcObj.
+			.Visible   = .t.
+			.Top	   = lnTop + 100
+			.Left	   = 1
+			.Caption   = [.]
+			.ForeColor = ThisForm.BackColor
+			.AutoSize  = .t.
+		
+			lnTop = (lnTop + 100 + .Height)
+		EndWith 
+	EndIf
+	loObjForm1.Top = 0
+	loObjForm1.Height = (lnTop + 100)
+ 
+ 	If loObjForm1.ControlCount > 0
+		ThisForm.poWindowOpe.ScrollBarContainer.VerticalScrollBar.SetSlideTop(0, loObjForm1.Controls(1) ) && seta scroll para o inicio da barra vertical...
+	EndIf 
+
+	This.CarregaFichaTecnica
+EndIf
+Select &lcArea
+Return .t.
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mostrarform
+------------------------------------------------------------
+PROCEDURE mostrarform
+* Rotina Para Exibir o Formulário de Ficha Técnica
+If ThisForm.CriouForm
+	ThisForm.ChecarFichaTecnica([MOSTRARFORM])
+	
+	ThisForm.Top = This.Top + 60
+	ThisForm.ZOrder(1)
+	ThisForm.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ocultarform
+------------------------------------------------------------
+PROCEDURE ocultarform
+* Rotina Para Ocultar o Formulário de Ficha Técnica
+If ThisForm.CriouForm
+	ThisForm.poWindowOpe.Top = This.Top + 600
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE validafichatecnica
+------------------------------------------------------------
+PROCEDURE validafichatecnica
+Local loObjForm1
+
+loObjForm1 = ThisForm.poWindowOpe.ScrollBarContainer.ScrollSlide
+
+If Used('crTmpFicha')
+	Select crTmpFicha
+	Scan
+		lcObj = [memFicha] + Alltrim(Str(crTmpFicha.COrds))
+
+		lcVal = loObjForm1.&lcObj..Value
+		If( crTmpFicha.cTpDados == [D] )
+			lcVal = Dtoc(lcVal)
+		Endif
+
+		If Len(Alltrim(lcVal)) < crTmpFicha.Mins
+			lcMsgs = 'O Titulo ' + Alltrim(crTmpFicha.CTits) + ;
+			         ' da Caracteristica ' + Alltrim(crTmpFicha.CCars) + Chr(13) + Chr(10) +;
+			         'deve conter no minimo ' + Alltrim(Str(crTmpFicha.Mins)) + ' caracteres.'
+			MessageBox(lcMsgs,16,'')
+			Return(.f.)
+		EndIf
+	EndScan
+Endif	
+
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+Do Parametros_Iniciais
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pCnx, pcTipo, pcDopes
+
+Thisform.poDataMgr = pCnx
+ThisForm.pcEscolha = pcTipo
+ThisForm.Operacao = pcDopes
+
+*-- Propriedades da Ficha Tecnica
+Thisform.CriouForm = .F.
+Thisform.PrimeiraEntrada = .T.
+Thisform.powindowope = ''
+Thisform.MontouCampos = .F.
+
+ThisForm.CriarForm()
+
+Thisform.MostrarForm()
+This.Refresh() 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFTC.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+If( ThisForm.CriouForm )
+	This.Gravafichatecnica()
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPFTC
+RESERVED3 (ClassInfo): criouform
+montoucampos
+operacao
+pcescolha
+podatamgr
+powindowope
+primeiraentrada
+*carregafichatecnica 
+*checarfichatecnica 
+*criarform 
+*desmontafichatecnica 
+*gravafichatecnica 
+*montafichatecnica 
+*mostrarform 
+*ocultarform 
+*validafichatecnica 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

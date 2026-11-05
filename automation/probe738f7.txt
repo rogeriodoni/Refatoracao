@@ -1,0 +1,20 @@
+CK00 inicio
+CK01 CREATEOBJECT VARTYPE=O
+== A) BINDEVENT vivo (AEVENTS) ==
+cmd_4c_Processa  Click -> 1 binding(s)
+cmd_4c_Cancela   Click -> 1 binding(s)
+cmd_4c_BtnGetArqO      -> 1 binding(s)
+cmd_4c_BtnDirs         -> 1 binding(s)
+chk_4c_ChkXml -> evento=[(Object)] delegate=[CHKXMLCLICK]
+== B) ChkXmlClick ==
+  Value=1 -> cntXml.Visible=.T. cntTXT.Visible=.F. ArqTXT=[] Dirs=[]
+  Value=0 -> cntXml.Visible=.F. cntTXT.Visible=.T.
+== C) AtualizarProgresso ==
+  lblResults.Caption=[Processando 3 Grupos / Produtos Gerados : 7]  this_cUltimoProgresso=[Processando 3 Grupos / Produtos Gerados : 7]
+== D) BtnProcessarClick (usuario DESISTE) ==
+  antes : this_lProcessando=.F.
+  depois: this_lProcessando=.F.  form ainda vivo? O
+  2a chamada OK (flag nao travou), this_lProcessando=.F.
+== E) BtnEncerrarClick ==
+  pos-Release VARTYPE(loF)=X
+CK99 FIM OK

@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `projeto\app\forms\operacionais\Formsigopftc.prg`.
+
+## O que esta fase N├âO entregou ÔÇö e por qu├¬
+
+O prompt pede "Grid + 6 bot├Áes CRUD + `AlternarPagina`". **O SIGOPFTC n├úo tem nenhuma dessas coisas** e invent├í-las violaria o PILAR 1. Medi o dump antes de mexer no form:
+
+| Superf├¡cie | Medi├º├úo no dump (task737) |
+|---|---|
+| `BaseClass: grid\|pageframe` | **0** |
+| `BaseClass: textbox\|editbox\|combobox\|listbox\|checkbox\|optiongroup\|optionbutton\|spinner` | **0** |
+| `AddCursor\|pColuna\|RecordSource\|ControlSource\|Grade\|grd` | **0** |
+
+A ├írvore inteira do SCX s├úo 4 objetos visuais: `cntSombra` + 2 Labels + `cntBotoes`. Os campos da ficha n├úo est├úo desenhados ÔÇö o legado os cria em **runtime** no `MontaFichaTecnica` (Fases 5-6). Esse ├® o ramo **DESPACHANTE** do gate da Fase 4, e ele est├í satisfeito ÔÇö medido rodando os pr├│prios predicados do `OrquestradorMigracao.ps1` contra o dump e o `.prg`: `semListaNemCampos=True`, `nBotoesLegado=2`, `temSuperficieDespachante=True` ÔåÆ `temLayoutDespachante=True`.
+
+## O que a Fase 4 entregou (o que o legado realmente tem)
+
+- **`ConfigurarContainerBotoes` completo**: `obj_4c_CntBotoes` ÔåÆ **`cmg_4c_Botoes`** (o nome gen├®rico `obj_4c_` n├úo era can├┤nico), com os 2 bot├Áes transcritos do dump ÔÇö `Buttons(1)`=Cancelar (Left=80, `Cancel=.T.`, TabIndex=2, `cadastro_sair_60.jpg`) e `Buttons(2)`=Confirmar (Left=5, TabIndex=1, `cadastro_salvar_60.jpg`). Os dois ├¡cones foram conferidos em `vbmp\` (regra #25). Geometria dos bot├Áes internos aplicada **antes** da do grupo (#31), `AutoSize=.F.` com Width/Height do dump (#23), fonte e cor nos bot├Áes e n├úo no grupo (#33). `mapeamento.json` atualizado junto com o rename.
+- **`BtnSairClick` / `BtnConfirmarClick`**: os dois `Click` do legado, transcritos. O Confirmar n├úo fecha o di├ílogo nem chama `ValidaFichaTecnica` ÔÇö porque o legado n├úo faz isso ali.
+- **`GravarFichaTecnica` + `CarregarRespostasGravadas`**: o `gravafichatecnica` legado, inteiro. Grava via `sigopftcBO.NovoRegistro()`+`Salvar()` ÔÇö n├úo `Inserir()`, que est├í `PROTECTED` no BO e estouraria "Property INSERIR is not found" chamado de fora (regra #51).
+
+## Duas decis├Áes que voc├¬ deve conhecer
+
+1. **Diverg├¬ncia deliberada do legado**: o `Zap in crSigCdCeT` esvazia o cursor local antes do SCAN. Se isso propaga DELETE para a base depende do buffering do `AddCursor` Fortyus, e n├úo h├í evid├¬ncia de que o legado apague respostas gravadas. Gravo **s├│ o que falta**, nunca sobrescrevo nem apago (PILAR 2) ÔÇö o mesmo crit├®rio do `If Eof([crSigCdCeT])` e o j├í documentado no BO da Fase 2. Est├í registrado em coment├írio no m├®todo.
+
+2. **Defeito pr├®-existente no BO, fora do escopo desta fase**: `sigopftcBO.Init()` chama `DODEFAULT()` **sem par├ómetro**, ent├úo `BusinessBase` nunca instancia o `DataAccess` e `this_oDataAccess` fica `.NULL.` ÔÇö `BO.Buscar()` ├® inutiliz├ível. Foi por isso que `CarregarRespostasGravadas` faz o pr├│prio `SQLEXEC` em vez de usar o BO. `Inserir()` n├úo ├® afetado (usa `SQLEXEC` direto). Vale corrigir numa fase que toque o BO.
+
+## Verifica├º├úo
+
+- `COMPILE` com `.fxp` apagado antes: BO 4215 bytes, Form 9370 bytes, **zero `.err`** nos dois.
+- Validador de completude (os 4 padr├Áes do `Test-CompletudeCodigo`): **0 marcadores, 0 pend├¬ncias, 0 stubs, 0 procedures vazias**.
+- `VerificarPropriedadesInexistentes.ps1` no projeto inteiro: *"OK - nenhuma atribuicao a propriedade inexistente"*. Conferi tamb├®m cada propriedade contra `propriedades_baseclasses.txt` ÔÇö todas existem em COMMANDGROUP/COMMANDBUTTON.
+- Zero acento literal, zero `RETURN` dentro de `TRY`.
+
+N├úo executei o form (`CREATEOBJECT`) ÔÇö nesta m├íquina o VFP9 compila e sai sem executar, e o SQL Server 192.168.200.10 est├í inalcan├º├ível. O **contrato para a Fase 5** est├í documentado no cabe├ºalho de `GravarFichaTecnica`: cursor `cursor_4c_Ficha` com as colunas `cords`/`ctpdados`/`ccars`/`ctits`, e controles `mem_4c_Ficha<COrds>` dentro de `cnt_4c_AreaFicha`.

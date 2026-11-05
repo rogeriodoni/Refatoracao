@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. O arquivo modificado ├® `C:\4c\projeto\app\forms\operacionais\Formsigopgar.prg`.
+
+## O que a fase encontrou
+
+Medi as duas metades da fase contra o dump **antes** de escrever qualquer linha, e nenhuma delas tinha o que acrescentar:
+
+**LOOKUPS: ZERO.** Varredura dos 987 linhas do dump pelos seis padr├Áes do gate ÔÇö `fwbusca` (cobre Ext/Sel/Int), `mAddColuna`, `sigacess(`, as 9 `Acesso<X>(` de `sigacess.PRG`, `FormBuscaAuxiliar` ÔÇö deu **0 em todos**. O ├║nico `CreateObject(` do form ├® `CreateObject([XMLAdapter])` (gerador de XML, n├úo picker); o ├║nico `PROCEDURE Valid` ├® o do `chkXml` (j├í migrado em `ChkXmlClick()`); os dois `PROCEDURE When` devolvem `.f.` (j├í migrados como `ReadOnly = .T.` + `TabStop = .F.`); e os dois `Seek()` buscam no cursor **local** `crGrupos` (controle de duplicidade), n├úo em tabela. Criar `AbrirLookup*` aqui exigiria inventar tabela que o legado nunca consulta ÔÇö n├úo fiz.
+
+**CAMPOS: 19 de 19 j├í criados** desde a Fase 4, com as propriedades auditadas na Fase 5.
+
+## Os dois defeitos reais que fechei
+
+| | |
+|---|---|
+| `shp_4c_Shape2` | tinha `.BorderColor = RGB(90,90,90)` **inventado** ÔÇö o dump n├úo declara BorderColor para Shape2. Medi o default da base class `Shape` no VFP9: **6579300 = RGB(100,100,100)**, n├úo preto. Linha removida; a moldura volta ├á cor que o legado desenha. (`Shape1` ├® o caso oposto ÔÇö o dump *declara* 136,189,188 ÔÇö e ficou.) |
+| `txt_4c_Arquivo` | campo **aposentado e soterrado no pr├│prio legado** (regra #28). Medido: ocupa 78..228 ├ù 11..34, contido inteiro em `txt_4c_Dirs` (78..499 ├ù 11..34), que ├® criado depois e desenha por cima ÔåÆ inalcan├º├ível ao clique. A ├║nica leitura dele no legado est├í **comentada** (`*!* lcArquivo = Thisform.cntXml.Get_Arquivo.Value`). Mantive geometria e ordem id├¬nticas ao SCX de prop├│sito e documentei no ponto de cria├º├úo. |
+
+Tamb├®m corrigi um coment├írio do `sigopgarBO.prg` que prometia que o Form p├Áe foco no bot├úo em falha de valida├º├úo ÔÇö ele n├úo p├Áe, e no legado esse `SetFocus` ├® inobserv├ível porque `Processa.Click` executa `Thisform.Release` logo depois sem condicionar ao retorno. E a contagem de objetos no cabe├ºalho (dizia 19/20 mas a soma por tipo dava 18, contando os labels do t├¡tulo duas vezes).
+
+## Verifica├º├úo
+
+Rodei primeiro o smoke test de 4 linhas para provar que o VFP9 **executa** nesta sess├úo (n├úo s├│ compila) ÔÇö passou.
+
+- **COMPILE**: Form e BO sem `.ERR`. Com **controle negativo** (`IF .T. THEN ENDWITH` injetado numa c├│pia) o check gerou `.ERR` nas duas linhas esperadas, provando que a verifica├º├úo detecta erro ÔÇö o `.FXP` apareceu nos dois casos, confirmando que ele sozinho n├úo prova nada.
+- **Instancia├º├úo**: `CREATEOBJECT("Formsigopgar")` ÔåÆ `VARTYPE=O`, nenhum di├ílogo capturado; `shp_4c_Shape2.BorderColor` lido de volta como 6579300.
+- **Gate da Fase 6**: criei `automation\VerificarGateFase6Task738.ps1` (helpers extra├¡dos em `LibGateFase6Task738.ps1` ÔÇö dot-source do orquestrador dispara migra├º├úo). Resultado: completude limpa nos dois arquivos e **ramo CAPTURA valida**.
+- **5 auditorias de acervo** (bot├úo fora da faixa, fun├º├Áes n├úo definidas, m├®todo protegido chamado de fora, propriedades inexistentes, lookup em KeyPress): zero achados para este form.
+- CRLF preservado (1190/1190, zero bare-LF) e zero bytes >127 nos dois arquivos.
+
+Dois desvios **ficam como est├úo**, por serem herdados do SCX: `cmd_4c_Cancela` termina em 804 com `Form.Width = 799` (Left 724 do dump + Width 80 do default da `fwbtng`), e `cmd_4c_Processa` termina em 729, cobrindo 5px da esquerda do Cancela. S├úo consequ├¬ncia aritm├®tica de valores que o legado declara ÔÇö "consertar" exigiria inventar Left ou Width pr├│prio. Documentei no cabe├ºalho.

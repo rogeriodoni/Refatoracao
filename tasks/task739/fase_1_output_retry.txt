@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 1 is complete and verified.
+
+## What was delivered
+
+**`C:\4c\projeto\app\classes\SigOpGcoBO.prg`** (11 KB, CRLF, 33 properties + `Init()`).
+
+`SIGOPGCO` is a child **graph-display** dialog, not a cadastro. It is opened by a parent form that has already populated two cursors (`crFinal` with `Mes/Ordem/Ano/Grupos/Total/npercs`, and `Cabecalho` with `pRelTitulo/pPeriodo`); the form only aggregates them into the TAB/CRLF series matrix and hands the binary to an `MSGraph.Chart` OLE control. It is the near-twin of `FormSigPrGf2`/`SigPrGf2BO` (task613), which I used as the canonical pattern.
+
+Consequences for the BO:
+- `this_cTabela`/`this_cCampoChave` are **empty** ÔÇö there is no proprietary table. The dump has **zero** `Insert Into`/`Update`/`Delete From`/`TABLEUPDATE`/`AddCursor`, so Phase 2's read-only exception will apply; I did not invent any INSERT/UPDATE (rule #22).
+- The legacy arrays `laMeses`, `laGrupos` and the matrix `laPerc` are declared as **cursor names**, not arrays, following the `SigPrGf2BO` precedent (avoids `m.array` scope leaking between BO and Form).
+- `this_cCampoGeral = "gGraficos"` is kept explicit ÔÇö that name is a contract with both the `OleBoundControl.ControlSource` and the print FRX.
+- `Init()` does **no** data loading, only property assignment, so it cannot return `.F.` and kill the form (the `BOInitFCACHE` trap).
+
+## Verification actually run
+
+| Check | Result |
+|---|---|
+| VFP9 `COMPILE` | `FXP` generated, **no `.ERR`** |
+| `CREATEOBJECT("SigOpGcoBO")` | `VARTYPE=O`, parent `Businessbase`, **all 33 properties correct** |
+| 05d completeness regexes (standalone) | **0 problems** ÔÇö no markers, no empty procs, no `pendente`/`nao implement` |
+| Rule #4 literal accents | 0 (title via `CHR(225)`, renders `Gr├ífico Comparativo`) |
+| Rule #1 `RETURN` inside `TRY` | 0 |
+| Rules #43 / #9.1 | 0 / 0 |
+| CRLF | `CR=246 = LF=246` |
+
+## Two corrections worth flagging
+
+**VFP9 *does* execute in this session.** My first smoke test said it didn't ÔÇö but that was my own bug: `printf` turned `\\4` and `\\a` into octal/bell escapes, so the script wrote to the garbage path `C:^Dc^Gutomation`. Rewritten with a quoted heredoc, it returned `VIVO`. So the memory `feedback_vfp9_compila_e_sai_sem_executar_nesta_sessao` does not hold here, and real compile + instantiation proofs were possible. (Related: invoking `vfp9 -T` directly on a pure `DEFINE CLASS` file *hangs* ÔÇö it has nothing to run and sits in the IDE; use a `COMPILE` wrapper that ends in `QUIT`.)
+
+**`SigOpGrc.frx` was missing from `reports\`.** The BO declares `this_cRelatorio = "SigOpGrc"` (from `Report Form SigOpGrc To Printer Prompt NoConsole`). I copied `SigOpGrc.frx`/`.frt` from `C:\4install\FortyusMC\Fortyus\` so the print button doesn't fail later.
+
+One item I could not confirm: the FRX's expected cursor alias. My attempt to dump it hung the VFP process (before I'd diagnosed the printf bug), and I killed it rather than retry, since the alias only matters when Phase 8 wires up `Imprimir`. Worth checking then ÔÇö per the `FRXaliasjpgCONT` rule, that alias is a contract.

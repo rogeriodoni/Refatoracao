@@ -1,0 +1,31 @@
+=== PROBE Fase 7 - FormSigOpGco (task739) ===
+[SETUP] ambiente OK
+[CURSORES] crFinal=4  Cabecalho=1
+[PAI] Comparativo.Value=1  Aguarde.Visible=.T.
+[1] CREATEOBJECT -> VARTYPE=O
+[2] escopo (prot=.T. significa PROTECTED):
+    GerarGrafico              ex=.T. prot=.F.
+    MostrarGrafico            ex=.T. prot=.F.
+    ObterComparativoDoPai     ex=.T. prot=.F.
+    OcultarAguardeDoPai       ex=.T. prot=.F.
+    AplicarFormatoGrafico     ex=.T. prot=.T.
+    AplicarEixosColuna        ex=.T. prot=.T.
+    AplicarRotulosPercentuais ex=.T. prot=.T.
+    AplicarAreaPizza          ex=.T. prot=.T.
+    AnexarGraficoAoCursor     ex=.T. prot=.T.
+[3] BO.this_nComparativo = 1  (esperado 1)
+[4] TotalMeses=2  TotalGrupos=2  DadosValidos=.T.  LEN(Dados)=88
+    SubTitulo1=[Faturamento por Loja]  SubTitulo2=[01/2025 a 02/2026]
+    MATRIZ (TAB->| , CRLF->/):
+    |Janeiro|Fevereiro/LOJA A2025|      1000|      2000/LOJA A2026|      1500|      2400/
+[5] percentuais cursor=cursor_4c_Percentuais  usado=.T.  linhas=4
+    ObterPercentual (1,1)=10  (1,2)=20  (2,1)=50  (2,2)=20  (9,9)=0
+    ObterPercentual prot=.F.
+[6] cursor grafico=cursor_4c_Grafico  usado=.T.  RECCOUNT=1  VIVOS=0
+[7] this_lGraficoGerado=.F.  this_lGraficoPronto=.F.
+    FalhaGrafico=[OLE error code 0x800401f3: Cadeia de caracteres de classe inválida.]
+    OLE.ControlSource=[]
+    LockScreen=.F.  (tem de ser .F.)
+[8] Pai.Aguarde.Visible=.F.  (tem de ser .F.)
+[9] sem pai/sem cursores -> VARTYPE=O  Comparativo=0  GraficoPronto=.F.  LockScreen=.F.
+=== FIM ===

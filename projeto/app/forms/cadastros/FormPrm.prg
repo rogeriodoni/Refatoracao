@@ -204,7 +204,9 @@ DEFINE CLASS FormPrm AS FormBase
             .Width       = 390
             .Height      = 85
             .BackColor   = RGB(53, 53, 53)
-            .BackStyle   = 1
+            *-- TRANSPARENTE (Erro312): container opaco pinta um anel em volta dos
+            *-- botoes, por cima da faixa do cabecalho. Canonico: FormCor.
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
 
@@ -217,7 +219,6 @@ DEFINE CLASS FormPrm AS FormBase
                 .Left = 5
                 .Width           = 75
                 .Height          = 75
-                .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
                 .FontName        = "Tahoma"
                 .FontSize        = 8

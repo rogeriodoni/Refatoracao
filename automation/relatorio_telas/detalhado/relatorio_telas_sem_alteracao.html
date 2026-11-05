@@ -1,0 +1,453 @@
+<title>Telas Sem Alteração</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root {
+  --paper:#edeeea; --panel:#ffffff; --panel-2:#f6f7f4;
+  --ink:#1b1d19; --fg:#242821; --muted:#636a5c; --faint:#8d9386;
+  --line:#d6d8d0; --line-soft:#e6e8e2;
+  --quiet:#8d9386; --alerta:#9a5f12; --recente:#5c7a86; --meses:#9a5f12;
+  --ghost:#cbcec5;
+  --sans:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --serif:"IBM Plex Serif",Georgia,serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#14150f; --panel:#1c1e17; --panel-2:#22241c;
+    --ink:#e9eae2; --fg:#dfe1d7; --muted:#9ba292; --faint:#767c6c;
+    --line:#2f3228; --line-soft:#272a21;
+    --quiet:#9ba292; --alerta:#d9a455; --recente:#8fb3c0; --meses:#d9a455;
+    --ghost:#383c30;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#14150f; --panel:#1c1e17; --panel-2:#22241c;
+  --ink:#e9eae2; --fg:#dfe1d7; --muted:#9ba292; --faint:#767c6c;
+  --line:#2f3228; --line-soft:#272a21;
+  --quiet:#9ba292; --alerta:#d9a455; --recente:#8fb3c0; --meses:#d9a455;
+  --ghost:#383c30;
+}
+* { box-sizing:border-box; }
+body { background:var(--paper); color:var(--fg); font-family:var(--sans); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:1180px; margin-inline:auto; padding:34px 22px 72px; }
+
+.head { border-bottom:2px solid var(--ink); padding-bottom:18px; }
+.eyebrow { font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 10px; }
+h1 { font-family:var(--serif); font-weight:600; font-size:clamp(26px,3.4vw,38px); line-height:1.1; margin:0 0 12px; color:var(--ink); text-wrap:balance; letter-spacing:-.01em; }
+.lede { max-width:68ch; margin:0; color:var(--muted); font-size:14.5px; }
+.lede b { color:var(--fg); font-weight:600; }
+.meta { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:16px; font-family:var(--mono); font-size:11px; color:var(--faint); }
+.meta span::before { content:"› "; color:var(--line); }
+
+.kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-top:none; }
+.kpi > div { background:var(--panel); padding:18px; display:flex; flex-direction:column; gap:3px; }
+.kpi .n { font-family:var(--serif); font-size:34px; font-weight:600; line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.kpi .k { font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); font-weight:500; }
+.kpi .s { font-size:12px; color:var(--faint); font-family:var(--mono); }
+
+section { margin-top:40px; }
+h2 { font-size:12px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin:0 0 4px; font-family:var(--mono); }
+.sub { margin:0 0 18px; color:var(--faint); font-size:13px; max-width:76ch; }
+.sub b { color:var(--muted); font-weight:600; }
+.band { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:32px; align-items:start; }
+@media (max-width:880px) { .band { grid-template-columns:minmax(0,1fr); gap:36px; } }
+
+/* cohort */
+.cohort { display:flex; flex-direction:column; gap:3px; }
+.co { display:grid; grid-template-columns:96px minmax(0,1fr) 34px; align-items:center; gap:12px; }
+.co .cd { font-family:var(--mono); font-size:11.5px; color:var(--fg); font-variant-numeric:tabular-nums; }
+.co .ct { height:17px; background:var(--panel); border:1px solid var(--line-soft); }
+.co .ct i { display:block; height:100%; }
+.co .cv { font-family:var(--mono); font-size:12px; text-align:right; font-variant-numeric:tabular-nums; color:var(--fg); }
+.legend { display:flex; gap:18px; margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--muted); }
+.legend span { display:flex; align-items:center; gap:6px; }
+.legend i { width:10px; height:10px; display:block; }
+
+/* tipos */
+.tipos { display:flex; flex-direction:column; gap:15px; }
+.tipo-row .tl { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+.tipo-row .tn { font-size:13.5px; font-weight:600; color:var(--fg); }
+.tipo-row .tv { font-family:var(--mono); font-size:11.5px; color:var(--faint); font-variant-numeric:tabular-nums; }
+.stack { display:flex; height:24px; background:var(--ghost); border:1px solid var(--line-soft); }
+.stack i { display:block; height:100%; position:relative; }
+.stack i span { position:absolute; inset:0; display:grid; place-items:center; font-family:var(--mono); font-size:10.5px; color:var(--panel); font-weight:600; }
+
+/* destaque das 4 antigas */
+.focus { border-left:3px solid var(--alerta); background:var(--panel); padding:2px 0 2px 0; }
+.focus table { width:100%; border-collapse:collapse; }
+.focus td { padding:11px 16px; border-bottom:1px solid var(--line-soft); vertical-align:baseline; }
+.focus tr:last-child td { border-bottom:none; }
+.focus .fn { font-family:var(--mono); font-size:12px; color:var(--ink); white-space:nowrap; }
+.focus .ft { font-size:13.5px; color:var(--fg); }
+.focus .fm { font-family:var(--mono); font-size:11px; color:var(--faint); white-space:nowrap; text-align:right; }
+
+/* filtros + tabela */
+.tools { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 14px; background:var(--panel); border:1px solid var(--line); }
+.tools input[type=search] { font-family:var(--mono); font-size:12.5px; padding:7px 10px; border:1px solid var(--line); background:var(--panel-2); color:var(--fg); min-width:200px; flex:1 1 200px; }
+.tools input[type=search]:focus-visible { outline:2px solid var(--recente); outline-offset:-1px; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; }
+.chip { font-family:var(--mono); font-size:11px; padding:5px 9px; border:1px solid var(--line); background:var(--panel-2); color:var(--muted); cursor:pointer; }
+.chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+.chip:focus-visible { outline:2px solid var(--recente); outline-offset:1px; }
+.count { font-family:var(--mono); font-size:11.5px; color:var(--faint); margin-left:auto; white-space:nowrap; }
+.tablebox { border:1px solid var(--line); border-top:none; background:var(--panel); max-height:min(70vh,720px); overflow:auto; }
+table.main { width:100%; border-collapse:collapse; font-size:12.5px; }
+table.main thead th { position:sticky; top:0; z-index:2; background:var(--panel-2); border-bottom:1px solid var(--line); text-align:left; padding:9px 12px; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600; white-space:nowrap; cursor:pointer; user-select:none; }
+table.main thead th:hover { color:var(--fg); }
+table.main thead th[aria-sort] { color:var(--ink); }
+table.main thead th[aria-sort]::after { content:" ▲"; font-size:8px; }
+table.main thead th[aria-sort="descending"]::after { content:" ▼"; }
+table.main tbody td { padding:8px 12px; border-bottom:1px solid var(--line-soft); }
+table.main tbody tr:hover td { background:var(--panel-2); }
+td.f { font-family:var(--mono); font-size:11.5px; color:var(--ink); white-space:nowrap; }
+td.t { color:var(--fg); }
+td.d { font-family:var(--mono); font-size:11px; color:var(--faint); white-space:nowrap; }
+td.num { font-family:var(--mono); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--fg); }
+.dash { color:var(--ghost); }
+.flag { display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.05em; padding:2px 5px; border:1px solid var(--alerta); color:var(--alerta); margin-left:7px; }
+
+.method { margin-top:44px; border-top:1px solid var(--line); padding-top:22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:26px; }
+.method h3 { font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 7px; font-weight:600; }
+.method p, .method li { font-size:12.5px; color:var(--muted); margin:0 0 7px; max-width:58ch; }
+.method code { font-family:var(--mono); font-size:11.5px; background:var(--panel); border:1px solid var(--line-soft); padding:1px 4px; color:var(--fg); }
+.method ul { margin:0; padding-left:16px; }
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="head">
+    <p class="eyebrow">Migração VFP9 → arquitetura em camadas · auditoria de histórico</p>
+    <h1>Telas sem alteração</h1>
+    <p class="lede">De <b>523</b> telas migradas, <b>93</b> não tiveram uma única linha mudada desde o commit que as migrou — nem no form, nem no BO: nem código, nem layout, nem comentário. Esta é a lista completa, com o que o histórico diz sobre o motivo.</p>
+    <p class="meta">
+      <span>Apurado em 05/11/2026</span>
+      <span>HEAD e484a3cdf · 254 commits</span>
+      <span>projeto/app/forms + projeto/app/classes</span>
+      <span>diff ignorando CRLF e espaços</span>
+    </p>
+  </header>
+
+  <div class="kpi" id="kpi"></div>
+
+  <section>
+    <h2>Por que estão intactas</h2>
+    <p class="sub">A homologação do sistema caminha em ordem alfabética e parou no <b>M</b> (FormMPD, Erro289, em 29/10). As telas migradas depois desse ponto ainda não foram abertas por ninguém — <b>intacta aqui significa sobretudo não testada</b>, não sem defeito. As quatro de julho são a exceção que importa.</p>
+    <div class="band">
+      <div>
+        <h2 style="font-size:11px">Commit de migração</h2>
+        <p class="sub">Cada barra é um commit. 65 das 93 vêm dos três lotes mais recentes.</p>
+        <div class="cohort" id="cohort"></div>
+        <div class="legend">
+          <span><i style="background:var(--recente)"></i> migrada de 20/10 em diante</span>
+          <span><i style="background:var(--meses)"></i> migrada há mais tempo</span>
+        </div>
+      </div>
+      <div>
+        <h2 style="font-size:11px">Fatia intacta de cada tipo</h2>
+        <p class="sub">Operacionais são o grosso: o lote recente é quase todo desse tipo.</p>
+        <div class="tipos" id="tipos"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>As quatro que merecem atenção</h2>
+    <p class="sub">Migradas em julho e intocadas desde então. Tiveram quatro meses para dar problema e não deram — ou nunca foram abertas. São as primeiras que vale conferir contra o legado.</p>
+    <div class="focus" id="focus"></div>
+  </section>
+
+  <section>
+    <h2>Todas as 93</h2>
+    <p class="sub">Linhas do .prg é o tamanho do arquivo migrado hoje — serve para dimensionar o esforço de conferir cada uma. Tela em branco significa que o form não declara <code>Caption</code> alcançável.</p>
+    <div class="tools">
+      <input type="search" id="q" placeholder="buscar tela ou arquivo" aria-label="Buscar">
+      <div class="chips" id="chipTipo"></div>
+      <div class="chips" id="chipLote"></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="tablebox">
+      <table class="main">
+        <thead><tr id="hrow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="method">
+    <div>
+      <h3>Como foi medido</h3>
+      <p>Para cada arquivo de form, o primeiro commit em que ele aparece define a versão migrada — nos casos de migração multi-fase, o último <code>feat(task…)</code> dele. Diff dessa versão contra o HEAD com <code>--ignore-cr-at-eol</code>, no form <em>e</em> no <code>*BO.prg</code> da tela.</p>
+      <p>Intacta = zero linhas de diferença nos dois arquivos. Rodado também com <code>-w --ignore-blank-lines</code>: o total não se move.</p>
+    </div>
+    <div>
+      <h3>O que ficou fora do universo</h3>
+      <p>O git rastreia 531 arquivos em <code>forms\</code>. Oito não são telas e sim harness de teste — <code>TesteFormProduto</code>, <code>TesteFormCargo</code>, <code>TesteFormAcessoGrupo</code>, <code>TesteFormsigregli</code>, <code>TesteFormProdutoDebug</code>, <code>TestMinimal</code>, <code>TestUltraMinimal</code>, <code>RunnerFormProduto</code>. Nenhum deles foi alterado, então todos cairiam nesta lista; estão excluídos. Daí 523 telas, 430 alteradas e 93 intactas.</p>
+    </div>
+    <div>
+      <h3>Limites conhecidos</h3>
+      <ul>
+        <li><code>FormSetor</code> consta aqui, mas é a mesma tela do <code>FormSET</code>, que foi renomeada. Como a medição é por caminho de arquivo, o nome novo nasceu em 02/09 e o <code>SETBO</code> alterado ficou atribuído ao nome antigo. Conte 92 telas distintas, se preferir o rigor.</li>
+        <li>6 BOs não casam com form nenhum pelo nome: <code>ccp</code>, <code>fer</code>, <code>for</code>, <code>planocontas</code>, <code>sigmvcom</code>, <code>sigrebct</code>. Se algum pertence a uma tela desta lista, ela pode ter mudado de comportamento sem aparecer aqui.</li>
+        <li>Telas cuja linha de base é o commit inicial (08/07/2026) herdam o marco zero do git como data de migração. Alteração anterior a isso é invisível.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const INTACTAS =
+[
+["Formsigmvitn","Caixa","operacionais","2026-09-25",7699],
+["Formsigopcgv","Pesquisa Global de Vendas","operacionais","2026-10-27",6300],
+["FormSIGOPCGF","Consulta Global Financeira","operacionais","2026-10-27",5923],
+["Formsigmvits","Caixa","operacionais","2026-09-25",5890],
+["FormSigOpDmp","Cadastro de Demonstrativos de Balanço","cadastros","2026-11-04",4218],
+["FormSigOpChi","Histórico de Cheques","operacionais","2026-10-27",4114],
+["Formsigopcgc","Consulta Genérica de Compras","operacionais","2026-10-27",3822],
+["Formsigopdtf","Sitef - Cartão de Débito","operacionais","2026-11-04",3699],
+["Formsigopcgb","Pesquisa Global de Codigo de Barras","operacionais","2026-10-27",3027],
+["FormSigOpDes","Seleção de Descontos","operacionais","2026-11-04",2785],
+["Formsigopacc","Formsigopacc","operacionais","2026-10-20",2680],
+["FormSIGMVMVT","Acompanhamento Operacional","operacionais","2026-09-25",2578],
+["Formsigopets","Impressão de Etiquetas de Produto","operacionais","2026-11-04",2413],
+["FormSigOpDpe","Tabela de Depreciação","operacionais","2026-11-04",2317],
+["FormSigOpCrd","Geração de Certificado de Crédito","operacionais","2026-11-04",2317],
+["FormSIGOPCPE","Porta de Comunicação","operacionais","2026-11-04",2305],
+["FormSigOpCot","Alteração de Câmbio","operacionais","2026-11-04",2139],
+["FormSigOpCtf","Cancelamento de SiTef","operacionais","2026-11-04",2137],
+["FormSigOpEnt","Alteração de Data de Entrega","operacionais","2026-11-04",2133],
+["FormSigOpCbl","Configuração de Boletos Bancários","operacionais","2026-10-20",2052],
+["Formsigopclg","Consulta do Log","operacionais","2026-11-04",2032],
+["FormSigOpCfl","Consulta de FollowUp de Cheques","operacionais","2026-10-27",1979],
+["FormSigOpCpr","FormSigOpCpr","operacionais","2026-11-04",1853],
+["FormSigOpCpo","FormSigOpCpo","operacionais","2026-11-04",1821],
+["FormSigOpCgr","Pesquisa Global de Rastreabilidade","operacionais","2026-10-27",1804],
+["FormSigOpEtq","FormSigOpEtq","operacionais","2026-11-04",1753],
+["FormSIGOPCFE","Pesquisa de Saldos por Funcionário","operacionais","2026-10-27",1718],
+["FormSigOpEnc","Encerramento de Contas","operacionais","2026-11-04",1708],
+["Formuni","Cadastro de Unidades","cadastros","2026-09-23",1706],
+["FormSigOpCop","FormSigOpCop","operacionais","2026-11-04",1706],
+["Formsigopcim","Formsigopcim","operacionais","2026-11-04",1695],
+["FormSigMvSbn","Subníveis","operacionais","2026-09-25",1688],
+["FormSIGOPCOR","FormSIGOPCOR","operacionais","2026-11-04",1687],
+["FormSigOpClp","FormSigOpClp","operacionais","2026-11-04",1538],
+["FormVis","Cadastro de Visitas","cadastros","2026-09-23",1534],
+["FormTpc","Cadastro de Tipos de Composição","cadastros","2026-09-10",1486],
+["FormSetor","Cadastro de Setores","cadastros","2026-09-25",1475],
+["FormSIGOPDVM","Diferenças Vendas x Mapa Resumo","operacionais","2026-11-04",1456],
+["FormSigOpAut","Autenticação","operacionais","2026-10-20",1448],
+["FormSigOpCts","FormSigOpCts","operacionais","2026-11-04",1442],
+["FormSigOpDoc","Relação de Arquivos e Documentos","operacionais","2026-11-04",1431],
+["Formsigopcks","Formsigopcks","operacionais","2026-11-04",1411],
+["FormSigOpCoc","Carta de Operações de Cheques","operacionais","2026-11-04",1400],
+["FormTPR","Subtipos de Transportes","cadastros","2026-09-23",1381],
+["FormSigOpDet","Seleção de Detalhes","operacionais","2026-11-04",1380],
+["FormSIGOPCHR","Relação de Cheques","relatorios","2026-10-27",1360],
+["FormSigOpChb","Procurar","operacionais","2026-10-27",1308],
+["FormSigOpEmb","Quantidade de embalagens","operacionais","2026-11-04",1299],
+["FormSigOpCcj","Procura de Contas por Cônjuge","operacionais","2026-10-20",1280],
+["FormSigOpCfa","Pesquisa de Falhas por Fase","operacionais","2026-10-20",1270],
+["FormSigMvAte","Registra os atendimentos dos vendedores","operacionais","2026-09-25",1257],
+["FormSIGOPCCO","FormSIGOPCCO","operacionais","2026-10-20",1168],
+["FormSIGOPCAU","Consulta de Acessos de Usuário","operacionais","2026-10-20",1157],
+["FormTot","Cadastro de Tipos de Operações de Produção","cadastros","2026-09-10",1149],
+["Formsigopbus","Formsigopbus","operacionais","2026-10-20",1143],
+["Formsigopden","Dados de Entrega","operacionais","2026-11-04",1091],
+["FormSigOpCfp","Cfop's p/: ","operacionais","2026-10-27",1066],
+["FormSigMvTta","Impostos Gerados na Movimentação","operacionais","2026-09-30",1054],
+["FormSigOpAtu","Operação para Atualização","operacionais","2026-10-20",1050],
+["FormSigOpCac","Consulta de Acesso a Programas","operacionais","2026-10-20",1050],
+["FormSigPrPpc","Produtos Por Conta","operacionais","2026-07-21",1045],
+["FormTPD","Cadastro de Tipos de Documentos","cadastros","2026-09-10",1037],
+["FormSigOpCtd","FormSigOpCtd","operacionais","2026-11-04",1026],
+["FormSigOpC44","Geração do Arquivo da CAT 44/2008","operacionais","2026-10-20",993],
+["FormTpa","Cadastro de Tipo de Acabamento","cadastros","2026-09-10",990],
+["FormSigOpCrp","Procura","operacionais","2026-11-04",962],
+["FormSigMvChv","Chaves","operacionais","2026-09-25",950],
+["Formsigopecm","Geração de Arquivo de Exportação Para e-Commerce","operacionais","2026-11-04",949],
+["Formsigopagr","Seleção de Localização","operacionais","2026-10-20",938],
+["FormTPG","Tipos de Transporte Automático","operacionais","2026-09-23",925],
+["FormSigOpBlo","Bloqueio","operacionais","2026-10-20",918],
+["FormSigOpBcb","FormSigOpBcb","operacionais","2026-10-20",906],
+["FormSIGMVDOC","Emissão do Documento","relatorios","2026-09-25",896],
+["FormSigOpArq","Geração de Arquivos","operacionais","2026-10-20",892],
+["FormSigOpChp","Prorrogar","operacionais","2026-10-27",888],
+["FormSigOpEmp","Empenho","operacionais","2026-11-04",882],
+["FormSIGMVCTH","Histórico de Cotações","operacionais","2026-09-25",853],
+["FormSIGPRPPP","Pesquisa de Produtos por Conta","operacionais","2026-07-21",830],
+["FormSIGMVTI2","Títulos Gerados","operacionais","2026-09-25",807],
+["FormSigReEtp","Impressão de Etiquetas de Operações","operacionais","2026-07-08",801],
+["FormSigOpAlC","Alteração de Cotação","operacionais","2026-10-20",765],
+["FormSigOpChc","Histórico da Carteira","operacionais","2026-10-27",728],
+["FormSIGOPBOL","FormSIGOPBOL","operacionais","2026-10-20",692],
+["FormSigOpCbx","Baixa de Cadastros","operacionais","2026-10-20",678],
+["FormSigOpCgl","FormSigOpCgl","operacionais","2026-10-27",667],
+["Formsigmvtit","Títulos Gerados - Movimentação : ","operacionais","2026-09-25",624],
+["Formsigmvpen","Pendentes","operacionais","2026-09-25",624],
+["FormSigMvMen","Mensagens","operacionais","2026-09-25",547],
+["FormSIGOPBIN","FormSIGOPBIN","operacionais","2026-10-20",498],
+["FormSigOpEtqDoc","FormSigOpEtqDoc","operacionais","2026-11-04",478],
+["FormSigPrScn","Liberação de Acesso ao Sistema","operacionais","2026-07-21",472],
+["FormSigMvExp","FormSigMvExp","operacionais","2026-09-25",367],
+["FormSigMvPdt","FormSigMvPdt","operacionais","2026-09-25",357]
+]
+;
+const TIPOS = [["cadastros","Cadastros",205],["operacionais","Operacionais",215],["relatorios","Relatórios",103]];
+const CORTE = "2026-10-20";
+const I={FORM:0,TELA:1,TIPO:2,DATA:3,LINHAS:4};
+
+const el = id => document.getElementById(id);
+const txt = (tag, cls, s) => { const n=document.createElement(tag); if(cls) n.className=cls; if(s!=null) n.textContent=s; return n; };
+const br = iso => iso.split("-").reverse().join("/");
+const recente = r => r[I.DATA] >= CORTE;
+
+/* ---------- indicadores ---------- */
+(function kpis(){
+  const op = INTACTAS.filter(r=>r[I.TIPO]==="operacionais").length;
+  const nov = INTACTAS.filter(recente).length;
+  const jul = INTACTAS.filter(r=>r[I.DATA] < "2026-08-01").length;
+  const tiles = [
+    {n:INTACTAS.length, k:"Telas intactas", s:"de 523 migradas", c:"var(--ink)"},
+    {n:op,  k:"Operacionais", s:Math.round(op/INTACTAS.length*100)+"% da lista", c:"var(--quiet)"},
+    {n:nov, k:"Do lote recente", s:"migradas de 20/10 em diante", c:"var(--recente)"},
+    {n:jul, k:"Migradas em julho", s:"intocadas há 4 meses", c:"var(--alerta)"}
+  ];
+  const box = el("kpi");
+  tiles.forEach(t=>{
+    const d = txt("div");
+    const num = txt("div","n", String(t.n)); num.style.color = t.c;
+    d.append(num, txt("div","k",t.k), txt("div","s",t.s));
+    box.append(d);
+  });
+})();
+
+/* ---------- barras por commit ---------- */
+(function cohort(){
+  const box = el("cohort");
+  const by = {};
+  INTACTAS.forEach(r=>{ by[r[I.DATA]] = (by[r[I.DATA]]||0)+1; });
+  const keys = Object.keys(by).sort().reverse();
+  const max = Math.max(...keys.map(k=>by[k]));
+  keys.forEach(k=>{
+    const row = txt("div","co");
+    row.append(txt("div","cd", br(k)));
+    const track = txt("div","ct"); const fill = txt("i");
+    fill.style.width = (by[k]/max*100)+"%";
+    fill.style.background = (k >= CORTE) ? "var(--recente)" : "var(--meses)";
+    track.append(fill);
+    row.append(track, txt("div","cv", String(by[k])));
+    box.append(row);
+  });
+})();
+
+/* ---------- barras por tipo ---------- */
+(function tipos(){
+  const box = el("tipos");
+  TIPOS.forEach(([key,label,total])=>{
+    const n = INTACTAS.filter(r=>r[I.TIPO]===key).length;
+    const row = txt("div","tipo-row");
+    const tl = txt("div","tl");
+    tl.append(txt("span","tn",label), txt("span","tv", n+" de "+total+" intactas"));
+    const st = txt("div","stack");
+    if(n){
+      const i = txt("i"); i.style.width=(n/total*100)+"%"; i.style.background="var(--quiet)";
+      i.title = n+" intactas de "+total;
+      if(n/total > .09) i.append(txt("span",null,String(n)));
+      st.append(i);
+    }
+    row.append(tl, st); box.append(row);
+  });
+})();
+
+/* ---------- as quatro de julho ---------- */
+(function focus(){
+  const box = el("focus");
+  const t = document.createElement("table");
+  const tb = document.createElement("tbody");
+  INTACTAS.filter(r=>r[I.DATA] < "2026-08-01")
+    .sort((a,b)=>b[I.LINHAS]-a[I.LINHAS])
+    .forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.append(txt("td","fn", r[I.FORM]));
+      tr.append(txt("td","ft", r[I.TELA] || "—"));
+      tr.append(txt("td","fm", "migrada " + br(r[I.DATA]) + " · " + r[I.LINHAS].toLocaleString("pt-BR") + " linhas"));
+      tb.append(tr);
+    });
+  t.append(tb); box.append(t);
+})();
+
+/* ---------- filtros ---------- */
+const st = { q:"", tipo:new Set(), lote:new Set(), sort:I.DATA, dir:-1 };
+function mkChips(boxId, items, set){
+  const box = el(boxId);
+  items.forEach(([v,label])=>{
+    const b = txt("button","chip",label); b.type="button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", ()=>{
+      const on = b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", on?"false":"true");
+      if(on) set.delete(v); else set.add(v);
+      render();
+    });
+    box.append(b);
+  });
+}
+mkChips("chipTipo", TIPOS.map(t=>[t[0], t[1].toLowerCase()]), st.tipo);
+mkChips("chipLote", [["novo","lote recente"],["antigo","migrada há meses"]], st.lote);
+el("q").addEventListener("input", e=>{ st.q = e.target.value.toLowerCase().trim(); render(); });
+
+/* ---------- tabela ---------- */
+const COLS = [["Arquivo",I.FORM],["Tela",I.TELA],["Tipo",I.TIPO],["Migrada em",I.DATA],["Linhas do .prg",I.LINHAS]];
+(function header(){
+  const tr = el("hrow");
+  COLS.forEach(c=>{
+    const th = txt("th", null, c[0]);
+    th.addEventListener("click", ()=>{
+      if(st.sort===c[1]) st.dir = -st.dir;
+      else { st.sort=c[1]; st.dir = (c[1]===I.LINHAS || c[1]===I.DATA) ? -1 : 1; }
+      render();
+    });
+    tr.append(th);
+  });
+})();
+
+function render(){
+  const rows = INTACTAS.filter(r=>{
+    if(st.tipo.size && !st.tipo.has(r[I.TIPO])) return false;
+    if(st.lote.size){
+      const k = recente(r) ? "novo" : "antigo";
+      if(!st.lote.has(k)) return false;
+    }
+    if(st.q && !(r[I.FORM]+" "+r[I.TELA]+" "+r[I.TIPO]).toLowerCase().includes(st.q)) return false;
+    return true;
+  }).sort((a,b)=>{
+    const x=a[st.sort], y=b[st.sort];
+    const c = (typeof x==="number") ? x-y : String(x).localeCompare(String(y),"pt");
+    return c*st.dir;
+  });
+  document.querySelectorAll("#hrow th").forEach((th,i)=>{
+    if(COLS[i][1]===st.sort) th.setAttribute("aria-sort", st.dir<0?"descending":"ascending");
+    else th.removeAttribute("aria-sort");
+  });
+  const tb = el("tbody"); tb.textContent="";
+  const frag = document.createDocumentFragment();
+  rows.forEach(r=>{
+    const tr = document.createElement("tr");
+    tr.append(txt("td","f", r[I.FORM]));
+    const td = txt("td","t", r[I.TELA] || "—");
+    if(!r[I.TELA]) td.classList.add("dash");
+    tr.append(td);
+    tr.append(txt("td","d", r[I.TIPO]));
+    const tdd = txt("td","d", br(r[I.DATA]));
+    if(!recente(r)) tdd.append(txt("span","flag","há meses"));
+    tr.append(tdd);
+    tr.append(txt("td","num", r[I.LINHAS].toLocaleString("pt-BR")));
+    frag.append(tr);
+  });
+  tb.append(frag);
+  el("count").textContent = rows.length===INTACTAS.length
+    ? INTACTAS.length+" telas"
+    : rows.length+" de "+INTACTAS.length+" telas";
+}
+render();
+</script>

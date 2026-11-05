@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Antes de editar qualquer `.prg`, confirmei na mem├│ria algo que j├í tinha sido medido hoje mesmo, na mesma task: esse erro **n├úo ├® um bug de c├│digo**.
+
+O log mostra:
+```
+Codigo: 1526
+Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® o erro de pr├®-flight de conex├úo SQL do `TestFormWrapper.prg`, **antes** de qualquer l├│gica do `FormSigOpGco`/`SigOpGcoBO` rodar. Tenho uma mem├│ria de projeto gravada hoje (2026-11-05), na mesma task739, exatamente para este mesmo form:
+
+> "Reconfirmado no mesmo dia 2026-11-05 (task739, mesma etapa 06_testForm, agora em FormSigOpGco): `Test-NetConnection -Port 1433` ainda devolve `False`. Mesmo erro 1526 DBNETLIB, mesma causa (rede)... **NAO editar FormSigOpGco.prg/SigOpGcoBO.prg para "corrigir" isto.**"
+
+Ou seja, essa mesma tentativa j├í foi diagnosticada e a instru├º├úo expl├¡cita foi n├úo tocar nesses arquivos. A m├íquina do SQL Server (192.168.200.10) fica intermitente entre alcan├º├ível/inalcan├º├ível dependendo do dia ÔÇö ├® rota de rede da m├íquina do pipeline, n├úo c├│digo.
+
+Disparei um `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` para reconfirmar o estado atual (rodando em background, j├í passou do timeout de 30s sem resposta, o que por si ├® consistente com rota indispon├¡vel). Vou aguardar o resultado antes de concluir, mas n├úo vou editar `FormSigOpGco.prg` ou `SigOpGcoBO.prg` ÔÇö alterar c├│digo de aplica├º├úo n├úo resolve uma falha de infraestrutura de rede, e faria isso na dire├º├úo errada (regra do projeto: nunca "corrigir" .prg por causa de erro 1526).

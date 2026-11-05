@@ -1,0 +1,29 @@
+CK00 inicio
+CK01 config.prg OK (SEM ConfigurarAmbiente)
+CK02 SET PROCEDURE OK
+CK03 CREATEOBJECT VARTYPE=O
+Caption=[Gera Arquivo] W=799 H=300
+== FORM ==
+cnt_4c_Sombra   = 1
+cnt_4c_TXT      = 2
+cmd_4c_Cancela  = 3
+cmd_4c_Processa = 4
+chk_4c_ChkXml   = 5
+cnt_4c_Xml      = 6
+== cnt_4c_TXT ==
+lbl_4c_LblResults = 1
+lbl_4c_Label1     = 2
+txt_4c_ArqTXT     = 3  TabStop=.F.  ReadOnly=.T.  Tip=[Arquivo XML a Ser Importado]
+cmd_4c_BtnGetArqO = 4  Pic=[geral_pasta_16.jpg]  PicPos=13  Tip=[Seleciona o Arquivo Que Será Processado]
+chk_4c_ChkImagens = 5  W=150  H=17  Bold=.T.
+== cnt_4c_Xml ==
+txt_4c_Arquivo      = 1  H=23  Fmt=[K!]  MaxLen=20
+cmd_4c_BtnDirs      = 2  Pic=[geral_pasta_26.jpg]  PicPos=13  Font=[Comic Sans MS]  FG=5921370  Tip=[Carregar o Diretório / Pasta de Gravação do Arquivo]
+txt_4c_Dirs         = 3  TabStop=.F.  Tip=[Diretório / Pasta de gravação do Arquivo]
+lbl_4c_LabelArquivo = 4  Bold=.F.
+== visibilidade dos paineis (TXT visivel, XML oculto) ==
+cnt_4c_TXT.Visible = .T.   cnt_4c_Xml.Visible = .F.
+filhos do XML visiveis? txt_4c_Arquivo=.T. cmd_4c_BtnDirs=.T.
+== metodo PUBLIC? (0=sim) ==
+ConfigurarOrdemTabulacao protected = .F.
+CK99 FIM OK

@@ -1,0 +1,31 @@
+CK00 inicio
+CK01 SET PROCEDURE OK
+CK02 CREATEOBJECT VARTYPE=O
+== 1) estado inicial (Init legado, via CarregarLista) ==
+xml=0 img=1 visTXT=.T. visXML=.F. arqTXT=[] dirs=[] cod=[]
+== 2) CarregarLista de FORA da classe, apos sujar a tela ==
+  antes : xml=1 img=0 visTXT=.T. visXML=.F. arqTXT=[C:\LIXO\A.TXT] dirs=[C:\LIXO\B.XML] cod=[ZZZ]
+  retorno CarregarLista = .T.
+  depois: xml=0 img=1 visTXT=.T. visXML=.F. arqTXT=[] dirs=[] cod=[]
+== 3) ChkXmlClick (toggle do legado, pelos dois funis) ==
+  marcado   : xml=1 img=1 visTXT=.F. visXML=.T. arqTXT=[] dirs=[] cod=[]
+  desmarcado: xml=0 img=1 visTXT=.T. visXML=.F. arqTXT=[] dirs=[] cod=[]
+== 4) FormParaBO (tela -> BO, os CINCO controles) ==
+  retorno FormParaBO = .T.
+  BO: GeraXml=.T. Imagens=.F. ArqTxt=[C:\SAIDA\PROD.TXT] ArqXml=[C:\SAIDA\PROD.XML] Cod=[ABC123]
+== 5) BOParaForm (BO -> tela; painel por consequencia) ==
+  tela zerada: xml=0 img=1 visTXT=.T. visXML=.F. arqTXT=[] dirs=[] cod=[]
+  retorno BOParaForm = .T.
+  tela       : xml=1 img=0 visTXT=.F. visXML=.T. arqTXT=[C:\SAIDA\PROD.TXT] dirs=[C:\SAIDA\PROD.XML] cod=[ABC123]
+== 6) LimparCampos (zera tela E BO) ==
+  retorno LimparCampos = .T.
+  tela: xml=1 img=0 visTXT=.F. visXML=.T. arqTXT=[] dirs=[] cod=[]
+  BO  : GeraXml=.T. Imagens=.F. ArqTxt=[] ArqXml=[] Cod=[]
+== 7) escopo MEDIDO (atributo 2 = Protected) ==
+  FormParaBO           prot=.T.
+  BOParaForm           prot=.T.
+  LimparCampos         prot=.T.
+  CarregarLista        prot=.F.
+  AplicarPainelPorModo prot=.F.
+  BtnCancelarClick     prot=.F.  existe=.T.
+CK99 FIM OK

@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpFpg.prg` (1702 ÔåÆ 2188 linhas).
+
+## O que faltava
+
+A tentativa anterior entregou os paineis flutuantes (campos restantes) mas **adiou o lookup para a Fase 7** ÔÇö e o gate da Fase 6, no ramo *layout flat* (OPERACIONAL sem PageFrame), exige `BINDEVENT` **mais** um m├®todo `AbrirLookup*`/`AbrirBusca*` realmente implementado. O arquivo tinha **zero** `BINDEVENT`.
+
+## Lookup implementado (Get_fpg ÔÇö "Cond. Pagto")
+
+├ë o ├║nico campo com busca no dump (`fwBuscaSel` no `Valid`). Transcrito do legado, com **dois universos distintos** que o dump usa de prop├│sito:
+
+| legado | novo | filtro |
+|---|---|---|
+| `csSigOpFp` (browse/`Seek`) | `ObterFiltroFormasValidas` + `ExisteFormaPagamentoValida` | `situas IN ('A',' ','R')` + ├¡ndice **filtrado** `For !IsEmpty(grupods) .and. !IsEmpty(contads)` |
+| `crSigOpFp` (ler o escolhido) | `AplicarFormaPagamento` | **nenhum** ÔÇö por isso n├úo repete o filtro do browse |
+
+`crSigOpFp` ├® cursor global Fortyus que n├úo existe na arquitetura nova, ent├úo ambos consultam `SigOpFp` direto. **N├úo** acrescentei filtro por `emps` (a coluna existe, mas o legado n├úo filtra ali ÔÇö inventar esconderia formas v├ílidas).
+
+M├®todos: `ConfigurarEventosLookup`, `TxtFpgKeyPress`, `TxtFpgLostFocus` (+`...Exec`), `AbrirLookupFpg`, `ObterFiltroFormasValidas`, `ExisteFormaPagamentoValida`, `AplicarFormaPagamento`, `LimparFormaPagamento`.
+
+Decis├Áes que valem registrar:
+
+- **`"LostFocus"`, n├úo `"KeyPress"` solto** (regra #47) ÔÇö o `KeyPress` est├í ligado tamb├®m, mas testa a tecla: ENTER confirma, F4/F5 ├® busca direta.
+- **Guarda de reentr├óncia** em wrapper fino + `...Exec()`, porque o corpo tem `RETURN` antecipado ÔÇö liberar a flag no fim do corpo a travaria ligada e mataria o lookup (regra #47). Nos irm├úos F4/F5, save/restore.
+- **`LASTKEY() = 9` aborta** ÔÇö no legado TAB desvia para navega├º├úo e **n├úo** abre o lookup; o `keyboard "{CTRL+TAB}"` era troca de p├ígina de PageFrame, que este di├ílogo n├úo tem.
+- **Leitura via `Mostrar()`/`cCodigoSelecionado`, n├úo pelo cursor** ÔÇö o form ├® `DataSession = 2` e o `FormBuscaAuxiliar` roda na datasession default, logo o cursor dele n├úo ├® vis├¡vel daqui; `Mostrar()` faz a leitura dentro da sess├úo do picker.
+- **`this_lAchouRegistro` antes do `Show()`** (regra #37) e o campo digitado s├│ ├® apagado no **cancelamento expl├¡cito** do browse (`Iif(Lastkey()==27,'','')` do legado) ÔÇö nunca por universo vazio ou erro de consulta (regra #50).
+
+## Verifica├º├úo
+
+| checagem | resultado |
+|---|---|
+| Compila├º├úo VFP9 (BO + Form) | `.fxp` gerado, **sem `.err`** |
+| Gate Fase 6 (simulado) | `temLayoutFlat = True` |
+| Completude (05d) | OK |
+| `ValidadorSQLSchema` | 683 tabelas, 2 statements, **nenhuma coluna inv├ílida** |
+| `VerificarFuncoesNaoDefinidas` | nenhuma chamada ├│rf├ú |
+| `VerificarPropriedadesInexistentes` | OK |
+| `VerificarLookupEmKeyPress` | form **n├úo** acusado (28 avisos pr├®-existentes em `Formsigopcgp`) |
+| Literais acentuados | zero byte n├úo-ASCII |
+
+Fica para a Fase 7, como o cabe├ºalho do arquivo agora declara: o bloco de cota├º├úo/c├ómbio do mesmo `Valid` (`Get_Cotacao`/`AlteraCotacao` + `fCarregarCambio`, que dependem de `crSigCdMoe`/`crUsuario`/`crSigCdCrg`), o c├ílculo de parcelas, a altern├óncia dos pain├®is (`MostraObs`/`mCartaoCred`), o leitor serial e os handlers Apaga/Ok/Cancela.

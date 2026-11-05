@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7 ÔÇö conclu├¡da
+
+### O entreg├ível nominal n├úo se aplica (e n├úo foi inventado)
+
+Os 4 nomes que a fase pede ÔÇö `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` ÔÇö s├úo conven├º├úo de form CRUD. O `SIGOPGAR` ├® um di├ílogo de gera├º├úo de arquivo e **n├úo tem superf├¡cie CRUD alguma**. Medido com as regexes exatas do gate (`case 7` do orquestrador):
+
+| evid├¬ncia de CRUD no dump | resultado |
+|---|---|
+| `frmcadastro` / `Grupo_Op` | ausentes |
+| `(btn\|cmd\|Command)(Incluir\|Alterar\|Visualizar)` com fronteira | 0 |
+| `pcEscolha` (qualquer forma) | 0 |
+| `X.verbo.Click` / `verbo.Click` solto | 0 |
+
+Logo `$legadoSemCrud = .T.` e o carve-out do gate vale: exige s├│ `nHandlers >= 2`, e o form tem **5**. Criar os 4 handlers violaria o PILAR 1 e a regra de completude.
+
+### Os 4 bot├Áes do legado j├í t├¬m handler ÔÇö e eu provei que funcionam
+
+N├úo bastava constatar que os m├®todos existem: handler sem `BINDEVENT` ├® c├│digo morto. Rodei o form no VFP9 (`automation\probe738f7.prg`):
+
+- **`AEVENTS`**: os 5 bindings est├úo vivos (1 cada), delegate `CHKXMLCLICK` confirmado.
+- **`ChkXmlClick`**: alterna os pain├®is e limpa os 3 campos ÔÇö fiel ao `chkXml.Valid` legado.
+- **`AtualizarProgresso`**: label e property atualizados (contrato com o BO, chamado de fora ÔåÆ PUBLIC, ok).
+- **`BtnProcessarClick`** com usu├írio desistindo: flag de reentr├óncia **liberada** apesar do `RETURN` antecipado, form **n├úo** fecha, 2┬¬ chamada funciona (sem deadlock) ÔÇö exatamente o `Return(.F.)` do legado.
+- **`BtnEncerrarClick`**: `VARTYPE` ÔåÆ `X`. `Release()` ├® correto aqui porque o di├ílogo n├úo devolve nada ao chamador (o legado usa o pai s├│ para acesso a banco).
+
+S├│ o di├ílogo de confirma├º├úo esperado foi capturado ÔÇö nenhum modal inesperado.
+
+### Um defeito real corrigido
+
+`sigopgarBO.prg` estava com **quebras LF puras** (653), contra a conven├º├úo do projeto: medi os 529 BOs e **522 s├úo CRLF** ÔÇö o arquivo era 1 dos 7 desviantes. Normalizei para CRLF com prova de que s├│ as quebras mudaram (delta exatamente +653 bytes, conte├║do id├¬ntico ignorando quebras, sem BOM, zero bytes >127). Recompilei e re-exercitei tudo depois: inalterado.
+
+### Verifica├º├úo
+
+- **COMPILE** limpo nos dois arquivos. Com **controle negativo** (`IF .T. THEN` + `ENDWITH` numa c├│pia) o check gerou `.ERR` nas duas linhas ÔÇö e o `.FXP` apareceu tamb├®m no arquivo quebrado, confirmando que `.FXP` sozinho n├úo prova nada.
+- **Completude**: zero TODO/FIXME/"n├úo implementado"/stub; zero procedure vazia.
+- **Contrato BOÔåöForm**: todas as 9 properties que o form l├¬ existem (`this_cMensagemErro` vem de `BusinessBase`); `GerarArquivo()` ├® PUBLIC (regra #51); zero `THIS.<m├®todo>()` inexistente.
+- **`chkImagens`**: confirmei que a li├º├úo do form irm├úo `SIGOPECM` foi aplicada certo ÔÇö o legado nunca l├¬ esse controle, e o BO mant├®m a property mas **n├úo** a usa na condi├º├úo, documentado nos dois pontos.
+- **4 auditorias de acervo** (m├®todo protegido, fun├º├Áes n├úo definidas, lookup em KeyPress, propriedades inexistentes): zero achados para este form.
+
+**Ponto de aten├º├úo sobre a pr├│pria verifica├º├úo**: a auditoria de propriedades inexistentes inicialmente *n├úo rodou* ÔÇö ela estourou com `$PSScriptRoot` vazio sob `-File` e devolveu "zero achados" por crash, n├úo por limpeza. Re-executei com `-Caminho`/`-TabelaPropriedades` expl├¡citos e a├¡ sim ela varreu de verdade (`OK - nenhuma atribuicao a propriedade inexistente`).
+
+Os dois desvios herdados do SCX documentados na Fase 6 (`cmd_4c_Cancela` terminando em 804 com `Form.Width = 799`, e `txt_4c_Arquivo` soterrado) seguem como est├úo ÔÇö s├úo consequ├¬ncia aritm├®tica de valores que o legado declara.

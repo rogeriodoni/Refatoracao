@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 9,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigOpFlu Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "Local lcWhere,ldIni,ldFin,lcEmp,lcTit,lcSub\n\nPrivate lcGru,ldDataI,ldDataF,lcCon\n\nldIni = ThisForm.GetDtInicial.Value\nldFin = ThisForm.GetDtFinal.Value\nlcGru = Padr(ThisForm.GetGrupo.Value, 10)\nlcCon = Padr(ThisForm.GetConta.Value, 10)\n\nlcEmp     = Alltrim(CrSigCdEmp.CEmps + ' - ' + CrSigCdEmp.Razas)\nlcTit     = Alltrim('Relatório de FollowUp de ' + Proper(lcGru))\nlcSub     = Alltrim('Período : ' + Dtoc(ldIni) + ' à ' + Dtoc(ldFin))\nllImpData = (ThisForm.ChkData.Value = 1)\n\nCreate Cursor CsCabec... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkData",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LParameters pDataSession, pGrupo, pConta\n\nPrivate pcCliente,pcConta,pcGrupo,pcEmp\n\npcCliente = pConta\npcGrupo   = pgrupo\npcConta   = pConta\npcEmp     = _Empr\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','SigOpFlu')\n\tIf .poDataMgr.pnIdconn < 1\n\t\tMessageBox('Impossível efetuar conexão com Servidor de Banco de Dados...',48,'CreateObject')\n\t\tReturn 0\n\tElse\n\t\t=DoDefault()\n\tEndIf\nEndWith\n\nIf ThisForm.poDataMgr.SqlExecute([Select CEmps,Razas From SigCdEmp Where CEmps = ?pcEmp ],'CrSigCdEmp'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Value = Date,Value   = Date,Enabled   = Empty,Enabled  = Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigOpFlu To Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If This.Value <> 3 && Se Não Clicou em Saída\n\tIf Empty(ThisForm.GetDtInicial.Value)\n\t\tMessageBox('Data Inicial Inválida !!!',48,'Campo Obrigatório')\n\t\tThisForm.GetDtInicial.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.GetDtFinal.Value)\n\t\tMessageBox('Data Final Inválida !!!',48,'Campo Obrigatório')\n\t\tThisForm.GetDtFinal.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf ThisForm.GetDtFinal.Value < ThisForm.GetDtInicial.Value\n\t\tMessageBox('Data Final não pode ser maior que a Inicial !!!',48,'Seleção Inválida')\n\t\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getDConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.GetGrupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.GetConta,ThisForm.GetDConta)\n\t\tMessagebox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.GetConta.Value = ''\n\t\tThisForm.GetConta.Refresh\n\t\tReturn(.F.)\n\tEndIf\nElse\n\tThisForm.GetConta.Value = ''\n\tThisForm.GetConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.GetConta,ThisForm.GetDConta)\n\t\tMessagebox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.GetDConta.Value = ''\n\t\tThisForm.GetDConta.Refresh\n\t\tReturn(.F.)\n\tEndIf\nElse\n\tThisForm.GetDConta.Value = ''\n\tThisForm.GetDConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getDGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !Empty(This.Value)\n\t=fAcessoContab(Usuar,'D',This.Value,ThisForm.GetGrupo,ThisForm.GetDGrupo)\nElse\n\tThisForm.GetGrupo.Value = ''\n\tThisForm.GetGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFLU.getGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !Empty(This.Value)\n\t=fAcessoContab(Usuar,'C',This.Value,ThisForm.GetGrupo,ThisForm.GetDGrupo)\nElse\n\tThisForm.GetDGrupo.Value = ''\n\tThisForm.GetDGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPFLU.Init",
+      "queryOriginal": "If ThisForm.poDataMgr.SqlExecute([Select CEmps,Razas From SigCdEmp Where CEmps = ?pcEmp ],'CrSigCdEmp'... [TRUNCADO]",
+      "tabelas": "SigCdEmp",
+      "colunas": "CEmps,Razas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

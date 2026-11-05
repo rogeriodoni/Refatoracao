@@ -166,7 +166,9 @@ DEFINE CLASS FormLin AS FormBase
                 .Left        = 542
                 .Width       = 390
                 .Height      = 85
-                .BackStyle   = 1
+                *-- TRANSPARENTE (Erro312): container opaco pinta um anel em volta dos
+                *-- botoes, por cima da faixa do cabecalho. Canonico: FormCor.
+                .BackStyle   = 0
                 .BackColor   = RGB(53, 53, 53)
                 .BorderWidth = 0
                 .Visible     = .T.
@@ -180,7 +182,6 @@ DEFINE CLASS FormLin AS FormBase
                     .Height          = 75
                     .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
                     .PicturePosition = 13
-                    .BackColor       = RGB(255, 255, 255)
                     .ForeColor       = RGB(90, 90, 90)
                     .FontName        = "Tahoma"
                     .FontSize        = 8

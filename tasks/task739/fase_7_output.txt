@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. Resumo do que foi entregue e medido.
+
+## O que a Fase 7 implementou
+
+O que restava do dump do `SIGOPGCO` era o `mostragrafico` e a parte de **dados** do `Init` legado ÔÇö os dois `Click` (Imprimir/sair) j├í tinham sido entregues na Fase 4. Em `FormSigOpGco.prg`:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `GerarGrafico()` | corpo do `Init` (modo Comparativo ÔåÆ BO agrega ÔåÆ cursor General ÔåÆ desenha) |
+| `AnexarGraficoAoCursor()` | `Append Blank` + `Append General gGraficos Class 'MsGraph.Chart'` |
+| `MostrarGrafico()` | `PROCEDURE mostragrafico` (bind + LockScreen + 3 blocos) |
+| `AplicarFormatoGrafico()` | autoformat / fontes / legenda / t├¡tulo / ├íreas |
+| `AplicarEixosColuna()` | bloco `If m.lnConta1==1` (eixos + ChartGroups) |
+| `AplicarRotulosPercentuais()` | os dois la├ºos de r├│tulo de percentual |
+| `AplicarAreaPizza()` | bloco `If m.lnConta1==2` |
+| `ObterComparativoDoPai()` / `OcultarAguardeDoPai()` | os dois acessos ao form pai |
+
+Em `SigOpGcoBO.prg`: acessor **PUBLIC** `ObterPercentual(grupo, mes)` ÔÇö equivalente a `laPerc(...)`; o form precisa ler e OLE n├úo entra no BO, e m├®todo chamado de fora n├úo pode ser PROTECTED (regra #51).
+
+## Medido em VFP9, n├úo lido
+
+Compila├º├úo limpa (sem `.err`) nos dois arquivos. Probe funcional (`automation/Probe739F7.prg`): form instancia, escopos corretos (4 p├║blicos / 5 protegidos), `Comparativo` lido do pai = 1, BO agregou 2 meses ├ù 2 grupos, matriz `|Janeiro|Fevereiro / LOJA A2025|1000|2000 / LOJA A2026|1500|2400`, `ObterPercentual` devolve 10/20/50/20 e 0 no cruzamento ausente, `Aguarde` do pai apagado, `LockScreen` reposto, e a tela ainda abre sem pai e sem cursores. Auditorias `VerificarFuncoesNaoDefinidas` / `VerificarMetodoProtegidoChamadoDeFora` / `VerificarPropriedadesInexistentes` e o check de completude: todas limpas.
+
+## Dois defeitos reais que o probe exp├┤s
+
+1. **Meu pr├│prio guard estava errado**: `RECCOUNT()` conta registro exclu├¡do, ent├úo depois do cleanup do `APPEND GENERAL` o cursor diz "1 linha" com zero viva ÔÇö o pai chamando `MostrarGrafico()` desenharia sobre registro exclu├¡do e exibiria chart vazio como resultado v├ílido. Troquei o guard para `this_lGraficoGerado`.
+2. **Defeito herdado da Fase 2** (corrigido): o BO fazia `ALLTRIM(Grupos + STR(Ano,4))` em vez de `ALLTRIM(Grupos) + STR(Ano,4)`, deixando 14 brancos no meio do r├│tulo da legenda (`LOJA A              2025`). Mexi em c├│digo de fase anterior porque ├® exatamente o dado que esta fase renderiza.
+
+## Pontos a registrar
+
+- **Uma diverg├¬ncia deliberada**: o legado reusa `lnConta1` como contador do la├ºo de r├│tulos, corrompendo o ├¡ndice do tipo de gr├ífico ÔÇö com 1 grupo s├│ no modo comparativo ele aplica geometria de *pizza* sobre um gr├ífico de *coluna*. ├ë colis├úo acidental de nome, n├úo regra de neg├│cio; usei contador pr├│prio e declarei a consequ├¬ncia no cabe├ºalho e no m├®todo.
+- **Os 4 `Btn<verbo>Click` CRUD n├úo existem** e isso foi medido: o dump tem zero `pcEscolha`, zero objeto/m├®todo com nome de verbo CRUD e zero `<verbo>.Click`. O gate da fase libera pela exce├º├úo legado-sem-CRUD (2 handlers ÔëÑ m├¡nimo 2). **Importante**: minha primeira vers├úo do coment├írio citava os quatro nomes por extenso e fazia o gate passar por *substring de coment├írio* ÔÇö reescrevi para o gate passar pelo motivo certo.
+- **N├úo validado nesta m├íquina**: os blocos de formata├º├úo do chart nunca executaram, porque o `APPEND GENERAL` falha com `0x800401f3` ÔÇö confirmei no registro que **nenhum ProgID `MSGraph*`** existe aqui. ├ë limita├º├úo de ambiente j├í documentada, n├úo defeito de migra├º├úo; o c├│digo trata, apaga a linha ├│rf├ú e avisa o usu├írio. A formata├º├úo em si s├│ poder├í ser conferida numa esta├º├úo com MSGraph instalado.
+- Tamb├®m n├úo h├í form pai migrado que abra esta tela (`grep SigOpGco` em `projeto/app/` s├│ acha o BO) ÔÇö o contrato est├í documentado no cabe├ºalho e exercitado pelo probe com um pai falso.

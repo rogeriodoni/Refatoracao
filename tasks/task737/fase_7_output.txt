@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 entregue e validada. Resumo:
+
+## O que encontrei antes de come├ºar
+
+**As fases 5 e 6 n├úo produziram nada.** `tasks/task737/fase_5_output.txt` e `fase_6_output.txt` registram o agente respondendo *"I don't see an actual request"* ÔÇö chegaram sem prompt de tarefa. O form estava s├│ com as fases 3-4.
+
+Isso importa porque os campos din├ómicos da ficha (trabalho das fases 5/6) s├úo chamados pelo evento principal da fase 7: sem eles `ChecarFichaTecnica` chamaria m├®todo inexistente (regra #13) e o Confirmar da fase 4 nunca teria `cursor_4c_Ficha` para percorrer. Ent├úo inclu├¡-os aqui, documentado no cabe├ºalho do arquivo.
+
+## Fase 7 ÔÇö `Formsigopftc.prg` (617 ÔåÆ 1.465 linhas)
+
+Este form **n├úo tem bot├Áes CRUD e n├úo deve ter**: o SCX tem 6 objetos e dois bot├Áes (Confirmar/Cancelar). Os eventos principais dele s├úo os m├®todos do pr├│prio SCX, chamados pelo form pai de movimenta├º├úo ÔÇö todos PUBLIC (regra #51):
+
+| Novo | Legado |
+|---|---|
+| `ChecarFichaTecnica(par_cTipo)` | `checarfichatecnica` ÔÇö gatilho central `[GRUPO_OP]`/`[MOSTRARFORM]` |
+| `MontarFichaTecnica` / `CarregarFichaTecnica` / `DesmontarFichaTecnica` | `montafichatecnica` (182 linhas) / `carregafichatecnica` / `desmontafichatecnica` |
+| `ValidarFichaTecnica` | `validafichatecnica` |
+| `MostrarForm` / `OcultarForm` | idem |
+| `CarregarOperacaoComFicha` / `CarregarCaracteristicas` / `RespostaEhFixa` | as 3 queries (`cnSigCdOpe`, `crTmpFicha`, `crResp`) |
+
+`InicializarForm` passou a chamar `MostrarForm()` (o legado faz `CriarForm` + `MostrarForm` no Init) ÔÇö ├® o que de fato monta a ficha; guardado contra modo teste.
+
+## O gate da Fase 7 reprovava ÔÇö e a causa era um literal de texto
+
+O gate casa `Grupo_Op` como evid├¬ncia estrutural de barra CRUD, por substring. A **├║nica** cita├º├úo no dump inteiro ├® `If ((pTip = [GRUPO_OP]) ...)` ÔÇö um *tag* de texto, n├úo objeto. As duas exce├º├Áes irm├ús n├úo alcan├ºam (uma exige ponto antes do nome, a outra exige bloco de PROPRIEDADES de um grupo que n├úo existe).
+
+Adicionei `Test-GrupoOpEhLiteralDeTexto` (fail-closed em 4 camadas), ligada aos **dois** call sites (Fases 7 e 8) pelo mesmo helper, por fonte ├║nica. Medido nos 736 dumps: 250 citam `Grupo_Op`, o helper libera **1** ÔÇö o pr├│prio sigopftc. Zero regress├úo nos CRUD conhecidos e nos j├í dispensados pelas irm├ús.
+
+## Verifica├º├Áes
+
+- Compila├º├úo VFP9: **0 erros**, `.fxp` apagado antes e regerado
+- Gate Fase 7 task737: **PASSA** (e sem token satisfeito por coment├írio ÔÇö corrigi um coment├írio meu que formava `BtnExcluirClick` acidentalmente)
+- `ValidadorSQLSchema`: **PASSOU**, 5 statements, nenhuma coluna inv├ílida (colunas conferidas no `schema.sql` UTF-16 via PowerShell)
+- `VerificarPropriedadesInexistentes`: OK ┬À `VerificarFuncoesNaoDefinidas`/`ColunaEmpresaSQL`/`FuncaoVFPemSQL`: limpos
+- Gates 734/735/736 e Fase 8/735 seguem **PASSA**
+- **Probe de instancia├º├úo**: form instancia (`VARTYPE = O`), 7 eventos existem e s├úo PUBLIC (`protegido=.F.`), chamadas reais de fora funcionam
+- Medi `SCAN WHILE <memvar>` no VFP9 (para na 1┬¬ viola├º├úo, como o `Return(.f.)` do legado)
+- Diff do orquestrador: **0 linhas removidas**, 142 adicionadas, CRLF/BOM preservados (as 2 dele├º├Áes que o `git diff` mostra s├úo da altera├º├úo j├í pendente no arquivo, n├úo minhas)
+
+## Lacunas que deixo expl├¡citas (n├úo omitidas em sil├¬ncio)
+
+1. **`frmbarcta` n├úo foi portada** ÔÇö a janela de scroll do legado n├úo existe no projeto novo. Os campos s├úo empilhados em `cnt_4c_AreaFicha` e o excedente fica recortado se a ficha for alta. O `pnCaixa`/`plSelecao` do `fweditbox` (lista de respostas pr├®-cadastradas) tamb├®m depende dela. Mesma categoria do `fwprogressbar`, que precisou de stub.
+2. **`ThisForm.Top = This.Top + 60` n├úo transcrito** ÔÇö ├® empilhamento de janela contra a `frmbarcta`; com `AutoCenter = .T.` faria a tela descer 60px por chamada.
+3. `task_state.json` segue com `05_migracao = IN_PROGRESS` ÔÇö n├úo mexi, ├® o orquestrador que mant├®m esse estado, e as fases 5/6 realmente n├úo rodaram.
+
+Registrei a li├º├úo do gate em mem├│ria (`feedback_gate_fase7_grupo_op_literal_de_texto.md`), na fam├¡lia das duas exce├º├Áes anteriores.

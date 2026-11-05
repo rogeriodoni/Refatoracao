@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VIVO " + TTOC(DATETIME()), "C:\4c\automation\_m736\smoke736.txt")
+QUIT

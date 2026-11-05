@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da em `projeto/app/forms/relatorios/FormSIGOPFLU.prg`.
+
+## O que foi feito
+
+O form ├® REPORT (layout de p├ígina ├║nica): a Fase 4 j├í tinha criado os **11 controles** do SCX legado dentro de `ConfigurarPaginaLista`. Em vez de inventar uma Page2 de Dados que o legado n├úo tem (PILAR 1) ou escrever um m├®todo vazio (regra de completude), apliquei o padr├úo can├┤nico dos outros 97 forms de relat├│rio (`FormSIGRECTL`, `FormSIGREADS`): **`ConfigurarPaginaDados` recebe a primeira metade dos campos** e `ConfigurarPaginaLista` continua sendo o funil chamado por `ConfigurarPageFrame`.
+
+Divis├úo (4 dos 7 campos de entrada = primeira metade):
+
+| M├®todo | Controles |
+|---|---|
+| `ConfigurarPaginaDados` (novo) | Per├¡odo ÔÇö `Say2` + `getDtInicial` + `Say3` + `getDtFinal`; Grupo ÔÇö `Say1` + `getGrupo` + `getDGrupo` |
+| `ConfigurarPaginaLista` | Conta ÔÇö `lbl_estoque` + `getConta` + `getDConta`; `ChkData` |
+
+`ConfigurarPaginaDados()` ├® chamado na **primeira linha** de `ConfigurarPaginaLista`, para a ordem de `AddObject` ficar id├¬ntica ├á do SCX ÔÇö n├úo ├® c├│digo morto, ao contr├írio do stub que o gerador costuma deixar. Nenhuma propriedade foi alterada: os blocos `WITH` foram movidos literalmente. A faixa cinza do t├¡tulo **n├úo** foi recriada dentro da p├ígina ÔÇö em form de relat├│rio ela ├® filha do FORM (`Top=0..80`) e o PageFrame come├ºa em `Top=85`; repetir desenharia duas faixas.
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou (`VIVO`, `exit=0`), ent├úo houve prova de compila├º├úo **e** de runtime:
+
+- **Compila├º├úo**: `FORM.FXP=SIM FORM.ERR=NAO BO.FXP=SIM BO.ERR=NAO`. Controle negativo (c├│pia do form + `IF .T.` / `? "x"` soltos) gerou `.ERR` apontando **s├│** as 2 linhas acrescentadas (650/651) ÔÇö prova que o detector funciona e que as 649 linhas reais est├úo limpas.
+- **Instancia├º├úo**: `CREATEOBJECT("FormSIGOPFLU")` devolveu objeto; `Page1.ControlCount = 11` na ordem do legado (1ÔÇô7 criados por `ConfigurarPaginaDados`, 8ÔÇô11 por `ConfigurarPaginaLista`), geometria conferida controle a controle (`T=16/13/16/13/43/39/39/70/66/66/106`), datas em 04/11/2026, `Grupo.Enabled=.T.`, `ChkData.Value=0`. Arquivo de di├ílogos suprimidos **vazio** ÔÇö nenhum erro engolido por CATCH.
+- Est├ítico: 0 bytes >127 (sem acentos literais), 0 TODO/stub/indicador de pend├¬ncia, 0 `RETURN` dentro de `TRY`, 0 `.Self`, 0 `Controls("nome")`, blocos balanceados (10 `PROCEDURE`/`ENDPROC`, 19 `WITH`/`ENDWITH`), e todos os `THIS.<x>()` resolvem para m├®todos da classe.
+
+Gate da Fase 5: `FormType = REPORT` s├│ habilita o ramo PAGINADO, que exige `ConfigurarPaginaDados` ÔÇö agora presente como c├│digo real.

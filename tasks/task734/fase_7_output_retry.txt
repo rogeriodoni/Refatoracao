@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 was **already complete and correct**. I did not modify the form ÔÇö doing so would have meant inventing a button the legacy doesn't have. Here's the evidence.
+
+## The reprovation is self-reference, not a defect
+
+The first Fase 7 attempt wrote the artifact *and* patched the gate that would have reproved it. The orchestrator process had already parsed the old `.ps1`, so the fix couldn't apply to the phase that wrote it:
+
+| measurement | value |
+|---|---|
+| task start (1st log) | **17:47:44** |
+| `.ps1` written | **18:43:38** ÔåÆ after ÔçÆ self-reference |
+| gate **PRE** (what actually ran) | `SoPainelDeLinha=False` ÔåÆ **REPROVA**, demands `BtnVisualizarClick` |
+| gate **POS** (on disk) | `SoPainelDeLinha=True` ÔåÆ **PASSA** |
+
+`BtnVisualizarClick` cannot be satisfied legitimately: the legacy action bar has exactly four verbs ÔÇö `cmdInserir`, `cmdAlterar`, `cmdApagar`, `cmdListar` ÔÇö and **zero** occurrences of any "Visualiz". Adding it would mean inventing UI surface (violates PILAR 1) or an empty stub (forbidden by the completeness rule). So the correct action was to prove the deliverable out-of-band.
+
+## Deliverable validated independently
+
+- **Smoke test passed** (`VIVO` written, `exit=0`) ÔÇö so this session can genuinely execute VFP9, and compile/runtime claims are provable rather than inferred.
+- **Compile clean** with `.fxp` deleted first: `BO.FXP=SIM BO.ERR=NAO`, `FORM.FXP=SIM FORM.ERR=NAO`. With a **negative control** (corrupted copy) the `.ERR` appeared flagging only the two lines I appended (1801ÔÇô1802 of a 1799-line file) ÔÇö proving the detector works *and* lines 1ÔÇô1799 are clean.
+- **Runtime probe reproduced** from scratch: form instantiates, all 7 externally-called methods are PUBLIC (`protegido=.F.`, regra #51/#3), the openÔåÆclose funnel restores state (regra #40), button geometry matches the legacy `Init` arithmetic.
+- `Test-CompletudeCodigo` **True** on both files; project auditors for protected-method-calls and orphan functions both ran (1117 files) and are clean; zero `RETURN`-in-`TRY`, zero non-ASCII bytes, zero `this_X .Value`, zero `.Self`, zero `Controls("name")`.
+- **Blast radius**: across all 733 dumps the gate patch flips exactly **one** verdict ÔÇö `task734/SigOpFlp`, only toward the dispensation.
+
+## Two corrections to the prior report
+
+The previous attempt reported an encoding incident that corrupted the `.ps1`. I checked, and the orchestrator is **intact** ÔÇö but the check nearly misfired twice, both times from my own instruments:
+
+- `git show HEAD:` **normalizes CRLF to LF** (18,618 CRLF lines ÔåÆ 0), so a line-diff against it marks 100% of lines changed ÔÇö precisely the signature of a latin-1 rewrite. Counting instead of diffing settles it: `U+FFFD` identical (172=172), non-ASCII lines identical (361=361), and a CRLF-insensitive diff shows **0** differences. The 172 replacement chars are pre-existing in the commit.
+- `grep -c '[\x80-\xFF]'` doesn't honor `\x` in GNU grep ÔÇö it reported 1562 literal accents in a file that has **zero**.
+
+Both traps are now recorded in memory alongside the 7th confirmation of the self-reference pattern.
+
+## One thing to expect
+
+`Test-VerbosCrudSaoTodosDePainelDeLinha` has a single call site (`case 7`, line 10114). Case 8 calls only the `...DeLinhaDeGrade` / `...DeRelatorio` variants, both `False` for this legacy. So **Fase 8 has no dispensation for the "row-action bar + floating panel" shape** and will likely demand CRUD verbs this legacy lacks. I'm flagging that as an expectation, not a measurement ÔÇö my case-8 harness was derived from the case-7 one and printed no diagnostic, so I don't trust it enough to quote a verdict.
+
+The gate fix on disk is correct and takes effect **from the next task onward**. Fase 7's artifacts (`FormSigOpFlp.prg` 1799 lines, `SigOpFlpBO.prg` 484 lines) are unchanged by me and verified complete.

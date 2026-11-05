@@ -188,8 +188,9 @@ DEFINE CLASS FormTpa AS FormBase
             .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackColor   = RGB(100, 100, 100)
-            .BackStyle   = 1
+            *-- TRANSPARENTE (Erro312): container opaco pinta um anel em volta dos
+            *-- botoes, por cima da faixa do cabecalho. Canonico: FormCor.
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH

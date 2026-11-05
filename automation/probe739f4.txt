@@ -1,0 +1,22 @@
+CK00 inicio
+CK01 SET PROCEDURE OK
+CK02 CREATEOBJECT VARTYPE=O
+== 1) form ==
+  BaseClass=[Form] Caption=[Gráfico Comparativo] W=800 H=600 ControlCount=3
+== 2) os DOIS botoes do SCX ==
+  cmd_4c_Imprimir existe=.T.
+  cmd_4c_Sair     existe=.T.
+  Imprimir Top=3 Left=647 W=75 H=75 Cap=[\<Imprimir] Vis=.T. PicOK=SIM
+  Sair     Top=3 Left=723 W=75 H=75 Cap=[Encerrar] Vis=.T. PicOK=SIM
+  dentro do form? Imprimir dir=722  Sair dir=798  Form.Width=800
+== 3) cabecalho (faixa) ==
+  cnt_4c_Sombra existe=.T.
+  faixa Top=0 H=80 BackColor=6579300 TituloCap=[Gráfico Comparativo] TituloFore=16777215
+== 4) handlers: existem E sao PUBLIC (atributo 2 = Protected) ==
+  CmdImprimirClick    existe=.T. prot=.F.
+  CmdSairClick        existe=.T. prot=.F.
+  ExecutarReportForm  existe=.T. prot=.F.
+== 5) CmdImprimirClick sem grafico gerado (nao deve imprimir nem estourar) ==
+  cursor grafico existe antes? .F.
+  CmdImprimirClick RETORNOU sem excecao
+CK99 FIM OK

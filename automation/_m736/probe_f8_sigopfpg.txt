@@ -1,0 +1,22 @@
+=== PROBE Fase 8 - FormSigOpFpg (task736) ===
+[1] Setup concluido
+[2] Form instanciado OK (DataSessionId=2)
+[3] CarregarCambio=1 MoedaPermiteCotacao=.F. CargoTemAltCots=.F.
+[4] ValidarVencimentoLinhaGrade (venc < DtEnts)=.F. (esperado .F.)
+[4] ValidarVencimentoLinhaGrade (venc ok)=.T. (esperado .T.)
+[4] ValidarValorLinhaGrade=.T. TotForma=100
+[5] TxtFweditdataVencLostFocus=.T. reccount=4
+[5] Fpg(pos-reset)=[] (esperado vazio)
+[6] TxtVparLostFocus=.T. Vpar=60 (esperado 60)
+[6] TxtPorcLostFocus=.T. Vpar=10 (esperado 10)
+[7] LimpaChe: Bancos=[] (esperado vazio)
+[7] VerificaCheque(banco letras)=.F. (esperado .F., fChkDigitos reprova)
+[7] VerificaCheque(digitos ok, sem SQL real)=.F.
+[8] fChkDigitos('123')=.T. fChkDigitos('12A')=.F. fChkDigitos('')=.F.
+[8] fValidaCards('4532015112830366')=.T. (esperado .T., Luhn valido) fValidaCards('1234567890123456')=.F. (esperado .F.)
+[9] FIM
+--- DIALOGS CAPTURADOS ---
+[04/11/2026 11:11:40 PM] Atenção: Vencimento não pode ser menor que a Data da Movimentação...
+[04/11/2026 11:11:40 PM] Atenção: Leitura de cheque incorreta!
+[04/11/2026 11:11:40 PM] Erro ao verificar cheque: Connection handle is invalid.
+

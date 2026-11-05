@@ -1,0 +1,641 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPFLU.SCX
+* Data/Hora: 04/11/2026 19:50:40
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPFLU
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkData
+  Parent: SIGOPFLU
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say1
+  Parent: SIGOPFLU
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGOPFLU
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGOPFLU
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getConta
+  Parent: SIGOPFLU
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDtInicial
+  Parent: SIGOPFLU
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupo
+  Parent: SIGOPFLU
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDtFinal
+  Parent: SIGOPFLU
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPFLU
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGOPFLU
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGOPFLU
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU
+------------------------------------------------------------
+  DataSession = 2
+  Height = 220
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Impressão de FollowUp"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  Name = "SIGOPFLU"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 12
+  btnReport.ZOrderSet = 13
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.ChkData
+------------------------------------------------------------
+  Top = 191
+  Left = 242
+  Height = 15
+  Width = 185
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprime Data / Hora da Ocorrência"
+  SpecialEffect = 0
+  Style = 0
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "ChkData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Left = 202
+  Top = 128
+  Width = 38
+  TabIndex = 10
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Left = 202
+  Top = 155
+  Width = 38
+  TabIndex = 11
+  ZOrderSet = 5
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getDConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 324
+  MaxLength = 40
+  TabIndex = 6
+  Top = 151
+  Width = 290
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getConta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 242
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 151
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 242
+  TabIndex = 1
+  Top = 98
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .F.
+  Format = "K"
+  Height = 25
+  Left = 324
+  MaxLength = 20
+  TabIndex = 4
+  Top = 124
+  Width = 150
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getDtFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 341
+  TabIndex = 2
+  Top = 98
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Período :"
+  Left = 195
+  Top = 101
+  Width = 45
+  TabIndex = 8
+  ZOrderSet = 14
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .F.
+  Format = "K"
+  Height = 25
+  Left = 242
+  MaxLength = 10
+  TabIndex = 3
+  Top = 124
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPFLU.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 328
+  Top = 101
+  Width = 8
+  TabIndex = 9
+  ZOrderSet = 12
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPFLU
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigOpFlu Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcWhere,ldIni,ldFin,lcEmp,lcTit,lcSub
+
+Private lcGru,ldDataI,ldDataF,lcCon
+
+ldIni = ThisForm.GetDtInicial.Value
+ldFin = ThisForm.GetDtFinal.Value
+lcGru = Padr(ThisForm.GetGrupo.Value, 10)
+lcCon = Padr(ThisForm.GetConta.Value, 10)
+
+lcEmp     = Alltrim(CrSigCdEmp.CEmps + ' - ' + CrSigCdEmp.Razas)
+lcTit     = Alltrim('Relatório de FollowUp de ' + Proper(lcGru))
+lcSub     = Alltrim('Período : ' + Dtoc(ldIni) + ' à ' + Dtoc(ldFin))
+llImpData = (ThisForm.ChkData.Value = 1)
+
+Create Cursor CsCabecalho (Empresa c(80), Titulo c(80), SubTitulo c(80), ImpData l)
+Insert Into CsCabecalho (Empresa, Titulo, SubTitulo, ImpData) Values (lcEmp, lcTit, lcSub, llImpData)
+
+*******************************************************************************************
+
+ldDataI = fDtoSQL(ldIni)
+ldDataF = fDtoSQL(ldFin,'23:59:59')
+
+lStrQuery = [Select a.IClis,a.Datas,a.Hists,a.Obs,b.Cpfs,b.RClis ]+;
+			[From SigCdClh a, SigCdCli b ]+;
+			[Where a.IClis = b.IClis And a.Datas BetWeen ?ldDataI And ?ldDataF And a.Grupos = ?lcGru ]+;
+				Iif(!Empty(lcCon),[And a.IClis = ?lcCon ],'')+;
+			[Order By a.IClis,a.Datas,a.Hists,b.Cpfs,b.RClis ]
+	
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsFwUp') < 1
+	Return(.F.)
+EndIf
+
+Select CsFwUp
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pDataSession, pGrupo, pConta
+
+Private pcCliente,pcConta,pcGrupo,pcEmp
+
+pcCliente = pConta
+pcGrupo   = pgrupo
+pcConta   = pConta
+pcEmp     = _Empr
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','SigOpFlu')
+	If .poDataMgr.pnIdconn < 1
+		MessageBox('Impossível efetuar conexão com Servidor de Banco de Dados...',48,'CreateObject')
+		Return 0
+	Else
+		=DoDefault()
+	EndIf
+EndWith
+
+If ThisForm.poDataMgr.SqlExecute([Select CEmps,Razas From SigCdEmp Where CEmps = ?pcEmp ],'CrSigCdEmp') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdEmp)')
+	Return(.F.)
+EndIf
+Select CrSigCdEmp
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select Grupos,IClis,RClis From SigCdCli Where IClis = ?pcCliente ],'CrSigCdCli') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdCli)')
+	Return(.F.)
+EndIf
+Select CrSigCdCli
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select Codigos,Descrs From SigCdGcr Where Codigos = ?pcGrupo ],'CrSigCdGcr') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdGcr)')
+	Return(.F.)
+EndIf
+Select CrSigCdGcr
+Go Top
+
+ThisForm.GetDtInicial.Value = Date()
+ThisForm.GetDtFinal.Value   = Date()
+ThisForm.GetConta.Value     = pConta
+ThisForm.GetDConta.Value    = CrSigCdCli.RClis
+ThisForm.GetGrupo.Value     = pGrupo
+ThisForm.GetDGrupo.Value    = CrSigCdGcr.Descrs
+
+ThisForm.GetGrupo.Enabled   = Empty(ThisForm.GetGrupo.Value)
+ThisForm.GetDGrupo.Enabled  = Empty(ThisForm.GetGrupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigOpFlu To Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value <> 3 && Se Não Clicou em Saída
+	If Empty(ThisForm.GetDtInicial.Value)
+		MessageBox('Data Inicial Inválida !!!',48,'Campo Obrigatório')
+		ThisForm.GetDtInicial.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.GetDtFinal.Value)
+		MessageBox('Data Final Inválida !!!',48,'Campo Obrigatório')
+		ThisForm.GetDtFinal.SetFocus
+		Return 0
+	EndIf
+
+	If ThisForm.GetDtFinal.Value < ThisForm.GetDtInicial.Value
+		MessageBox('Data Final não pode ser maior que a Inicial !!!',48,'Seleção Inválida')
+		ThisForm.GetDtInicial.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.GetGrupo.Value)
+		MessageBox('Grupo Inválido !!!',48,'Campo Obrigatório')
+		ThisForm.GetGrupo.SetFocus
+		Return 0
+	EndIf
+EndIf
+
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFLU.getDConta
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetConta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.GetGrupo.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.GetConta,ThisForm.GetDConta)
+		Messagebox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.GetConta.Value = ''
+		ThisForm.GetConta.Refresh
+		Return(.F.)
+	EndIf
+Else
+	ThisForm.GetConta.Value = ''
+	ThisForm.GetConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFLU.getConta
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.GetConta,ThisForm.GetDConta)
+		Messagebox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.GetDConta.Value = ''
+		ThisForm.GetDConta.Refresh
+		Return(.F.)
+	EndIf
+Else
+	ThisForm.GetDConta.Value = ''
+	ThisForm.GetDConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFLU.getDGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetGrupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	=fAcessoContab(Usuar,'D',This.Value,ThisForm.GetGrupo,ThisForm.GetDGrupo)
+Else
+	ThisForm.GetGrupo.Value = ''
+	ThisForm.GetGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPFLU.getGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	=fAcessoContab(Usuar,'C',This.Value,ThisForm.GetGrupo,ThisForm.GetDGrupo)
+Else
+	ThisForm.GetDGrupo.Value = ''
+	ThisForm.GetDGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPFLU
+RESERVED3 (ClassInfo): periodoimp
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

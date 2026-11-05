@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 ÔÇö j├í estava completa; verifiquei de ponta a ponta
+
+N├úo alterei o form. O trabalho da tentativa anterior (04:43) est├í correto e eu o validei; o que faltava era a verifica├º├úo.
+
+### O legado n├úo tem o que a Fase 4 normalmente pede
+
+`SIGOPGCO` ├® um **visualizador de gr├ífico**: 8 objetos, **zero** `BaseClass grid|pageframe` e **zero** controle de entrada (medido no dump). S├úo `cntSombra`+2 labels, `Shape2`, `OleGrafico` (OLE do chart) e 2 `fwbtng`. Criar Grid ou os 6 bot├Áes CRUD seria inventar ÔÇö viola o PILAR 1.
+
+### Fidelidade conferida contra o `layout.json`, valor por valor
+
+| | legado | instanciado |
+|---|---|---|
+| Form | 800x600, "Gr├ífico Comparativo" | 800x600, idem |
+| `cntSombra` | Top=0 H=80 | Top=0 H=80, BackColor `6579300` = RGB(100,100,100), t├¡tulo branco |
+| `Imprimir` | Top=3 Left=647 `\<Imprimir` | idem |
+| `sair` | Top=3 Left=723 `Encerrar` | idem |
+
+Ambos dentro do form (722 e 798 < 800) e os dois `.Picture` existem em `vbmp\` (regra #25).
+
+### Executou de verdade
+
+- **COMPILE**: form e BO sem `.ERR` (FXP apagado antes).
+- **CREATEOBJECT**: `VARTYPE=O`, `ControlCount=3`.
+- `CmdImprimirClick`/`CmdSairClick`/`ExecutarReportForm` existem com `PEMSTATUS(...,2)=.F.` ÔÇö **PUBLIC**, que ├® o que o `BINDEVENT` exige (regra #3).
+- Clicar Imprimir sem gr├ífico gerado avisou *"Gr├ífico ainda n├úo foi gerado"* e **n├úo imprimiu**, sem exce├º├úo. `SigOpGrc.frx`/`.frt` j├í est├úo em `reports\`.
+- Validador de completude: **0 problemas**. O `TODO` mai├║sculo da linha 138 est├í no meio de uma frase ("entao TODO uso dela") e o regex ancora `TODO` no marcador de coment├írio ÔÇö n├úo ├® falso positivo.
+
+### O gate: a corre├º├úo ├® s├│lida, e medi sozinho
+
+A tentativa anterior consertou o ramo DESPACHANTE da Fase 4, que era **auto-anul├ível**: exigia aus├¬ncia de lista pelo regex largo, e esse regex casa o **token cru** `ControlSource` ÔÇö justamente o `.ControlSource = 'gGraficos'` do `OleGrafico`. A prova de que o ramo se aplicava derrubava o ramo. Verifiquei que o gate agora d├í `temLayoutDespachante = True`.
+
+Refiz a medi├º├úo por n├úo aceitar o n├║mero de fora:
+
+- **Regress├úo ├® estruturalmente imposs├¡vel**: a linha 9205 ├® um **OR puro** dos 6 ramos; relaxar a pr├®-condi├º├úo do DESPACHANTE s├│ pode virar FALSEÔåÆTRUE. Os `if` por ramo acima dela s├úo s├│ `Write-Host`.
+- **Emp├¡rico, 738 dumps**: `estrito=TRUE e largo=FALSE` ÔåÆ **0** casos (a dire├º├úo de regress├úo n├úo existe). 141 dumps mudam largoÔåÆestrito, mas s├│ **7 (3 legados: SigOpGco, SIGPRMEI, SigPrRss)** t├¬m `temCampos=False` e portanto podem mudar o veredito ÔÇö todos ganhando dispensa.
+- **EXIBICAO intocado**: o c├│digo antigo j├í calculava a composi├º├úo estrita de 5 termos por conta pr├│pria; o novo s├│ deduplica. Comparei as duas ÔÇö id├¬nticas.
+
+### Uma ressalva que muda o que esperar da pr├│xima valida├º├úo
+
+`RunLoop.ps1` chama o orquestrador com `& "...OrquestradorMigracao.ps1"` ÔÇö parse novo **por arquivo SCX**, n├úo por fase. O arquivo foi gravado ├ás **04:50:05**, mas o processo que atende a task739 come├ºou ~04:02. Ele carrega o parse antigo, ent├úo **vai reprovar a Fase 4 outra vez** mesmo com o form certo e o gate consertado. Resolve na pr├│xima invoca├º├úo do orquestrador (pr├│ximo SCX) ou relan├ºando o loop ÔÇö n├úo ├® defeito de c├│digo.
+
+Dois pontos que n├úo s├úo meus para decidir: a corre├º├úo do gate segue **n├úo commitada** no working tree (o `OrquestradorMigracao.ps1` j├í tinha altera├º├Áes de outras sess├Áes), e `Shape2`/`OleGrafico` ainda n├úo foram criados ÔÇö s├úo a superf├¡cie de exibi├º├úo, escopo da Fase 5, coerente com `ControlCount=3`.

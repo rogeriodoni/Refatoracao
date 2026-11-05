@@ -1,0 +1,24 @@
+VARTYPE(loForm)=O
+Caption=[Impressão de FollowUp]
+Form WxH=800x220
+PageCount=1 ActivePage=1
+Page1.ControlCount=11
+--- controles da Page1 (ordem de AddObject) ---
+1  LBL_4C_LABEL2         Label        T=  16 L= 195 W=  45 H=  15 Vis=T
+2  TXT_4C_DTINICIAL      Textbox      T=  13 L= 242 W=  80 H=  23 Vis=T
+3  LBL_4C_LABEL3         Label        T=  16 L= 328 W=   8 H=  15 Vis=T
+4  TXT_4C_DTFINAL        Textbox      T=  13 L= 341 W=  80 H=  23 Vis=T
+5  LBL_4C_LABEL1         Label        T=  43 L= 202 W=  38 H=  15 Vis=T
+6  TXT_4C_GRUPO          Textbox      T=  39 L= 242 W=  80 H=  25 Vis=T
+7  TXT_4C_DGRUPO         Textbox      T=  39 L= 324 W= 150 H=  25 Vis=T
+8  LBL_4C_LBL_ESTOQUE    Label        T=  70 L= 202 W=  38 H=  15 Vis=T
+9  TXT_4C_CONTA          Textbox      T=  66 L= 242 W=  80 H=  25 Vis=T
+10 TXT_4C_DCONTA         Textbox      T=  66 L= 324 W= 290 H=  25 Vis=T
+11 CHK_4C_CHKDATA        Checkbox     T= 106 L= 242 W= 185 H=  15 Vis=T
+--- metodos ---
+PEMSTATUS ConfigurarPaginaDados exists=T protected=T
+PEMSTATUS ConfigurarPaginaLista exists=T protected=T
+--- estado inicial ---
+DtInicial=[04/11/2026] DtFinal=[04/11/2026]
+Grupo.Enabled=T DGrupo.Enabled=T
+ChkData.Value=0

@@ -29,6 +29,79 @@ FUNCTION SomenteNumeros(pcTexto)
 ENDFUNC
 
 *------------------------------------------------------------------------------
+* fChkDigitos - Legado Fortyus (SIGFUNCS.PRG, nao portado - regra #27). Diz se
+* a string contem SOMENTE digitos (0-9) e NAO esta vazia. Usado para validar
+* banco/agencia/conta/numero de cheque e campos similares digitados a mao.
+* Parametros: par_cValor - texto a validar
+* Retorno: .T. se todo-numerico e nao vazio, .F. caso contrario (inclusive
+*          vazio, NULL ou tipo diferente de Character)
+*------------------------------------------------------------------------------
+FUNCTION fChkDigitos(par_cValor)
+    LOCAL loc_cValor, loc_nI, loc_lResultado
+
+    IF VARTYPE(par_cValor) != "C" OR ISNULL(par_cValor)
+        RETURN .F.
+    ENDIF
+
+    loc_cValor = ALLTRIM(par_cValor)
+
+    IF EMPTY(loc_cValor)
+        RETURN .F.
+    ENDIF
+
+    loc_lResultado = .T.
+    FOR loc_nI = 1 TO LEN(loc_cValor)
+        IF !ISDIGIT(SUBSTR(loc_cValor, loc_nI, 1))
+            loc_lResultado = .F.
+            EXIT
+        ENDIF
+    ENDFOR
+
+    RETURN loc_lResultado
+ENDFUNC
+
+*------------------------------------------------------------------------------
+* fValidaCards - Legado Fortyus (SIGFUNCS.PRG, nao portado - regra #27). Valida
+* numero de cartao de credito pelo algoritmo de Luhn (modulo 10), o mesmo
+* padrao usado por Visa/Mastercard/etc. Aceita o numero com ou sem espacos.
+* Parametros: par_cCartao - numero do cartao digitado
+* Retorno: .T. quando o digito verificador de Luhn confere
+*------------------------------------------------------------------------------
+FUNCTION fValidaCards(par_cCartao)
+    LOCAL loc_cNumero, loc_nI, loc_nDigito, loc_nSoma, loc_lDobra, loc_nTotal
+
+    IF VARTYPE(par_cCartao) != "C" OR ISNULL(par_cCartao)
+        RETURN .F.
+    ENDIF
+
+    loc_cNumero = SomenteNumeros(par_cCartao)
+
+    IF LEN(loc_cNumero) < 12
+        RETURN .F.
+    ENDIF
+
+    loc_nSoma  = 0
+    loc_lDobra = .F.
+    FOR loc_nI = LEN(loc_cNumero) TO 1 STEP -1
+        loc_nDigito = VAL(SUBSTR(loc_cNumero, loc_nI, 1))
+
+        IF loc_lDobra
+            loc_nDigito = loc_nDigito * 2
+            IF loc_nDigito > 9
+                loc_nDigito = loc_nDigito - 9
+            ENDIF
+        ENDIF
+
+        loc_nSoma  = loc_nSoma + loc_nDigito
+        loc_lDobra = !loc_lDobra
+    ENDFOR
+
+    loc_nTotal = loc_nSoma % 10
+
+    RETURN (loc_nTotal = 0)
+ENDFUNC
+
+*------------------------------------------------------------------------------
 * FormatarNumeroSQL - Formata numero para uso em SQL (sempre com ponto decimal)
 * IMPORTANTE: TRANSFORM() usa SET POINT (virgula no Brasil), mas SQL Server
 * espera ponto como separador decimal. Esta funcao garante formato correto.
