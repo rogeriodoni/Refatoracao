@@ -466,6 +466,13 @@ DEFINE CLASS FormSigReDif AS FormBase
                     .Column13.Header1.ForeColor = RGB(36, 84, 155)
                     .Column14.Header1.ForeColor = RGB(36, 84, 155)
 
+                    *-- Fonte da GRADE primeiro (Erro334): trocar Grid.FontName/FontSize
+                    *-- recalcula TODAS as colunas para a largura padrao (medido: as 14
+                    *-- ficavam com 45 e os valores saiam cortados). Tem de vir ANTES
+                    *-- das fontes dos headers e das larguras abaixo.
+                    .FontName = "Tahoma"
+                    .FontSize = 8
+
                     *-- FontName/FontSize/Alignment dos headers (fidelidade ao original)
                     .SetAll("FontName", "Tahoma", "Header")
                     .SetAll("FontSize", 8, "Header")
@@ -492,8 +499,6 @@ DEFINE CLASS FormSigReDif AS FormBase
                     .Column13.Width = 31
                     .Column14.Width = 80
 
-                    .FontName = "Tahoma"
-                    .FontSize = 8
                     .SetAll("ReadOnly", .T., "Column")
                     .Refresh()
                 ENDWITH

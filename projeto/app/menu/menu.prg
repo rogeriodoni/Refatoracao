@@ -1226,9 +1226,10 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 89 OF popRelatorios PROMPT "Cotas de Desconto" ;
            MESSAGE "Relat" + CHR(243) + "rio de Cotas de Desconto"
     DEFINE BAR 90 OF popRelatorios PROMPT "\-"
-    DEFINE BAR 91 OF popRelatorios PROMPT "Diferen" + CHR(231) + "as Encontradas" ;
-           MESSAGE "Visualizador de Diferen" + CHR(231) + "as Encontradas (Contabilidade)"
-    DEFINE BAR 92 OF popRelatorios PROMPT "\-"
+    *-- BAR 91/92 (Diferencas Encontradas) removidos - Erro334: no legado o
+    *-- SigReDif NAO tem item de menu; so abre pela Integracao Contabil
+    *-- (FormSigPrIct, "Visualizar as diferencas na Tela?") com a data session
+    *-- que tem movaux/dif2. Aberto do menu ficava vazio (grade com "Header1").
     DEFINE BAR 93 OF popRelatorios PROMPT "Impress" + CHR(227) + "o de Documento" ;
            MESSAGE "Impress" + CHR(227) + "o de Documento por Opera" + CHR(231) + CHR(227) + "o"
     DEFINE BAR 94 OF popRelatorios PROMPT "\-"
@@ -1400,7 +1401,6 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 85 OF popRelatorios DO AbrirFormSIGRECTP
     ON SELECTION BAR 87 OF popRelatorios DO AbrirFormSigReDdp
     ON SELECTION BAR 89 OF popRelatorios DO AbrirFormSIGREDES
-    ON SELECTION BAR 91 OF popRelatorios DO AbrirFormSigReDif
     ON SELECTION BAR 93 OF popRelatorios DO AbrirFormsigredoc
     ON SELECTION BAR 95 OF popRelatorios DO AbrirFormSigReDpD
     ON SELECTION BAR 97 OF popRelatorios DO AbrirFormsigredtv
@@ -3748,39 +3748,6 @@ PROCEDURE AbrirFormSIGREDES()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir Relat" + CHR(243) + "rio de Cotas de Desconto:" + CHR(13) + CHR(13) + ;
-                     "Erro: " + loException.Message + CHR(13) + ;
-                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
-                     "Procedure: " + loException.Procedure
-
-        MostrarErro(lcMensagem, "Erro Detalhado")
-    ENDTRY
-
-    IF VARTYPE(loForm) = "O"
-        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
-    ENDIF
-ENDPROC
-
-*------------------------------------------------------------------------------
-* AbrirFormSigReDif - Abre visualizador de Diferencas Encontradas (Contabilidade)
-*   NOTA: Este form recebe DataSessionId do form chamador (movaux/dif2).
-*   Quando aberto do menu sem contexto, o grid ficara vazio.
-*------------------------------------------------------------------------------
-PROCEDURE AbrirFormSigReDif()
-    LOCAL loForm, loException
-
-    TRY
-        GarantirClasse("FormSigReDif")
-        loForm = CREATEOBJECT("FormSigReDif")
-
-        IF VARTYPE(loForm) <> "O"
-            MostrarErro("Erro ao criar Visualizador de Diferen" + CHR(231) + "as Encontradas" + CHR(13) + ;
-                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
-        ENDIF
-
-    CATCH TO loException
-        LOCAL lcMensagem
-        lcMensagem = "Erro ao abrir Visualizador de Diferen" + CHR(231) + "as Encontradas:" + ;
-                     CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
