@@ -798,8 +798,12 @@ DEFINE CLASS SigReDpDBO AS RelatorioBase
                         loc_nEnv = IIF(loc_lDope, CrSigCdNec.Nenvs, 0)
 
                         *-- Filtrar grupo de transito (configurado em SigCdPam)
-                        IF USED("CrSigCdPam") AND ;
-                                ALLTRIM(loc_cGrp) = ALLTRIM(CrSigCdPam.GrTrans)
+                        *-- Legado: If lcGrp = CrSigCdPam.GrTrans (ambos char(10) com
+                        *   padding). Com ALLTRIM nos dois lados e GrTrans em branco,
+                        *   "11210" = "" eh .T. com SET EXACT OFF e TODA linha era
+                        *   descartada (relatorio sempre vazio). Comparacao exata.
+                        IF USED("CrSigCdPam") AND !EMPTY(CrSigCdPam.GrTrans) AND ;
+                                ALLTRIM(loc_cGrp) == ALLTRIM(CrSigCdPam.GrTrans)
                             SELECT CrSigCdNec
                             LOOP
                         ENDIF
@@ -1016,15 +1020,9 @@ DEFINE CLASS SigReDpDBO AS RelatorioBase
 
                 loc_cFRX = THIS.ObterNomeFRX()
 
-                IF loc_cFRX = "SigReDp7"
-                    SET POINT TO ","
-                    SET SEPARATOR TO "."
-                    REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) PREVIEW NOCONSOLE
-                    SET POINT TO "."
-                    SET SEPARATOR TO ","
-                ELSE
-                    REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) PREVIEW NOCONSOLE
-                ENDIF
+                *-- SETs do FRX legado isolados (SigReDp7: legado usa POINT ",")
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + loc_cFRX, "PREVIEW", "", ;
+                    (loc_cFRX == "SigReDp7"))
 
                 loc_lSucesso = .T.
                 EXIT
@@ -1056,27 +1054,9 @@ DEFINE CLASS SigReDpDBO AS RelatorioBase
 
                 loc_cFRX = THIS.ObterNomeFRX()
 
-                IF loc_cFRX = "SigReDp7"
-                    SET POINT TO ","
-                    SET SEPARATOR TO "."
-                    IF loc_lDialogo
-                        REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINTER PROMPT NOCONSOLE
-                    ELSE
-                        REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINTER NOCONSOLE
-                    ENDIF
-                    SET POINT TO "."
-                    SET SEPARATOR TO ","
-                ELSE
-                    IF loc_lDialogo
-                        REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINTER PROMPT NOCONSOLE
-                    ELSE
-                        REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINTER NOCONSOLE
-                    ENDIF
-                ENDIF
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + loc_cFRX, ;
+                    IIF(loc_lDialogo, "PRINTER_PROMPT", "PRINTER"), "", ;
+                    (loc_cFRX == "SigReDp7"))
 
                 loc_lSucesso = .T.
                 EXIT

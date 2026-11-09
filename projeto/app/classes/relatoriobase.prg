@@ -58,14 +58,21 @@ DEFINE CLASS RelatorioBase AS Custom
     *   par_cModo    : "PREVIEW" | "PRINTER_PROMPT" | "PRINTER" | "ASCII"
     *   par_cArquivo : arquivo de saida (so para "ASCII")
     *--------------------------------------------------------------------------
-    PROCEDURE ReportFormIsolado(par_cFRX, par_cModo, par_cArquivo)
+    PROCEDURE ReportFormIsolado(par_cFRX, par_cModo, par_cArquivo, par_lDecimalVirgula)
+        *-- par_lDecimalVirgula (opcional): FRX que o proprio legado imprimia
+        *   com SET POINT TO "," / SEPARATOR "." (ex.: SigReDp7)
         LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
         loc_cPointOrig    = SET("POINT")
         loc_cSepOrig      = SET("SEPARATOR")
         loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
         TRY
-            SET POINT TO "."
-            SET SEPARATOR TO ","
+            IF VARTYPE(par_lDecimalVirgula) = "L" AND par_lDecimalVirgula
+                SET POINT TO ","
+                SET SEPARATOR TO "."
+            ELSE
+                SET POINT TO "."
+                SET SEPARATOR TO ","
+            ENDIF
             SET REPORTBEHAVIOR 80
             DO CASE
                 CASE par_cModo == "PREVIEW"

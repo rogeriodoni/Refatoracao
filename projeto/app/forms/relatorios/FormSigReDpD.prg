@@ -1960,7 +1960,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdGcr")
                 SELECT CrSigCdGcr
                 SET ORDER TO BalCodigo
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdGcr.Codigos)))
                     loc_oPg.txt_4c_GetGrupo.Value  = ALLTRIM(CrSigCdGcr.Codigos)
                     loc_oPg.txt_4c_GetDGrupo.Value = ALLTRIM(CrSigCdGcr.Descrs)
                 ELSE
@@ -1990,7 +1990,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdGcr")
                 SELECT CrSigCdGcr
                 SET ORDER TO BalDescrs
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdGcr.Descrs)))
                     loc_oPg.txt_4c_GetGrupo.Value  = ALLTRIM(CrSigCdGcr.Codigos)
                     loc_oPg.txt_4c_GetDGrupo.Value = ALLTRIM(CrSigCdGcr.Descrs)
                 ELSE
@@ -2020,7 +2020,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdCli")
                 SELECT CrSigCdCli
                 SET ORDER TO BalCodigo
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdCli.IClis)))
                     loc_oPg.txt_4c_GetConta.Value  = ALLTRIM(CrSigCdCli.IClis)
                     loc_oPg.txt_4c_GetDConta.Value = ALLTRIM(CrSigCdCli.RClis)
                 ELSE
@@ -2050,7 +2050,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdCli")
                 SELECT CrSigCdCli
                 SET ORDER TO BalNome
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdCli.RClis)))
                     loc_oPg.txt_4c_GetConta.Value  = ALLTRIM(CrSigCdCli.IClis)
                     loc_oPg.txt_4c_GetDConta.Value = ALLTRIM(CrSigCdCli.RClis)
                 ELSE
@@ -2175,7 +2175,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdCli")
                 SELECT CrSigCdCli
                 SET ORDER TO BalCodigo
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdCli.IClis)))
                     loc_oPg.txt_4c_GetCodCli.Value  = ALLTRIM(CrSigCdCli.IClis)
                     loc_oPg.txt_4c_GetDescCli.Value = ALLTRIM(CrSigCdCli.RClis)
                 ELSE
@@ -2205,7 +2205,7 @@ DEFINE CLASS FormSigReDpD AS FormBase
             IF USED("CrSigCdCli")
                 SELECT CrSigCdCli
                 SET ORDER TO BalNome
-                IF SEEK(loc_cVal)
+                IF SEEK(PADR(loc_cVal, LEN(CrSigCdCli.RClis)))
                     loc_oPg.txt_4c_GetCodCli.Value  = ALLTRIM(CrSigCdCli.IClis)
                     loc_oPg.txt_4c_GetDescCli.Value = ALLTRIM(CrSigCdCli.RClis)
                 ELSE
