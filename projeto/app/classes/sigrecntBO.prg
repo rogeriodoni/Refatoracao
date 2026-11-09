@@ -70,6 +70,12 @@ DEFINE CLASS sigrecntBO AS RelatorioBase
                     EXIT
                 ENDIF
 
+                *-- Erro318: legado Init (linhas 791-795) - VisualizaCtg controla o
+                *-- "Imprimir quando" das colunas de quantidade CONTADA no SigReCnt.frx.
+                *-- No FRX a expressao virou THIS.this_lVisualizaCtg (o REPORT FORM roda
+                *-- dentro deste BO; ThisForm estourava erro 1938).
+                THIS.this_lVisualizaCtg = fChecaAcesso("SIGRECNT", "CONTAGEM")
+
                 loc_nResult = SQLEXEC(gnConnHandle, "SELECT * FROM SigLcNv1", "cursor_4c_SigLcNv1")
                 IF loc_nResult < 1
                     THIS.this_cMensagemErro = "Erro ao carregar n" + CHR(237) + "vel 1"

@@ -331,9 +331,13 @@ DEFINE CLASS SIGRECMVBO AS RelatorioBase
                 loc_nSal = 0
                 SELECT cursor_4c_Saldo
                 SCAN
-                    loc_cGCM    = ALLTRIM(cursor_4c_Saldo.Grupos) + ;
-                                  ALLTRIM(cursor_4c_Saldo.Contas) + ;
-                                  ALLTRIM(cursor_4c_Saldo.Moedas)
+                    *-- Erro317: GruConMoes eh chave POSICIONAL (Grupos char10 + Contas
+                    *-- char10 + Moedas char3 = char23). ALLTRIM nas partes encurtava a
+                    *-- chave e ela nunca casava -> custo de producao sempre 0 (regra #42).
+                    *-- Legado: lcGCM = crSaldo.Grupos + crSaldo.Contas + crSaldo.Moedas
+                    loc_cGCM    = PADR(cursor_4c_Saldo.Grupos, 10) + ;
+                                  PADR(cursor_4c_Saldo.Contas, 10) + ;
+                                  PADR(cursor_4c_Saldo.Moedas, 3)
                     loc_cMoeOpe = ALLTRIM(cursor_4c_Saldo.Moedas)
 
                     loc_cSQL = "SELECT a.Saldos, a.Datas, a.Opers FROM SigMvCcr a " + ;
@@ -407,9 +411,13 @@ DEFINE CLASS SIGRECMVBO AS RelatorioBase
                 THIS.this_nTotalQtd   = NVL(cursor_4c_TotItens.TotQtd, 0)
 
                 *-- Cria cursor principal do relatorio (crVenda) com estrutura do SigMvItn
+                *-- Erro317: o legado escreve "00000000.0000 AS ValCuss" pensando no
+                *-- VFP (8 inteiros + 4 decimais), mas o SQL Server tipa esse literal
+                *-- como numeric(4,4) - max 0,9999 - e o custo saia "*,****" no
+                *-- relatorio. CAST explicito mantem a largura pretendida.
                 loc_cSQL = "SELECT 0 AS ordem, dopes, cpros, qtds, pesos, " + ;
-                           "dtalts AS Datas, 00000000.0000 AS ValCuss, " + ;
-                           "00000000.0000 AS TotCuss, '  ' AS MoeCuss " + ;
+                           "dtalts AS Datas, CAST(0 AS numeric(12,4)) AS ValCuss, " + ;
+                           "CAST(0 AS numeric(12,4)) AS TotCuss, '  ' AS MoeCuss " + ;
                            "FROM SigMvItn WHERE 0=1"
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)
                 IF loc_nResult < 1
@@ -431,8 +439,8 @@ DEFINE CLASS SIGRECMVBO AS RelatorioBase
                     loc_cDopes = ALLTRIM(Dopes)
 
                     loc_cSQL = "SELECT 2 AS ordem, a.dopes, a.cpros, a.qtds, a.pesos, " + ;
-                               "b.Datas, 00000000.0000 AS ValCuss, " + ;
-                               "00000000.0000 AS TotCuss, '  ' AS MoeCuss " + ;
+                               "b.Datas, CAST(0 AS numeric(12,4)) AS ValCuss, " + ;
+                               "CAST(0 AS numeric(12,4)) AS TotCuss, '  ' AS MoeCuss " + ;
                                "FROM SigMvItn a " + ;
                                "INNER JOIN sigopetq b ON a.codbarras = b.cbars " + ;
                                "WHERE a.Dopes = " + EscaparSQL(loc_cDopes) + ;

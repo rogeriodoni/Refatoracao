@@ -277,12 +277,15 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         CD (loc_cReports)
 
         DO CASE
+            *-- Erro314: estas linhas chamavam THIS.ExecutarReportForm (o proprio
+            *-- metodo) -> recursao infinita, erro 103 "Allowed DO nesting ...
+            *-- exceeded". Legado: SIGRECND linhas 401/409/537.
             CASE par_cModo == "PREVIEW"
-                THIS.ExecutarReportForm("SigReCnd", "PREVIEW")
+                REPORT FORM SigReCnd PREVIEW NOCONSOLE
             CASE par_cModo == "PRINTER_PROMPT"
-                THIS.ExecutarReportForm("SigReCnd", "PRINTER_PROMPT")
+                REPORT FORM SigReCnd TO PRINTER PROMPT NOCONSOLE
             CASE par_cModo == "PRINTER"
-                THIS.ExecutarReportForm("SigReCnd", "PRINTER")
+                REPORT FORM SigReCnd TO PRINTER NOCONSOLE
         ENDCASE
 
         CD (loc_cCdOrig)
@@ -375,11 +378,21 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                 SET POINT TO "."
                 SET SEPARATOR TO ","
                 SELECT TmpHist
-                THIS.ExecutarReportForm("SigReCnd", "PREVIEW")
+                *-- Erro314: REPORT FORM direto (via helper o REPORTBEHAVIOR 90
+                *-- dele anularia o 80 acima - Erro102). Legado linha 537.
+                REPORT FORM SigReCnd PREVIEW NOCONSOLE
                 SET REPORTBEHAVIOR (loc_nBehaviorOrig)
                 SET POINT TO (loc_cPointOrig)
                 SET SEPARATOR TO (loc_cSepOrig)
                 CD (loc_cCdOrig)
+                *-- Restaurar menu apos PREVIEW (Erro63), como no helper
+                TRY
+                    SET SYSMENU TO DEFAULT
+                    RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+                    CriarMenuPrincipal()
+                CATCH
+                    *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+                ENDTRY
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

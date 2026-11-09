@@ -675,7 +675,7 @@ DEFINE CLASS SigReCmpBO AS RelatorioBase
                                              CPros, DPros, Cunis, Pesoms, reffs, Mats, ;
                                              Dmats, unicompos, cunips, Nops, ObsOfs, RefMats) ;
                                             VALUES (loc_cGrupoRel, loc_cContaRel, ;
-                                                    CrSigMvCab.Cemps, CrSigCdEmp.Razas, ;
+                                                    CrSigMvCab.Emps, CrSigCdEmp.Razas, ;
                                                     CrSigMvItn.CGrus, loc_cDgru, ;
                                                     CrSigMvItn.CPros, CrSigMvItn.DPros, ;
                                                     CrSigMvItn.Cunis, loc_lnPeso, ;
@@ -707,7 +707,7 @@ DEFINE CLASS SigReCmpBO AS RelatorioBase
                                          CPros, DPros, Cunis, Pesoms, reffs, Mats, ;
                                          Dmats, unicompos, cunips, Nops, ObsOfs, RefMats) ;
                                         VALUES (loc_cGrupoRel, loc_cContaRel, ;
-                                                CrSigMvCab.Cemps, CrSigCdEmp.Razas, ;
+                                                CrSigMvCab.Emps, CrSigCdEmp.Razas, ;
                                                 CrSigMvItn.CGrus, loc_cDgru, ;
                                                 CrSigMvItn.CPros, CrSigMvItn.DPros, ;
                                                 CrSigMvItn.Cunis, loc_lnPeso, ;

@@ -1102,6 +1102,14 @@ DEFINE CLASS sigrecopBO AS RelatorioBase
         TRY
             loc_lSucesso = THIS.PrepararDados()
             IF loc_lSucesso
+                *-- Erro320: o SigReCr8.frx legado (identico em todas as instalacoes)
+                *-- imprime "alltrim(gv)" (coluna Tabela) e "ValAPags" (coluna A Pagar),
+                *-- que NENHUM codigo legado do SIGRECOP gera - nem o crAnalitico nem
+                *-- variavel global. Sem declarar, o REPORT FORM estoura "Variable not
+                *-- found". Vazias = branco/zero, sem inventar regra de negocio.
+                PRIVATE gv, ValAPags
+                gv       = ""
+                ValAPags = 0
                 loc_lcSep = SET("Separator")
                 loc_lcPto = SET("Point")
                 SET POINT TO ","
@@ -1143,6 +1151,14 @@ DEFINE CLASS sigrecopBO AS RelatorioBase
         TRY
             loc_lSucesso = THIS.PrepararDados()
             IF loc_lSucesso
+                *-- Erro320: o SigReCr8.frx legado (identico em todas as instalacoes)
+                *-- imprime "alltrim(gv)" (coluna Tabela) e "ValAPags" (coluna A Pagar),
+                *-- que NENHUM codigo legado do SIGRECOP gera - nem o crAnalitico nem
+                *-- variavel global. Sem declarar, o REPORT FORM estoura "Variable not
+                *-- found". Vazias = branco/zero, sem inventar regra de negocio.
+                PRIVATE gv, ValAPags
+                gv       = ""
+                ValAPags = 0
                 loc_lcSep = SET("Separator")
                 loc_lcPto = SET("Point")
                 SET POINT TO ","

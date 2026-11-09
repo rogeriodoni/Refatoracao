@@ -590,7 +590,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (gc_4c_CaminhoReports + "RelSigrecpe.frx") ;
+                REPORT FORM (gc_4c_CaminhoReports + "SigReCpe.frx") ;
                     TO PRINTER PROMPT NOCONSOLE
                 loc_lSucesso = .T.
             ENDIF
@@ -609,7 +609,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (gc_4c_CaminhoReports + "RelSigrecpe.frx") ;
+                REPORT FORM (gc_4c_CaminhoReports + "SigReCpe.frx") ;
                     PREVIEW NOCONSOLE
                 loc_lSucesso = .T.
             ENDIF

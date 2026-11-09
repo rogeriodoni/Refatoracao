@@ -39,7 +39,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
 
     *-- Cursores de saida do relatorio
     this_cCursorAnalitico = "cursor_4c_Analitico"
-    this_cCursorCabecalho = "cursor_4c_Cabecalho"
+    this_cCursorCabecalho = "dbcabecalho"
 
     *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
     this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
@@ -255,13 +255,13 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                                 IIF(loc_nOpt = 2, "N" + CHR(227) + "o", "Ambos"))
 
             *-- Cursor cabecalho
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("dbcabecalho")
+                USE IN dbcabecalho
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho (NomeEmpresa C(80), Titulo C(80))
+            CREATE CURSOR dbcabecalho (NomeEmpresa C(80), Titulo C(80))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho (NomeEmpresa, Titulo) ;
+            INSERT INTO dbcabecalho (NomeEmpresa, Titulo) ;
                 VALUES (loc_cNmEmpresa, loc_cNmTitulo)
 
             *-- Cursor analitico de saida
@@ -650,7 +650,8 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                 loc_cPto = SET("Point")
                 SET POINT TO ","
                 SET SEPARATOR TO "."
-                REPORT FORM (loc_cFrx) TO PRINTER NOCONSOLE
+                *-- Erro321: sem a pasta, o REPORT FORM dependia da pasta corrente
+                REPORT FORM (gc_4c_CaminhoReports + loc_cFrx) TO PRINTER NOCONSOLE
                 SET POINT TO (loc_cPto)
                 SET SEPARATOR TO (loc_cSep)
                 loc_lResultado = .T.
@@ -675,7 +676,8 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                 loc_cPto = SET("Point")
                 SET POINT TO ","
                 SET SEPARATOR TO "."
-                REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
+                *-- Erro321: sem a pasta, o REPORT FORM dependia da pasta corrente
+                REPORT FORM (gc_4c_CaminhoReports + loc_cFrx) PREVIEW NOCONSOLE
                 SET POINT TO (loc_cPto)
                 SET SEPARATOR TO (loc_cSep)
                 loc_lResultado = .T.
