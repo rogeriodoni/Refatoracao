@@ -1409,7 +1409,7 @@ DEFINE CLASS Formsigredtv AS FormBase
         loc_cValor  = ALLTRIM(THIS.txt_4c_Demons.Value)
         loc_oBusca  = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdMrr", "cursor_4c_BuscaDem", "Balancos", loc_cValor, ;
-            "Demonstrativos", .F., .T., "")
+            "Demonstrativos", .F., .T., THIS.FiltroMapas())
         IF VARTYPE(loc_oBusca) = "O"
             IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
                 THIS.txt_4c_Demons.Value = ALLTRIM(cursor_4c_BuscaDem.Balancos)
@@ -1431,13 +1431,23 @@ DEFINE CLASS Formsigredtv AS FormBase
         THIS.txt_4c_Demons.Refresh()
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * FiltroMapas - Legado carrega crSigCdMrr com
+    *   Where Iif(ThisForm.Tipo=2, [], [Not]) Mapas = 2
+    * Demonstrativo (Tipo 1) nao aceita Mapa de Contas e vice-versa.
+    *--------------------------------------------------------------------------
+    PROCEDURE FiltroMapas()
+        RETURN IIF(THIS.this_nTipo = 2, "Mapas = 2", "NOT Mapas = 2")
+    ENDPROC
+
     PROTECTED PROCEDURE ValidarDemonstrativo()
         LOCAL loc_cValor, loc_cSQL, loc_nResult
         loc_cValor  = ALLTRIM(THIS.txt_4c_Demons.Value)
         IF EMPTY(loc_cValor)
             RETURN
         ENDIF
-        loc_cSQL    = "SELECT Balancos FROM SigCdMrr WHERE Balancos = " + EscaparSQL(loc_cValor)
+        loc_cSQL    = "SELECT Balancos FROM SigCdMrr WHERE Balancos = " + EscaparSQL(loc_cValor) + ;
+                      " AND " + THIS.FiltroMapas()
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DemVal")
         IF loc_nResult > 0
             SELECT cursor_4c_DemVal

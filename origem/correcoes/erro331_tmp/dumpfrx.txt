@@ -1,0 +1,44 @@
+3 t=9 c=3 expr=[Codigos] supexpr=[] tag=[]
+10 t=8 c=0 expr=[Time()] supexpr=[] tag=[]
+11 t=8 c=0 expr=[Date()] supexpr=[] tag=[]
+12 t=8 c=0 expr=[crCabecalho.Titulo] supexpr=[] tag=[]
+13 t=8 c=0 expr=['Pag.: '+padl(_pageno,4,'0')] supexpr=[] tag=[]
+14 t=8 c=0 expr=[crCabecalho.Empresa] supexpr=[] tag=[]
+15 t=8 c=0 expr=[crCabecalho.SubTit] supexpr=[] tag=[]
+16 t=8 c=0 expr=[[Cotação : ] + Alltrim(Str(Codigos, 6)) + [     -  Data : ] + Dtoc(DtCotas) + Iif(Aprovados, [   Aprovado -  Aprovador : ] + Alltrim(Aprovador) + [ - ] + Alltrim(NmAprovador), [   Não Aprovado])] supexpr=[] tag=[]
+23 t=8 c=0 expr=['Fornecedor'] supexpr=[] tag=[]
+26 t=8 c=0 expr=[IClis] supexpr=[Contador = 1] tag=[]
+30 t=8 c=0 expr=[RClis] supexpr=[Contador = 1] tag=[]
+31 t=8 c=0 expr=['Produto'] supexpr=[] tag=[]
+33 t=8 c=0 expr=[CPros] supexpr=[Contador = 1] tag=[]
+35 t=8 c=0 expr=[DPros] supexpr=[Contador = 1] tag=[]
+36 t=8 c=0 expr=['Qtde.'] supexpr=[] tag=[]
+38 t=8 c=0 expr=[QtdAdqs] supexpr=[Contador = 1] tag=[]
+40 t=8 c=0 expr=['Valor'] supexpr=[] tag=[]
+42 t=8 c=0 expr=[ValAdqs] supexpr=[Contador = 1] tag=[]
+44 t=8 c=0 expr=[[Justificativa Geral :]] supexpr=[Not Empty(JustGerals)] tag=[]
+48 t=8 c=0 expr=['Justificativa'] supexpr=[] tag=[]
+49 t=8 c=0 expr=[Alltrim(Justificas)] supexpr=[Contador = 1] tag=[]
+50 t=8 c=0 expr=[[Pedidos :]] supexpr=[Contador = 2] tag=[]
+51 t=8 c=0 expr=[Dopes] supexpr=[Contador <> 1] tag=[]
+52 t=8 c=0 expr=[Numes] supexpr=[Contador <> 1] tag=[]
+53 t=8 c=0 expr=[DtPedidos] supexpr=[Contador <> 1] tag=[]
+54 t=8 c=0 expr=[Emps] supexpr=[Contador <> 1] tag=[]
+56 t=8 c=0 expr=[Alltrim(JustGerals)] supexpr=[Not Empty(JustGerals)] tag=[]
+61 t=8 c=0 expr=[QtdAdqs] supexpr=[] tag=[]
+63 t=8 c=0 expr=[ValAdqs] supexpr=[] tag=[]
+71 t=8 c=0 expr=[QtdAdqs] supexpr=[] tag=[]
+73 t=8 c=0 expr=[ValAdqs] supexpr=[] tag=[]
+76 t=8 c=0 expr=[[Total da Cotação : ] + Alltrim(Str(Codigos, 6))] supexpr=[] tag=[]
+77 t=8 c=0 expr=[[Total Geral : ]] supexpr=[] tag=[]
+86 t=25 c=0 expr=[Left = 60 
+Top = 126 
+Width = 520 
+Height = 200 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]

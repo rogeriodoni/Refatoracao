@@ -1,0 +1,61 @@
+3 t=9 c=3 expr=[opcao] supexpr=[] tag=[]
+4 t=9 c=3 expr=[cemps] supexpr=[] tag=[]
+5 t=9 c=3 expr=[fpags] supexpr=[] tag=[]
+13 t=8 c=0 expr=[fpags] supexpr=[] tag=[]
+14 t=8 c=0 expr=[iif(opcao=2,'Vencimento',padc('Data Ent.',10,'_'))] supexpr=[] tag=[]
+15 t=8 c=0 expr=[datas] supexpr=[] tag=[]
+16 t=8 c=0 expr=[padc('Lote',10,'_')] supexpr=[] tag=[]
+17 t=8 c=0 expr=[nlotecs] supexpr=[] tag=[]
+18 t=8 c=0 expr=[padc('Operação',20,'_')] supexpr=[] tag=[]
+19 t=8 c=0 expr=[dopes] supexpr=[] tag=[]
+20 t=8 c=0 expr=[padc('Código',6,'_')] supexpr=[] tag=[]
+21 t=8 c=0 expr=[numes] supexpr=[] tag=[]
+22 t=8 c=0 expr=[padc('Valor Bruto',15,'_')] supexpr=[] tag=[]
+23 t=8 c=0 expr=[valor] supexpr=[] tag=[]
+24 t=8 c=0 expr=['Empresa : '+cemps+' - '+Razas] supexpr=[] tag=[]
+25 t=8 c=0 expr=[total_cartao] supexpr=[] tag=[]
+26 t=8 c=0 expr=[total_empresa] supexpr=[] tag=[]
+27 t=8 c=0 expr=[total_geral] supexpr=[] tag=[]
+28 t=8 c=0 expr=['Sub-Total : '] supexpr=[] tag=[]
+29 t=8 c=0 expr=['Total '+cemps+' : '] supexpr=[] tag=[]
+30 t=8 c=0 expr=['Total '+ alltrim(cMovimento)+' : '] supexpr=[] tag=[]
+31 t=8 c=0 expr=[padc('No.Resumo',10,'_')] supexpr=[] tag=[]
+32 t=8 c=0 expr=[noresumos] supexpr=[] tag=[]
+33 t=8 c=0 expr=[padc('Cliente',40,'_')] supexpr=[] tag=[]
+34 t=8 c=0 expr=[iclis+'-'+rclis] supexpr=[] tag=[]
+35 t=8 c=0 expr=[cMovimento] supexpr=[] tag=[]
+36 t=8 c=0 expr=[padc('Taxa',8,'_')] supexpr=[] tag=[]
+37 t=8 c=0 expr=[taxas] supexpr=[] tag=[]
+38 t=8 c=0 expr=[padc('Valor Líquido',15,'_')] supexpr=[] tag=[]
+39 t=8 c=0 expr=[ValLiq] supexpr=[] tag=[]
+40 t=8 c=0 expr=[TotLiq_Cartao] supexpr=[] tag=[]
+41 t=8 c=0 expr=[TotLiq_Empresa] supexpr=[] tag=[]
+42 t=8 c=0 expr=[TotLiq_Geral] supexpr=[] tag=[]
+43 t=8 c=0 expr=['Vencimento'] supexpr=[] tag=[]
+44 t=8 c=0 expr=[nvl(vencs,"")] supexpr=[] tag=[]
+45 t=8 c=0 expr=['Cartão de Crédito no Período  de '+dtoc(m.dDtInicial)+' a '+dtoc(m.dDtFinal)] supexpr=[] tag=[]
+46 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+47 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+49 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+54 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+55 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+56 t=8 c=0 expr=[this.name] supexpr=[] tag=[]
+58 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+60 t=18 c=0 expr=[valor] supexpr=[] tag=[0]
+61 t=18 c=0 expr=[valor] supexpr=[] tag=[0]
+62 t=18 c=0 expr=[valor] supexpr=[] tag=[0]
+63 t=18 c=0 expr=[ValLiq] supexpr=[] tag=[0]
+64 t=18 c=0 expr=[ValLiq] supexpr=[] tag=[0]
+65 t=18 c=0 expr=[ValLiq] supexpr=[] tag=[0]
+75 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource = .NULL. 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]

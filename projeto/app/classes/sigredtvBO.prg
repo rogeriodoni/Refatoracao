@@ -260,7 +260,11 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
 
             *-- Configuracoes dos Mapas/Demonstrativos
             WAIT WINDOW "Aguarde!!! Carregando Configura" + CHR(231) + CHR(245) + "es dos Mapas..." NOWAIT
-            loc_cQuery = "SELECT * FROM SigCdMrr"
+            *-- Legado: Where Iif(ThisForm.Tipo=2, [], [Not]) Mapas = 2
+            *   Demonstrativo (Tipo 1) so enxerga Mapas <> 2; Mapa de Contas
+            *   (Tipo 2) so Mapas = 2.
+            loc_cQuery = "SELECT * FROM SigCdMrr WHERE " + ;
+                         IIF(THIS.this_nTipo = 2, "", "NOT ") + "Mapas = 2"
             loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "crSigCdMrr")
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Falha ao carregar SigCdMrr"
@@ -467,6 +471,22 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
         PRIVATE pDtI, pDtF, pDcI, pDcF
 
         loc_lSucesso = .F.
+
+        *-- Demonstrativo tem de existir em crSigCdMrr (ja filtrado por tipo:
+        *   legado so aceita no Valid o que esta no cursor). Antes o erro era
+        *   exibido e o processamento SEGUIA, gerando relatorio do item errado.
+        LOCAL loc_lAchouDem
+        loc_lAchouDem = .F.
+        IF USED("crSigCdMrr")
+            loc_lAchouDem = SEEK(PADR(ALLTRIM(THIS.this_cDemonstrativo), ;
+                LEN(crSigCdMrr.Balancos)), "crSigCdMrr", "Balancos")
+        ENDIF
+        IF !loc_lAchouDem
+            THIS.this_cMensagemErro = "Demonstrativo n" + CHR(227) + "o encontrado: " + ;
+                ALLTRIM(THIS.this_cDemonstrativo)
+            RETURN .F.
+        ENDIF
+
         TRY
             *-- Filtros do formulario mapeados para variaveis locais
             loc_cMoe   = ALLTRIM(THIS.this_cCodMoeda)
@@ -524,14 +544,10 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
             *-- Salva filtro de empresas para uso pelo PrepararComparativo
             THIS.this_cFiltroEmpresas = loc_cEpr
 
-            *-- Verifica se demonstrativo existe
+            *-- Demonstrativo ja validado antes do TRY (crSigCdMrr posicionado)
             SELECT crSigCdMrr
             SET ORDER TO Balancos
-            IF !SEEK(loc_cDmr, "crSigCdMrr", "Balancos")
-                THIS.this_cMensagemErro = "Demonstrativo n" + CHR(227) + "o encontrado: " + loc_cDmr
-                MsgErro(THIS.this_cMensagemErro, "sigredtvBO.PrepararDados")
-                loc_lSucesso = .F.
-            ENDIF
+            =SEEK(loc_cDmr, "crSigCdMrr", "Balancos")
             loc_llPep = (crSigCdMrr.Mapas = 2)
             loc_lcCol = IIF(loc_nOpc = 2, "Mov M" + CHR(234) + "s Anterior", "Mov Ano Anterior")
 
@@ -1257,7 +1273,7 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
                 SELECT Emps AS Empresas, PROPER(Titulos) AS Titulos, ;
                        SUM(Valor) AS Valores ;
                   FROM dbRelatorio ;
-                 WHERE Ps <> "4" ;
+                 WHERE Ps <> "4" AND Nivels > 0 ;
                  GROUP BY 1, 2 ;
                   INTO CURSOR Tempo
                 SELECT Tempo
@@ -1873,15 +1889,13 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF !THIS.PrepararDados()
-                MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + ;
-                    "vel preparar os dados do relat" + CHR(243) + "rio.", ;
-                    "Demonstrativo")
+                *-- Mensagem (this_cMensagemErro) exibida pelo form
             ELSE
                 IF USED("Tempo") AND THIS.this_lComparativo
                     *-- Relatorio por empresa em modo comparativo
                 ELSE
                     loc_cFRX = THIS.ObterNomeFRX()
-                    REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+                    THIS.ReportFormIsolado(loc_cFRX, "PREVIEW", "")
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF
@@ -1901,12 +1915,10 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF !THIS.PrepararDados()
-                MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + ;
-                    "vel preparar os dados do relat" + CHR(243) + "rio.", ;
-                    "Demonstrativo")
+                *-- Mensagem (this_cMensagemErro) exibida pelo form
             ELSE
                 loc_cFRX = THIS.ObterNomeFRX()
-                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(loc_cFRX, "PRINTER_PROMPT", "")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -1925,12 +1937,10 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF !THIS.PrepararDados()
-                MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + ;
-                    "vel preparar os dados do relat" + CHR(243) + "rio.", ;
-                    "Demonstrativo")
+                *-- Mensagem (this_cMensagemErro) exibida pelo form
             ELSE
                 loc_cFRX = THIS.ObterNomeFRX()
-                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(loc_cFRX, "PRINTER", "")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

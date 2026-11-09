@@ -352,7 +352,7 @@ DEFINE CLASS Formsigreegp AS FormBase
         *-- EMPRESA (lbl_empresa.top=185->100, get_cd_empresa.top=180->95)
         loc_oPagina.AddObject("lbl_4c_Lbl_empresa", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_empresa
-            .Top       = 185
+            .Top       = 100
             .Left      = 237
             .AutoSize  = .T.
             .Caption   = "Empresa :"
@@ -488,7 +488,7 @@ DEFINE CLASS Formsigreegp AS FormBase
         *-- GRUPO DE PRODUTO (lbl_grupo.top=264->179, get_cd_grupo.top=259->174)
         loc_oPagina.AddObject("lbl_4c_Lbl_grupo", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_grupo
-            .Top       = 264
+            .Top       = 179
             .Left      = 193
             .AutoSize  = .T.
             .Caption   = "Grupo de Produto :"
@@ -624,7 +624,7 @@ DEFINE CLASS Formsigreegp AS FormBase
         *-- DATA e DT. COTACAO (lbl_data.top=341->256, get_data.top=336->251)
         loc_oPagina.AddObject("lbl_4c_Lbl_data", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_data
-            .Top       = 341
+            .Top       = 256
             .Left      = 255
             .AutoSize  = .T.
             .Caption   = "Data :"
@@ -651,7 +651,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("lbl_4c_Lbl_dt_cotacao", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_dt_cotacao
-            .Top       = 341
+            .Top       = 256
             .Left      = 384
             .AutoSize  = .T.
             .Caption   = "Dt. Cota" + CHR(231) + CHR(227) + "o :"
@@ -680,7 +680,7 @@ DEFINE CLASS Formsigreegp AS FormBase
         *-- MOEDA (lbl_moeda.top=368->283, get_moeda.top=363->278)
         loc_oPagina.AddObject("lbl_4c_Lbl_moeda", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_moeda
-            .Top       = 368
+            .Top       = 283
             .Left      = 246
             .AutoSize  = .T.
             .Caption   = "Moeda :"
@@ -739,7 +739,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("cbo_4c_CmbOrdem", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbOrdem
-            .Top       = 390
+            .Top       = 305
             .Left      = 290
             .Width     = 152
             .Height    = 24
@@ -770,7 +770,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_Opc_Venda", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Venda
-            .Top           = 415
+            .Top           = 330
             .Left          = 285
             .Width         = 97
             .Height        = 23
@@ -821,7 +821,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_Opc_fator", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_fator
-            .Top           = 416
+            .Top           = 331
             .Left          = 541
             .Width         = 97
             .Height        = 23
@@ -872,7 +872,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_Opc_Custo", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Custo
-            .Top           = 439
+            .Top           = 354
             .Left          = 285
             .Width         = 97
             .Height        = 23
@@ -923,7 +923,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_Opc_Peso", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Peso
-            .Top           = 440
+            .Top           = 355
             .Left          = 541
             .Width         = 97
             .Height        = 23
@@ -974,7 +974,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptUnis", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptUnis
-            .Top           = 462
+            .Top           = 377
             .Left          = 541
             .Width         = 97
             .Height        = 23
@@ -1012,7 +1012,7 @@ DEFINE CLASS Formsigreegp AS FormBase
         *-- DADOS DA COTACAO (lbl_dados_cotacao.top=467->382, opt_dados_cotacao.top=463->378)
         loc_oPagina.AddObject("lbl_4c_Lbl_dados_cotacao", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_dados_cotacao
-            .Top       = 467
+            .Top       = 382
             .Left      = 190
             .AutoSize  = .T.
             .Caption   = "Dados da Cota" + CHR(231) + CHR(227) + "o :"
@@ -1025,7 +1025,7 @@ DEFINE CLASS Formsigreegp AS FormBase
 
         loc_oPagina.AddObject("obj_4c_Opt_dados_cotacao", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opt_dados_cotacao
-            .Top           = 463
+            .Top           = 378
             .Left          = 285
             .Width         = 97
             .Height        = 23
@@ -1315,7 +1315,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             ENDIF
             IF loc_lProsseguir
                 IF USED("cursor_4c_SigCdEmp") AND ;
-                   SEEK(loc_cCodigo, "cursor_4c_SigCdEmp", "cemps")
+                   SEEK(PADR(loc_cCodigo, LEN(cursor_4c_SigCdEmp.cemps)), "cursor_4c_SigCdEmp", "cemps")
                     loc_oPagina.txt_4c__cd_empresa.Value = ALLTRIM(cursor_4c_SigCdEmp.cemps)
                     loc_oPagina.txt_4c__ds_empresa.Value = ALLTRIM(cursor_4c_SigCdEmp.razas)
                 ELSE
@@ -1375,7 +1375,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             ENDIF
             IF loc_lProsseguir
                 IF USED("cursor_4c_SigCdGcr") AND ;
-                   SEEK(loc_cCodigo, "cursor_4c_SigCdGcr", "codigos")
+                   SEEK(PADR(loc_cCodigo, LEN(cursor_4c_SigCdGcr.codigos)), "cursor_4c_SigCdGcr", "codigos")
                     loc_oPagina.txt_4c__Cd_GrEstoque.Value = ALLTRIM(cursor_4c_SigCdGcr.codigos)
                     loc_oPagina.txt_4c__Ds_GrEstoque.Value = ALLTRIM(cursor_4c_SigCdGcr.descrs)
                 ELSE
@@ -1701,7 +1701,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             ENDIF
             IF loc_lProsseguir
                 IF USED("cursor_4c_SigCdMoe") AND ;
-                   SEEK(loc_cCodigo, "cursor_4c_SigCdMoe", "cmoes")
+                   SEEK(PADR(loc_cCodigo, LEN(cursor_4c_SigCdMoe.cmoes)), "cursor_4c_SigCdMoe", "cmoes")
                     loc_oPagina.txt_4c__moeda.Value      = ALLTRIM(cursor_4c_SigCdMoe.cmoes)
                     loc_oPagina.txt_4c__moeda_desc.Value = ALLTRIM(cursor_4c_SigCdMoe.dmoes)
                 ELSE

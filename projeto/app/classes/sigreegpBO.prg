@@ -97,7 +97,7 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
             ELSE
                 loc_cFrx = gc_4c_CaminhoReports + THIS.this_cNomeRelatorio + ".frx"
                 IF FILE(loc_cFrx)
-                    REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
+                    THIS.ReportFormIsolado(loc_cFrx, "PRINTER_PROMPT", "")
                     loc_lSucesso = .T.
                 ELSE
                     MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
@@ -125,7 +125,7 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
             ELSE
                 loc_cFrx = gc_4c_CaminhoReports + THIS.this_cNomeRelatorio + ".frx"
                 IF FILE(loc_cFrx)
-                    REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
+                    THIS.ReportFormIsolado(loc_cFrx, "PREVIEW", "")
                     loc_lSucesso = .T.
                 ELSE
                     MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
@@ -327,28 +327,28 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
             IF !llUnis
                 lcChave = "Tempo.grupos + Tempo.estos + PADR(NVL(Tempo.cgrus,''),10) + lcCodCors + lcFatVens"
             ELSE
-                lcChave = "Tempo.grupos + Tempo.estos + Tempo.cUnis + PADR(NVL(Tempo.cgrus,''),10) + lcCodCors + lcFatVens"
+                lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.cUnis, SPACE(3)) + PADR(NVL(Tempo.cgrus,''),10) + lcCodCors + lcFatVens"
             ENDIF
         CASE lnOrdem = 2
             lcOrdem = "1,2,12,3"
             IF !llUnis
                 lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.linhas,'') + lcCodCors + lcFatVens"
             ELSE
-                lcChave = "Tempo.grupos + Tempo.estos + Tempo.cUnis + NVL(Tempo.linhas,'') + lcCodCors + lcFatVens"
+                lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.cUnis, SPACE(3)) + NVL(Tempo.linhas,'') + lcCodCors + lcFatVens"
             ENDIF
         CASE lnOrdem = 3
             lcOrdem = "1,2,13,3"
             IF !llUnis
                 lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.colecoes,'') + lcCodCors + lcFatVens"
             ELSE
-                lcChave = "Tempo.grupos + Tempo.estos + Tempo.cUnis + NVL(Tempo.colecoes,'') + lcCodCors + lcFatVens"
+                lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.cUnis, SPACE(3)) + NVL(Tempo.colecoes,'') + lcCodCors + lcFatVens"
             ENDIF
         CASE lnOrdem = 4
             lcOrdem = "1,2,3"
             IF !llUnis
                 lcChave = "Tempo.grupos + Tempo.estos + Tempo.estos + lcCodCors + lcFatVens"
             ELSE
-                lcChave = "Tempo.grupos + Tempo.estos + Tempo.cUnis + Tempo.estos + lcCodCors + lcFatVens"
+                lcChave = "Tempo.grupos + Tempo.estos + NVL(Tempo.cUnis, SPACE(3)) + Tempo.estos + lcCodCors + lcFatVens"
             ENDIF
         OTHERWISE
             lnOrdem = 1
@@ -572,8 +572,8 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
                     REPLACE dbRelat.fatvens WITH lcFatVens, ;
                         dbRelat.grupos  WITH Tempo.grupos, ;
                         dbRelat.estos   WITH Tempo.estos, ;
-                        dbRelat.cUnis   WITH Tempo.cUnis, ;
-                        dbRelat.cUniPs  WITH Tempo.cUniPs, ;
+                        dbRelat.cUnis   WITH NVL(Tempo.cUnis, ""), ;
+                        dbRelat.cUniPs  WITH NVL(Tempo.cUniPs, ""), ;
                         dbRelat.codCors WITH lcCodCors IN dbRelat
                     DO CASE
                     CASE lnOrdem = 1
@@ -630,10 +630,10 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
 
                 *-- Acumular por unidade
                 SELECT dbUnis
-                SEEK Tempo.cUnis
+                SEEK NVL(Tempo.cUnis, SPACE(3))
                 IF !FOUND()
                     APPEND BLANK
-                    REPLACE cUnis WITH Tempo.cUnis
+                    REPLACE cUnis WITH NVL(Tempo.cUnis, "")
                 ENDIF
                 REPLACE nValors WITH nValors + Tempo.valos
 
@@ -986,84 +986,5 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
     ENDPROC
 
 
-    *--------------------------------------------------------------------------
-    * Visualizar - Exibe relatorio em preview na tela (Pattern #167 auto)
-    *--------------------------------------------------------------------------
-    PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    SELECT (THIS.this_cCursorDados)
-                    GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        PREVIEW NOCONSOLE
-                    loc_lSucesso = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Visualizar")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Imprimir - Imprime relatorio com dialogo de impressora (Pattern #167 auto)
-    *--------------------------------------------------------------------------
-    PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    SELECT (THIS.this_cCursorDados)
-                    GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO PRINTER PROMPT NOCONSOLE
-                    loc_lSucesso = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Imprimir")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
-    *--------------------------------------------------------------------------
-    PROCEDURE GerarExcel()
-        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    SELECT (THIS.this_cCursorDados)
-                    GO TOP
-                    loc_cArquivo = SYS(5) + CURDIR() + "sigreegp_" + ;
-                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
-                    IF FILE(loc_cArquivo)
-                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
-                    ENDIF
-                    loc_lSucesso = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "GerarExcel")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
 
 ENDDEFINE

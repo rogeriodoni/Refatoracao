@@ -1,0 +1,33 @@
+6 t=8 c=0 expr=[Nome] supexpr=[] tag=[]
+7 t=8 c=0 expr=[Qtds] supexpr=[Operas # 'T'] tag=[]
+9 t=5 c=0 expr=["Fase"] supexpr=[] tag=[]
+11 t=5 c=0 expr=["Funcionário"] supexpr=[] tag=[]
+13 t=5 c=0 expr=["Tp.Operação"] supexpr=[] tag=[]
+15 t=5 c=0 expr=["Qtde"] supexpr=[] tag=[]
+16 t=8 c=0 expr=[Iif( Inlist( Operas, 'T', 'H', 'P' ), ' ', Operas )] supexpr=[] tag=[]
+17 t=8 c=0 expr=[grupos] supexpr=[] tag=[]
+18 t=8 c=0 expr=[contas] supexpr=[] tag=[]
+19 t=8 c=0 expr=[TpOps] supexpr=[] tag=[]
+20 t=8 c=0 expr=[Qtds] supexpr=[Operas = 'T'] tag=[]
+21 t=8 c=0 expr=[CsCabecalho.cb_titulo] supexpr=[] tag=[]
+22 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+23 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+24 t=8 c=0 expr=[CsCabecalho.cb_periodo] supexpr=[] tag=[]
+26 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+31 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+32 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+33 t=8 c=0 expr=[this.name] supexpr=[] tag=[]
+35 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+37 t=18 c=0 expr=[Iif( Inlist( Operas,  'E', ' ' ), Qtds, Qtds*(-1))] supexpr=[] tag=[CsCabecalho.SdInicial]
+45 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource = .NULL. 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]

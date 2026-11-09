@@ -1,0 +1,231 @@
+===== C:\4c\refatoracao\projeto\app\reports\SigReDt1.frx
+1 t=1 c=53 expr=[ORIENTATION=1 
+PAPERSIZE=9 
+COLOR=1 
+] supexpr=[] tag=[]
+3 t=9 c=3 expr=[PadR(Classes,1) +Grupos] supexpr=[] tag=[]
+9 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='3'] tag=[]
+10 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='4'] tag=[]
+11 t=8 c=0 expr=[PadL(StrTran(Transform(Previsao,'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+12 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[inlist(ps,'2','3','4') and fators<100] tag=[]
+13 t=8 c=0 expr=[PadL(StrTran(Transform(valor,'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+14 t=8 c=0 expr=[IIF( PercPrev <> 0,Transform(PercPrev,'9999.99')+'%','')] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+17 t=8 c=0 expr=[IIF( PercGrp <> 0,Transform(PercGrp,'9999.99')+'%','')] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+19 t=8 c=0 expr=[PadL(StrTran(Transform(Abs(valor)-Abs(previsao),'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+20 t=8 c=0 expr=[IIF( Perc_dif <> 0,Transform(Perc_dif,'9999.99')+'%','')] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1))] tag=[]
+22 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='5'.and.analiticos==2] tag=[]
+23 t=8 c=0 expr=[alltrim(DS_grupos)] supexpr=[ps=='6'] tag=[]
+26 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[ps='5' and analiticos=2 and fators<100] tag=[]
+27 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',valor,valor_grupo),'@( 99,999,999.99'),' ','' ),15)] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+28 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',Previsao,valor_Prev),'@( 99,999,999.99'),' ','' ),15)] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+29 t=8 c=0 expr=[IIF(PercPrev <> 0,Transform(PercPrev,'9999.99') + '%','')] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+31 t=8 c=0 expr=[IIF(PercGrp <> 0,Transform(PercGrp,'9999.99') + '%','')] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+33 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',valor_dif,tot_dif),'@( 99,999,999.99'),' ','' ),15)] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+34 t=8 c=0 expr=[IIF(IIF(Ps='6',Perc_dif,Perc_Dif_Tot) <> 0,Transform(IIF(Ps='6',Perc_dif,Perc_Dif_Tot),'9999.99') + '%','')] supexpr=[ps$'56' .and. analiticos==2] tag=[]
+37 t=8 c=0 expr=[PadL(StrTran(Transform(Previsao,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+38 t=8 c=0 expr=[contas] supexpr=[ps=='5'.and.analiticos==1] tag=[]
+39 t=8 c=0 expr=[ds_contas] supexpr=[ps=='5'.and.analiticos==1] tag=[]
+41 t=8 c=0 expr=[IIF( PercPrev <> 0,Transform(PercPrev,'9999.99')+'%','')] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+43 t=8 c=0 expr=[PadL(StrTran(Transform(valor,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+44 t=8 c=0 expr=[IIF( PercGrp <> 0,Transform(PercGrp,'9999.99')+'%','')] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+47 t=8 c=0 expr=[PadL(StrTran(Transform(valor_dif,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+48 t=8 c=0 expr=[IIF( Perc_dif <> 0,Transform(Perc_dif,'9999.99')+'%','')] supexpr=[ps == '5' .and. analiticos == 1] tag=[]
+49 t=8 c=0 expr=['Orçado'] supexpr=[] tag=[]
+53 t=8 c=0 expr=['%'] supexpr=[] tag=[]
+55 t=8 c=0 expr=['Real'] supexpr=[] tag=[]
+56 t=8 c=0 expr=['%'] supexpr=[] tag=[]
+59 t=8 c=0 expr=['Diferença'] supexpr=[] tag=[]
+60 t=8 c=0 expr=['%'] supexpr=[] tag=[]
+61 t=8 c=0 expr=[dbcabecalho.Titulo] supexpr=[] tag=[]
+62 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+63 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+64 t=8 c=0 expr=[dbcabecalho.Empresa] supexpr=[] tag=[]
+65 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+70 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+71 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+72 t=8 c=0 expr=[[SIGREDT1]] supexpr=[] tag=[]
+74 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+76 t=8 c=0 expr=[dbcabecalho.Orcamento] supexpr=[] tag=[]
+77 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+78 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+79 t=18 c=0 expr=[Iif(ps=='5',Previsao,0)] supexpr=[] tag=[0]
+80 t=18 c=0 expr=[Round((Valor_Grupo/Valor_Prev)*100,2)] supexpr=[] tag=[0]
+81 t=18 c=0 expr=[Abs(valor)-Abs(previsao)] supexpr=[] tag=[0]
+82 t=18 c=0 expr=[IIF(Previsao <> 0,(valor_dif/Abs(Previsao))*100,0)] supexpr=[] tag=[0]
+83 t=18 c=0 expr=[Valor] supexpr=[] tag=[0]
+84 t=18 c=0 expr=[Previsao] supexpr=[] tag=[0]
+85 t=18 c=0 expr=[Abs(Tot_Valor) - Abs(Tot_Previsao)] supexpr=[] tag=[0]
+86 t=18 c=0 expr=[IIF(Valor_Prev <> 0,(Tot_Dif/Abs(Valor_Prev))*100,0)] supexpr=[] tag=[0]
+95 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource =  
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]
+===== C:\4c\refatoracao\projeto\app\reports\SigReDt2.frx
+1 t=1 c=53 expr=[ORIENTATION=1 
+PAPERSIZE=9 
+COLOR=1 
+] supexpr=[] tag=[]
+3 t=9 c=3 expr=[PadR(Classes,1) +Grupos] supexpr=[] tag=[]
+8 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='5'.and.analiticos==2] tag=[]
+9 t=8 c=0 expr=[alltrim(DS_grupos)] supexpr=[ps=='6'] tag=[]
+10 t=8 c=0 expr=[PadL(StrTran(Transform(valor_conta,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps=='5'.and.analiticos==1 .and. dbCabecalho.Previsao = 'N'] tag=[]
+11 t=8 c=0 expr=[contas] supexpr=[ps=='5'.and.analiticos==1] tag=[]
+12 t=8 c=0 expr=[ds_contas] supexpr=[ps=='5'.and.analiticos==1] tag=[]
+13 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',valor,valor_grupo),'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps$'56'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+14 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='2'] tag=[]
+15 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='3'] tag=[]
+16 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='4'] tag=[]
+17 t=8 c=0 expr=[PadL(StrTran(Transform(valor,'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+20 t=8 c=0 expr=['Contas'] supexpr=[dbCabecalho.Previsao = 'N'] tag=[]
+21 t=8 c=0 expr=['Movimentação'] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+24 t=8 c=0 expr=['Fator'] supexpr=[] tag=[]
+25 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[inlist(ps,'2','3','4') and fators<100] tag=[]
+26 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[ps='5' and analiticos=2 and fators<100] tag=[]
+27 t=8 c=0 expr=['Op'] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+29 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+30 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[ps=='5'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+31 t=8 c=0 expr=[dbCabecalho.Comparativo] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+33 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',vlrcomp,valor_gr_comp),'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps$'56'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+34 t=8 c=0 expr=['Variação [%]'] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+36 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',varcomp,Round(((valor_grupo/valor_gr_comp)-1)*100,2)),'@( 9,999.99'),' ','' ),10)] supexpr=[ps$'56'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+37 t=8 c=0 expr=[PadL(StrTran(Transform(valor_comp,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps=='5'.and.analiticos==1 .and. dbCabecalho.Previsao = 'N'] tag=[]
+38 t=8 c=0 expr=[PadL(StrTran(Transform(varcomp,'@( 9,999.99'),' ','' ),10)] supexpr=[ps=='5'.and.analiticos==1 .and. dbCabecalho.Previsao = 'N'] tag=[]
+39 t=8 c=0 expr=[PadL(StrTran(Transform(varcomp,'@( 9,999.99'),' ','' ),10)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+40 t=8 c=0 expr=[PadL(StrTran(Transform(vlrcomp,'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+41 t=8 c=0 expr=[dbcabecalho.Titulo] supexpr=[] tag=[]
+42 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+43 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+44 t=8 c=0 expr=[dbcabecalho.Empresa] supexpr=[] tag=[]
+46 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+51 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+52 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+53 t=8 c=0 expr=[[SIGREDT2]] supexpr=[] tag=[]
+55 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+57 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+58 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+59 t=18 c=0 expr=[Iif(ps=='5',Previsao,0)] supexpr=[] tag=[0]
+60 t=18 c=0 expr=[Round((Valor_Grupo/Valor_Prev)*100,2)] supexpr=[] tag=[0]
+61 t=18 c=0 expr=[Iif(ps=='5',vlrComp,0)] supexpr=[] tag=[0]
+62 t=18 c=0 expr=[Iif(ps=='5',vlrcomp,0)] supexpr=[] tag=[0]
+71 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource = .NULL. 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]
+===== C:\4c\refatoracao\projeto\app\reports\SigReDt3.frx
+1 t=1 c=53 expr=[ORIENTATION=0 
+PAPERSIZE=9 
+COLOR=1 
+] supexpr=[] tag=[]
+3 t=9 c=3 expr=[PadR(Classes,1) +Grupos] supexpr=[] tag=[]
+10 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='5'.and.analiticos==2] tag=[]
+11 t=8 c=0 expr=[alltrim(DS_grupos)] supexpr=[ps=='6'] tag=[]
+12 t=8 c=0 expr=[Alltrim(StrTran(Transform(valor_conta,'@( 999,999,999.99'),' ','' ))] supexpr=[ps=='5'.and.analiticos==1 and empty(scontas)] tag=[]
+13 t=8 c=0 expr=[contas] supexpr=[ps=='5'.and.analiticos==1 .and. Empty(scontas)] tag=[]
+14 t=8 c=0 expr=[ds_contas] supexpr=[ps=='5'.and.analiticos==1 and empty(scontas)] tag=[]
+15 t=8 c=0 expr=[Alltrim(StrTran(Transform(iif(ps=='6',valor,valor_grupo),'@( 999,999,999.99'),' ','' ))] supexpr=[ps$'56'.and.analiticos==2] tag=[]
+16 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='2'] tag=[]
+17 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='3'] tag=[]
+18 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='4'] tag=[]
+19 t=8 c=0 expr=[Alltrim(StrTran(Transform(valor,'@( 999,999,999.99'),' ','' ))] supexpr=[inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)] tag=[]
+22 t=8 c=0 expr=['Contas'] supexpr=[] tag=[]
+23 t=8 c=0 expr=['Movimentação'] supexpr=[] tag=[]
+26 t=8 c=0 expr=['Fator'] supexpr=[] tag=[]
+27 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[inlist(ps,'2','3','4') and fators<100] tag=[]
+28 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[ps='5' and analiticos=2 and fators<100] tag=[]
+29 t=8 c=0 expr=['Op'] supexpr=[] tag=[]
+31 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)] tag=[]
+32 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[ps=='5'.and.analiticos==2] tag=[]
+33 t=8 c=0 expr=[Alltrim(StrTran(Transform(valor_conta,'@( 999,999,999.99'),' ','' ))] supexpr=[ps=='5'.and.analiticos==1 and !empty(scontas)] tag=[]
+34 t=8 c=0 expr=[scontas] supexpr=[ps=='5'.and.analiticos==1 .and. !Empty(scontas)] tag=[]
+35 t=8 c=0 expr=[ds_scontas] supexpr=[ps=='5'.and.analiticos==1 .and. !Empty(scontas)] tag=[]
+36 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+37 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+39 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+44 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+45 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+46 t=8 c=0 expr=[[SIGREDT3]] supexpr=[] tag=[]
+48 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+50 t=8 c=0 expr=[dbcabecalho.Titulo] supexpr=[] tag=[]
+51 t=8 c=0 expr=[dbcabecalho.Empresa] supexpr=[] tag=[]
+52 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+53 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+62 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource = .NULL. 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]
+===== C:\4c\refatoracao\projeto\app\reports\SigReDt4.frx
+1 t=1 c=53 expr=[ORIENTATION=0 
+PAPERSIZE=9 
+COLOR=1 
+] supexpr=[] tag=[]
+3 t=9 c=3 expr=[PadR(Classes,1) +Grupos] supexpr=[] tag=[]
+8 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='5'.and.analiticos==2] tag=[]
+9 t=8 c=0 expr=[alltrim(DS_grupos)] supexpr=[ps=='6'] tag=[]
+10 t=8 c=0 expr=[PadL(StrTran(Transform(valor_conta,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps=='5'.and.analiticos==1 .and. dbCabecalho.Previsao = 'N' And Empty(SContas)] tag=[]
+11 t=8 c=0 expr=[contas] supexpr=[ps=='5'.and.analiticos==1 And Empty(SContas)] tag=[]
+12 t=8 c=0 expr=[ds_contas] supexpr=[ps=='5'.and.analiticos==1 And Empty(SContas)] tag=[]
+13 t=8 c=0 expr=[PadL(StrTran(Transform(iif(ps=='6',valor,valor_grupo),'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps$'56'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+14 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='2'] tag=[]
+15 t=8 c=0 expr=[ALLTRIM(CLASSES)+' - '+alltrim(descClasse)] supexpr=[ps=='3'] tag=[]
+16 t=8 c=0 expr=[alltrim(grupos)+' - '+alltrim(ds_grupos)] supexpr=[ps=='4'] tag=[]
+17 t=8 c=0 expr=[PadL(StrTran(Transform(valor,'@( 999,999,999.99'),' ','' ),16)] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+20 t=8 c=0 expr=['Contas'] supexpr=[dbCabecalho.Previsao = 'N'] tag=[]
+21 t=8 c=0 expr=['Movimentação'] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+24 t=8 c=0 expr=['Fator'] supexpr=[] tag=[]
+25 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[inlist(ps,'2','3','4') and fators<100] tag=[]
+26 t=8 c=0 expr=[alltrim(str(fators,3))+'%'] supexpr=[ps='5' and analiticos=2 and fators<100] tag=[]
+27 t=8 c=0 expr=['Op'] supexpr=[dbcabecalho.Previsao = 'N'] tag=[]
+29 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[(inlist(ps,'2','3').or.(ps=='4'.and.analiticos==1)) .and. dbCabecalho.Previsao = 'N'] tag=[]
+30 t=8 c=0 expr=[Iif(Operacaos='-','-','')] supexpr=[ps=='5'.and.analiticos==2 .and. dbCabecalho.Previsao = 'N'] tag=[]
+31 t=8 c=0 expr=[dbcabecalho.Titulo] supexpr=[] tag=[]
+32 t=8 c=0 expr=[TIME()] supexpr=[] tag=[]
+33 t=8 c=0 expr=[DATE()] supexpr=[] tag=[]
+34 t=8 c=0 expr=[dbcabecalho.Empresa] supexpr=[] tag=[]
+36 t=8 c=0 expr=[TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999')] supexpr=[] tag=[]
+41 t=8 c=0 expr=[gcCabRel] supexpr=[] tag=[]
+42 t=8 c=0 expr=[gosistema.nomesistema] supexpr=[] tag=[]
+43 t=8 c=0 expr=[[SIGREDT4]] supexpr=[] tag=[]
+45 t=8 c=0 expr=[[Página]] supexpr=[] tag=[]
+47 t=8 c=0 expr=[PadL(StrTran(Transform(valor_conta,'@( 999,999,999.99'),' ','' ),16)] supexpr=[ps=='5'.and.analiticos==1 .and. dbCabecalho.Previsao = 'N' And Not Empty(ContEms)] tag=[]
+48 t=8 c=0 expr=[ContEms] supexpr=[ps=='5'.and.analiticos==1 And Not Empty(ContEms)] tag=[]
+49 t=8 c=0 expr=[alltrim(Ds_ContEms)] supexpr=[ps=='5'.and.analiticos==1 And Not Empty(ContEms)] tag=[]
+51 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+52 t=18 c=0 expr=[Iif(ps=='5',valor,0)] supexpr=[] tag=[0]
+53 t=18 c=0 expr=[Iif(ps=='5',Previsao,0)] supexpr=[] tag=[0]
+54 t=18 c=0 expr=[Round((Valor_Grupo/Valor_Prev)*100,2)] supexpr=[] tag=[0]
+63 t=25 c=0 expr=[Top = 126 
+Left = 60 
+Width = 520 
+Height = 200 
+DataSource = .NULL. 
+Name = "Dataenvironment" 
+] supexpr=[] tag=[PROCEDURE Init 
+If WExist('Report Designer') 
+	Zoom Window 'Report Designer' Max 
+EndIf 
+ENDPROC 
+]
