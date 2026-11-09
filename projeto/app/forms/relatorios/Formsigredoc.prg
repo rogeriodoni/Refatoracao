@@ -413,7 +413,7 @@ DEFINE CLASS Formsigredoc AS FormBase
             .Width        = 40
             .Height       = 40
             .Caption      = ""
-            .Picture      = gc_4c_CaminhoBase + "vbmp\a_save1.bmp"
+            .Picture      = gc_4c_CaminhoIcones + "a_save1.bmp"   && Erro336: era gc_4c_CaminhoBase + "vbmp\" (pasta inexistente)
             .FontName     = "Verdana"
             .FontSize     = 8
             .WordWrap     = .T.
@@ -434,7 +434,7 @@ DEFINE CLASS Formsigredoc AS FormBase
             .Width        = 40
             .Height       = 40
             .Caption      = ""
-            .Picture      = gc_4c_CaminhoBase + "vbmp\cancelab.bmp"
+            .Picture      = gc_4c_CaminhoIcones + "cancelab.bmp"  && Erro336: era gc_4c_CaminhoBase + "vbmp\" (pasta inexistente)
             .FontName     = "Verdana"
             .FontSize     = 8
             .WordWrap     = .T.
@@ -878,6 +878,58 @@ DEFINE CLASS Formsigredoc AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
+    * ChamarAcessoMovmto - Executa fAcessoMovmto (Framework\sigacess.PRG) com
+    *   o framework.vcx carregado (Erro335).
+    *   Quando a operacao digitada nao existe exata, a funcao legado abre
+    *   CreateObject("fwBuscaSel", ...) - classe do framework.vcx. So o
+    *   FormCliente fazia SET CLASSLIB desse VCX: sem ele aberto antes na
+    *   sessao, estourava "Class definition FWBUSCASEL is not found".
+    *   Carrega so durante a chamada e libera se foi este metodo que carregou
+    *   (CLASSLIB global poderia sobrepor classes homonimas do projeto).
+    *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * Usuario (Erro336): o sistema novo nao pede login e roda como "SISTEMA",
+    *   que nao existe em SigCdUsu - fAcessoMovmto devolvia lista VAZIA de
+    *   operacoes. Decisao do time: usuario NAO cadastrado = acesso total (mesma
+    *   convencao de fChecaAcesso/VerificarAcessoEmpresa no sistema novo). Para
+    *   isso a funcao legado recebe "4CONTROL", que ela propria trata como
+    *   acesso total. Usuario real cadastrado segue a regra do legado (SigCdAcU/
+    *   SigCdAcG).
+    *--------------------------------------------------------------------------
+    PROCEDURE ChamarAcessoMovmto(par_cDopes, par_oTxt)
+        LOCAL loc_cVcx, loc_lCarregou, loc_cUsuario
+        LOCAL loc_lCadastrado
+        loc_cUsuario    = ALLTRIM(IIF(VARTYPE(gc_4c_UsuarioLogado) = "C", gc_4c_UsuarioLogado, ""))
+        loc_lCadastrado = .F.
+        *-- IFs separados: VFP nao faz curto-circuito em OR (regra #27)
+        IF !EMPTY(loc_cUsuario)
+            IF SQLEXEC(gnConnHandle, "SELECT Usuarios FROM SigCdUsu WHERE Usuarios = " + ;
+                       EscaparSQL(loc_cUsuario), "cursor_4c_UsuAcesso") > 0
+                loc_lCadastrado = (RECCOUNT("cursor_4c_UsuAcesso") > 0)
+            ENDIF
+            IF USED("cursor_4c_UsuAcesso")
+                USE IN cursor_4c_UsuAcesso
+            ENDIF
+        ENDIF
+        IF !loc_lCadastrado
+            loc_cUsuario = "4CONTROL"
+        ENDIF
+        loc_cVcx      = gc_4c_CaminhoFramework + "framework.vcx"
+        loc_lCarregou = .F.
+        IF FILE(loc_cVcx) AND !("FRAMEWORK.VCX" $ UPPER(SET("CLASSLIB")))
+            SET CLASSLIB TO (loc_cVcx) ADDITIVE
+            loc_lCarregou = .T.
+        ENDIF
+        TRY
+            fAcessoMovmto(loc_cUsuario, par_cDopes, par_oTxt)
+        FINALLY
+            IF loc_lCarregou
+                RELEASE CLASSLIB (loc_cVcx)
+            ENDIF
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * ValidarOperacao - Valida codigo de operacao e atualiza estado chk_4c_Reimp
     *   Equivalente ao get_dopes.Valid do legado
     *--------------------------------------------------------------------------
@@ -888,7 +940,8 @@ DEFINE CLASS Formsigredoc AS FormBase
 
         TRY
             IF !EMPTY(loc_cDopes)
-                fAcessoMovmto(gc_4c_UsuarioLogado, loc_cDopes, loc_oPagina.txt_4c_Dopes)
+                THIS.ChamarAcessoMovmto(loc_cDopes, loc_oPagina.txt_4c_Dopes)
+                loc_cDopes = ALLTRIM(loc_oPagina.txt_4c_Dopes.Value)
             ENDIF
 
             IF !EMPTY(loc_cDopes)
@@ -1282,7 +1335,11 @@ DEFINE CLASS Formsigredoc AS FormBase
             REPLACE Marca WITH !Marca
         ELSE
             REPLACE Marca WITH IIF(Marca = 0, 1, 0)
-        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Emps.Refresh()
+        ENDIF
+        *-- Erro336: o Refresh estava na MESMA linha do ENDIF - texto depois de
+        *-- ENDIF eh comentario no VFP, o Refresh nunca rodava e a marcacao da
+        *-- empresa nao aparecia na grade.
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Emps.Refresh()
     ENDPROC
 
     PROCEDURE TgEmps1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
