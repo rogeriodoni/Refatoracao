@@ -110,6 +110,12 @@ DEFINE CLASS Formsigrecrp AS FormBase
                 *-- BINDEVENTs: Fase 5 cobre Grupo+Conta; Fase 6 completa com demais
                 THIS.ConfigurarPaginaDados()
 
+                *-- Valores iniciais dos filtros: o Init legado preenche
+                *-- get_dt_inicial/get_dt_final = Date() e opt_oper = 1. Sem
+                *-- isto o Vencimento abria "/ /" e o BETWEEN com data vazia
+                *-- nunca trazia linha (Erro327).
+                THIS.LimparCampos()
+
                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
 

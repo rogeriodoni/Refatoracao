@@ -375,8 +375,7 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                    PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "PREVIEW")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -394,8 +393,7 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                    TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -415,8 +413,7 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
             IF THIS.PrepararDados()
                 loc_cArquivo = SYS(5) + CURDIR() + "SigReCrf_" + ;
                                STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                    TO FILE &loc_cArquivo NOCONSOLE ASCII
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "ASCII", loc_cArquivo)
                 IF FILE(loc_cArquivo)
                     MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                 ENDIF

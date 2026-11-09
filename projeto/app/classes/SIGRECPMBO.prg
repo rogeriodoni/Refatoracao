@@ -448,12 +448,12 @@ DEFINE CLASS SIGRECPMBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
+                *-- Mesmo caminho isolado do Visualizar (POINT/REPORTBEHAVIOR 80):
+                *-- REPORT FORM cru imprimia os numericos como "*****" (Erro328)
                 IF THIS.this_nTipo = 1
-                    REPORT FORM (gc_4c_CaminhoReports + "SigReCPM.frx") ;
-                           TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReCPM", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 ELSE
-                    REPORT FORM (gc_4c_CaminhoReports + "SigReC2P.frx") ;
-                           TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReC2P", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF

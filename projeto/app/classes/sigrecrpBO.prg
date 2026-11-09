@@ -44,7 +44,9 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
 
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        THIS.this_cArquivoFRX = gc_4c_CaminhoReports + "RelSigrecrp.frx"
+        *-- FRX do legado: "report form SigReCrP" (Erro327 - o nome RelSigrecrp
+        *-- tinha sido inventado e o arquivo nunca existiu em reports\)
+        THIS.this_cArquivoFRX = gc_4c_CaminhoReports + "SigReCrP.frx"
         THIS.this_cTitulo     = "Relat" + CHR(243) + "rio de D" + CHR(233) + "bitos/Cr" + CHR(233) + "ditos Pendentes"
         THIS.this_dDtInicial  = DATE()
         THIS.this_dDtFinal    = DATE()
@@ -426,7 +428,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PREVIEW")
                 loc_lSucesso = .T.
             ELSE
                 IF !EMPTY(THIS.this_cMensagemErro)
@@ -453,7 +455,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ELSE
                 IF !EMPTY(THIS.this_cMensagemErro)
@@ -683,8 +685,9 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "sigrecrp_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    *-- this_cArquivoFRX (este BO nao tem this_cArquivoRelatorio: o Pattern
+                    *-- #167 gerou o nome errado e o Excel estourava "Property not found")
+                    THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

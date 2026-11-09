@@ -381,10 +381,13 @@ DEFINE CLASS Formsigrectc AS FormBase
         LOCAL loc_oPag
         loc_oPag = THIS.pgf_4c_Paginas.Page1
 
-        *-- ROW 1 (Top=123): Checkboxes de tipo de movimenta" + CHR(231) + CHR(227) + "o
+        *-- ROW 1: Checkboxes de tipo de movimenta" + CHR(231) + CHR(227) + "o
+        *-- Top 38 = 123 do SCX - 85 (mesmo deslocamento das demais linhas).
+        *-- Com 123 cru caiam na linha do Cartao (113) e "Entradas" ficava
+        *-- inteiro sob txt_4c_Fpags: impossivel marcar (Erro328).
         loc_oPag.AddObject("chk_4c_Entrada", "CheckBox")
         WITH loc_oPag.chk_4c_Entrada
-            .Top       = 123
+            .Top       = 38
             .Left      = 288
             .Width     = 61
             .Height    = 15
@@ -399,7 +402,7 @@ DEFINE CLASS Formsigrectc AS FormBase
 
         loc_oPag.AddObject("chk_4c_Receber", "CheckBox")
         WITH loc_oPag.chk_4c_Receber
-            .Top       = 123
+            .Top       = 38
             .Left      = 363
             .Width     = 68
             .Height    = 15
@@ -414,7 +417,7 @@ DEFINE CLASS Formsigrectc AS FormBase
 
         loc_oPag.AddObject("chk_4c_Depositar", "CheckBox")
         WITH loc_oPag.chk_4c_Depositar
-            .Top       = 123
+            .Top       = 38
             .Left      = 447
             .Width     = 74
             .Height    = 15
@@ -429,7 +432,7 @@ DEFINE CLASS Formsigrectc AS FormBase
 
         loc_oPag.AddObject("chk_4c_Baixa", "CheckBox")
         WITH loc_oPag.chk_4c_Baixa
-            .Top       = 123
+            .Top       = 38
             .Left      = 540
             .Width     = 61
             .Height    = 15

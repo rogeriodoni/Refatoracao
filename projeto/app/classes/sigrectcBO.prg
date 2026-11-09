@@ -161,6 +161,10 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
             loc_cNomeEmpresa = ALLTRIM(go_4c_Sistema.cEmpresa)
 
             *-- Datas formatadas para SQL Server (inicio do dia / fim do dia)
+            *-- Nas colunas dDtInicial/dDtFinal do SELECT vao com CAST(... AS datetime):
+            *-- o legado passava ?m.dDtInicial (DATETIME); literal '2000-01-01' cru volta
+            *-- como coluna TEXTO e o INSERT ... FROM MEMVAR no campo T estourava
+            *-- "Data type mismatch" em qualquer checkbox marcado (Erro328).
             loc_cDtIniSQL = FormatarDataSQL(THIS.this_dDtInicial)
             loc_cDtFimSQL = "'" + ;
                             STR(YEAR(THIS.this_dDtFinal), 4) + "-" + ;
@@ -200,8 +204,8 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                 loc_cMovimento   = PADR("Entradas", 30)
 
                 loc_cSQL = "SELECT " + EscaparSQL(loc_cNomeEmpresa) + " as cNomeEmpre," + ;
-                           loc_cDtIniSQL + " as dDtInicial," + ;
-                           loc_cDtFimSQL + " as dDtFinal," + ;
+                           "CAST(" + loc_cDtIniSQL + " AS datetime) as dDtInicial," + ;
+                           "CAST(" + loc_cDtFimSQL + " AS datetime) as dDtFinal," + ;
                            "a.emps as cemps,b.ncarts,a.numes,a.datas,a.nlotecs," + ;
                            "b.fpags,b.dopes,b.valos as valor," + ;
                            "(b.valos*(1-(b.taxas/100))) as ValLiq,b.taxas," + ;
@@ -240,8 +244,8 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                 loc_cMovimento   = PADR(CHR(192) + " Receber", 30)
 
                 loc_cSQL = "SELECT " + EscaparSQL(loc_cNomeEmpresa) + " as cNomeEmpre," + ;
-                           loc_cDtIniSQL + " as dDtInicial," + ;
-                           loc_cDtFimSQL + " as dDtFinal," + ;
+                           "CAST(" + loc_cDtIniSQL + " AS datetime) as dDtInicial," + ;
+                           "CAST(" + loc_cDtFimSQL + " AS datetime) as dDtFinal," + ;
                            "d.emps as cemps,d.ncarts,d.numes,d.vencs as datas,d.nlotecs," + ;
                            "d.fpags,d.dopes,d.totres-d.totpar as valor," + ;
                            "((d.totres-d.totpar)*(1-(d.taxas/100))) as ValLiq,d.taxas," + ;
@@ -293,8 +297,8 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                 *-- SQL base: busca dados com colunas extras Parcs e prazos
                 *-- NOT EXISTS filtra apenas transacoes ainda nao no SigCdCrd
                 loc_cSQL = "SELECT " + EscaparSQL(loc_cNomeEmpresa) + " as cNomeEmpre," + ;
-                           loc_cDtIniSQL + " as dDtInicial," + ;
-                           loc_cDtFimSQL + " as dDtFinal," + ;
+                           "CAST(" + loc_cDtIniSQL + " AS datetime) as dDtInicial," + ;
+                           "CAST(" + loc_cDtFimSQL + " AS datetime) as dDtFinal," + ;
                            "b.emps as cemps,b.ncarts,b.numes,b.datas,b.Parcs,f.prazos," + ;
                            "b.nlotecs,b.fpags,b.dopes,b.valos as valor," + ;
                            "(b.valos*(1-(b.taxas/100))) as ValLiq,b.taxas," + ;
@@ -367,8 +371,8 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                 loc_cMovimento   = PADR("Baixados", 30)
 
                 loc_cSQL = "SELECT " + EscaparSQL(loc_cNomeEmpresa) + " as cNomeEmpre," + ;
-                           loc_cDtIniSQL + " as dDtInicial," + ;
-                           loc_cDtFimSQL + " as dDtFinal," + ;
+                           "CAST(" + loc_cDtIniSQL + " AS datetime) as dDtInicial," + ;
+                           "CAST(" + loc_cDtFimSQL + " AS datetime) as dDtFinal," + ;
                            "d.emps as cemps,d.ncarts,d.numes,d.vencs as datas,d.nlotecs," + ;
                            "d.fpags,d.dopes,d.totres as valor," + ;
                            "(d.totres*(1-(d.taxas/100))) as ValLiq,d.taxas," + ;
@@ -469,14 +473,18 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
         LOCAL loc_lSucesso, loc_oErro
+        *-- SigReCtc.frx le m.dDtInicial / m.dDtFinal (no legado: PUBLIC do
+        *-- processamento). Sem elas: "Variable 'DDTINICIAL' is not found" (Erro328).
+        PRIVATE dDtInicial, dDtFinal
+        dDtInicial = THIS.this_dDtInicial
+        dDtFinal   = THIS.this_dDtFinal
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        PREVIEW NOCONSOLE
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "PREVIEW")
                     loc_lSucesso = .T.
                 ELSE
                     THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
@@ -494,14 +502,16 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
         LOCAL loc_lSucesso, loc_oErro
+        PRIVATE dDtInicial, dDtFinal   && lidas pelo SigReCtc.frx (m.dDtInicial/m.dDtFinal)
+        dDtInicial = THIS.this_dDtInicial
+        dDtFinal   = THIS.this_dDtFinal
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO PRINTER PROMPT NOCONSOLE
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "PRINTER_PROMPT")
                     loc_lSucesso = .T.
                 ELSE
                     THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
@@ -519,6 +529,9 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
     *--------------------------------------------------------------------------
     PROCEDURE GerarExcel()
         LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        PRIVATE dDtInicial, dDtFinal   && lidas pelo SigReCtc.frx (m.dDtInicial/m.dDtFinal)
+        dDtInicial = THIS.this_dDtInicial
+        dDtFinal   = THIS.this_dDtFinal
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
@@ -527,8 +540,7 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SigReCtc_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE &loc_cArquivo NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

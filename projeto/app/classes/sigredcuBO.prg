@@ -595,7 +595,7 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                 ENDIF
                 PRIVATE pn_4c_ImpTodasPaginas   && lida pelo SigReDc2.frx (ex-ThisForm.ImpTodaspaginas)
                 pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
-                REPORT FORM SigReDc2 TO FILE (loc_cArqSaida) ASCII NOCONSOLE
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + "SigReDc2", "ASCII", loc_cArqSaida)
             NEXT
             loc_lSucesso = FILE(loc_cArqSaida)
             IF !loc_lSucesso

@@ -559,7 +559,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
         pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
-            REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
+            THIS.ReportFormIsolado(loc_cFrx, "PREVIEW")
         ELSE
             MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                      "o encontrado: " + ALLTRIM(loc_cFrx), "Visualizar")
@@ -576,7 +576,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
         pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
-            REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
+            THIS.ReportFormIsolado(loc_cFrx, "PRINTER_PROMPT")
         ELSE
             MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                      "o encontrado: " + ALLTRIM(loc_cFrx), "Imprimir")
@@ -593,7 +593,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
         pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
-            REPORT FORM (loc_cFrx) TO PRINTER NOCONSOLE
+            THIS.ReportFormIsolado(loc_cFrx, "PRINTER")
         ELSE
             MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                      "o encontrado: " + ALLTRIM(loc_cFrx), "Documento")
@@ -636,8 +636,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
                     PRIVATE pc_4c_ContaTran
                     pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF
