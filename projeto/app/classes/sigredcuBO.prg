@@ -485,6 +485,12 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
         SET SEPARATOR TO ","
         SET REPORTBEHAVIOR 80
 
+        *-- SigReDc2.frx: o legado lia ThisForm.ImpTodaspaginas (chkImpPag.Value).
+        *-- REPORT FORM aqui roda num metodo do BO (Custom fora de form) e ThisForm
+        *-- estoura "Object is not contained in a FORM"; o FRX le esta PRIVATE.
+        PRIVATE pn_4c_ImpTodasPaginas
+        pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
+
         DO CASE
             CASE par_cModo == "PREVIEW"
                 REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
@@ -587,6 +593,8 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
                 ENDIF
+                PRIVATE pn_4c_ImpTodasPaginas   && lida pelo SigReDc2.frx (ex-ThisForm.ImpTodaspaginas)
+                pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
                 REPORT FORM SigReDc2 TO FILE (loc_cArqSaida) ASCII NOCONSOLE
             NEXT
             loc_lSucesso = FILE(loc_cArqSaida)
@@ -695,6 +703,8 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
+                    PRIVATE pn_4c_ImpTodasPaginas   && lida pelo SigReDc2.frx (ex-ThisForm.ImpTodaspaginas)
+                    pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
                     REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
                         PREVIEW NOCONSOLE
                     loc_lSucesso = .T.
@@ -720,6 +730,8 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
+                    PRIVATE pn_4c_ImpTodasPaginas   && lida pelo SigReDc2.frx (ex-ThisForm.ImpTodaspaginas)
+                    pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
                     REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
                         TO PRINTER PROMPT NOCONSOLE
                     loc_lSucesso = .T.
@@ -747,6 +759,8 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "sigredcu_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    PRIVATE pn_4c_ImpTodasPaginas   && lida pelo SigReDc2.frx (ex-ThisForm.ImpTodaspaginas)
+                    pn_4c_ImpTodasPaginas = IIF(THIS.this_lImpTodasPaginas, 1, 0)
                     REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
                         TO FILE (loc_cArquivo) NOCONSOLE ASCII
                     IF FILE(loc_cArquivo)

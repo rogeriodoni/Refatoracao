@@ -126,7 +126,13 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
             ELSE
 
             *-- Montar cabecalho do relatorio
-            CREATE CURSOR csCabecalho (NomeEmpresa C(80), Titulo C(200), Titulo2 C(200), Figura C(10))
+            *-- VisualizaCtg: no legado o SigReCrf.frx lia ThisForm.VisualizaCtg
+            *-- (Init: fChecaAcesso('SIGRECRF','CONTAGEM')) para mostrar Lidos/Estoque/
+            *-- Diferenca. Aqui o REPORT FORM roda num metodo do BO (Custom fora de
+            *-- form) e ThisForm estoura "Object is not contained in a FORM" (Erro326),
+            *-- entao o flag vai no cabecalho e o FRX le csCabecalho.VisualizaCtg.
+            CREATE CURSOR csCabecalho (NomeEmpresa C(80), Titulo C(200), Titulo2 C(200), Figura C(10), ;
+                                       VisualizaCtg L)
 
             loc_cNomeEmpresa = loc_cEmpresa
             loc_cTitulo2     = ""
@@ -139,8 +145,9 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
                 loc_cTitulo2 = "Vendedor - " + loc_cVends + " " + ALLTRIM(THIS.this_cDConta)
             ENDIF
 
-            INSERT INTO csCabecalho (NomeEmpresa, Titulo, Titulo2) ;
-                VALUES (loc_cNomeEmpresa, THIS.this_cTituloRelatorio, loc_cTitulo2)
+            INSERT INTO csCabecalho (NomeEmpresa, Titulo, Titulo2, VisualizaCtg) ;
+                VALUES (loc_cNomeEmpresa, THIS.this_cTituloRelatorio, loc_cTitulo2, ;
+                        fChecaAcesso("SIGRECRF", "CONTAGEM"))
 
             *--------------------------------------------------------------
             *-- QUERY 1: Contagens - sigcdcrf JOIN sigcdcri

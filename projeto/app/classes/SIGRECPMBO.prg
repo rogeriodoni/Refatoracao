@@ -111,9 +111,14 @@ DEFINE CLASS SIGRECPMBO AS RelatorioBase
             IF USED("dbCabecalho")
                 USE IN dbCabecalho
             ENDIF
+            *-- lOpe/nPesos/nPeso2s/nQtd: no legado o SigReCPM.frx lia ThisForm.llOpe/
+            *-- nPesos/nPeso2s/nqtd. Aqui o REPORT FORM roda num metodo do BO (Custom fora
+            *-- de form) e ThisForm estoura "Object is not contained in a FORM" (Erro323),
+            *-- entao os valores vao para o cabecalho e o FRX le dbCabecalho.<campo>.
             CREATE CURSOR dbCabecalho (NomeEmpresa C(80), Titulo C(80), ;
                                        Periodo C(150), SubTitulo C(80), ;
-                                       lCompo L, Total M(4))
+                                       lCompo L, Total M(4), ;
+                                       lOpe L, nPesos N(14,3), nPeso2s N(14,3), nQtd N(14,3))
 
             loc_cTitulo = "Listagem de Composi" + CHR(231) + CHR(227) + "o por OP - " + ;
                           IIF(THIS.this_nTipo = 2, "Sint" + CHR(233) + "tico", ;
@@ -327,6 +332,12 @@ DEFINE CLASS SIGRECPMBO AS RelatorioBase
             ENDIF
 
             THIS.this_lLlope = EMPTY(THIS.this_cOperacao)
+
+            *-- Totais e flag lidos pelo SigReCPM.frx (substituem ThisForm.*)
+            REPLACE lOpe    WITH THIS.this_lLlope, ;
+                    nPesos  WITH THIS.this_nPesos, ;
+                    nPeso2s WITH THIS.this_nPeso2s, ;
+                    nQtd    WITH THIS.this_nQtd IN dbCabecalho
 
             loc_lSucesso = .T.
             ENDIF  && loc_nResult >= 1

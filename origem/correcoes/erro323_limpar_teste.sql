@@ -1,0 +1,8 @@
+-- Remove os dados de TESTE do Erro323 (FormSIGRECPM)
+SET NOCOUNT ON;
+BEGIN TRAN;
+DELETE FROM SigCdNei WHERE cidchaves LIKE 'TST323%';
+DELETE FROM SigCdNec WHERE cidchaves LIKE 'TST323%';
+DELETE FROM SigPdMvf WHERE cidchaves LIKE 'TST323%';
+DELETE FROM SigOpPic WHERE cidchaves LIKE 'TST323%';
+COMMIT;

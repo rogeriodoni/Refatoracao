@@ -535,11 +535,28 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
     ENDFUNC
 
     *--------------------------------------------------------------------------
+    * ObterContaTranRelatorio - Valor que o SigReIag.frx compara com
+    *   crDbImp.SContas (no legado: ThisForm.ContaTran, o valor deixado pelo
+    *   ULTIMO registro do laco de PrepararDados). O REPORT FORM roda num metodo
+    *   do BO (Custom fora de form) e ThisForm estouraria "Object is not
+    *   contained in a FORM"; os metodos de impressao publicam este valor na
+    *   PRIVATE pc_4c_ContaTran, que o FRX le.
+    *   PADR(10): no legado o valor vinha cru de LocalParam.ContaPags/ContaRecs
+    *   (char 10). Com SET EXACT OFF, comparar com o valor ALLTRIM mudaria o
+    *   resultado ("1110100001" = "11101" seria .T.).
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterContaTranRelatorio()
+        RETURN PADR(THIS.this_cContaTran, 10)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * Visualizar - Exibe relatorio em preview na tela
     * Logica original: PROCEDURE visualizacao em SIGREIDT.SCX
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
         LOCAL loc_cFrx
+        PRIVATE pc_4c_ContaTran
+        pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
             REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
@@ -555,6 +572,8 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
         LOCAL loc_cFrx
+        PRIVATE pc_4c_ContaTran
+        pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
             REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
@@ -570,6 +589,8 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
     *--------------------------------------------------------------------------
     PROCEDURE Documento()
         LOCAL loc_cFrx
+        PRIVATE pc_4c_ContaTran
+        pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
         loc_cFrx = THIS.ObterNomeFrx()
         IF !EMPTY(loc_cFrx) AND FILE(loc_cFrx + ".frx")
             REPORT FORM (loc_cFrx) TO PRINTER NOCONSOLE
@@ -613,6 +634,8 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SigReIdt_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    PRIVATE pc_4c_ContaTran
+                    pc_4c_ContaTran = THIS.ObterContaTranRelatorio()
                     REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
                         TO FILE (loc_cArquivo) NOCONSOLE ASCII
                     IF FILE(loc_cArquivo)

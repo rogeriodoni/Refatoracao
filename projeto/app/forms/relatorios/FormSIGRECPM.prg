@@ -1036,7 +1036,11 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaOperacao(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9, 115)
+        *-- Legado (getOperacao.Valid): campo vazio nao valida nada. Enter/Tab
+        *-- com vazio so passa; F4 abre a lista (Erro323).
+        IF par_nKeyCode = 115 OR ;
+           (INLIST(par_nKeyCode, 13, 9) AND ;
+            !EMPTY(ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Operacao.Value)))
             THIS.AbrirBuscaOperacao()
         ENDIF
     ENDPROC
@@ -1103,9 +1107,49 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaGrOrigem(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            THIS.AbrirBuscaGrOrigem()
+        THIS.TeclaCodigoLookup(par_nKeyCode, "txt_4c_GrOrigem", "txt_4c_DsGrOrigem", "AbrirBuscaGrOrigem")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaCodigoLookup - Enter/Tab/F4 num campo CODIGO de lookup (Erro323)
+    *   Legado (getGrOrigem/getContaO/... Valid): codigo VAZIO so limpa a
+    *   descricao, nunca abre lista. Abrir FormBuscaAuxiliar com "" lista a
+    *   tabela inteira (LIKE '%'); um Enter distraido gravava o 1o registro
+    *   no filtro e o relatorio voltava vazio. F4 continua abrindo a lista.
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaCodigoLookup(par_nKeyCode, par_cTxtCodigo, par_cTxtDescricao, par_cMetodoBusca)
+        LOCAL loc_oPag
+        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        DO CASE
+            CASE par_nKeyCode = 115
+                EVALUATE("THIS." + par_cMetodoBusca + "()")
+            CASE INLIST(par_nKeyCode, 13, 9)
+                IF EMPTY(ALLTRIM(EVALUATE("loc_oPag." + par_cTxtCodigo + ".Value")))
+                    STORE "" TO ("loc_oPag." + par_cTxtDescricao + ".Value")
+                ELSE
+                    EVALUATE("THIS." + par_cMetodoBusca + "()")
+                ENDIF
+        ENDCASE
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaDescricaoLookup - Enter/Tab/F4 num campo DESCRICAO de lookup (Erro323)
+    *   Legado (getDsGrOrigem/getDContaO/... Valid): descricao vazia limpa o
+    *   codigo; so ha busca quando ha texto. F4 continua abrindo a lista.
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaDescricaoLookup(par_nKeyCode, par_cTxtCodigo, par_cTxtDescricao, par_cMetodoBusca)
+        LOCAL loc_oPag
+        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        IF !EMPTY(ALLTRIM(EVALUATE("loc_oPag." + par_cTxtCodigo + ".Value")))
+            RETURN
         ENDIF
+        DO CASE
+            CASE par_nKeyCode = 115
+                EVALUATE("THIS." + par_cMetodoBusca + "()")
+            CASE INLIST(par_nKeyCode, 13, 9) AND ;
+                 !EMPTY(ALLTRIM(EVALUATE("loc_oPag." + par_cTxtDescricao + ".Value")))
+                EVALUATE("THIS." + par_cMetodoBusca + "()")
+        ENDCASE
     ENDPROC
 
     PROCEDURE AbrirBuscaGrOrigem()
@@ -1158,13 +1202,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     ENDPROC
 
     PROCEDURE TeclaDsGrOrigem(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            IF EMPTY(ALLTRIM(loc_oPag.txt_4c_GrOrigem.Value))
-                THIS.AbrirBuscaGrOrigem()
-            ENDIF
-        ENDIF
+        THIS.TeclaDescricaoLookup(par_nKeyCode, "txt_4c_GrOrigem", "txt_4c_DsGrOrigem", "AbrirBuscaGrOrigem")
     ENDPROC
 
     *==========================================================================
@@ -1172,9 +1210,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaContaO(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            THIS.AbrirBuscaContaO()
-        ENDIF
+        THIS.TeclaCodigoLookup(par_nKeyCode, "txt_4c_ContaO", "txt_4c_DContaO", "AbrirBuscaContaO")
     ENDPROC
 
     PROCEDURE AbrirBuscaContaO()
@@ -1228,13 +1264,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     ENDPROC
 
     PROCEDURE TeclaDContaO(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            IF EMPTY(ALLTRIM(loc_oPag.txt_4c_ContaO.Value))
-                THIS.AbrirBuscaContaO()
-            ENDIF
-        ENDIF
+        THIS.TeclaDescricaoLookup(par_nKeyCode, "txt_4c_ContaO", "txt_4c_DContaO", "AbrirBuscaContaO")
     ENDPROC
 
     *==========================================================================
@@ -1242,9 +1272,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaGrDestino(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            THIS.AbrirBuscaGrDestino()
-        ENDIF
+        THIS.TeclaCodigoLookup(par_nKeyCode, "txt_4c_GrDestino", "txt_4c_DsGrDestino", "AbrirBuscaGrDestino")
     ENDPROC
 
     PROCEDURE AbrirBuscaGrDestino()
@@ -1297,13 +1325,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     ENDPROC
 
     PROCEDURE TeclaDsGrDestino(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            IF EMPTY(ALLTRIM(loc_oPag.txt_4c_GrDestino.Value))
-                THIS.AbrirBuscaGrDestino()
-            ENDIF
-        ENDIF
+        THIS.TeclaDescricaoLookup(par_nKeyCode, "txt_4c_GrDestino", "txt_4c_DsGrDestino", "AbrirBuscaGrDestino")
     ENDPROC
 
     *==========================================================================
@@ -1311,9 +1333,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaContaD(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            THIS.AbrirBuscaContaD()
-        ENDIF
+        THIS.TeclaCodigoLookup(par_nKeyCode, "txt_4c_ContaD", "txt_4c_DContaD", "AbrirBuscaContaD")
     ENDPROC
 
     PROCEDURE AbrirBuscaContaD()
@@ -1367,13 +1387,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     ENDPROC
 
     PROCEDURE TeclaDContaD(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag
-        IF INLIST(par_nKeyCode, 13, 9, 115)
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            IF EMPTY(ALLTRIM(loc_oPag.txt_4c_ContaD.Value))
-                THIS.AbrirBuscaContaD()
-            ENDIF
-        ENDIF
+        THIS.TeclaDescricaoLookup(par_nKeyCode, "txt_4c_ContaD", "txt_4c_DContaD", "AbrirBuscaContaD")
     ENDPROC
 
     *--------------------------------------------------------------------------
