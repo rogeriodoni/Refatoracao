@@ -1918,11 +1918,19 @@ ENDFUNC
 *   nome: aqui o contrato e "devolver o path de um .jpg valido").
 *
 * Parametros: par_cNomeArquivo  - nome do arquivo em vbmp\ (ex: "brjpg.jpg")
-*             par_cPastaDestino - pasta onde a copia temporaria sera criada
+*             par_cPastaDestino - pasta onde a copia temporaria sera criada;
+*                                 como no legado (pLoc), so vale se for texto E
+*                                 a pasta existir - senao SYS(2023). As chamadas
+*                                 transcritas passam .F. aqui.
+*             par_xConn         - conexao do legado (pCnx): aceito por
+*                                 compatibilidade e ignorado. Erro335: sem ele a
+*                                 chamada com 3 argumentos (sigredocBO e o fonte
+*                                 legado) estourava "Must specify additional
+*                                 parameters" e o relatorio nunca era gerado.
 * Retorno: path completo do arquivo copiado, ou "" se a origem nao existir
 *------------------------------------------------------------------------------
-FUNCTION fCriarIcone(par_cNomeArquivo, par_cPastaDestino)
-    LOCAL loc_cOrigem, loc_cDestino
+FUNCTION fCriarIcone(par_cNomeArquivo, par_cPastaDestino, par_xConn)
+    LOCAL loc_cOrigem, loc_cDestino, loc_cPasta
 
     IF VARTYPE(par_cNomeArquivo) != "C" OR EMPTY(par_cNomeArquivo)
         RETURN ""
@@ -1933,7 +1941,11 @@ FUNCTION fCriarIcone(par_cNomeArquivo, par_cPastaDestino)
         RETURN ""
     ENDIF
 
-    loc_cDestino = ADDBS(ALLTRIM(NVL(par_cPastaDestino, SYS(2023)))) + SYS(2015) + ".jpg"
+    loc_cPasta = SYS(2023)
+    IF VARTYPE(par_cPastaDestino) = "C" AND !EMPTY(par_cPastaDestino) AND DIRECTORY(ALLTRIM(par_cPastaDestino))
+        loc_cPasta = ALLTRIM(par_cPastaDestino)
+    ENDIF
+    loc_cDestino = ADDBS(loc_cPasta) + SYS(2015) + ".jpg"
 
     TRY
         COPY FILE (loc_cOrigem) TO (loc_cDestino)

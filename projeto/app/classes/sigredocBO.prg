@@ -67,7 +67,9 @@ DEFINE CLASS sigredocBO AS RelatorioBase
     PROCEDURE Init()
         THIS.this_cTabela     = "SigMvCab"
         THIS.this_cCampoChave = "Numes"
-        THIS.this_cArquivoFRX = gc_4c_CaminhoFramework + "SigReDoc.frx"
+        *-- Erro335: apontava para gc_4c_CaminhoFramework e o FRX nunca tinha sido
+        *-- copiado para o projeto; trazido de FortyusMC\Fortyus para reports\
+        THIS.this_cArquivoFRX = gc_4c_CaminhoReports + "SigReDoc.frx"
         RETURN DODEFAULT()
     ENDPROC
 
@@ -240,8 +242,12 @@ DEFINE CLASS sigredocBO AS RelatorioBase
 
                     SELECT TprMvCab
                     SCAN WHILE loc_lContinuar
-                        loc_pEmp = ALLTRIM(TprMvCab.Emps)
-                        loc_pDop = ALLTRIM(TprMvCab.Dopes)
+                        *-- Chave POSICIONAL EmpDopNums = Emps(3)+Dopes(20)+STR(Numes,6):
+                        *-- legado usa pEmp = TprMvCab.Emps / pDop = TprMvCab.Dopes SEM
+                        *-- ALLTRIM. Com ALLTRIM a chave encolhia e itens/pagamentos/
+                        *-- subniveis voltavam vazios em silencio (regra #42, Erro335).
+                        loc_pEmp = PADR(TprMvCab.Emps, 3)
+                        loc_pDop = PADR(TprMvCab.Dopes, 20)
                         loc_pNum = TprMvCab.Numes
 
                         *-- Sub-niveis (estrutura de produtos)
@@ -258,7 +264,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                NVL(b.Abrevs, '') AS cAbrevs ;
                             FROM CrTmpEstPe a ;
                             LEFT JOIN CrTmpOpe b ;
-                                ON b.NDopes = VAL(LEFT(a.Codigos, 4)) ;
+                                ON b.NDopes = VAL(LEFT(STR(a.Codigos, 10), 4)) ;
                             WHERE a.Emps + a.Dopes + STR(a.Numes, 6) == ;
                                   loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
                             INTO CURSOR TmpEstPe
@@ -294,7 +300,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                 NVL(i.cpros, '')     AS CPros,      NVL(i.UniVals, 0)    AS Bases, ;
                                 NVL(i.codbarras, 0)  AS CodBarras,  NVL(i.DPros, '')     AS dpros, ;
                                 NVL(i.totas, 0)      AS Totas,      NVL(i.Obs, '')       AS obs, ;
-                                NVL(i.Notas, '')     AS Notas,      NVL(i.Reffs, '')     AS Reffs ;
+                                NVL(i.Notas, '')     AS Notas ;
                                 FROM CrTprMvCab c ;
                                 LEFT JOIN CrTmpOpe    o ON c.Dopes == o.Dopes ;
                                 LEFT JOIN CrTmpTabd   d ON c.Tabds == d.Codigos ;
@@ -350,8 +356,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                 NVL(j.CodBarras, 0)  AS CodBarras2, NVL(j.CodEmbEnts, '') AS CodEmbEnts, ;
                                 NVL(j.Pesos, 0)      AS Pesos2, ;
                                 NVL(i.Qtds - IIF(loc_pItPendente, i.QtBaixas, 0), 0) AS Qtds, ;
-                                NVL(i.Notas, '')     AS Notas,      SPACE(4)              AS CodTams, ;
-                                NVL(i.Reffs, '')     AS Reffs ;
+                                NVL(i.Notas, '')     AS Notas,      SPACE(4)              AS CodTams ;
                                 FROM CrTprMvCab c ;
                                 LEFT JOIN CrTmpOpe   o ON c.Dopes == o.Dopes ;
                                 LEFT JOIN CrTmpTabd  d ON c.TabDs == d.Codigos ;
@@ -1746,7 +1751,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
             IF THIS.PrepararDados()
                 SELECT TmpRelat
                 GO TOP
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -1765,7 +1770,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
             IF THIS.PrepararDados()
                 SELECT TmpRelat
                 GO TOP
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -1784,7 +1789,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
             IF THIS.PrepararDados()
                 SELECT TmpRelat
                 GO TOP
-                REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PREVIEW")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
