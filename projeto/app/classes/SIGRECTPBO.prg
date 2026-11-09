@@ -53,7 +53,7 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             loc_lSucesso = DODEFAULT()
-            THIS.this_cArquivoRelatorio = "relsigrectp"
+            THIS.this_cArquivoRelatorio = "SigReCtp"   && FRX do legado (Erro331: "relsigrectp" nunca existiu)
             THIS.this_cTituloRelatorio  = "Relat" + CHR(243) + "rio de Cota" + ;
                                           CHR(231) + CHR(227) + "o de Compras"
             THIS.this_dDtInicial = DATE()
@@ -93,150 +93,224 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Monta cursor crImpressao com dados de cotacoes de
-    * compras conforme filtros definidos nas propriedades this_*.
-    * Equivalente ao PROCEDURE processamento do legado SIGRECTP.
-    * Tambem cria cursor crCabecalho para cabecalho do relatorio FRX.
+    * PrepararDados - Transcricao da classe de negocio legado cnSigReCtp
+    *   (Fortyus\SigReCtp.PRG: Processamento -> CriarCabecalho, CriarCursores,
+    *   SelecDados). Erro331: a versao migrada tinha sido INVENTADA - cursor so
+    *   com o cabecalho da cotacao e crCabecalho com cb_*; o SigReCtp.frx le
+    *   crImpressao (uma linha por produto com o fornecedor vencedor, Contador=1,
+    *   + uma linha por pedido gerado, Contador=2..n) e crCabecalho.Titulo/
+    *   SubTit/Empresa.
+    *   crImpressao / crCabecalho: nomes exigidos pelo FRX (contrato do legado).
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
-        LOCAL loc_lSucesso, loc_oErro
-        LOCAL loc_cSQL, loc_cWhere, loc_cJoin, loc_nResult
-        LOCAL loc_cDtIniSQL, loc_cDtFimSQL
-        LOCAL loc_cEmpresa, loc_cTitulo, loc_cPeriodo
+        LOCAL loc_lSucesso, loc_oErro, loc_lAbortou
+        LOCAL loc_cSQL, loc_cVal, loc_nCod, loc_cLet, loc_nCnt, loc_oProg
+        LOCAL loc_cSub, loc_cEmp, loc_cEmpDop
         loc_lSucesso = .F.
+        loc_lAbortou = .F.
+        loc_oProg    = .NULL.
         TRY
-            *-- Fechar cursor anterior se aberto
-            IF USED(THIS.this_cCursorDados)
-                USE IN (THIS.this_cCursorDados)
-            ENDIF
+            THIS.this_cMensagemErro = ""
 
-            *-- Formatar datas para SQL Server (datetime)
-            loc_cDtIniSQL = "'" + ;
-                PADL(YEAR(THIS.this_dDtInicial),  4, "0") + "-" + ;
-                PADL(MONTH(THIS.this_dDtInicial), 2, "0") + "-" + ;
-                PADL(DAY(THIS.this_dDtInicial),   2, "0") + " 00:00:00'"
-            loc_cDtFimSQL = "'" + ;
-                PADL(YEAR(THIS.this_dDtFinal),  4, "0") + "-" + ;
-                PADL(MONTH(THIS.this_dDtFinal), 2, "0") + "-" + ;
-                PADL(DAY(THIS.this_dDtFinal),   2, "0") + " 23:59:59'"
+            *-- CriarCabecalho
+            loc_cSub = "Cota" + CHR(231) + CHR(227) + "o : " + DTOC(THIS.this_dDtInicial) + " a " + DTOC(THIS.this_dDtFinal) + " " + ;
+                IIF(!EMPTY(THIS.this_dDtValidIs) OR !EMPTY(THIS.this_dDtValidFs), ;
+                    "Validade : " + DTOC(THIS.this_dDtValidIs) + " a " + DTOC(THIS.this_dDtValidFs) + " ", "") + ;
+                IIF(EMPTY(THIS.this_cComprador), "", " - Comprador : " + ALLTRIM(THIS.this_cComprador)) + ;
+                IIF(EMPTY(THIS.this_cAprovador), "", " - Aprovador : " + ALLTRIM(THIS.this_cAprovador)) + ;
+                IIF(EMPTY(THIS.this_cCPros), "", " - Produto : " + ALLTRIM(THIS.this_cCPros)) + ;
+                IIF(EMPTY(THIS.this_cIClis), "", " - Fornecedor : " + ALLTRIM(THIS.this_cIClis)) + ;
+                IIF(THIS.this_nPedidos = 1, "Com Pedidos", "") + ;
+                IIF(THIS.this_nAprovados = 1, "Com Aprova" + CHR(231) + CHR(227) + "o", "")
 
-            *-- Clausula WHERE base: periodo de cotacao (obrigatorio)
-            loc_cWhere = "dc.dtcotas >= " + loc_cDtIniSQL + ;
-                         " AND dc.dtcotas <= " + loc_cDtFimSQL
-
-            *-- Filtro periodo de validade (opcional - apenas se ambas preenchidas)
-            IF !EMPTY(THIS.this_dDtValidIs)
-                loc_cWhere = loc_cWhere + ;
-                    " AND dc.dtvalids >= '" + ;
-                    PADL(YEAR(THIS.this_dDtValidIs),  4, "0") + "-" + ;
-                    PADL(MONTH(THIS.this_dDtValidIs), 2, "0") + "-" + ;
-                    PADL(DAY(THIS.this_dDtValidIs),   2, "0") + " 00:00:00'"
-            ENDIF
-            IF !EMPTY(THIS.this_dDtValidFs)
-                loc_cWhere = loc_cWhere + ;
-                    " AND dc.dtvalids <= '" + ;
-                    PADL(YEAR(THIS.this_dDtValidFs),  4, "0") + "-" + ;
-                    PADL(MONTH(THIS.this_dDtValidFs), 2, "0") + "-" + ;
-                    PADL(DAY(THIS.this_dDtValidFs),   2, "0") + " 23:59:59'"
-            ENDIF
-
-            *-- Filtro comprador
-            IF !EMPTY(ALLTRIM(THIS.this_cComprador))
-                loc_cWhere = loc_cWhere + ;
-                    " AND RTRIM(dc.comprador) = " + EscaparSQL(ALLTRIM(THIS.this_cComprador))
-            ENDIF
-
-            *-- Filtro aprovador
-            IF !EMPTY(ALLTRIM(THIS.this_cAprovador))
-                loc_cWhere = loc_cWhere + ;
-                    " AND RTRIM(dc.aprovador) = " + EscaparSQL(ALLTRIM(THIS.this_cAprovador))
-            ENDIF
-
-            *-- Filtro aprovados (chkaprovs: 0=nao aprovado, 1=aprovado)
-            IF THIS.this_nAprovados = 1
-                loc_cWhere = loc_cWhere + " AND dc.chkaprovs = 1"
-            ENDIF
-            IF THIS.this_nAprovados = 2
-                loc_cWhere = loc_cWhere + " AND dc.chkaprovs = 0"
-            ENDIF
-
-            *-- Filtro pedidos via EXISTS em SigCtTps
-            IF THIS.this_nPedidos = 1
-                loc_cWhere = loc_cWhere + ;
-                    " AND EXISTS (SELECT 1 FROM SigCtTps ps" + ;
-                    " WHERE ps.codigos = dc.codigos)"
-            ENDIF
-            IF THIS.this_nPedidos = 2
-                loc_cWhere = loc_cWhere + ;
-                    " AND NOT EXISTS (SELECT 1 FROM SigCtTps ps" + ;
-                    " WHERE ps.codigos = dc.codigos)"
-            ENDIF
-
-            *-- JOINs adicionais para filtros de produto e fornecedor
-            loc_cJoin = ""
-
-            IF !EMPTY(ALLTRIM(THIS.this_cCPros))
-                loc_cJoin  = loc_cJoin + ;
-                    " INNER JOIN SigCtTct ct ON ct.codigos = dc.codigos"
-                loc_cWhere = loc_cWhere + ;
-                    " AND RTRIM(ct.cpros) = " + EscaparSQL(ALLTRIM(THIS.this_cCPros))
-            ENDIF
-
-            IF !EMPTY(ALLTRIM(THIS.this_cIClis))
-                loc_cJoin  = loc_cJoin + ;
-                    " INNER JOIN SigCtTfn fn ON fn.codigos = dc.codigos"
-                loc_cWhere = loc_cWhere + ;
-                    " AND RTRIM(fn.iclis) = " + EscaparSQL(ALLTRIM(THIS.this_cIClis))
-            ENDIF
-
-            *-- SELECT principal: cabecalho da cotacao com nomes dos usuarios
-            loc_cSQL = "SELECT DISTINCT" + ;
-                " dc.codigos, dc.dtcotas, dc.dtvalids, dc.dtsolics," + ;
-                " dc.dtpagtos, dc.dtaprovs," + ;
-                " RTRIM(dc.comprador) AS comprador," + ;
-                " RTRIM(dc.aprovador) AS aprovador," + ;
-                " RTRIM(dc.solicitas) AS solicitas," + ;
-                " RTRIM(dc.aprsols)   AS aprsols," + ;
-                " dc.situas, dc.prioris," + ;
-                " dc.chkaprovs, dc.localents, dc.copias," + ;
-                " RTRIM(dc.deptos)   AS deptos," + ;
-                " RTRIM(dc.contaes)  AS contaes," + ;
-                " ISNULL(RTRIM(u1.ncomps), '') AS ncomp_comprador," + ;
-                " ISNULL(RTRIM(u2.ncomps), '') AS ncomp_aprovador" + ;
-                " FROM SigCtTdc dc" + ;
-                " LEFT JOIN sigcdusu u1 ON RTRIM(u1.usuarios) = RTRIM(dc.comprador)" + ;
-                " LEFT JOIN sigcdusu u2 ON RTRIM(u2.usuarios) = RTRIM(dc.aprovador)" + ;
-                loc_cJoin + ;
-                " WHERE " + loc_cWhere + ;
-                " ORDER BY dc.codigos"
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)
-            IF loc_nResult < 1
-                THIS.this_cMensagemErro = "Erro ao buscar dados de cota" + ;
-                    CHR(231) + CHR(227) + "o de compras"
-                loc_lSucesso = .F.
-            ELSE
-                *-- Cursor de cabecalho para o FRX
-                loc_cEmpresa = ALLTRIM(go_4c_Sistema.cEmpresa)
-                loc_cTitulo  = THIS.this_cTituloRelatorio
-                loc_cPeriodo = "Per" + CHR(237) + "odo: " + ;
-                    DTOC(THIS.this_dDtInicial) + " " + CHR(150) + " " + DTOC(THIS.this_dDtFinal)
-
-                IF USED("crCabecalho")
-                    USE IN crCabecalho
+            loc_cEmp = ""
+            IF SQLEXEC(gnConnHandle, "SELECT Razas FROM SigCdEmp WHERE Cemps = " + ;
+                    EscaparSQL(go_4c_Sistema.cCodEmpresa), "cursor_4c_CtpEmp") > 0
+                IF !EOF("cursor_4c_CtpEmp")
+                    loc_cEmp = go_4c_Sistema.cCodEmpresa + " - " + ALLTRIM(cursor_4c_CtpEmp.Razas)
                 ENDIF
-                CREATE CURSOR crCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
-                INSERT INTO crCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
-                    VALUES (loc_cEmpresa, loc_cTitulo, loc_cPeriodo)
+                USE IN cursor_4c_CtpEmp
+            ENDIF
 
-                SELECT (THIS.this_cCursorDados)
+            IF USED("crCabecalho")
+                USE IN crCabecalho
+            ENDIF
+            CREATE CURSOR crCabecalho (Titulo C(200), SubTit C(200), Empresa C(80))
+            INSERT INTO crCabecalho (Titulo, SubTit, Empresa) ;
+                VALUES ("Relat" + CHR(243) + "rio de Cota" + CHR(231) + CHR(227) + "o de Compras", loc_cSub, loc_cEmp)
+            GO TOP IN crCabecalho
+
+            *-- CriarCursores
+            IF USED("crImpressao")
+                USE IN crImpressao
+            ENDIF
+            CREATE CURSOR crImpressao (Codigos N(6), DtCotas D(8), IClis C(10), RClis C(50), ;
+                CPros C(14), DPros C(40), QtdAdqs N(12,2), ValAdqs N(12,2), ;
+                Emps C(3), Dopes C(20), Numes N(6), DtPedidos D(8), ;
+                JustGerals M(4), Justificas M(4), Aprovador C(10), ;
+                NmAprovador C(30), Aprovados L(1), Contador N(3))
+
+            *-- SelecDados: validade (opcional, 3 combinacoes como no legado)
+            loc_cVal = ""
+            DO CASE
+                CASE !EMPTY(THIS.this_dDtValidIs) AND !EMPTY(THIS.this_dDtValidFs)
+                    loc_cVal = "b.DtValids BETWEEN " + FormatarDataSQL(THIS.this_dDtValidIs) + ;
+                               " AND " + FormatarDataSQL(THIS.this_dDtValidFs) + " AND "
+                CASE !EMPTY(THIS.this_dDtValidIs)
+                    loc_cVal = "b.DtValids >= " + FormatarDataSQL(THIS.this_dDtValidIs) + " AND "
+                CASE !EMPTY(THIS.this_dDtValidFs)
+                    loc_cVal = "b.DtValids <= " + FormatarDataSQL(THIS.this_dDtValidFs) + " AND "
+            ENDCASE
+
+            *-- Periodo: legado usa fDtoSql(data) nas DUAS pontas (sem 23:59:59)
+            loc_cSQL = "SELECT a.Codigos, b.DtCotas, a.CPros, a.DPros, a.QtdAdqs, a.ValAdqs, a.Justificas," + ;
+                " b.Justificas AS JustGerals, b.ChkAprovs, b.Aprovador, c.NComps AS NmAprovador," + ;
+                " a.Marca01, a.Marca02, a.Marca03, a.Marca04, a.Marca05, a.Marca06" + ;
+                " FROM SigCtTct a, SigCtTdc b" + ;
+                " LEFT JOIN SigCdUsu c ON c.Usuarios = b.Aprovador" + ;
+                " WHERE a.Codigos = b.Codigos AND" + ;
+                " b.DtCotas BETWEEN " + FormatarDataSQL(THIS.this_dDtInicial) + " AND " + FormatarDataSQL(THIS.this_dDtFinal) + " AND " + ;
+                loc_cVal + ;
+                IIF(EMPTY(THIS.this_cCPros),     "", "a.CPros = "     + EscaparSQL(THIS.this_cCPros) + " AND ") + ;
+                IIF(EMPTY(THIS.this_cComprador), "", "b.Comprador = " + EscaparSQL(THIS.this_cComprador) + " AND ") + ;
+                IIF(EMPTY(THIS.this_cAprovador), "", "b.Aprovador = " + EscaparSQL(THIS.this_cAprovador) + " AND ") + ;
+                IIF(THIS.this_nAprovados = 3, "", IIF(THIS.this_nAprovados = 2, "b.ChkAprovs = 0 AND ", "b.ChkAprovs = 1 AND ")) + ;
+                IIF(THIS.this_nPedidos   = 3, "", IIF(THIS.this_nPedidos   = 2, "b.Situas = 0 AND ",    "b.Situas > 0 AND ")) + ;
+                "0 = 0 ORDER BY a.Codigos, a.CPros"
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtpDados1") < 1
+                THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!!" + CHR(13) + ;
+                    "Falha na Conex" + CHR(227) + "o (crSigReCtp_Dados1)"
+                loc_lAbortou = .T.
+            ENDIF
+
+            IF !loc_lAbortou
+                SELECT DISTINCT Codigos FROM cursor_4c_CtpDados1 ORDER BY Codigos INTO CURSOR cursor_4c_CtpCodigos
+
+                IF RECCOUNT("cursor_4c_CtpCodigos") > 0
+                    loc_oProg = CREATEOBJECT("fwprogressbar", "Processando Cota" + CHR(231) + CHR(245) + "es...", RECCOUNT("cursor_4c_CtpCodigos"))
+                    IF VARTYPE(loc_oProg) = "O"
+                        loc_oProg.Show()
+                    ENDIF
+                ENDIF
+
+                SELECT cursor_4c_CtpCodigos
+                SCAN WHILE !loc_lAbortou
+                    loc_nCod = cursor_4c_CtpCodigos.Codigos
+                    IF VARTYPE(loc_oProg) = "O"
+                        loc_oProg.SubTitulo.Caption = "Cota" + CHR(231) + CHR(227) + "o : " + ALLTRIM(STR(loc_nCod, 6))
+                        loc_oProg.Update(.T.)
+                    ENDIF
+
+                    SELECT * FROM cursor_4c_CtpDados1 WHERE Codigos = loc_nCod ORDER BY CPros INTO CURSOR cursor_4c_CtpDados
+
+                    *-- Fornecedor vencedor de cada produto (Marca01..06 -> grade A..F)
+                    SELECT cursor_4c_CtpDados
+                    SCAN WHILE !loc_lAbortou
+                        loc_cLet = " "
+                        DO CASE
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca01)
+                                loc_cLet = "A"
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca02)
+                                loc_cLet = "B"
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca03)
+                                loc_cLet = "C"
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca04)
+                                loc_cLet = "D"
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca05)
+                                loc_cLet = "E"
+                            CASE THIS.MarcaLigada(cursor_4c_CtpDados.Marca06)
+                                loc_cLet = "F"
+                        ENDCASE
+
+                        IF !EMPTY(loc_cLet)
+                            loc_cSQL = "SELECT a.IClis, a.Fornecs FROM SigCtTfn a" + ;
+                                " WHERE a.Codigos = " + ALLTRIM(STR(cursor_4c_CtpDados.Codigos, 6)) + ;
+                                " AND a.Grades = " + EscaparSQL(loc_cLet) + ;
+                                IIF(EMPTY(THIS.this_cIClis), "", " AND a.IClis = " + EscaparSQL(PADR(THIS.this_cIClis, 10)))
+                            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtpFornecs") < 1
+                                THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!!" + CHR(13) + ;
+                                    "Falha na Conex" + CHR(227) + "o (crSigReCtp_Fornecs)"
+                                loc_lAbortou = .T.
+                            ELSE
+                                IF !EOF("cursor_4c_CtpFornecs")
+                                    INSERT INTO crImpressao (Codigos, DtCotas, IClis, RClis, CPros, DPros, QtdAdqs, ValAdqs, ;
+                                        JustGerals, Justificas, Contador, Aprovador, NmAprovador, Aprovados) ;
+                                        VALUES (cursor_4c_CtpDados.Codigos, ConverterParaData(NVL(cursor_4c_CtpDados.DtCotas, {})), ;
+                                            cursor_4c_CtpFornecs.IClis, cursor_4c_CtpFornecs.Fornecs, cursor_4c_CtpDados.CPros, ;
+                                            cursor_4c_CtpDados.DPros, cursor_4c_CtpDados.QtdAdqs, cursor_4c_CtpDados.ValAdqs, ;
+                                            NVL(cursor_4c_CtpDados.JustGerals, ""), NVL(cursor_4c_CtpDados.Justificas, ""), 1, ;
+                                            cursor_4c_CtpDados.Aprovador, NVL(cursor_4c_CtpDados.NmAprovador, ""), ;
+                                            (cursor_4c_CtpDados.ChkAprovs = 1))
+                                ENDIF
+                                USE IN cursor_4c_CtpFornecs
+                            ENDIF
+                        ENDIF
+                        SELECT cursor_4c_CtpDados
+                    ENDSCAN
+
+                    *-- Pedidos gerados pela cotacao (Contador 2..n)
+                    IF !loc_lAbortou
+                        SELECT crImpressao
+                        LOCATE FOR Codigos = loc_nCod
+                        IF FOUND()
+                            loc_cSQL = "SELECT a.EmpDopNums, b.Datas FROM SigCtTps a, SigCtTpc b" + ;
+                                " WHERE a.Codigos = " + ALLTRIM(STR(loc_nCod, 6)) + " AND a.Codigos = b.Codigos" + ;
+                                " ORDER BY a.EmpDopNums"
+                            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtpPeds") < 1
+                                THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!!" + CHR(13) + ;
+                                    "Falha na Conex" + CHR(227) + "o (crSigReCtp_Peds)"
+                                loc_lAbortou = .T.
+                            ELSE
+                                loc_nCnt = 1
+                                SELECT cursor_4c_CtpPeds
+                                SCAN
+                                    loc_nCnt    = loc_nCnt + 1
+                                    loc_cEmpDop = cursor_4c_CtpPeds.EmpDopNums
+                                    INSERT INTO crImpressao (Codigos, Contador, Emps, Dopes, Numes, DtPedidos) ;
+                                        VALUES (loc_nCod, loc_nCnt, SUBSTR(loc_cEmpDop, 1, 3), SUBSTR(loc_cEmpDop, 4, 20), ;
+                                            INT(VAL(SUBSTR(loc_cEmpDop, 24, 6))), ConverterParaData(NVL(cursor_4c_CtpPeds.Datas, {})))
+                                    SELECT cursor_4c_CtpPeds
+                                ENDSCAN
+                                USE IN cursor_4c_CtpPeds
+                            ENDIF
+                        ENDIF
+                    ENDIF
+
+                    IF USED("cursor_4c_CtpDados")
+                        USE IN cursor_4c_CtpDados
+                    ENDIF
+                    SELECT cursor_4c_CtpCodigos
+                ENDSCAN
+                USE IN cursor_4c_CtpCodigos
+                USE IN cursor_4c_CtpDados1
+            ENDIF
+
+            IF !loc_lAbortou
+                SELECT crImpressao
+                GO TOP
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
+        IF VARTYPE(loc_oProg) = "O"
+            loc_oProg.Complete()
+            loc_oProg = .NULL.
+        ENDIF
         RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MarcaLigada - SigCtTct.MarcaNN eh bit: chega Logico ou Numerico conforme
+    *   o driver (regra #13). O legado fazia "Case crSigReCtp_Dados.Marca01".
+    *--------------------------------------------------------------------------
+    PROCEDURE MarcaLigada(par_uValor)
+        IF VARTYPE(par_uValor) = "L"
+            RETURN par_uValor
+        ENDIF
+        RETURN (NVL(par_uValor, 0) = 1)
     ENDPROC
 
     *--------------------------------------------------------------------------

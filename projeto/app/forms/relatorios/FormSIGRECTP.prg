@@ -939,7 +939,7 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 ENDIF
             ENDIF
             IF loc_lProsseguir
-                THIS.ExecutarReportForm("relsigrectp", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReCtp", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -968,7 +968,7 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 ENDIF
             ENDIF
             IF loc_lProsseguir
-                THIS.ExecutarReportForm("relsigrectp", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReCtp", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
