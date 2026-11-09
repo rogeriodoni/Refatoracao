@@ -700,13 +700,13 @@ DEFINE CLASS SIGREDESBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                IF THIS.this_nOpcao = 1
-                    loc_cFRX = gc_4c_CaminhoReports + "SigReDes"
-                ELSE
-                ENDIF
+                *-- Legado (visualizacao): option=1 -> SigReDes (Detalhado), senao SigReDe1
+                *-- (Resumido). Erro333: o IF estava vazio e sempre rodava o SigReDe1, que le
+                *-- a coluna "tipo" - so existe no cursor resumido -> "Variable 'TIPO' is not found".
+                loc_cFRX = IIF(THIS.this_nOpcao = 1, "SigReDes", "SigReDe1")
                 SELECT csRelatorio
                 GO TOP
-                THIS.ExecutarReportForm("SigReDe1", "PREVIEW", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm(loc_cFRX, "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -724,13 +724,11 @@ DEFINE CLASS SIGREDESBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                IF THIS.this_nOpcao = 1
-                    loc_cFRX = gc_4c_CaminhoReports + "SigReDes"
-                ELSE
-                ENDIF
+                *-- Legado (impressao): option=1 -> SigReDes, senao SigReDe1 (Erro333)
+                loc_cFRX = IIF(THIS.this_nOpcao = 1, "SigReDes", "SigReDe1")
                 SELECT csRelatorio
                 GO TOP
-                THIS.ExecutarReportForm("SigReDe1", "PRINTER_PROMPT", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm(loc_cFRX, "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
