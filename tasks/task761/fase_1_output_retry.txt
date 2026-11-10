@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. **`C:\4c\projeto\app\classes\SigOpLimBO.prg`** criado (8173 bytes, 150 linhas, 26 propriedades).
+
+## Por que a tentativa anterior falhou
+
+O log mostra que o Claude CLI **nunca escreveu o arquivo**: abortou num aviso de regra de permiss├úo com wildcard (`settings.local.json`), saiu com `exit=0` e 2030 bytes de output que eram s├│ a mensagem de erro. N├úo foi defeito de gera├º├úo ÔÇö a fase n├úo rodou.
+
+## O que foi gerado
+
+`SIGOPLIM` n├úo ├® CRUD: ├® um **di├ílogo modal de autoriza├º├úo** ("Limite Ultrapassado..."), chamado por outra tela quando o operador tenta desconto/acr├®scimo acima da al├ºada do cargo, e devolve em `zsenha` a credencial de quem liberou. Declarei as 26 propriedades em 6 blocos: par├ómetros do chamador (os 11 `Parameter` do legado, menos `poform`/`Pcx` que s├úo do Form), estado derivado (`this_lSoMotivo`), resultado, usu├írio autorizador, motivo, senha livre e aliases de cursor.
+
+Quatro pontos que exigiram decis├úo, n├úo transcri├º├úo:
+
+**`limdescs` ├® coluna hom├┤nima de tipos diferentes.** `SigCdUsu.limdescs` ├® `char(1)` e `SigCdCrg.limdescs` ├® `numeric(11,2)`. O `If limdescs = "S"` do legado roda sobre `TmpUsu` (`Select a.*` de SigCdUsu), logo ├® a **char** ÔÇö declarei `this_cLimDescs = ""`. A num├®rica entra s├│ no `WHERE`. Trocar uma pela outra quebraria a compara├º├úo em sil├¬ncio.
+
+**`zsenha` ├® property variante** (recebe `.F.` quando negado, string quando liberado). Separei em `this_lAutorizado` (l├│gico) + `this_cZSenha` (caractere) para n├úo deixar property de tipo amb├¡guo no BO; o Form remonta o retorno do di├ílogo na Fase 3.
+
+**`fCriptografar` fica ausente de prop├│sito.** Confirmei que n├úo existe no projeto e minha mem├│ria registra que a aus├¬ncia ├® intencional (stub de hash autentica quem n├úo devia, ou recusa todos ÔÇö nos dois casos sem erro na tela). As propriedades guardam o valor cru de `senhas` para a Fase 2 transcrever a compara├º├úo literalmente dentro de TRY/CATCH. Aqui n├úo h├í risco de par assim├®trico: o form s├│ *l├¬* senha, nunca grava.
+
+**`GeraSenha` n├úo pode delegar a `ValidarCNPJ`.** Verifiquei: o `gerasenha` legado chama `fValidarCNPJ(_var1)` e depois l├¬ `pridig`/`segdig` ÔÇö vari├íveis que a fun├º├úo preenche como **efeito colateral**. Nosso `ValidarCNPJ` (validators.prg:67) mant├®m `lnDigito1`/`lnDigito2` como `LOCAL` e devolve s├│ l├│gico. A Fase 2 ter├í de calcular os dois d├¡gitos verificadores ela mesma. (Observa├º├úo secund├íria: no legado `zsen`/`zsen1` s├úo atribu├¡dos e nunca lidos ÔÇö `senha.Valid` recalcula tudo. Transcrevi fielmente o contrato, mas vale saber que o resultado ├® descartado.)
+
+## Verifica├º├úo
+
+Todas as 7 tabelas e cada coluna citada pelo legado conferidas em `docs/schema.sql` lido com `Get-Content -Raw` (682 tabelas ÔÇö encoding correto, regra #14).
+
+| Gate | Resultado |
+|---|---|
+| `Test-CompletudeCodigo` (gate real do orquestrador) | **OK** ÔÇö zero TODO/stub/procedure vazia |
+| Compila├º├úo VFP9 | **COMPILE_OK**, sem `.ERR`, `.FXP` gerado |
+| Bytes n├úo-ASCII (acentos literais) | 0 |
+| `RETURN` dentro de TRY / `PUBLIC` em DEFINE CLASS / `MESSAGEBOX` | nenhum |
+| Colis├úo de property com BusinessBase | 0 |
+
+Sobre a compila├º├úo: minha mem├│ria afirmava que o VFP9 nesta sess├úo compila e **sai sem executar**, o que invalidaria qualquer alega├º├úo de `COMPILE_OK`. Rodei o smoke test obrigat├│rio antes ÔÇö e ele **escreveu o arquivo de sa├¡da**, provando execu├º├úo. O veredito acima ├® portanto medido, n├úo inferido de `.FXP`/`exit=0`. Atualizei a mem├│ria: o comportamento varia por sess├úo, ent├úo a li├º├úo transport├ível ├® "sempre medir com arquivo de sa├¡da", n├úo "o VFP n├úo executa" ÔÇö ler a medi├º├úo antiga como permanente faria abrir m├úo de uma verifica├º├úo real dispon├¡vel.
+
+Fiz apenas a Fase 1 conforme pedido. Os m├®todos de dados (`CarregarDoCursor`, consultas de usu├írio/motivo/senha livre, `GeraSenha`) s├úo escopo da Fase 2 ÔÇö o arquivo n├úo cont├®m stubs no lugar deles.

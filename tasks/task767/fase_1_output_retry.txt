@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpMopBO.prg` criado (7.112 bytes, 159 linhas), compilado no VFP9 sem `.err`.
+
+## O que foi feito
+
+O legado `SIGOPMOP.SCX` ├® um **di├ílogo filho** do Cadastro de Opera├º├Áes (`SIGCDOPE`), e a tabela real ├® **`SigCdMop`** ÔÇö n├úo "SigOpMop". O `analise.json` vinha com `tabela: ""`, ent├úo confirmei a tabela pelo cursor `crSigCdMop` do dump e pelo `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14).
+
+**Propriedades da entidade** ÔÇö as 9 colunas de `SigCdMop`, todas `NOT NULL`, com nome espelhando o banco (regra de naming DB):
+
+| Propriedade | Coluna | Tipo |
+|---|---|---|
+| `this_cCidChaves` | `cidchaves` | char(20) ÔÇö PK, `fUniqueIds()` |
+| `this_cCdopes` | `cdopes` | char(20) ÔÇö opera├º├úo PAI |
+| `this_cCnivels` | `cnivels` | char(20) ÔÇö "Movimenta├º├úo" |
+| `this_nNcors` | `ncors` | numeric(10,0) ÔÇö "Cores" |
+| `this_nPadraos` | `padraos` | numeric(1,0) ÔÇö "Padr├úo" |
+| `this_nOrdems` | `ordems` | numeric(3,0) ÔÇö "Ordem" |
+| `this_cMercs` | `mercs` | char(3) ÔÇö "G.Grp" |
+| `this_cEmpds` | `empds` | char(3) ÔÇö "Emp." |
+| `this_cOpers` | `opers` | char(1) ÔÇö **sem controle na tela** |
+
+Dois achados que vale registrar para a Fase 2:
+
+- **`opers` char(1) NOT NULL n├úo aparece em lugar nenhum do dump legado** ÔÇö ├® exatamente a armadilha da regra #22 (coluna invis├¡vel no dump, que existia s├│ no registro em branco do `AddCursor`). J├í declarada, para o INSERT da Fase 2 n├úo a omitir.
+- **`ndopes` N├âO existe em `SigCdMop`** ÔÇö a coluna " # " da grade ├® exibi├º├úo, lida de `SigCdOpe.ndopes` (`Replace nDopes With CpSigCdOpe.nDopes in CrSigCdMop`). Declarei `this_nNdopes` marcada como n├úo-persistida, para o INSERT/UPDATE da Fase 2 n├úo tentar grav├í-la.
+
+Tamb├®m declarei o contexto que o form pai passa (`this_cOperacaoPai`, `this_cEscolha`), a configura├º├úo da opera├º├úo lida de `SigOpCdc` (`this_nGerOpes` ÔÇö `<> 2` trava a coluna Cores; `this_nOpeInatvs` ÔÇö `= 1` recusa a opera├º├úo) e os nomes de cursores centralizados.
+
+**M├®todos completos** (sem stub): `Init()` (tabela/campo-chave/cursores), `ObterChavePrimaria()` (ÔåÆ `cidchaves`), `LimparDados()` e `InicializarValoresPadrao()` ÔÇö este ├║ltimo transcreve o `cmdInserir.Click` do legado, onde a linha nova nasce com `cdopes` = opera├º├úo pai e `cidchaves` = `fUniqueIds()` (que devolve 20 chars, batendo com o `char(20)`).
+
+`CarregarDoCursor`/`Inserir`/`Atualizar` ficaram **fora de prop├│sito** ÔÇö s├úo a Fase 2, que completa o arquivo via Read+Edit. Removi o `.fxp` ap├│s compilar para que as fases seguintes n├úo rodem c├│digo velho.

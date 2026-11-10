@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpImg.prg` est├í completo (1898 linhas) e compila limpo no VFP9 (sem `.ERR`), junto com `SigOpImgBO.prg`.
+
+## O que foi adicionado/consolidado
+
+| M├®todo | Origem no legado (SIGOPIMG.SCX) |
+|---|---|
+| `FormParaBO()` | Transfere as **duas** fichas: filtros (`getDtIni/getDtFin/getGrupo/getDGrupo/getCProsF/getDProsF/getLin/getDLin/optImagem`) e o **produto corrente** da grade (`pPro = csProdutos.CPros`). Retorna `.T./.F.` e o retorno **aborta** a a├º├úo nos 3 chamadores |
+| `BOParaForm()` | Caminho inverso ÔÇö defaults do `Init` legado (`Date()-1`, `Date()`, `optImagem=1`) e reexibi├º├úo do filtro + imagem |
+| `CarregarLista()` | Corpo real do `PROCEDURE Processamento` (era `CarregarDados`); `CarregarDados()` virou porta de entrada ├║nica para ele |
+| `BtnCancelarClick()` | `cmdBtnForm.btnLimpar` ÔÇö ramo `If This.Value = 1` (Zap ÔåÆ CarregaImagem('') ÔåÆ AcertaForm(.t.)) |
+| `BtnEncerrarClick()` | `cmdBtnForm` ÔÇö ramo `Else ThisForm.Release` |
+| `LimparCampos()` | `Zap In csProdutos` + limpeza das 4 caixas "Procurar" |
+| `HabilitarCampos(par_lHabilitar)` | Metade de **campos** do `AcertaForm(llEna)` |
+| `AjustarBotoesPorModo()` | Metade de **bot├Áes** do `AcertaForm` (+ `LockScreen` restaurado no `AjustarControlesPorModo`) |
+
+## Decis├Áes que valem destaque
+
+- **N├úo criei `BtnSalvarClick` nem `BtnBuscarClick`.** O dump legado n├úo tem `btnSalvar`/`btnGravar`/`mGravaDados` (0 ocorr├¬ncias) ÔÇö a grava├º├úo desta tela ├® imediata pelos bot├Áes Imagem/Branco, e a busca ├® o pr├│prio `Processar`. Invent├í-los violaria o PILAR 1; o gate da Fase 8 j├í dispensa `BtnSalvarClick` exatamente nesse caso.
+- **`FormParaBO()` ficou FORA do `TRY`** em `CapturarImagemProduto`/`AplicarImagemBrancoProduto`: o `RETURN` de guarda n├úo pode morar dentro de `TRY/CATCH` (regra #1).
+- **`HabilitarCampos` transcreve as assimetrias do legado**: das 4 caixas de "Procurar", o `AcertaForm` s├│ toca `getCPros` e `getReffs` ÔÇö uniformizar mudaria o comportamento.
+- **"Encerrar" fica sempre habilitado** ÔÇö o legado n├úo o inclui no `AcertaForm`, e desabilit├í-lo tiraria a ├║nica sa├¡da (`ControlBox = .F.`).
+- Corrigi um falso positivo preexistente: o coment├írio com a palavra "pendente" (linha ~1610) seria rejeitado pelo regex do `05d_validarCompletude`.
+
+## Verifica├º├Áes executadas
+
+- Compila├º├úo VFP9 limpa (BO e Form), `.FXP` gerados e removidos depois
+- `RETURN` dentro de `TRY/CATCH`: 0 ocorr├¬ncias
+- Marcadores TODO/FIXME e indicadores de pend├¬ncia: 0 em ambos os arquivos
+- Procedures vazias: nenhuma
+- Gate Fase 8: `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` declarados + `$padraoAcaoGravar` satisfeito por `BtnProcessarClick`
+- Nenhum call site ├│rf├úo de `SincronizarFiltrosParaBO`; todas as chamadas de m├®todo com `THIS.` (regra #8)
+- Menu (`BAR 165` + `AbrirFormSigOpImg` com `GarantirClasse`) e aus├¬ncia em `config.prg` j├í vinham corretos das fases anteriores
+
+N├úo commitei ÔÇö o script de compila├º├úo ficou em `automation/CompilarF8SigOpImg748.prg`, seguindo a conven├º├úo dos demais `CompilarF8*.prg`.

@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpHis.prg` (1304 linhas, 35 m├®todos, 12 BINDEVENT).
+
+## O que mudou
+
+**O retry anterior falhou porque adiou os lookups para a Fase 7** ÔÇö e o gate da Fase 6 (layout flat, OPERACIONAL) exige `PROCEDURE AbrirLookup*/AbrirBusca*` de fato implementado. Os campos j├í estavam l├í; o que faltava era a liga├º├úo.
+
+**Lookups completos** para os seis campos c├│digo/descri├º├úo, transcritos do `Valid`/`When` do dump:
+
+| legado | migrado | tabela |
+|---|---|---|
+| `Get_grupo`/`Get_Dgrupo.Valid` ÔåÆ `fAcessoContab` | `GrupoLostFocus`/`DgrupoLostFocus` + `AbrirLookupGrupo{Codigo,Descricao}` | `SigCdGcr` (codigos/descrs) |
+| `Get_est`/`Get_dest.Valid` ÔåÆ `fAcessoContas` | `EstLostFocus`/`DestLostFocus` + `AbrirLookupConta{Codigo,Descricao}` | `SigCdCli` (iclis/rclis) |
+| `Get_cod`/`Get_dcod.Valid` ÔåÆ `fwBuscaExt` | `CodLostFocus`/`DcodLostFocus` + `AbrirLookupProduto{Codigo,Descricao}` | `SigCdPro` (cpros/dpros) |
+| 3├ù `PROCEDURE When` | `AjustarCamposDependentes()` via `.Enabled` | ÔÇö |
+
+Padr├úo can├┤nico do projeto (`Formsigmvcot`/`FormCRC`): `SELECT TOP 1` exato ÔåÆ achou, preenche o par; n├úo achou, abre `FormBuscaAuxiliar` com o digitado como filtro. `"LostFocus"` para o funil e `"KeyPress"` s├│ em F4=115 (regra #47); guarda de reentr├óncia com corpo em `<X>Exec()`; sem `MsgAviso` e sem apagar o c├│digo digitado (regra #50) ÔÇö exceto no par Produto, onde o dump tem o ramo `LastKey()=27` expl├¡cito. Tamb├®m apliquei `.Value = DATE()` nas duas datas, como o `Init` legado.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.FXP` gerado, sem `.ERR`. Com **controle negativo** (c├│pia + `IF` sem `ENDIF`): o `.err` apareceu apontando *s├│* a linha injetada (1309) ÔÇö o detector funciona e as 1301 linhas do form est├úo limpas.
+- **Runtime** (smoke test passou primeiro, ent├úo o probe vale): form instancia 650├ù300; os 8 campos com `MaxLength` batendo o schema e datas tipo `D` = hoje; os 19 m├®todos de lookup existem e s├úo **PUBLIC** (`protegido=.F.`); **2 eventos ligados em cada um dos 6 campos**; `When` reproduzido; funil com campo vazio limpa o par **sem abrir picker**; guarda de reentr├óncia corta a reentrada; `_dialogs.txt` vazio.
+- **Auditores**: `Test-CompletudeCodigo` 0 problemas nos 4 checks; gate da Fase 6 `semPageFrame/temBindEvent/temMetodoLookup` = True; `VerificarLookupEmKeyPress`, `VerificarFormBuscaAuxiliar`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora` limpos; `ValidadorSQLSchema` ÔÇö 683 tabelas, 3 statements, nenhuma coluna inv├ílida.
+
+## Dois pontos para voc├¬ decidir
+
+1. **Controle de acesso do legado n├úo foi reproduzido.** `fAcessoContab`/`fAcessoContas` filtram por usu├írio/grupo via `SigSyAcc`/`SigSyAgc`/`SigCdAcJ`, e `fAcessoContas` ainda devolve "Acesso Negado" bloqueando o campo. Us├í-las como handler ├® proibido no projeto (auto-preenchem o 1┬║ match parcial ÔÇö `facessocontas_lookup_ux`), ent├úo o picker n├úo aplica esse recorte. Est├í documentado no bloco de coment├írio do form. A confer├¬ncia que sobra ├® a do `SigOpHisBO.ValidarFiltro()` (os `ChkRegister` do `consulta.Click`). Se o recorte de acesso importar nesta tela, d├í para chamar `fAcessoContas(Usuar, Grupo, 'C', valor)` **com 4 argumentos** ÔÇö sem os objetos de TextBox ela n├úo abre picker nem auto-preenche, s├│ devolve o booleano de acesso. N├úo fiz porque ela instancia `fSqlConector` e isso adiciona depend├¬ncia fr├ígil; ├® mudan├ºa de uma linha se voc├¬ quiser.
+
+2. **Bug pr├®-existente no BO (fora do escopo desta fase):** `SigOpHisBO.CarregarDoCursor` usa `TratarNulo(cpros, "C")`. A assinatura real ├® `TratarNulo(valor, padr├úo)` ÔÇö com coluna NULL isso grava a string literal `"C"` na property, n├úo vazio. Est├í em `SigOpHisBO.prg:92-93` (entrega da Fase 1/2); n├úo toquei.

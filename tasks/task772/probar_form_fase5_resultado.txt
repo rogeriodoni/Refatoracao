@@ -1,0 +1,29 @@
+M1 inicio
+M2 ambiente ok
+CREATEOBJECT VARTYPE=O
+--- FORM ---
+Closable=.T. (esperado .T. - nao declarado no dump)
+ControlBox=.F. MaxButton=.F. MinButton=.F.
+--- LABELS (AutoSize/Width/Height) ---
+C1.lbl_4c_Label3 AutoSize=.F. W=35 H=15 (dump 35x15)
+C1.lbl_4c_Label1 AutoSize=.F. W=63 H=15 (dump 63x15)
+C2.lbl_4c_Label1 AutoSize=.F. W=114 H=25 (dump 114x25)
+C2.lbl_4c_Label2 AutoSize=.F. W=279 H=20 (dump 279x20)
+--- SOBREPOSICAO label x campo (mesmo pai) ---
+Label3 fim=47 txt_4c_OP ini=49
+Label1 fim=209 txt_4c_Envelope ini=210
+--- FWBTNG (heranca da classe fwbtng) ---
+Fwbtng1 Font=[Comic Sans MS] Bold=.T. Italic=.T. WordWrap=.T. MousePointer=15 ForeColor=5921370 WxH=80x100
+Fwbtng2 Font=[Comic Sans MS] ForeColor=5921370
+RGB(90,90,90)=5921370
+Picture Fwbtng1 existe=SIM Fwbtng2 existe=SIM Encerrar existe=SIM
+--- TABINDEX (nivel Form) ---
+cnt_4c_Container1=1 cmg_4c_Commandgroup1=2 cnt_4c_Container2=3 Fwbtng1=4 Fwbtng2=5
+--- TABINDEX (dentro de Container1) ---
+txt_4c_OP=1 txt_4c_Envelope=2 TreeView presente=.F.
+--- CAMPOS (Format/InputMask/MaxLength) ---
+txt_4c_OP Format=[R] InputMask=[9999999999] MaxLength=10 VARTYPE(Value)=N
+txt_4c_Envelope Format=[R] InputMask=[9999999999] MaxLength=10 VARTYPE(Value)=N
+Container2.Visible=.F. (esperado .F.)
+img_4c_Imagem.Visible=.F. (esperado .F.)
+RESULTADO=INSTANCIOU

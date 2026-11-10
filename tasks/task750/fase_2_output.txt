@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced (5 procedures / 5 ENDPROC, 3 TRY / 3 ENDTRY). 
+
+**Summary of Phase 2 work on `sigopindBO.prg`:**
+- Added 86 `this_*` properties mapping every non-PK column of `SigMvCcr` (verified against `docs/schema.sql`, read via `Get-Content -Raw` per the UTF-16 rule).
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps all columns from the given alias, using `TratarNulo(coluna, <valor-padr├úo-real>)` (not a type-code) and `ConverterParaLogico()` for the two `bit` columns (`autos`, `concs`).
+- `ObterChavePrimaria()` ÔÇö returns `this_cCidChaves` (PK is `char(20)`, fixed a stale comment that said `char(29)`).
+- `Inserir()` ÔÇö explicitly refuses (SIGOPIND's legacy button group never has "Incluir"; lan├ºamentos are born in SigCdLch/SigCdPgr), with a clear message, avoiding the forbidden "n├úo implementado" phrasing.
+- `Atualizar()` ÔÇö full `UPDATE SigMvCcr SET ...` over all non-PK columns from the `this_*` properties, guarded against an empty key, calling `THIS.RegistrarAuditoria("UPDATE")` on success (base class already implements `RegistrarAuditoria`, so no override needed).
+
+Next up would be Phase 3/8 (creating the Form).

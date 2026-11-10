@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpMpd.prg` est├í completo (1359 linhas, 27 m├®todos).
+
+## O que a Fase 8 acrescentou
+
+**Hooks can├┤nicos exigidos pela fase** ÔÇö todos com l├│gica real, nenhum stub:
+
+| M├®todo | Conte├║do |
+|---|---|
+| `CarregarLista()` PUBLIC | entrada can├┤nica/harness ÔåÆ delega ao funil `CarregarGrade()` (mesmo padr├úo de FormSigPdMp5/Mp8/PrPcp/PrSlp) |
+| `FormParaBO()` | linha corrente da grade ÔåÆ properties do BO (`CarregarDoCursor`, que estava **morto** no BO) + l├¬ `Amarra` do pai |
+| `BOParaForm()` | `Amarra` de volta ao pai + Refresh da p├ígina de dados dele (a ├║ltima linha de `marca`/`desmarca` no legado) |
+| `HabilitarCampos()` / `AjustarBotoesPorModo()` PUBLIC | ponto ├║nico com o `When` do fwcheckbox1 e o `Visible`+`When` de SelTudo/Apaga, no lugar de 3 c├│pias inline |
+| `LimparCampos()` | zera linha corrente, par (chave,valor) do UPDATE e sugest├Áes antes de cada recarga |
+| `FecharDialogo()` + `BtnEncerrarClick()` + `BtnCancelarClick()` | sa├¡da ├║nica (o OK do legado; `ControlBox=.F.`/`Closable=.F.`) |
+
+**Dois defeitos reais fechados:**
+
+1. **`EditaOrigem` nunca chegava ├á tela.** `DesmarcarExec()` j├í calculava `this_lPermiteEditarOrigem` e o pr├│prio coment├írio do BO dizia que a atribui├º├úo era da camada de Form ÔÇö mas nenhum m├®todo a lia: o rec├ílculo morria no BO. Fechado por `AplicarPermissaoOrigemAoFormPai()`, chamada nos dois caminhos de desmarca├º├úo, exatamente onde o legado mexe em `EditaOrigem`.
+2. **Column8 ("Produto") voltava a ser edit├ível ap├│s cada carga.** O `RecordSource` em `CarregarGrade()` repropaga `Grid.ReadOnly = .F.` para todas as colunas; s├│ `Column1.ReadOnly` era reafirmado. Agora `HabilitarCampos()` reafirma as duas depois do bind.
+
+Tamb├®m renomeei `this_cModoFormPai` ÔåÆ `this_cModoAtual` (nome can├┤nico e o que o legado de fato tem: `This.Op_Escolha`, c├│pia tirada no Init ÔÇö e ├® a property que o harness escreve antes de `AjustarBotoesPorModo`).
+
+**`BtnSalvarClick`/`BtnBuscarClick` n├úo foram criados** ÔÇö o dump n├úo tem bot├úo de gravar (nenhum `btnSalvar`/`btnGravar`/`mGravaDados`) nem de busca; os tr├¬s bot├Áes s├úo ok/SELTUDO/APAGA. Cada marca├º├úo j├í persiste na hora (`UPDATE SigCdNec.ChkSubn`), ent├úo tamb├®m n├úo h├í o que cancelar. Documentado no cabe├ºalho.
+
+## Verifica├º├Áes executadas
+
+- **Compila limpo** no VFP9 (`.fxp` gerado, sem `.err`); `.fxp` removido depois.
+- `Test-CompletudeCodigo` do Orquestrador: **OK** no Form e no BO (nenhum TODO/stub/procedure vazia).
+- `Test-CodeReviewProblems`: o achado `METODO-INEXISTENTE THIS.Caption()` (falso positivo de coment├írio) foi eliminado reescrevendo o coment├írio. Sobram 3 achados que **verifiquei um a um contra o dump legado e s├úo falsos positivos**: `SigCdPam` (o legado usa `crSigCdPam`, linhas 820/830), e `PESOS`/`FATORS` acusados como "WHERE inventado" quando est├úo na *lista do SELECT* e no *par├ómetro de campos* do `ExecutarCursorQuery` ÔÇö grep confirma zero `WHERE` sobre essas colunas, e o legado l├¬ `SigCdUni.Fators` (linhas 836/844/847) e `SigCdNei` (785/793).
+- `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarLookupEmKeyPress`: todos limpos para este form.
+- `indice_classes.txt` regerado: `FormSigOpMpd` + depend├¬ncia de `SigOpMpdBO` registradas, ent├úo `GarantirClasse("FormSigOpMpd")` funciona.
+
+## Pend├¬ncia fora do escopo desta task (reportando, n├úo corrigi)
+
+`Formepd.prg` (pai, task407) **n├úo tem o bot├úo que abre este di├ílogo**: o legado tem `SIGCDEPD.Pagina.Dados.Bot_Pendentes.Click` ÔåÆ `Do Form SigOpMpd`, e grep por `pendent` em `Formepd.prg` d├í zero ÔÇö `BtnOperacaoClick` ├® outro di├ílogo (`FormSigPdMp5`). O pai tamb├®m n├úo declara as properties equivalentes a `EditaOrigem` e `Amarra`; por isso as duas pontes novas ficaram sob `PEMSTATUS`, com fallback que aplica o efeito observ├ível hoje e passa a usar as properties no dia em que existirem. Registrei isso em mem├│ria de projeto para n├úo virar "FormSigOpMpd est├í quebrado".

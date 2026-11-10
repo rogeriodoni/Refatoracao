@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa. `Formsigopfin.prg` passou de 439 para 796 linhas.
+
+## O que faltava
+
+O grid (`grd_4c_Dados`) e os 3 bot├Áes (`cmd_4c_BtnSetaUp/BtnSetaDn/BtnExcluiGrd`) **j├í existiam** da tentativa anterior, transcritos fielmente do dump. O gate da Fase 4 reprovou por um ├║nico predicado: `temCarga` ÔÇö o form n├úo tinha `CarregarLista|CarregarDados|MontaGrade`. Grade montada, sem nada que a popule.
+
+## O que acrescentei
+
+| M├®todo | Equivalente no legado |
+|---|---|
+| `CarregarDados()` | trecho do `Init` (linhas 1483-1523): `fSigOpFin_Cria()` + `Scan crSigOpFin` + linha em branco do fim |
+| `InserirLinhaGrade(par_nOrdem)` | corpo do `Scan` (`Scatter Memvar Memo` / `Insert From Memvar`) |
+| `MontaGrade()` | `montagrades` (linhas 1417-1446) |
+| `AjustarBotoesGrade()` | `.btnExcluiGrd.Visible = InList(.pcEscolha, [INSERIR],[ALTERAR])` |
+| `EmModoEdicao()`, `ObterDescricaoOrigem()`, `FecharCursorTemporario()` | helpers de apoio |
+
+Mais os `TabIndex` (1/2/3/4) que o dump declara e a migra├º├úo tinha descartado, e as chamadas em `InicializarForm` **depois** de `TornarControlesVisiveis` ÔÇö que for├ºa `Visible = .T.` em tudo e apagaria o ajuste dos bot├Áes.
+
+## Duas decis├Áes que valem explicitar
+
+**`fSigOpFin_Cria`/`fSigOpFin_Tabs`/`fSigOpFin_Busca` n├úo vieram no acervo** (vivem no `SigOpFin.prg` legado, ausente). O que a primeira fazia de fato ÔÇö abrir as linhas de `sigopfin` da movimenta├º├úo ÔÇö est├í reproduzido com SQL direto. Mas `crTabOpFin`, a lista de origens que alimenta a coluna `Descrs`, **n├úo corresponde a tabela alguma**: o schema tem `sigopfin` e nenhuma outra `*opfin*`. N├úo inventei a lista. `ObterDescricaoOrigem()` l├¬ `crTabOpFin` quando o cursor existir e, enquanto n├úo existir, exibe o pr├│prio c├│digo ÔÇö a linha fica vis├¡vel e identific├ível em vez de a grade parecer vazia, e a aus├¬ncia fica aparente.
+
+**O `SQLEXEC` vai para cursor tempor├írio** + `ZAP` + inser├º├úo linha a linha no alias da grade. `SQLEXEC` direto sobre o `RecordSource` do Grid fecha e recria o alias, zerando `ColumnCount` ÔÇö grade viraria ret├óngulo branco sem erro nenhum.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: limpa, sem `.ERR`, `.FXP` regerado (apaguei o anterior antes). Controle negativo confirmou que o mecanismo detecta erro de fato (`Error in line 795` numa c├│pia com sintaxe injetada) ÔÇö ent├úo o compile limpo significa algo.
+- **Runtime**: instanciei o form de verdade. `VARTYPE = "O"`, cursor criado, tempor├írio fechado, `ColumnCount = 1`, `Column1.Width = 700` e o caption do header **sobrevivem** ao rebind, os 3 `Picture` resolvem (`FILE()` = `.T.`), e em `VISUALIZAR` os bot├Áes de manuten├º├úo somem. Chamei `CarregarDados()` uma segunda vez: idempotente, binding intacto.
+- **Schema**: `ValidadorSQLSchema` passou (683 tabelas lidas ÔÇö encoding correto), nenhuma coluna inv├ílida. `VerificarFuncoesNaoDefinidas` e `VerificarMetodoProtegidoChamadoDeFora` limpos no projeto inteiro.
+
+**O que n├úo foi provado**: o caminho SQL n├úo executou ÔÇö o SQL Server (192.168.200.10) n├úo ├® alcan├º├ível desta m├íquina, ent├úo o probe rodou com `gb_4c_ValidandoUI = .T.` e a grade voltou com 1 linha (a linha em branco de edi├º├úo, correta para `ALTERAR`). A query foi validada contra o schema, n├úo contra o banco. `MontaGrade()` ainda n├úo religa os `ControlSource` dos campos de detalhe que o `montagrades` legado tamb├®m religa (`getNotas`/`getCMoes`/os 16 de Grupo/Conta) ÔÇö esses controles nascem nas Fases 5 e 6, e deixei comentado no m├®todo que o religamento deles entra ali junto.

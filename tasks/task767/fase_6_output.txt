@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 entregue e verificada.
+
+## O que foi feito
+
+**`projeto/app/forms/operacionais/FormSigOpMop.prg`** ÔÇö os **tr├¬s** lookups que o dump declara, todos no `Valid` de c├®lula de `Column` (nunca em `AfterRowColChange`, regra #46):
+
+| Coluna | Tabela | Campos | M├®todos |
+|---|---|---|---|
+| Column1 "Movimenta├º├úo" | `SigCdOpe` | `dopes` char(20) + `ndopes` num(4,0) | `ValidarMovimentacaoMopExec/Corpo` + `ObterOperacaoInativa` |
+| Column6 "G.Grp" | `SigCdGpr` | `codigos` char(3) + `descs` char(40) | `ValidarGrandeGrupoMopExec/Corpo` + `GrandeGrupoMopGotFocusExec`/`LostFocusExec` |
+| Column7 "Emp." | `SigCdEmp` | `cemps` char(3) + `razas` char(40) | `ValidarEmpresaMopExec/Corpo` |
+
+Transcrito do legado tamb├®m: a recusa de **opera├º├úo INATIVA** (com `MsgAviso` + `Return .F.`), o `REPLACE ndopes` que preenche a coluna `"  #  "` (ela vem do JOIN, n├úo existe em `SigCdMop`), e o par `GotFocus`/`LostFocus` do G.Grp que ├® o detector de altera├º├úo (Tag de entrada ├ù valor de sa├¡da ligando `this_lHouveInsercao`).
+
+**`projeto/app/classes/TextBoxGridLookup.prg`** ÔÇö duas classes novas (`TextBoxGrandeGrupoMop_4c`, `TextBoxEmpresaMop_4c`) instaladas por `GarantirCelulasEditaveisGrade` com `AddObject` + `CurrentControl` + `Sparse = .F.`; `MaxLength` da largura da coluna no schema (3/3), e `MaxLength = 20` acrescentado ao `TextBoxMovimentacaoMop_4c` (regra #19). Os `.Text1.*` das Columns 6/7 sa├¡ram de `ConfigurarColunasGrade` ÔÇö viraram c├│digo morto quando a coluna passou a desenhar outro controle.
+
+Cada `Exec` ├® wrapper da guarda de reentr├óncia `this_lEmLookup`, com o corpo num `...Corpo` separado para a flag nunca travar ligada (regra #47); atribui├º├úo s├│ sob `this_lSelecionou` e `Show()` s├│ quando `this_lAchouRegistro` ├® `.F.` (regra #37); universo vazio n├úo avisa nem apaga o digitado (regra #50).
+
+**Tr├¬s diverg├¬ncias deliberadas do legado**, todas justificadas em coment├írio no pr├│prio m├®todo: o legado l├¬ o cursor do picker mesmo quando o usu├írio sai com ESC (o campo recebia a 1┬¬ linha da busca parcial sem ningu├®m escolher), e no Column7 ele limpa a c├®lula no ESC ÔÇö como o `FormBuscaAuxiliar` n├úo distingue ESC de universo vazio, reproduzir o clear cairia exatamente no defeito da regra #50.
+
+## Verifica├º├úo
+
+- VFP9: compila limpo (`.err` ausente nos dois arquivos).
+- Instanciado de fato (`automation/Probe767F6.prg` / `.log`): as 5 c├®lulas edit├íveis sobem com classe, `Sparse=.F.` e `MaxLength` corretos; os 13 delegates existem e s├úo PUBLIC; os lookups sem conex├úo aceitam o digitado **sem abrir modal** (o probe terminou, logo nenhum picker subiu); guarda de reentr├óncia devolve `.T.` sem entrar; detector de Tag funciona nos dois sentidos; ├írea de trabalho volta ao cursor da grade; `MontaGrade()` repetido reinstala as 5 c├®lulas e preserva larguras (150/38/80/50/45/42/40) e headers.
+- Auditorias: `VerificarFormBuscaAuxiliar`, `VerificarLookupEmKeyPress` (ERRO=0), `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas` ÔÇö todas limpas.
+- Regexes do `05d_validarCompletude` (TODO/LATER/STUB/proc vazia): 0 em ambos os arquivos. Peguei um **falso positivo** meu no caminho ÔÇö a frase `* Todo lookup passa...` casava com `^\s*\*\s*TODO\b`; reescrita para "Os tr├¬s lookups passam".
+
+Um achado fora do escopo, n├úo tocado: `SigOpMopBO.prg` est├í gravado **LF-only** (489 linhas, zero CRLF), ao contr├írio do Form e das classes. Vem das fases 1ÔÇô2, compila e roda normalmente ÔÇö registro s├│ para n├úo parecer regress├úo desta fase.
+
+**N├úo h├í** `cnt_4c_BotoesAcao` com Salvar/Cancelar para esta fase entregar: a SE├ç├âO 1 do dump lista 25 objetos e os ├║nicos `CommandButton` s├úo `cmdInserir`/`cmdExcluir`/`cmdSair`, os tr├¬s j├í criados na Fase 4. A grava├º├úo mora no `cmdSair` ("Encerrar"), que ├® onde o legado roda o `UpDate`/`Commit` ÔÇö isso fica para a Fase 8, e os handlers dos bot├Áes para a Fase 7.

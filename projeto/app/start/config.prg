@@ -144,6 +144,17 @@ ADDPROPERTY(go_4c_Sistema, "DirImagens", ADDBS(gc_4c_CaminhoFramework) + "Imagen
 ADDPROPERTY(go_4c_Sistema, "ControlaImp", .F.)
 ADDPROPERTY(go_4c_Sistema, "QtdDecimais", 2)
 
+*-- Fortyus compat: goSistema.Sys2015Tmp eh o PREFIXO que o legado poe no nome
+*-- dos arquivos temporarios de imagem, para poder identifica-los/limpa-los:
+*--     lcArquivo = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+*-- A property nunca foi criada aqui, e MEDIDO no VFP9 (2026-11-08) a leitura
+*-- de property ausente em objeto Empty estoura "Property SYS2015TMP is not
+*-- found." (PEMSTATUS devolve .F., TYPE devolve "U") - ou seja, todo site que
+*-- monta nome de arquivo temporario quebrava em RUNTIME ao exibir a foto do
+*-- produto. Sites que dependem disto: sigtosenBO (2), Formrst (2),
+*-- Formsigtosen (2) e SigOpLclBO.
+ADDPROPERTY(go_4c_Sistema, "Sys2015Tmp", "4c_tmp_")
+
 *-- Fortyus VCX compat (Erro163_Aba1): goSistema.ObjectConn eh o gerenciador de
 *-- CONEXOES NOMEADAS do legado (classe cOpenConn, classes\sigclcnx.PRG). O
 *-- fSqlConector consulta-o sempre que recebe um NOME em vez de um handle:

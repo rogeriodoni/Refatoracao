@@ -1,0 +1,43 @@
+TESTE 1 - MontarChaveEmpDnPs
+  chave   = [001MALOTE                       3]
+  LEN     = 33 (esperado 33)
+  bate    = SIM
+  RESULT  = OK
+
+TESTE 1b - forma ERRADA (ALLTRIM nas partes) para contraste
+  LEN com ALLTRIM = 19 (!= 33 -> nunca casaria)
+
+TESTE 1c - argumentos ausentes/tipo errado
+  LEN(sem args)   = 33
+  LEN(tipo errado)= 33
+
+TESTE 2 - CarregarDoCursor
+  retorno        = .T.
+  Cidchaves      = [CHV0001]
+  Nenvs          = 777
+  Dpros          = [PRODUTO X]
+  Pesos          = 99.125
+  TotPesos       = 1234.567 (esperado 1234.567)
+  Datas VARTYPE  = D (esperado D)
+  Servicos       = .T. / VARTYPE = L (esperado L e .T.)
+  area restaurada= SIM
+  Emps           = [001] (esperado [001])
+  Dopps(ALLTRIM) = [MALOTE] (esperado [MALOTE])
+  Numps          = 3 (esperado 3)
+  round-trip     = OK (chave identica)
+
+TESTE 3 - cursor sem a coluna TotPesos
+  retorno   = .T. (sem erro = guard TYPE() funcionou)
+  TotPesos  = 0 (esperado 0)
+  Servicos  = .F. (esperado .F.)
+
+TESTE 4 - EOF e alias inexistente
+  EOF retorno     = .F. (esperado .F., sem erro)
+  inexistente     = .F. (esperado .F.)
+  mensagem        = [Cursor [cursor_4c_NaoExiste] não está aberto.]
+
+TESTE 5 - ObterChavePrimaria e LimparDados
+  chave primaria  = [001MALOTE                       3]
+  pos-LimparDados EmpDnPs vazio = SIM
+  pos-LimparDados cursor fechado= SIM
+  pos-LimparDados Servicos      = .F. (esperado .F.)

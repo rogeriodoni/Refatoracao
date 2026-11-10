@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 complete. `C:\4c\projeto\app\forms\operacionais\FormSigOpLcl.prg` created (14.173 bytes, CRLF, 335 linhas).
+
+## O que foi entregue
+
+`DEFINE CLASS FormSigOpLcl AS FormBase` com a estrutura base:
+
+| Membro | Conte├║do |
+|---|---|
+| Propriedades visuais | 20 props transcritas do SCX (968x500, `TitleBar=0`, `WindowType=1`, `AlwaysOnTop`, `Closable=.F.`, Verdana 8) |
+| Propriedades de estado | `this_cEscolha`, `this_cOrigem`, `this_oConexao`, `this_lPodeEditar`, `this_nOrdemAtual`, `this_lEmLookup` |
+| `Init(par_oCnx, par_cEscolha, par_cOrigem)` | Contrato do legado (`pCnx, pEscolha, pOrigem`), toda leitura guardada por `PCOUNT`/`VARTYPE` |
+| `InicializarForm()` | BO ÔåÆ cursor de localiza├º├Áes ÔåÆ itens ÔåÆ n├¡veis ÔåÆ cabe├ºalho ÔåÆ `TornarControlesVisiveis` |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` (nomes do `mapeamento.json`) |
+| `TornarControlesVisiveis()` | Recursivo, com `img_4c_ImgJpg` na lista de exce├º├úo (nasce oculto no SCX) |
+| `Destroy()` | Libera BO/conex├úo + `DODEFAULT()` por ├║ltimo |
+
+**`DataSession = 1`** (n├úo 2): `crTpmMvItn` ├® criado pelo form chamador e precisa continuar vis├¡vel ÔÇö isolar a sess├úo quebraria o contrato externo.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: `resultado_compilacao.json` ÔåÆ `"compilou": true`, sem `.err`. (Contraria a mem├│ria `vfp9_compila_e_sai_sem_executar_nesta_sessao` ÔÇö nesta sess├úo o `ValidarCompilacao.prg` executou de fato.)
+- **Gate da Fase 3** simulado com a l├│gica real do `OrquestradorMigracao.ps1`: `temEstruturaFlat = True` ÔåÆ **GATE = True** (ramo FLAT: legado tem `Container` mas n├úo tem `PageFrame`, raiz `Class: form` gen├®rico).
+- **`Test-CompletudeCodigo`** (validador real da etapa 05d, extra├¡do por AST sem dot-source): `[OK] nenhum TODO/stub/procedure vazia`.
+- **Regras VFP9**: zero acentos literais, zero `RETURN` dentro de `TRY` (TRY/ENDTRY balanceado), zero `MESSAGEBOX`/`ISEMPTY`/`.Self`/`Controls("nome")`/`PUBLIC PROCEDURE`/`this_X .Value`; `DODEFAULT()` presente no `Destroy`.
+- **Regra #33**: todas as 47 propriedades usadas conferidas contra `automation/propriedades_baseclasses.txt` (Form/Container/Label) ÔÇö nenhuma ausente; `Container.BorderStyle` n├úo usado.
+- **Regra #51**: os 3 m├®todos do BO chamados (`CriarCursorLocalizacoes`, `CarregarItens`, `CarregarNiveis`) s├úo PUBLIC; `this_cEscolha`/`this_cOrigem` declaradas no BO.
+
+## Dois pontos para registro
+
+**N├úo criei `ConfigurarPageFrame` nem `cnt_4c_Botoes`/`cnt_4c_BotoesAcao`**, que o prompt da fase pede: o SCX legado n├úo tem PageFrame nenhum e os bot├Áes s├úo `CommandGroup` soltos no form (`cntBotoes`, `cmdAcoes`), n├úo containers. Cri├í-los violaria o PILAR 1 e a regra "NUNCA inventar" ÔÇö e o gate j├í tem o ramo FLAT exatamente para isso. As Shapes (`ShpFigura`/`Shape1`) ficaram de fora por conven├º├úo da casa: nos outros forms operacionais elas s├úo criadas no m├®todo que desenha a ├írea (`ConfigurarCampos`/`ConfigurarBotoes`), ou seja Fases 4-6.
+
+**Durante a verifica├º├úo eu sobrescrevi e depois apaguei `projeto/app/forms/operacionais/resultado_compilacao.json`**, que ├® um arquivo rastreado no git (restos da task anterior, FormSigOpGco). Restaurei com `git checkout --`; o diret├│rio est├í limpo e o ├║nico acr├®scimo meu ├® o `.prg`. O `.fxp` gerado na compila├º├úo tamb├®m foi removido.

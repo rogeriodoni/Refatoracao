@@ -1,0 +1,671 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpNch.SCX
+* Data/Hora: 09/11/2026 09:50:41
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPNCH
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPNCH
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPNCH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPNCH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPNCH
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grade
+  Parent: SIGOPNCH
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPNCH.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPNCH.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPNCH.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPNCH.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPNCH.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPNCH.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPNCH.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPNCH.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPNCH.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPNCH.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnAlterar
+  Parent: SIGOPNCH
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCancelar
+  Parent: SIGOPNCH
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 370
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Numeração de Cheques"
+  ControlBox = .F.
+  Closable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGOPNCH"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 804
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 612
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 238
+  Left = 183
+  RowHeight = 16
+  Top = 104
+  Width = 434
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "csCheques.FPags"
+  Column1.Width = 123
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "csCheques.Bancos"
+  Column2.Width = 35
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "csCheques.Agencias"
+  Column3.Width = 55
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = "csCheques.NContas"
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ControlSource = "csCheques.Cheques"
+  Column5.Width = 105
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Forma de Pagamento"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Bco."
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Agência"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Próximo Chq."
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999999"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.btnAlterar
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirmar"
+  Name = "btnAlterar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNCH.btnCancelar
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "btnCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPNCH
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private lcNew, lcChave
+
+lcChave = NULL
+
+Thisform.nAntChqVal = 0
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',thisform.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigOpFp','FPags','crSigOpFp','FPags',.f.)
+		.AddCursor('SigSySeq','Valor','crAutoriza','Valor',.f.)
+		.Requery("CrSigOpFp")
+		.Requery("CrAutoriza")
+	EndWith
+Endwith	
+
+Select crSigOpFp
+Scan
+	If crSigOpFp.Infos = 'C' And crSigOpFp.EmiChqs = 1 And Not IsEmpty(crSigOpFp.Bancos) And ;
+			Not IsEmpty(crSigOpFp.Agencias) And Not IsEmpty(crSigOpFp.NContas)
+		lcChave = PADR(crSigOpFp.Bancos + crSigOpFp.Agencias + crSigOpFp.NContas,25)
+	  	Select crAutoriza
+	  	LOCATE FOR valor = lcChave
+		IF ! EOF()
+			Insert Into csCheques (FPags, Bancos, Agencias, NContas, Cheques) Values ;
+								  (crSigOpFp.FPags, crSigOpFp.Bancos, crSigOpFp.Agencias, ;
+								   crSigOpFp.NContas, crAutoriza.Conteudo + 1)
+		Else
+			Insert Into csCheques (FPags, Bancos, Agencias, NContas, Cheques) Values ;
+								  (crSigOpFp.FPags, crSigOpFp.Bancos, crSigOpFp.Agencias, ;
+								   crSigOpFp.NContas, 1)
+		Endif
+	Endif
+	Select crSigOpFp
+EndScan
+
+Select csCheques
+Go Top
+
+With ThisForm.Grade
+	.Refresh
+	.Column5.SetFocus
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+=fConfigGeral()
+
+Create Cursor csCheques ( FPags C(12), Bancos C(3), Agencias C(4), NContas C(10), ;
+						  Cheques N(6), Marcas L(1) )
+Index On Fpags Tag FPags
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < 0
+	MessageBox('Número do Cheque Inválido.', 48, '')
+	This.Value = Thisform.nAntChqVal
+	Return 0
+EndIf
+
+If This.Value # Thisform.nAntChqVal
+	Select csCheques
+	Replace csCheques.Marcas With .T.
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Thisform.nAntChqVal = This.Value
+
+Return( .T. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.btnAlterar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcChave
+
+Select csCheques
+Scan For Marcas
+	If !IsEmpty(csCheques.Cheques)
+		lcChave = PADR(csCheques.Bancos + csCheques.Agencias + csCheques.NContas,25)
+		SELECT crAutoriza
+		LOCATE FOR valor = lcChave
+		If ! EOF()
+			Do While !Rlock()
+			Enddo
+			Replace Conteudo With csCheques.Cheques - 1
+			Unlock
+		Else
+			Insert Into crAutoriza (Valor, Conteudo) Values (lcChave, csCheques.Cheques-1)
+		Endif
+	Endif
+	Select csCheques
+EndScan
+
+SELECT crAutoriza
+
+Local m.lnErro1
+
+m.lnErro1 = ThisForm.poDatamgr.pnIdConn
+
+With ThisForm
+	If m.lnErro1>0 
+		m.lnErro1 = Iif(.poDataMgr.UpDate('crAutoriza'),1,-1)
+	EndIf 
+	If m.lnErro1>0 
+		m.lnErro1 = .poDataMgr.Commit()
+	EndIf 
+	If Not m.lnErro1>0 
+		.poDataMgr.RollBack()
+	EndIf 
+EndWith 
+If Not m.lnErro1>0 
+	= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+EndIf 
+
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNCH.btnCancelar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPNCH
+RESERVED3 (ClassInfo): nantchqval
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

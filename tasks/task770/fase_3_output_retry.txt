@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 CONCLU├ìDA ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpNch.prg` criado (375 linhas, 17.9 KB).
+
+## O que foi entregue
+
+| M├®todo | Origem no legado |
+|---|---|
+| `DEFINE CLASS FormSigOpNch AS FormBase` + propriedades | `SECAO 2: PROPRIEDADES DE SIGOPNCH` (Height 370, Width 800, DataSession 2, TitleBar 0, ControlBox/Closable/ClipControls .F., BorderStyle 2, AutoCenter, ShowTips) |
+| `this_nAntChqVal` | `RESERVED3/ClassInfo: nantchqval` + `Thisform.nAntChqVal = 0` do `Init` |
+| `Init()` | Caption via `CHR()` (regra #4) + `DODEFAULT()` ÔÇö sem segunda chamada a `InicializarForm` |
+| `ValidarParametros()` | `If Not .poDatamgr.pnIdconn>0 / Messagebox / Return(.f.)` |
+| `InicializarForm()` | cria├º├úo do BO, `Picture`, cabe├ºalho, propaga├º├úo do Caption, cursor da grade |
+| `ConfigurarCabecalho()` | `cntSombra` + `lblSombra`/`lblTitulo` ÔåÆ `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` (nomes do `mapeamento.json`) |
+| `TornarControlesVisiveis()` | `AddObject` nasce com `Visible = .F.` |
+| `Destroy()` | libera o BO + `DODEFAULT()` (Pattern #145) |
+
+**Layout FLAT, sem PageFrame inventado**: o dump prova raiz `Class: form` gen├®rica e zero `BaseClass: pageframe` ÔÇö verifiquei as regexes do gate da Fase 3 no PowerShell (`raizFormGenerico=True`, `legadoSemPageFrame=True`), caindo no ramo FLAT, que exige `InicializarForm` + `AddObject("cnt_4c_...")` e pro├¡be `pgf_4c_`. Os dois bot├Áes do legado penduram direto no Form (sem container agrupador), ent├úo `cnt_4c_Botoes`/`cnt_4c_BotoesAcao` citados no prompt gen├®rico **n├úo** foram criados ÔÇö seriam inven├º├úo (PILAR 1).
+
+**Guardas aplicadas**: `ValidarParametros` com bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` antes da checagem de `gnConnHandle` (o harness usa `0` como sentinela); nenhum `IF gb_4c_ValidandoUI / RETURN` no topo de `InicializarForm` (isso tornaria diferen├ºas de UI Fidelity irrecuper├íveis); `RETURN` da guarda fora do `TRY`; `AutoSize = .F.` com `Width`/`Height` expl├¡citos nos labels (com `WordWrap = .T.`, `AutoSize` descartaria a Height); `cnt_4c_Sombra.Width = THIS.Width` em vez do literal 804 do dump (container desenhado 4px mais largo que a janela).
+
+## Verifica├º├Áes executadas
+
+- **Smoke test do VFP9 primeiro** (`STRTOFILE` gravou "VIVO") ÔÇö s├│ ent├úo os demais scripts, para a prova vir do arquivo de sa├¡da e n├úo do exit code.
+- **Compila├º├úo limpa**: `FXP_GERADO=SIM`, `ERR_EXISTE=NAO`.
+- **Instancia├º├úo real** (`gb_4c_ModoTeste`, `gnConnHandle=0`): `VARTYPE=O`, Caption `[Numera├º├úo de Cheques]`, 800x370, DataSession 2, TitleBar 0, `Picture=c:\4c\vbmp\new_background.jpg`, `cnt_4c_Sombra` vis├¡vel com os dois labels em 769x40 / 769x46 (Height preservada).
+- **Cursor da grade dentro da datasession privada do form**: `cursor_4c_Cheques` ABERTO com `FPAGS C(12), BANCOS C(3), AGENCIAS C(4), NCONTAS C(10), CHEQUES N(6), MARCAS L(1)` e `TAG1=[FPAGS]` ÔÇö id├¬ntico ao `Create Cursor csCheques` + `Index On Fpags Tag FPags` do `Load`. `SET DATE=BRITISH / CENTURY=ON / SAFETY=OFF` confirmados na sess├úo privada.
+- **Auditorias**: `VerificarPropriedadesInexistentes` ÔåÆ "nenhuma atribuicao a propriedade inexistente"; `VerificarFuncoesNaoDefinidas` ÔåÆ "nenhuma chamada orfa".
+- **Est├íticas**: blocos balanceados (DEFINE CLASS/DO CASE/FOR/IF/PROCEDURE/TRY/WITH), zero `RETURN` dentro de `TRY`, o ├║nico `CATCH` tem `MsgErro`, zero bytes n├úo-ASCII, e as duas regexes do validador 05d (`todoPattern`, `laterPattern`) d├úo 0 hits.
+
+Dois pontos para as pr├│ximas fases: os tokens que os gates das Fases 4ÔÇô8 procuram (`AddObject("grd_4c_`, `AddObject("cmd_4c_`, `CarregarLista`/`CarregarDados`/`MontaGrade`, `AlternarPagina`) est├úo com **zero** ocorr├¬ncias no arquivo, inclusive em coment├írios ÔÇö nenhuma fase seguinte passa sem c├│digo real. O item de menu (`AbrirFormSigOpNch` em `popMovimentos`) **n├úo** foi criado: ├® a etapa de integra├º├úo, fora do escopo da Fase 3; o `indice_classes.txt` j├í registrou a classe e suas depend├¬ncias sozinho, e `GarantirClasse("FormSigOpNch")` funcionou no probe.

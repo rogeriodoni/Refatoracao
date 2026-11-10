@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da. `FormSigOpLop.prg` passou de 422 para 1041 linhas.
+
+## O que foi entregue
+
+| M├®todo | Papel |
+|---|---|
+| `ConfigurarGrade()` | cria `grd_4c_Dados` (grdOperacoes) ÔÇö 85/96/198/220, HeaderHeight 19, ColumnCount 2 |
+| `GarantirCheckBoxSelecao()` | `Column1.AddObject` do CheckBox + os 4 `BINDEVENT`, **idempotente** |
+| `MontaGrade(par_cFiltro)` | funil ├║nico: bind ÔåÆ CheckBox ÔåÆ formata├º├úo ÔåÆ `GO TOP IN` + `Refresh` |
+| `FormatarGridOperacoes()` | as duas colunas (Width/Header/Sparse/CurrentControl/ReadOnly) |
+| `CarregarLista()` | repintura (token que o gate da Fase 4 exige) |
+| `ConfigurarBotoes()` | `cmd_4c_CmdSair` ÔÇö o Ok (`fwbtng`, Cancel=.T.) |
+| `ConfigurarEventos()` | `BINDEVENT` do Click |
+| `AlternarSelecaoLinha()` + 4 handlers `ChkSelecionada*` | altern├óncia do legado com `NODEFAULT` |
+| `CmdSairClick()` | devolve `Enabled` ao pai e fecha |
+
+## Desvio do roteiro gen├®rico ÔÇö e por que
+
+O prompt pedia `ConfigurarPaginaLista` + PageFrame + 6 bot├Áes CRUD + `AlternarPagina`. **Este legado n├úo tem nada disso**, e medi antes de decidir (est├í registrado no cabe├ºalho do `.prg`): 0 `BaseClass: pageframe`, 1 grid, 1 CommandButton, **0 ocorr├¬ncias dos verbos CRUD** no dump, e nenhum dos 7 m├®todos com c├│digo grava no banco. ├ë um seletor: marca linhas num cursor que o form pai populou. Inventar p├íginas/CRUD violaria o PILAR 1, e nomear m├®todos vazios para casar com o regex ├® o stub disfar├ºado que a regra de completude pro├¡be. O ramo **FLAT** do gate (`case 4`) ├® o satisfaz├¡vel aqui ÔÇö medi os 4 predicados: `OPERACIONAL` Ô£ô, `grd_4c_` Ô£ô, `cmd_4c_` Ô£ô, `CarregarLista` Ô£ô.
+
+## Provas (n├úo s├│ "compila")
+
+Compila├º├úo: `.fxp` gerado, **zero `.err`**. E instanciei de verdade (`automation/ProbeF4SigOpLop764.prg`), porque o caminho `Column.AddObject` de CheckBox ├® exatamente o que mata o `Init` em sil├¬ncio:
+
+- **sem argumento** (caminho do harness): `Init OK`, 391x318, DS=1, `CurrentControl=CHK_4C_CHECK1`
+- **com pai + `LocalSacOp`**: pai desabilitado; grade 85/96/198/220; `Column1` ÔåÆ `LocalSacOp.Selecionada`, W=15, `Sparse=.F.`, `chkVal=N`; `Column2` ÔåÆ `Dopes`, W=150, ReadOnly, Courier New; bot├úo 3/315/80x100, `Cancel=.T.`, **├¡cone existe**
+- **altern├óncia grava de fato**: `0 ÔåÆ 1 ÔåÆ 0 ÔåÆ 1` via MouseDown/MouseDown/KeyPress, `totSel=1 marcadas=[LIMPEZA]`
+- **CheckBox volta** ap├│s derrubar o alias (o defeito de perda parcial medido em 2026-11-08): `chk=.T.`, `CurrentControl` e larguras restaurados
+- **todos os handlers PUBLIC** (`PEMSTATUS(...,2)=.F.`) ÔÇö sem isso o BINDEVENT falha calado
+- **Ok** devolve `paiEnabled=.T.` e libera o form
+
+Dois pontos que transcrevi com nota expl├¡cita, em vez de "consertar" por conta pr├│pria: o bot├úo passa 4px da borda (a classe `fwbtng` tem 80 fixos e o legado estourava igual ÔÇö o VFP recorta nos dois casos), e o `KeyPress` do `Check1` legado l├¬ uma vari├ível `LOCAL` hom├┤nima que nunca recebe o valor do registro, ou seja n├úo reproduz o `MouseDown`; no migrado os dois caminhos passam pela mesma leitura do cursor, preservando a inten├º├úo sem carregar o defeito.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stray accented characters. The file is clean and complete for Phase 2.
+
+## Summary
+
+Completed Phase 2/8 (BO business logic) for `SigOpIboBO.prg`. Since this BO backs a parametrized print dialog with no table and no primary key (documented in the Phase 1 header), the generic CRUD template (`CarregarDoCursor`/`Inserir`/`Atualizar`/`ObterChavePrimaria`) doesn't apply ÔÇö added a short note explaining that BusinessBase's inherited defaults are correct here, instead of forcing fake stubs.
+
+Implemented the real methods the Phase 1 plan called for:
+- `DefinirTipoBoleto()` ÔÇö type-guarded parameter intake, mirroring the legacy `WITH Thisform` block in `Init`
+- `ObterTituloPorTipoBoleto()` ÔÇö the legacy `DO CASE` for the dialog title (10 branches, with CHR() codes for accents)
+- `DeveExibirImprimirObservacoes/Carne/AgruparInformacoes()` ÔÇö reproduces the *final* visibility result of the legacy's double-assignment quirk (chkObss/chkCarne are each set twice with no guard between; only the last assignment matters)
+- `CarregarImpressorasConfiguradas()` ÔÇö the SigSyImp/SigCdAcG/SigCdmp UNION ALL query (using `gc_4c_UsuarioLogado` instead of legacy `Usuar`), APRINTERS() cross-match logic, with a safe fallback cursor structure for the edge case where the legacy would have crashed on a missing alias
+- `ExecutarImpressao()` ÔÇö transcribes `DO SigBlBol WITH ...` inside TRY/CATCH, surfacing the missing legacy procedure via `MsgErro` instead of silently faking success (per CLAUDE.md rule #27)
+
+No literal accented characters in the file (verified), no `RETURN` inside TRY/CATCH, and SQL/cursor handling follows the established `cursor_4c_*` conventions.

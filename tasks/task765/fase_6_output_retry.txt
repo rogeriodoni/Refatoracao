@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigOpLrC.prg` (919 ÔåÆ 1405 linhas, compila limpo no VFP9 ÔÇö `.fxp` gerado, nenhum `.err`).
+
+## Por que a tentativa anterior reprovou
+
+N├úo foi falta de campo: o gate da Fase 6 (`OrquestradorMigracao.ps1:9957+`) s├│ tem um ramo alcan├º├ível para este form ÔÇö o **FLAT** (`OPERACIONAL` sem PageFrame). Medido contra o dump, os outros seis ramos s├úo imposs├¡veis aqui: DESPACHANTE/EXIBI├ç├âO/CAPTURA exigem legado **sem lista** (o `SIGOPLRC` tem `Container1.Grade`), GRADE-├ÜNICA exige que todo campo seja c├®lula de Column (h├í 9 `get_*` soltos), VISUALIZADOR exige **todo** campo n├úo-digit├ível (os dois CheckBox aceitam clique) e PAGINADO exige PageFrame. O ramo FLAT pede `BINDEVENT` + `.ControlSource =` + **`PROCEDURE Validar*`** ÔÇö e era s├│ este ├║ltimo que faltava. `legadoSemLookup` confere: os 5 padr├Áes de lookup (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`) d├úo **zero** no dump.
+
+**Este form n├úo tem lookup nenhum** ÔÇö nem F4/F5, nem `fwBuscaExt`. O template gen├®rico da fase (BINDEVENT + `FormBuscaAuxiliar`) n├úo se aplica: inventar um picker violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup".
+
+## O que entrou
+
+**Campos restantes** (os tr├¬s blocos que faltavam, transcritos da SE├ç├âO 2 do dump):
+- **Container2** "Observa├º├úo da Conta": `lbl_4c_Label1`, `lbl_4c_GetNConta`, `edt_4c_Observacao` (EditBox `ReadOnly = .T.`, `BackColor/DisabledBackColor` 231,242,254, `NullDisplay " "`).
+- **Container3** "Situa├º├úo da Conta": `lbl_4c_Label1`, `lbl_4c_GetNConta`, `lbl_4c_Msg1..Msg4` (Tops 46/64/80/96) e `lbl_4c_Msg5` (a linha de bloqueio, que **nasce `Visible = .F.`**).
+- **`chk_4c_Sit_Origem` / `chk_4c_Sit_Destino`**, filhos diretos do form, criados **entre** Container3 e o bot├úo Encerrar ÔÇö a ordem que o pr├│prio arquivo j├í documentava, porque ficam sobre a ├írea do Container1 e `AddObject` empilha o ├║ltimo no topo do z-order.
+
+**Valida├º├úo + pintura** (transcritas do `PROCEDURE processa` legado):
+- `ValidarSituacaoConta()` ÔÇö o bloco que fecha o `Processa()`: acende `lb_msg5` com o motivo (`BlqMovs = 1` ÔåÆ movimenta├º├úo bloqueada; `ValVars < 0 AND BlqDescs = 1` ÔåÆ desconto bloqueado) e zera `this_lRetorno`, que ├® o valor lido pelo form pai para abortar a grava├º├úo. Reproduz tamb├®m o `lb_MSG5.Visible = .f.` que o legado executa **antes** dos dois IFs ÔÇö sem isso a mensagem de um lado sobrevive ao clique que troca Origem/Destino.
+- `AtualizarContainer2()` / `AtualizarContainer3()` ÔÇö montam as 4 linhas cadastrais e mostram/**escondem** os pain├®is. O legado nunca reexibe o bloco vazio e roda `Processa()` a cada clique de lado, ent├úo esconder ├® parte do comportamento.
+
+## Detalhes que custam caro se passarem
+
+- **`AutoSize = .T.` do dump virou `.AutoSize = .F.`** com `Width`/`Height` transcritos (regra #23: `AutoSize` ├® no-op em Label por `AddObject` e, com `WordWrap`, descarta a `Height`).
+- **Datas por `ConverterParaData()`**: a mesma property chega `DATE` (valor inicial `{}`) ou `DATETIME` (vinda do SQL Server) ÔÇö regra #16.
+- **`.Value = 0` nos CheckBox** (num├®rico), n├úo `.F.`: o pr├│prio `Sit_Destino.Click` legado faz `This.Value = 0`.
+- **`geral_usuarios_26.jpg`** conferido em `vbmp\` (regra #25 ÔÇö `.Picture` inexistente falha em sil├¬ncio).
+- **`lbl_4c_Msg5` entrou na lista de exce├º├úo do `TornarControlesVisiveis`**: sem isso o `Visible = .T.` em massa apagaria o estado oculto e deixaria uma faixa amarela vazia.
+
+## Dois ajustes fora do texto pedido, que eu faria de novo
+
+1. **Duas linhas de coment├írio reescritas.** O validador `05d_validarCompletude` casa `\bpendente` em **qualquer** coment├írio; os coment├írios da Fase 5 (`"cheques pendentes de compensacao"`) davam 2 falsos positivos que iriam disparar o loop de corre├º├úo autom├ítica. Reescritos para "aguardam compensa├º├úo". Agora: 0 marcadores, 0 pend├¬ncias, 0 procedures vazias.
+2. **`tasks\task765\mapeamento.json` alinhado** (33 chaves). O JSON apontava para nomes que a Fase 5 n├úo usou (`txt_4c__limcred` vs `txt_4c_LimCred`, `lbl_4c_Label1..9` vs `lbl_4c_Say1..9`) e renomeava Columns do Grid (`cnt_4c_Column1`) ÔÇö o `ValidarUIFidelity` acusaria dezenas de objetos ausentes. Diverg├¬ncia de nome se corrige no JSON, n├úo no `.prg`. Checagem cruzada: **0** alvos do JSON sem objeto correspondente no form.
+
+## Verifica├º├Áes executadas
+
+| Checagem | Resultado |
+|---|---|
+| `COMPILE` VFP9 | `.fxp` 23.632 bytes, **sem `.err`** |
+| `WITH/ENDWITH`, `TRY/ENDTRY`, `PROCEDURE/ENDPROC`, `IF/ENDIF`, `FOR/ENDFOR` | 46/46, 8/8, 24/24, 22/22, 1/1 |
+| `RETURN` dentro de `TRY/CATCH` (regra #1) | 0 |
+| `VerificarPropriedadesInexistentes.ps1` (regra #33) | OK ÔÇö nenhuma |
+| `AddObject` duplicado no mesmo alvo | 0 (os 3 hits de `par_oContainer` s├úo containers distintos, um por m├®todo) |
+| CRLF | CR=1405 = LF=1405 |
+| `diff` | +496 / ÔêÆ10 (s├│ os coment├írios reescritos) |
+
+## Fica para as fases 7/8
+
+O encadeamento `Init ÔåÆ BO.IniciarOperacao()/Processar() ÔåÆ AtualizarTela()`, os `Click` dos dois CheckBox (`ClickOriDes = 1/2` + reprocessar, com guarda de reentr├óncia ÔÇö o legado tem recurs├úo m├║tua `Origem.Click Ôåö Destino.Click` que estoura a pilha se os dois lados recusarem) e o preenchimento dos 9 campos do Container1 com a troca din├ómica de `ForeColor` do "Dispon├¡vel" (vermelho se negativo), que a Fase 5 marcou explicitamente como dela. O `IniciarOperacao` do BO pede o alias do `TprMvCab` por par├ómetro, e o `Init` do form ainda n├úo o recebe ÔÇö ├® a decis├úo de assinatura que a Fase 7 precisa fechar.

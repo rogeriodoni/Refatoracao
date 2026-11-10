@@ -1,0 +1,810 @@
+{
+  "resumo": {
+    "totalMetodos": 48,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 20,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fMontaObs", "Fpags + cnidTefs + Str", "fConfigGeral", "fDtoSQL", "fGravarLog", "fwBuscaSel", "fChecaAcesso", "fAcessoContas", "fMensagemFixa", "fwBuscaExt", "From SigCdCli Where ]+Iif", "fEndEntrega", "fDecriptografar"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Procedure",
+      "linhas": 93,
+      "codigoOriginal": "Local lnLf0, lnTp0, lnLft, lnTop\n\nlnLf0 = ThisForm.cntCodigos.Left\nlnTp0 = ThisForm.cntCodigos.Top\n\n* Ajustando Primeira Linha de Campos\nlnLft = lnLf0 + ThisForm.cntDocumentos.Width + ThisForm.cntCodigos.Width\nlnTop = lnTp0\n\nIf ThisForm.cntEcfs.Visible\n\tThisForm.cntEcfs.Left = lnLft\n\tThisForm.cntEcfs.Top  = lnTop\n\tlnLft = lnLft + ThisForm.cntEcfs.Width\nEndIf\n\nIf ThisForm.cntNemps.Visible\n\tThisForm.cntNemps.Left = lnLft\n\tThisForm.cntNemps.Top  = lnTop\n\tlnLft = lnLft + ThisForm.cntNemps.Width\nEndI... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local lcCta, ldDat\n\nIf (InList(crSigCdOpe.DtEntrs, 1, 4, 6) And (InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')) And ;\n   (IsEmpty(TprMvCab.PrazoEnts) Or Dtos(TprMvCab.PrazoEnts) = Dtos(Date())))\n\n\tlcCta = Iif(crSigCdOpe.COpers = 1, TprMvCab.ContaDs, TprMvCab.ContaOs)\n\t\n\tIf IsEmpty(TprMvCab.PrazoEnts)\n\t\tldDat = Date()\n\t\tIf CrSigOpCdc.NMinEnts = CrSigOpCdc.nMaxEnts\n\t\t\tldDat = Date() + CrSigOpCdc.nMinEnts\n\t\t\tReplace PrazoEnts With ldDat In TprMvCab\n\t\tEndif\n\tElse\n\t\tldDat = Iif(Type('TprMvCab.PrazoE... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Lparameters pCnx\n\nLocal loCnt\n\nloCnt = ThisForm.cntObservacao\n\nloCnt.getCodObs.Value = crSigCdObs.Codigos\n\nlcMsg = fMontaObs(crSigCdObs.Observas, pCnx)\n\nIf Not Empty(lcMsg)\n\tloCnt.getDesObs.Value = lcMsg\nEndIf\nloCnt.getDesObs.Refresh\nloCnt.getCodObs.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fMontaObs",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Procedure",
+      "linhas": 82,
+      "codigoOriginal": "Local llOk\n\nIf ThisForm.Direta\n\tSelect CrSigMvCab\n\tZap\n\tSelect TprMvCab\n\tScatter Memvar memo\n\tSelect CrSigMvCab\n\tAppend Blank\n\tGather Memvar Memo\n\t\n\tlcSql = [Select a.*, b.TpVencs,b.Entradas,b.dias,b.tVens From SigMvPar a, SigOpFp b where a.EmpDopNums = ']+TprMvCab.EmpDopNums+[' ]+;\n\t\t\t[And a.Fpags = b.fpags ]\n\tIf Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalPar') < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão ( LocalPar )')\n\t\tReturn .f.\n\tEndIf\n\n\tSelect LocalPar\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Fpags + cnidTefs + Str",
+        "metodosFormChamados": "Sqlexecute,UpDate,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Init",
+      "linhas": 205,
+      "codigoOriginal": "Lparameters pForm, pData, plAltDireta, plAutomatico\n\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\nPUBLIC listaObs\nlistaObs = []\n\nSet DataSession To pData\nSet Confirm On\n\nThisForm.LockScreen = .t.\n\nWith ThisForm\n\t.ParentForm = pForm\n\t.pcEscolha = ThisForm.ParentForm.pcEscolha\n\t.ParentForm.Enabled = .f.\n\t.Direta = plAltDireta\t\nEndWith\n\nWith ThisForm.ParentForm.poDataMgr\n\t.Cursorquery('SigCdOpe',   'CrSigCdOpe',   'Dopes', TprMvC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And InList,CursorQuery,Visible = InList,Visible    = InList,Visible \t   = INT,SQLExecute",
+        "controlesReferenciados": "Get_Conta,Get_DConta,Get_Cpf,ChkCFOP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "KeyPress",
+      "linhas": 18,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf ThisForm.cntEntrega.cmdEntrega.Visible\n\tIf (nKeyCode = -1) && F2\n\t\tThisForm.cntEntrega.cmdEntrega.SetFocus\n\t\tKeyboard '{ENTER}'\n\t\tNoDefault\n\tEndIf\nEndIf\n\nIf ThisForm.cmdEntrega.Visible\n\tIf (nKeyCode = -2) && F3\n\t\tThisForm.cmdEntrega.cmdEntrega.SetFocus\n\t\tKeyboard '{ENTER}'\n\t\tNoDefault\n\tEndIf\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntBotoes",
+      "evento": "Click",
+      "linhas": 170,
+      "codigoOriginal": "If Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n\t If crSigCdOpe.DigObs = 3 And (IsEmpty( TprMvCab.CodObs) Or IsEmpty( TprMvCab.Obses ) )\n\t\tMessagebox( 'Obrigatório Informar ' + iif( IsEmpty( TprMvCab.CodObs ), ;\n\t\t\t\t\t'Código da ','') + 'Observação para essa Operação ... ', 16, ;\n\t\t\t\t\t'Observação é Informação Obrigatória' )\n\t\tIf IsEmpty( TprMvCab.CodObs)\n\t\t\tThisForm.cntObservacao.getCodObs.SetFocus\n\t\tElse\n\t\t\tThisForm.cntObservacao.getDesObs.SetFocus\n\t\tEndif\n\t\tReturn \n\tEndif\n\n\tIf IsEmpty(Tpr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,Fpags + cnidTefs + Str,fGravarLog",
+        "metodosFormChamados": "cursorquery,sqlexecute,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cmdCotacao",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Do Form SigPrCtc With Thisform, ThisForm.DataSessionId, ThisForm.pcescolha, TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes\n\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "Local ldDat, lnMin, ldEst\n\nldDat = Iif(IsEmpty(TprMvCab.PrazoEnts), Date(), TprMvCab.PrazoEnts)\nlnMin = Iif(IsEmpty(crSigOpCdc.NMinEnts), 0, crSigOpCdc.NMinEnts)\nlnMax = Iif(IsEmpty(CrSigOpCdc.nMaxEnts), 0, CrSigOpCdc.nMaxEnts)\nldEst = Ttod(fDtoSQL(Nvl(TprMvCab.Datas, Date())))\n\nDo Form SigOpEnt With TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, ldDat, ThisForm, lnMin, ldEst, .f., lnMax\n\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntVolumes.getQtds",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntVolumes.getEspes",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntVolumes.getPLiqs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntVolumes.getPBrus",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntVolumes.getValTrans",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.getCodObs",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Str(This.Value, 10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.getCodObs",
+      "evento": "Valid",
+      "linhas": 52,
+      "codigoOriginal": "Private pIni, pFim\n\nloCnx = ThisForm.ParentForm.poDataMgr\n\nIf Not Empty(This.Value) And Not (This.Tag = Str(This.Value, 10))\n\tloCnx.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', TprMvCab.Dopes, 'ObsPads, ObsInis, ObsFins')\n\tpIni = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsInis), LocalOpe.ObsInis, 000)\n\tpFim = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsFins), LocalOpe.ObsFins, 999)\n\t\n\tIf not Empty(crSigMvNfi.Cfis) and (crSigOpCdd.ChkCFOP <> 2)\n\t\tlcQuery = [Select ObsInis, ObsFins fr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "MontaObs",
+        "controlesReferenciados": "ChkCFOP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.getCodObs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Antvalu = This.Value\nReturn Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.getDesObs",
+      "evento": "When",
+      "linhas": 13,
+      "codigoOriginal": "*!*\tIF not fChecaAcesso( padl(crSigCdOpe.nDopes,8,'0'), \"ALTINFO\" )\n*!*\t\tReturn .f.\n*!*\tElse\n*!*\t*!*\t\tDodefault()\n*!*\t\tReturn InList(ThisForm.pcEscolha,'CONSULTAR')\n*!*\tEndif \n\nIF fChecaAcesso( padl(crSigCdOpe.nDopes,8,'0'), 'ALTINFO' )\n\tReturn !InList(ThisForm.pcEscolha,'EXCLUIR')\nElse\n\tDodefault()\nEndif \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.btnMultObs",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (TprMvCab.CodObs > 0)\n\t=MessageBox([Para Selecionar Múltiplas Observações Não] + Chr(13) + ;\n\t\t\t\t[Pode Ser Informado o Código de Observação], 0+16, [Atenção])\n\tThisForm.cntObservacao.getCodObs.SetFocus\n\tReturn .f.\nEndIf\n\nDo Form SigOpIns With ThisForm.ParentForm.poDataMgr\n\nThisForm.cntObservacao.getDesObs.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntObservacao.btnMultObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntProtocolo.getProtocolos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getContas",
+      "evento": "Valid",
+      "linhas": 63,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, '', 'C', This.Value, This, ThisForm.cntEntrega.getDConta)\n\t\tThisForm.cntEntrega.getDConta.Value = ''\n\t\tThisForm.cntEntrega.getCpfs.Value = ''\n\t\t=MessageBox('Acesso Negado!!!', 32, '')\n\t\tThis.Value = ''\n\t\tReturn 0\n\tEndIf\n\t\n\tlcCliente = This.Value\n\tIf Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',lcCliente)\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpCli)')\n\t\tReturn .f.\n\tEndIf\n\tIf crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fMensagemFixa",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getContas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getDConta",
+      "evento": "Valid",
+      "linhas": 64,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, '', 'D', This.Value, ThisForm.cntEntrega.getContas, This)\n\t\tThisForm.cntEntrega.getContas.Value = ''\n\t\tThisForm.cntEntrega.getCpfs.Value = ''\n\t\t=MessageBox('Acesso Negado!!!', 32, '')\n\t\tThis.Value = ''\n\t\tReturn 0\n\tEndIf\n\n\tlcCliente = This.Value\n\tIf Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Rclis',lcCliente)\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpCli - 3)')\n\t\tReturn .f.\n\tEndIf\n\n\tIf ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fMensagemFixa",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(ThisForm.cntEntrega.getContas.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getCpfs",
+      "evento": "LostFocus",
+      "linhas": 127,
+      "codigoOriginal": "Local lcTpFat, lcCadGrupo\n\nlcTpFat = ''\nCgc  = This.Value\nCgc1 = ''\nRetCli = ''\n\nIf Not Empty(This.Value)\n\tCgc = Strt(Strt(Strt(Cgc, \".\", \"\"), \"-\", \"\"), \"/\", \"\")\n\tIf (Len(Alltrim(Cgc)) <> 14)\n\t\tCgc1 = Transform(Cgc, \"@R 999.999.999-99\")\n\tElse\n\t\tCgc1 = Transform(Cgc, \"@R 99.999.999/9999-99\")\n\tEndIf\n\t\n\tThis.Value = Cgc1\n\t\n\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\tlnErro = ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery,'CrTmpCli')\n\t\n\tIf lnErro < 1\n\t\tMessageBox('Favor reinicializar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt,From SigCdCli Where ]+Iif,fMensagemFixa",
+        "metodosFormChamados": "SqlExecute,pcEscolha = 'INSERIR') And MessageBox,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.getCpfs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(ThisForm.cntEntrega.getContas.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli', 'crDCompCli', 'Iclis', TprMvCab.ContaEs, 'Grupos, IClis, RClis')\n\nDo Form SigCdEnd With crDCompCli.Grupos, crDCompCli.IClis, crDCompCli.RClis, ThisForm.pcEscolha, ThisForm.ParentForm.poDataMgr, TprMvCab.LocalEnts\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tDimension laArray(1)\n\tlaArray(1) = crDCompCli.IClis\n\n\tIf fEndEntrega(@laArray, ThisForm.ParentForm.poDataMgr)\n\t\tReplace LocalEnts With laArray(02) In TprMvCab\n\tEndIf\nEndIf\n\nIf Use... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntrega.cmdEntrega",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntCodigos.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntDocumentos.getDocumentos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\t Not InList(crSigCdOpe.NFiscals,1,2) And Not InList(CrSigCdOpe.DigDoc,4,5) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntDocumentos.GetNumeroNota",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\t Not InList(crSigCdOpe.NFiscals,1,2) And Not InList(CrSigCdOpe.DigDoc,4,5) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEcfs.getEcfs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntNemps.getNemps",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlnNoFabr = This.Value\n\tlcImpf = fDecriptografar(alltrim(lnNoFabr))\n\tlcWhere = [Select * From SIGFIMPF Where cimpfabs = ?lcImpf ]\n\tLnErro = ThisForm.Parentform.Podatamgr.SqlExecute(lcWhere,'CrSIGFIMPF')\n\tIf LnErro < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrSIGFIMPF)')\n\t\tReturn .f.\n\tElse\n\t\tSelect CrSIGFIMPF\n\t\tIf Reccount() = 0\n\t\t\tMessageBox('Impressora Fiscal não Cadastrada!!',0+48,'ERRO')\n\t\t\tReturn .f.\n\t\tEndif\n\tEndIf\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDecriptografar",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntNemps.getNemps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEmiss.getEmiss",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')\n\tMessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEmiss.getEmiss",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntregas.getEntregas",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')\n\tMessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntEntregas.getEntregas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntRecepcaos.getRecepcaos",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')\n\tMessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntRecepcaos.getRecepcaos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntPrzEnts.getPrzEnts",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')\n\tMessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntPrzEnts.getPrzEnts",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntPedido.getPedido",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Not (crSigCdOpe.PedClis = 5)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.CntObs2.btnMultObs",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Do Form SigOpIns With ThisForm.ParentForm.poDataMgr, TprMvCab.CodObs2\nreplace CodObs2 with ALLTRIM(listaObs) in TprMvCab\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.CntObs2.btnMultObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINF.cntLivre.getNLivDg",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPINF.Procedure",
+      "queryOriginal": "\tlcSql = [Select a.*, b.TpVencs,b.Entradas,b.dias,b.tVens From SigMvPar a, SigOpFp b where a.EmpDopNums = ']+TprMvCab.EmpDopNums+[' ]+; \t\t\t[And a.Fpags = b.fpags ]",
+      "tabelas": "SigMvPar",
+      "colunas": "TpVencs,Entradas,dias,tVens,EmpDopNums,EmpDopNums+[,Fpags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPINF.cntEntrega.getCpfs.LostFocus",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Cpfs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPINF.cntNemps.getNemps.Valid",
+      "queryOriginal": "\tlcWhere = [Select * From SIGFIMPF Where cimpfabs = ?lcImpf ]",
+      "tabelas": "SIGFIMPF",
+      "colunas": "cimpfabs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvPar", "SigCdCli", "SIGFIMPF"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

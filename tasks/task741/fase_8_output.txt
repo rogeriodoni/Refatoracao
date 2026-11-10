@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and verified by compilation (confirmed with a negative control, so the clean `.ERR`-absent result is trustworthy, not a false negative).
+
+**Summary of what was added to `Formsigopfin.prg`:**
+- `ConfigurarSaida()` ÔÇö builds `cmd_4c_Sair` (the legacy `Sair`/`\<OK` button, save icon, Left=925/Width=75 fitting exactly the 1000px form width).
+- `BtnSairClick()` ÔÇö faithful port of `SIGOPFIN.Sair.Click`: validates the grid when edited, offers to abandon changes on inconsistency, strips blank rows, saves, and releases.
+- `ValidarGradeValores()` / `ValidarCampoGradeVazio()` ÔÇö reproduce the legacy field-by-field validation loop, including its "last match wins per row" quirk.
+- `GravarDados()` ÔÇö delete-then-reinsert for ALTERAR mode, row-by-row `sigopfinBO.Inserir()` with renumbered `Ordem`.
+- `AtualizarConfigFinanceiraOperacao()` ÔÇö updates the two checkbox flags into `SigCdOpe.cfgfinancs` positions 1-2, preserving the rest.
+
+One bug caught and fixed during review: the original draft called `sigopfinBO.CarregarDoCursor()` against `cursor_4c_GrdValores`, which doesn't have `cidchaves`/`chkempds` columns ÔÇö that would have crashed at runtime with `Variable CIDCHAVES is not found`. Fields are now mapped explicitly instead.
+
+A documented, low-impact deviation: the legacy preserves `UsuIncs`/`DatIncs`/`UsuAlts`/`DatAlts` per-row through the delete-then-reinsert; `sigopfinBO.Inserir()` always stamps the current user/timestamp. This is internal audit metadata (not user-visible), and the new system's `LogAuditoria` captures the real audit trail regardless ÔÇö noted in code comments for anyone revisiting this.

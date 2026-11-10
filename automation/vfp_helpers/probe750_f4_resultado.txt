@@ -1,0 +1,65 @@
+=== COMPILACAO (fxp apagado antes) ===
+BO.FXP   = .T.
+BO.ERR   = .F.
+FORM.FXP = .T.
+FORM.ERR = .F.
+
+=== 1) UPDATE Matriz (legado: Iif(Empty(ContaMats),'',Iif(Contas=ContaMats,'M','F'))) ===
+  Contas=0000000001 ContaMats=0000000001 -> Matriz=[M]
+  Contas=0000000002 ContaMats=0000000001 -> Matriz=[F]
+  Contas=0000000003 ContaMats=           -> Matriz=[ ]
+  Contas=0000000004 ContaMats=<null>    -> Matriz=[ ]
+  esperado: M (igual), F (diferente), vazio (branco), vazio (null)
+
+=== 2) INSTANCIACAO ===
+VARTYPE(loForm) = [O]  (esperado O)
+BaseClass    = [Form]
+Caption      = [Individual]
+Width/Height = 1000/600
+DataSession  = 1
+ControlCount = 1
+BO VARTYPE   = [O]
+
+=== 3) grd_4c_Saldos x dump legado ===
+Top/Left/W/H  = 140/10/980/453   (dump: 140/10/980/453)
+ColumnCount   = 7   (dump: 7)
+RecordMark    = .T.   (dump: .T.)
+DeleteMark    = .F.   (dump: .F.)
+ScrollBars    = 2   (dump: 2)
+GridLineColor = 15658734   (dump RGB(238,238,238)=15658734)
+Themes        = .F.   (dump: .F.)
+ReadOnly      = .T.   (dump: .T.)
+RecordSource  = [cursor_4c_Saldos]
+
+col | Width (dump) | ColumnOrder (dump) | ControlSource (dump) | Header
+1   | 100 (100)     | 1 (1)              | cursor_4c_Saldos.Contas (Contas)                  | [Conta ]
+2   | 433 (433)     | 2 (2)              | cursor_4c_Saldos.Rclis (Rclis)                    | [Descrição]
+3   | 43 (43)       | 5 (5)              | cursor_4c_Saldos.Moedas (Moedas)                  | [Moeda]
+4   | 140 (140)     | 4 (4)              | cursor_4c_Saldos.Saldos (Saldos)                  | [Saldo]
+5   | 41 (41)       | 6 (6)              | cursor_4c_Saldos.Emps (Emps)                      | [Emp]
+6   | 136 (136)     | 3 (3)              | cursor_4c_Saldos.Cpfs (Cpfs)                      | [CPF/CNPJ]
+7   | 28 (28)       | 7 (7)              | cursor_4c_Saldos.Matriz (Matriz)                  | [M/F]
+
+Column4.Text1.InputMask = [99,999,999,999.99]   (dump: 99,999,999,999.99)
+Column3.Text1.Alignment = 3   (dump: 3)
+Column7.Text1.Alignment = 2   (dump: 2)
+Column1.Header1.ForeColor = 5921370   (dump RGB(90,90,90)=5921370)
+Column1.DynamicBackColor = [IIF(cursor_4c_Saldos.Matriz = 'M', RGB(220,255,220), IIF(cursor_4c_Sal...]
+Column7.DynamicBackColor vazio = .F.   (esperado .F.)
+
+=== 4) cursor_4c_Saldos (datasession do form) ===
+USED = .T.  FCOUNT = 10  RECCOUNT = 0
+TAGS: CONTAS RCLIS CPFS   (legado: Contas, Rclis, Cpfs)
+ORDER corrente = []  (esperado vazio)
+
+=== 5) PEMSTATUS attr 2 (PROTECTED) - esperado .F. ===
+MontaGrade    = .F.
+CarregarLista = .F.
+AlternarPagina= .F.
+
+=== 6) MontaGrade('') com gnConnHandle=0 ===
+retorno = .F.  (gnConnHandle=0 -> .F. esperado, sem excecao)
+
+Release OK
+
+FIM

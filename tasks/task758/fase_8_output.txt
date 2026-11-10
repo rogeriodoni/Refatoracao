@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSigOpLcZ.prg` est├í completo e **verificado instanciando no VFP9**, n├úo apenas compilando.
+
+## O que a Fase 8 entregou
+
+**(a) Tr├¬s controles que faltavam** ÔÇö as fases 3ÔÇæ7 nunca os criaram, e controle ausente n├úo estoura, n├úo entra em log e n├úo aparece em screenshot comparado por nome:
+- `shp_4c_Shape1`, `shp_4c_ShpFigura` (molduras, `BackStyle=0`) e `img_4c_ImgJpg` (`Stretch=2`, nasce oculta)
+- Criados na **ordem relativa do dump**, que ├® o que garante o zÔÇæorder: as Shape antes dos campos que emolduram (caixa transparente criada depois bloquearia o clique), a Image depois da moldura dela
+- O `ZOrderSet = 0` do dump **n├úo** foi transcrito ÔÇö ├® bookkeeping do Form Designer, n├úo existe em runtime (regra #33)
+
+**(b) A foto do produto** ÔÇö metade do `AfterRowColChange` legado que n├úo tinha sido portada. `CarregarFotoProduto()`: remove os prefixos dataÔÇæURI, **um ├║nico** `STRCONV(...,14)`, `CLEAR RESOURCES`, `STRTOFILE`, exibe/esconde a Image.
+
+**(c) Os funis de consolida├º├úo** ÔÇö `MontaGrade`, `CarregarLista`, `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`. Os tr├¬s primeiros s├úo `PROTECTED` por obriga├º├úo (hooks do `FormBase`; VFP9 n├úo deixa alargar escopo herdado); `CarregarLista`/`AjustarBotoesPorModo` s├úo PUBLIC porque o harness chama de fora.
+
+**(d) TabIndex** transcrito do dump, atribu├¡do em ordem crescente.
+
+## Dois defeitos reais que s├│ apareceram instanciando
+
+1. **A tela n├úo abria.** `Grid` sem `RecordSource` **autoÔÇæbinda na ├írea corrente** ao definir `ColumnCount` ÔÇö medido: `Column3` caiu em `Dpros` (character), e o `AddObject` do CheckBox (cujo `.Value` nasce num├®rico) estourava `Data type mismatch` dentro do TRY do `Init` ÔåÆ `CREATEOBJECT` devolvia `.F.`. Medi tr├¬s ordens; s├│ "bindar na coluna num├®rica ÔåÆ AddObject ÔåÆ CurrentControl" funciona. Note que isso **contraria a letra do CLAUDE.md** ("nunca `Column.ControlSource` antes do `AddObject`") ÔÇö registrei na mem├│ria.
+2. **CheckBox desaparecia ap├│s recarga.** Fechar o alias do Grid destr├│i o objeto da Column (`CurrentControl` voltou a `Text1`) mas **preserva** Width/Header ÔÇö perda parcial, mais enganosa que o `ColumnCount=0` conhecido. Corrigido com cria├º├úo idempotente + reÔÇæBINDEVENT no funil.
+
+A vers├úo pr├®ÔÇæFaseÔÇæ8 que recebi **tamb├®m n├úo instanciava** (pendurava num modal de erro) ÔÇö n├úo introduzi esses defeitos, encontreiÔÇæos.
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Smoke test VFP9 (o processo realmente executa) | gravou o arquivo de sa├¡da ÔÇö provas abaixo s├úo v├ílidas |
+| `COMPILE` | zero erros, sem `.ERR` |
+| Instancia├º├úo + 12 controles vs dump | geometria exata; grade com `Col3.CurrentControl=CHK_4C_CHECK1`, `Sparse=.F.`, larguras 122/290/17/95 |
+| Fluxo funcional (5 cen├írios) | marcar/desmarcar, recusa sem base, Localizar, **Confirmar gravando no cursor do pai** (`Locals` vs `LocalOs` por origem), modo PROCURAR travado, sem cursor do pai, `CREATEOBJECT` sem argumentos |
+| Completude real do orquestrador (05d) | `FORM=True BO=True` |
+| `ValidadorSQLSchema` (05f) | PASSOU |
+| `VerificarFuncoesNaoDefinidas` / `VerificarPropriedadesInexistentes` | OK |
+| Schema can├┤nico (682 tabelas, UTFÔÇæ16) | `SigPrLcl.codigos char(10)`/`descricaos char(20)` batem com os `MaxLength` |
+| Zero bytes >127 (acentos via `CHR()`), CRLF preservado | `alto=0`, `CR=LF=1957` |
+
+**Deliberadamente n├úo entregue:** um validador de Base no form. O legado tem a `PROCEDURE validacao`, mas ela **n├úo tem chamador** no dump (o corpo est├í duplicado inline no `btnLocalizar.Click`) e a regra j├í vive em `SigOpLcZBO.Localizar()`, que ├® o caminho real ÔÇö recri├íÔÇæla s├│ criaria uma segunda fonte da mesma regra. Documentei isso no cabe├ºalho. Os handlers CRUD de cinco bot├Áes continuam ausentes por fidelidade: o dump prova por tr├¬s caminhos independentes que esse form n├úo os tem.
+
+Uma observa├º├úo sobre o `btnLocalizar`: ele tem `Cancel = .T.` e `ToolTipText = "[Esc] Encerrar"` **no pr├│prio SCX legado**, colidindo com o bot├úo Cancelar. Mantive fiel (defeito herdado, regra #28) ÔÇö vale saber que ESC aciona Localizar, n├úo Cancelar.

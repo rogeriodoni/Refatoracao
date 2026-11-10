@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VIVO", "C:\4c\tasks\task759\logs\smoke759.txt")
+QUIT

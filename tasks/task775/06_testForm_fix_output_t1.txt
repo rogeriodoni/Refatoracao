@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: n├úo ├® bug de c├│digo ÔÇö ├® falha de rede da m├íquina do pipeline
+
+O erro **1526 DBNETLIB** ("SQL Server inexistente ou acesso negado") ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT("FormSigOpOco")` rodar ÔÇö ├® um pre-flight gen├®rico de conex├úo SQL, sem rela├º├úo com o conte├║do do form ou do BO.
+
+Confirmei isso de duas formas:
+1. **Teste de rede**: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` devolveu `TcpTestSucceeded = False` ÔÇö a porta SQL Server est├í inalcan├º├ível desta m├íquina agora.
+2. **Revis├úo de c├│digo**: li `FormSigOpOco.prg` e `SigOpOcoBO.prg` por completo contra o checklist padr├úo (RETURN sempre fora do TRY/CATCH, handlers PUBLIC para BINDEVENT, form nunca chama m├®todo PROTECTED do BO, CATCH sempre com MsgErro, EscaparSQL sem aspas extras) ÔÇö nenhum defeito encontrado.
+
+Esta ├® a mesma assinatura de falha j├í documentada repetidamente em mem├│ria de projeto para as tasks 769ÔÇô774 (SigOpMpn, SigOpNch, SigOpNFd, SigOpOca, SigOpOch) ÔÇö todas com c├│digo correto, todas bloqueadas pela mesma indisponibilidade de rede at├® `192.168.200.10:1433`.
+
+**N├úo editei os arquivos** ÔÇö faz├¬-lo apenas para "tentar algo" seria dano, n├úo corre├º├úo, dado que o problema n├úo est├í no `.prg`. Registrei esta nova confirma├º├úo (task775/FormSigOpOco) na mem├│ria do projeto.
+
+**Recomenda├º├úo**: como j├í refor├ºado nas confirma├º├Áes anteriores, esta task vai esgotar as 10 tentativas de retry autom├ítico com c├│digo correto se a rota de rede para `192.168.200.10:1433` n├úo for restaurada, ou se o gate `06_testForm` n├úo abrir uma exce├º├úo para erro 1526/conectividade antes de contar como falha de migra├º├úo.

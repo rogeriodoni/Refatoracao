@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This confirms formType is CRUD, boClass is `sigoplinBO`, formClass is `Formsigoplin` ÔÇö matching what I built. The BO file is complete for this phase. I won't modify task_state.json since that's managed by the orchestrator pipeline, not by me.
+
+Phase 2/8 complete: `sigoplinBO.prg` now has the full CRUD layer added to the Phase 1 properties/Init:
+
+- **CarregarDoCursor** ÔÇö maps all 12 `SigPrLit` columns, using real default values with `TratarNulo` (not the buggy `"C"`/`"N"` type-code convention flagged in project memory).
+- **Inserir** ÔÇö generates `cidchaves` (`fUniqueIds()`) and `numlotes` (`fGerUniqueKey("LOTEINST"+CHQ/TIT)`) when absent, fills `emps`/`usuarios`/`datas` defaults, then `INSERT` + `RegistrarAuditoria("INSERT")` ÔÇö transcribed from the legacy `Case 'INSERIR'` Replace block.
+- **Atualizar** ÔÇö `UPDATE` of the editable fields only (identity columns stay immutable) + `RegistrarAuditoria("UPDATE")`.
+- **ExecutarExclusao** ÔÇö deletes `SigPrLii` detail rows by `tipos+numlotes` first, then the `SigPrLit` header by `cidchaves`.
+- **Buscar** / **CarregarPorCodigo** ÔÇö list/single-record SELECTs into `cursor_4c_Dados` / `cursor_4c_Carrega`, matching the `CorBO.prg` canonical pattern.
+- **LimparDados** / **ValidarDados** ÔÇö added so Incluir doesn't leak a previously-loaded record, and so the one concrete legacy validation ("Instru├º├úo Inv├ílida!!!") survives.
+
+Detail-grid (`SigPrLii`) CRUD was deliberately left for the Form/Grid phases (3-8), with a comment explaining why ÔÇö there's no separate BO phase later in this 8-phase pipeline. Brace/IF/TRY counts all balance (verified via grep).

@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 done on `projeto\app\forms\operacionais\FormSigOpIbo.prg`.
+
+## The four CRUD handlers the template asks for don't exist in this legacy
+
+Measured in `SigOpIbo_form_codigo_fonte.txt`, not assumed ÔÇö all four CRUD-evidence greps return **0**: no `frmcadastro`/`frmrelatorio`, no `pcEscolha`/`Grupo_Op`, no `btn|cmd<verbo>` name, no `<Verbo>.Click`. `SIGOPIBO` is a child dialog that **prints** a boleto; it has exactly **two** buttons ÔÇö `Cmd_Imprimir` and `Cmd_Sair`, members `Command1`/`Command2` of the `btnReport` CommandGroup (`ButtonCount = 2`). Fabricating a CRUD handler would mean an empty method or a button the legacy doesn't have.
+
+## What Phase 7 actually delivered
+
+The two real button events were already transcribed and wired (Phase 4). What was still open was the **Click path itself**: `SincronizarOpcoesParaBO` and `ExibirConteudoBoleto` still carried `IF PEMSTATUS` scaffolding from when the checkboxes and the EditBox didn't exist yet. Phase 6 created all 19 objects, so those guards no longer protect anything ÔÇö they only convert a visible error into a silent one: a name mismatch would **skip** the read, the user's checkbox choice would never reach the BO (printing with the Init default) and the boleto panel would open **blank**, with no error, log or warning. Both now read/write the controls directly, so the same mistake surfaces in the method's own `CATCH` with name and line.
+
+Also recorded the phase decisions in the file header, including why `CmdSairClick` keeps `THIS.Release()` rather than `Hide()`: the legacy has no `Unload` with `Return` and the SCX `ClassInfo` lists only the nine *input* properties ÔÇö this dialog returns nothing to its caller.
+
+## One adjacent fix, outside Phase 7's nominal scope
+
+My first draft of the header spelled `BtnIncluirClick` etc. verbatim ÔÇö which made the gate pass **for the wrong reason** (it matches those names across the whole `.prg`, comments included). I rewrote it generically. While there, lines 351/358 ÔÇö written in an earlier phase ÔÇö spelled `BtnSalvarClick`/`FormParaBO`/`BOParaForm`, the **Phase 8** gate tokens, which would have handed Phase 8 the same false pass. I generified those two comment lines too. No behavioral change; flagging it since it wasn't part of the Phase 7 ask.
+
+## Verification
+
+- **Phase 7 gate**: `VEREDITO=PASSA` via the real `case 7` block recut from the orchestrator (new harness `automation\VerificarGateFase7Task746.ps1`). Passing for the right reason: all four tokens **absent** (`faltantes = 4`), carve-out ran, `nBotoesLegado = 2` ÔåÆ floor 2, `nHandlers = 2`.
+- **Completeness** (`Test-CompletudeCodigo`): `True` on form and BO ÔÇö no TODO/stub/empty procedure.
+- **Auditors**: `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` ÔÇö all clean. All BO methods the form calls are PUBLIC; `ConverterParaLogico` is defined in `utils\functions.prg`; all four control names match their `AddObject` exactly.
+- **Structure**: IF/ENDIF 35┬À35, TRY/ENDTRY 19┬À19, WITH/ENDWITH 21┬À21, PROC/ENDPROC 24┬À24; no `RETURN` inside TRY; 0 bytes >127; CRLF restored (CR=LF=2110).
+
+**Not verified: compilation.** VFP9 in this session only opens the IDE and never runs the script ÔÇö three invocation variants hung with no `.fxp` and no `.err`, so I killed the process. The checks above are static. The edits are two straight assignments plus comments, with block balance confirmed, but `05c_validarCompilacao` is still the step that proves it.

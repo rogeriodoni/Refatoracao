@@ -1386,3 +1386,233 @@ DEFINE CLASS TextBoxCelulaDmp_4c AS TextBox
         RETURN ""
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxMovimentacaoMop_4c - celula "Movimentacao" (Column1) da grade de
+* operacoes multiplas do FormSigOpMop (SIGOPMOP.GradeSubN.Column1.Text1).
+*
+* Legado:
+*   When      -> Return( ( crSigCdMop.cDopes = crSigCdOpe.Dopes ) And
+*                         IsEmpty( crSigCdMop.cNivels ) )
+*                (so a linha NOVA, ainda sem operacao filha, aceita foco -
+*                 depois de preenchida, a Movimentacao nao se edita mais)
+*   Valid     -> fwBuscaExt contra SigCdOpe (lookup da operacao FILHA, com
+*                recusa de operacao INATIVA e REPLACE de ndopes) - o corpo
+*                mora em THISFORM.ValidarMovimentacaoMopExec
+*   LostFocus -> If IsEmpty(This.Value) / Thisform.cmdSair.SetFocus / Endif
+*
+* Instalada com Column.AddObject + CurrentControl + Sparse = .F. (regra #18);
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46). When/
+* LostFocus moram no form (Fase 5) e o Valid delega para
+* THISFORM.ValidarMovimentacaoMopExec (Fase 6). O guard PEMSTATUS fica: ele
+* eh o que impede a classe de estourar se for reusada por um form que nao
+* implemente o delegate (BINDEVENT/delegate inexistente aborta o Init).
+*
+* MaxLength = 20 vem da LARGURA DA COLUNA no schema (SigCdMop.cnivels
+* char(20), lookup em SigCdOpe.dopes char(20)), nunca do Width em pixels
+* (regra #19). O dump nao o declara porque la o ControlSource ligava a celula
+* direto na coluna char(20) e o VFP truncava sozinho.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxMovimentacaoMop_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 20
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaMovimentacaoMopEditavel", 5)
+            RETURN THISFORM.CelulaMovimentacaoMopEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarMovimentacaoMopExec", 5)
+            RETURN THISFORM.ValidarMovimentacaoMopExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "MovimentacaoMopLostFocusExec", 5)
+            THISFORM.MovimentacaoMopLostFocusExec(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCoresMop_4c - celula "Cores" (Column3) da grade de operacoes
+* multiplas do FormSigOpMop (SIGOPMOP.GradeSubN.Column3.Text1).
+*
+* Legado:
+*   When  -> ThisForm.Antvalue = This.Value
+*            Return( ( crSigCdMop.cDopes = crSigCdOpe.Dopes ) And
+*                     Not IsEmpty( crSigCdMop.cNivels ) )
+*            (so a linha JA LIGADA a uma operacao filha aceita foco; o
+*             snapshot do valor anterior vai ANTES do teste, igual ao legado)
+*   Valid -> If This.Value <> ThisForm.Antvalue
+*                Thisform.lHouveIns = .T.
+*                If This.Value > 0
+*                    x = GetColor(This.Value)
+*                    If x > 0 / This.Value = x / Else / This.Value = 0 / Endif
+*                    This.Refresh
+*                Endif
+*            Endif
+*            (GetColor() eh funcao NATIVA do VFP9 - abre o seletor de cor do
+*             Windows - e por isso NAO eh lookup/Fase 6: o Valid fica aqui)
+*
+* O ReadOnly desta coluna (travada quando geropes <> 2) continua decidido em
+* ConfigurarColunasGrade (Fase 4) - o When aqui so governa linha EM BRANCO
+* versus linha JA PREENCHIDA, nunca a permissao de geropes.
+*
+* InputMask/MaxLength de 10 digitos (coerentes com ncors numeric(10,0)) vem
+* da classe, nao de atribuicao por instancia - ConfigurarColunasGrade nao
+* precisa repeti-los.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCoresMop_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    InputMask   = "9999999999"
+    MaxLength   = 10
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaCoresMopEditavel", 5)
+            RETURN THISFORM.CelulaCoresMopEditavel(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCoresMopExec", 5)
+            RETURN THISFORM.ValidarCoresMopExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxGrandeGrupoMop_4c - celula "G.Grp" (Column6) da grade de operacoes
+* multiplas do FormSigOpMop (SIGOPMOP.GradeSubN.Column6.Text1).
+*
+* Legado:
+*   GotFocus  -> This.Tag = This.Value
+*   Valid     -> If Not Empty(This.Value)
+*                    loLista = CreateObject([fwBuscaExt], ..., [SigCdGpr],
+*                                [crListaRemota], [Codigos], This.Value,
+*                                [Selecao], .t.)
+*                    If Not loLista.plAchouRegistro
+*                        loLista.mAddColuna([Codigos], [], [Codigo])
+*                        loLista.mAddColuna([Descs],   [], [Descricao])
+*                        loLista.Show()
+*                    EndIf
+*                    This.Value = crListaRemota.Codigos
+*                    Use In crListaRemota
+*                EndIf
+*                This.Refresh
+*   LostFocus -> If (This.Tag <> This.Value) / Thisform.lHouveIns = .T. / Endif
+*
+* O par GotFocus/LostFocus eh o detector de "o usuario mudou o grande grupo":
+* o Tag guarda o valor de ENTRADA e o LostFocus compara com o de SAIDA para
+* ligar a flag de gravacao. Sem o GotFocus o Tag nasce vazio e QUALQUER
+* passagem pela celula marcaria a tela como alterada.
+*
+* Tag eh CHARACTER em VFP9 (nao aceita outro tipo): a comparacao do LostFocus
+* roda sobre texto, e por isso o GotFocus guarda ALLTRIM() do valor, nunca o
+* valor cru.
+*
+* MaxLength = 3 vem da LARGURA DA COLUNA no schema (SigCdMop.mercs char(3),
+* lookup em SigCdGpr.codigos char(3)) - nunca do Width em pixels (regra #19).
+* O dump do legado nao declara MaxLength aqui porque la o ControlSource ligava
+* a celula direto na coluna char(3) e o VFP truncava sozinho.
+*
+* Instalada com Column.AddObject + CurrentControl + Sparse = .F. (regra #18);
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46), por isso
+* os eventos moram na classe e delegam para metodos PUBLIC do form.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxGrandeGrupoMop_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 3
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE GotFocus()
+        IF PEMSTATUS(THISFORM, "GrandeGrupoMopGotFocusExec", 5)
+            THISFORM.GrandeGrupoMopGotFocusExec(THIS)
+        ENDIF
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarGrandeGrupoMopExec", 5)
+            RETURN THISFORM.ValidarGrandeGrupoMopExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "GrandeGrupoMopLostFocusExec", 5)
+            THISFORM.GrandeGrupoMopLostFocusExec(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxEmpresaMop_4c - celula "Emp." (Column7) da grade de operacoes
+* multiplas do FormSigOpMop (SIGOPMOP.GradeSubN.Column7.Text1).
+*
+* Legado:
+*   Valid -> If !IsEmpty( This.Value )
+*                xBrox = CreateObject('fwbuscaext', ..., 'SigCdEmp',
+*                          'crSigCdEmp', 'cEmps', This.Value, 'Empresas', .t., 'cEmps')
+*                If Not xBrox.plAchouRegistro
+*                    xBrox.mAddColuna('CEmps', 'XXXXXX', 'Codigo', .t.)
+*                    xBrox.mAddColuna('Razas', '', 'Descricao', .t.)
+*                    xBrox.Show()
+*                    This.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )
+*                EndIf
+*            Endif
+*
+* O dump declara ReadOnly = .F. nesta celula EXPLICITAMENTE (as outras nao
+* declaram) - a coluna eh digitavel por projeto, e isso continua espelhado em
+* ConfigurarColunasGrade, que poe Column7.ReadOnly = .F. DEPOIS do
+* Grid.ReadOnly (o do grid propaga e sobrescreveria a trava da coluna).
+*
+* MaxLength = 3 vem do schema (SigCdMop.empds char(3), lookup em
+* SigCdEmp.cemps char(3)), nao do Width em pixels (regra #19).
+*
+* Esta celula NAO tem LostFocus no legado, logo editar SO a empresa nao liga a
+* flag de gravacao - comportamento TRANSCRITO, nao esquecimento. Na pratica a
+* linha so chega a ter empresa depois de ter passado por Inserir (que ja liga a
+* flag), e inventar aqui um LostFocus que o legado nao tem mudaria quando a
+* tela decide gravar.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxEmpresaMop_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 3
+    ReadOnly    = .F.
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarEmpresaMopExec", 5)
+            RETURN THISFORM.ValidarEmpresaMopExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE

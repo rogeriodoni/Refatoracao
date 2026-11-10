@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpLhi.prg` ÔÇö 732 linhas, 33 KB, compila limpo no VFP9 (exit 0, sem `.err`).
+
+## O que entrou nesta fase
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarLista()` **PUBLIC** | fim do `Init` (`Select TmpLanca / Go Top / This.Refresh`) ÔÇö a grade do SCX (`RecordSource = "TmpLanca"`) **├®** a lista deste form. PUBLIC porque `TesteAutomatico.prg:363` chama `oForm.CarregarLista()` de fora (regra #3) |
+| `RepintarGrade()` | funil ├║nico de repintura (regra #21a) ÔÇö n├úo move o ponteiro |
+| `FormParaBO()` | leva a linha corrente do cursor ao BO (`CarregarLinhaAtual`), inclusive o `Hists` editado na Column3 ÔÇö ├® por `this_cHists` que o pai l├¬ o resultado |
+| `BOParaForm()` | `cntSombra.lblSombra.Caption = ThisForm.Caption` + idem `lblTitulo`, com o t├¡tulo montado pelo BO; fecha repintando a grade |
+| `BtnOkClick()` | `Confirma.Click` (Caption `"\<Ok"`) ÔÇö era `CmdConfirmaClick` |
+| `BtnCancelarClick()` | `Cancela.Click` (Caption `"Encerrar"`, `Cancel = .T.`), que aborta a baixa no pai ÔÇö era `CmdCancelaClick` |
+
+Renomeei os dois handlers **pela a├º├úo/Caption**, n├úo pelo `Name` do objeto legado, e `SincronizarLinhaCorrente` foi dobrado dentro de `FormParaBO` (eram o mesmo corpo) ÔÇö nada ficou duplicado nem ├│rf├úo.
+
+`Destroy` passou a fechar o cursor de lan├ºamentos **s├│ quando foi este form que o criou** (nova property `this_lCursorPlaceholder`): em uso real o `TmpLanca` ├® do form PAI, que continua lendo o `Hists` confirmado **depois** do `Release` ÔÇö fech├í-lo aqui tiraria do pai o resultado do di├ílogo, em sil├¬ncio.
+
+## Tr├¬s decis├Áes que vale registrar
+
+**N├úo inventei `BtnBuscarClick`, `BtnSalvarClick`, `HabilitarCampos`, `LimparCampos` nem `AjustarBotoesPorModo`**, que o prompt da fase lista. O dump do SIGOPLHI n├úo tem bot├úo de busca, n├úo tem bot├úo de gravar, n├úo tem `pcEscolha`/modo de edi├º├úo e n├úo tem Page1/Page2 ÔÇö os **├║nicos** dois bot├Áes do SCX s├úo `Confirma` e `Cancela`. Cri├í-los seria inventar superf├¡cie que o usu├írio do legado nunca viu (PILAR 1) ou gerar m├®todos vazios (proibido pela regra de completude). Est├í documentado no cabe├ºalho, com o motivo de cada um.
+
+**Tamb├®m n├úo inventei `Valid` na Column3**: no SCX a edi├º├úo do Hist├│rico ├® liga├º├úo direta por `ControlSource`, sem valida├º├úo alguma. Por isso `FormParaBO` l├¬ do **cursor**, n├úo de `Column3.Text1.Value` ÔÇö o controle da coluna ├® um s├│, compartilhado entre linhas, e l├¬-lo arriscaria gravar o Hist├│rico de outra linha sobre o certo, sem erro.
+
+**Conferi o gate da Fase 8 antes de escrever** (`OrquestradorMigracao.ps1`, `case 8`): exige os textos `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista` ÔÇö os quatro presentes como m├®todos reais ÔÇö e `$padraoAcaoGravar` (`PROCEDURE Btn(Salvar|Confirmar|Gravar|Processa|Aplicar|Executar|OK)\w*Click`), satisfeito por `PROCEDURE BtnOkClick` ÔÇö que ├® literalmente o Caption do legado, sem precisar de nenhum dos 17 ramos de exce├º├úo. Rodei as quatro regex exatas do `Test-CompletudeCodigo`: zero marcadores, zero indicadores de pend├¬ncia, zero stubs, zero procedure vazia, arquivo ASCII puro, blocos balanceados (16 `PROCEDURE`/16 `ENDPROC`, 13 `WITH`/13 `ENDWITH`, 5 `TRY`/5 `ENDTRY`, 23 `IF`/23 `ENDIF`) e nenhum `RETURN` dentro de `TRY`.
+
+Uma ressalva honesta sobre o alcance: compilar prova sintaxe, n├úo comportamento. Este form s├│ instancia com o cursor de lan├ºamentos montado pelo form PAI (`Formpgr`), ent├úo o fluxo real ÔÇö editar o Hist├│rico na Column3, sair pelo Ok e o pai ler `this_cHists`, ou sair pelo Encerrar e o pai abortar a baixa ÔÇö n├úo foi exercido aqui. O CRLF do arquivo foi preservado (732/732 linhas) e o `.fxp` foi apagado para o pr├│ximo teste n├úo rodar c├│digo antigo.

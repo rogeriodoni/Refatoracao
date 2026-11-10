@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 2 conclu├¡da. `C:\4c\projeto\app\classes\SigOpNchBO.prg` ÔÇö 1031 linhas, compila├º├úo limpa, CRLF preservado.
+
+## Entregue
+
+**M├®todos exigidos pela fase:**
+
+| M├®todo | O que faz |
+|---|---|
+| `CarregarDoCursor` | SigSySeq ÔÇö mapeia as **3** colunas (`valor`/`conteudo`/`digchecks`) e deriva `this_nProxCheque = conteudo + 1` (a conta do `Init` legado) |
+| `CarregarChequeDoCursor` | linha da grade ÔåÆ chave posicional + `conteudo = Cheques - 1` |
+| `Inserir` | `INSERT INTO SigSySeq (valor, conteudo, digchecks)` + `RegistrarAuditoria("INSERT")` |
+| `Atualizar` | `UPDATE ... SET conteudo` (preserva `digchecks`, igual ao `Replace Conteudo With` legado) + auditoria |
+| `ObterChavePrimaria` | PROTECTED, `ALLTRIM` s├│ porque alimenta `LogAuditoria` |
+
+**Funcionalidade completa do form** (n├úo s├│ o CRUD): `MontarChaveConta`, `CarregarFormasPagtoCheque`, `CarregarAutoriza`, `LocalizarSequencia`, `CriarCursorCheques`, `MontarCheques`, `CarregarDados`, `MarcarChequeAlterado`, `ContarChequesAlterados`, `GravarNumeracao`, `ValidarDados`, `ValidarNumeroCheque`, `LimparDados`, `Destroy`. Zero TODO/stub.
+
+## Medido no VFP9 (n├úo presumido)
+
+- **Compila├º├úo**: smoke test com `STRTOFILE` provou que o corpo do script executou; `.fxp` criado, **sem `.err`**.
+- **Chave posicional (regra #42)**: byte-a-byte id├¬ntica ├á f├│rmula literal do legado, 25 chars = `valor char(25)`. Testei tamb├®m com parte **mais curta** que a coluna (`"33"` em `bancos char(3)`), que ├® o caso que pega o defeito ÔÇö a forma com `ALLTRIM` nas partes d├í `3312777` contra `33 12  777`, provando que o `PADR` por parte importa.
+- **Cursor da grade**: estrutura id├¬ntica ao `Create Cursor csCheques` legado (`FPags C(12) Bancos C(3) Agencias C(4) NContas C(10) Cheques N(6) Marcas L(1)`, TAG FPags).
+- **`ValidarNumeroCheque`**: `-1`ÔåÆ`.F.`, `0/1/999999`ÔåÆ`.T.` (regra `< 0` do `Valid`, sem teto inventado).
+- **Regra #22**: INSERT cobre as 3 colunas NOT NULL, nenhuma inventada. *Minha primeira verifica├º├úo deu um falso "OK" com lista vazia por regex errado* ÔÇö refiz com piso de sanidade (3 colunas parseadas).
+- **Auditorias**: `ValidadorSQLSchema` exit 0; `FuncoesNaoDefinidas` e `MetodoProtegidoChamadoDeFora` (regra #51) OK. `TabelasInexistentes` saiu exit 1 por achados **pr├®-existentes em `UepBO.prg`** ÔÇö zero hits de SigOpNch.
+
+## Duas decis├Áes que valem registro
+
+1. **Atomicidade**: o legado grava as N linhas em **uma** transa├º├úo (`UpDate`ÔåÆ`Commit`ÔåÆ`RollBack`). `BEGIN/COMMIT` via `SQLEXEC` separado n├úo protegeria nada aqui ÔÇö a conex├úo nasce com `Transactions = 2` e `@@TRANCOUNT` j├í vale 1, ent├úo o par s├│ aninha. `GravarNumeracao` manda o lote inteiro num `SQLEXEC` ├║nico com `SAVE TRANSACTION` + `THROW`, e reproduz o `Commit()` como passo com caminho de falha pr├│prio (`SQLCOMMIT`/`SQLROLLBACK`, `IF` aninhado).
+2. **`digchecks`** n├úo aparece em ponto nenhum do legado ÔÇö o `Insert Into crAutoriza (Valor, Conteudo)` grava 0 ali porque ├® o buffer do cursor do `AddCursor`. Como a coluna ├® NOT NULL sem DEFAULT, gravo o mesmo 0 explicitamente.
+
+Dois pontos para as fases seguintes: o `ZAP` do `MontarCheques` vai guardado por `SET SAFETY` (o form ├® `DataSession = 2`, onde SAFETY volta a ON e o ZAP congelaria a tela), e o `LocalizarSequencia` usa `==` sobre as duas pontas em 25 chars em vez do `=` do legado, que depende de um `SET EXACT` que a datasession privada reseta.
+
+N├úo testei grava├º├úo contra o banco: `192.168.200.10` est├í inalcan├º├ível desta m├íquina. O caminho SQL est├í verificado s├│ na gera├º├úo do texto.

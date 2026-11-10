@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VIVO " + TTOC(DATETIME()), "C:\4c\tasks\task772\smoke772_resultado.txt")
+QUIT

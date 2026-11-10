@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. O que foi feito e por qu├¬:
+
+## Decis├úo de escopo: os 4 `Btn<CRUD>Click` **n├úo** foram criados
+
+O dump de `SIGOPLHI.SCX` prova que n├úo existe superf├¡cie CRUD ÔÇö medido, n├úo presumido:
+
+| evid├¬ncia de CRUD | ocorr├¬ncias no dump |
+|---|---|
+| `frmcadastro` / `Grupo_Op` / `pcEscolha` | 0 / 0 / 0 |
+| `(btn\|cmd\|Command)(Incluir\|Alterar\|Visualizar\|Excluir)` | 0 |
+| `X.Incluir.Click` e variantes | 0 |
+| `BaseClass: commandbutton` soltos | **2** (`Confirma` "\<Ok", `Cancela` "Encerrar") |
+
+├ë um di├ílogo modal filho (`Do Form SigOpLhi With ThisForm`) com 3 m├®todos no legado: `Init`, `Cancela.Click`, `Confirma.Click`. Inventar 4 bot├Áes violaria o PILAR 1; m├®todos vazios violariam a regra de completude. O carve-out do gate (`$legadoSemCrud` + `nHandlers >= nBotoesLegado`) ├® satisfeito com **2 handlers para 2 bot├Áes**. Os nomes literais dos 4 eventos foram mantidos fora at├® dos coment├írios ÔÇö o gate casa por regex no arquivo inteiro e um coment├írio os satisfaria pelo motivo errado.
+
+## Eventos efetivamente portados/completados
+
+- **`CmdConfirmaClick`** ÔÇö `ThisForm.Release` do legado + sincronia da linha corrente com o BO antes de liberar (o `Hists` editado na Column3 chega a `this_cHists`, que ├® por onde o resultado do di├ílogo fica leg├¡vel) + recontagem; desliga explicitamente a flag de cancelamento.
+- **`CmdCancelaClick` / `MarcarCanceladoNoPai`** ÔÇö marca a flag no pai por **qualquer um dos dois nomes poss├¡veis** (`this_lCanceladoExterno` migrado ou `CanceladoExterno` legado) e, se o pai n├úo exp├Áe nenhum, cria o do legado com `AddProperty`. Antes s├│ o nome migrado era tentado: com pai de nome legado o cancelamento era **perdido em sil├¬ncio** e o pai seguiria a baixa que o usu├írio acabou de cancelar.
+- **`GrdDadosAfterRowColChange` + `SincronizarLinhaCorrente`** ÔÇö `BINDEVENT` no grid com o par├ómetro do evento declarado (regra #3). Uso correto de `AfterRowColChange` (carregar o detalhe da linha corrente); **nenhuma** valida├º├úo de c├®lula foi inventada ÔÇö o legado n├úo tem `Valid` na `Grade.Column3`.
+
+## Verifica├º├úo executada (n├úo inferida)
+
+Smoke test de 4 linhas passou (`VIVO` gravado), ent├úo o VFP9 **executa** nesta sess├úo e os resultados abaixo s├úo reais:
+
+- `COMPILE` do form e do BO: `.FXP` gerados, **zero `.err`**.
+- Probe (`automation/ProbeF7SigOpLhi759.prg`, sa├¡da em `_f7_759_probe.txt`): form instancia (`VARTYPE=O`), caption montado do cursor de contexto; os 5 m├®todos existem e s├úo **PUBLIC** (`prot=.F.`); `AEVENTS` confirma `[AFTERROWCOLCHANGE] -> GRDDADOSAFTERROWCOLCHANGE` e os dois `[CLICK]`; `Hists` editado chega a `BO.this_cHists`; ├írea de trabalho corrente preservada; flag marcada nos 3 formatos de pai e `.F.` sem exce├º├úo com pai `.NULL.`; Ok deixa a flag `.F.`, Encerrar deixa `.T.`; **zero di├ílogos** emitidos.
+- Validador de completude (checks 1ÔÇô4 de `Test-CompletudeCodigo` rodados sobre o arquivo): **0 problemas**.
+
+Fora de escopo, registrado: a integra├º├úo no lado do pai n├úo existe ÔÇö `Formpgr`/`PGRBO` n├úo citam este di├ílogo nem o cursor de lan├ºamentos, ent├úo o contrato s├│ fecha quando o pai for (re)migrado.

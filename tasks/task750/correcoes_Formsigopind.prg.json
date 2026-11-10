@@ -1,0 +1,63 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopind.prg",
+    "timestamp":  "2026-11-10T01:50:44",
+    "correcoes":  [
+                      {
+                          "Tipo":  "ADDOBJECT_DUPLICADO",
+                          "Linha":  1980,
+                          "Original":  "loc_oGrd.Column11.AddObject(\"chk_4c_Selec\", \"CheckBox\")",
+                          "Corrigido":  "loc_oGrd.Column11.AddObject(\"chk_4c_selec2\", \"CheckBox\")",
+                          "Descricao":  "Nome duplicado \u0027chk_4c_selec\u0027 no mesmo container - renomeado para \u0027chk_4c_selec2\u0027"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-186-BINDEVENT-MEMBRO-INEXISTENTE",
+                          "Linha":  2002,
+                          "Original":  "BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, \"Click\",     THIS, \"ChkSelecClick\")",
+                          "Corrigido":  "(repontar para \u0027text1\u0027 — controles existentes: chk_4c_selec2)",
+                          "Descricao":  "Pattern #186-C: BINDEVENT aponta para \u0027chk_4c_selec\u0027 em grd_4c_lancamento|11, membro que NAO existe nessa coluna. Controles realmente adicionados ali: chk_4c_selec2 (CurrentControl = \u0027text1\u0027). BINDEVENT com referencia de objeto invalida estoura no Init do form, e o controle que deveria ser ligado fica sem handler nenhum. Causa tipica: copiar o bloco de BINDEVENT de outro grid sem trocar o nome do controle. REVISAR MANUAL: repontar para o CurrentControl da coluna (\u0027text1\u0027). Origem: sweep Pattern #185 (2026-09-04, FormMda — os 4 BINDEVENT de grd_4c_Emps.Column1 apontavam para Check1, que so existe em grd_4c_Opers.Column1; o checkbox de Empresas ficou sem toggle)."
+                      },
+                      {
+                          "Tipo":  "WARN-186-BINDEVENT-MEMBRO-INEXISTENTE",
+                          "Linha":  2003,
+                          "Original":  "BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, \"MouseDown\", THIS, \"ChkSelecMouseDown\")",
+                          "Corrigido":  "(repontar para \u0027text1\u0027 — controles existentes: chk_4c_selec2)",
+                          "Descricao":  "Pattern #186-C: BINDEVENT aponta para \u0027chk_4c_selec\u0027 em grd_4c_lancamento|11, membro que NAO existe nessa coluna. Controles realmente adicionados ali: chk_4c_selec2 (CurrentControl = \u0027text1\u0027). BINDEVENT com referencia de objeto invalida estoura no Init do form, e o controle que deveria ser ligado fica sem handler nenhum. Causa tipica: copiar o bloco de BINDEVENT de outro grid sem trocar o nome do controle. REVISAR MANUAL: repontar para o CurrentControl da coluna (\u0027text1\u0027). Origem: sweep Pattern #185 (2026-09-04, FormMda — os 4 BINDEVENT de grd_4c_Emps.Column1 apontavam para Check1, que so existe em grd_4c_Opers.Column1; o checkbox de Empresas ficou sem toggle)."
+                      },
+                      {
+                          "Tipo":  "WARN-186-BINDEVENT-MEMBRO-INEXISTENTE",
+                          "Linha":  2004,
+                          "Original":  "BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, \"MouseUp\",   THIS, \"ChkSelecMouseUp\")",
+                          "Corrigido":  "(repontar para \u0027text1\u0027 — controles existentes: chk_4c_selec2)",
+                          "Descricao":  "Pattern #186-C: BINDEVENT aponta para \u0027chk_4c_selec\u0027 em grd_4c_lancamento|11, membro que NAO existe nessa coluna. Controles realmente adicionados ali: chk_4c_selec2 (CurrentControl = \u0027text1\u0027). BINDEVENT com referencia de objeto invalida estoura no Init do form, e o controle que deveria ser ligado fica sem handler nenhum. Causa tipica: copiar o bloco de BINDEVENT de outro grid sem trocar o nome do controle. REVISAR MANUAL: repontar para o CurrentControl da coluna (\u0027text1\u0027). Origem: sweep Pattern #185 (2026-09-04, FormMda — os 4 BINDEVENT de grd_4c_Emps.Column1 apontavam para Check1, que so existe em grd_4c_Opers.Column1; o checkbox de Empresas ficou sem toggle)."
+                      },
+                      {
+                          "Tipo":  "WARN-186-BINDEVENT-MEMBRO-INEXISTENTE",
+                          "Linha":  2005,
+                          "Original":  "BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, \"KeyPress\",  THIS, \"ChkSelecKeyPress\")",
+                          "Corrigido":  "(repontar para \u0027text1\u0027 — controles existentes: chk_4c_selec2)",
+                          "Descricao":  "Pattern #186-C: BINDEVENT aponta para \u0027chk_4c_selec\u0027 em grd_4c_lancamento|11, membro que NAO existe nessa coluna. Controles realmente adicionados ali: chk_4c_selec2 (CurrentControl = \u0027text1\u0027). BINDEVENT com referencia de objeto invalida estoura no Init do form, e o controle que deveria ser ligado fica sem handler nenhum. Causa tipica: copiar o bloco de BINDEVENT de outro grid sem trocar o nome do controle. REVISAR MANUAL: repontar para o CurrentControl da coluna (\u0027text1\u0027). Origem: sweep Pattern #185 (2026-09-04, FormMda — os 4 BINDEVENT de grd_4c_Emps.Column1 apontavam para Check1, que so existe em grd_4c_Opers.Column1; o checkbox de Empresas ficou sem toggle)."
+                      },
+                      {
+                          "Tipo":  "COLUMN_ADDOBJECT_SEM_CURRENTCONTROL",
+                          "Linha":  1980,
+                          "Original":  "loc_oGrd.Column11.AddObject(\"chk_4c_selec2\", \"CheckBox\") sem CurrentControl",
+                          "Corrigido":  "loc_oGrd.Column11.CurrentControl = \"chk_4c_selec2\"",
+                          "Descricao":  "Pattern #198: Column.AddObject CRIA o controle mas NAO o exibe - a coluna continua desenhando o Text1 dela. O controle existe, responde a PEMSTATUS e nunca aparece: o usuario ve o valor cru numa caixa de texto e nao tem como marcar nada. Quem escolhe o controle desenhado eh Column.CurrentControl (default \u0027Text1\u0027), que precisa do nome exato passado ao AddObject; junto vai Sparse = .F., senao o controle so aparece na linha ativa. Conferir tambem Column.ReadOnly = .F. DEPOIS do Grid.ReadOnly quando o campo for editavel. Origem: Erro158 (2026-09-10, FormCco \u0027Cadastro de Classificacao de Contas\u0027)."
+                      },
+                      {
+                          "Tipo":  "WARN-216-FORMAT-INPUTMASK-AUSENTE",
+                          "Linha":  0,
+                          "Original":  "(form inteiro)",
+                          "Corrigido":  "(nao mutado - o valor sai do dump, controle a controle)",
+                          "Descricao":  "Pattern #216 WARNING: o dump do legado declara 9 Format e 3 InputMask nao-vazios, mas este .prg tem 4 e 1 - faltam 5 Format e 2 InputMask. Severidade ALTA (InputMask muda o que eh digitado/gravado). O migrador descarta essas duas propriedades e o defeito so aparece na TELA: no FormCEP o CEP exibia \"07083280\" em vez de \"07083-280\" (InputMask = \"99999-999\") e os campos aceitavam minuscula onde o legado forca MAIUSCULA (Format = \"K!\"). Compila limpo, nenhum outro gate pega. NAO auto-fixado: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -\u003e objeto migrado eh HUMANO porque o PILAR 3 manda renomear (getTipoNomes -\u003e txt_4c_TipoNomes) - casar por nome nunca funciona (regras #30/#39). Conferir no dump e transcrever. Cuidado: \"Format = \u0027\u0027\" / \"InputMask = \u0027\u0027\" no dump sao override VAZIO do Form Designer, nao formatacao - ignorar. Auditoria em lote: automation\\VerificarFormatInputMask.ps1. Skill: secao 243. Origem: Erro197 (FormCEP)."
+                      }
+                  ],
+    "totalCorrecoes":  8
+}

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpHis.prg` (1304 ÔåÆ 1572 linhas).
+
+## O que foi implementado
+
+O legado **SIGOPHIS n├úo tem CRUD** ÔÇö herda de `form` puro (sem `frmcadastro`, sem `Grupo_Op`, sem `pcEscolha`, zero objeto Incluir/Alterar/Visualizar/Excluir). Toda a sua superf├¡cie de a├º├úo ├® **um CommandGroup com 2 bot├Áes**. Ent├úo os "4 eventos principais" aqui s├úo os **dois Click que o legado realmente tem** ÔÇö criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├Áes (PILAR 1) ou escrever m├®todos vazios (regra de completude). O gate da Fase 7 cobre exatamente este caso (`legadoSemCrud` + piso de 2 handlers para 2 bot├Áes do dump).
+
+| M├®todo | Origem no dump | Escopo |
+|---|---|---|
+| `BtnConsultaClick` | `sair.consulta.Click` (linhas 601-660) | PUBLIC |
+| `BtnEncerrarClick` | `sair.sair.Click` (linhas 663-666) | PUBLIC |
+| `FocarCampoRecusado` | os 6 `ThisForm.get_xxx.SetFocus` | PUBLIC |
+| `FormParaBO` | bloco "Inicializa variaveis de campos" | PROTECTED (base assim o declara) |
+| `BINDEVENT` de `obj_4c_Sair.Buttons(1)/(2)` | ÔÇö | em `ConfigurarBotoesAcao` |
+
+Pontos de fidelidade: a sequ├¬ncia de consist├¬ncias j├í vivia em `SigOpHisBO.ValidarFiltro()` (Fase 2), ent├úo o handler s├│ exibe e foca; o despacho `Do Form SigPrHpr With ThisForm` virou `CREATEOBJECT("FormSigPrHpr", THIS)` com as `PRIVATE pcCdGrupo/pcCdConta/pcDsConta/pcCdProduto/pcDsProduto/pdDataIni/pdDataFin` declaradas no handler ÔÇö que ├® o que o `Init` do filho l├¬ pelo nome. `Show()` fora do TRY (#29), `Enabled = .T.` no funil de volta (#40), `ConverterParaData` nas datas (#16), `PADR` nas larguras do schema.
+
+**Desvio deliberado**: as mensagens de recusa usam `MsgAviso` (amarelo) e n├úo `MsgErro`, embora o legado use `MessageBox(...,16,...)` ÔÇö ├® a norma do projeto para valida├º├úo de campo, e os forms irm├úos (`FormCOC`, `FormCmr`) fazem igual. O **texto** ├® o do legado, letra por letra.
+
+## Verifica├º├úo
+
+Compila├º├úo VFP9 limpa (`.fxp` gerado, nenhum `.err`). Probe headless (`automation\_probe745f7.prg`) executou at├® o fim:
+
+- `BtnConsultaClick`/`BtnEncerrarClick`/`FocarCampoRecusado` ÔåÆ `protegido=.F.`; `FormParaBO` ÔåÆ `.T.`
+- `Buttons(1)` "\<Consulta" e `Buttons(2)` "Encerrar" ÔåÆ **1 evento delegado cada**
+- `FormParaBO` transferiu os 8 campos: `this_cGrupo` LEN=10, `this_cConta` LEN=10, `this_cProduto` LEN=14, as duas datas `VARTYPE=D`
+- Grupo vazio ÔåÆ `Grupo Inv├ílido !` + `this_cCampoFoco=[Grupo]`; campos cheios sem conex├úo SQL ÔåÆ `Conta Inv├ílida !` + `[Conta]` (ordem do legado)
+- `Form.Enabled` permanece `.T.` em toda recusa (o `Enabled=.F.` s├│ ocorre depois de validar)
+- `BtnEncerrarClick` liberou o form (`VARTYPE` ÔåÆ `X`)
+- Nenhum `Show()` modal bloqueou ÔåÆ nenhuma recusa chegou a abrir `FormSigPrHpr`
+
+Dois pontos para registro, nenhum deles defeito da Fase 7: o log mostra `Erro em AbrirPicker: Connection handle is invalid` porque o `SetFocus` do campo recusado dispara o `LostFocus` do campo anterior (lookup da Fase 6) e esta m├íquina n├úo alcan├ºa o SQL Server `192.168.200.10` ÔÇö ├® o comportamento do `Valid` legado. E o cabe├ºalho do arquivo foi atualizado: a Fase 8 ficou com "m├®todos finais do contrato de form e revis├úo de completude", j├í que o `BINDEVENT` e o `FormParaBO` que o plano original reservava para ela foram entregues aqui (handler sem `BINDEVENT` seria c├│digo morto).

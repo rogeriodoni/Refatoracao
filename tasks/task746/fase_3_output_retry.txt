@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpIbo.prg` (28 KB, 540 linhas, CRLF, zero bytes n├úo-ASCII).
+
+## O que foi entregue
+
+| M├®todo | Conte├║do |
+|---|---|
+| `DEFINE CLASS FormSigOpIbo AS FormBase` | 11 propriedades de estado + 15 propriedades visuais transcritas do SCX |
+| `Init(10 params)` | Assinatura na **mesma ordem** do `LParameters` legado ÔåÆ BO + Caption (`Do Case`) + `llSair` |
+| `ResolverBloqueioEncerrar()` | o `llSair` legado (TpBol=1 + `Op_Escolha='INSERIR'` + `fChecaAcesso`) |
+| `InicializarForm()` | Picture do Framework + containers + visibilidade |
+| `ConfigurarPageFrame()` | `cnt_4c_Sombra` + 2 labels, `cnt_4c_Container1` |
+| `TornarControlesVisiveis()` | com exce├º├úo para o painel que nasce oculto |
+| `Destroy()` | fecha os 5 cursores do BO + `DODEFAULT()` |
+
+## Verifica├º├Áes feitas (n├úo s├│ inspe├º├úo)
+
+- **Compila limpo** no VFP9: nenhum `.ERR`, `.FXP` gerado.
+- **Instancia de verdade**, medido no VFP9 ÔÇö `CREATEOBJECT("FormSigOpIbo")` sem argumento (o que o harness `06_testForm` faz) devolve objeto; Caption cai no `OTHERWISE` do `Do Case`; `ControlCount=2`; faixa e labels vis├¡veis; `cnt_4c_Container1.Visible=.F.`; BO instanciado; sem travar em `fChecaAcesso`. Com `TpBol=18` ÔåÆ "Impress├úo de Duplicata/Carne" e Carne/Obs/Agrupa = `.T./.F./.F.`; com `TpBol=3` ÔåÆ Agrupa `.T.`.
+- **Gate da Fase 3**: aprova pelos **dois** ramos (`temEstruturaPaginada` e `temEstruturaFlat`), avaliado com os regexes reais do `OrquestradorMigracao.ps1`.
+- **`Test-CompletudeCodigo`** (o validador real, extra├¡do do orquestrador): `[OK] nenhum TODO/stub/procedure vazia`.
+- **Propriedades**: todas as 40 usadas conferidas contra `propriedades_baseclasses.txt` ÔåÆ 0 inexistentes.
+- Auditorias `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas`: 0 achados neste arquivo.
+- Todos os `RETURN` fora de `TRY/CATCH`; zero `MESSAGEBOX`; zero `PUBLIC` em `DEFINE CLASS`.
+
+## Desvios do template gen├®rico ÔÇö e por qu├¬
+
+O template da Fase 3 pede `PageFrame` com Page1/Page2 e a barra CRUD. **N├úo se aplica**: o dump prova raiz `Class: form` gen├®rico, sem `BaseClass: pageframe`, sem lista e sem bot├Áes Incluir/Alterar/Excluir/Buscar. Desenhei os **dois containers que o dump prova existir**. O gate tem exce├º├úo FLAT exatamente para este caso.
+
+Dois literais do dump foram deliberadamente **n├úo** copiados: `cntSombra.Width=800` e labels `Width=769` num form de 600 ÔÇö artefato do Form Designer; o literal faria o pai recortar o t├¡tulo. Usei `THIS.Width` e `THIS.Width - 20`.
+
+## Pend├¬ncias que registrei no pr├│prio arquivo
+
+1. **`TabIndex`** ÔÇö o SCX declara em 12 controles. N├úo transcrito agora de prop├│sito: s├│ pode ser atribu├¡do em ordem ascendente depois que todos os `AddObject` existirem (com 2 controles o VFP clamparia 11 ÔåÆ 2). A lista dos focaliz├íveis a numerar est├í no cabe├ºalho.
+2. **`SET DATASESSION TO this_nDataSessionChamador`** ÔÇö o legado trocava de datasession para a rotina de impress├úo ver o cursor do chamador. Guardei o Id; a fase que chamar `SigBlBol` tem de envolver a chamada. `SigBlBol` n├úo veio no acervo (regra #27), ent├úo n├úo h├í como medir ÔÇö fica expl├¡cito em vez de silenciosamente perdido.
+3. `Closable`/`MinButton`/`ShowWindow` **n├úo** declarados ÔÇö o SCX n├úo os declara. `MaxButton = .F.` sim, e foi transcrito.

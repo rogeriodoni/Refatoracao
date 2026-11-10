@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLOC",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "Select crSigOpOco\nWith ThisForm.GridSels\n\t.ColumnCount = 3\n\t.RecordSource = 'crSigOpOco'\n\t.HeaderHeight = 0\n\t.DeleteMark = .f.\n\t.RecordMark = .f.\n\t.ReadOnly = .f.\n\t.RowHeight = 18\n\t.Scrollbars = 2\n\t.AllowHeaderSizing = .f.\n\t.AllowRowSizing = .f.\n\n\t.Column1.ControlSource = 'crSigOpOco.Imps'\n\t.Column1.FontName = 'Courier New'\n\t.Column1.Movable = .f.\n\t.Column1.Resizable = .f.\n\t.Column1.ReadOnly = .f.\n\t.Column1.Sparse = .f.\n\t.Column1.Check1.AutoSize = .t.\n\n\t.Column2.ControlSource = 'crSigOpOco.Codig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Imps\n\nIf InList(nKeyCode, 13, 32)\n\tm.Imps = (!SigOpOco.Imps)\n\n\tSelect crSigOpOco\n\tGather Memvar Fields Imps\n\tThisForm.GridSels.Refresh\n\n\tNoDefault\nEndif\n*********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Imps\n\nm.Imps = (Not crSigOpOco.Imps)\n\nSelect crSigOpOco\nGather Memvar Fields Imps\nThisForm.GridSels.Refresh\n\nNoDefault\n*********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n*********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.GridSels.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.DesmarcarEmp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select crSigOpOco\nReplace All Imps with .f.\nGo Top\nThisForm.GridSels.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.MarcarEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crSigOpOco\nReplace All Imps with .t.\nGo Top\nThisForm.GridSels.Refresh\n*********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLOC.btnSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

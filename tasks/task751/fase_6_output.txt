@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö correctly omitted there. The implementation is complete, compiles cleanly, and I've cleaned up all temporary artifacts.
+
+## Summary
+
+Fase 6/8 of `Formsigopinf.prg` is complete. Added the 7 remaining containers with full lookup logic:
+
+- **cnt_4c_Volumes** ÔÇö 5 campos de transporte (Qtde/Esp├®cie/Peso L├¡quido/Peso Bruto/Valor Transporte), `When` compartilhado
+- **cnt_4c_Observacao** ÔÇö c├│digo/texto da observa├º├úo com o lookup completo (faixa de c├│digos v├ílidos em `SigCdOpe`/`SigCdObs`, fallback `FormBuscaAuxiliar`), gate `fChecaAcesso` (ALTINFO) no memo, e bot├úo de m├║ltiplas observa├º├Áes
+- **cnt_4c_Protocolo** ÔÇö campo ├║nico, reaproveitando `PadraoIncluirAlterarWhen`
+- **cnt_4c_Entrega** ÔÇö conta/nome/CPF-CNPJ do destinat├írio, com lookup em `SigCdCli` pelos tr├¬s campos (intercambi├íveis), checagem de acesso via `fAcessoContas` em modo backend (sem auto-load de UI, seguindo a conven├º├úo j├í estabelecida no projeto), checagens de situa├º├úo de conta e conta-diferente-de-origem/destino (guardadas por `USED()`), e bot├úo "Local de Entrega"
+- **cnt_4c_Pedido**, **CntObs2** e **cnt_4c_Livre** ÔÇö campos restantes
+
+Para `SigCdEnd` e `SigOpIns` (n├úo migrados), segui o padr├úo j├í usado em `FormSigOpChi`/`Formsigopfis`: tenta de verdade via `CREATEOBJECT` e s├│ avisa (`AvisarLegadoNaoPortado`) se a classe realmente n├úo existir. Adicionei tamb├®m o `KeyPress` do Form (F2/F3) para os dois bot├Áes de navega├º├úo por atalho, j├í que o bot├úo local agora existe.
+
+Compilei o arquivo via VFP9 (`vfp9.exe -T`) ÔÇö compilou limpo, sem `.err`. Arquivos tempor├írios de compila├º├úo foram removidos.

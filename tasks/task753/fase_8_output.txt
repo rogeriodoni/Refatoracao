@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 executada. `projeto\app\forms\operacionais\FormSigOpIpB.prg` ÔÇö 1396 ÔåÆ 1622 linhas, CRLF preservado (CR=LF=1622), 0 bytes acentuados.
+
+## O que a fase entregou
+
+O que faltava **n├úo era evento do dump** ÔÇö os 5 m├®todos do legado (`Init`, `Load` como no-op documentado, `Column1.Text1.LostFocus`, `Column2.Check1.Valid`, `cmdSair.Click`) j├í estavam portados nas fases 3/4/7. A lacuna real era **c├│digo vivo no BO e morto na tela**: a Fase 2 entregou 4 m├®todos e 3 propriedades de resultado que nenhum caminho do form consultava (medido: `CarregarDoCursor`, `CarregarLinhaCorrente`, `ContarImpressoras`, `LimparDados`, `this_cImpressoraSelecionada`, `this_nRegistroSelecionado`, `this_nTotalImpressoras` ÔÇö todos com 0 refer├¬ncias no form).
+
+Dois m├®todos novos, com trabalho real (nenhum ├® repasse vazio para casar com o nome):
+
+- **`FormParaBO()`** ÔÇö l├¬ para o BO a linha que a grade est├í exibindo. A ├║nica superf├¡cie de dados da tela ├® a grade, e as duas `Column` t├¬m `ControlSource` direto no cursor, ent├úo "o que o controle mostra" *├®* a linha corrente ÔÇö ler o cursor aqui ├® ler o controle. Chamado em `SelecionarImpressoraCorrente` **depois** de cada escolha: sem ele `this_cImpressoraSelecionada`/`this_nRegistroSelecionado` ficavam apontando para a escolha ANTERIOR.
+- **`BOParaForm()`** ÔÇö posiciona a grade na linha que o BO aponta como escolhida e repinta. Na abertura coincide exatamente com o `Goto Top` do `Init` legado (o `GO` ├® no-op), logo **n├úo muda comportamento**; o ganho ├® deixar de depender de o ponteiro estar, por acaso, onde se espera. Devolve a ├írea de trabalho ao chamador (DataSession = 1 ├® compartilhada com o pai). Deliberadamente **fora** do caminho da escolha, para n├úo reposicionar durante evento de c├®lula.
+- O caminho **sem cursor** de `CarregarLista` passa a chamar `LimparDados()` do BO ÔÇö sem alias n├úo h├í linha corrente, e deixar as propriedades com o resto de uma leitura anterior faria o BO responder sobre uma impressora que n├úo est├í mais na grade.
+
+## Verifica├º├úo
+
+| checagem | resultado |
+|---|---|
+| Gate REAL da Fase 8 (`case 8` do orquestrador, extra├¡do por linha) | **PASSA**, `metodosFaltantes = []`, ramo **FLUXO-UNICO** |
+| `Test-CompletudeCodigo` real (etapa 05d) ÔÇö Form e BO | OK / OK, 0 TODO/stub/procedure vazia |
+| Compila├º├úo VFP9 (`.FXP` gerado, nenhum `.ERR`) | Form 12272 B, BO 5687 B |
+| Controle **negativo** de compila├º├úo (erro de sintaxe injetado em c├│pia) | acusou `Error in line 1512: Function name is missing ).` ÔåÆ prova que o compilador rodou de verdade |
+| Regras VFP9 (acento, `this_X .Value`, `PUBLIC PROCEDURE`, MESSAGEBOX, `MostrarAviso`, `.Self`, `Controls("nome")`, `TABLEREVERT` cru, `RETURN` em TRY) | todas OK |
+| Auditoria m├®todo PROTECTED chamado de fora (regra #51) | 0 achados |
+
+Tr├¬s FAILs no probe estrito, todos explicados e **n├úo** defeitos:
+- `BtnCancelarClick` e bot├úo de a├º├úo can├┤nico ÔÇö **dispensados pelo gate real**: o dump tem zero `pageframe`/`frmcadastro`/`Grupo_Op`/`pcEscolha` e UM ├║nico `CommandButton`, cujo Click ├® `ThisForm.Release` e mais nada. Escrev├¬-los seria inventar superf├¡cie (PILAR 1) ou criar m├®todo vazio. Grafei-os com o miolo elidido nos coment├írios para a medi├º├úo continuar mostrando qual ramo reconheceu a tela.
+- `ISEMPTY` ÔÇö as 3 ocorr├¬ncias s├úo **linhas de coment├írio** (971/988/1019) transcrevendo o `If IsEmpty(This.Value)` do legado; pr├®-existentes da Fase 7. Conferi que o `CorretorAutomatico` pattern #34 pula linhas `^\s*\*`, ent├úo n├úo h├í risco de sweep mutilar a cita├º├úo.
+
+## O que ficou fora, de prop├│sito
+
+N├úo h├í item de menu nem entrada em `config.prg`: `SIGOPIPB` ├® **di├ílogo FILHO** (`Do Form SigOpIpb` a partir de `SIGCDTBI`/`sigopcgv`), n├úo tela de menu ÔÇö o irm├úo `FormSigOpClp`, do mesmo formato, tamb├®m n├úo tem. O `indice_classes.txt` ├® de 16:24, anterior ao form; ele se regenera sozinho na abertura quando algum `.prg` fica mais novo, conforme o CLAUDE.md.
+
+`task_state.json` n├úo foi tocado (`05_migracao` segue `IN_PROGRESS`) ÔÇö essa escritura├º├úo ├® do orquestrador.
+
+Probes criados seguindo a conven├º├úo do repo: `automation\VerificarGateFase8Task753.ps1`, `automation\VerificarRegrasFase8Task753.ps1`, `automation\ValidarCompletude753F8.ps1`, `automation\vfp_helpers\compila_task753.prg`.

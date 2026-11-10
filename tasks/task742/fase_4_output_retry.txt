@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í entregue. O artefato **j├í estava correto** ÔÇö o que reprovou foi o gate, que para este legado era insatisfaz├¡vel. Consertei o gate, n├úo o form.
+
+## Diagn├│stico
+
+`Formsigopfis.prg` reproduz **os 22 filhos diretos** do `SIGOPFIS.SCX` (1 Shape, `cnt_4c_Sombra` + 2 labels, `pgf_4c_1` com as Pages "Nota Fiscal"/"Servi├ºos", 8 labels, 10 TextBox, `cmd_4c_Ok`), compila limpo (`.fxp` regerado 21:27:14 com o `.fxp` velho apagado, zero `.err`) e passa `Test-CompletudeCodigo` = `True`.
+
+Rodando o `case 4` recortado do orquestrador num harness isolado (`automation\VerificarGateFase4Task742.ps1`), os seis ramos s├úo **todos** insatisfaz├¡veis sem inventar UI:
+
+| | |
+|---|---|
+| `BaseClass: grid` / ListBox / TokenGrade / AddCursor-liga-grade / ControlSource-liga-lista | **todos False** |
+| `BaseClass: pageframe` | **True** ÔåÉ ├║nica cl├íusula verdadeira |
+| `Test-LegadoPaginadoSemPaginaDados` | **True** (Pages "Impostos"/"Servi├ºos", nenhuma de Dados/Lista) |
+
+O `pageframe` ├® **proxy** de lista ÔÇö s├│ vale porque no `frmcadastro` a Page de Lista guarda a Grade. Num di├ílogo OPERACIONAL ele ├® um agrupador de 78 TextBox, e sozinho derrubava os tr├¬s ramos "sem lista" (DESPACHANTE/EXIBI├ç├âO/CAPTURA) num form que n├úo tem lista nenhuma. Mesma raiz do token de grade do form pai.
+
+A causa de fundo ├® o padr├úo j├í documentado: **as Fases 5 e 6 j├í t├¬m esse carve-out**, pelo helper compartilhado `Test-LegadoPaginadoSemPaginaDados` (criado na task698/SIGOPCHI); a **Fase 4 nunca recebeu o call site**.
+
+## O que mudei
+
+Ramo PAGINADO-N├âO-CRUD no `case 4`, chamando o helper compartilhado, com uma porta a mais que a Fase 5 n├úo tem: o pageframe precisa ser a **├║nica** evid├¬ncia de lista. Sem ela o carve-out dispensaria a grade de quem tem grade ÔÇö e ├® essa porta que reduz o alcance de 6 forms (os da medi├º├úo da Fase 5, todos com Grid) para 1. Legado com lista real + Pages de dom├¡nio continua cobrado pelo ramo FLAT. Handler de Click n├úo entra (o FLAT tamb├®m n├úo cobra; handler ├® objeto da Fase 7).
+
+**Blast radius medido** nos 689 forms com dump + `analise.json` + `.prg` (375 OPERACIONAL), rodando o `case 4` das vers├Áes PRE e POS (`automation\MedirGateFase4PaginadoNaoCrud.ps1`): predicado verdadeiro em **1** task, veredito `REPROVA ÔåÆ PASSA` em **1**, regress├úo `PASSA ÔåÆ REPROVA` em **0**, n├úo-medidos **0**. Encoding intacto: BOM `EF BB BF`, bytes >127 **2965 = 2965**, `U+FFFD` **172 = 172**, CRLF em 100% das linhas, `ParseFile` sem erro.
+
+Veredito do form: **PRE = REPROVA, POS = PASSA**.
+
+## O retry vai reprovar de novo ÔÇö e isso ├® esperado
+
+O `RunLoop.ps1` est├í vivo desde 17:42; a invoca├º├úo da task742 come├ºou **20:44** e o `.ps1` foi gravado **21:23:25**. O orquestrador em execu├º├úo j├í parseou a vers├úo antiga, ent├úo a valida├º├úo desta Fase 4 reprova mais uma vez **com o artefato correto** ÔÇö self-reference. O conserto passa a valer na pr├│xima invoca├º├úo. N├úo mexer no form por causa dessa reprova├º├úo.
+
+O patch toca **s├│** o `case 4`, ent├úo nenhuma fase posterior desta task herda o problema: Fases 5 e 6 j├í consultavam o helper na vers├úo carregada. Medido para a Fase 5: `PaginadoSemPaginaDados = True`, 78 campos no legado, piso **39** campos no migrado ÔÇö ela ├® satisfaz├¡vel, e ├® l├í que entram as duas Pages (incluindo os 8 bot├Áes `Fwbtnm1-7`/`ImpEtiqueta`, que s├úo filhos da Page "Impostos", n├úo do form).
+
+Mem├│ria atualizada em `feedback_gate_fase5_exige_pagina_dados_inexistente.md` com a irm├ú na Fase 4 e a sub-causa nova do proxy `pageframe`.

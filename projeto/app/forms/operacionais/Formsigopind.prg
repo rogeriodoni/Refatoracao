@@ -1,7 +1,8 @@
 *=============================================================================
 * Formsigopind.prg - Individual de Conta Corrente
 * Migrado de: SIGOPIND.SCX (Tipo: OPERACIONAL)
-* Fase 7/8: Eventos principais (FormKeyPress, PagActivate, date validation)
+* Fase 7/8: Eventos principais (FormKeyPress, PagActivate, date validation,
+*           aliases canonicos BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick)
 *=============================================================================
 
 DEFINE CLASS Formsigopind AS FormBase
@@ -79,6 +80,19 @@ DEFINE CLASS Formsigopind AS FormBase
                  Situas C(4) NULL, Cpfs C(20) NULL, ContaMats C(10) NULL, ;
                  Matriz C(1) NULL)
             SET NULL OFF
+
+            *-- Tags do MontaGrade legado ("Index On Rclis Tag rclis / Contas
+            *-- Tag Contas / Cpfs Tag Cpfs"), que tambem sao os cordertag/
+            *-- cseektag declarados nos Ingrid1 das Columns 1/2/6 do dump.
+            *-- Criados aqui (e nao no MontaGrade) porque o cursor eh
+            *-- PERSISTENTE no migrado: MontaGrade recarrega por ZAP+APPEND,
+            *-- que preserva estrutura e indices - recria-los a cada carga
+            *-- seria trabalho repetido.
+            SELECT cursor_4c_Saldos
+            INDEX ON Contas TAG Contas ADDITIVE
+            INDEX ON Rclis  TAG Rclis  ADDITIVE
+            INDEX ON Cpfs   TAG Cpfs   ADDITIVE
+            SET ORDER TO
 
             *-- Carregar labels de D/C a partir de SigCdPam (parametros)
             IF gnConnHandle > 0
@@ -472,69 +486,147 @@ DEFINE CLASS Formsigopind AS FormBase
 
         *----------------------------------------------------------------------
         * grd_saldo - Grid de saldos de conta corrente
-        * top=137, left=8, width=980, height=454, columnCount=7
+        * Propriedades TRANSCRITAS do dump legado (SIGOPIND.Page.SALDO.grd_saldo,
+        * tasks/task750/sigopind_form_codigo_fonte.txt linhas 1059-1145):
+        *   Top=140 Left=10 Width=980 Height=453 ColumnCount=7 ReadOnly=.T.
+        *   RecordMark=.T. DeleteMark=.F. ScrollBars=2 GridLineColor=238,238,238
+        *   Themes=.F. FontName="Tahoma"
+        * GridLines e HeaderHeight NAO constam do dump - nao declarar (PILAR 1:
+        * "nao inventar"). GridLines=0 em particular CONTRADIZ o
+        * GridLineColor=238,238,238 que o legado declara, porque esconde as
+        * linhas que essa cor existe para pintar.
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("grd_4c_Saldos", "Grid")
         loc_oGrd = loc_oPagina.grd_4c_Saldos
         WITH loc_oGrd
-            .Top          = 137
-            .Left         = 8
-            .Width        = 980
-            .Height       = 454
-            .ReadOnly     = .T.
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .GridLines    = 0
-            .HeaderHeight = 20
-            .RecordMark   = .F.
-            .DeleteMark   = .F.
+            .Top           = 140
+            .Left          = 10
+            .Width         = 980
+            .Height        = 453
+            .ReadOnly      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .RecordMark    = .T.
+            .DeleteMark    = .F.
+            .ScrollBars    = 2
+            .GridLineColor = RGB(238, 238, 238)
+            .Themes        = .F.
         ENDWITH
         loc_oGrd.ColumnCount  = 7
         loc_oGrd.RecordSource = "cursor_4c_Saldos"
 
-        *-- Reconfigurar ControlSources e Headers apos RecordSource
-        loc_oGrd.Column1.ControlSource    = "cursor_4c_Saldos.Contas"
-        loc_oGrd.Column1.Width            = 100
-        loc_oGrd.Column1.Header1.Caption  = "Conta"
-        loc_oGrd.Column1.Header1.FontName = "Tahoma"
-        loc_oGrd.Column1.Header1.FontBold = .T.
+        *-- Reconfigurar ControlSources, Width/ColumnOrder e Headers DEPOIS do
+        *-- RecordSource: atribuir RecordSource recalcula Column.Width para o
+        *-- default 90 e reseta Header1.Caption (regra #41 / Problema 48).
+        *-- Width e ColumnOrder vem do dump legado: a ORDEM VISUAL das colunas
+        *-- no legado eh Conta, Descricao, CPF/CNPJ, Saldo, Moeda, Emp, M/F
+        *-- (ColumnOrder 1,2,5,4,6,3,7 sobre as Columns 1..7).
+        loc_oGrd.Column1.ControlSource     = "cursor_4c_Saldos.Contas"
+        loc_oGrd.Column1.ColumnOrder       = 1
+        loc_oGrd.Column1.Width             = 100
+        loc_oGrd.Column1.Movable           = .F.
+        loc_oGrd.Column1.Resizable         = .F.
+        loc_oGrd.Column1.ReadOnly          = .T.
+        loc_oGrd.Column1.Header1.Caption   = "Conta"
+        loc_oGrd.Column1.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column1.Header1.FontSize  = 8
+        loc_oGrd.Column1.Header1.FontBold  = .T.
+        loc_oGrd.Column1.Header1.Alignment = 2
+        loc_oGrd.Column1.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column1.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column2.ControlSource    = "cursor_4c_Saldos.Rclis"
-        loc_oGrd.Column2.Width            = 280
-        loc_oGrd.Column2.Header1.Caption  = "Descri" + CHR(231) + CHR(227) + "o"
-        loc_oGrd.Column2.Header1.FontName = "Tahoma"
-        loc_oGrd.Column2.Header1.FontBold = .T.
+        loc_oGrd.Column2.ControlSource     = "cursor_4c_Saldos.Rclis"
+        loc_oGrd.Column2.ColumnOrder       = 2
+        loc_oGrd.Column2.Width             = 433
+        loc_oGrd.Column2.Movable           = .F.
+        loc_oGrd.Column2.Resizable         = .F.
+        loc_oGrd.Column2.ReadOnly          = .T.
+        loc_oGrd.Column2.Header1.Caption   = "Descri" + CHR(231) + CHR(227) + "o"
+        loc_oGrd.Column2.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column2.Header1.FontSize  = 8
+        loc_oGrd.Column2.Header1.FontBold  = .T.
+        loc_oGrd.Column2.Header1.Alignment = 2
+        loc_oGrd.Column2.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column2.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column3.ControlSource    = "cursor_4c_Saldos.Moedas"
-        loc_oGrd.Column3.Width            = 80
-        loc_oGrd.Column3.Header1.Caption  = "Moeda"
-        loc_oGrd.Column3.Header1.FontName = "Tahoma"
-        loc_oGrd.Column3.Header1.FontBold = .T.
+        loc_oGrd.Column3.ControlSource     = "cursor_4c_Saldos.Moedas"
+        loc_oGrd.Column3.ColumnOrder       = 5
+        loc_oGrd.Column3.Width             = 43
+        loc_oGrd.Column3.Movable           = .F.
+        loc_oGrd.Column3.Resizable         = .F.
+        loc_oGrd.Column3.ReadOnly          = .T.
+        loc_oGrd.Column3.Text1.Alignment   = 3
+        loc_oGrd.Column3.Header1.Caption   = "Moeda"
+        loc_oGrd.Column3.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column3.Header1.FontSize  = 8
+        loc_oGrd.Column3.Header1.FontBold  = .T.
+        loc_oGrd.Column3.Header1.Alignment = 2
+        loc_oGrd.Column3.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column3.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column4.ControlSource    = "cursor_4c_Saldos.Saldos"
-        loc_oGrd.Column4.Width            = 140
-        loc_oGrd.Column4.Alignment        = 2
-        loc_oGrd.Column4.Header1.Caption  = "Saldo"
-        loc_oGrd.Column4.Header1.FontName = "Tahoma"
-        loc_oGrd.Column4.Header1.FontBold = .T.
+        loc_oGrd.Column4.ControlSource     = "cursor_4c_Saldos.Saldos"
+        loc_oGrd.Column4.ColumnOrder       = 4
+        loc_oGrd.Column4.Width             = 140
+        loc_oGrd.Column4.Movable           = .F.
+        loc_oGrd.Column4.Resizable         = .F.
+        loc_oGrd.Column4.ReadOnly          = .T.
+        loc_oGrd.Column4.Text1.InputMask   = "99,999,999,999.99"
+        loc_oGrd.Column4.Header1.Caption   = "Saldo"
+        loc_oGrd.Column4.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column4.Header1.FontSize  = 8
+        loc_oGrd.Column4.Header1.FontBold  = .T.
+        loc_oGrd.Column4.Header1.Alignment = 2
+        loc_oGrd.Column4.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column4.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column5.ControlSource    = "cursor_4c_Saldos.Emps"
-        loc_oGrd.Column5.Width            = 50
-        loc_oGrd.Column5.Header1.Caption  = "Emp"
-        loc_oGrd.Column5.Header1.FontName = "Tahoma"
-        loc_oGrd.Column5.Header1.FontBold = .T.
+        loc_oGrd.Column5.ControlSource     = "cursor_4c_Saldos.Emps"
+        loc_oGrd.Column5.ColumnOrder       = 6
+        loc_oGrd.Column5.Width             = 41
+        loc_oGrd.Column5.ReadOnly          = .T.
+        loc_oGrd.Column5.Header1.Caption   = "Emp"
+        loc_oGrd.Column5.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column5.Header1.FontSize  = 8
+        loc_oGrd.Column5.Header1.FontBold  = .T.
+        loc_oGrd.Column5.Header1.Alignment = 2
+        loc_oGrd.Column5.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column5.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column6.ControlSource    = "cursor_4c_Saldos.Cpfs"
-        loc_oGrd.Column6.Width            = 160
-        loc_oGrd.Column6.Header1.Caption  = "CPF/CNPJ"
-        loc_oGrd.Column6.Header1.FontName = "Tahoma"
-        loc_oGrd.Column6.Header1.FontBold = .T.
+        loc_oGrd.Column6.ControlSource     = "cursor_4c_Saldos.Cpfs"
+        loc_oGrd.Column6.ColumnOrder       = 3
+        loc_oGrd.Column6.Width             = 136
+        loc_oGrd.Column6.Movable           = .F.
+        loc_oGrd.Column6.Resizable         = .F.
+        loc_oGrd.Column6.ReadOnly          = .T.
+        loc_oGrd.Column6.Header1.Caption   = "CPF/CNPJ"
+        loc_oGrd.Column6.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column6.Header1.FontSize  = 8
+        loc_oGrd.Column6.Header1.FontBold  = .T.
+        loc_oGrd.Column6.Header1.Alignment = 2
+        loc_oGrd.Column6.Header1.ForeColor = RGB(90, 90, 90)
+        loc_oGrd.Column6.Header1.BackColor = RGB(255, 255, 255)
 
-        loc_oGrd.Column7.ControlSource    = "cursor_4c_Saldos.Situas"
-        loc_oGrd.Column7.Width            = 80
-        loc_oGrd.Column7.Header1.Caption  = "M/F"
-        loc_oGrd.Column7.Header1.FontName = "Tahoma"
-        loc_oGrd.Column7.Header1.FontBold = .T.
+        *-- Column7 = Matriz (M/F), NAO Situas: o legado liga
+        *-- ".Column7.ControlSource = 'CrSigMvSlc.Matriz'" no MontaGrade, e o
+        *-- Header1.Caption "M/F" so faz sentido sobre esse campo. O
+        *-- Header1 do Column7 NAO declara Alignment nem BackColor no dump.
+        loc_oGrd.Column7.ControlSource     = "cursor_4c_Saldos.Matriz"
+        loc_oGrd.Column7.ColumnOrder       = 7
+        loc_oGrd.Column7.Width             = 28
+        loc_oGrd.Column7.Alignment         = 2
+        loc_oGrd.Column7.ReadOnly          = .T.
+        loc_oGrd.Column7.Text1.Alignment   = 2
+        loc_oGrd.Column7.Header1.Caption   = "M/F"
+        loc_oGrd.Column7.Header1.FontName  = "Tahoma"
+        loc_oGrd.Column7.Header1.FontSize  = 8
+        loc_oGrd.Column7.Header1.FontBold  = .T.
+        loc_oGrd.Column7.Header1.ForeColor = RGB(90, 90, 90)
+
+        *-- DynamicBackColor transcrito do MontaGrade legado: matriz em verde
+        *-- claro, filial em amarelo, conta sem vinculo em branco.
+        loc_oGrd.SetAll("DynamicBackColor", ;
+            "IIF(cursor_4c_Saldos.Matriz = 'M', RGB(220,255,220), " + ;
+            "IIF(cursor_4c_Saldos.Matriz = 'F', RGB(245,251,136), " + ;
+            "RGB(255,255,255)))", "Column")
 
         BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GrdSaldoAfterRowColChange")
 
@@ -1023,12 +1115,12 @@ DEFINE CLASS Formsigopind AS FormBase
         ENDWITH
 
         *----------------------------------------------------------------------
-        * Container1 - barra separadora visual: top=6, left=69, width=14, height=84
+        * Container1 - barra separadora visual: top=6, left=100, width=14, height=84
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container1", "Container")
         WITH loc_oPagina.cnt_4c_Container1
             .Top           = 6
-            .Left          = 69
+            .Left          = 100
             .Width         = 14
             .Height        = 84
             .BackColor     = RGB(100, 100, 100)
@@ -1439,6 +1531,51 @@ DEFINE CLASS Formsigopind AS FormBase
         BINDEVENT(loc_oPagina.cmd_4c_Procura, "Click", THIS, "BtnProcuraHistClick")
 
         *----------------------------------------------------------------------
+        * Total das linhas MARCADAS na grade de lancamentos
+        * Legado: Say8 "Total Saldo :" (top=106, left=650, ForeColor 90,90,90)
+        * e GetTotal (top=103, left=724, width=124, height=21,
+        * InputMask 999,999,999.99, Alignment=3, SpecialEffect=1,
+        * When = .F. -> somente leitura).
+        * Tops/Lefts seguem o mesmo deslocamento dos vizinhos desta faixa
+        * (legado - 10 no Top, legado + 1 no Left).
+        *----------------------------------------------------------------------
+
+        *-- Say8 "Total Saldo :"
+        loc_oPagina.AddObject("lbl_4c_TotalSaldo", "Label")
+        WITH loc_oPagina.lbl_4c_TotalSaldo
+            .Top       = 96
+            .Left      = 651
+            .Width     = 71
+            .Height    = 15
+            .Caption   = "Total Saldo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .AutoSize  = .F.
+            .Alignment = 0
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+        ENDWITH
+
+        *-- GetTotal: total acumulado (somente leitura - legado When = .F.)
+        loc_oPagina.AddObject("txt_4c_Total", "TextBox")
+        WITH loc_oPagina.txt_4c_Total
+            .Top           = 93
+            .Left          = 725
+            .Width         = 124
+            .Height        = 21
+            .Value         = 0
+            .Alignment     = 3
+            .InputMask     = "999,999,999.99"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .ReadOnly      = .T.
+        ENDWITH
+
+        *----------------------------------------------------------------------
         * Labels e indicadores de status lateral - top=89-127, left=926
         * (legendas do container Botoes de cores)
         *----------------------------------------------------------------------
@@ -1794,11 +1931,91 @@ DEFINE CLASS Formsigopind AS FormBase
         ENDWITH
 
         *----------------------------------------------------------------------
+        * grd_4c_Lancamento - grade historico de lancamentos (10 colunas)
+        * top=142, left=10, width=981, height=389
+        *----------------------------------------------------------------------
+        loc_oPagina.AddObject("grd_4c_Lancamento", "Grid")
+        loc_oGrd = loc_oPagina.grd_4c_Lancamento
+        WITH loc_oGrd
+            .Top        = 142
+            .Left       = 10
+            .Width      = 981
+            .Height     = 389
+            .FontName   = "Tahoma"
+            .FontSize   = 8
+            .GridLines  = 0
+            .RecordMark = .F.
+            .DeleteMark = .F.
+            .ReadOnly   = .T.
+        ENDWITH
+        loc_oGrd.ColumnCount = 11
+
+        *----------------------------------------------------------------------
+        * Column11 (col_selec no legado): coluna de MARCACAO da linha.
+        * Legado: ColumnOrder = 1 (primeira na tela), Width = 22, Movable = .F.,
+        * ReadOnly = .F., Sparse = .F., Header1 com Picture CHECKBX.BMP.
+        * O CheckBox precisa de AddObject + CurrentControl para APARECER
+        * (a Column nasce so com Header1/Text1).
+        *----------------------------------------------------------------------
+        *-- .Value NAO e atribuido aqui (padrao provado em Formgpd.Column3.
+        *-- Check1/pesoprods - mesmo n(1,0)).
+        *--
+        *-- Erro283 (3a tentativa): a causa real do "Error with CHK_4C_SELEC -
+        *-- Value : Data type mismatch" NAO era nulabilidade (2a tentativa,
+        *-- reincidiu) - provado por probe isolado no VFP9 (so Grid+Column.
+        *-- AddObject, sem BO/conexao nenhuma): o erro dispara no proprio
+        *-- `Column11.AddObject("chk_4c_Selec", "CheckBox")` desta linha,
+        *-- ANTES de qualquer Sparse/ControlSource/CurrentControl, e SO
+        *-- quando um cursor LARGO (~40+ campos, como o CrSigMvCcr real) ja
+        *-- esta ABERTO no momento do AddObject - aparentemente o VFP9 usa a
+        *-- posicao da Column (11) para "espiar" o campo na mesma posicao
+        *-- ORDINAL do alias aberto (mesmo sem RecordSource nenhum definido
+        *-- ainda) e, se o tipo nao bater, estoura ali mesmo. Reproduzido de
+        *-- forma 100% reprodutivel criando o CrSigMvCcr ANTES deste bloco;
+        *-- com NENHUM cursor largo aberto neste ponto, o AddObject nunca
+        *-- falha. Fix definitivo: o cursor placeholder CrSigMvCcr (comentario
+        *-- mais abaixo) e criado DEPOIS deste bloco todo, nao antes - a
+        *-- ordem de criacao eh o que importa, nao a ordem dos campos nem o
+        *-- alias corrente.
+        loc_oGrd.Column11.AddObject("chk_4c_selec2", "CheckBox")
+        WITH loc_oGrd.Column11.chk_4c_selec2
+            .Top       = 23
+            .Left      = 4
+            .Width     = 60
+            .Height    = 17
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .Alignment = 0
+            .ReadOnly  = .F.
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column11.CurrentControl = "chk_4c_selec2"
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column11.CurrentControl = "chk_4c_Selec"
+        loc_oGrd.Column11.Sparse         = .F.
+
+        *-- Handlers do CheckBox de grade: o toggle nativo NAO altera o cursor,
+        *-- por isso Click/MouseDown suprimem o default e MouseUp/KeyPress
+        *-- gravam o valor (legado col_selec.Check1).
+        BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "Click",     THIS, "ChkSelecClick")
+        BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "MouseDown", THIS, "ChkSelecMouseDown")
+        BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "MouseUp",   THIS, "ChkSelecMouseUp")
+        BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "KeyPress",  THIS, "ChkSelecKeyPress")
+        BINDEVENT(loc_oGrd.Column11.Header1,      "Click",     THIS, "HeaderSelecClick")
+
+        *----------------------------------------------------------------------
         * Cursor placeholder para grd_4c_Lancamento
         * (sera populado por BtnConsultarSaldoClick via SQLEXEC)
+        * Erro283 (3a tentativa): criado SO AGORA, depois do grid/Column11/
+        * chk_4c_Selec acima - ver o comentario no AddObject do checkbox.
         *----------------------------------------------------------------------
         IF !USED("CrSigMvCcr")
-            SET NULL ON
             CREATE CURSOR CrSigMvCcr ( ;
                 Emps        C(3),    ;
                 Grupos      C(10),   ;
@@ -1840,29 +2057,9 @@ DEFINE CLASS Formsigopind AS FormBase
                 Situas      C(10),   ;
                 Concilias   N(1),    ;
                 Tipo        C(1),    ;
-                Prorrogados L )
-            SET NULL OFF
+                Prorrogados L,       ;
+                Seleciona   N(1) NOT NULL DEFAULT 0 )
         ENDIF
-
-        *----------------------------------------------------------------------
-        * grd_4c_Lancamento - grade historico de lancamentos (10 colunas)
-        * top=142, left=10, width=981, height=389
-        *----------------------------------------------------------------------
-        loc_oPagina.AddObject("grd_4c_Lancamento", "Grid")
-        loc_oGrd = loc_oPagina.grd_4c_Lancamento
-        WITH loc_oGrd
-            .Top        = 142
-            .Left       = 10
-            .Width      = 981
-            .Height     = 389
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .GridLines  = 0
-            .RecordMark = .F.
-            .DeleteMark = .F.
-            .ReadOnly   = .T.
-        ENDWITH
-        loc_oGrd.ColumnCount = 10
 
         *-- Column1: Datas (Data)
         WITH loc_oGrd.Column1
@@ -1964,6 +2161,19 @@ DEFINE CLASS Formsigopind AS FormBase
             .Text1.FontSize  = 8
         ENDWITH
 
+        *-- Erro283/Erro182: DESARMAR a Column11 (CurrentControl -> Text1,
+        *-- ControlSource -> "") ANTES de (re)atribuir o RecordSource. Com o
+        *-- CheckBox ainda montado como CurrentControl, reatribuir o
+        *-- RecordSource religa a coluna SEM ControlSource explicito ao campo
+        *-- da MESMA posicao (11) do cursor novo por ORDEM - que pode ser
+        *-- outro campo de tipo incompativel - e estoura "Error with
+        *-- CHK_4C_SELEC - Value : Data type mismatch" na hora (mesmo
+        *-- mecanismo do Column7/CHK_4C_INATIVO em FormProduto.VincularGradeLista).
+        IF loc_oGrd.ColumnCount >= 11
+            loc_oGrd.Column11.CurrentControl = "Text1"
+            loc_oGrd.Column11.ControlSource  = ""
+        ENDIF
+
         *-- RecordSource APOS configurar todas as colunas
         loc_oGrd.RecordSource = "CrSigMvCcr"
 
@@ -1978,6 +2188,7 @@ DEFINE CLASS Formsigopind AS FormBase
         loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
         loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
         loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
+        THIS.RestaurarColunaSelecao(loc_oGrd)
 
         *-- BINDEVENT: AfterRowColChange + KeyPress em todas as 10 colunas
         BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GrdLancamentoAfterRowColChange")
@@ -2093,7 +2304,7 @@ DEFINE CLASS Formsigopind AS FormBase
             *-- Botao Excel (Command1): top=11, left=557, width=75, height=75
             loc_oCnt.AddObject("cmd_4c_ImpExcel", "CommandButton")
             WITH loc_oCnt.cmd_4c_ImpExcel
-                .Top              = 5
+                .Top              = 11
                 .Left             = 557
                 .Width            = 75
                 .Height           = 75
@@ -2113,7 +2324,7 @@ DEFINE CLASS Formsigopind AS FormBase
             *-- Botao Impressora (Cmd_Imprimir): top=11, left=482, width=75, height=75
             loc_oCnt.AddObject("cmd_4c_ImpPrint", "CommandButton")
             WITH loc_oCnt.cmd_4c_ImpPrint
-                .Top              = 5
+                .Top              = 11
                 .Left             = 482
                 .Width            = 75
                 .Height           = 75
@@ -2133,7 +2344,7 @@ DEFINE CLASS Formsigopind AS FormBase
             *-- Botao Video/Preview (Cmd_Visual): top=11, left=407, width=75, height=75
             loc_oCnt.AddObject("cmd_4c_ImpVideo", "CommandButton")
             WITH loc_oCnt.cmd_4c_ImpVideo
-                .Top              = 5
+                .Top              = 11
                 .Left             = 407
                 .Width            = 75
                 .Height           = 75
@@ -2708,6 +2919,21 @@ DEFINE CLASS Formsigopind AS FormBase
                         USE IN cursor_4c_SaldosTemp
                     ENDIF
 
+                    *-- Marcar matriz/filial. Transcrito do MontaGrade legado:
+                    *-- "Update CrSigMvSlc Set Matriz = Iif(Empty(ContaMats),
+                    *--  '', Iif(Contas = ContaMats, 'M', 'F'))".
+                    *-- O SELECT traz Matriz como ' ' constante; sem este
+                    *-- UPDATE a coluna "M/F" fica sempre em branco, o
+                    *-- DynamicBackColor nunca pinta verde/amarelo e o ramo
+                    *-- matriz/filial de ExecutarConsultaSaldo (que le
+                    *-- cursor_4c_Saldos.Matriz) nunca executa.
+                    *-- NVL obrigatorio: o cursor nasce NULL-enabled (SET NULL
+                    *-- ON no CREATE CURSOR) e EMPTY(.NULL.) devolve .F. - sem
+                    *-- NVL uma ContaMats nula seria classificada como filial.
+                    UPDATE cursor_4c_Saldos ;
+                        SET Matriz = IIF(EMPTY(NVL(ContaMats, "")), "", ;
+                                         IIF(NVL(Contas, "") = NVL(ContaMats, ""), "M", "F"))
+
                     *-- Aplicar filtro do optFiltro
                     SELECT cursor_4c_Saldos
                     DO CASE
@@ -2729,14 +2955,34 @@ DEFINE CLASS Formsigopind AS FormBase
             loc_oGrd.ColumnCount = 7
             loc_oGrd.RecordSource = "cursor_4c_Saldos"
 
-            *-- Reconfigurar ControlSources (RecordSource os redefine)
+            *-- Reconfigurar ControlSources (RecordSource os redefine).
+            *-- Column7 = Matriz, como no MontaGrade legado - NAO Situas.
             loc_oGrd.Column1.ControlSource = "cursor_4c_Saldos.Contas"
             loc_oGrd.Column2.ControlSource = "cursor_4c_Saldos.Rclis"
             loc_oGrd.Column3.ControlSource = "cursor_4c_Saldos.Moedas"
             loc_oGrd.Column4.ControlSource = "cursor_4c_Saldos.Saldos"
             loc_oGrd.Column5.ControlSource = "cursor_4c_Saldos.Emps"
             loc_oGrd.Column6.ControlSource = "cursor_4c_Saldos.Cpfs"
-            loc_oGrd.Column7.ControlSource = "cursor_4c_Saldos.Situas"
+            loc_oGrd.Column7.ControlSource = "cursor_4c_Saldos.Matriz"
+
+            *-- Reconfigurar Width e ColumnOrder (RecordSource recalcula as
+            *-- larguras para o default 90 - regra #41 / Problema 48). Valores
+            *-- do dump legado: larguras 100/433/43/140/41/136/28 e
+            *-- ColumnOrder 1/2/5/4/6/3/7.
+            loc_oGrd.Column1.ColumnOrder = 1
+            loc_oGrd.Column1.Width       = 100
+            loc_oGrd.Column2.ColumnOrder = 2
+            loc_oGrd.Column2.Width       = 433
+            loc_oGrd.Column3.ColumnOrder = 5
+            loc_oGrd.Column3.Width       = 43
+            loc_oGrd.Column4.ColumnOrder = 4
+            loc_oGrd.Column4.Width       = 140
+            loc_oGrd.Column5.ColumnOrder = 6
+            loc_oGrd.Column5.Width       = 41
+            loc_oGrd.Column6.ColumnOrder = 3
+            loc_oGrd.Column6.Width       = 136
+            loc_oGrd.Column7.ColumnOrder = 7
+            loc_oGrd.Column7.Width       = 28
 
             *-- Reconfigurar headers (RecordSource os reseta)
             loc_oGrd.Column1.Header1.Caption = "Conta"
@@ -2746,6 +2992,13 @@ DEFINE CLASS Formsigopind AS FormBase
             loc_oGrd.Column5.Header1.Caption = "Emp"
             loc_oGrd.Column6.Header1.Caption = "CPF/CNPJ"
             loc_oGrd.Column7.Header1.Caption = "M/F"
+
+            *-- O DynamicBackColor (matriz verde / filial amarelo) tambem eh
+            *-- perdido ao reatribuir RecordSource - reaplicar.
+            loc_oGrd.SetAll("DynamicBackColor", ;
+                "IIF(cursor_4c_Saldos.Matriz = 'M', RGB(220,255,220), " + ;
+                "IIF(cursor_4c_Saldos.Matriz = 'F', RGB(245,251,136), " + ;
+                "RGB(255,255,255)))", "Column")
 
             SELECT cursor_4c_Saldos
             GO TOP
@@ -3002,7 +3255,7 @@ DEFINE CLASS Formsigopind AS FormBase
         ENDIF
 
         *-- Criar cursor base vazio com estrutura de SigMvCcr + campos extras
-        loc_cSQL = "SELECT ' ' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
+        loc_cSQL = "SELECT ' ' AS Tipo, a.Saldos AS SaldosP, a.*, 0 AS Seleciona " + ;
                    "FROM SigMvCcr a " + ;
                    "WHERE 0 = 1"
 
@@ -3020,7 +3273,7 @@ DEFINE CLASS Formsigopind AS FormBase
                        cursor_4c_Matrizes.Moedas
 
             *-- Lancamentos realizados (SigMvCcr)
-            loc_cSQL = "SELECT 'R' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
+            loc_cSQL = "SELECT 'R' AS Tipo, a.Saldos AS SaldosP, a.*, 0 AS Seleciona " + ;
                        "FROM SigMvCcr a " + ;
                        "WHERE a.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
                        " AND a.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
@@ -3032,7 +3285,7 @@ DEFINE CLASS Formsigopind AS FormBase
             ENDIF
 
             *-- Previsoes (SigMvCpv)
-            loc_cSQL = "SELECT 'P' AS Tipo, b.Saldos AS SaldosP, b.* " + ;
+            loc_cSQL = "SELECT 'P' AS Tipo, b.Saldos AS SaldosP, b.*, 0 AS Seleciona " + ;
                        "FROM SigMvCpv b " + ;
                        "WHERE b.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
                        " AND b.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
@@ -3142,6 +3395,14 @@ DEFINE CLASS Formsigopind AS FormBase
             *-- Configurar grd_4c_Lancamento com novo cursor
             IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
                 loc_oGrd = loc_oPagHist.grd_4c_Lancamento
+
+                *-- Erro283/Erro182: desarmar Column11 antes do RecordSource -
+                *-- ver comentario em ConfigurarPaginaHist.
+                IF loc_oGrd.ColumnCount >= 11
+                    loc_oGrd.Column11.CurrentControl = "Text1"
+                    loc_oGrd.Column11.ControlSource  = ""
+                ENDIF
+
                 loc_oGrd.RecordSource = "CrSigMvCcr"
 
                 *-- Reconfirmar TODOS os ControlSources apos RecordSource
@@ -3155,6 +3416,7 @@ DEFINE CLASS Formsigopind AS FormBase
                 loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
                 loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
                 loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
+                THIS.RestaurarColunaSelecao(loc_oGrd)
 
                 *-- DynamicForeColor: Cancelado=Vermelho, Conciliado=Azul, Baixado=Verde, Prorrogado=Laranja, Normal=Preto
                 LOCAL loc_i, loc_cForeExpr, loc_cBackExpr
@@ -3258,24 +3520,73 @@ DEFINE CLASS Formsigopind AS FormBase
         ENDTRY
     ENDPROC
 
-    *-- TxtGrupo KeyPress -> ENTER/TAB carrega grade pelo codigo de grupo
-    *   Equivale ao Get_Grupo.Valid do legado (via KeyPress)
+    *-- TxtGrupo KeyPress -> ENTER/TAB valida acesso ao grupo (fAcessoContab em
+    *   modo lookup, preenchendo Grupo/DGrupo) e carrega a grade.
+    *   Equivale ao Get_Grupo.Valid do legado (via KeyPress):
+    *     lcGrupo = Repli(Chr(255),10)
+    *     If !Empty(This.Value)
+    *         If fAcessoContab(Usuar,'C',This.Value,Get_Grupo,Get_DGrupo)
+    *             lcGrupo = This.Value
+    *         Else
+    *             MessageBox('Grupo de Contas Com Acesso Restrito',48,...)
+    *             Return .f.
+    *         EndIf
+    *     EndIf
+    *     ThisForm.MontaGrade(lcGrupo)
     PROCEDURE TxtGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cGrupo
+        LOCAL loc_oPag, loc_cGrupo, loc_cGrupoGrade
         IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            loc_cGrupo = TRIM(THIS.pgf_4c_1.Page1.txt_4c_Grupo.Value)
-            THIS.this_cGrupoOper = loc_cGrupo
-            THIS.MontaGrade(loc_cGrupo)
-            THIS.pgf_4c_1.Page1.grd_4c_Saldos.Refresh()
+            loc_oPag        = THIS.pgf_4c_1.Page1
+            loc_cGrupoGrade = REPLICATE(CHR(255), 10)
+            loc_cGrupo      = TRIM(loc_oPag.txt_4c_Grupo.Value)
+
+            IF !EMPTY(loc_cGrupo)
+                IF fAcessoContab(gc_4c_UsuarioLogado, "C", loc_cGrupo, ;
+                                 loc_oPag.txt_4c_Grupo, loc_oPag.txt_4c_DGrupo)
+                    loc_cGrupoGrade = TRIM(loc_oPag.txt_4c_Grupo.Value)
+                ELSE
+                    MsgAviso("Grupo de Contas Com Acesso Restrito", "Checagem de Acesso")
+                    RETURN
+                ENDIF
+            ENDIF
+
+            THIS.this_cGrupoOper = IIF(loc_cGrupoGrade == REPLICATE(CHR(255), 10), ;
+                                        "", TRIM(loc_cGrupoGrade))
+            THIS.MontaGrade(loc_cGrupoGrade)
+            loc_oPag.grd_4c_Saldos.Refresh()
+            loc_oPag.txt_4c_Grupo.Refresh()
+            loc_oPag.txt_4c_DGrupo.Refresh()
         ENDIF
     ENDPROC
 
-    *-- TxtDGrupo KeyPress -> ENTER/TAB recarrega grade (descricao apenas leitura)
-    *   Equivale ao Get_DGrupo.Valid do legado (via KeyPress)
+    *-- TxtDGrupo KeyPress -> ENTER/TAB valida acesso pela descricao do grupo
+    *   (fAcessoContab modo 'D', preenchendo Grupo/DGrupo) e carrega a grade.
+    *   Equivale ao Get_DGrupo.Valid do legado (via KeyPress).
     PROCEDURE TxtDGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_oPag, loc_cDescricao, loc_cGrupoGrade
         IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.MontaGrade(TRIM(THIS.pgf_4c_1.Page1.txt_4c_Grupo.Value))
-            THIS.pgf_4c_1.Page1.grd_4c_Saldos.Refresh()
+            loc_oPag        = THIS.pgf_4c_1.Page1
+            loc_cGrupoGrade = REPLICATE(CHR(255), 10)
+            loc_cDescricao  = TRIM(loc_oPag.txt_4c_DGrupo.Value)
+
+            IF !EMPTY(loc_cDescricao)
+                IF fAcessoContab(gc_4c_UsuarioLogado, "D", loc_cDescricao, ;
+                                 loc_oPag.txt_4c_Grupo, loc_oPag.txt_4c_DGrupo)
+                    IF !EMPTY(TRIM(loc_oPag.txt_4c_DGrupo.Value))
+                        loc_cGrupoGrade = TRIM(loc_oPag.txt_4c_Grupo.Value)
+                    ENDIF
+                ELSE
+                    MsgAviso("Grupo de Contas Com Acesso Restrito", "Checagem de Acesso")
+                    RETURN
+                ENDIF
+            ENDIF
+
+            THIS.this_cGrupoOper = IIF(loc_cGrupoGrade == REPLICATE(CHR(255), 10), ;
+                                        "", TRIM(loc_cGrupoGrade))
+            THIS.MontaGrade(loc_cGrupoGrade)
+            loc_oPag.grd_4c_Saldos.Refresh()
+            loc_oPag.txt_4c_Grupo.Refresh()
+            loc_oPag.txt_4c_DGrupo.Refresh()
         ENDIF
     ENDPROC
 
@@ -3522,12 +3833,30 @@ DEFINE CLASS Formsigopind AS FormBase
     ENDPROC
 
     *-- BtnConsultaCnt Click -> OK (posicionar no registro) ou Cancelar
-    *   Equivale ao cntConsulta.cmd_grupo.Click do legado (2 handlers: OK e Cancelar)
+    *   Equivale ao cntConsulta.cmd_grupo.Click do legado, que tem DOIS
+    *   handlers distintos: Buttons(1) "OK" posiciona o cursor na conta
+    *   digitada antes de fechar o painel; Buttons(2) "Cancelar" apenas
+    *   reabilita os controles da pagina e esconde o painel, SEM o Locate.
     PROCEDURE BtnConsultaCntClick()
-        LOCAL loc_oPag, loc_oCnt, loc_cConta
-        loc_oPag   = THIS.pgf_4c_1.Page1
-        loc_oCnt   = loc_oPag.cnt_4c_Consulta
-        loc_cConta = TRIM(loc_oCnt.txt_4c_Cd_Conta.Value)
+        LOCAL loc_nBotao
+
+        loc_nBotao = THIS.pgf_4c_1.Page1.cnt_4c_Consulta.obj_4c_Cmd_grupo.Value
+
+        IF loc_nBotao = 2
+            THIS.BtnCancelarClick()
+        ELSE
+            THIS.ConfirmarPainelConsultaSaldo()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfirmarPainelConsultaSaldo - corpo do botao OK do painel cntConsulta:
+    * posiciona o cursor de saldos na conta digitada e fecha o painel.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfirmarPainelConsultaSaldo()
+        LOCAL loc_cConta
+
+        loc_cConta = TRIM(THIS.pgf_4c_1.Page1.cnt_4c_Consulta.txt_4c_Cd_Conta.Value)
 
         IF !EMPTY(loc_cConta)
             *-- Posicionar cursor no registro da conta (botao OK)
@@ -3537,12 +3866,25 @@ DEFINE CLASS Formsigopind AS FormBase
             ENDIF
         ENDIF
 
-        *-- Fechar container e reabilitar controles da pagina
+        THIS.FecharPainelConsultaSaldo()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FecharPainelConsultaSaldo - fecha o painel flutuante cntConsulta e
+    * devolve o estado da pagina SALDO (controles reabilitados + foco na
+    * grade). Corpo compartilhado pelos dois handlers do cmd_grupo do legado,
+    * que terminam exatamente nestas seis linhas.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FecharPainelConsultaSaldo()
+        LOCAL loc_oPag
+
+        loc_oPag = THIS.pgf_4c_1.Page1
+
         loc_oPag.cmd_4c_Cmd_procurar.Enabled  = .T.
         loc_oPag.cmd_4c_Com_Imprimir2.Enabled = .T.
         loc_oPag.obj_4c_Grp_operacao.Enabled  = .T.
         loc_oPag.grd_4c_Saldos.Enabled        = .T.
-        loc_oCnt.Visible = .F.
+        loc_oPag.cnt_4c_Consulta.Visible      = .F.
         loc_oPag.grd_4c_Saldos.SetFocus()
     ENDPROC
 
@@ -4319,6 +4661,13 @@ DEFINE CLASS Formsigopind AS FormBase
                 ENDCASE
                 GO TOP
 
+            *-- Erro283/Erro182: desarmar Column11 antes do RecordSource -
+            *-- ver comentario em ConfigurarPaginaHist.
+                IF loc_oGrd.ColumnCount >= 11
+                    loc_oGrd.Column11.CurrentControl = "Text1"
+                    loc_oGrd.Column11.ControlSource  = ""
+                ENDIF
+
             *-- Reatribuir RecordSource e reconfirmar todos ControlSources
                 loc_oGrd.RecordSource = "CrSigMvCcr"
                 loc_oGrd.Column1.ControlSource  = "CrSigMvCcr.Datas"
@@ -4331,7 +4680,12 @@ DEFINE CLASS Formsigopind AS FormBase
                 loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
                 loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
                 loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
+                THIS.RestaurarColunaSelecao(loc_oGrd)
                 loc_oGrd.Refresh()
+
+                *-- Legado (Cmb_Concilia.InteractiveChange): ao trocar o filtro
+                *-- o total das linhas marcadas volta a zero.
+                THIS.ZerarTotalSaldo()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em CmbConciliaHistChange")
@@ -5578,8 +5932,8 @@ DEFINE CLASS Formsigopind AS FormBase
             IF PEMSTATUS(loc_oPagHist, "txt_4c_Hist2", 5)
                 loc_oPagHist.txt_4c_Hist2.Refresh()
             ENDIF
-            IF PEMSTATUS(loc_oPagHist, "txt_4c_1", 5)
-                loc_oPagHist.txt_4c_1.Refresh()
+            IF PEMSTATUS(loc_oPagHist, "txt_4c_Get1", 5)
+                loc_oPagHist.txt_4c_Get1.Refresh()
             ENDIF
             IF PEMSTATUS(loc_oPagHist, "txt_4c_Get3", 5)
                 loc_oPagHist.txt_4c_Get3.Refresh()
@@ -5792,6 +6146,28 @@ DEFINE CLASS Formsigopind AS FormBase
                 THIS.this_oBusinessObject.this_nCmbConcilia = loc_oPag2.cmb_4c_Concilia.ListIndex
             ENDIF
 
+            *-- Painel de procura por conta (cntConsulta)
+            IF PEMSTATUS(loc_oPag1, "cnt_4c_Consulta", 5)
+                IF PEMSTATUS(loc_oPag1.cnt_4c_Consulta, "txt_4c_Cd_Conta", 5)
+                    THIS.this_oBusinessObject.this_cCdContaBusca = TRIM(loc_oPag1.cnt_4c_Consulta.txt_4c_Cd_Conta.Value)
+                ENDIF
+                IF PEMSTATUS(loc_oPag1.cnt_4c_Consulta, "txt_4c__ds_conta", 5)
+                    THIS.this_oBusinessObject.this_cDsContaBusca = TRIM(loc_oPag1.cnt_4c_Consulta.txt_4c__ds_conta.Value)
+                ENDIF
+            ENDIF
+
+            *-- Estado operacional da tela (espelho das propriedades do form,
+            *-- equivalente a ThisForm.GrupoOper/Cliente/Operacao/Matrizes/
+            *-- DataConcilia do legado)
+            THIS.this_oBusinessObject.this_cGrupoOper    = THIS.this_cGrupoOper
+            THIS.this_oBusinessObject.this_cCliente      = THIS.this_cCliente
+            THIS.this_oBusinessObject.this_cOperacao     = THIS.this_cOperacao
+            THIS.this_oBusinessObject.this_lMatrizes     = THIS.this_lMatrizes
+            THIS.this_oBusinessObject.this_dDataConcilia = THIS.this_dDataConcilia
+            IF TYPE("gc_4c_UsuarioLogado") = "C"
+                THIS.this_oBusinessObject.this_cUsuario = gc_4c_UsuarioLogado
+            ENDIF
+
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em FormParaBO")
         ENDTRY
@@ -5903,6 +6279,30 @@ DEFINE CLASS Formsigopind AS FormBase
             IF PEMSTATUS(loc_oCntImprime, "chk_4c_ChkOcultaCta", 5)
                 loc_oCntImprime.chk_4c_ChkOcultaCta.Value = IIF(THIS.this_oBusinessObject.this_lChkOcultaCta, 1, 0)
             ENDIF
+
+            *-- Cmb_Concilia esta na Page2 (HIST), nao no cntImprime
+            IF PEMSTATUS(loc_oPag2, "cmb_4c_Concilia", 5)
+                IF THIS.this_oBusinessObject.this_nCmbConcilia >= 1
+                    loc_oPag2.cmb_4c_Concilia.ListIndex = THIS.this_oBusinessObject.this_nCmbConcilia
+                ENDIF
+            ENDIF
+
+            *-- Painel de procura por conta (cntConsulta)
+            IF PEMSTATUS(loc_oPag1, "cnt_4c_Consulta", 5)
+                IF PEMSTATUS(loc_oPag1.cnt_4c_Consulta, "txt_4c_Cd_Conta", 5)
+                    loc_oPag1.cnt_4c_Consulta.txt_4c_Cd_Conta.Value = THIS.this_oBusinessObject.this_cCdContaBusca
+                ENDIF
+                IF PEMSTATUS(loc_oPag1.cnt_4c_Consulta, "txt_4c__ds_conta", 5)
+                    loc_oPag1.cnt_4c_Consulta.txt_4c__ds_conta.Value = THIS.this_oBusinessObject.this_cDsContaBusca
+                ENDIF
+            ENDIF
+
+            *-- Estado operacional da tela
+            THIS.this_cGrupoOper    = THIS.this_oBusinessObject.this_cGrupoOper
+            THIS.this_cCliente      = THIS.this_oBusinessObject.this_cCliente
+            THIS.this_cOperacao     = THIS.this_oBusinessObject.this_cOperacao
+            THIS.this_lMatrizes     = THIS.this_oBusinessObject.this_lMatrizes
+            THIS.this_dDataConcilia = THIS.this_oBusinessObject.this_dDataConcilia
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BOParaForm")
@@ -6147,6 +6547,422 @@ DEFINE CLASS Formsigopind AS FormBase
     *==========================================================================
     * PROCEDURE Destroy
     *==========================================================================
+    *==========================================================================
+    * PROCEDURE RestaurarColunaSelecao
+    * Reatribuir RecordSource/ControlSource de um Grid faz o VFP recalcular a
+    * coluna: Width, ColumnOrder, Sparse, ReadOnly, CurrentControl e as
+    * propriedades do Header voltam ao default. Este metodo repoe a coluna de
+    * marcacao (col_selec do legado) e tem de ser chamado DEPOIS de todo
+    * RecordSource do grd_4c_Lancamento.
+    *==========================================================================
+    PROCEDURE RestaurarColunaSelecao(par_oGrid)
+        LOCAL loc_oCol, loc_oErro
+        TRY
+            IF VARTYPE(par_oGrid) = "O" AND par_oGrid.ColumnCount >= 11
+                loc_oCol = par_oGrid.Column11
+
+                *-- O CheckBox pode ter sido destruido junto com a Column
+                IF !PEMSTATUS(loc_oCol, "chk_4c_Selec", 5)
+                    *-- .Value NAO e atribuido aqui - ver comentario na criacao
+                    *-- original em ConfigurarPaginaHist (Erro283).
+                    loc_oCol.AddObject("chk_4c_Selec", "CheckBox")
+                    WITH loc_oCol.chk_4c_Selec
+                        .Top       = 23
+                        .Left      = 4
+                        .Width     = 60
+                        .Height    = 17
+                        .Caption   = ""
+                        .FontName  = "Tahoma"
+                        .Alignment = 0
+                        .ReadOnly  = .F.
+                        .BackStyle = 0
+                        .Visible   = .T.
+                    ENDWITH
+                    BINDEVENT(loc_oCol.chk_4c_Selec, "Click",     THIS, "ChkSelecClick")
+                    BINDEVENT(loc_oCol.chk_4c_Selec, "MouseDown", THIS, "ChkSelecMouseDown")
+                    BINDEVENT(loc_oCol.chk_4c_Selec, "MouseUp",   THIS, "ChkSelecMouseUp")
+                    BINDEVENT(loc_oCol.chk_4c_Selec, "KeyPress",  THIS, "ChkSelecKeyPress")
+                    BINDEVENT(loc_oCol.Header1,      "Click",     THIS, "HeaderSelecClick")
+                ENDIF
+
+                loc_oCol.Width          = 22
+                loc_oCol.ColumnOrder    = 1
+                loc_oCol.Movable        = .F.
+                loc_oCol.FontName       = "Tahoma"
+                loc_oCol.FontSize       = 8
+
+                *-- Erro283 (2a tentativa): a 1a tentativa condicionava
+                *-- ControlSource/Sparse/CurrentControl a "RECCOUNT > 0",
+                *-- supondo que o mismatch so vinha de NULL em LINHA real - e o
+                *-- erro reincidiu identico, ja no Init, com a grade vazia (0
+                *-- linhas). A causa de verdade era o campo "Seleciona" poder
+                *-- nascer NULL-avel no schema (CREATE CURSOR dentro de "SET
+                *-- NULL ON" - ja removido acima), nao a presenca ou nao de
+                *-- registro. Com o campo garantidamente NOT NULL na origem,
+                *-- os tres atribuem-se SEMPRE, do mesmo jeito que o padrao
+                *-- comprovado em Formgpd.Column3/Check1 (pesoprods, tambem
+                *-- NOT NULL, tambem sem guarda de RECCOUNT).
+                loc_oCol.ControlSource  = "CrSigMvCcr.Seleciona"
+                loc_oCol.Sparse         = .F.
+                loc_oCol.CurrentControl = "chk_4c_Selec"
+
+                *-- ReadOnly da COLUNA depois do ReadOnly do GRID (o do grid propaga)
+                loc_oCol.ReadOnly       = .F.
+
+                WITH loc_oCol.Header1
+                    .Caption     = ""
+                    .Alignment   = 2
+                    .Picture     = gc_4c_CaminhoIcones + "CHECKBX.BMP"
+                    .ToolTipText = "Marca/Desmarca todos"
+                ENDWITH
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em RestaurarColunaSelecao")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * PROCEDURE CalcSaldo
+    * Total das linhas MARCADAS da grade de lancamentos, espelhado no campo
+    * "Total Saldo". Transcrito do legado (PROCEDURE calcsaldo):
+    *   lnTotal = lnTotal + Iif(CrCcr.Opers=[D], crCcr.Valors, -crCcr.Valors)
+    * Debito (D) SOMA, credito SUBTRAI.
+    *==========================================================================
+    PROCEDURE CalcSaldo()
+        LOCAL loc_nTotal, loc_nRegAtual, loc_oPagHist, loc_oErro
+        TRY
+            loc_nTotal    = 0
+            loc_nRegAtual = 0
+
+            IF USED("CrSigMvCcr")
+                SELECT CrSigMvCcr
+                loc_nRegAtual = RECNO("CrSigMvCcr")
+
+                IF USED("cursor_4c_Selecionados")
+                    USE IN cursor_4c_Selecionados
+                ENDIF
+
+                SELECT * FROM CrSigMvCcr ;
+                    WHERE Seleciona = 1 ;
+                    INTO CURSOR cursor_4c_Selecionados READWRITE
+
+                SELECT cursor_4c_Selecionados
+                GO TOP
+                SCAN
+                    loc_nTotal = loc_nTotal + ;
+                                 IIF(cursor_4c_Selecionados.Opers = "D", ;
+                                     cursor_4c_Selecionados.Valors, ;
+                                     -cursor_4c_Selecionados.Valors)
+                ENDSCAN
+
+                IF USED("cursor_4c_Selecionados")
+                    USE IN cursor_4c_Selecionados
+                ENDIF
+
+                *-- Repor o ponteiro do cursor da grade (o SCAN move o RECNO)
+                SELECT CrSigMvCcr
+                IF loc_nRegAtual > 0 AND loc_nRegAtual <= RECCOUNT("CrSigMvCcr")
+                    GO loc_nRegAtual
+                ENDIF
+            ENDIF
+
+            loc_oPagHist = THIS.pgf_4c_1.Page2
+            IF PEMSTATUS(loc_oPagHist, "txt_4c_Total", 5)
+                loc_oPagHist.txt_4c_Total.Value = loc_nTotal
+                loc_oPagHist.txt_4c_Total.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em CalcSaldo")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * PROCEDURE ZerarTotalSaldo
+    * Legado: Cmb_Concilia.InteractiveChange termina com
+    *   thisform.page.HIST.getTOTAL.Value = 0.00 / getTOTAL.refresh
+    *==========================================================================
+    PROCEDURE ZerarTotalSaldo()
+        LOCAL loc_oPagHist, loc_oErro
+        TRY
+            loc_oPagHist = THIS.pgf_4c_1.Page2
+            IF PEMSTATUS(loc_oPagHist, "txt_4c_Total", 5)
+                loc_oPagHist.txt_4c_Total.Value = 0.00
+                loc_oPagHist.txt_4c_Total.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em ZerarTotalSaldo")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * PROCEDURE ChkSelecKeyPress
+    * Alterna Seleciona da linha corrente e recalcula o total.
+    * Transcrito do legado col_selec.Check1.Click, que le o RecordSource para
+    * prever cursores diferentes na mesma grade e so recalcula o total quando
+    * a grade esta ligada a CrSigMvCcr.
+    *==========================================================================
+    PROCEDURE ChkSelecKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_oGrd, loc_cCur, loc_nReg, loc_oErro
+        TRY
+            IF INLIST(par_nKeyCode, 13, 32)
+                loc_oGrd = THIS.pgf_4c_1.Page2.grd_4c_Lancamento
+                loc_cCur = ALLTRIM(loc_oGrd.RecordSource)
+
+                IF !EMPTY(loc_cCur) AND USED(loc_cCur)
+                    SELECT (loc_cCur)
+                    loc_nReg = RECNO(loc_cCur)
+                    IF loc_nReg > 0 AND loc_nReg <= RECCOUNT(loc_cCur)
+                        REPLACE Seleciona WITH IIF(Seleciona = 1, 0, 1) IN (loc_cCur)
+
+                        IF UPPER(loc_cCur) == "CRSIGMVCCR"
+                            THIS.CalcSaldo()
+                        ENDIF
+
+                        SELECT (loc_cCur)
+                        GO loc_nReg
+                    ENDIF
+                    loc_oGrd.Refresh()
+                ENDIF
+
+                NODEFAULT
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em ChkSelecKeyPress")
+        ENDTRY
+    ENDPROC
+
+    *-- MouseUp da celula: o legado delega para o mesmo tratamento do Enter
+    PROCEDURE ChkSelecMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.ChkSelecKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    *-- MouseDown: suprime o toggle nativo (legado col_selec.Check1.MouseDown)
+    PROCEDURE ChkSelecMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    *-- Click: suprime o toggle nativo para a marcacao nao alternar duas vezes
+    PROCEDURE ChkSelecClick()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * PROCEDURE HeaderSelecClick
+    * Marca/desmarca TODAS as linhas (legado col_selec.Header1.Click, que usa
+    * o proprio Tag do Header como estado). O legado NAO recalcula o total
+    * neste caminho - comportamento mantido.
+    *==========================================================================
+    PROCEDURE HeaderSelecClick()
+        LOCAL loc_oGrd, loc_oCol, loc_cCur, loc_nReg, loc_oErro
+        TRY
+            loc_oGrd = THIS.pgf_4c_1.Page2.grd_4c_Lancamento
+            loc_oCol = loc_oGrd.Column11
+            loc_cCur = ALLTRIM(loc_oGrd.RecordSource)
+
+            IF !EMPTY(loc_cCur) AND USED(loc_cCur)
+                SELECT (loc_cCur)
+                loc_nReg = RECNO(loc_cCur)
+
+                IF loc_oCol.Header1.Tag == "X"
+                    loc_oCol.Header1.Tag = ""
+                    REPLACE ALL Seleciona WITH 0 IN (loc_cCur)
+                ELSE
+                    loc_oCol.Header1.Tag = "X"
+                    REPLACE ALL Seleciona WITH 1 IN (loc_cCur)
+                ENDIF
+
+                SELECT (loc_cCur)
+                IF loc_nReg > 0 AND loc_nReg <= RECCOUNT(loc_cCur)
+                    GO loc_nReg
+                ENDIF
+                loc_oGrd.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em HeaderSelecClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * Eventos principais (nomes canonicos) - Fase 7/8
+    * SIGOPIND eh um visualizador/operacional de Conta Corrente: o legado NAO
+    * tem Incluir (nao existe cadastro de lancamento aqui - lancamentos nascem
+    * em outras telas: SigMvCab/SigPgTit/SigCdPgr/SigCdChe/SigCdLch/SigCdPgb/
+    * SigMvPdt, navegaveis por Anexa "Movimento"). Visualizar/Alterar/Excluir
+    * correspondem aos botoes reais Cmd_Consulta/Cmd_Alterar/Cmd_Excluir da
+    * Pagina HIST (ja implementados e ligados por BINDEVENT em Btn*HistClick) -
+    * estes metodos sao os alias canonicos que delegam para a logica real.
+    *==========================================================================
+    PROCEDURE BtnVisualizarClick()
+        THIS.BtnConsultaHistClick()
+    ENDPROC
+
+    PROCEDURE BtnAlterarClick()
+        THIS.BtnAlterarHistClick()
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick()
+        THIS.BtnExcluirHistClick()
+    ENDPROC
+
+    *-- Nao ha Incluir no legado SIGOPIND (regra #13 harness): o mais proximo
+    *-- eh Anexa ("Movimento"), que navega/abre o documento de origem do
+    *-- lancamento selecionado (SigMvCab/SigPgTit/SigCdPgr/SigCdChe/SigCdLch/
+    *-- SigCdPgb/SigMvPdt conforme o tipo).
+    PROCEDURE BtnIncluirClick()
+        THIS.BtnAnexaHistClick()
+    ENDPROC
+
+    *-- Alias canonico de Buscar: abre o painel de procura por conta
+    *-- (cnt_4c_Consulta), equivalente ao cmd_procurar.Click do legado.
+    PROCEDURE BtnBuscarClick()
+        THIS.BtnProcurarSaldoClick()
+    ENDPROC
+
+    *-- Alias canonico de Encerrar: equivale ao Grupo_Op.Click (opcao Sair)
+    *-- do legado, que faz ThisForm.Release.
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnConfirmarClick - alias canonico da acao de CONFIRMAR da tela.
+    * SIGOPIND nao grava cadastro (o SCX legado nao tem botao de Salvar): a
+    * acao a confirmar depende do contexto, e este metodo despacha para a que
+    * o legado oferece em cada um, na mesma ordem de precedencia:
+    *   1) painel flutuante ABERTO -> aplica o painel. No cntConsulta eh o
+    *      Buttons(1) "OK" (posiciona o cursor na conta digitada); nos paineis
+    *      de relatorio (SigCcrSaldos / SigCcrimpressao / SigCcrQuitacao) a
+    *      emissao tem botoes proprios (Video / Impressora / Excel), logo o
+    *      cmd_grupo deles so encerra o painel - e eh isso que se confirma.
+    *   2) pagina SALDO sem painel aberto -> grp_operacao opcao 1 "Consulta"
+    *      (cmd_consulta.Click do legado), que leva a conta selecionada na
+    *      grade de saldos para a pagina HIST.
+    *   3) pagina HIST sem painel aberto -> Cmd_Consulta, que abre o
+    *      lancamento corrente para visualizacao.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnConfirmarClick()
+        LOCAL loc_oErro, loc_oPagSaldo, loc_oPagHist, loc_lTratou
+
+        loc_lTratou = .F.
+
+        TRY
+            loc_oPagSaldo = THIS.pgf_4c_1.Page1
+            loc_oPagHist  = THIS.pgf_4c_1.Page2
+
+            *-- 1) Paineis flutuantes da pagina SALDO
+            IF PEMSTATUS(loc_oPagSaldo, "cnt_4c_Consulta", 5)
+                IF loc_oPagSaldo.cnt_4c_Consulta.Visible
+                    THIS.ConfirmarPainelConsultaSaldo()
+                    loc_lTratou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lTratou AND PEMSTATUS(loc_oPagSaldo, "cnt_4c_Saldo", 5)
+                IF loc_oPagSaldo.cnt_4c_Saldo.Visible
+                    THIS.BtnSaldoCntOKClick()
+                    loc_lTratou = .T.
+                ENDIF
+            ENDIF
+
+            *-- 1) Paineis flutuantes da pagina HIST
+            IF !loc_lTratou AND PEMSTATUS(loc_oPagHist, "cnt_4c_Imprime", 5)
+                IF loc_oPagHist.cnt_4c_Imprime.Visible
+                    THIS.BtnCntImpVoltarClick()
+                    loc_lTratou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lTratou AND PEMSTATUS(loc_oPagHist, "cnt_4c_Quitas", 5)
+                IF loc_oPagHist.cnt_4c_Quitas.Visible
+                    THIS.BtnCntQuitasVoltarClick()
+                    loc_lTratou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lTratou
+                IF THIS.pgf_4c_1.ActivePage = 2
+                    *-- 3) HIST: abre o lancamento corrente
+                    THIS.BtnConsultaHistClick()
+                ELSE
+                    *-- 2) SALDO: leva a conta selecionada para o historico
+                    THIS.BtnConsultarSaldoClick()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em BtnConfirmarClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - alias canonico de ABANDONAR a operacao em curso.
+    * O legado SIGOPIND nao tem um "Cancelar" global; o abandono eh por
+    * contexto, e este metodo despacha para o do contexto ATIVO:
+    *   1) painel flutuante ABERTO -> fecha o painel SEM aplicar nada
+    *      (cntConsulta.cmd_grupo Buttons(2) "Cancelar"; nos paineis de
+    *      relatorio o cmd_grupo de UM botao so reabilita os controles e
+    *      esconde o painel);
+    *   2) pagina HIST sem painel aberto -> abandona a operacao e volta para
+    *      SALDO, como o Page.HIST.grp_operacao opcao Sair do legado
+    *      (Operacao = '' + Page.Hist.Enabled = .f. + ActivePage = 1);
+    *   3) pagina SALDO sem painel aberto -> nao ha operacao em curso para
+    *      abandonar; devolve o foco a grade de saldos.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        LOCAL loc_oErro, loc_oPagSaldo, loc_oPagHist, loc_lFechou
+
+        loc_lFechou = .F.
+
+        TRY
+            loc_oPagSaldo = THIS.pgf_4c_1.Page1
+            loc_oPagHist  = THIS.pgf_4c_1.Page2
+
+            *-- 1) Paineis flutuantes da pagina SALDO
+            IF PEMSTATUS(loc_oPagSaldo, "cnt_4c_Consulta", 5)
+                IF loc_oPagSaldo.cnt_4c_Consulta.Visible
+                    THIS.FecharPainelConsultaSaldo()
+                    loc_lFechou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lFechou AND PEMSTATUS(loc_oPagSaldo, "cnt_4c_Saldo", 5)
+                IF loc_oPagSaldo.cnt_4c_Saldo.Visible
+                    THIS.BtnSaldoCntOKClick()
+                    loc_lFechou = .T.
+                ENDIF
+            ENDIF
+
+            *-- 1) Paineis flutuantes da pagina HIST
+            IF !loc_lFechou AND PEMSTATUS(loc_oPagHist, "cnt_4c_Imprime", 5)
+                IF loc_oPagHist.cnt_4c_Imprime.Visible
+                    THIS.BtnCntImpVoltarClick()
+                    loc_lFechou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lFechou AND PEMSTATUS(loc_oPagHist, "cnt_4c_Quitas", 5)
+                IF loc_oPagHist.cnt_4c_Quitas.Visible
+                    THIS.BtnCntQuitasVoltarClick()
+                    loc_lFechou = .T.
+                ENDIF
+            ENDIF
+
+            IF !loc_lFechou
+                IF THIS.pgf_4c_1.ActivePage = 2
+                    *-- 2) Abandona a operacao da pagina HIST
+                    THIS.BtnSairHistClick()
+                ELSE
+                    *-- 3) Nada em curso na pagina SALDO
+                    IF PEMSTATUS(loc_oPagSaldo, "grd_4c_Saldos", 5)
+                        loc_oPagSaldo.grd_4c_Saldos.SetFocus()
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em BtnCancelarClick")
+        ENDTRY
+    ENDPROC
+
     PROCEDURE Destroy()
         *-- Liberar cursores
         IF USED("cursor_4c_Saldos")

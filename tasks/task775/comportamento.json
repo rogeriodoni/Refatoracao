@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPOCO",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "LParameters lcCodBarra,oOldForm,llRepete,lcObs,lnTop,lnLeft\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = oOldForm\nThisForm.RepeteObs  = llRepete\nThisForm.Observas   = lcObs\n\nSelect Historico\nSet Order To CBars\nSet Key To lcCodBarra\nGo Top\n\nThisForm.Top  = lnTop + 22\nThisForm.Left = lnTop + 390\nThisForm.Refresh\n\nThisForm.Grade.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LParameters nColIndex\nThisForm.Get_Obs.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "If !isEmpty(This.Value)\n\tlStrQuery = [Select * From SigBaOco Where Tipos = 'O' And Autos <> 'S' ]\n\tIf ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CsOcorr') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsOcorr)')\n\t\tReturn(.F.)\n\tEndIf\n\tSelect CsOcorr\n\tIndex On Codigos Tag Codigos\n\tIndex On Descrs  Tag Descrs\n\tSet Order To Codigos\n\tGo Top\n\tIf !Seek(This.Value)\n\t\tm.loLista = CreateObject('fwBuscaInt','CsOcorr','Codigos',This.Value,'Ocorrências',.T.)\n\t\tm.loLista... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If Lastkey() = 9 Or Lastkey() = 13   && TAB Ou ENTER\n\tThisForm.Get_Obs.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If Lastkey() # 27\n\tKeyBoard '{DNARROW}' Plain\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Saída",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "*!*\tlnRegHis = Recno('Historico')\n*!*\tlcEmpObs = Historico.Emps\n*!*\tlnCodObs = Historico.Codigos\n*!*\tlnBarObs = Historico.CBars\n*!*\tlcObs    = Historico.Obs\n*!*\tUpdate Historico Set Obs = lcObs Where Emps = lcEmpObs And Codigos = lnCodObs And CBars = lnBarObs\n*!*\tSelect Historico\n*!*\tGo lnRegHis\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Get_Obs",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.RepeteObs And !IsEmpty(ThisForm.Grade.Column3.Text1.Value) And IsEmpty(This.Value)\n\tThis.Value = ThisForm.Observas\nEndIf\nReturn(!IsEmpty(ThisForm.Grade.Column3.Text1.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RepeteObs And !IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Get_Obs",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !ISEmpty(This.Value)\n\tThisForm.ParentForm.ObsAnterior = This.Value\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCO.Get_Obs",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Observas = This.Value\nIf Lastkey() = 9   && TAB\n\tThisForm.Grade.Column4.Text1.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPOCO.Grade.Column3.Text1.Valid",
+      "queryOriginal": "\tlStrQuery = [Select * From SigBaOco Where Tipos = 'O' And Autos <> 'S' ]",
+      "tabelas": "SigBaOco",
+      "colunas": "Tipos,Autos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigBaOco"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

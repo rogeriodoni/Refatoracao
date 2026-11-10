@@ -1,0 +1,2575 @@
+{
+  "resumo": {
+    "totalMetodos": 150,
+    "metodosComSQL": 30,
+    "metodosComValidacao": 44,
+    "totalQueries": 22,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FILE", "fMontaObs", "fConfigGeral", "fBeneficio_RJ", "fCodMunicipal", "fEndEntrega", "fValidarTransps", "fwBuscaExt", "for alltrim", "fiscal autorizada: \" + SUBSTR", "fEnviaCtg", "fwBuscaInt", "fwBuscaSel", "From TmpSigCdCfo Where", "fGerUniqueKey", "fCanUniqueKey", "fVerImpPends", "For Not Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters pUFs\n\nlnRet = 99\n\nlcQuery = [Select UFIBGEs ] + ;\n\t\t    [From SigCdUfs ] + ;\n\t\t   [Where Estados = '] + Padr(pUFs, 2) + [']\n\nIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalUF]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalUF)])\n\tReturn 0\nEndIf\n\nSelect LocalUF\nGo Top In LocalUF\nIf Not Eof([LocalUF])\n\tlnRet = LocalUF.UFIBGEs\nEndIf\n\nReturn lnRet\n* Fim **************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "private uf, da, mo, se, tnf, nnf, cnf, cnpj, lcCha, lcDig\n\nuf \t= TRANSFORM(ThisForm.CodIBGEUF(LocalEmp.Estas), \"@L 99\")\ncnpj= ALLTRIM(Strtran(Strtran(Strtran(LocalEmp.Cgcs, [.], []), [-], []), [/], []))\nda = DTOs(crSigmvnfi.emis)\nmo = '55'\nse = '1'\ntnf= Iif(crSigmvnfi.Operas = [S], [1], [0])\nnnf = ALLTRIM(crSigmvnfi.nfis)\n\ncDEmis= SUBSTR(da, 1, 8)\ncnf = transform(VAL(nnf) + VAL(cDEmis),\"@L 99999999\")\n\nlcCha = uf + SUBSTR(da, 3,4) + cnpj+mo+TRANSFORM(VAL(se), \"@L, 999\")+TRANSFORM(VAL(nnf), \"@L, 9... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CodIBGEUF,digitoverificador",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "parameters _key\n\nLocal i As Integer\nLocal j As Integer\nLocal k As Integer\nLocal DV As Double\n\nj = 5\nDV = 0.00\nFor i = 1 To 43 Step 1\nj = Iif(j = 2, 9, j - 1)\nK = j * Val(Substr(_Key , i, 1))\nDV = DV + K\nRelease K\nEndFor\n\nDV = Mod(DV, 11)\nDV = Iif(Between(DV, 0, 1), 0, 11 - DV)\nReturn Alltrim(Str(DV))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "parameters cArq, nTime, cMsg\n*** nTime = qtde de segundos a esperar\nLOCAL i, nT, j, msg\n\nnT = nTime\ni=0\nj=0\nDO WHILE NOT FILE(cArq) AND j < nT\n\tmsg = IIF(VARTYPE(cMsg)<>'C','Aguardando retorno da SEFAZ', cMsg)\n\tWAIT window msg timeout 1\n\tj=j+1\nENDDO\nIf NOT FILE(cArq)\n\tReturn .F.\nENDIF\t\nReturn .T.\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILE",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "parameters cArq, nTime\nLOCAL i\nnTime = nTime\ni=0\nDO WHILE FILE(cArq) AND i < nTime\n\tWAIT window '' timeout 1\n\ti=i+1\nENDDO\nRETURN\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILE",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters pCnx\n\nLocal lcMsg\n\nReplace CodObs With crObs.Codigos In TprMvCab\n\nlcMsg = crObs.Observas\n\nlcMsg = fMontaObs(crObs.Observas, pCnx)\n\nIf Not Empty(lcMsg)\n\tReplace ObsEs With lcMsg In TprMvCab\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fMontaObs",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 84,
+      "codigoOriginal": "PRIVATE lcCha, lcNf, lcSe\nLOCAL lnRet, lcXml, lcInfo, lcChv, lcProt\n\nCLEAR DLLS\nDECLARE integer tCFCancelar_NFCe_Daruma in 'DarumaFramework' string StrNNF, string StrNSerie, string StrChAcesso, string StrProtAutorizacao, string StrJustificativa\nDECLARE integer regAlterarValor_Daruma in 'DarumaFramework' String StrTagNFCe, String StrValorTagNFCe\nDECLARE integer regAlterarValor_NFCe_Daruma in 'DarumaFramework' String StrTagNFCe, String StrValorTagNFCe\nDECLARE integer iCFReImprimir_NFCe_Daruma in '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "With ThisForm.Pagina.Impostos\n\t.Refresh\n\t.Get_Quantidade.Refresh\n\t.Get_Marca.Refresh\n\t.Get_PesoLiq.Refresh\n\t.Get_PesoBruto.Refresh\n\t.Get_Espécie.Refresh\n\t.Get_frete.ListIndex = CrSigMvNfi.Fretes\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Quantidade,Get_Marca,Get_PesoLiq,Get_PesoBruto,Get_Espécie,Get_frete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\nThis.MemoEstourado = .f.\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS",
+      "evento": "Init",
+      "linhas": 560,
+      "codigoOriginal": "LParameters loForm, loDatses\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal lcSerie, lcNota, lcCfo, lnCfo, llPgServicos, lnIcm, lcOri, ldDes\n\nSet DataSession to loForm.DataSessionId\nThisForm.ParentForm = loForm\nThisForm.Op_Escolha = loForm.pcEscolha\nThisForm.NfServicos = 0\nThisForm.Editafrete = .t.\nThisForm.IpiBaseIcm = .f.\nThisForm.llFiltraCfo = .F.\nThisForm.icmsttnf = .f.\n\nThisForm.Podatamgr = ThisForm.ParentForm.poDataMg... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBeneficio_RJ,fCodMunicipal",
+        "metodosFormChamados": "visible = IIF,Cursorquery,visible = INLIST,SQLExecute",
+        "controlesReferenciados": "ChkCFOP,get_Selo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_ValorIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseICMS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_ValorICMS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.ImpEtiqueta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Op_Escolha # 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.ImpEtiqueta",
+      "evento": "Click",
+      "linhas": 128,
+      "codigoOriginal": "Lparameters pOperacao\nLocal lcChave\n\nlcOperacao = Iif(Type('pOperacao')='C',pOperacao,crSigMvNfi.Emps + crSigMvNfi.Dopes + Str(crSigMvNfi.Numes,6) )\n\nIf MessageBox('Confirma impressão das Etiquetas ?(S/N)',4+32+256,lcOperacao) # 6\n\tReturn\nEndIf\n\nZap in dbimpressao\n\nIf lcOperacao = ( crSigMvNfi.Emps + crSigMvNfi.Dopes + Str(crSigMvNfi.Numes,6) )\n\n\tIf InList(crSigCdOpe.CtrlLotes,1,2) And crSigOpCdc.ietiqs=1 \n\t\tlnBar = Val( Str(crSigCdOpe.Ndopes,4)+Transf(crSigMvNfi.Numes,\"@L 999999\") )\n\t\tlcObs = c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,cursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TotalProds",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TotalNf",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.antvalu = This.Value\nReturn( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TotalNf",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value <> ThisForm.Antvalu \n\tThisForm.Totalnota = This.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TFrete",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ThisForm.Editafrete \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TFrete",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If This.Value = 0\n\tReplace Frticms With 0,;\n\t\t\tFrtIpis With 0 In CrSigMvNfi\nEndif\nIf This.Value # 0\n\tReplace CrSigMvNfi.ObsFretes With '' in CrSigMvNfi\n\tThis.Parent.Get_obsfrete.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_obsfrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TFrete",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) In CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\n\nIf This.Value # This.peantvalue\n\tReplace Frticms With 0,;\n\t\t\tFrtIpis With 0 In CrSigMvNfi\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto( .t.,,,.t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TSeguros",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TSeguros",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value = 0\n\tReplace Segicms With 0,;\n\t\t\tSegIpis With 0 In CrSigMvNfi\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_TSeguros",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) IN CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\nIf This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto(.t.)\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DespAces",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DespAces",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value = 0\n\tReplace Desicms With 0,;\n\t\t\tDesIpis With 0 In CrSigMvNfi\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DespAces",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) IN CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\nIf This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto(.t.)\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Quantidade",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Quantidade",
+      "evento": "Valid",
+      "linhas": 69,
+      "codigoOriginal": "Local lnCasas\n\nStore 0 to lnTotalPeso\n\n=ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)\nlnCasas = crSigCdOpe.Casas\n\nlcQuery = [Select Series, NldSer, MarPads, EspPads, Piss, FatBrutos, PesoVols ] + ;\n  \t\t\t[From SigCnFNf ] + ;\n  \t\t   [Where Emps = '] + TprMvCab.Emps + [' And ] + ;\n  \t\t   \t\t [Series = '] + crSigMvNfi.Series + [']\n\nIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'crSigCnFNf') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery,SqlExecute",
+        "controlesReferenciados": "Get_Quantidade,Get_PesoBruto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Espécie",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Marca",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Numero",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PesoLiq",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PesoLiq",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value # 0\n\tReplace CrSigMvNfi.Obspliqs With '' in CrSigMvNfi\n\tThis.Parent.Get_obspliq.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_obspliq",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PesoBruto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PesoBruto",
+      "evento": "Valid",
+      "linhas": 47,
+      "codigoOriginal": "If This.Value # 0\n\tReplace CrSigMvNfi.Obspbrus With '' in CrSigMvNfi\n\tThis.Parent.Get_obspbru.Refresh\n\n\t*** Tiago - 208/09/2012 - Ícaro - Rotina para checar se ter valor de frete cadastrado na transportadora\n\tIf crSigMvNfi.Fretes = 2 And CrSigOpCdc.FreteDefs <> 3\n\t\tDimension laArray(2)\n\t\tlaArray(1) = Iif(Empty(TprMvCab.ContaEs),Padr(CrSigMvNfi.CliFors,10),TprMvCab.ContaEs)\n\t\tlaArray(2) = Iif(Empty(TprMvCab.LocalEnts),' ',TprMvCab.LocalEnts)\n\t\t\n\t\tIf Not Empty(TprMvCab.IDEntrega)\n\t\t\tlaArray(1) = P... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega,fValidarTransps",
+        "metodosFormChamados": "atuatot,CalcImposto,Refresh",
+        "controlesReferenciados": "Get_obspbru,Get_TotalNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PesoBruto",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ok.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Estado",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Cidade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Transp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return thisform.op_escolha$'INSERIR/ALTERAR'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Transp",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local loLista\n\nIf !Empty( This.Value )\n\n\tloLista = CreateObject('fwbuscaext', ThisForm.parentform.poDataMgr.pnIdConn, 'SigPrTrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Itras', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('ITras',  '', 'Código',.t.,'Itras')\n\t\tloLista.mAddColuna('Razaos', '', 'Razão Social',.t.,'Razaos')\n\t\tloLista.mAddColuna('Cgcs',   '', 'CPF/CNPJ',.t.,'Cgcs')\n\t\tloLista.Show()\n\tEndIf\n\n\tWith This.Parent\n\t\tIf LastKey() # 27\n\t\t\t.Get_Transp.Value = CrListaR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Transp,Get_Nome,Get_Endereço,Get_Cidade,Get_Estado",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Nome",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return thisform.op_escolha$'INSERIR/ALTERAR' And IsEmpty( This.Parent.Get_Transp.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Transp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Nome",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local loLista\n\nIf !Empty( This.Value )\n\tlcfiltro = [razaos like '%] + Alltrim(this.Value) + [%']\n\tloLista = CreateObject('fwbuscaext', ThisForm.parentform.poDataMgr.pnIdConn, 'SigPrTrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Razaos', This.Value, 'Seleção', .T., '', lcfiltro)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Razaos', '', 'Razão Social',.t.,'Razaos')\n\t\tloLista.mAddColuna('Itras', '', 'Código',.t.,'Itras')\n\t\tloLista.Show()\n\tEndIf\n\tWith This.Parent\n\t\tIf LastKey() # 27\n\t\t\t.Get_Transp.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Transp,Get_Nome,Get_Endereço,Get_Cidade,Get_Estado",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Endereço",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Frete",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_Frete",
+      "evento": "Valid",
+      "linhas": 56,
+      "codigoOriginal": "If This.Value = 2 And CrSigOpCdc.FreteDefs <> 3\n\tDimension laArray(2)\n\tlaArray(1) = Iif(Empty(TprMvCab.ContaEs),Padr(CrSigMvNfi.CliFors,10),TprMvCab.ContaEs)\n\tlaArray(2) = Iif(Empty(TprMvCab.LocalEnts),' ',TprMvCab.LocalEnts)\n\t\n\tIf Not Empty(TprMvCab.IDEntrega)\n\t\tlaArray(1) = Padr(CrSigMvNfi.CliFors,10)\n\t\tlaArray(2) = TprMvCab.LocalEnts\n\tEndIf\n\t\n\tIf fEndEntrega(@laArray, ThisForm.parentform.Podatamgr,,TprMvCab.IDEntrega )\n\t\tlcCida = laArray(10)\n\t\tlcEsta = laArray(11)\t\t\n\t\tIf fValidarTransps(crSig... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega,fValidarTransps",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TFrete,Get_FrtIcm,Get_FrtIpi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_UfPlaca",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.ParentForm.poDataMgr.pnIdConn, [SigCdUfs], ;\n\t\t\t\t\t\t   [crListaRemota], [Estados], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Estados], [], [UF])\n\t\tloLista.mAddColuna([Descrs],  [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Estados\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **********************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.getObss",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.get_obsfrete",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\nThisForm.Pagina.Impostos.Get_tFrete.value = 0\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_tFrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_obspliq",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\nThisform.Pagina.Impostos.Get_pesoLiq.Value = 0\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_pesoLiq",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_obspbru",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\nThisForm.Pagina.Impostos.Get_pesobruto.Value = 0\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_pesobruto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_FrtIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Frticms = 1 And CrSigMvNfi.VlFretes <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_FrtIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_FrtIpi",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.FrtIpis = 1 And CrSigMvNfi.Vlfretes <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_FrtIpi",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) IN CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\nIf This.Value # This.peantvalue\n\tIf This.Parent.Get_pFrtIcm.Value = 0\n\t\tThis.Parent.Get_FrtIcm.Value = 0\n\tEndif\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm And .Get_pfrtIcm.Value > 0\n\t\t\txValor =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf,Get_pFrtIcm,Get_FrtIcm,Get_obsfrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Frticms = 1 And CrSigMvNfi.VlFretes <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIcm",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If This.Value # 0\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm\n\t\t\txValFrt = ( CrSigMvNfi.VlFretes + .Get_frtipi.Value ) \n\t\tElse\n\t\t\txValFrt = ( CrSigMvNfi.VlFretes )\n\t\tEndif\n\t\txValor = Round(xValFrt * This.Value / 100,2)\n\t\t.Get_frtIcm.Value = xValor\n\t\t.Get_frtIcm.Refresh\n\t\tReplace CrSigMvNfi.ObsFretes With '' in CrSigMvNfi\n\t\t.Get_obsfrete.Refresh\n\tEndWith\nEndIf\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_frtipi,Get_frtIcm,Get_obsfrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIPI",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.FrtIpis = 1 And CrSigMvNfi.VlFretes <> 0\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIPI",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm.Pagina.Impostos\n\tIf This.Value # 0\n\t\txValor = Round(CrSigMvNfi.VlFretes * This.Value / 100,2)\n\t\t.Get_frtIpi.Value = xValor\n\t\t\n\t\tIf ThisForm.IpiBaseIcm And .Get_pfrtIcm.Value > 0\n\t\t\tIf This.Value # This.peantvalue\n\t\t\t\txValor = Round(( CrSigMvNfi.VlFretes + .Get_frtIpi.Value ) * .Get_pfrtIcm.Value / 100,2)\n\t\t\t\t.Get_frtIcm.Value = xValor\n\t\t\t\t.Get_FrtIcm.Refresh\n\t\t\t\tReplace CrSigMvNfi.ObsFretes With '' in CrSigMvNfi\n\t\t\t\t.Get_obsfrete.Refresh\n\t\t\tEndIf\n\t\tEndif\n\tEndif\n\tReturn .t.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_frtIpi,Get_pfrtIcm,Get_frtIcm,Get_obsfrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_PfrtIPI",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tIf This.Parent.Get_pFrtIcm.Value = 0\n\t\tThis.Parent.Get_FrtIcm.Value = 0\n\tEndif\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_pFrtIcm,Get_FrtIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_SegIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Segicms = 1 And CrSigMvNfi.VlSeguros <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_SegIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_SegIpi",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.SegIpis = 1 And CrSigMvNfi.VlSeguros <> 0",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_SegIpi",
+      "evento": "LostFocus",
+      "linhas": 22,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) IN CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\n\nIf This.Value # This.peantvalue\n\tIf This.Parent.Get_pSegIcm.Value = 0\n\t\tThis.Parent.Get_SegIcm.Value = 0\n\tEndif\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm And .Get_pSegIcm.Value > 0\n\t\t\txValor ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf,Get_pSegIcm,Get_SegIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Segicms = 1 And CrSigMvNfi.VlSeguros <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIcm",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If This.Value # 0\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm\n\t\t\txValSeg = ( CrSigMvNfi.VlSeguros + .Get_Segipi.Value ) \n\t\tElse\n\t\t\txValSeg = ( CrSigMvNfi.VlSeguros )\n\t\tEndif\n\t\txValor = Round(xValSeg * This.Value / 100,2)\n\t\t.Get_SegIcm.Value = xValor\n\t\t.Get_SegIcm.Refresh\n\tEndWith\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Segipi,Get_SegIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIpi",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.SegIpis = 1 And CrSigMvNfi.VlSeguros <> 0\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIpi",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.Pagina.Impostos\n\tIf This.Value # 0\n\t\txValor = Round(CrSigMvNfi.VlSeguros * This.Value / 100,2)\n\t\t.Get_SegIpi.Value = xValor\n\t\tIf ThisForm.IpiBaseIcm And .Get_pSegIcm.Value > 0\n\t\t\tIf This.Value # This.peantvalue\n\t\t\t\txValor = Round(( CrSigMvNfi.VlSeguros + .Get_SegIpi.Value) * .Get_pSegIcm.Value / 100,2)\n\t\t\t\t.Get_SegIcm.Value = xValor\n\t\t\t\t.Get_SegIcm.Refresh\n\t\t\tEndIf\n\t\tEndif\n\tEndif\n\tReturn .t.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SegIpi,Get_pSegIcm,Get_SegIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pSegIpi",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tIf This.Parent.Get_pSegIcm.Value = 0\n\t\tThis.Parent.Get_SegIcm.Value = 0\n\tEndif\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_pSegIcm,Get_SegIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DesIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Desicms = 1 And CrSigMvNfi.DespAces <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DesIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DesIpi",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.DesIpis = 1 And CrSigMvNfi.DespAces <> 0",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DesIpi",
+      "evento": "LostFocus",
+      "linhas": 21,
+      "codigoOriginal": "Replace CrSigMvNfi.TotNotas WITH ThisForm.Totalnota + CrSigMvNfi.VlFretes + CrSigMvNfi.vlseguros + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.despaces + CrSigMvNfi.FrtIpis + CrSigMvNfi.SegIpis + ;\n\t\t\t\t\t\t\t\tCrSigMvNfi.DesIpis + Iif(ThisForm.IcmsTTNf,CrSigMvNfi.ValIcms,0) IN CrSigMvNfi\nThis.Parent.Get_TotalNf.Refresh\nIf This.Value # This.peantvalue\n\tIf This.Parent.Get_pDesIcm.Value = 0\n\t\tThis.Parent.Get_DesIcm.Value = 0\n\tEndif\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm And .Get_pDesIcm.Value > 0\n\t\t\txValor =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_TotalNf,Get_pDesIcm,Get_DesIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIcm",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.Desicms = 1 And CrSigMvNfi.Despaces <> 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIcm",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If This.Value # 0\n\tWith ThisForm.Pagina.Impostos\n\t\tIf ThisForm.IpiBaseIcm\n\t\t\txValSeg = ( CrSigMvNfi.DespAces + .Get_Desipi.Value ) \n\t\tElse\n\t\t\txValSeg = ( CrSigMvNfi.DespAces )\n\t\tEndif\n\t\txValor = Round(xValSeg * This.Value / 100,2)\n\t\t.Get_DesIcm.Value = xValor\n\t\t.Get_DesIcm.Refresh\n\tEndWith\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Desipi,Get_DesIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIcm",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIpi",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "This.peantvalue = This.Value\nlcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+[']\nThisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')\n\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And LocalCfo.DesIpis = 1 And CrSigMvNfi.DespAces <> 0\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIpi",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.Pagina.Impostos\n\tIf This.Value # 0\n\t\txValor = Round(CrSigMvNfi.DespAces * This.Value / 100,2)\n\t\t.Get_DesIpi.Value = xValor\n\t\tIf ThisForm.IpiBaseIcm And .Get_pDesIcm.Value > 0\n\t\t\tIf This.Value # This.peantvalue\n\t\t\t\txValor = Round(( CrSigMvNfi.DespAces + .Get_DesIpi.Value) * .Get_pDesIcm.Value / 100,2)\n\t\t\t\t.Get_DesIcm.Value = xValor\n\t\t\t\t.Get_DesIcm.Refresh\n\t\t\tEndIf\n\t\tEndif\n\tEndif\n\tReturn .t.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DesIpi,Get_pDesIcm,Get_DesIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_pDesIpi",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "If This.Value # This.peantvalue\n\tIf This.Parent.Get_pDesIcm.Value = 0\n\t\tThis.Parent.Get_DesIcm.Value = 0\n\tEndif\n\tThisForm.parentform.atuatot()\n\tIf InList( crSigCdOpe.NFiscals, 1, 2 )\n\t\tThisform.ParentForm.CalcImposto()\n\tEndIf \n\tThisform.Pagina.Impostos.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atuatot,CalcImposto",
+        "controlesReferenciados": "Get_pDesIcm,Get_DesIcm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BcIcmss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_icmss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseIcmIsen",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseIcmOutras",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseIpiIsento",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_BaseIpiOutras",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_IpiNCred",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm1",
+      "evento": "Click",
+      "linhas": 86,
+      "codigoOriginal": "LOCAL lcArq, lcDanfe, lcArqP, lcTpImp, lcEmp, lnIni, lcLogo, lcTemp \n\nIF crSigCdOpe.CupFis>=5 \t&& se NFCe ou SAT\n\tThisForm.reprintd() \n\tRETURN .T.\n*!*\t\tIF \tcrSigPrNfe.stats = 'EMI'\t&& cancelamento de NFCe\n*!*\t\t\tThisForm.reprintd() \n*!*\t\t\tRETURN .T.\n*!*\t\tELSE\n*!*\t\t\tMESSAGEBOX('Esta nota não está emitida. Não pode ser reimpressa.', 0, 'Reimpressão NFCe/SAT')\n*!*\t\t\tRETURN .T.\n*!*\t\tENDIF\nENDIF\n\n*** mena - 04/09/2016 - reimprime carne de ECF no ECF como relatorio gerencial  ***\nIF crSigCdOpe.CupFis=1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for alltrim",
+        "metodosFormChamados": "reprintd,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm2",
+      "evento": "Click",
+      "linhas": 90,
+      "codigoOriginal": "PRIVATE cServer, cSenha, nPorta \nLOCAL cCorpo, cFrom, cCC, cTo, cAssunto, cAnexo, cEmail\nLOCAL lcQuery, lcArqT, lcArqX, lcArqC, lcEmp, lcCli, lcPasta\n\ndo while .t.\n\n\tlcEmp = crSigMvNfi.emps\n\t* pega dados de nfe do cadastro da empresa\n\tlcQuery = [Select servs, emailnfe, senhas, pastas, textonfe, portas ] +;\n\t\t\t  [From SigCdEmp ] + ;\n\t\t\t  [Where CEmps = '] + lcEmp + [']\n\tIf (ThisForm.parentform.poDataMgr.SqlExecute(lcQuery, [LocalEmp]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fiscal autorizada: \" + SUBSTR",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm3",
+      "evento": "Click",
+      "linhas": 195,
+      "codigoOriginal": "Do Form SigOpNFd with Thisform.parentform, thisform, thisform.DataSessionId, 'CAN'\n\n\n*!*\tPRIVATE cTo, cAssunto, cAnexo, cCorpo, cFrom, cCC, cServer, cSenha\n*!*\tPRIVATE lOk, cCampo, cComando, lcTeste, lcStat\n*!*\tPRIVATE lcDest, lcXml, lcQuery, lcArqXML, lcArqPDF\n\n*!*\tLocal lcArq, lcTAmb, lcProt, lcEmp, lcQuery, lcCH, lcPathNfe, cCnpj, cDemis, lcLinha, pIni, pFim, llOks\n\n*!*\tIF crSigmvNfi.impress <> 1\n*!*\t\tMessagebox('Esta nota não pode ser cancelada, pois ainda não foi emitida.', 0+64, [])\n*!*\t\tr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.GetChave",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Get_DI",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.get_dregdi",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.get_ddesemb",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.GetChaveC",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm4",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Do Form SigOpNFd with Thisform.parentform, thisform, thisform.DataSessionId, 'CAR'\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm5",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "IF INLIST(crSigCdope.cupfis,5)\n\t=fEnviaCtg()\t&& Mena 03/09/2018 - envia notas em contingencia - foi transformada em funcao para poder ser executada na entrada do sistema\nENDIF\n\n*!*\t\tCLEAR DLLS\n*!*\t\tDECLARE integer tEnvioUnitContingenciaOffline_NFCe_Daruma in 'DarumaFramework' String StrCNPJEmit , String StrSerie, String StrnNF, String StrProtocolo, String StrChaveAcesso ,String StrSitCodigo\n*!*\t\tDECLARE integer tEnviarContingenciaOffline_NFCe_Daruma in 'DarumaFramework' Integer iQtdDocsContingen... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEnviaCtg",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm6",
+      "evento": "Click",
+      "linhas": 159,
+      "codigoOriginal": "Local lcEmpr, cTpConnect, cFtpAdd, cFtpUser, cFtpPass, cDirEnvFtp, cDirRecFtp, cDirEnvLoc, cDirRecLoc, lDelLocal, lDelHost\nLocal lcQuery, lcArqT, lcArqX, lcArqC, lcEmp, lcCli, lcPasta\n\nlcArqT =''\nlcArqX =''\nlcArqC =''\nlcArqP =''\nllOK = .T.\n\nSelect crSigMvNfi\nlcEmp = crSigMvNfi.emps\n* pega dados de nfe do cadastro da empresa\nlcQuery = [Select servs, emailnfe, senhas, pastas, textonfe, portas ] +;\n\t\t  [From SigCdEmp ] + ;\n\t\t  [Where CEmps = '] + lcEmp + [']\nIf (ThisForm.parentform.poDataMgr.SqlExe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.Fwbtnm7",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "do form sigprnfe with crSigMvNfi.EmpDopNums\n\n*!*\tLocal lnOldSel\n*!*\tlnOldSel = Select()\n\n*!*\tLocal _Emps, _Dopes, _Numes, _EmpDopNums, _Notas\n\n*!*\t_Emps = crSigMvNfi.Emps\n*!*\t_Dopes = crSigMvNfi.Dopes \n*!*\t_Numes = crSigMvNfi.Numes\n*!*\t_EmpDopNums = crSigMvNfi.EmpDopNums\n*!*\t_Notas = crSigMvNfi.Nfis\n\n*!*\tIf Not ProcessaNota(_Emps, _Dopes, _Numes, _EmpDopNums, _Notas, ThisForm.Parentform.PoDataMgr)\n*!*\t\tMessageBox([Houve um Erro na Geração da NF-e, Verifique.],0+16,[Aviso])\n*!*\t\tSelect(lnOldSel)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Impostos.get_Desconto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return( InList(ThisForm.Op_Escolha,'INSERIR','ALTERAR') And ThisForm.AltImpostos )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_tptribsers",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_tptribsers",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "replace tptribsers with  RECNO('crTpTrib') in crSigmvnfi",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_Uf",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_Uf",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.parentform.Podatamgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf crListaRemota.Estados <> '  '\n\t\tThis.Value = crListaRemota.Estados\n\tEndif\nEndIf\nThis.Refresh\nThisForm.pagina.servicos.Refresh\n  \n* Fim ********... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_Mun",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_Mun",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "Local loLista, lcQuery, lcUf, lcIbges\n\nlcUf = this.Parent.get_Uf.value\nlcIbges = ''\n\n*** Mostra lista de municipios ***\nIf Not Empty(lcUf)\n\tlcQuery = \t[Select b.estados as estados, a.descs as munici, a.codigos as codibges From SigCdMun a, SigcdUfs b where b.estados = '] + ;\n\t\tlcUf + [' and a.ufibges = b.ufibges order by descs]\n\n\tIf (ThisForm.parentform.Podatamgr.SqlExecute(lcQuery, [crLocal])) >0\n\t\tSelect crlocal\n\t\tIndex On munici Tag munici\n\t\tIf Not Seek(Padr(This.Value, 40), [crLocal], [munici... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_Uf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_cbene",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_cbene",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\nIf !Empty(This.Value)\n\tSelect crBeneficioRJ\n\tSet Order To Codigos\n\tIf Not Seek(Padr(This.Value, 3), [crBeneficioRJ], [codigos])\n\t\tloLista = Createobject([fwbuscaint], [crBeneficioRJ], [codigos], This.Value, [Beneficio Fiscal], .T.)\n\t\tloLista.mAddColuna([codigos], [], [Cod Beneficio], \t .F.)\n\t\tloLista.mAddColuna([descrs],  [], [Descricao], \t .F.)\n\t\tloLista.Show()\n\tEndif\n\tThis.Value = crBeneficioRJ.codigos\n\tthis.Parent.get_dbene.value = crBeneficioRJ.descrs\nEndIf\nThis.Refresh\nThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dbene",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_dbene",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) and EMPTY(this.parent.get_cbene.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cbene",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_dbene",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIF !EMPTY(this.value)\n\tSelect crBeneficioRJ\n\tloLista = Createobject([fwbuscaint], [crBeneficioRJ], [descrs], This.Value, [Beneficio Fiscal], .T.)\n\tloLista.mAddColuna([codigos], [], [Cod Beneficio], \t .F.)\n\tloLista.mAddColuna([descrs], [], [Descricao], \t .F.)\n\tloLista.Show()\n\tthis.Parent.get_cbene.value = crBeneficioRJ.codigos\n\tThis.Value = crBeneficioRJ.descrs\nENDIF\n\nThis.Refresh\n  \n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cbene",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_csrvfis",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_csrvfis",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\nIf !Empty(This.Value)\n\tSelect crSrvMuns\n\tSet Order To Codigos\n\tIf Not Seek(Padr(This.Value, 8), [crSrvMuns], [codigos])\n\t\tloLista = Createobject([fwbuscaint], [crSrvMuns], [codigos], This.Value, [Cod Serviço Municipal], .T.)\n\t\tloLista.mAddColuna([codigos], [], [Cod Serviço], \t .F.)\n\t\tloLista.mAddColuna([descrs], [], [Descricao], \t .F.)\n\t\tloLista.Show()\n\tEndif\n\tThis.Value = crSrvMuns.codigos\n\tthis.Parent.get_dsrvfis.value = crSrvMuns.descrs\nENDIF\nreplace codsrvfis with strtran(this.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dsrvfis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_dsrvfis",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) and EMPTY(this.parent.get_csrvfis.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_csrvfis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_dsrvfis",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loLista\n\nSelect crSrvMuns\nloLista = Createobject([fwbuscaint], [crSrvMuns], [descrs], This.Value, [Cod Serviço Municipal], .T.)\nloLista.mAddColuna([codigos], [], [Cod Serviço], \t .F.)\nloLista.mAddColuna([descrs], [], [Descricao], \t .F.)\nloLista.Show()\nThis.Value = crSrvMuns.descrs\nthis.Parent.get_csrvfis.value = crSrvMuns.codigos\n\nThis.Refresh\n  \n* Fim *********************************************************************************\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_csrvfis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Get_vdedu",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_vdscc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_vdsvi",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_outretens",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Op_IssRetido",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Op_IssRetido",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "replace issretidos with  this.Value-1 in crSigmvnfi",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_tiponfs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.get_tiponfs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "replace tiponfs with SUBSTR(this.value, 1,2) in crSigmvnfi",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget2",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget3",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget4",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget5",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.Fwget6",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Pagina.Servicos.set_total",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_nota",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "lcSerie = crSigMvNfi.Series\nThisForm.parentform.Podatamgr.CursorQuery('SigCdSer','crTmpSerie','EmpCods',TprMvCab.Emps + lcSerie)\nIf Eof('crTmpSerie')\n\tThisForm.parentform.Podatamgr.CursorQuery('SigCdSer','crTmpSerie','EmpCods',Space(3) + lcSerie)\nEndIf\nReturn ((ThisForm.Op_escolha = 'INSERIR' and Substr(crSigOpCdd.ConfigGers, 242, 01) != \"1\" And (CrSigCdOpe.TipoNfs < 3 Or ( CrSigCdOpe.TipoNfs = 4 And CrTmpSerie.Tiponfs < 3 ) )) Or ;\n\t   (ThisForm.Op_escolha = 'ALTERAR' And ((CrSigCdOpe.TipoNfs =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Op_escolha = 'INSERIR' and Substr,Op_escolha = 'ALTERAR' And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_nota",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "This.Value = Padl(Alltrim(This.Value), 6, [0])\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_nota",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_ClFiscal",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peantvalue = This.Value\nSet Step On \nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) and Substr(crSigOpCdd.ConfigGers, 242, 01) != \"1\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_ClFiscal",
+      "evento": "Valid",
+      "linhas": 93,
+      "codigoOriginal": "If !Empty( This.Value )\n\tIf InList(CrSigCdOpe.Opers,1,2)\n\t\tlcSql = [Select * From SigCdCfo Where Operacaos = ]+Iif(CrSigCdOpe.Opers=1,['E'],['S'])\n\tElse\n\t\tlcSql = [Select * From SigCdCfo ]\n\tEndIf\n\tIf ThisForm.llFiltraCfo\n\t\tlcSql = lcSql + Iif(At([Where],lcSql) > 0,[ And ],[ Where ]) + [ Codigos in (Select Cfops from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[')]\n\tEndif\n\t\t\n\tIf ThisForm.ParentForm.PodataMgr.SqlExecute(lcSql,'TmpSigCdCfo') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,From TmpSigCdCfo Where",
+        "metodosFormChamados": "SqlExecute,IpiBaseIcm =,IcmsTTNf   =,Cursorquery,CalcImposto,vrefresh",
+        "controlesReferenciados": "Get_ClFiscal,Get_DClFiscal,ChkCFOP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_DClFiscal",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = ThisForm.Get_ClFiscal.Value\nReturn Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And IsEmpty( ThisForm.Get_ClFiscal.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ClFiscal",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_DClFiscal",
+      "evento": "Valid",
+      "linhas": 79,
+      "codigoOriginal": "If !Empty( This.Value )\n\tIf InList(CrSigCdOpe.Opers,1,2)\n\t\tlcSql = [Select * From SigCdCfo Where Operacaos = ]+Iif(CrSigCdOpe.Opers=1,['E'],['S'])\n\tElse\n\t\tlcSql = [Select * From SigCdCfo ]\n\tEndIf\n\tIf ThisForm.llFiltraCfo\n\t\tlcSql = lcSql + Iif(At([Where],lcSql) > 0,[ And ],[ Where ]) + [ Codigos in (Select Cfops from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[')]\n\tEndif\n\t\n\tIf ThisForm.ParentForm.PodataMgr.SqlExecute(lcSql,'TmpSigCdCfo') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,From TmpSigCdCfo Where",
+        "metodosFormChamados": "SqlExecute,IpiBaseIcm =,IcmsTTNf   =,Cursorquery,CalcImposto,vrefresh",
+        "controlesReferenciados": "Get_ClFiscal,Get_DClFiscal,ChkCFOP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Série",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( ThisForm.Op_Escolha = 'INSERIR' and Substr(crSigOpCdd.ConfigGers, 242, 01) != \"1\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Op_Escolha = 'INSERIR' and Substr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Série",
+      "evento": "Valid",
+      "linhas": 131,
+      "codigoOriginal": "Local lcSerie, lnNota\n\nIf !Empty( This.Value )\n\tIf CrSigOpCdd.SerVzs = 1\n\t\tlcQuery = [Select Distinct series From SigCnFNf ]\n\tElse\n\t\tlcQuery = [Select series From SigCnFNf Where Emps = ']+TprMvCab.emps+[']\n\tEndif\n\tIf ThisForm.Parentform.podatamgr.sqlexecute(lcquery,'TmpCfgNf') < 0\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crhis)')\n\t\tReturn 0\n\tEndIf\n\tSelect TmpCfgNf\n\tIf Reccount() = 0\n\t\tlcQuery = [Select series From SigCnFNf Where Emps = ']+Space(3)+[']\n\t\tIf ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,fGerUniqueKey,fCanUniqueKey,fVerImpPends",
+        "metodosFormChamados": "sqlexecute,CursorQuery",
+        "controlesReferenciados": "Get_Série,Get_Serie,Get_Selo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Espécie",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.Op_escolha, [INSERIR], [ALTERAR]) and Substr(crSigOpCdd.ConfigGers, 242, 01) != \"1\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Espécie",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.parentform.poDataMgr.pnIdConn, [SigCdEsp], ;\n\t\t\t\t\t\t   [crListaRemota], [Especies], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Especies], [], [Espécie])\n\t\tloLista.mAddColuna([Descs],    [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Especies\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Emissão",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( thisform.op_escolha, 'INSERIR', 'ALTERAR' ) and Substr(crSigOpCdd.ConfigGers, 242, 01) != \"1\" \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Selo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_escolha, 'INSERIR', 'ALTERAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Saidas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Saidas",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < crSigMvNfi.Emis And !IsEmpty( This.Value )\n\tMessagebox( 'A Data da Saída não pode ser menor do que a Data de Emissão...', 32, Dtoc( crSigMvNfi.Emis ) )\n\tThis.Value = crSigMvNfi.Emis\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_Saidas",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If LastKey() = 13 And Not Empty(ThisForm.Get_ClFiscal.Value)\n\tThisForm.Pagina.ActivePage = 1\n\tThisForm.Pagina.Impostos.Get_TFrete.SetFocus\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ClFiscal,Get_TFrete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.ok",
+      "evento": "Click",
+      "linhas": 128,
+      "codigoOriginal": "Local lnIpi\n\nIf InList(Thisform.Op_Escolha, 'INSERIR', 'ALTERAR') And IsEmpty(Thisform.Get_ClFiscal.Value)\n\tMessageBox('Obrigatório Informar C.F.O.P.', 48, 'Informação Obrigatória')\n\tThisform.Get_ClFiscal.SetFocus\n\tReturn\nEndIf\n\n*** Mena 10/06/2014 - obrigatorio se tripo de tributação for = 3 ou 4 ***\nIf InList(Thisform.Op_Escolha, 'INSERIR', 'ALTERAR') And INLIST(crSigMvNfi.tptribsers,3,4) and Empty(crSigMvNfi.codbenefs)\n\tMessageBox('Obrigatório Código do benefício no serviço', 48, 'Informação ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Not Empty",
+        "metodosFormChamados": "CursorQuery,SQLExecute,MontaObs,NfServicos = 3 And InList",
+        "controlesReferenciados": "Get_ClFiscal,Get_ValorIPI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_CfoSubs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPFIS.Get_DCfoSub",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_FrtIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_FrtIpi.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_PfrtIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_PfrtIPI.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_SegIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_SegIpi.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_pSegIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_pSegIpi.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_DesIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_DesIpi.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_pDesIcm.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Impostos.Get_pDesIpi.When",
+      "queryOriginal": "lcSql = [Select * From SigCdCfo Where Codigos = ']+CrSigMvNfi.Cfis+['] Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalCfo')",
+      "tabelas": "SigCdCfo",
+      "colunas": "Codigos,Cfis+[],SqlexecutelcSql,LocalCfo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Pagina.Servicos.Get_Mun.Valid",
+      "queryOriginal": "\tlcQuery = \t[Select b.estados as estados, a.descs as munici, a.codigos as codibges From SigCdMun a, SigcdUfs b where b.estados = '] + ; \t\tlcUf + [' and a.ufibges = b.ufibges order by descs]",
+      "tabelas": "SigCdMun",
+      "colunas": "estados,descs,codigos,ufibges",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_ClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = [Select * From SigCdCfo Where Operacaos = ]+Iif(CrSigCdOpe.Opers=1,['E'],['S']) \tElse",
+      "tabelas": "SigCdCfo",
+      "colunas": "Operacaos,Opers",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_ClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = [Select * From SigCdCfo ]",
+      "tabelas": "SigCdCfo",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_ClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = lcSql + Iif(At([Where],lcSql) > 0,[ And ],[ Where ]) + [ Codigos in (Select Cfops from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[')] \tEndif",
+      "tabelas": "SigCdOop",
+      "colunas": "Cfops,Codigos,Select,from,SigCdOop,where,Dopes,Dopes+[]",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_DClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = [Select * From SigCdCfo Where Operacaos = ]+Iif(CrSigCdOpe.Opers=1,['E'],['S']) \tElse",
+      "tabelas": "SigCdCfo",
+      "colunas": "Operacaos,Opers",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_DClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = [Select * From SigCdCfo ]",
+      "tabelas": "SigCdCfo",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_DClFiscal.Valid",
+      "queryOriginal": "\t\tlcSql = lcSql + Iif(At([Where],lcSql) > 0,[ And ],[ Where ]) + [ Codigos in (Select Cfops from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[')] \tEndif",
+      "tabelas": "SigCdOop",
+      "colunas": "Cfops,Codigos,Select,from,SigCdOop,where,Dopes,Dopes+[]",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_Série.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select Distinct series From SigCnFNf ]",
+      "tabelas": "SigCnFNf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_Série.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select series From SigCnFNf Where Emps = ']+TprMvCab.emps+['] \tEndif",
+      "tabelas": "SigCnFNf",
+      "colunas": "series,Emps,emps+[]",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPFIS.Get_Série.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select series From SigCnFNf Where Emps = ']+Space(3)+['] \t\tIf ThisFo... [TRUNCADO]",
+      "tabelas": "SigCnFNf",
+      "colunas": "series,Emps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCfo", "SigCdMun", "SigCdOop", "SigCnFNf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

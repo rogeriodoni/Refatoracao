@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Este n├úo ├® um bug de c├│digo ÔÇö ├® a mesma falha de infraestrutura j├í confirmada 8 vezes nesta mesma task.**
+
+Confirmei agora: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded = False`. ├ë exatamente o erro 1526 DBNETLIB ("SQL Server inexistente ou acesso negado") acontecendo na ETAPA 1B (conex├úo ao banco), **antes de qualquer `CREATEOBJECT`** ÔÇö ou seja, antes do form ou do BO sequer serem instanciados.
+
+Revisei `FormSigOpOca.prg` e `SigOpOcaBO.prg` novamente: o conte├║do ├® id├¬ntico ao j├í revisado nas tentativas 1-8 (mem├│ria do projeto confirma isso), e n├úo h├í defeito nenhum:
+- RETURN sempre fora do TRY/CATCH
+- handlers PUBLIC para BINDEVENT
+- form nunca chama m├®todo PROTECTED do BO
+- CATCH sempre com MsgErro
+- guard de `gnConnHandle` antes do SQL em `Atualizar()`
+- guard de `USED()`/Buffering antes de `TABLEREVERT`/`USE IN`
+
+**N├úo editei os arquivos** ÔÇö reescrever c├│digo que j├í est├í correto n├úo vai abrir a porta 1433, e arriscaria introduzir uma regress├úo num c├│digo j├í revisado 8 vezes sem necessidade.
+
+Esta ├® a tentativa **9 de 10**. S├│ resta 1 retry. Se a rota de rede n├úo voltar, a task vai falhar por esgotamento de tentativas apesar do c├│digo estar correto. Recomendo fortemente:
+1. Pausar o retry autom├ítico desta task773, ou
+2. Dar exce├º├úo no gate `06_testForm` para o erro 1526/falha de conectividade, tratando-o como infraestrutura e n├úo como falha de migra├º├úo.
+
+Atualizei a mem├│ria do projeto com esta 9┬¬ confirma├º├úo id├¬ntica.

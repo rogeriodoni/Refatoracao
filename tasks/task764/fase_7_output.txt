@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpLop.prg` (1041 ÔåÆ 1103 linhas).
+
+## O que a fase pedia vs. o que o legado tem
+
+A fase pede os 4 handlers CRUD. **O SIGOPLOP n├úo tem CRUD nenhum** ÔÇö ├® um di├ílogo modal filho (391x318, `TitleBar=0`) que marca linhas no cursor `LocalSacOp` que o *pai* populou, com **um ├║nico bot├úo** (`cmdSair`, Caption `"\<Ok"`). Cri├í-los violaria o PILAR 1 ("NUNCA inventar") ou produziria 4 m├®todos vazios (proibido pela regra de completude).
+
+Medi o gate replicando-o com as **pr├│prias fun├º├Áes** do `OrquestradorMigracao.ps1`, em processo separado (sem dot-source, que dispararia uma migra├º├úo):
+
+| medi├º├úo | valor |
+|---|---|
+| 5 fam├¡lias de evid├¬ncia CRUD (`frmcadastro`, `Grupo_Op`, nome CRUD, `pcEscolha`, `<Verbo>.Click`) | todas **0** ÔåÆ `legadoSemCrud=True` |
+| `Get-ContagemBotoesLegado` | **1** ÔåÆ piso cai de 2 para 1 |
+| `PROCEDURE Cmd*/Btn*Click` no form | **1** (`CmdSairClick`) |
+
+**Veredicto: APROVA pelo carve-out** ÔÇö e confirmei *qual ramo* aprovou (`faltantes=4` antes do carve-out), porque um gate de m├║ltiplos ramos pode passar pelo motivo errado.
+
+## Entrega
+
+Os **7 m├®todos com c├│digo do SCX est├úo todos portados** (conferido um a um: `Init`, `Load`, os 4 eventos do `Check1` e `cmdSair.Click`) ÔÇö a fase n├úo tinha handler faltando. O que acrescentei ├® o bloco `FASE 7/8` registrando a justificativa **medida**, para a fase n├úo parecer pulada numa revis├úo ou re-execu├º├úo.
+
+Dois achados de verifica├º├úo:
+- **`fwbtng` medido na classe** (abri `framework.vcx` como DBF): `Width=80 Height=100`, Comic Sans MS 8 bold/italic, ForeColor 90,90,90. A geometria do migrado ├® transcri├º├úo fiel, n├úo chute.
+- **`Left 315 + Width 80 = 395` contra `Form.Width=391`** ÔÇö os ├║ltimos 4px do Ok ficam recortados. ├ë **herdado do SCX** (regra #28): o legado exibia igual, porque move o `cmdSair` para 315 sem reduzir a largura que `fwbtng` imp├Áe. Reproduzir ├® o PILAR 1 ÔÇö documentei em vez de "corrigir".
+
+Evitei deliberadamente escrever os 4 identificadores por extenso: o gate casa nome no `.prg` **inteiro**, coment├írio incluso, e cit├í-los fingiria handlers inexistentes. Deixei essa nota no pr├│prio cabe├ºalho para quem editar depois.
+
+## Valida├º├úo
+
+- **VFP9**: `.fxp` regerado (apaguei antes), **zero `.err`** nos dois arquivos
+- **`Test-CompletudeCodigo`**: `True` em Form e BO
+- Regra #1 (RETURN em TRY): zero viola├º├Áes ÔÇö os 4 que meu primeiro `awk` acusou eram falso positivo por vazamento de estado entre m├®todos; reconferi com reset por m├®todo
+- Regra #51: `AlternarSelecao`/`AtualizarTotais`/`TemSelecao` s├úo PUBLIC no BO; s├│ `ObterChavePrimaria` ├® PROTECTED (correto)
+- LF-only e aus├¬ncia de BOM preservados
+
+N├úo mexi em `Themes`/`DisabledPicture` do `cmd_4c_CmdSair`: ├® territ├│rio da Fase 4, o bot├úo nunca ├® desabilitado (nada atribui `.Enabled`), e o `FormCor` can├┤nico usa `Themes=.F.` sem `DisabledPicture` ÔÇö ent├úo a escolha ├® inerte aqui e alter├í-la s├│ geraria churn contra uma fase anterior.

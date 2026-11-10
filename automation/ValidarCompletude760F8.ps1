@@ -1,0 +1,14 @@
+# Roda a Test-CompletudeCodigo REAL do orquestrador (etapa 05d_validarCompletude)
+# sobre o Form e o BO da task760, sem executar o orquestrador.
+param(
+    [string]$Orquestrador = 'C:\4c\automation\OrquestradorMigracao.ps1'
+)
+$ast = [System.Management.Automation.Language.Parser]::ParseFile($Orquestrador, [ref]$null, [ref]$null)
+foreach ($f in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $false)) {
+    . ([scriptblock]::Create($f.Extent.Text))
+}
+$okForm = Test-CompletudeCodigo -FilePath 'C:\4c\projeto\app\forms\operacionais\FormSigOpLib.prg' -Descricao 'Form (FormSigOpLib)'
+$okBO   = Test-CompletudeCodigo -FilePath 'C:\4c\projeto\app\classes\SigOpLibBO.prg'              -Descricao 'BO (SigOpLibBO)'
+"FORM={0}  BO={1}" -f $okForm, $okBO
+if ($okForm -and $okBO) { exit 0 }
+exit 1

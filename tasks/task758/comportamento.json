@@ -1,0 +1,513 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 9,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLCZ",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Local lnOldSel\n\nSelect crItensLoc\nIndex on Cpros Tag Cpros\nGo top\n\nWith ThisForm.grdItens\n\t.RecordSource = [crItensLoc]\n\t.column1.ControlSource = [crItensLoc.Cpros]\n\t.column2.ControlSource = [crItensLoc.Dpros]\n\t.column3.ControlSource = [crItensLoc.Marcas]\n\t.column4.ControlSource = [crItensLoc.Locals]\n\t.Refresh()\nEndWith \n\nThisForm.grdItens.Column1.SetFocus\nThisForm.grdItens.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nIf Empty(Thisform.getBase.Value)\n\tMessagebox([Informar a Base da Localização.],0+48,[Atenção])\n\tReturn .F.\nEndif\n\n\nSelect(lnOldSel)\nReturn .T.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Use In crItensLoc\nUse In csLocals\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "lParameters pCnx, pEscolha, pOrigem\n\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.pcOrigem  = pOrigem\nThisForm.pcEscolha = pEscolha\nThisForm.poDataMgr = pCnx\n\nIf Used([csLocals])\n\tUse in csLocals\nEndIf \n\nCreate Cursor csLocals(Cpros c(14), Locals c(10))\n\nThisForm.grdItens.RecordSource = []\n\nSelect crTpmMvItn\nSelect Distinct 0 as Marcas, Cpros, Dpros, Iif(ThisForm.pcOrigem='ORIGEM',LocalOs,Locals) as Locals from crTpmMv... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "MontaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nSelect crItensLoc\n= ThisForm.poDataMgr.CursorQuery('SigCdPro','crTPro','Cpros',crItensLoc.Cpros,'FigJpgs')\nIf Not IsNull(crTPro.FigJpgs) And Not IsEmpty(crTPro.FigJpgs)\n\tThis.parent.ImgJpg.Visible = .F.\n\tThis.parent.ImgJpg.Picture = ''\n\tSelect crTPro\n\tClear Resources\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(crTPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base6... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column3.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nThis.KeyPress(13,0)\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column3.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace crItensLoc.Marcas With IIf(crItensLoc.Marcas == 0,1,0)\t\n\tThis.parent.parent.AfterRowColChange\n\tThis.parent.parent.Refresh \n\tNoDefault\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column3.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.grdItens.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cntBotoes",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Select csLocals\nGo top\nScan \n\tIf ThisForm.pcOrigem = 'ORIGEM'\n\t\tUpdate crTpmMvItn set Localos = csLocals.Locals where Cpros = csLocals.Cpros\n\tElse\n\t\tUpdate crTpmMvItn set Locals = csLocals.Locals where Cpros = csLocals.Cpros\n\tEndIf \nEndScan \n\nSelect crTpmMvItn\nGo top\n\nThisForm.Release\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.getBase",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.getBase",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Localização')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tThisForm.getDBase.Value = crListaRemota.Descricaos\n\t\n\tUse In crListaRemota\n\nEndIf\nThis.Refresh\nThisForm.getDBase.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.getBase",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.getDBase.Value = []\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cmdAcoes",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cmdAcoes",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nlcLocaliza = ThisForm.getBase.Value\n\nIf Empty(Thisform.getBase.Value)\n\tMessagebox([Informar a Base da Localização.],0+48,[Atenção])\n\tReturn .F.\nEndIf\n\nSelect crItensLoc\nGo Top\nScan For Marcas <> 0\n\tSelect csLocals\n\tAppend Blank \n\t\n\tReplace Cpros  With crItensLoc.Cpros\n\tReplace Locals With lcLocaliza\n\t\n\tSelect crItensLoc\nEndScan \n\nSelect crItensLoc\nDelete From crItensLoc Where Marcas <> 0 \n\nThisForm.getBase.Value  = []\nThisForm.getDBase.Value = []\n\nSelect crIte... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cmdAcoes",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.cmdAcoes",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nThisForm.Montagrade()\n\nSelect crItensLoc\nGo Top\n\nThisForm.getBase.Value = []\nThisForm.getDBase.Value = []\n\nSelect(lnOldSel)\nReturn .T.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "Montagrade",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.apaga",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.apaga",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crItensLoc\nReplace All crItensLoc.Marcas with 0\nGo Top\n\nThisForm.grdItens.AfterRowColChange()\n\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.SelTudo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.SelTudo",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crItensLoc\nReplace All crItensLoc.Marcas with 1\nGo Top\n\nThisForm.grdItens.AfterRowColChange()\n\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLCZ.getDBase",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPLCZ.Init",
+      "queryOriginal": "Select Distinct 0 as Marcas, Cpros, Dpros, Iif(ThisForm.pcOrigem='ORIGEM',LocalOs,Locals) as Locals from crTpmMv... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "Cpros,Dpros,pcOrigem=ORIGEM,LocalOs,Locals)",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLCZ.cntBotoes.Click",
+      "queryOriginal": "\t\tUpdate crTpmMvItn set Localos = csLocals.Locals where Cpros = csLocals.Cpros",
+      "tabelas": "crTpmMvItn",
+      "colunas": "Localos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLCZ.cntBotoes.Click",
+      "queryOriginal": "\t\tUpdate crTpmMvItn set Locals = csLocals.Locals where Cpros = csLocals.Cpros",
+      "tabelas": "crTpmMvItn",
+      "colunas": "Locals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLCZ.cmdAcoes.Click",
+      "queryOriginal": "Delete From crItensLoc Where Marcas <> 0",
+      "tabelas": "crItensLoc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crTpmMvItn", "crItensLoc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

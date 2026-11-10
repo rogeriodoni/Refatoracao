@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, this exact reincidence pattern is already well-tracked there (reincidence 3 is the same method). No need to duplicate further ÔÇö the existing entries already cover `FormSigOpLcZ.prg`'s case precisely.
+
+## Summary
+
+Reviewed all 3 findings in this FUNCTIONAL pass against `FormSigOpLcZ.prg`/`SigOpLcZBO.prg` and confirmed **all three are false positives**, matching an extensively documented pattern from this same task's sibling form (`FormSigOpLcl.prg`, reviewed earlier today):
+
+1. **[CONTAINER-VISIVEL] `CNT_4C_SOMBRA`** ÔÇö already `.Visible = .T.` explicitly, never `.F.` anywhere in the file.
+2. **[METODO-INEXISTENTE] `THIS.AbrirLookupCanonico()`** ÔÇö inherited from `FormBase.prg:393`, call signature matches exactly.
+3. **[GRID-WITH]** ÔÇö the quoted `WITH ThisForm.grdItens` text exists only inside a docstring comment; the real `MontaGrade()` code uses plain dot-notation with no `WITH` block at all.
+
+No code changes were made (making any would have introduced a regression). Updated the two project memory files (`feedback_container_visivel_cabecalho_falso_positivo.md`, `feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco.md`) logging this reincidence for future passes.

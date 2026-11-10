@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da.
+
+## O que a Fase 4 entregou
+
+**Nenhum Grid, nenhum bot├úo CRUD, nenhum `AlternarPagina`** ÔÇö porque nada disso existe no legado. O entreg├ível foi registrar no cabe├ºalho do `.prg` a **medi├º├úo** que dispensa a fase, para que o pr├│ximo sweep n├úo "conserte" o que est├í correto.
+
+`SIGOPLIM` ├® um di├ílogo modal de **captura** (400├ù250) que confere al├ºada de desconto e devolve `zsenha` ao chamador. Medido no dump ÔÇö ├írvore completa de **12 objetos**:
+
+| termo | medido |
+|---|---|
+| `BaseClass: grid` / `pageframe` / `listbox` | 0 |
+| `commandbutton` / `commandgroup` | **0** |
+| `AddCursor` / `pColuna` / `RecordSource` / `ControlSource` | 0 |
+| token `\bGrade\b` / `\bgrd` | 0 |
+| `BaseClass: textbox` | 3 (usuario, senha, get_Motivo) |
+| `ReadOnly = .T.` | 0 ÔåÆ campos de **entrada** |
+
+N├úo h├í um ├║nico bot├úo: o di├ílogo se encerra pelos pr├│prios `Valid` (`thisform.release()`). Inventar Grid+CRUD violaria o PILAR 1, e escrever os dois m├®todos vazios seria o stub disfar├ºado que a regra de completude pro├¡be.
+
+## Verifica├º├úo
+
+- **Gate real rodado standalone** (corpo do `case 4` extra├¡do por balan├ºo de chaves, parse validado, helpers extra├¡dos por AST ÔÇö sem dot-source do orquestrador): `validado = True` pelo ramo **CAPTURA**, com PAGINADO/FLAT/DESPACHANTE/EXIBI├ç├âO/├üRVORE todos `False`.
+- **Compila├º├úo limpa com controle negativo**: smoke test desta sess├úo passou (escreveu o arquivo de sa├¡da), ent├úo `COMPILE` ├® prova leg├¡tima. Alvo: `.FXP` presente, `.ERR` ausente. Controle negativo (c├│pia + `PUBLIC PROCEDURE`, regra #9.1) gerou `.ERR` apontando **s├│** as linhas 406ÔÇô407 injetadas ÔÇö prova que o detector funciona e que as 403 linhas do form est├úo limpas.
+- **S├│ coment├írios mudaram**: md5 das linhas de c├│digo id├¬ntico ao arquivo da Fase 3 (`3323081340ÔÇª`), 166 linhas de c├│digo antes e depois.
+- CRLF restaurado (CR=LF=412, igual aos forms vizinhos); zero bytes >127; `.FXP` apagado para a Fase 5 n├úo rodar p-code velho.
+
+## Dois achados que corrigi no caminho
+
+1. **O cabe├ºalho da Fase 3 estava com a contagem errada** ÔÇö dizia "11 objetos / 3 label soltos"; s├úo **12 objetos / 4 label soltos** (`Frase`, `Say1`, `Say2`, `Say3`). Corrigido, j├í que estou registrando uma medi├º├úo.
+
+2. **Minha primeira vers├úo do coment├írio causou um falso-positivo no gate.** Ao citar `ConfigurarPaginaLista()` e `AlternarPagina()` por extenso, o predicado `$temLayoutPaginado` (`-match` sobre o `.prg` inteiro, coment├írio inclu├¡do) virou `True` e a fase passaria pelo ramo **PAGINADO** ÔÇö isto ├®, o gate concluiria que o form tem p├ígina Lista. Reescrevi de forma gen├®rica e remedi: os dois tokens agora d├úo `False` e a aprova├º├úo vem da CAPTURA, o motivo verdadeiro. Deixei isso explicado no pr├│prio cabe├ºalho para a Fase 5 n├úo reintroduzir.
+
+O que resta por fase: campos (5), lookups `fwBuscaSel` TmpUsu/TmpMdsc (6), `Valid` de al├ºada + `zsenha` (7ÔÇô8). O `TabIndex` tamb├®m n├úo cabia aqui ÔÇö fora da faixa `1..N` ├® descartado em sil├¬ncio, ent├úo vai na fase que cria o ├║ltimo `AddObject`.
+
+Uma observa├º├úo: `automation/OrquestradorMigracao.ps1` aparece como modificado no git, mas **n├úo fui eu** ÔÇö mtime 01:31 (meu trabalho come├ºou 14:20) e zero men├º├Áes a `SigOpLim`/`task761` no diff. ├ë altera├º├úo n├úo commitada de outra sess├úo, como a mem├│ria do projeto j├í registra.

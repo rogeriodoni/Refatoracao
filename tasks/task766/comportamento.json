@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPMET",
+      "evento": "Procedure",
+      "linhas": 146,
+      "codigoOriginal": "Private ldDataD\nLocal alMes\n\nDeclare alMes(12)\nalMes[1] = 'JANEIRO'\nalMes[2] = 'FEVEREIRO'\nalMes[3] = 'MARCO'\nalMes[4] = 'ABRIL'\nalMes[5] = 'MAIO'\nalMes[6] = 'JUNHO'\nalMes[7] = 'JULHO'\nalMes[8] = 'AGOSTO'\nalMes[9] = 'SETEMBRO'\nalMes[10] = 'OUTUBRO'\nalMes[11] = 'NOVEMBRO'\nalMes[12] = 'DEZEMBRO'\n\nlcArq = Getfile('xls*')\n\nIf Empty(lcArq)\n\tReturn .F.\nEndif\n\nIf Not ImpExcelDriver(lcArq,'Orç.Meta Dia')\n\tReturn .F.\nEndif\nlnCelI=0\n\nSelect * From xlResults Into Cursor localMeta Readwrite\nSelect localMeta... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPMET",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.Empty(ThisForm.Pagina.Dados.Getemps.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigOpMet','emps',ThisForm.Pagina.Dados.Getemps.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMET",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpMet','codigo','crSigOpMet','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('codigo','','','Codigo',100,.t.)\n\t\t.pfSqlTabela(1).pColuna('ufs','','','Estado',75,.t.)\n\t\t.pfSqlTabela(1).pColuna('emps','','','Loja',75,.t.)\n\t\t.pfSqlTabela(1).pColuna('nomeloja','','','Nome da Loja',150,.t.)\n\t\t.pfSqlTabela(1).pColuna('datas','','','Data',75,.t.)\n\t\t.pfSqlTabela(1).pCo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMET.btncarregar",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMET.btncarregar",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "local llRet\n\nllRet = thisform.ImportaPlan()\nIF llRet\n\tMessagebox('Planilha importada com sucesso.',(0+64),'Aviso')\nELSE\n\tMessagebox('A Planilha não foi importada.',(0+48),'Aviso')\nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ImportaPlan",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMET.Pagina.Dados.getvaldes",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMET.Pagina.Dados.getcodigo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPMET.Procedure",
+      "queryOriginal": "Select * From xlResults Into Cursor localMeta Readwrite",
+      "tabelas": "xlResults",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xlResults"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

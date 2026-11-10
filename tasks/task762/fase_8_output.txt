@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both the form and BO are new untracked files (from earlier phases), and `menu.prg` now shows as modified. Everything compiles clean with VFP9 (positive and negative controls both confirmed).
+
+## Summary
+
+Phase 8/8 of the `Formsigoplin` (Lote de Instru├º├Áes) migration is complete:
+
+**`Formsigoplin.prg`** ÔÇö added the four remaining event handlers and wired their `BINDEVENT`s to buttons that existed since Phase 4/6 but had no handler yet:
+- `BtnBuscarClick()` ÔÇö opens `FormBuscaAuxiliar` on `SigPrLit.numlotes`, locates the match in `cursor_4c_Dados` and refreshes the grid (bound to `cmd_4c_Buscar`).
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()` (bound to `cmd_4c_Encerrar`).
+- `BtnSalvarClick()` ÔÇö `FormParaBO()` + `Salvar()`, no `ELSE` (BusinessBase already reports failure) (bound to `cmd_4c_Confirmar`).
+- `BtnCancelarClick()` ÔÇö back to the list + `CarregarLista()` (bound to `cmd_4c_Cancelar`).
+
+Documented a scoped decision in the header: the legacy Cheques/T├¡tulos detail grids and search panels (`cntGradeCheques`/`cntGradeTitulos`/`cntBuscaCheques`/`cntBuscaTitulos`) were not ported ÔÇö the master CRUD (`SigPrLit`) is complete and functional, the detail is left for a dedicated follow-up task (this was a pre-existing decision from `sigoplinBO.prg`, now made explicit in the form header too).
+
+**`menu.prg`** ÔÇö added `DEFINE BAR 200`/`ON SELECTION BAR 200 OF popCadastros` and the `AbrirFormsigoplin()` procedure (canonical pattern: `TRY` covers only `CREATEOBJECT`, `Show()` outside the `TRY` per regra #29).
+
+Verified via VFP9 `COMPILE` (no execution) with a negative control proving the `.ERR` detector actually works: both `sigoplinBO.prg`/`Formsigoplin.prg` and `menu.prg` compiled with `.FXP` generated and no `.ERR`. This proves compilation only, not runtime ÔÇö I did not instantiate/exercise the form.

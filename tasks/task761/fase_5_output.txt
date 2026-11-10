@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da.
+
+## O que entreguei
+
+`ConfigurarCampos()` em `FormSigOpLim.prg` (+161 linhas, s├│ adi├º├úo) com a **primeira metade dos campos** ÔÇö 2 dos 3 TextBox do legado, cada um com seu r├│tulo:
+
+| legado | migrado | Left/Top | detalhe |
+|---|---|---|---|
+| `Frase` | `lbl_4c_Frase` | 19 / 91 | r├│tulo de instru├º├úo |
+| `Say1` + `get_Motivo` | `lbl_4c_Label1` + `txt_4c__Motivo` | 116/131 e 168/123 | motivo (SigCdFs.codigos) |
+| `Say2` + `usuario` | `lbl_4c_Label2` + `txt_4c_Usuario` | 112/170 e 168/162 | `InputMask="!!!!!!!!!!"` |
+
+`Say3`/`senha` ficam para a Fase 6 ÔÇö s├úo justamente os dois que o legado declara `Visible = .F.`. Este form ├® FLAT (sem PageFrame), ent├úo os `AddObject` v├úo direto em `THIS` e n├úo h├í offset de PageFrame a compensar.
+
+## Tr├¬s coisas que medi em vez de presumir
+
+**1. `Format = "K"` estava invis├¡vel no dump.** Abri a `framework.vcx` como DBF: a classe `fwget` declara `Format = "K"`, `DisabledBackColor = 192,192,192` e `DisabledForeColor = 0,0,0`. O SCX n├úo repete nada disso porque herda ÔÇö mas o migrado usa `TextBox` puro, ent├úo sem transcrever esses valores eles se perdiam em sil├¬ncio.
+
+**2. A `Width` da `Frase` tem de caber a frase de RUNTIME, n├úo a de projeto.** O `Init` legado reatribui esse Caption em tr├¬s variantes. Medido em Tahoma 8 bold: projeto = 134px, maior variante de runtime = **268px**. Como `AutoSize` ├® no-op em Label de `AddObject` (confirmei: fica nos 100 do default), dimensionar pelos 134 cortaria exatamente a frase que o usu├írio l├¬. Usei 275.
+
+**3. Os `Left` escalonados do legado (116/112/120) s├úo c├ílculo, n├úo descuido.** Os tr├¬s textos medem 48/52/44px e terminam **todos em 164**, 4px antes dos campos em 168 ÔÇö por isso `Alignment = 0`, nunca o `Alignment = 1` que o migrador costuma inventar.
+
+## Verifica├º├úo
+
+- **Gate real da Fase 5** rodado standalone, com os 8 helpers extra├¡dos por balan├ºo de chaves (sem dot-source, que dispararia migra├º├úo): aprova pelo ramo **CAPTURA** com paridade de verdade ÔÇö piso 2 (metade dos 3 do legado), 2 no migrado. `temPaginaDados`, `temLayoutFlat`, despachante e exibi├º├úo todos `False`, ent├úo a aprova├º├úo vem do motivo certo. N├úo citei `ConfigurarPaginaDados` nem usei `.ControlSource` ÔÇö os dois flipariam o ramo (a armadilha que a Fase 4 registrou).
+- **Completude**: rodei os 4 regexes reais do `Test-CompletudeCodigo` ÔåÆ **0 problemas**.
+- **Compila├º├úo limpa com controle negativo**: `.FXP` gerado, `.ERR` ausente; a c├│pia com `PUBLIC PROCEDURE` acusou s├│ as 2 linhas injetadas, provando que o detector funciona.
+- **Instanciei o form** (n├úo s├│ compilei): `VARTYPE = "O"`, 6 controles com geometria exata, `ForeColor=5921370`=RGB(90,90,90), nenhum filho fora do pai (#30), e os r├│tulos terminando em 164 contra campo em 168 (#28).
+- S├│ adi├º├úo: 0 linhas removidas ou alteradas, Fases 3/4 intactas. CRLF preservado (573/573), zero bytes >127, `.FXP` apagado para a Fase 6 n├úo rodar p-code velho.
+
+## Dois pontos para as fases seguintes
+
+**`MaxLength` e `InputMask` n├úo valem para atribui├º├úo por c├│digo** ÔÇö medi: `.Value = "abcdefghijklmno"` passou com 15 chars min├║sculos. ├ë o comportamento documentado (regra #49), n├úo defeito. Mas significa que, quando o lookup da Fase 6 gravar o valor escolhido no campo, ele precisa respeitar o `char(10)` por conta pr├│pria (`LEFT`/`PADR`) ÔÇö o controle n├úo vai proteger.
+
+**A visibilidade condicional continua pendente**, de prop├│sito: o `Init` legado esconde `Say1`/`get_Motivo` quando `!Motivo`, e esconde `Say2`/`usuario` quando `somotivo` ou `Tipo='L'`. Isso roda DEPOIS do `TornarControlesVisiveis`, ent├úo mora na fase que porta o corpo do `Init`. Criei tudo `Visible = .T.`, como o dump declara. O `TabIndex` segue na fase do ├║ltimo `AddObject`, pela raz├úo que a Fase 4 registrou (fora da faixa 1..N ├® descartado em sil├¬ncio).
+
+Uma observa├º├úo: `automation/OrquestradorMigracao.ps1` e `ValidadorSQLSchema.ps1` aparecem modificados, mas n├úo fui eu ÔÇö mtime 01:31 (meu trabalho come├ºou ├ás 14:40) e zero men├º├Áes a `SigOpLim`/`task761` no diff. ├ë altera├º├úo n├úo commitada de outra sess├úo, como a Fase 4 j├í havia notado.

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `SigOpLbCBO.prg` (1072 linhas, 49,9 KB) agora passa o gate.
+
+## O que faltava
+
+O gate da Fase 2 exige `CarregarDoCursor` **e** (`Inserir` + `Atualizar` **ou** a exce├º├úo "BO somente-leitura"). O arquivo deixado pela tentativa anterior tinha 15 m├®todos de c├ílculo completos, mas **nenhum `CarregarDoCursor`** ÔÇö e esse token ├® obrigat├│rio mesmo com a exce├º├úo. Era o ├║nico item em falta.
+
+## O que foi feito
+
+**1. `CarregarDoCursor(par_cAliasCursor)` adicionado** ÔÇö sobrescrita de `BusinessBase`, mapeando as 4 colunas de `SigCdOpe` conferidas no `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14): `dopes char(20)`, `tipoops numeric(2,0)`, `nivels char(20)`, `limcres numeric(1,0)`. Declarada **PUBLIC** (sem `PROTECTED`) ÔÇö a base declara o m├®todo PUBLIC e `PROTECTED` em qualquer n├¡vel da heran├ºa o tornaria inalcan├º├ível de fora (regra #51). Guarda de EOF (`RECCOUNT > 0 AND !EOF`) e `TYPE(alias + ".col")` para tolerar alias mais estreito, j├í que `BusinessBase.Buscar` aceita lista de campos em `pcCampos`.
+
+**2. `CarregarOperacao` passou a delegar o mapeamento** ÔÇö ele lia os campos inline logo ap├│s o `SELECT`, **sem guarda de EOF**. Isso era um defeito real de fidelidade: o `SqlExecute` do Fortyus devolvia a *contagem de linhas*, ent├úo `< 1` recusava zero linha; o `SQLEXEC` do VFP9 devolve 1 por result set e n├úo distingue. Com zero registro, a leitura em EOF entregava branco/zero e o c├ílculo seguia com limite 0 e o lado da conta errado, em sil├¬ncio. Agora `.F.` do `CarregarDoCursor` cai na mesma recusa com a mensagem do legado ("Favor reinicializar o processo").
+
+## Verifica├º├Áes executadas
+
+| Checagem | Resultado |
+|---|---|
+| Compila├º├úo VFP9 (`.fxp` apagado antes, timestamp conferido) | FXP novo ├ás 03:15:50, **sem `.err`** |
+| Gate Fase 2 (l├│gica do orquestrador replicada) | **VALIDADO** |
+| `ValidadorSQLSchema.ps1` (etapa 05f) | PASSOU ÔÇö 683 tabelas, 14 statements, 0 coluna inv├ílida |
+| `VerificarFuncoesNaoDefinidas.ps1` (regra #13) | nenhuma chamada ├│rf├ú |
+| Balanceamento PROCEDURE/TRY/CASE/SCAN/IF | 16/16, 11/11, 3/3, 6/6, 56/56 |
+| `RETURN` dentro de TRY ┬À `PUBLIC` em DEFINE CLASS ┬À `MESSAGEBOX` direto ┬À acentos literais | 0 em todos |
+| Encoding | ASCII, CRLF preservado |
+
+**Sobre `Inserir`/`Atualizar`:** continuam herdados de `BusinessBase`, e isso est├í certo por evid├¬ncia, n├úo por conveni├¬ncia. Rodei as 4 provas do gate contra o dump legado: sem `TABLEUPDATE`, sem `.AddCursor(`, e o **├║nico** alvo de escrita ├® `Insert Into DbOpera` ÔÇö cursor local criado com `Create Cursor DbOpera`. O BO tamb├®m n├úo tem nenhum `SQLEXEC` de escrita. Sobrescrever `Inserir`/`Atualizar` aqui seria inventar INSERT/UPDATE, o que a regra #22 pro├¡be.
+
+Criei `automation/CompilarF2SigOpLbC756.prg` (com `SET SAFETY OFF`/`SET RESOURCE OFF`, regra #6) para a checagem de compila├º├úo.

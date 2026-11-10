@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+.fxp is gitignored (not listed). Phase 3 is complete ÔÇö FormSIGOPGRC.prg was created with the base structure and compiles cleanly.
+
+**Summary of what was done:**
+
+Read the BO (`SIGOPGRCBO.prg`, phases 1-2), the legacy source dump, `mapeamento.json`, `analise.json`/`task_state.json`, and the already-fully-migrated twin form `FormSigOpGco.prg` (task739, same "Gr├ífico Comparativo" family) to establish the correct pattern.
+
+Key decision: this is an **OPERACIONAL flat form** (8 objects, zero PageFrame/grid/input controls in the SCX dump) ÔÇö not a CRUD cadastro. I deviated from the generic Fase-3 template (which assumes Page1=Lista/Page2=Dados) per CLAUDE.md's explicit rule for OPERACIONAL forms, following the same precedent already established by the twin form.
+
+Created `FormSIGOPGRC.prg` (`AS FormBase`) with just this phase's scope:
+- Visual properties transcribed from the SCX (Width=800, Height=600, BorderStyle=2, TitleBar=0, WindowType=1, MaxButton/MinButton=.F., DataSession=2, Caption via `CHR(225)`)
+- `Init()` accepting `(par_oFormPai, par_nDataSession)`, entering the parent's data session before `DODEFAULT()` ÔÇö mirrors the legacy `Lparameters pForm, datses` contract
+- `InicializarForm()` instantiating `SIGOPGRCBO`, reasserting the `crFinal` cursor contract (no `Cabecalho` cursor here ÔÇö documented divergence from the twin), setting the background picture, and calling the page-frame orchestrator
+- `ConfigurarPageFrame()` as a thin orchestrator calling only `ConfigurarCabecalho()` for now, with comments mapping out what Fases 4/5/7 will add and in what order (z-order matters ÔÇö same lesson as the twin)
+- `ConfigurarCabecalho()` transcribing `cnt_4c_Sombra` + the two labels exactly from the dump
+- `TornarControlesVisiveis()` and a `Destroy()` that safely closes the graph cursor by name (inert until Fase 7 creates it)
+
+Verified it compiles cleanly with VFP9 (no syntax errors).

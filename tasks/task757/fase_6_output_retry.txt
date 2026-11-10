@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpLcl.prg`.
+
+## O que estava faltando
+
+A tentativa anterior entregou a fase **funcionalmente completa e correta** ÔÇö os 4 lookups de n├¡vel em `LostFocus`, guarda de reentr├óncia, campos 3┬║/4┬║ n├¡vel, a├º├Áes, ordena├º├úo. Reprovou por um item s├│: o dump de `SIGOPLCL` casa `fwbuscaext`/`fwbuscasel`/`mAddColuna`, logo `legadoSemLookup = .F.` e o ramo FLAT do gate cobra as **duas** exig├¬ncias integrais ÔÇö `BINDEVENT` (tinha 22) **e** `PROCEDURE AbrirLookup*/AbrirBusca*` (tinha **zero**). O picker estava implementado *inline* dentro de `BaseLostFocusExec` e `ValidarNivelExec`.
+
+## Conserto
+
+Extra├¡ os dois pickers para os funis can├┤nicos do projeto (regra #37, padr├úo de 137 arquivos) ÔÇö n├úo ├® teatro de regex: o funil ├║nico ├® o que impede dois `CREATEOBJECT` divergirem e d├í o ponto de entrada para acionamento externo.
+
+| novo m├®todo | o que ├® | legado transcrito |
+|---|---|---|
+| `AbrirBuscaBase()` | picker da Base, tabela **remota** `SigLcNv1` via `AbrirLookupCanonico` | `getBase.Valid` ÔåÆ `fwbuscaext` + `mAddColuna('Cods'/'Descs')` |
+| `AbrirBuscaNivel(n)` | picker de 2┬║/3┬║/4┬║ n├¡vel, cursor **local** filtrado pelo pai (Pattern A) | `getNvl2/3/4.Valid` ÔåÆ `fwbuscasel` + `AddColuna` |
+| `ObterControleNivel/ObterCursorNivel/ObterTituloNivel` | resolvedores `PROTECTED` ÔÇö fonte ├║nica do mapa n├¡velÔåÆ(cod, desc, pai, cursor, t├¡tulo) | substituem o `DO CASE` que ia duplicar nos dois m├®todos |
+
+Os dois funis s├úo **PUBLIC** (regra #3) e usam guarda **save/restore** em vez de set/clear, porque s├úo chamados de dentro dos `LostFocus*` onde a flag j├í est├í ligada ÔÇö `clear` simples liberaria cedo e o `LostFocus` redisparado pelo fechamento do picker modal abriria um segundo di├ílogo (regra #47).
+
+## Verifica├º├úo
+
+`COMPILE` dos dois arquivos sem `.ERR`. Probe real (`automation\ProbeF6bSigOpLcl757.prg`, `.fxp` apagado antes) confirmou: `CREATEOBJECT` ÔåÆ `O`; `PEMSTATUS(...,2) = .F.` nos dois funis (PUBLIC); ramo **"achou"** com cursor filtrado em 2 linhas ÔåÆ `SEEK` casa, **n├úo** reatribui `Value`/`Desc` (fidelidade ao legado, que s├│ toca os campos no ramo "n├úo achou"); campo vazio e n├¡vel inv├ílido abortam sem erro; guarda provada nos dois sentidos (aninhado `.T.ÔåÆ.T.`, standalone `.F.ÔåÆ.F.`) para **ambos** os funis; valor digitado preservado (regra #50); e os 8 `BINDEVENT` dos quatro campos continuam ligados ap├│s o refactor (`AEVENTS` com 2 argumentos).
+
+O probe **terminar** dentro do timeout ├® parte da prova ÔÇö `Mostrar()` chama `Show()` modal, que travaria headless; os dois `Erro no Lookup: Connection handle is invalid` no log de erros s├úo o `CATCH` esperado de `AbrirLookupCanonico` com `gnConnHandle = -1`, ou seja o caminho do picker foi *alcan├ºado* e tratado, n├úo pulado.
+
+Gate rodado verbatim: `temLayoutFlat = True`. `Test-CompletudeCodigo` (os 4 regex dele, n├úo `grep -i todo`): **0 problemas**.
+
+Dois pontos que encontrei e deixei fora do escopo, para registro:
+- `gnConnHandle` ├® criado em `main.prg:75`, **n├úo** em `config.prg` ÔÇö leitura crua dele num probe abre "Variable not found" e trava o processo headless (foi o que travou minha primeira execu├º├úo). O form est├í correto: guarda com `TYPE("gnConnHandle") = "N"`.
+- `FormBase.AbrirLookupCanonico` tem um `MsgAviso("Nenhum registro encontrado.")` no `ELSE` de universo vazio. N├úo apaga o campo digitado, ent├úo n├úo ├® o defeito da regra #50, mas ├® mensagem que o legado n├úo exibe ÔÇö mexer em `FormBase` afetaria 137 arquivos e n├úo cabe nesta fase.

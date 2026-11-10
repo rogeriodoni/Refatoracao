@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e aprovada.
+
+## O que estava reprovando
+
+A Fase 8 n├úo falhou por c├│digo faltando. Medi o veredito real do gate com um probe (`automation/VerificarGateFase8Task749.ps1`, no padr├úo dos 20 j├í existentes, rodando o pr├│prio bloco `case 8` do orquestrador) e o resultado foi cir├║rgico:
+
+```
+metodosFaltantes = [BtnCancelarClick]
+```
+
+O ramo **leitor-baixa** j├í casava corretamente e dispensava `CarregarLista`, mas dispensa *apenas* esse nome. O bloqueio era um ├║nico nome can├┤nico.
+
+## Por que `BtnCancelarClick` n├úo existe no legado
+
+O SCX tem **dois** bot├Áes, ambos membros do CommandGroup `cntBotoes` ÔÇö e nenhum abandona:
+
+| | Name | Caption | Click |
+|---|---|---|---|
+| Command1 | `btnConfirmar` | `\<Recalcular` | recalcula via o form pai, **n├úo fecha** |
+| Command2 | `btnSair` | `\<Voltar`, **`Cancel = .T.`** | valida, `Replace AltImpost`, reabilita o pai, `fGravarLog`, **s├│ a├¡** `ThisForm.Release` |
+
+O bot├úo do ESC **├®** o bot├úo de a├º├úo. E n├úo poderia ser diferente: o `Valid` de cada campo j├í faz `Replace <coluna> ... in crTpmMvItn` no cursor do pai, ent├úo as edi├º├Áes s├úo *live* ÔÇö n├úo h├í estado a abandonar. Criar o m├®todo exigiria inventar um terceiro bot├úo (PILAR 1) ou um handler vazio (completude); renomear `BtnConfirmarClick` faria o nome mentir, j├í que ele grava e loga.
+
+## Corre├º├úo
+
+Estendi o ramo leitor-baixa com um predicado **pr├│prio** (`Test-LegadoSaidaEhOBotaoDeAcao`) ÔÇö n├úo afrouxei `$legadoLeitorBaixaF8`, para n├úo alargar os outros consumidores. Fail-closed em quatro provas; `FormParaBO`/`BOParaForm` seguem exigidos.
+
+Ele l├¬ `CommandN.Name` do bloco `PROPRIEDADES DE` porque `Get-NomesBotoesLegado` ignora membro de CommandGroup de prop├│sito ÔÇö e os dois bot├Áes daqui s├úo exatamente isso; o corpo do Click reusa `Get-CorpoClickDoObjetoLegado` (fonte ├║nica).
+
+## Largura medida, n├úo presumida
+
+O helper sozinho dispara em **38 dos 748 dumps** ÔÇö o que pareceria um WARNING massivo. Somado ao lado-dump das seis provas do leitor-baixa sobram **2**: `SigOpImp` e `SigReEch` ÔÇö e o `FormSigReEch` migrado **j├í tem** `BtnCancelarClick`, ent├úo a dispensa ├® no-op nele. **Blast radius real: um form.** Os probes das tasks 737/738/739/744/746 seguem PASSA.
+
+## Verificado
+
+- **Compila├º├úo VFP9**: `.fxp` regerado e `.err` ausente nos dois arquivos ÔÇö com **controle negativo** (um `IF` sem `ENDIF` produziu `.err`), porque compilar limpo s├│ vale como prova se o harness souber reprovar.
+- **Completude** (`Test-CompletudeCodigo`): OK nos dois. Os "TODO" que apareceram numa primeira varredura eram a palavra m├®**todo**.
+- **Cobertura de campos**: `BOParaForm` cobre os 23 TextBox do legado; `FormParaBO` os 16 num├®ricos edit├íveis ÔÇö os 4 de lookup chegam ao BO pelos resolvers (fonte ├║nica) e os 3 de exibi├º├úo t├¬m `When` ÔåÆ `.F.` no legado.
+- **Auditorias** (#13, #33, #47, #51, #52, FormBuscaAuxiliar): zero achados para SigOpImp.
+- `indice_classes.txt` regenerado ÔÇö `FormSigOpImp` resolve com o fecho de depend├¬ncias; `config.prg` corretamente n├úo o cita (carga sob demanda).
+
+## Duas armadilhas que fechei
+
+A `.ps1` ├® CRLF com bytes n├úo-ASCII, ent├úo splicei por bytes (`head`/`cat`/`tail`) em vez de usar ferramenta que normaliza. Na confer├¬ncia, `grep -c $'\r'` me devolveu "2462 linhas CRLF" num arquivo com **zero** CR ÔÇö s├│ `tr -dc '\r' | wc -c` com `LC_ALL=C` d├í o n├║mero certo. Por isso uma primeira inser├º├úo no `.prg` duplicou os CRs; restaurei do backup e refiz com LF.
+
+E como o gate casa os nomes por **substring no arquivo inteiro**, documentei no cabe├ºalho do form por que os dois nomes ausentes n├úo se aplicam ÔÇö com o miolo **elidido** (`Btn...CancelarClick`, `Carregar...Lista`). Cit├í-los por extenso os faria passar por presentes e transformaria a dispensa num no-op.
+
+Gravei a li├º├úo em `feedback_gate_fase8_saida_eh_o_proprio_botao_de_acao.md` com o ponteiro no `MEMORY.md`.
+
+Dois pontos para sua decis├úo: alterei `automation/OrquestradorMigracao.ps1`, que ├® infraestrutura compartilhada do pipeline ÔÇö segui o padr├úo dos 17 ramos de exce├º├úo j├í existentes, mas vale sua revis├úo. E n├úo commitei nada; `FormSigOpImp.prg` e `SigOpImpBO.prg` seguem untracked, e a branch atual ├® `fix/erro283-tabstretch`, que n├úo parece o lugar desta migra├º├úo.

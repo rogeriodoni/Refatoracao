@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö no forbidden stub phrases, just unrelated matches on "NAO". The file is clean.
+
+## Summary
+
+Phase 2/8 is complete. Since `SigOpLim` is a **non-CRUD authorization dialog** (not a cadastro over its own table ÔÇö confirmed by Phase 1's own header and `analise.json`'s empty `tabela`), I didn't fabricate fake `Inserir()`/`Atualizar()` for a nonexistent entity (CLAUDE.md's explicit "BO somente-leitura" rule). Instead I added the **real business methods** that replace the legacy `.Valid` handlers, verified every table/column against `docs/schema.sql` (read via `-Raw` per the UTF-16 rule):
+
+- `CarregarDoCursor()` / `CarregarMotivoDoCursor()` ÔÇö load selected rows into properties
+- `BuscarUsuariosAutorizados()` ÔÇö transcribes the 3-branch `usuario.Valid` query (D/X/A), using `FormatarNumeroSQL`/`EscaparSQL` instead of raw `Str()` concatenation
+- `BuscarMotivos()` + `FiltrarMotivosPorClassificacao()` ÔÇö transcribes `get_Motivo.Valid`'s join + emps filter + classification restriction, using separate cursors to avoid self-overwrite
+- `ValidarSenhaUsuario()` / `ValidarEConsumirSenhaLivre()` ÔÇö transcribe `senha.Valid`'s two branches; `fCriptografar()` is called literally inside `TRY/CATCH` (per the documented lesson: it was never ported and must be left to error, not stubbed with a fake hash)
+- `GeraSenha()` ÔÇö literal transcription, documented as inert/dead code in the legacy (its result is never consumed)
+- `ComporAutorizacaoSoMotivo/SenhaLivre/UsuarioSenha()` ÔÇö assemble the final `this_cZSenha`/`this_lAutorizado`, each calling `RegistrarAuditoria("AUTORIZACAO")`
+- `ObterChavePrimaria()` override (PROTECTED) backing that audit call
+
+All writes stay outside `TRY/CATCH` per rule #1, methods the Form will call are left public, internal helpers stay `PROTECTED`. File: `C:\4c\projeto\app\classes\SigOpLimBO.prg`.

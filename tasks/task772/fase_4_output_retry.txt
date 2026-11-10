@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## O que estava reprovando
+
+Medi os tr├¬s predicados do ramo **ARVORE** do `case 4` (`OrquestradorMigracao.ps1`) em vez de adivinhar. O legado dispensa Grid/CRUD legitimamente (zero `BaseClass: grid|pageframe`, um `olecontrol`, 7 chamadas da API de n├│s), e do lado migrado s├│ **um** predicado falhava:
+
+```
+temArvoreMigrada = True   temBotoes = True   temCarga = False  <-- aqui
+```
+
+Dispensar a grade n├úo dispensa o **m├®todo de carga** ÔÇö era isso que faltava, e ├® trabalho real, n├úo concess├úo.
+
+## Entrega
+
+`FormSIGOPNOP.prg` ganhou a carga da ├írvore (a superf├¡cie de lista desta tela), transcrita dos `PROCEDURE maketree`/`maketreeenv` do dump:
+
+- `CarregarDados()` ÔÇö escolhe o crit├®rio (O.P. ou Envelope, mutuamente exclusivos no legado), chama `SIGOPNOPBO.PesquisarPorOP/PesquisarPorEnvelope` e desenha a ├írvore
+- `PopularArvore()` ÔÇö os cinco n├¡veis de n├│, com as **diferen├ºas reais** entre os dois m├®todos legado preservadas (├¡cone da raiz 1 vs 5, movimenta├º├úo 2 vs 1, prefixo `Nops` no material, e o n├│ de peso que o `maketree` desenha com `Pesos = 0` e o `maketreeenv` n├úo)
+- `PrepararArvore()` + `CarregarImagemArvore()`, `ExibirImagemProduto()`, `AdicionarNoOrigemDestino()`, `AdicionarNoMedida()`, `ArvoreDisponivel()`
+- propriedades `this_nNodeExp` (o `pnNodeExp` que Fwbtng1/2 leem na Fase 7) e `this_lImagensArvore`
+
+Eventos continuam para a Fase 7/8, como o roteiro prev├¬.
+
+## Dois defeitos que o probe pegou
+
+Instanciei com um stub da ├írvore e exercitei `PopularArvore` **duas vezes** ÔÇö foi o que exp├┤s:
+
+1. `LOADPICTURE()` **rejeita os cinco `.jpg`** (`OLE 0x800a01e1`) com os arquivos existindo, ent├úo `IF FILE()` n├úo protegeria. Fallback para o `.Ico`/`.bmp` que o pr├│prio legado nomeia **comentado na mesma linha** (os seis est├úo em `vbmp\`).
+2. Pior: num TRY ├║nico, essa falha abortava antes do `ClearNodes` e **os n├│s acumulavam** ÔÇö 15 viravam 29 na segunda pesquisa, o resultado antigo pendurado sobre o novo. Separei em dois TRY, reproduzindo a separa├º├úo do legado (imagens no `Init`, propriedades no `MakeTree`).
+
+## Provas
+
+- **Compila├º├úo**: `.fxp` gerado, **zero `.err`** nos dois arquivos ÔÇö com smoke test antes, confirmando que o `vfp9.exe` realmente executa nesta sess├úo
+- **Instancia├º├úo**: `BaseClass=Form`, 800x600, caption correto; `CarregarDados` PUBLIC e `PopularArvore` PROTECTED (medido por `PEMSTATUS(...,2)`)
+- **Comportamento**: `ClearNodes` 1ÔåÆ2 e n├│s 15ÔåÆ14 (sem ac├║mulo), imagens carregadas exatamente 6 e est├íveis na 2┬¬ chamada, `Decimals` restaurado, `Container2` volta a invis├¡vel, campos vazios n├úo consultam, **zero erros** capturados
+- **Gate Fase 4 (ramo ARVORE) = True**; `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes` limpos; zero TODO/stub
+- CRLF ├¡ntegro (1160/1160), artefatos tempor├írios removidos
+
+Guardei a li├º├úo do `LOADPICTURE` na mem├│ria e mantive a medi├º├úo em `automation\medir_loadpicture_jpeg.prg`, referenciada pelo coment├írio do c├│digo.

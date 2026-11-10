@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 conclu├¡da. Criado `C:\4c\projeto\app\forms\operacionais\FormSigOpMop.prg` (404 linhas, 19,5 KB).
+
+## O que foi entregue
+
+**Classe base** ÔÇö `DEFINE CLASS FormSigOpMop AS FormBase`, geometria TRANSCRITA do dump (759x430, `TitleBar=0`, `ControlBox=.F.`, `MaxButton/MinButton=.F.`, `Movable=.F.`, `ClipControls=.F.`, `BorderStyle=2`).
+
+**Propriedades de estado** mapeadas 1-para-1 das custom properties do SCX: `ParentForm`ÔåÆ`this_oFormPai`, `PcEscolha`ÔåÆ`this_cEscolha`, `lHouveIns`ÔåÆ`this_lHouveInsercao`, `lHouveExcl`ÔåÆ`this_lHouveExclusao`, `Antvalue`ÔåÆ`this_nValorAnterior`.
+
+**`Init(par_oFormPai, par_nDataSession, par_cEscolha, par_cOperacaoPai)`** ÔÇö mesma assinatura do legado mais a opera├º├úo PAI (que no legado vinha do cursor compartilhado `crSigCdOpe.Dopes`); Caption reproduzido com `CHR()`.
+
+**`InicializarForm`** ÔÇö cria `SigOpMopBO`, repassa o contexto, `Picture`, chama `ConfigurarPageFrame`, propaga Caption para os dois labels, `TornarControlesVisiveis`, desabilita o form pai.
+
+**`ConfigurarCabecalho`** ÔÇö `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` com geometria transcrita, nomes conforme `mapeamento.json`, `AutoSize=.F.` expl├¡cito (regra #23).
+
+**`Destroy`** ÔÇö reabilita o pai no FUNIL (o legado s├│ reabilita no `cmdSair.Click`, o que deixaria o Cadastro de Opera├º├Áes inerte se o di├ílogo fechasse por ESC) + `DODEFAULT()` na ├║ltima linha.
+
+## Decis├Áes que registrei no cabe├ºalho
+
+- **Sem PageFrame real**: o SCX herda de `form` puro e n├úo declara nenhum objeto `BaseClass: pageframe`; as refer├¬ncias a `Pagina.Lista` no c├│digo s├úo do form **PAI** (`ThisForm.ParentForm.Pagina...`). O m├®todo mant├®m o nome por contrato do pipeline.
+- **Sem barra de seis bot├Áes CRUD**: a SECAO 1 lista 25 objetos e os ├║nicos CommandButton s├úo `cmdInserir`/`cmdExcluir`/`cmdSair`, todos com `Parent: SIGOPMOP`. Cri├í-la seria inventar interface (PILAR 1).
+- **Ordem do `AddObject`**: a faixa ├® a PRIMEIRA ÔÇö os tr├¬s bot├Áes ficam em `Top=3`, dentro da ├írea do cabe├ºalho (regra #11), e entram depois dela na Fase 4.
+- **`DataSession = 1`** como equivalente fiel ao `Set DataSession to pnDataSes`; o par├ómetro fica guardado mas **n├úo** emito `SET DATASESSION TO` (efeito colateral global ap├│s o Release).
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 3 (ramos paginado e flat) | **APROVADO** nos dois |
+| `Test-CompletudeCodigo` (TODO/stubs/procedure vazia/pend├¬ncia) | 0 problemas |
+| Acentos literais, `.Self`, `Controls("nome")`, `ISEMPTY`, `PUBLIC PROCEDURE`, `MESSAGEBOX`, `this_X .Value`, `RETURN` em TRY, CATCH mudo | 0 cada |
+| Props do BO usadas / m├®todos `THIS.` chamados | todos resolvem |
+| `VerificarPropriedadesInexistentes` / `VerificarFuncoesNaoDefinidas` / `VerificarMetodoProtegidoChamadoDeFora` | OK |
+| **Compila├º├úo VFP9** | `.FXP` gerado, `.ERR` ausente ÔÇö **com controle negativo** |
+
+Sobre a compila├º├úo: o **smoke test desta sess├úo FALHOU** (`exit=0`, `.FXP` criado, arquivo de sa├¡da ausente ÔÇö o VFP compila e sai sem executar). Usei ent├úo o caminho documentado: passei o pr├│prio `.prg` como `-T`. Para que a aus├¬ncia de `.ERR` signifique algo, rodei o controle negativo (c├│pia do form + `PUBLIC PROCEDURE`, regra #9.1) e o `.ERR` saiu apontando **s├│** as linhas 407-409 acrescentadas ÔÇö o form tem 404 linhas. Isso prova **compila├º├úo limpa**, e apenas isso: **n├úo houve como provar instancia├º├úo nem runtime** nesta sess├úo. Limpei o `.FXP` depois (regra do `.fxp` velho).
+
+Uma observa├º├úo fora do escopo desta fase: por ser di├ílogo **filho** (aberto pelo `FormOPE`, n├úo pelo menu), este form n├úo deve receber item em `popMovimentos` ÔÇö a instru├º├úo gen├®rica de integra├º├úo do prompt n├úo se aplica aqui.

@@ -14442,3 +14442,87 @@ nunca vao ser aplicadas em validacao (`gb_4c_ValidandoUI`/etapa `07_validarUI`).
 Sem auto-fix neste texto - ver CorretorAutomatico **#221** (WARNING-only).
 Origem: Erro232 (2026-10-25, `task697`/`FormSigOpChc` - "Cadastro de Cheques
 Compensados").
+
+## 250. Rename de `AddObject` para contornar OUTRO bug, sem atualizar os consumidores no mesmo bloco - fix correto, aplicado so na metade, sobrevive a 9+ tentativas de retry
+
+`Erro283` (`Formsigopind`/`task750`, grid `grd_4c_Lancamento.Column11`) e um caso
+documentado de **regressao auto-infligida pelo proprio loop de retry**: o
+`AddObject` do CheckBox de selecao foi renomeado de `chk_4c_Selec` para
+`chk_4c_selec2` numa tentativa anterior (para investigar um crash diferente -
+`Column.AddObject` colidindo com o tipo da coluna de um cursor largo ja aberto,
+regra relacionada a #18), mas **nenhum dos quatro `BINDEVENT` nem o `Sparse`
+nem a segunda atribuicao de `CurrentControl`** foram atualizados para o nome
+novo. O resultado e pior que nao ter corrigido nada: as DUAS linhas de
+`CurrentControl` ficam uma do lado da outra, a correta primeiro e a STALE
+(leftover da tentativa anterior, com o MESMO comentario duplicado colado
+acima) depois - a ultima vence e aponta para um membro que nunca foi criado
+naquele caminho de codigo.
+
+```foxpro
+*-- ERRADO (Formsigopind.prg:1980-2009, estado real apos 9 tentativas de fix)
+loc_oGrd.Column11.AddObject("chk_4c_selec2", "CheckBox")   && renomeado AQUI
+WITH loc_oGrd.Column11.chk_4c_selec2
+    ...
+ENDWITH
+
+*-- CurrentControl: sem isto a coluna continua desenhando o Text1 ...
+loc_oGrd.Column11.CurrentControl = "chk_4c_selec2"         && CORRETO
+
+*-- CurrentControl: sem isto a coluna continua desenhando o Text1 ...
+loc_oGrd.Column11.CurrentControl = "chk_4c_Selec"          && STALE - sobrescreve
+loc_oGrd.Column11.Sparse         = .F.                     && acima, member inexistente
+
+BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "Click", THIS, "ChkSelecClick")       && 4x
+BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "MouseDown", THIS, "ChkSelecMouseDown")
+```
+
+```foxpro
+*-- CERTO - renomear de volta para o nome canonico em TODOS os sites do bloco,
+*-- e apagar a linha duplicada/stale (nao "adicionar a nova por cima")
+loc_oGrd.Column11.AddObject("chk_4c_Selec", "CheckBox")
+WITH loc_oGrd.Column11.chk_4c_Selec
+    ...
+ENDWITH
+
+loc_oGrd.Column11.CurrentControl = "chk_4c_Selec"
+loc_oGrd.Column11.Sparse         = .F.
+
+BINDEVENT(loc_oGrd.Column11.chk_4c_Selec, "Click", THIS, "ChkSelecClick")
+```
+
+O erro em runtime - `Error with Column11 - CurrentControl : Expression
+evaluated to an illegal value` - acontece dentro do `TRY` de
+`InicializarForm`, que devolve `.F.`; `CREATEOBJECT(formClass)` devolve valor
+logico; o teste "Instanciacao" falha com o sintoma generico `CREATEOBJECT
+retornou valor nao-objeto` (mesmo sintoma do Pattern #220, causa diferente) -
+sem nenhuma pista de grid/checkbox no log de teste.
+
+**O que torna este caso diferente do Pattern #186 (AddObject/BINDEVENT
+incoerentes)**: ali o defeito nasce de COPIAR um bloco de um grid para outro
+sem trocar o nome (erro do migrador, uma vez so). Aqui o defeito nasce do
+PROPRIO CICLO DE CORRECAO AUTOMATICA: uma tentativa de retry renomeia o
+`AddObject` para isolar/contornar um bug diferente, e tentativas SEGUINTES -
+inclusive uma que diagnosticou o problema CORRETAMENTE em texto (*"o AddObject
+continuava usando chk_4c_selec2 em vez do nome canonico"*) - deixaram a
+correcao pela metade: o `AddObject` foi revertido, mas BINDEVENT/Sparse/a
+segunda linha de `CurrentControl` continuaram com o nome antigo, porque o
+patch so tocou a PRIMEIRA ocorrencia do nome no bloco. A tarefa rodou **10
+tentativas automaticas em `06_testForm` + 10 em `06b_testeAutomatico`**, com
+pelo menos uma tentativa descrevendo o fix certo em prosa, e terminou FAILED
+com o bug ainda presente no arquivo - prova de que "o agente de retry disse
+que corrigiu" nao e o mesmo que "o arquivo no disco reflete a correcao".
+
+**Regra para quem escreve/revisa um fix de rename em bloco de
+`AddObject`+`Column`**: ao trocar o nome do controle em QUALQUER ponto do
+bloco, fazer `grep` do nome ANTIGO no metodo inteiro (nao so nas 2-3 linhas
+vizinhas do `AddObject`) e substituir TODAS as ocorrencias na MESMA edicao -
+nunca deixar a atribuicao antiga ao lado da nova esperando que "a ultima
+vale" resolva sozinho, porque se a ordem inverter (cola-se a linha nova ANTES
+da antiga, que e exatamente o que aconteceu aqui) a antiga vence e reverte o
+fix silenciosamente. Comentario duplicado (o mesmo texto aparecendo duas vezes
+seguidas) e o sinal mais barato de que ha um bloco de retry anterior colado
+por cima, nao substituido.
+
+Sem auto-fix neste texto - ver CorretorAutomatico **#222**. Origem: Erro283
+(reincidencia, `task750`/`Formsigopind` - "Posicao do Indice" OPERACIONAL,
+2026-11-10).

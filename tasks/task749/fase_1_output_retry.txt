@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1 conclu├¡da. Criado `C:\4c\projeto\app\classes\SigOpImpBO.prg` (207 linhas, 11 KB).
+
+## O que o form ├®
+
+`SIGOPIMP` ├® um **di├ílogo FILHO** aberto pela tela de movimento (`ParentForm.ParentForm`) para ajustar ├á m├úo os impostos de **UM item** da nota. Ele recebe `(pForm, pnDatSes, pConexao)` e trabalha sobre o cursor de itens do pai (`crTpmMvItn`), posicionado por `cItens`.
+
+Consequ├¬ncia de arquitetura que registrei no cabe├ºalho do BO: **este di├ílogo n├úo grava em tabela de movimento** ÔÇö todo `Replace` do legado tem por destino o cursor do pai, e a persist├¬ncia fica com a tela de movimento (`Atuatot` + `CalcImposto`). O ├║nico acesso remoto de escrita ├® o `UPDATE SigCdPro.ClFiscals` opcional, confirmado pelo usu├írio. Por isso o BO n├úo sobrescreve `Inserir`/`Atualizar`/`ExecutarExclusao` ÔÇö o comportamento herdado da `BusinessBase` j├í ├® o correto, e inventar INSERT violaria a regra #22.
+
+## Propriedades: 51 pr├│prias (59 com as herdadas)
+
+Tipos conferidos em `docs/schema.sql` lido com `Get-Content -Raw` (regra #14), tabela `SigMvItn` ÔÇö a estrutura que o cursor espelha:
+
+- **Item** (22 colunas): `citens` n(10,0), `cpros` char(14), `dpros` char(65), `totas` n(11,2), IPI (`aliqs` n(4,2)/`valipis`/`bcipis`), ICMS (`aliqicms` n(5,2)/`icms`/`baseicms`), ICMS-ST (`icmss`/`bcicmss`), base + 7 impostos (`valbases`, `vpis`, `vcofins`, `taxaiis`, `iss`, `irrf`, `inss`, `cssl`), `cfops` char(10).
+- **Lookups**: `SigCdClf` (Codigos/Descricaos/BIcms), `SigCdCFO` (Descricaos + 6 al├¡quotas + `ipis`/`icms` char(1) de tributa├º├úo), `SigCdPro.cgrus`, `SigCdGRP.servicos`.
+- **Contexto do pai**: `cliFors`, `emps`/`dopes`/`numes` (as tr├¬s partes da chave do log, cada uma na largura do schema porque a concatena├º├úo ├® posicional ÔÇö regra #42), usu├írio.
+- **Estado**: `this_lManipulou` (o `maniPulou` do legado), `this_lAltImposto`, `this_lAtualizouProduto`, e os 8 aliases de cursor.
+
+Dois pontos onde o tipo ├® f├ícil de errar e eu checei no schema:
+- **`AltImpost` n├úo existe em `SigMvItn`** ÔÇö grep no schema d├í zero. ├ë coluna de controle que s├│ vive no cursor de trabalho do pai. Documentei isso na declara├º├úo para ningu├®m tentar inclu├¡-la num INSERT depois.
+- **`SigCdGRP.servicos` ├® `numeric(1,0)`**, n├úo `bit` ÔÇö property num├®rica, nunca l├│gica (├® coluna de dom├¡nio; achatar em l├│gica ├® o defeito da regra #34/duas-op├º├Áes).
+
+## Verifica├º├Áes executadas
+
+| Gate | Resultado |
+|---|---|
+| `Test-CompletudeCodigo` (os 4 regexes reais do 05d) | **0 problemas** |
+| `COMPILE` no VFP9 | **.fxp gerado, nenhum .err** |
+| `CREATEOBJECT("SigOpImpBO")` real | **SUCESSO** ÔÇö `Tabela=[SigMvItn]`, `Chave=[citens]`, 59 props, tipos batendo com os prefixos `c`/`n`/`l` |
+| 22 colunas do cursor do legado ÔåÆ property | **22/22 mapeadas** |
+| 17 colunas de lookup/contexto ÔåÆ property | **17/17 mapeadas** |
+| Acentos literais / `PUBLIC` em `DEFINE CLASS` / `RETURN` dentro de `TRY` / `MESSAGEBOX` | nenhum |
+
+O `.fxp` e os scripts tempor├írios de compila├º├úo/probe foram removidos; s├│ `SigOpImpBO.prg` ficou no working tree (`??` ÔÇö adi├º├úo nova).
+
+## Pend├¬ncia que a Fase 2 vai encontrar
+
+`FSigOpFin_imp(conta, "", "<IMPOSTO>", conexao)` ÔÇö usada 7├ù no `Valid` do campo "BC Imps" quando a al├¡quota do CFOP vem zerada ÔÇö **n├úo existe** no projeto (`grep` em todos os `.prg`: zero). ├ë fun├º├úo global do `SIGFUNCS.PRG` legado que devolve uma string cujos chars 21..25 s├úo a al├¡quota. Confirmei que a tabela `sigopfin` **existe** no schema, ent├úo a Fase 2 tem como implementar a consulta de verdade; j├í declarei `this_cCursorFin` para isso. Registro expl├¡cito porque, pela regra #27, um stub devolvendo `0` aqui gravaria imposto errado em sil├¬ncio ÔÇö n├úo ├® op├º├úo.

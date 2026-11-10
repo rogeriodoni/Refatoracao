@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both present. Fase 4/8 is complete for `Formsigoplin.prg`.
+
+**Summary of changes to `C:\4c\projeto\app\forms\cadastros\Formsigoplin.prg`:**
+- `ConfigurarPaginaLista()`: added `cnt_4c_Botoes` with 5 CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar), `cnt_4c_Saida` with `cmd_4c_Encerrar` (canonical Left=917/Width=90 per CLAUDE.md regra #10), and `grd_4c_Lista` (8 columns: Tipo, Lote, Instru├º├úo, Data, Grupo, Conta, Valor, Moeda) bound to `cursor_4c_Dados`.
+- Added `CarregarLista()` ÔÇö calls `sigoplinBO.Buscar("")` and binds the grid (RecordSource ÔåÆ ControlSource ÔåÆ headers/widths reconfigured after, per the RecordSource-reset rule).
+- Added `AlternarPagina(par_nPagina)` ÔÇö switches `ActivePage` and reloads the list when returning to Page1.
+- Wired `CarregarLista()` into `InicializarForm()`.
+- Click handlers (`BtnIncluirClick`, etc.) and `BINDEVENT` wiring are intentionally deferred to Fases 7-8, per the file's own phase-boundary convention and the "eventos" pipeline split confirmed in the orchestrator's Fase 4 gate (`ConfigurarPaginaLista` + `AlternarPagina` presence only).
+
+Balanced syntax verified (12 PROCEDURE/ENDPROC, 20 WITH/ENDWITH, 2 TRY/ENDTRY, 17 AddObject calls all accounted for).

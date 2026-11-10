@@ -1,0 +1,45 @@
+VARTYPE(loForm) = O
+INSTANCIACAO     = OK
+BaseClass        = Form
+Caption          = Dados Fiscais
+Width x Height   = 1000 x 600
+PageCount        = 2
+--- handlers de Click (5=existe / 2=protegido) ---
+  BtnConfirmarClick            existe=.T.  protegido=.F.
+  CmdImprimirEtiquetasClick    existe=.T.  protegido=.F.
+  CmdReimprimirDanfeClick      existe=.T.  protegido=.F.
+  CmdEnviarEmailNfeClick       existe=.T.  protegido=.F.
+  CmdCancelarNotaClick         existe=.T.  protegido=.F.
+  CmdCartaCorrecaoClick        existe=.T.  protegido=.F.
+  CmdProcessosNfceClick        existe=.T.  protegido=.F.
+  CmdGerarXmlClick             existe=.T.  protegido=.F.
+  CmdGerarNfeClick             existe=.T.  protegido=.F.
+--- BINDEVENT do Click de cada botao ---
+  cmd_4c_Ok                          eventos=1 [CLICK->BTNCONFIRMARCLICK]
+  pgf_4c_1.Page1.cmd_4c_ImpEtiqueta  eventos=1 [CLICK->CMDIMPRIMIRETIQUETASCLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm1      eventos=1 [CLICK->CMDREIMPRIMIRDANFECLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm2      eventos=1 [CLICK->CMDENVIAREMAILNFECLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm3      eventos=1 [CLICK->CMDCANCELARNOTACLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm4      eventos=1 [CLICK->CMDCARTACORRECAOCLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm5      eventos=1 [CLICK->CMDPROCESSOSNFCECLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm6      eventos=1 [CLICK->CMDGERARXMLCLICK]
+  pgf_4c_1.Page1.cmd_4c_Fwbtnm7      eventos=1 [CLICK->CMDGERARNFECLICK]
+--- chamadas reais de fora ---
+  CmdCancelarNotaClick         -> OK
+  CmdCartaCorrecaoClick        -> OK
+  CmdProcessosNfceClick        -> OK
+  CmdImprimirEtiquetasClick    -> OK
+  CmdGerarNfeClick             -> OK
+  CmdGerarXmlClick             -> OK
+  CmdEnviarEmailNfeClick       -> OK
+  CmdReimprimirDanfeClick      -> OK
+  BtnConfirmarClick            -> OK (liberou o form)
+--- dialogos suprimidos ---
+[05/11/2026 11:08:29 PM] Recurso Indisponível: Esta ação depende de tela SigOpNFd (modo CAN), que não veio no acervo migrado.Não realizado: cancelar a Nota Fiscal.
+[05/11/2026 11:08:29 PM] Recurso Indisponível: Esta ação depende de tela SigOpNFd (modo CAR), que não veio no acervo migrado.Não realizado: emitir a Carta de Correção da Nota Fiscal.
+[05/11/2026 11:08:29 PM] Impressão de Etiquetas: A nota ainda não foi gravada - não há itens para etiquetar.
+[05/11/2026 11:08:29 PM] Gerar NF-e: A nota ainda não foi gravada - não há movimentação para gerar a NF-e.
+[05/11/2026 11:08:29 PM] Gerar XML: A pasta de arquivos de NF-e não está configurada no cadastro da empresa (SigCdEmp.pastas).
+[05/11/2026 11:08:29 PM] Envio de E-mail: A pasta de arquivos de NF-e não está configurada no cadastro da empresa (SigCdEmp.pastas).
+[05/11/2026 11:08:29 PM] Reimpressão do DANFE: Não há registro desta nota para reimprimir.
+[05/11/2026 11:08:29 PM] Movimento Indisponível: O cabeçalho do movimento não está disponível nesta sessão: os dados fiscais foram validados, mas o número da nota e os totais NÃO foram devolvidos à tela de movimentação.Campo não gravado: Notas.

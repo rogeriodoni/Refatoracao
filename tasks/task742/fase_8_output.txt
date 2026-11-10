@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. All residue from my own compile checks is removed; remaining `??` files belong to earlier phases (already present before I started).
+
+## Summary
+
+Phase 8 of the `Formsigopfis`/`sigopfisBO` migration (task742) is complete. This form is a **modal sub-dialog** (Dados Fiscais da Nota Fiscal) embedded in a parent movement form ÔÇö not a Lista/Dados CRUD screen ÔÇö so the generic phase-8 template (BtnSalvarClick, CarregarLista, etc.) didn't literally apply. I adapted to what the architecture actually needed:
+
+**sigopfisBO.prg**
+- Added `CarregarPorCidchaves()` to load an existing `SigMvNfi` row by PK.
+- Fixed a pre-existing, widespread bug (documented in project memory) where `CarregarDoCursor` passed type-letters (`"C"`/`"N"`/`"D"`) as `TratarNulo`'s *default value* instead of a real default ÔÇö a NULL column would literally become the string `"C"`. Fixed all 60+ call sites in this BO.
+
+**Formsigopfis.prg**
+- `PrepararChaveMovimento()` ÔÇö seeds the BO's Emps/Dopes/Numes/Cidchaves from `TprMvCab` before anything else runs (several existing methods already depended on this).
+- `CarregarRegistroAtual()` ÔÇö decides INCLUIR vs ALTERAR/VISUALIZAR, loads or initializes the BO, and syncs to the screen.
+- `FormParaBO()` / `BOParaForm()` ÔÇö full two-way binding for every `crSigMvNfi`-bound control (~70 fields), via small `CopiarControleParaBO`/`CopiarBOParaControle` helpers.
+- `PreencherDescricoesDerivadas()` ÔÇö re-resolves CFOP/Transportadora/Munic├¡pio descriptions (from the same real tables the lookups already use) when reopening an existing note; left Benef├¡cio Fiscal/Servi├ºo Municipal blank since no real table backs those legacy cursors (documented, not invented).
+- Wired `BtnConfirmarClickExec` to actually persist (`FormParaBO` + `this_oBusinessObject.Salvar()`) before touching parent totals.
+- Implemented the 9 frete/seguro/despesas calculation handlers (% ├ù base ÔåÆ ICMS/IPI) per CLAUDE.md's literal-formula rule.
+
+Verified with a real VFP9 `COMPILE` (not just static review): both files compile with no `.ERR`, confirmed against a negative control that does produce one.

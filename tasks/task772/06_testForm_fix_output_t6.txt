@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmado: este erro ├® de rede/ambiente, n├úo um defeito no c├│digo.
+
+**Diagn├│stico**: o erro 1526 DBNETLIB ("SQL Server inexistente ou acesso negado") ocorre na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pre-flight check gen├®rico que tenta `SQLSTRINGCONNECT` **antes** de qualquer `CREATEOBJECT` do `FormSIGOPNOP`/`SIGOPNOPBO`. O log confirma: a falha acontece logo ap├│s "Conectando ao banco de dados..." e nunca chega a "Carregando depend├¬ncias" do form em si.
+
+Testei a conectividade de rede agora mesmo:
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433 -> TcpTestSucceeded = False
+```
+
+Isso confirma que a m├íquina do pipeline est├í sem rota para o SQL Server nesta tentativa ÔÇö mesma assinatura j├í documentada em mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`), que tem **5 confirma├º├Áes anteriores s├│ nesta mesma task772/FormSIGOPNOP** (tentativas 1 a 5), todas com os dois arquivos revisados linha a linha sem nenhum defeito encontrado.
+
+Revisei novamente `FormSIGOPNOP.prg` e `SIGOPNOPBO.prg` por completo (conte├║do recebido integralmente neste prompt): todas as guardas j├í est├úo corretas ÔÇö `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` protegendo o OCX `ctTree`, TRY/CATCH completo em `PesquisarPorEnvelope`/`PesquisarPorOP`/`BuscarImagemProduto`/`MontarCursorArvore`/`FecharCursoresResultado`, guard de buffering antes do `TABLEREVERT` (regra #52). **N├úo h├í nada para corrigir nestes arquivos** ÔÇö edit├í-los "para tentar algo" seria o anti-padr├úo que a mem├│ria do projeto existe justamente para evitar.
+
+Registrei esta 6┬¬ reconfirma├º├úo na mem├│ria do projeto. Os arquivos **n├úo foram alterados** ÔÇö a corre├º├úo real ├® restabelecer a rota de rede at├® `192.168.200.10:1433` na m├íquina do pipeline (hist├│rico mostra que essa rota j├í oscilou entre alcan├º├ível e inalcan├º├ível v├írias vezes).

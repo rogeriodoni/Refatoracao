@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada e verificada em VFP9.
+
+## O que entrou em `projeto\app\forms\operacionais\FormSigOpLoc.prg` (300 ÔåÆ 858 linhas)
+
+O ramo **PAGINADO** do gate (`ConfigurarPaginaLista` + `AlternarPagina`) n├úo se aplica: o SCX ├® `Class: form` puro, sem `BaseClass: pageframe` e sem `Grupo_Op` ÔÇö inventar Page Lista/Dados com 6 bot├Áes CRUD violaria o PILAR 1. Vale o ramo **FLAT**, que cobra a superf├¡cie que o legado tem. Medido: `grade=True botoes=True carga=True`.
+
+| m├®todo | o que reproduz do dump |
+|---|---|
+| `ConfigurarGrade` | `grd_4c_Dados` (GridSels) 337x165 em 192,132; `ColumnCount 3`, `HeaderHeight 0`, `RowHeight 18`, `ScrollBars 2`, `GridLineColor 238,238,238` |
+| `FormatarColunasGrade` | 3 colunas, larguras **15/80/220**, `Courier New` do Init sobre o `Tahoma` do SCX, Column2/3 `ReadOnly` (= o `Return(.f.)` do `When`) |
+| `GarantirCheckBoxMarcacao` | `chk_4c_Check1` na Column1 + `CurrentControl` + `Sparse = .F.` + os 4 `BINDEVENT`, **idempotente** |
+| `ConfigurarBotoes` | `shp_4c_Shape2` **antes** dos 3 bot├Áes (ordem da ├írvore do SCX) |
+| `AjustarOrdemTabulacao` | `TabIndex` s├│ dos focaliz├íveis, depois de todo `AddObject` |
+| `CarregarDados` | funil ├║nico: `SELECT` ÔåÆ bind ÔåÆ caixa ÔåÆ larguras ÔåÆ `GO TOP` ÔåÆ `Refresh` |
+| `ChkMarcacao{KeyPress,MouseUp,MouseDown,Click}` | os 4 eventos do `Check1`, delegando a invers├úo ao `SigOpLocBO.AlternarSelecao` |
+
+## Quatro medi├º├Áes que determinaram a ordem do c├│digo
+
+1. **Grid auto-liga ao alias CORRENTE quando `ColumnCount` ├® definido** ÔÇö com `crSigOpOco` selecionado, `Column1.ControlSource` virou `crsigopoco.codigos`, que ├® `char(10)` (1┬¬ coluna de `SigOpOco` no schema). `Column1.AddObject(...,"CheckBox")` ali estoura **no pr├│prio AddObject**: `Data type mismatch`. Da├¡ o `ColumnCount` ser a ├║ltima atribui├º├úo e a caixa nascer s├│ no funil, ap├│s `ControlSource` apontar para `Imps`.
+2. **Ligada a `Imps` (bit ÔåÆ L├│gico) o `AddObject` funciona** e `.Value` nasce **L├ôGICO**; atribuir `.Value = 0` o converte para num├®rico. Por isso **n├úo** h├í `.Value = 0` aqui ÔÇö a regra geral vale para caixa solta ou coluna num├®rica.
+3. **`Column.Width` depois de `RecordSource` fica** (15/80/220) ÔÇö antes, volta ao default 90.
+4. **`framework.vcx` lido como DBF**: `fwbtnp = 40x40`, `fwbtng = 80x100`. E `Shape` n├úo tem `ForeColor` nem `ZOrderSet` (os `ZOrderSet` do dump ficaram s├│ documentados em coment├írio).
+
+## Prova por instancia├º├úo (n├úo s├│ compila├º├úo)
+
+`CREATEOBJECT` devolveu `"O"` nos **dois** cen├írios, inclusive no hostil (alias estranho de 1┬¬ coluna char selecionado). Com cursor: 4 `BINDEVENT` nos handlers certos (todos PUBLIC, `PEMSTATUS(...,2) = .F.`), toggle `.F.ÔåÆ.T.` (Espa├ºo) `ÔåÆ.F.` (MouseUp) e **sem mudar** na tecla `A`; `MarcarTodos ÔåÆ 3/3`, `DesmarcarTodos ÔåÆ 0`; 2┬¬ chamada do funil preserva `CurrentControl` e larguras; os 6 controles vis├¡veis na ordem da ├írvore do SCX; `crSigOpOco` do chamador segue aberto. Sem cursor, `CarregarDados()` devolve `.F.` em sil├¬ncio e a tela abre.
+
+Est├íticos: 0 acentos literais, 0 `RETURN` dentro de `TRY`, 0 procedure vazia, 0 marcador de pend├¬ncia, 0 `this_X .Value`, CRLF preservado (858/858).
+
+## Dois pontos para o seu conhecimento
+
+- **`cmd_4c_BtnSair` fica 3px fora do form**: `Left 723` + os 80 da classe `fwbtng` = 803 contra `Width = 800`. Mantive a geometria do legado (recorte **herdado** do SCX, regra #28) em vez de encolher para 75x75 ÔÇö trocar mudaria a tela que o usu├írio v├¬ hoje. Se preferir o can├┤nico, ├® uma linha.
+- **A altern├óncia do mouse ficou no `MouseUp`**, n├úo no `MouseDown` como no dump: ├® o par can├┤nico j├í medido do projeto (`Formsigredtv`/`Formacg`), que evita altern├óncia dupla quando o `NoDefault` do delegate n├úo suprime o toggle nativo. Efeito para o usu├írio ├® id├¬ntico; n├úo consegui medir o caso contr├írio sem entrada real de mouse.
+
+Os `Btn*Click` dos tr├¬s bot├Áes n├úo entraram aqui de prop├│sito ÔÇö s├úo o objeto da Fase 7, e o gate da Fase 4 explicitamente n├úo os cobra. Os probes citados nos coment├írios (`automation\probe763.prg`, `probevcx763.prg`, `probeform763.prg`) ficaram no disco como evid├¬ncia; `.FXP` e o `smoke` foram apagados.

@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue em `C:\4c\projeto\app\forms\operacionais\FormSigOpLib.prg` (+209 linhas, zero removidas, CRLF preservado, ASCII puro).
+
+## Por que n├úo h├í Grid nem bot├Áes CRUD ÔÇö medido, n├úo presumido
+
+Rodei os predicados reais do `case 4` do orquestrador (helpers extra├¡dos por AST, sem dot-source). Dos 7 ramos, **s├│ o CAPTURA se aplica**:
+
+| evid├¬ncia no dump | resultado |
+|---|---|
+| `BaseClass: grid` / `pageframe` / `listbox` | ZERO |
+| `AddCursor` / `pColuna` / `RecordSource` / `ControlSource` / `Grade` / `grd` | ZERO |
+| teste ESTRITO de lista (5 cl├íusulas) | todas `False` |
+| campo de ENTRADA (2 `fwget`, nenhum `ReadOnly`) | `True` |
+
+├ürvore inteira = 12 objetos. Inventar PageFrame Lista/Dados com 6 bot├Áes CRUD violaria o PILAR 1 (e os bot├Áes can├┤nicos ficam em `Left=542..932`, invis├¡veis num form de 550px).
+
+## O que a fase entrega
+
+`ConfigurarBotoes()` (`shp_4c_Shape2` + `cmd_4c_Ok`, na ordem dos registros do SCX), `ConfigurarEventos()`, `CmdOkClick()`, `FecharDialogo()` e `Unload()`.
+
+Duas decis├Áes que divergem do literal do dump, ambas deliberadas:
+- **Bot├úo 75x75, n├úo os 80x100 da classe `fwbtng`** ÔÇö a conta ├® exata: `475+80=555 > 550` (5px recortados) e `3+100=103 > 80` (23px fora da faixa). Com 75x75 fecha em 550 e 78. Mesmo crit├®rio do `fwbtng` de `FormSIGOPGRC`.
+- **`Hide()` no lugar do `ThisForm.Release` legado** ÔÇö o di├ílogo existe para devolver `this_cRetorno`, e `Release()` mata a refer├¬ncia do chamador. `Unload()` mantido porque o legado tem.
+
+## Verifica├º├Áes executadas
+
+VFP9 **executa** nesta sess├úo (smoke test com `STRTOFILE` produziu o arquivo). Ent├úo:
+- **Compila limpo**: dois `.FXP` gerados, zero `.err`.
+- **Instancia e funciona**: 3 filhos na ordem do SCX, bot├úo em 475/3/75x75 (borda direita exata em 550), `Picture` e `DisabledPicture` resolvendo para arquivo existente, `AEVENTS` provando o bind ÔåÆ `CMDOKCLICK`, `CmdOkClick`/`FecharDialogo` PUBLIC e `ConfigurarBotoes`/`ConfigurarEventos` PROTECTED.
+- **O teste que importa**: ap├│s o Click, `VARTYPE = "O"`, `Visible = .F.`, `this_cRetorno` e `Unload()` leg├¡veis ÔÇö Hide, n├úo Release.
+- **CorretorAutomatico**: diff **vazio** em c├│pia sob `\forms\`; s├│ os 2 WARN que a Fase 3 j├í documentou.
+
+## Um achado que vale destacar
+
+O gate passou na primeira tentativa **pelo motivo errado**: meu coment├írio citava literalmente os nomes dos m├®todos do ramo PAGINADO ao transcrever o pedido da fase, e o gate l├¬ o `.prg` inteiro sem distinguir coment├írio de c├│digo ÔÇö `temLayoutPaginado` virou `True` num form com zero Page. O ├║nico sinal foi a mensagem do ramo CAPTURA n├úo ter sido impressa. Reescrevi em prosa; agora CAPTURA ├® o ├║nico `True`. O validador de completude caiu na mesma armadilha com a palavra "PENDENTE". Registrei as duas como 3┬¬ inst├óncia na mem├│ria.
+
+Fica para as fases seguintes, e **n├úo** antecipei: os campos (`Shape1`/`Say2`/`get_codigo`/`get_descr`/`Say1`, com o `InputMask "!!!!!!!!!!"` ÔÇö regra #49), o lookup em `SigCdNcf`, o `When` de `get_descr` e a ordem de tabula├º├úo. N├úo commitei ÔÇö os dois arquivos seguem untracked, como o pipeline os deixou.

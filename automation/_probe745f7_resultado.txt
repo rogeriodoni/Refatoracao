@@ -1,0 +1,39 @@
+VARTYPE(loForm) = O
+INSTANCIACAO     = OK
+--- (2) metodos da Fase 7: existe / protegido ---
+  BtnConsultaClick       existe=.T.  protegido=.F.
+  BtnEncerrarClick       existe=.T.  protegido=.F.
+  FocarCampoRecusado     existe=.T.  protegido=.F.
+  FormParaBO             existe=.T.  protegido=.T.
+  (esperado: os 3 primeiros protegido=.F.; FormParaBO=.T.)
+--- (3) BINDEVENT de obj_4c_Sair.Buttons(N) ---
+  obj_4c_Sair existe=.T.  ButtonCount=2
+  Buttons(1) Caption=[\<Consulta] eventos ligados=1
+  Buttons(2) Caption=[Encerrar] eventos ligados=1
+--- (5a) Grupo vazio ---
+  BtnConsultaClick voltou sem excecao
+  this_cCampoFoco = [Grupo]  (esperado Grupo)
+  Form.Enabled    = .T.  (esperado .T.)
+  dialogo: [06/11/2026 05:57:16 AM] Histórico de Produtos: Grupo Inválido !  
+--- (4) FormParaBO + (5b) Conta sem conexao ---
+  BtnConsultaClick voltou sem excecao
+  BO.this_cGrupo    =[001       ] LEN=10
+  BO.this_cDGrupo   =[GRUPO UM]
+  BO.this_cConta    =[0000000001] LEN=10
+  BO.this_cDConta   =[CONTA UM]
+  BO.this_cProduto  =[PRO1          ] LEN=14
+  BO.this_cDProduto =[PRODUTO UM]
+  BO.this_dDataIni  =07/10/2026 VARTYPE=D
+  BO.this_dDataFin  =06/11/2026 VARTYPE=D
+  BO.this_cCampoFoco=[Conta]  (esperado Conta - sem conexao SQL)
+  Form.Enabled    = .T.  (esperado .T.)
+  dialogo: [06/11/2026 05:57:16 AM] Histórico de Produtos: Conta Inválida !  [06/11/2026 05:57:16 AM] Erro em AbrirPicker: Connection handle is invalid. Linha: 114 Procedure: init  
+--- (5c) ValidarFiltro com periodo invertido ---
+  ValidarFiltro = .F.
+  mensagem      = [Conta Inválida !]
+  campo foco    = [Conta]
+--- FocarCampoRecusado isolado ---
+  voltou sem excecao
+--- (7) BtnEncerrarClick ---
+  voltou sem excecao; VARTYPE(loForm) apos = X
+--- FIM DO PROBE ---

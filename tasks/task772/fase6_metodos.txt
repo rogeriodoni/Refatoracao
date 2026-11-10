@@ -1,0 +1,189 @@
+
+	*==========================================================================
+	* ConfigurarEventos - Liga os eventos dos DOIS campos digitaveis da tela
+	* (GetOP e GetEnvelope do legado). Roda depois de TODOS os AddObject e
+	* ANTES do SetFocus do Init.
+	*
+	* NAO HA LOOKUP NESTA TELA, e isso foi CONFERIDO no dump, nao presumido:
+	* tasks\task772\SIGOPNOP_form_codigo_fonte.txt nao casa NENHUM dos padroes
+	* de busca do legado - zero "fwBuscaExt"/"fwBuscaSel"/"fwBuscaInt", zero
+	* "mAddColuna", zero "sigacess(" e zero "Acesso<X>(" (AcessoCampos/
+	* Contab/Contas/Empresa/Grupos/MovInd/MovMto/Produto/Titulo). O unico
+	* CreateObject do form eh "fSqlConector" (gerente de conexao do legado,
+	* hoje gnConnHandle + DataAccess). Os dois campos sao NUMEROS digitados a
+	* mao (O.P. e Envelope) que o Valid consulta direto; nao existe tabela de
+	* apoio para escolher em grade. Criar aqui um AbrirBusca*/AbrirLookup*
+	* seria INVENTAR tabela de lookup que o legado nunca consulta - viola o
+	* PILAR 1 e a regra explicita "NUNCA inventar tabelas de lookup que nao
+	* existem no original".
+	*
+	* Pelo mesmo motivo nao existe container de Salvar/Cancelar: o SCX legado
+	* tem UM CommandGroup de um unico botao (Encerrar) e dois CommandButton de
+	* navegacao da arvore (Expandir/Regredir) - esta tela ANALISA, nao grava.
+	* Os tres ja sao criados em ConfigurarControles e os Click deles entram na
+	* Fase 7.
+	*
+	* Por que "KeyPress" e nao "LostFocus": o legado valida no Valid (ao SAIR
+	* do campo) e BINDEVENT em "Valid" NAO dispara de forma confiavel em
+	* TextBox. O substituto canonico eh "KeyPress" TESTANDO a tecla - ENTER(13)
+	* e TAB(9), as duas que saem do campo. "LostFocus" esta proibido aqui pela
+	* regra oposta: o handler chama CarregarDados (SQLEXEC + redesenho da
+	* arvore) e LostFocus dispara SEMPRE, inclusive pelo SetFocus de outro
+	* controle, o que produz recursao. A regra CLAUDE.md #47 (lookup tem de ir
+	* em LostFocus) NAO se aplica: ela trata de handler que abre PICKER sem
+	* testar a tecla - aqui nao ha picker e a tecla eh testada.
+	*
+	* GotFocus reproduz DUAS coisas do legado, que juntas fazem dos dois
+	* campos mutuamente exclusivos:
+	*   GetOP.GotFocus       -> "This.Parent.GetEnvelope.Value = 0"
+	*   GetEnvelope.GotFocus -> "This.Parent.GetOP.Value = 0"
+	* e, no caso do O.P., mais o When ("ThisForm.Imagem.Visible = .f."), cujo
+	* Return(.t.) esta COMENTADO no SCX - ou seja, o When legado so tem esse
+	* efeito colateral. Ele vai para o GotFocus por dois motivos: BINDEVENT
+	* DESCARTA o retorno do delegate (um When ligado por BINDEVENT nao
+	* bloquearia nada mesmo) e When/GotFocus disparam na MESMA entrada no
+	* campo, logo o efeito visivel eh identico. O When do GetEnvelope eh
+	* "Return(.t.)" puro - nao tem efeito nenhum a reproduzir.
+	*
+	* Os quatro handlers sao PUBLIC (sem PROTECTED): BINDEVENT ignora metodo
+	* PROTECTED em silencio (regra CLAUDE.md #3).
+	*==========================================================================
+	PROCEDURE ConfigurarEventos()
+		LOCAL loc_oCnt
+
+		loc_oCnt = THIS.cnt_4c_Container1
+
+		*-- GetOP: GotFocus (zera o Envelope + apaga a figura) e Valid
+		*-- (consulta por O.P.), este ultimo via KeyPress ENTER/TAB.
+		BINDEVENT(loc_oCnt.txt_4c_OP, "GotFocus", THIS, "TxtOPGotFocus")
+		BINDEVENT(loc_oCnt.txt_4c_OP, "KeyPress", THIS, "ValidarOP")
+
+		*-- GetEnvelope: GotFocus (zera a O.P.) e Valid (consulta por
+		*-- Envelope).
+		BINDEVENT(loc_oCnt.txt_4c_Envelope, "GotFocus", THIS, "TxtEnvelopeGotFocus")
+		BINDEVENT(loc_oCnt.txt_4c_Envelope, "KeyPress", THIS, "ValidarEnvelope")
+	ENDPROC
+
+	*==========================================================================
+	* TxtOPGotFocus - GetOP.GotFocus + GetOP.When do legado:
+	*   This.Parent.GetEnvelope.Value = 0
+	*   ThisForm.Imagem.Visible = .f.
+	*
+	* A segunda linha eh o When (ver ConfigurarEventos): ao voltar para o
+	* campo da O.P., a figura do produto da pesquisa ANTERIOR sai da tela.
+	* Sem ela o usuario digitaria uma O.P. nova olhando a foto da antiga.
+	*==========================================================================
+	PROCEDURE TxtOPGotFocus()
+		THIS.cnt_4c_Container1.txt_4c_Envelope.Value = 0
+		THIS.img_4c_Imagem.Visible = .F.
+	ENDPROC
+
+	*==========================================================================
+	* TxtEnvelopeGotFocus - GetEnvelope.GotFocus do legado:
+	*   This.Parent.GetOP.Value = 0
+	*
+	* O When do GetEnvelope eh "Return(.t.)" puro - sem efeito a reproduzir, e
+	* por isso a figura NAO eh apagada aqui (o caminho do Envelope nunca mexe
+	* na Imagem, nem no legado).
+	*==========================================================================
+	PROCEDURE TxtEnvelopeGotFocus()
+		THIS.cnt_4c_Container1.txt_4c_OP.Value = 0
+	ENDPROC
+
+	*==========================================================================
+	* ValidarOP - GetOP.Valid do legado. A consulta (SELECT + UNION ALL +
+	* fallback de SigPdMvf + figura do produto) mora no SIGOPNOPBO e o desenho
+	* da arvore em PopularArvore; aqui fica so o GATILHO, com a guarda do
+	* legado e a do teclado.
+	*
+	* Os tres IF sao SEPARADOS de proposito: VFP9 NAO faz short-circuit em OR,
+	* entao juntar "VARTYPE(par_nKeyCode) != 'N' OR par_nKeyCode != 13"
+	* avaliaria a comparacao numerica tambem quando o argumento nao eh
+	* numerico, estourando "Operator/operand type mismatch".
+	*
+	* Os RETURN ficam todos FORA de qualquer TRY (regra CLAUDE.md #1).
+	*==========================================================================
+	PROCEDURE ValidarOP(par_nKeyCode, par_nShiftAltCtrl)
+		LOCAL loc_nValor, loc_oErro
+
+		*-- KeyPress passa SEMPRE os dois argumentos, mas o handler tambem eh
+		*-- alcancavel por chamada direta (harness de teste) - sem esta guarda
+		*-- a comparacao abaixo estouraria.
+		IF VARTYPE(par_nKeyCode) != "N"
+			RETURN
+		ENDIF
+
+		*-- So ENTER e TAB saem do campo. Sem este teste a consulta dispararia
+		*-- a CADA tecla, com o numero da O.P. pela metade.
+		IF par_nKeyCode != 13 AND par_nKeyCode != 9
+			RETURN
+		ENDIF
+
+		IF THIS.this_lEmConsulta
+			RETURN
+		ENDIF
+
+		loc_nValor = THIS.cnt_4c_Container1.txt_4c_OP.Value
+		loc_nValor = IIF(VARTYPE(loc_nValor) = "N", loc_nValor, 0)
+
+		*-- "If ! Empty(This.Value)" que envolve o Valid legado inteiro: campo
+		*-- zerado nao consulta e nao avisa nada.
+		IF loc_nValor != 0
+			THIS.this_lEmConsulta = .T.
+
+			TRY
+				THIS.CarregarDados()
+			CATCH TO loc_oErro
+				MsgErro("Falha ao consultar a O.P.: " + loc_oErro.Message + CHR(13) + ;
+						"Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+						"Procedure: " + loc_oErro.Procedure, "Erro")
+			ENDTRY
+
+			*-- Liberada DEPOIS do ENDTRY, para valer tambem quando o CATCH
+			*-- dispara - flag travada ligada MATARIA o campo pelo resto da
+			*-- vida do form (regra CLAUDE.md #47).
+			THIS.this_lEmConsulta = .F.
+		ENDIF
+	ENDPROC
+
+	*==========================================================================
+	* ValidarEnvelope - GetEnvelope.Valid do legado. Gemeo de ValidarOP (valem
+	* as mesmas notas de short-circuit, de guarda de reentrancia e de liberacao
+	* da flag depois do ENDTRY); a diferenca eh so o campo lido - e, portanto,
+	* o criterio que CarregarDados escolhe (loc_lPorEnvelope = (O.P. = 0)).
+	*
+	* O caminho do Envelope NAO toca na figura do produto: o Valid do
+	* GetEnvelope legado nao tem o bloco de Imagem/StrToFile que o GetOP tem.
+	*==========================================================================
+	PROCEDURE ValidarEnvelope(par_nKeyCode, par_nShiftAltCtrl)
+		LOCAL loc_nValor, loc_oErro
+
+		IF VARTYPE(par_nKeyCode) != "N"
+			RETURN
+		ENDIF
+
+		IF par_nKeyCode != 13 AND par_nKeyCode != 9
+			RETURN
+		ENDIF
+
+		IF THIS.this_lEmConsulta
+			RETURN
+		ENDIF
+
+		loc_nValor = THIS.cnt_4c_Container1.txt_4c_Envelope.Value
+		loc_nValor = IIF(VARTYPE(loc_nValor) = "N", loc_nValor, 0)
+
+		IF loc_nValor != 0
+			THIS.this_lEmConsulta = .T.
+
+			TRY
+				THIS.CarregarDados()
+			CATCH TO loc_oErro
+				MsgErro("Falha ao consultar o Envelope: " + loc_oErro.Message + CHR(13) + ;
+						"Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+						"Procedure: " + loc_oErro.Procedure, "Erro")
+			ENDTRY
+
+			THIS.this_lEmConsulta = .F.
+		ENDIF
+	ENDPROC

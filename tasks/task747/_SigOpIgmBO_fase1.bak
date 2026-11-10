@@ -1,0 +1,105 @@
+*==============================================================================
+* SIGOPIGMBO.prg
+*
+* Business Object para SIGOPIGM (Impressao Global de Movimentacoes)
+*
+* Este form NAO persiste dados em tabela propria - e um dialogo OPERACIONAL
+* chamado por outro form (poform) para autenticar/imprimir em lote um
+* conjunto de movimentacoes pendentes de uma mesma Operacao (Dopes). O
+* legado monta a chave composta EmpDnCrds = Emps + Dopes + Str(Numes,6) a
+* partir dos parametros recebidos e consulta SigMvCab/SigCdOpe/SigOpCdc para
+* popular um cursor local (csPgto) com uma linha por movimentacao pendente
+* de autenticacao - o usuario marca (checkbox) quais quer processar e
+* aciona Imprimir (documentos) ou Boleto (impressao de boleto bancario).
+*
+* Tabela: (nenhuma - dialogo parametrizado, sem persistencia propria;
+* csPgto e um CURSOR local criado em memoria, nao uma tabela do SQL Server)
+*
+* Parametros recebidos do form chamador (Init legado: Parameters poform,
+* _pEmps, _pDopes, _pNumes, _pChkImpDoc, _pBol), espelhados nas properties
+* abaixo:
+*   - this_cEmps          : _pEmps  - Codigo da Empresa
+*   - this_cDopes          : _pDopes - Codigo da Operacao (= property
+*     "movimentacao" do form legado, que recebe o MESMO valor de _pDopes)
+*   - this_nNumes          : _pNumes - Numero da Movimentacao de origem
+*   - this_lChkImpDoc      : _pChkImpDoc - repassado para SigPrIdc/SigReIfx
+*     na impressao de documentos (controla se confirma impressao por doc)
+*   - this_nBoleto         : _pBol - Tipo/flag de boleto (Iif(Type=N,
+*     valor, 0) no legado - Boleto > 0 troca o Caption do form para
+*     "Impressao Global de Boletos")
+*
+* poForm (referencia ao form chamador) e oModem (ThisForm.Parentform.
+* oModemEest, repassado para SigPrIdc) NAO entram neste BO - mesma decisao
+* arquitetural de SigOpIboBO.prg/SigOpCtdBO.prg ("ONDE FICA O poForm"):
+* guardar referencia a objeto de UI aqui fecharia um ciclo de referencias;
+* ficam no Form (fase 3+).
+*
+* this_lExibirBotaoBoleto espelha "ThisForm.btnBoleto.Visible = Inlist(
+* crSigOpCdc.VenBols, 1, 3)" do Init legado - depende de consulta SQL
+* (CursorQuery a SigOpCdc por Dopes), por isso fica .F. por default aqui e
+* e calculado numa fase futura, junto com a carga do cursor csPgto.
+*
+* Fase 1/8: APENAS propriedades e Init() basico. As proximas fases
+* adicionam os metodos que reproduzem a logica REAL do Init/Click do
+* legado:
+*   - MontarChaveEmpDopNums()        : lcEDN = Emps + Dopes + Str(Numes,6)
+*     (regra CLAUDE.md #42 - chave POSICIONAL, NUNCA ALLTRIM nas partes)
+*   - BuscarMovimentacoesPendentes() : Select a.Emps, a.Dopes, a.Numes,
+*     a.EmpDopNums, a.Valos, a.ValDevs, b.Docus, c.VenBols From SigMvCab a,
+*     SigCdOpe b, SigOpCdc c Where EmpDnCrds = <EDN> And a.Dopes = b.Dopes
+*     And a.Dopes = c.Dopes And b.Docus in(1,3,4) - popula o cursor local
+*     csPgto/cursor_4c_Pgto (Marca L, Obs C(27), Printed L, Valos N(12,2),
+*     Emps C(3), Dopes C(20), Numes N(6), Valdevs N(12,2), Docus N(1))
+*   - DeveExibirBotaoBoleto()        : CursorQuery SigOpCdc por Dopes +
+*     Inlist(VenBols, 1, 3)
+*   - ProcessarImpressaoDocumentos() : Scan no cursor marcado - Docus=1
+*     chama SigPrIdc, Docus in (3,4) chama Do Form SigReIfx
+*   - ProcessarImpressaoBoletos()    : Scan no cursor marcado - resolve
+*     lnTpB (ConfigGers/BolItes do SigOpCdc) e chama Do Form SigOpIbo
+*
+* SigPrIdc e SigReIfx sao rotinas/forms legados do Fortyus referenciados
+* pelo Click de Imprimir/Boleto - a fase que implementar
+* ProcessarImpressaoDocumentos()/ProcessarImpressaoBoletos() deve
+* transcrever a chamada exatamente como o legado faz (regra CLAUDE.md #17 -
+* formula/chamada de legado se transcreve, nao se reescreve).
+*==============================================================================
+
+DEFINE CLASS SigOpIgmBO AS BusinessBase
+
+    *-- Propriedades da entidade (parametros recebidos do form chamador,
+    *-- espelhando as properties customizadas do form legado SIGOPIGM)
+    this_cEmps = ""                && _pEmps - Codigo da Empresa
+    this_cDopes = ""               && _pDopes - Codigo da Operacao (= "movimentacao" do legado)
+    this_nNumes = 0                && _pNumes - Numero da Movimentacao de origem
+    this_lChkImpDoc = .F.          && _pChkImpDoc - repassado a SigPrIdc/SigReIfx
+    this_nBoleto = 0               && _pBol - Tipo/flag de boleto (Boleto > 0 muda o Caption)
+
+    *-- Derivados de consulta SQL (calculados em fase futura, junto com a
+    *-- carga do cursor de movimentacoes pendentes)
+    this_cChaveEmpDopNums = ""     && lcEDN - Emps + Dopes + Str(Numes,6) (chave posicional)
+    this_lExibirBotaoBoleto = .F.  && Inlist(crSigOpCdc.VenBols, 1, 3)
+
+    *====================================================================
+    * Init - Inicializa Business Object
+    *====================================================================
+    PROCEDURE Init()
+        DODEFAULT()
+
+        *-- CRITICO: Usar nomes CORRETOS das propriedades herdadas
+        *-- Dialogo parametrizado: nao ha tabela nem campo chave proprios
+        THIS.this_cTabela = ""
+        THIS.this_cCampoChave = ""
+
+        THIS.this_cEmps = ""
+        THIS.this_cDopes = ""
+        THIS.this_nNumes = 0
+        THIS.this_lChkImpDoc = .F.
+        THIS.this_nBoleto = 0
+
+        THIS.this_cChaveEmpDopNums = ""
+        THIS.this_lExibirBotaoBoleto = .F.
+
+        RETURN .T.
+    ENDPROC
+
+ENDDEFINE

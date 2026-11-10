@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSIGOPins.prg` est├í completo e verificado.
+
+## O que mudei
+
+**1. `BtnSairClick` ÔåÆ `BtnCancelarClick`** (+ BINDEVENT). O objeto legado se chama `btnSair`, mas o `Caption` que o usu├írio l├¬ ├® `"\<Cancelar"` e o corpo do `Click` s├│ fecha ÔÇö handler nomeado pela **a├º├úo**, n├úo pelo `Name` do SCX.
+
+**2. `FormParaBO()` e `BOParaForm()`** ÔÇö PROTECTED (como em `FormBase`, sem alargar escopo), com conte├║do **real**, n├úo stub:
+- `FormParaBO`: l├¬ `chk_4c_Pular` ÔåÆ `BO.this_lPularLinhas` (era bloco inline no `BtnConfirmarClick`; virou ponto ├║nico de leitura da tela, com guarda de `VARTYPE` para o CheckBox criado por `AddObject` n├úo vazar o tipo pro BO).
+- `BOParaForm`: t├¡tulo (via `AplicarTitulo` ÔåÆ `BO.ObterTituloDialogo`) + `chk_4c_Pular` a partir do BO. Substituiu a chamada solta de `AplicarTitulo` no `InicializarForm`.
+
+A marca├º├úo da grade e o `getObs` **n├úo** entram nos hooks: est├úo ligados ao cursor por `ControlSource`.
+
+**3. Defeito real encontrado e corrigido** ÔÇö `BtnConfirmarClick` fechava com `THIS.Release()`. Form object do VFP9 n├úo segue refcount: o di├ílogo se **destru├¡a antes de entregar o resultado** que existe para produzir. Agora h├í um funil `FecharDialogo()` com `Hide()`, usado pelos dois bot├Áes (o Cancelar tamb├®m precisa do objeto vivo ÔÇö ├® por `this_lConfirmado = .F.` que o chamador reconhece o cancelamento). O contrato ficou documentado nas properties de resultado: o chamador l├¬ e depois d├í `Release()`.
+
+Isso apareceu num probe que media outra coisa: a leitura ap├│s `BtnConfirmarClick()` estourou `LOFORM is not an object`. ├ë a 4┬¬ ocorr├¬ncia dessa classe de defeito no projeto ÔÇö registrei na mem├│ria (`FormSIGOPBIN`/task646 continua aberto).
+
+## O que **n├úo** criei, e por qu├¬
+`BtnSalvarClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `AjustarBotoesPorModo`, `HabilitarCampos`, `LimparCampos` ÔÇö o SCX tem s├│ dois bot├Áes (Cancelar/Confirmar), n├úo tem `pcEscolha`, nenhum controle troca `Enabled`/`ReadOnly` em runtime e a tela nunca volta ao estado inicial. Cri├í-los seria inventar bot├úo (PILAR 1) ou m├®todo vazio (regra de completude). A aus├¬ncia est├í justificada no cabe├ºalho da se├º├úo de eventos.
+
+## Verifica├º├úo (medida, n├úo inferida)
+Smoke test do VFP9 passou primeiro, ent├úo a execu├º├úo ├® real nesta sess├úo:
+
+| Prova | Resultado |
+|---|---|
+| Compila├º├úo | `_TALLY = 0`, sem `.ERR` |
+| Instancia├º├úo | `VARTYPE = O`, `BaseClass = Form`, grade ligada (`RecordSource`, `ControlSource`, `CurrentControl = CHK_4C_SELECAO`), `getObs` ligado |
+| `BOParaForm` rodou | Caption nos dois labels + `chk_4c_Pular` l├│gico `.T.` = `BO.this_lPularLinhas` |
+| `FormParaBO` rodou | desmarcar na tela ÔåÆ `BO.this_lPularLinhas = .F.` ap├│s `BtnConfirmarClick` |
+| Persist├¬ncia ponta a ponta | fluxo GRP inseriu em `crSigOpFnl` (`RECCOUNT = 1`) |
+| Retorno ao chamador | `this_cListaSelecionadas = [,7,23,]` (formato do legado, s├│ os marcados); `Release()` do chamador ÔåÆ `VARTYPE = X` e cursores fechados |
+| Escopo | `CarregarLista` PUBLIC; `FormParaBO`/`BOParaForm` PROTECTED |
+| Gates est├íticos | completude, 4 nomes da Fase 8 como m├®todo real, bot├úo de a├º├úo, sem acento literal / `.Self` / `Controls("nome")` / `TABLEREVERT` cru / `MESSAGEBOX` / `RETURN` em `TRY` ÔÇö todos OK |
+
+CRLF preservado (`CR=LF=1598`). Evid├¬ncias em `automation\CompilarF8Sigopins752.prg`, `ProbeF8Sigopins752*.prg`, `VerificarGateFase8Task752.ps1` e os `_f8_752_*.txt`.
+
+Dois pontos para voc├¬ decidir: **(a)** nenhum form chama `FormSIGOPins` ainda ÔÇö a integra├º├úo acontece quando `SIGOPINF`/`SIGOPPRO` forem migrados, e o contrato `Show()` ÔåÆ ler ÔåÆ `Release()` precisa ser respeitado l├í; **(b)** n├úo h├í item de menu, por ser di├ílogo filho aberto com par├ómetros (acrescentar um seria inventar entrada que o legado n├úo tem). N├úo commitei ÔÇö os dois arquivos seguem untracked.

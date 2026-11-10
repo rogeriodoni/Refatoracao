@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 3/8
+
+Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpGvt.prg` ÔÇö o form legado ├® um di├ílogo modal operacional pequeno (193x1000, `DataSession=2`, sem PageFrame/grid/CRUD), ent├úo adaptei a "estrutura base" ao formato real em vez do template gen├®rico de cadastro:
+
+- **Propriedades**: dimens├Áes/flags copiadas do SCX (`ControlBox=.F.`, `Closable=.F.`, `AlwaysOnTop=.T.`, `BorderStyle=2`, `DataSession=2`).
+- **Init()**: recebe `par_cImpressora, par_oFormulario, par_nPortaSerial` (equivalente ao `LPARAMETERS _Imp, _OForm, _nPorta` legado) e guarda em properties pr├│prias do Form, porque o Business Object ainda n├úo existe nesse ponto ÔÇö s├│ ├® criado em `InicializarForm()`, chamado via `DODEFAULT()`.
+- **InicializarForm()**: cria `SigOpGvtBO`, repassa os tr├¬s par├ómetros para as properties do BO (`this_cImpressora`/`this_oFormulario`/`this_nPortaSerial`, j├í existentes desde a Fase 1-2), fixa `Caption = "Gaveta"` e monta o cabe├ºalho.
+- **ConfigurarCabecalho()**: faixa cinza (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`) com os valores exatos do dump (`BackColor=RGB(100,100,100)`, Tops/ForeColors/fontes do legado).
+- **TornarControlesVisiveis()** e **Destroy()** completos.
+
+Deixei de fora, para as pr├│ximas fases, apenas o conte├║do espec├¡fico do di├ílogo (Shape, imagem da gaveta, label de mensagem e o bot├úo "Encerrar" com a l├│gica de `VerificarStatusGaveta`), j├í que tudo que escrevi est├í funcional (sem TODOs/stubs vazios, conforme a regra de completude).
+
+Validei a sintaxe compilando com o VFP9 real (`COMPILE`) ÔÇö gerou `.fxp` sem `.err`, ou seja, compila limpo. Removi o `.fxp` e o script auxiliar de compila├º├úo depois do teste.

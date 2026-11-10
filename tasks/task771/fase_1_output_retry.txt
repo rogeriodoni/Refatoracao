@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da e verificada em VFP9 real.
+
+## O que foi criado
+
+`projeto\app\classes\SigOpNFdBO.prg` (340 linhas) ÔÇö `DEFINE CLASS SigOpNFdBO AS BusinessBase` com **102 propriedades pr├│prias** (110 contando a heran├ºa) + `Init()` + `ObterChavePrimaria()`.
+
+**Por que a tentativa anterior falhou:** o `fase_1_output.txt` mostra que o Claude CLI invocado n├úo recebeu a tarefa ÔÇö ele s├│ viu CLAUDE.md/mem├│rias/git status e respondeu *"n├úo vi uma solicita├º├úo espec├¡fica nesta mensagem"*. Nenhum arquivo foi gerado. N├úo era erro de conte├║do.
+
+## Propriedades, por origem
+
+| Bloco | Conte├║do |
+|---|---|
+| **SigMvNfd** (tabela principal) | todas as **13** colunas ÔÇö conferido coluna a coluna contra `docs/schema.sql` (regra #22 j├í satisfeita para a Fase 2) |
+| **SigMvNfi** (`crSigMvNfi`) | 14 props com prefixo `Nfi` ÔÇö `nfis`/`nfeprt`/`nfexml`/`emps`/`dopes`/`numes`/`empdopnums`/`cidchaves` s├úo **hom├┤nimas** entre as duas tabelas; sem o prefixo o protocolo da NOTA sobrescreveria o do EVENTO |
+| **SigPrNfe / SigMvCab** | `stats`, `statts`, `prots`, `arquivos`, `lcancelas`, `dopes` |
+| **Config da opera├º├úo** | `cupfis` (5=NFCe Daruma, 6=CF-e SAT, outros=NFe), `configgers`, `cncaixas`, `geropes`, `dopenfs`, `direxpsdfs` |
+| **SigCdEmp** (emitente) | 10 props, incl. `textopaf` (dados do SAT em posi├º├Áes fixas 1..14 / 16..359 / 361..370) |
+| **Estado do evento** | `this_cEvento`, r├│tulos, `Refazer`, `HorarioVerao`, fuso, ├║ltima sequ├¬ncia |
+| **Constantes do legado** | `tpEvento` 110111/110110, vers├Áes 1.00/4.00, m├¡nimo de 15 chars da descri├º├úo, m├íximo 99 do `nfeseq` |
+| **Caminhos UniNFe** | raiz + as 13 subpastas fixas, transcritas literalmente (s├úo os nomes que o UniNFe monitora em disco) |
+| **Cursores** | 9 nomes `cursor_4c_*` em property |
+
+## Decis├Áes que valem registrar
+
+- **`this_dNfedte = {/:}`** (DATETIME vazio) e n├úo `{}` (DATE): a hora faz parte do `dhEvento`, e s├│ com `VARTYPE = "T"` o `FormatarDataSQL()` acrescenta `HH:MM:SS`. Medido: `VARTYPE_NFEDTE=T`. Documentado tamb├®m que **n├úo** se aplica `TTOD()` nessa property (regra #16), j├í que o valor vem de `CTOT(<TextBox>.Value)` e chega como DATE com o campo vazio.
+- **R├│tulos acentuados atribu├¡dos no `Init()`**, n├úo na declara├º├úo ÔÇö declara├º├úo de property n├úo aceita chamada de fun├º├úo. Resultado medido: `CARTA DE CORRE├ç├âO`, id├¬ntico ao legado.
+- **`Init()` n├úo toca o banco** ÔÇö Init que devolve `.F.` mata o form, e o BO tamb├®m ├® instanciado pelo harness sem `gnConnHandle`.
+
+## Verifica├º├úo executada (n├úo ├® alega├º├úo)
+
+Rodei primeiro o smoke test de 4 linhas exigido antes de qualquer probe VFP9 ÔÇö **passou** (`STRTOFILE` gravou), ent├úo os resultados abaixo v├¬m de execu├º├úo real, n├úo de exit code:
+
+- **Compila├º├úo limpa**: `.fxp` gerado, `.err` ausente.
+- **Instancia├º├úo**: `VARTYPE=O`, `TABELA=[SigMvNfd]`, `CAMPOCHAVE=[cidchaves]`, nenhum erro no arquivo de modo-teste.
+- **Escopo (regra #51)**: `ObterChavePrimaria` PROTECTED, `Salvar` PUBLIC.
+- **Gates est├íticos**: zero bytes n├úo-ASCII; os tr├¬s regexes reais do `Test-CompletudeCodigo` (TODO/pr├│xima-fase/stub-MsgAviso) devolvem **0** ÔÇö inclusive o `nao implement`, evitado de prop├│sito no coment├írio de design.
+
+Removi o `.fxp` e os scripts de probe para a Fase 2 n├úo rodar p-code velho. Nada foi adicionado ao `config.prg` (carga sob demanda) nem ao `menu.prg` ÔÇö isso ├® das fases seguintes.

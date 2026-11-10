@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Both files compile clean and the form instantiates and runs end-to-end.
+
+## What Phase 8 delivered
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigOpNFd.prg`** (1138 ÔåÆ 1540 lines)
+
+| Hook | Content (all from the dump, none invented) |
+|---|---|
+| `FormParaBO()` *(PROTECTED)* | The **4** controls the legacy reads back: `getDesc` (lines 999/1120/1209), `getData` (the three `CTOT`, lines 571/1220/1469), `Refazer` (1310/1519), `Verao` (1142). `getNfe`/`getSeq`/`GetEvento` deliberately excluded ÔÇö `When ÔåÆ Return .f.`, display-only, never read by the legacy. |
+| `BOParaForm(par_nSequencia)` *(PROTECTED)* | The closing block of `atucur` (577-579) **and** of the `Refazer.Click` reuse branch (1771-1775) ÔÇö the same block differing only in the sequence shown, hence the parameter. Ends with the legacy's `ThisForm.Refresh`. |
+| `CarregarLista()` *(PUBLIC)* | Canonical load funnel ÔåÆ `AtualizarCursorEvento()`. No grid exists in this form, so no `RecordSource`/`GO TOP`. Same funnel pattern as `FormSigOpNch`. |
+| `HabilitarCampos(par_lHabilitar)` *(PUBLIC)* | Single source of `Enabled`, derived from each field's `When`: the two `.t.` fields follow the parameter; the three `.f.` fields stay disabled at **any** parameter value. |
+| `LimparCampos()` *(PROTECTED)* | The `nfedesc with ''` of the `APPEND` (line 572), on both sides (property + control). Does **not** touch the date ÔÇö the legacy has exactly that line commented out in both places it would fit. |
+
+Also closed two real behaviour gaps: `BtnEnviarClick` now ends with the legacy's final `thisform.atucur()` (line 1676, outside any `IF`), and the reuse branch now shows `nfeseq` while `atucur` shows `lnUltSeq` ÔÇö Phase 6 used `this_nNfeseq` for both.
+
+**`SigOpNFdBO.prg`**: `AtualizarUltimoEvento` now clears `this_lNovoRegistro` before `EditarRegistro()`. `BusinessBase.EditarRegistro()` **refuses** while that flag is on, so once the funnel had taken the new-row branch, every later reuse pass would have failed and left the BO in INSERT mode ÔÇö `Salvar` would have written a duplicate where the legacy does `UPDATE`.
+
+## Not applicable (documented in the header, not silently dropped)
+`BtnSalvarClick`/`BtnBuscarClick`/`BtnEncerrarClick` ÔÇö the SCX has exactly two buttons (`\<Enviar` = `btnSelItens`, `\<Cancelar` = `btnSair`) and the only two `PROCEDURE *.Click` in the whole dump are theirs, already ported. `AjustarBotoesPorModo` ÔÇö no mode exists (zero `pcEscolha`/`frmcadastro`/`Grupo_Op`) and the legacy has no `.Enabled`/`.Visible` assignment on any control. `AlternarPagina` ÔÇö flat form, no PageFrame.
+
+## Verification
+- `COMPILE` of both files: `.fxp` produced, no `.err` (`automation\CompilarF8SigOpNFd771.prg`).
+- Completude checks (TODO/empty-procedure/pendency/stub-MsgAviso): **0 problems** in both files.
+- Phase-8 gate names: all four present as real declarations, not comment mentions; the action-handler requirement resolves through the dump's `Command1.Caption = "\<Enviar"` ÔåÆ `BtnEnviarClick` (simulated the helper: `True`).
+- Instantiation probe (`automation\InstantiateCheckNFdF8.prg`): form opens, `Enabled` matrix matches the `When` values, `HabilitarCampos(.T.)` leaves the display fields off, date validation normalizes and mirrors as `DATETIME` (`VARTYPE "T"`), and with the nota context filled in, the full `atucur` path runs ÔÇö `Nfe=[000456]`, `Seq=1`, `LimparCampos` cleared both sides, `EmpDopNums` length **29** (positional key correct). No `ON ERROR` entries; the only captured dialog is the legacy's own "Descri├º├úo do evento inv├ílida".
+
+One note worth flagging: the probe originally died silently at startup, and the cause was the harness, not the form ÔÇö on this machine a `.prg` loaded by `SET PROCEDURE` that does `DEFINE CLASS X AS FormSigOpNFd` kills `vfp9.exe` at the first `CREATEOBJECT`, with no error and no log. That's why the PROTECTED hooks are exercised through the real call path instead of a probe subclass; it's recorded in the probe's header.

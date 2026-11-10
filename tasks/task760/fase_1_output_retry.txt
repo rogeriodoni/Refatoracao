@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da: **`C:\4c\projeto\app\classes\SigOpLibBO.prg`** (199 linhas, CRLF ├¡ntegro).
+
+A tentativa anterior falhou porque o Claude CLI s├│ carregou contexto e respondeu *"No specific task has been given yet"* ÔÇö exit code 0, arquivo nunca criado (├® exatamente o no-op do Erro178). Executei a fase diretamente.
+
+## O que o form ├®
+`SIGOPLIB` ├® um **di├ílogo modal** (550x200, `TitleBar=0`, `WindowType=1`) que escolhe um **tipo de libera├º├úo** em `SigCdNcf` e devolve `c├│digo + descri├º├úo` ao form pai ÔÇö o pai mant├®m o cursor `xNensi` (de `SigCdNei`), e o `Init` legado semeia o campo com `xNensi.CodnConfs`.
+
+## Propriedades declaradas (10)
+Colunas de `SigCdNcf`, conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14):
+
+| Propriedade | Coluna | Tipo |
+|---|---|---|
+| `this_cCods` | `cods` char(10) PK | C |
+| `this_cDescs` | `descs` char(60) | C |
+| `this_nFixos` | `fixos` numeric(1,0) | **N** |
+| `this_nTipos` | `tipos` numeric(1,0) | **N** |
+| `this_cEmps` | `emps` char(3) | C |
+
+Mais o estado do di├ílogo: `this_nTipoFiltro` (o `_Tipo` recebido), `this_cCodigoInicial` (semente `CodnConfs`), `this_cRetorno`, `this_lRegistroEncontrado`, `this_cCursorNcf`.
+
+Tr├¬s decis├Áes que registrei em coment├írio para as fases seguintes n├úo as perderem:
+
+- **`emps`, n├úo `cemps`** ÔÇö confirmado no schema e no `Where` do legado (regra #48); o prefixo da tabela n├úo decide.
+- **`fixos`/`tipos` ficam NUM├ëRICOS** ÔÇö o legado compara com os literais `2`, `3`, `4`; achatar `numeric(1,0)` de v├írias op├º├Áes em l├│gico gravaria valor errado em sil├¬ncio.
+- **`this_nTipoFiltro` tem nome deliberadamente distinto de `this_nTipos`** ÔÇö os dois n├║meros se encontram na mesma compara├º├úo do `Where`, e um par separado por uma letra convida ao erro que o compilador n├úo pega.
+
+## Verifica├º├úo (n├úo inferida)
+O smoke test mostrou que **o VFP9 executa nesta sess├úo** (gravou o arquivo de sa├¡da), ent├úo compilei e instanciei de verdade:
+
+- `.FXP` gerado, **sem `.ERR`** ÔåÆ compila limpo
+- `CREATEOBJECT("SigOpLibBO")` ÔåÆ `VARTYPE=O`
+- `this_cTabela=[SigCdNcf]`, `this_cCampoChave=[cods]`
+- tipos conferidos um a um: `C C N N C N C L`
+- `this_cRetorno` com `LEN=10` (o `Space(10)` do `Init` legado)
+- `this_oDataAccess` = `.NULL.` ÔÇö `DODEFAULT()` sem argumento n├úo cria DataAccess, logo o BO instancia headless sem conex├úo SQL
+
+Gates checados: zero caractere n├úo-ASCII, nenhum TODO/stub, nenhum `RETURN` dentro de TRY, `CATCH` com `MostrarErro`, nenhum `PUBLIC` em `DEFINE CLASS`, e a frase `"nao implement"` ausente (que reprovaria o 05d por falso positivo).
+
+Removi o `.fxp` gerado e os scripts de probe para n├úo deixar c├│digo compilado velho atrapalhando as pr├│ximas fases.
+
+**Escopo que deixei de fora de prop├│sito:** `CarregarDoCursor`, a consulta filtrada do `Get_codigo.Valid` e o `When` do `Get_descr` s├úo da Fase 2 ÔÇö a Fase 1 pede s├│ propriedades e `Init`. A entrada no `menu.prg` com `GarantirClasse` cabe ├á integra├º├úo final, depois que o Form existir.

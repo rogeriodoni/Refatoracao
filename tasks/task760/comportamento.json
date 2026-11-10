@@ -1,0 +1,147 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaSel", "From SigCdNcf Where"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLIB",
+      "evento": "Init",
+      "linhas": 11,
+      "codigoOriginal": "LParameters _Tipo\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\nThisform.poDatamgr = CreateObject('fSqlConector','SigOpLib')\nThisForm.Tipo = Iif(Type(\"_Tipo\") # 'N', 0 , _Tipo )\nThisForm.Get_codigo.Value = xNensi.CodnConfs\nThisForm.Retorno = Space(10)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDatamgr = CreateObject,Tipo = Iif,Retorno = Space",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDatamgr.Release\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.Retorno",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB.get_codigo",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tlcSql = [Select * From SigCdNcf Where (Emps = ']+_Empr+[' Or Emps = ' ') And ]+;\n\t\t\tIif(InList(Thisform.Tipo,2,3,4), [Tipos = ]+Str(ThisForm.Tipo),;\n\t\t\t[Tipos <= ]+Str(Thisform.Tipo) )\n\tThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')\n\tSelect CrSigCdNcf\n\tIndex On Cods  tag Cods\n\tIndex On Descs tag descs\n\n\tIf Not Seek(This.Value, 'CrSigCdNcf', 'Cods')\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigCdNcf', 'Cods', This.Value, 'Tipo de Liberação')\n\t\tloBrows... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,From SigCdNcf Where",
+        "metodosFormChamados": "Tipo,2,3,4), [Tipos = ]+Str,Sqlexecute",
+        "controlesReferenciados": "Get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB.get_descr",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tThisForm.Retorno = ThisForm.Get_codigo.Value + ThisForm.get_descr.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_codigo,get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB.get_descr",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcCod\n\nlcCod = ThisForm.Get_codigo.Value\nlcSql = [Select * From SigCdNcf Where cods = ']+lcCod+[']\nThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')\n\nReturn (NOt Empty(lcCod) And CrSigCdNcf.Fixos = 2 )\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIB.ok",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPLIB.get_codigo.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigCdNcf Where (Emps = ']+_Empr+[' Or Emps = ' ') And ]+; \t\t\tIif(InList(Thisform.Tipo,2,3,4), [Tipos = ]+Str(ThisForm.Tipo),; \t\t\t[Tipos <= ]+Str(Thisform.Tipo) ) \tThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')",
+      "tabelas": "SigCdNcf",
+      "colunas": "Emps,Tipo,2,3,4,;,Sqlexecutelcsql,CrSigCdNcf",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIB.get_descr.When",
+      "queryOriginal": "lcSql = [Select * From SigCdNcf Where cods = ']+lcCod+['] ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')",
+      "tabelas": "SigCdNcf",
+      "colunas": "cods,Sqlexecutelcsql,CrSigCdNcf",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdNcf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

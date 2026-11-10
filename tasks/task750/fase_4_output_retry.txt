@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada.
+
+## O que a Fase 4 reprovava ÔÇö e por qu├¬
+
+O gate da Fase 4 falhava em **uma** condi├º├úo: `grade=True botoes=False carga=True`. O ramo FLAT exige `AddObject("cmg_4c_` ou `"cmd_4c_`, e o esqueleto batizou o CommandGroup de `obj_4c_Grp_operacao` ÔÇö prefixo que o `mapeamento.json` gera para tipo n├úo reconhecido.
+
+**Mas consertar s├│ isso teria commitado uma perda enorme.** Medindo o disco contra o HEAD:
+
+| | HEAD (`e484a3cdf`) | disco ao chegar na Fase 4 |
+|---|---|---|
+| `Formsigopind.prg` | **6177 linhas / 86 m├®todos** | 628 / 13 |
+| `sigopindBO.prg` | **852 / 15** | 535 / 6 |
+
+task750 ├® re-migra├º├úo de um form **j├í migrado e maduro** (o `git log --follow` mostra Erro153/159/161/162 propagados nele), e o `Write` da Fase 3 destruiu as duas p├íginas Saldo/Hist├│rico, 3 grids, os 4 pain├®is flutuantes e Conciliar/Auditar/Excluir/Anexa/Quita├º├úo/FollowUp. O SCX **n├úo** ├® placeholder ÔÇö s├úo 9.000 linhas de dump.
+
+## O que entreguei
+
+1. **Restaurei** form + BO do HEAD. Isso j├í faz o gate passar (`FLAT=True`) e devolve o form ao `Formsigopind_mapeamento.json` de abril, que casa com os nomes do HEAD (`grd_4c_Saldos`) e n├úo com os do esqueleto. Esqueleto preservado em `tasks/task750/bak_fase4_esqueleto/`.
+
+2. **Auditei e corrigi o grid de Saldo** (objeto da Fase 4) contra o dump ÔÇö o HEAD divergia:
+   - `Column7.ControlSource` era **`Situas` sob o header "M/F"**, e `MontaGrade` nunca rodava o `Update ... Set Matriz = Iif(Empty(ContaMats),'',Iif(Contas=ContaMats,'M','F'))` do legado. A coluna ficava sempre em branco, o `DynamicBackColor` matriz-verde/filial-amarelo n├úo existia, e o ramo matriz/filial de `ExecutarConsultaSaldo` ÔÇö que **l├¬** `Matriz` ÔÇö era c├│digo morto. Os tr├¬s foram restaurados (com `NVL`, porque `EMPTY(.NULL.)` devolve `.F.` e classificaria nula como filial).
+   - 6 larguras, os 7 `ColumnOrder`, `RecordMark`, `ScrollBars`, `GridLineColor`, `InputMask`, geometria 140/10/980/453 ÔÇö tudo transcrito; `GridLines = 0` e `HeaderHeight = 20` removidos (n├úo constam do dump, e `GridLines = 0` contradiz o `GridLineColor` que o legado declara).
+   - Width/ColumnOrder/DynamicBackColor reaplicados **depois** do `RecordSource` em `MontaGrade` (regra #41).
+   - Tags `Contas`/`Rclis`/`Cpfs` do `MontaGrade` legado.
+
+## Verifica├º├úo (VFP9 executou ÔÇö smoke test passou primeiro)
+
+`.FXP` nos dois arquivos com **zero `.ERR`**; `CREATEOBJECT` ÔåÆ `VARTYPE=O`, `BaseClass=Form`, 1000x600; as 7 colunas conferidas uma a uma contra o dump (todas batem); `UPDATE` do Matriz devolvendo `M / F / vazio / vazio`; tags criadas; `MontaGrade("")` ÔåÆ `.F.` sem exce├º├úo; `MontaGrade`/`CarregarLista`/`AlternarPagina` PUBLIC. Evid├¬ncia em `tasks/task750/logs/05_migracao_fase4_probe.txt`. Diff focado: 191 inser├º├Áes / 58 remo├º├Áes, CRLF preservado; o BO voltou id├¬ntico ao HEAD.
+
+## Dois pontos para voc├¬ decidir
+
+- **`DataSession = 2`, `AutoCenter`, `ShowTips`, `BorderStyle = 2`** est├úo no dump e o HEAD n├úo os declara. S├úo propriedades de **Form** (escopo da Fase 3), e `DataSession = 2` reseta `SET DATE/CENTURY/DELETED/EXACT` e muda o isolamento dos cursores de nome fixo (`CrSigMvCcr`, `xTmpBaixa`) ÔÇö n├úo mexi num form rec├®m-restaurado sem banco para testar.
+- **task750 ├® duplicata**: o pipeline vai rodar as Fases 5ÔÇô8 sobre um form que j├í as cobre. Elas tendem a reprovar ou a sobrescrever de novo. N├úo toquei no `task_state.json` (bookkeeping do orquestrador).

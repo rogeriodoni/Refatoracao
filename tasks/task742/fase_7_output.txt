@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is complete and verified.
+
+## O que foi entregue
+
+`projeto/app/forms/operacionais/Formsigopfis.prg` ÔÇö 4.878 ÔåÆ 7.285 linhas.
+
+**Os 4 nomes CRUD (`Btn<verbo>Click`) n├úo existem neste form, e n├úo ├® omiss├úo.** O dump do legado n├úo tem `frmcadastro` nem `Grupo_Op`, n├úo tem bot├úo com verbo CRUD no nome, e l├¬ o modo do form **pai** (`ThisForm.Op_Escolha = loForm.pcEscolha`). ├ë a aba fiscal de uma Nota Fiscal ÔÇö quem inclui/altera/exclui ├® a tela de movimenta├º├úo que a abriu. Medi os predicados do gate contra o dump real: `faltantes = 4`, `legadoSemCrud = True`, `nBotoesLegado = 9` ÔåÆ piso 2, `nHandlers = 14`. **A aprova├º├úo vem do carve-out leg├¡timo.**
+
+Os eventos principais aqui s├úo os **9 Click** que o dump declara, nomeados pela a├º├úo (n├úo por `Fwbtnm1..7`, que n├úo dizem nada):
+
+| legado | handler | estado |
+|---|---|---|
+| `ok` ("Retornar") | `BtnConfirmarClick` | 4 valida├º├Áes + s├®rie + observa├º├úo CFOP + totais ao movimento |
+| `ImpEtiqueta` | `CmdImprimirEtiquetasClick` | 3 ramos (lote/itens/hist├│rico) + montagem de `dbImpressao` |
+| `Fwbtnm6` | `CmdGerarXmlClick` | integral |
+| `Fwbtnm7` | `CmdGerarNfeClick` | integral ÔÇö `CREATEOBJECT("Formsigprnfe")` |
+| `Fwbtnm1` | `CmdReimprimirDanfeClick` | caminho DANFE (PDF/XML+unidanfe) integral |
+| `Fwbtnm2` | `CmdEnviarEmailNfeClick` | anexos gravados; s├│ o envio falta |
+| `Fwbtnm3/4/5` | `CmdCancelarNota/CartaCorrecao/ProcessosNfce` | fronteira reportada |
+
+## Fronteiras que ficaram vis├¡veis, n├úo mudas
+
+`fMontaObs`, `enviaEmail`, `fEnviaCtg`, `reprintd` (DLL Daruma), `SigOpNFd`, `SigOpIpE`, `SigOpQtE` n├úo vieram no acervo. Cada handler executa tudo at├® a fronteira e **avisa dizendo o que n├úo foi feito** (regra #27) ÔÇö stub mudo gravaria observa├º├úo fiscal vazia, etiqueta com quantidade zero ou nota n├úo-cancelada em sil├¬ncio.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa; o form **instancia** (`VARTYPE = "O"`); os 9 handlers existem, s├úo PUBLIC (`protegido = .F.`) e os 9 `BINDEVENT` de Click est├úo de fato ligados (confirmado por `AEVENTS`); todos cham├íveis de fora sem *Program Error*, cada um parando na guarda certa. Probe extra exercitou o caminho de etiquetas que o principal n├úo alcan├ºa (CREATE CURSOR, INSERT com m├®todo em VALUES, UPDATE com LOCAL, ZAP com guarda de SAFETY). Zero bytes n├úo-ASCII, zero `RETURN` dentro de TRY, auditorias do projeto limpas.
+
+## Dois achados fora do form
+
+1. **Meu coment├írio de cabe├ºalho passava o gate pelo motivo errado** ÔÇö citava os 4 identificadores por extenso, e o gate casa o `.prg` inteiro, coment├írio incluso (`faltantes` dava 0, sugerindo que os handlers existiam). Reescrevi em forma gen├®rica; o veredito agora vem do carve-out real.
+
+2. **`ValidadorSQLSchema.ps1` acusava `INFORMATION_SCHEMA` como "tabela que n├úo existe"** ÔÇö falso positivo que dispararia a rodada de corre├º├úo autom├ítica da etapa 05f, cujo conserto prov├ível seria remover meu guard de exist├¬ncia de coluna (a transcri├º├úo fiel do `Type([crSigOpCdi.ObrDtSai])=[N]` do legado ÔÇö essa coluna realmente n├úo est├í no schema). Adicionei skip para `information_schema`/`sys`. Medi: **13 outros arquivos j├í usavam `INFORMATION_SCHEMA`**, ent├úo o defeito era sist├¬mico, n├úo meu; e controle negativo confirma que tabela inexistente de verdade continua sendo pega.
+
+Uma pend├¬ncia que vale registrar: `AtualizarTotaisMovimento` devolve `Notas`/`Valos` ao cabe├ºalho do movimento por duas vias (hook `AplicarCampoMovimento` no pai, ou `REPLACE` em `TprMvCab` quando alcan├º├ível). Nenhuma existe hoje porque a tela de movimenta├º├úo pai ainda n├úo foi migrada ÔÇö nesse caso avisa uma vez por sess├úo em vez de perder o dado calado.

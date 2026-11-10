@@ -1,0 +1,52 @@
+COMPILE: FXP=SIM  FXP_CLS=SIM  ERR=NAO
+
+=== instanciacao ===
+OK - form instanciado. Caption=[Geração de Multiplas Operações Venda]
+
+=== CurrentControl / Sparse / MaxLength por coluna ===
+Column1: CC=[txt_4c_Movimentacao] classe=[Textboxmovimentacaomop_4c] Sparse=.F. ReadOnly=.F. MaxLength=20
+Column2: CC=[Text1] classe=[Textbox] Sparse=.T. ReadOnly=.T. MaxLength=0
+Column3: CC=[txt_4c_Cores] classe=[Textboxcoresmop_4c] Sparse=.F. ReadOnly=.T. MaxLength=10
+Column4: CC=[CHK_4C_CHECK1] classe=[Checkbox] Sparse=.F. ReadOnly=.F. MaxLength=-
+Column5: CC=[Text1] classe=[Textbox] Sparse=.T. ReadOnly=.F. MaxLength=0
+Column6: CC=[txt_4c_GrandeGrupo] classe=[Textboxgrandegrupomop_4c] Sparse=.F. ReadOnly=.F. MaxLength=3
+Column7: CC=[txt_4c_Empresa] classe=[Textboxempresamop_4c] Sparse=.F. ReadOnly=.F. MaxLength=3
+
+=== delegates esperados pelas celulas ===
+CelulaMovimentacaoMopEditavel      existe=.T.  protected=.F.
+ValidarMovimentacaoMopExec         existe=.T.  protected=.F.
+MovimentacaoMopLostFocusExec       existe=.T.  protected=.F.
+CelulaCoresMopEditavel             existe=.T.  protected=.F.
+ValidarCoresMopExec                existe=.T.  protected=.F.
+GrandeGrupoMopGotFocusExec         existe=.T.  protected=.F.
+ValidarGrandeGrupoMopExec          existe=.T.  protected=.F.
+GrandeGrupoMopLostFocusExec        existe=.T.  protected=.F.
+ValidarEmpresaMopExec              existe=.T.  protected=.F.
+ObterOperacaoInativa               existe=.T.  protected=.F.
+ValidarMovimentacaoMopCorpo        existe=.T.  protected=.F.
+ValidarGrandeGrupoMopCorpo         existe=.T.  protected=.F.
+ValidarEmpresaMopCorpo             existe=.T.  protected=.F.
+
+=== lookups sem conexao (gnConnHandle = -1) ===
+Movimentacao: retorno=.T.  Value=[VENDA BALCAO]  EmLookup=.F.
+G.Grp: retorno=.T.  Value=[01]  Tag=[01]  EmLookup=.F.
+LostFocus com Tag IGUAL  -> HouveInsercao=.F.  (esp .F.)
+LostFocus com Tag DIFERE -> HouveInsercao=.T.  (esp .T.)
+Emp.: retorno=.T.  Value=[001]  EmLookup=.F.
+
+=== guarda de reentrancia ===
+reentrante: retorno=.T.  Value intacto=[XXX]  flag ainda=.T.
+
+=== ObterOperacaoInativa ===
+cursor config [cursor_4c_ConfigOpe] USED=.T.  RECCOUNT=0
+inativa('VENDA')=0  inativa('')=0 (esp 0 / 0)
+
+alias corrente ao fim: [CURSOR_4C_DADOS]  (esp o cursor da grade)
+
+=== MontaGrade() novamente (idempotencia) ===
+MontaGrade=.T.  C1=[txt_4c_Movimentacao]  C3=[txt_4c_Cores]  C4=[CHK_4C_CHECK1]  C6=[txt_4c_GrandeGrupo]  C7=[txt_4c_Empresa]
+larguras: 150/38/80/50/45/42/40  (esp 150/38/80/50/45/42/40)
+headers: [G.Grp] [Emp.]
+
+dialogos capturados: []
+FIM

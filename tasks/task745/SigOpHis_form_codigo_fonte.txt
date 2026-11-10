@@ -1,0 +1,733 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpHis.SCX
+* Data/Hora: 06/11/2026 03:51:49
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPHIS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPHIS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPHIS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPHIS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Say1
+  Parent: SIGOPHIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPHIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_est
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dest
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cod
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dcod
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: sair
+  Parent: SIGOPHIS
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say4
+  Parent: SIGOPHIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dgrupo
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPHIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DataIni
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPHIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DataFin
+  Parent: SIGOPHIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 55
+  Left = 33
+  Width = 581
+  Height = 170
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 300
+  Width = 650
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (prompt())
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  AlwaysOnTop = .F.
+  Name = "SIGOPHIS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Say1
+------------------------------------------------------------
+  Caption = "Conta :"
+  Left = 102
+  Top = 149
+  TabIndex = 12
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Say2
+------------------------------------------------------------
+  Caption = "Produto :"
+  Left = 92
+  Top = 172
+  TabIndex = 13
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_est
+------------------------------------------------------------
+  FontName = "Courier New"
+  Left = 148
+  TabIndex = 3
+  Top = 144
+  Width = 80
+  Name = "Get_est"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_dest
+------------------------------------------------------------
+  Left = 228
+  TabIndex = 4
+  Top = 144
+  Width = 290
+  Name = "Get_dest"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_cod
+------------------------------------------------------------
+  Left = 148
+  MaxLength = 14
+  TabIndex = 5
+  Top = 167
+  Width = 108
+  Name = "Get_cod"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_dcod
+------------------------------------------------------------
+  Left = 257
+  TabIndex = 6
+  Top = 167
+  Width = 290
+  Name = "Get_dcod"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.sair
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 493
+  SpecialEffect = 1
+  Top = -2
+  Width = 161
+  TabIndex = 9
+  BorderColor = 136,188,189
+  Themes = .F.
+  Name = "sair"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_procura_60.jpg
+  Command1.Caption = "\<Consulta"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.DisabledBackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "consulta"
+  Command2.Top = 5
+  Command2.Left = 81
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Say4
+------------------------------------------------------------
+  Caption = "Grupo :"
+  Left = 101
+  Top = 124
+  TabIndex = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_grupo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 148
+  TabIndex = 1
+  Top = 121
+  Width = 80
+  ZOrderSet = 20
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_Dgrupo
+------------------------------------------------------------
+  Left = 228
+  TabIndex = 2
+  Top = 121
+  Width = 150
+  Name = "Get_Dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Say3
+------------------------------------------------------------
+  Caption = "Período :"
+  Left = 92
+  Top = 196
+  TabIndex = 14
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_DataIni
+------------------------------------------------------------
+  Alignment = 3
+  Value = (Date())
+  InputMask = ""
+  Left = 148
+  MaxLength = 10
+  TabIndex = 7
+  Top = 191
+  Width = 80
+  Name = "Get_DataIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Say5
+------------------------------------------------------------
+  Caption = "à"
+  Left = 231
+  Top = 195
+  TabIndex = 15
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPHIS.Get_DataFin
+------------------------------------------------------------
+  Alignment = 3
+  InputMask = "99/99/9999"
+  Left = 242
+  MaxLength = 10
+  TabIndex = 8
+  Top = 191
+  Width = 80
+  Name = "Get_DataFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPHIS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Local llAcTotal, lcKey, lcFrom, lcWhere, llUsuaRest
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.poDataMgr = CreateObject('fSqlConector')
+
+* Inicializa as variáveis de campos
+ThisForm.get_est.Value     = Space(10)
+ThisForm.get_dest.Value    = Space(40)
+ThisForm.get_cod.Value     = Space(10)
+ThisForm.get_dcod.Value    = Space(40)
+ThisForm.get_dataini.Value = Date()
+ThisForm.get_datafin.Value = Date()
+ThisForm.get_est.Refresh
+ThisForm.get_dest.Refresh
+ThisForm.get_cod.Refresh
+ThisForm.get_dcod.Refresh
+ThisForm.get_dataini.Refresh
+ThisForm.get_datafin.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_est
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.Get_grupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',this.Value,ThisForm.get_Est,ThisForm.get_DEst)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.get_dest.Value = ''
+		ThisForm.get_dest.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.get_dest.Value = ''
+	ThisForm.get_dest.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_dest
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.get_Grupo.Value
+If !IsEmpty(this.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.get_est,ThisForm.get_dest)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.get_est.Value = ''
+		ThisForm.get_est.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.get_est.Value = ''
+	ThisForm.get_est.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.get_Est.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_cod
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If IsEmpty(This.Value)
+	ThisForm.get_dcod.Value = ''
+	ThisForm.get_dcod.Refresh
+	Return(.T.)
+EndIf
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Seleção',1000)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('cpros','','Código')
+	m.loLista.mAddColuna('dpros','','Descrição')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrProds')
+	ThisForm.get_cod.Value  = Evaluate('CrProds.cpros')
+	ThisForm.get_dcod.Value = Evaluate('CrProds.dpros')
+Else
+	ThisForm.get_cod.Value  = ''
+	ThisForm.get_dcod.Value = ''
+EndIf
+ThisForm.get_cod.Refresh
+ThisForm.get_dcod.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_dcod
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If IsEmpty(This.Value)
+	ThisForm.get_cod.Value = ''
+	ThisForm.get_cod.Refresh
+	Return(.T.)
+EndIf
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Seleção',1000)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('dpros','','Descrição')
+	m.loLista.mAddColuna('cpros','','Código')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrProds')
+	ThisForm.get_cod.Value  = Evaluate('CrProds.cpros')
+	ThisForm.get_dcod.Value = Evaluate('CrProds.dpros')
+Else
+	ThisForm.get_cod.Value  = ''
+	ThisForm.get_dcod.Value = ''
+EndIf
+ThisForm.get_cod.Refresh
+ThisForm.get_dcod.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.get_cod.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.sair
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE consulta.Click
+------------------------------------------------------------
+PROCEDURE consulta.Click
+* Declara variáveis de campos
+Private pnOpcao,pcCdEstoque,pcDsEstoque,pcCdProduto,pcDsProduto,pdDataIni,pdDataFin
+
+* Inicializa variáveis de campos
+pcCdGrupo	= ThisForm.get_grupo.Value
+pcCdConta	= ThisForm.get_est.Value
+pcDsConta	= ThisForm.get_dest.Value
+pcCdProduto = ThisForm.get_cod.Value
+pcDsProduto = ThisForm.get_dcod.Value
+pdDataIni   = ThisForm.get_dataini.Value
+pdDataFin   = ThisForm.get_datafin.Value
+
+* Consiste o Campo Grupo
+If IsEmpty(pcCdGrupo)
+	MessageBox('Grupo Inválido !',16,'')
+	ThisForm.get_grupo.SetFocus
+	Return(.F.)
+EndIf
+
+* Consiste o campo Conta
+If IsEmpty(pcCdConta) Or !(ThisForm.poDataMgr.ChkRegister('SigCdCli','iclis',pcCdConta))
+	MessageBox('Conta Inválida !',16,'')
+	ThisForm.get_est.SetFocus
+	Return(.F.)
+EndIf
+
+* Consiste o campo produto
+If IsEmpty(pcCdProduto) Or !(ThisForm.poDataMgr.ChkRegister('SigCdPro','cpros',pcCdProduto))
+	MessageBox('Produto Inválido !',16,'')
+	ThisForm.get_cod.SetFocus
+	Return(.F.)
+EndIf
+
+* Consiste o campo data inicial
+If IsEmpty(pdDataIni)
+	MessageBox('Data Inicial Inválida !',16,'')
+	ThisForm.get_dataini.SetFocus
+	Return(.F.)
+EndIf
+
+* Consiste o campo data final
+If IsEmpty(pdDataFin)
+	MessageBox('Data Final Inválida !',16,'')
+	ThisForm.get_datafin.SetFocus
+	Return(.F.)
+EndIf
+
+* Consiste o período
+If pdDataIni > pdDataFin
+	MessageBox('Data Inicial maior que Data Final !',16,'')
+	ThisForm.get_dataini.SetFocus
+	Return(.F.)
+EndIf
+
+ThisForm.Enabled = .F.
+Do Form SigPrHpr With ThisForm
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE sair.Click
+------------------------------------------------------------
+PROCEDURE sair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,ThisForm.get_grupo,ThisForm.get_DGrupo)
+Else
+	ThisForm.get_DGrupo.Value = ''
+	ThisForm.get_DGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPHIS.Get_Dgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.Value)
+	fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)
+Else
+	ThisForm.get_Grupo.Value = ''
+	ThisForm.get_Grupo.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.Get_Grupo.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPHIS
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

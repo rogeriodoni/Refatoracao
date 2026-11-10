@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue e verificada.
+
+## O que foi feito
+
+**`FormSigOpMop.prg`** (404 ÔåÆ 1097 linhas) ÔÇö tudo transcrito do dump (`SECAO 2` + `layout.json`):
+
+- `ConfigurarGrade()` ÔÇö `grd_4c_Dados` (Top=99 Left=58 483x311, Tahoma 8, RowHeight=16, ScrollBars=2, GridLineColor 238,238,238)
+- `ConfigurarMoldura()` ÔÇö `shp_4c_Shape1`
+- `ConfigurarBotoes()` ÔÇö `cmd_4c_CmdInserir/CmdExcluir/CmdSair` (Top=3, Left 533/608/683, ├¡cones `cadastro_*_60.jpg` conferidos em `vbmp\`, `Cancel=.T.` no Encerrar)
+- `AplicarPermissoesBotoes()` ÔÇö a regra de permiss├úo do `Init` legado, inclusive o rec├ílculo de `Left`/`Width` da moldura
+- `CarregarDados()` ÔåÆ `MontaGrade()` ÔåÆ `ConfigurarColunasGrade()` / `GarantirCheckBoxPadrao()` ÔÇö o funil de carga e repintura
+
+**`SigOpMopBO.prg`** (279 ÔåÆ 489 linhas) ÔÇö as duas cargas que a grade exigia e que n├úo existiam: `CarregarConfiguracaoOperacao()` (SigOpCdc ÔåÆ `geropes`/`opeinatvs`) e `CarregarGrade()` com a query **exata** do `AddCursor` do form pai, que achei em `tasks/task483/SIGCDOPE_form_codigo_fonte.txt:54214` ÔÇö ├® o `INNER JOIN SigCdOpe` que traz `ndopes`, coluna que n├úo existe em `SigCdMop`.
+
+## Decis├Áes que valem registro
+
+**N├úo h├í 6 bot├Áes CRUD nem PageFrame Lista/Dados para entregar** ÔÇö medido, n├úo presumido: o dump tem zero `BaseClass: pageframe`, um `grid` e exatamente tr├¬s `commandbutton`. O gate `case 4` passa pelo ramo FLAT (`temGrade/temBotoes/temCarga` = todos `True`). Inventar aquela barra violaria o PILAR 1; criar `ConfigurarPaginaLista`/`AlternarPagina` vazios seria o stub disfar├ºado que a regra de completude pro├¡be.
+
+**Ordem do bind ├® medida, n├úo estil├¡stica.** `ColumnCount` ÔåÆ `RecordSource` ÔåÆ `ControlSource` de todas as 7 ÔåÆ `AddObject` do CheckBox ÔåÆ `CurrentControl`/`Sparse` ÔåÆ larguras/cabe├ºalhos. Invertida, o Grid auto-liga ├á ├írea de trabalho corrente e o `AddObject` do CheckBox estoura "Data type mismatch" dentro do `Init` ÔÇö falha total e silenciosa.
+
+**Z-order:** o Shape vem **antes** dos bot├Áes, como no SCX. Ele ├® invis├¡vel (`BackStyle=0` + `BorderStyle=0`) e, depois do reposicionamento, cobre a faixa deles ÔÇö criado depois, bloquearia o clique sem desenhar nada.
+
+## Duas corre├º├Áes al├®m do pedido
+
+1. **`TratarNulo(col, "N")` ÔåÆ `TratarNulo(col, 0)`** ÔÇö o 2┬║ argumento ├® o *valor padr├úo*, n├úo um c├│digo de tipo. Corrigi meus 2 sites novos e os 10 pr├®-existentes deste arquivo (colunas `NOT NULL`, logo sem mudan├ºa de comportamento ÔÇö corre├º├úo pura). O sweep dos outros ~292 arquivos do projeto continua pendente e ├® decis├úo sua.
+
+2. **Geometria de CheckBox em Column ├® read-only em runtime.** Medi 4 ordena├º├Áes: `Top/Left/Width/Height` voltam **sempre** `0,0,10,10`, inclusive sem atribuir nada. Removi as 4 atribui├º├Áes (eram c├│digo morto sugerindo que a ├írea clic├ível tinha sido calibrada) e atualizei a mem├│ria que afirmava que as 7 props eram todas necess├írias ÔÇö as outras 3 pegam, essas 4 n├úo.
+
+## Provas
+
+- `COMPILE` dos dois arquivos: `.FXP` gerado, **zero `.ERR`**
+- `CREATEOBJECT("FormSigOpMop", ...)` headless: `VARTYPE=O`, 759x430, 6 controles, grade com `ColumnCount=7`, as 7 `ControlSource` ligadas, `CurrentControl=CHK_4C_CHECK1`, `Sparse=.F.`, larguras 150/38/80/50/45/42/40, TabIndex 1-4, moldura em 528/241, **nada em `probe_err.txt`**
+- Recarga (`CarregarDados()` 2┬¬ vez): CheckBox sobrevive, largura e cabe├ºalho sobrevivem ÔÇö o `MontaGrade` ├® idempotente
+- CRLF do form preservado (`CR=LF=1097`); zero bytes >127 nos dois arquivos; regex real de TODO do validador: 0 ocorr├¬ncias
+
+Logs em `tasks/task767/logs/` (`compila_f4`, `probe_f4`, `exp_chk`, `exp_chk2`).
+
+**Fica para as fases seguintes**, como o cabe├ºalho do arquivo registra: regras das colunas digit├íveis e lookups (5-6), `BINDEVENT` + Click dos tr├¬s bot├Áes e altern├óncia do CheckBox (7), grava├º├úo do cursor com a checagem de duplicidade (8). Os bot├Áes j├í nascem com geometria, ├¡cone e permiss├úo ÔÇö falta s├│ a a├º├úo do clique.

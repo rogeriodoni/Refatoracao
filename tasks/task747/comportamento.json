@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIGM",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Create Cursor csPgto (Marca L, Obs C(27), Printed L, Valos n(12,2), Emps c(3), ;\n\t\t\t\t\tDopes c(20), Numes n(6), Valdevs n(12,2), Docus n(1))\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase nKeyCode = -1 && F2\n\t\tNoDefault\n\t\tThisForm.Imprimir.Click()\n\n\tCase nKeyCode = -2 && F3\n\t\tNoDefault\n\t\tThisForm.Grade.Click()\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "Parameters poform, _pEmps, _pDopes, _pNumes, _pChkImpDoc, _pBol\n\nThisForm.Parentform   = poform\nThisForm.pChkImpDoc   = _pChkImpDoc\nThisForm.Boleto \t  = Iif(Type([_pBol])=[N], _pBol, 0)\nThisform.oModem \t  = ThisForm.Parentform.oModemEest\nThisForm.Movimentacao = _pDopes\n\nIf (ThisForm.Boleto > 0)\n\tThisForm.Caption = [Impressão Global de Boletos]\nEndIf\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nlcEDN = _pEmps + _pDopes + Str(_pNum... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Boleto \t  = Iif,Sqlexecute,CursorQuery,Visible = Inlist",
+        "controlesReferenciados": "ChkImpDoc",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Grd.Column1.Check1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "if !(csPgto.printed)\n\tThis.value = .t.\nendif\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Grd.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Grd.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Grade",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Grd.Column1.Setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.Imprimir",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "Local lOk\nlOk = .f.\nIf Reccount(\"csPgto\") <=0\n\tMessageBox(\"Não existem observações a serem auteticadas\",16,\"\")\t\n\tThisForm.Sair.Setfocus\nEndIf\n\nSelect csPgto\nScan\n\tIf csPgto.marca\n\t\tIf (CsPgto.docus = 1)\n\t\t\t=ThisForm.Parentform.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\t\t\t=ThisForm.ParentForm.PodataMgr.CursorQuery('SigOpCdc','CrSigOpCdc','Dopes',TprMvCab.Dopes)\n\t\t\tDO SigPrIdc with CsPgto.Emps, CsPgto.Dopes, CsPgto.Numes,CsPgto.valdevs, crSigOpCdc.QtdDocs,.F.,.F.,.F.,.F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "ChkImpDoc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIGM.btnBoleto",
+      "evento": "Click",
+      "linhas": 44,
+      "codigoOriginal": "Local lOk, lnTpB\nlOk = .f.\n\nIf Reccount(\"csPgto\") <=0\n\tMessageBox(\"Não existem observações a serem auteticadas\",16,\"\")\t\n\tThisForm.Sair.Setfocus\nEndIf\n\nSelect csPgto\nScan\n\tlnTpB = 0\n\t=ThisForm.Parentform.poDataMgr.CursorQuery('SigOpCdc','crSigOpCdc','Dopes',ThisForm.Movimentacao)\n\n\tDo Case \n\t\tCase !EMPTY(substr(crSigOpCdd.ConfigGers,233,2))\t&& mena - 30/06/2016 - Pega tipo de boleto para Rosana\n\t\t\tlnTpB = VAL(substr(crSigOpCdd.ConfigGers,233,2))\n\t\t\n\t\tCase (crSigOpCdc.BolItes = 3) && SubNiveis\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

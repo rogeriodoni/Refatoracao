@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This failure (etapa 06_testForm, Tentativa 4/10, task772/FormSIGOPNOP) is **not** a code defect ÔÇö it's the same recurring SQL Server connectivity issue documented in memory. The log shows the error occurring in `TestFormWrapper.prg`'s pre-flight connection check (ETAPA 1B), *before* any `CREATEOBJECT` of `FormSIGOPNOP`/`SIGOPNOPBO` even runs ÔÇö error 1526 DBNETLIB is always network/environment, never `.prg`.
+
+I confirmed it myself just now:
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433 ÔåÆ TcpTestSucceeded = False
+```
+
+I also re-read `FormSIGOPNOP.prg` and `SIGOPNOPBO.prg` in full (as provided). Both already have the correct defensive patterns already verified in Tentativas 1ÔÇô3 of this same task: `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` guards around every OCX (`ctTree`) access, complete `TRY/CATCH` in every SQL routine (`PesquisarPorEnvelope`, `PesquisarPorOP`, `BuscarImagemProduto`, `MontarCursorArvore`, `FecharCursoresResultado`), and the buffering guard before `TABLEREVERT` (rule #52). No defect found.
+
+Per the project's established anti-pattern guard, I did **not** edit either file ÔÇö editing correct code "to try something" when the actual cause is the pipeline machine's network route to `192.168.200.10:1433` would be the wrong move, and this has now been reconfirmed 4 times on this exact task. I updated the memory file with this 4th confirmation so future retries don't repeat the full investigation from scratch.
+
+This will keep failing on retry until the pipeline machine's network route to the SQL Server is restored ÔÇö that's an infrastructure fix, not something fixable in `FormSIGOPNOP.prg`/`SIGOPNOPBO.prg`.

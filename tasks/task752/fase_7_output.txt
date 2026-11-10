@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGOPins.prg` atualizado (1293 ÔåÆ 1437 linhas).
+
+## O que foi feito
+
+**Os 4 handlers CRUD pedidos no prompt n├úo foram criados ÔÇö o legado n├úo tem CRUD.** Medi o dump por cinco caminhos independentes, todos negativos: `Class = form` puro (n├úo `frmcadastro`), zero `Grupo_Op`, zero `pcEscolha`, nenhum objeto `btn|cmd|Command + Incluir|Alterar|Visualizar|Excluir`, nenhum `<X>.Click` com esses verbos. `SIGOPINS` ├® um **di├ílogo modal de sele├º├úo** (marcar observa├º├Áes numa grade e confirmar). Criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├úo (viola o PILAR 1) ou deixar m├®todo sem corpo (viola a regra de completude).
+
+Rodei o gate real do `case 7` do `OrquestradorMigracao.ps1` com as fun├º├Áes do arquivo em disco: `nBotoesLegado = 2` (o CommandGroup `cntBotoes` com `ButtonCount = 2`), `legadoSemCrud = .T.`, `minHandlersF7 = 2`, `nHandlers = 2` (`BtnSairClick` + `BtnConfirmarClick`) ÔåÆ **passa**.
+
+**O trabalho real da fase era outro, e estava faltando:** o CheckBox da `Column1` era `CurrentControl` da coluna **sem nenhum handler de toggle**. CheckBox em coluna de Grid n├úo alterna pelo binding nativo ÔÇö ele desenha em todas as linhas, recebe foco, e clicar ou teclar Espa├ºo/Enter n├úo muda nada. Como marcar observa├º├úo ├® a *├║nica* fun├º├úo deste di├ílogo, a tela estaria in├║til. Acrescentei o mecanismo manual can├┤nico (ref. `Formsigredtv.prg:1564`):
+
+- `ChkSelecaoKeyPress` ÔÇö alterna `selecao` no cursor (Enter/Espa├ºo) + `Refresh` + `NODEFAULT`
+- `ChkSelecaoMouseUp` ÔÇö delega ao KeyPress com tecla 13
+- `ChkSelecaoMouseDown` / `ChkSelecaoClick` ÔÇö `NODEFAULT` para suprimir o toggle nativo (sem eles o valor alterna duas vezes e a tela n├úo muda)
+- os 4 `BINDEVENT` em `VincularEventos()`, sob guarda `PEMSTATUS`
+
+O legado n├úo precisava disso: a `fwcheckbox` do `framework.vcx` declara s├│ `When` e `GotFocus`, e a classe cuidava do toggle. Aqui o controle ├® `CheckBox` puro via `AddObject` sobre coluna **num├®rica** (`selecao N(1,0)`) ÔÇö o caso em que o toggle manual ├® a forma segura. Pr├®-requisito confirmado: o cursor ├® `CREATE CURSOR` + `ZAP`/`APPEND FROM DBF()`, nunca `SQLEXEC` sobre o alias da grade, ent├úo o `REPLACE` n├úo estoura.
+
+Tamb├®m documentei no arquivo, antes dos handlers, por que os nomes CRUD n├úo existem e qual ├® a superf├¡cie de bot├úo real do legado.
+
+## Verifica├º├Áes
+
+| Checagem | Resultado |
+|---|---|
+| Compila├º├úo VFP9 (form + BO) | `FORM.FXP=.T. FORM.ERR=.F.` / `BO.FXP=.T. BO.ERR=.F.` |
+| `Test-CompletudeCodigo` (05d) | OK nos dois arquivos |
+| Gate Fase 7 | `nHandlers=2 >= minHandlersF7=2`, `legadoSemCrud=.T.` |
+| Acentos literais / `RETURN` em TRY | 0 / nenhum |
+| CRLF | restaurado (CR=1437 = LF=1437), ASCII puro |
+
+`.fxp` do smoke test removidos. Os `TODO`/`MESSAGEBOX` que um grep cru acusa s├úo falsos positivos: "todo o SQL", "m├®todo", e uma linha de coment├írio citando o legado.
+
+Uma observa├º├úo que fica fora do escopo desta fase, para a Fase 8 ou revis├úo: o `Header1.Click` legado (marcar/desmarcar tudo) ├® **c├│digo morto no pr├│prio legado** ÔÇö est├í guardado por `If Used([LocalBusLin])` e `LocalBusLin` n├úo ├® criado em lugar nenhum do SCX, al├®m de referenciar um membro `Grade.Seleciona` que n├úo existe. Foi transcrito fielmente (s├│ o `Refresh` final executa), mas na pr├ítica o usu├írio n├úo tem "marcar todos" nesta tela em nenhum dos dois sistemas.

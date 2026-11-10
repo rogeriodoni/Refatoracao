@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and the gate passes.
+
+## What was wrong
+
+The previous attempt had already built the grid, but failed the gate for two reasons ÔÇö and the diagnosis in its own report was mistaken:
+
+1. **Method named `CarregarGrade`** ÔÇö the Phase 4 FLAT gate matches `CarregarLista|CarregarDados|MontaGrade`.
+2. **No buttons** ÔÇö it deferred all four to Phase 7ÔÇæ8, arguing that adding them would "invent CRUD buttons and violate PILAR 1."
+
+That argument was wrong on the facts. The legacy `SIGOPIGM.SCX` genuinely has **four `CommandButton` children of the form** (`Sair`, `Grade`, `Imprimir`, `btnBoleto`, all `Class: fwbtng`), each with full geometry, Caption, Picture and TabIndex in the dump. Transcribing them is fidelity, not invention. What *would* have been invention is wrapping them in a `cmg_4c_*` CommandGroup ÔÇö the legacy has no group, so I created four standalone buttons.
+
+## Changes to `FormSigOpIgm.prg` (599 ÔåÆ 796 lines)
+
+- **`ConfigurarBotoes()`** ÔÇö the four buttons, transcribed from the dump: `Top=3`, `75x75`, `Left` 499/574/649/724. Captions keep the literal `\<` access-key markers (ALT+B/I/G). Pictures copied from the dump, **not** guessed semantically ÔÇö `Grade` uses `geral_selecionar_60.jpg`, not a lupa (regra #25); all four verified present in `vbmp\`. `Cancel = .T.` on `Sair` preserved ÔÇö with `TitleBar = 0` and `ControlBox = .F.` it's the only keyboard exit.
+- **`AjustarVisibilidadeBoleto()`** ÔÇö the legacy `Init`'s last line (`btnBoleto.Visible = Inlist(crSigOpCdc.VenBols, 1, 3)`), called *after* `TornarControlesVisiveis()`, which would otherwise force `Visible = .T.` and erase the decision.
+- **`CarregarGrade` ÔåÆ `CarregarLista`, and `PROTECTED` removed.** The rename exposed a real latent bug: `TesteAutomatico.prg:362` calls `oForm.CarregarLista()` from outside the class, and `PEMSTATUS(...,5)` returns `.T.` for PROTECTED methods ÔÇö so the harness would have entered the branch and failed at runtime with *Property CARREGARLISTA is not found* (CLAUDE.md regra #3).
+
+**No `BINDEVENT`** ÔÇö it validates the delegate at bind time, so binding to Phase 7ÔÇæ8 handlers that don't exist yet would kill `InicializarForm`. Each bind ships with its handler.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| Phase 4 gate (exact predicates, PowerShell) | **PASSOU** ÔÇö `temLayoutFlat = True` |
+| VFP9 compilation | `.FXP` present, `.ERR` absent |
+| Negative control | `.ERR` generated, isolated to **only** injected lines 799ÔÇæ800 |
+| `Test-CompletudeCodigo` (real function) | Form **True**, BO **True** |
+| Block balance | PROCEDURE 10/10, WITH 8/8, TRY 5/5 |
+| Regras #1, #34, #38, #43, #51; literal accents; MESSAGEBOX | all 0 / satisfied |
+| Line endings | 796 CRLF, 0 bare LF |
+
+Two caveats on the compile evidence. The **smoke test failed** ÔÇö `vfp9.exe` compiled but did not execute (`exit=0`, `.FXP` present, output file absent), so I proved compilation only by passing the `.prg` directly to `-T`; I have **not** proven instantiation or runtime behaviour. And the negative control is what makes the clean `.ERR` meaningful: without it, an absent `.ERR` is indistinguishable from "VFP never tried."
+
+Phases 5ÔÇæ8 still owe the grid cell events (the legacy `Check1.Click` guard `if !(csPgto.printed)`), the four `Click` handlers with their `BINDEVENT`s, and the form `KeyPress` (F2ÔåÆImprimir, F3ÔåÆGrade).

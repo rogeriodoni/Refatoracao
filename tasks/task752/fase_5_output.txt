@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da em `projeto\app\forms\operacionais\FormSIGOPins.prg` (812 ÔåÆ 953 linhas, **s├│ adi├º├úo**, zero remo├º├úo).
+
+## O que entrou
+
+**`ConfigurarCampoObservacao()`** ÔÇö o `getObs` do legado (`Class: fwmemo`, `BaseClass: editbox`, filho DIRETO da Form porque o SCX ├® FLAT), mapeado como `obj_4c_GetObs` conforme `mapeamento.json`. Propriedades transcritas literalmente do dump: `Top=391 Left=54 Width=608 Height=180 SpecialEffect=1 Format="K!" NullDisplay="  " TabIndex=4`. `Top`/`Left` **crus**, sem o `+29` ÔÇö n├úo h├í PageFrame aqui. `FontSize`/`DisabledBackColor`/`DisabledForeColor`/`Themes` v├¬m da classe `fwmemo` (`AddObject` cria EditBox puro, que n├úo herda nada do framework). N├úo inventei `BackColor`/`ForeColor`/`ScrollBars`/`ReadOnly` ÔÇö nem o SCX nem a classe os declaram.
+
+**Bind em `VincularGrade()`, n├úo na configura├º├úo** ÔÇö `This.getObs.ControlSource = [LocalObs.Observas]` aponta para o **mesmo cursor da grade** (├® a vista do texto completo da linha corrente, da├¡ o `getObs.Refresh` no `AfterRowColChange`). Ficou junto do bind da grade, onde o cursor j├í existe: `ControlSource` de alias inexistente derrubaria o `Init` (regra #41). Fecha com `Refresh()` do campo ÔÇö popular cursor n├úo repinta controle ligado a ele (regra #21).
+
+**Unbind em `Destroy()`** antes do `USE IN`, pelo mesmo motivo da grade.
+
+**Subclasse `EditBoxMemoSIGOPins_4c_`** ÔÇö o `When` do `fwmemo` decide o foco por `ThisForm.pcEscolha`; **SIGOPINS n├úo tem essa propriedade** (├® di├ílogo, n├úo `frmcadastro`), ent├úo o legado cai sempre no `Else`, onde o retorno ├® `This.ReadOnly` = `.F.` do dump: o campo **nunca recebe foco**, ├® painel de exibi├º├úo. Transcrevi s├│ o ramo que de fato roda (`RETURN .F.`) ÔÇö reproduzir o `DO CASE` inteiro criaria refer├¬ncia a `pcEscolha` e estouraria *Property PCESCOLHA is not found* em runtime.
+
+## Verifica├º├úo executada
+
+VFP9 **executa** nesta sess├úo (smoke test com `STRTOFILE` produziu o arquivo), ent├úo o seguinte ├® medido, n├úo inferido:
+
+| | |
+|---|---|
+| `COMPILE` | `.FXP` gerado, **sem `.err`** |
+| `CREATEOBJECT("FormSIGOPins")` | `VARTYPE=O`, `BaseClass=Form`, `ControlCount=4` |
+| `obj_4c_GetObs` | `Class=Editboxmemosigopins_4c_` / `Base=Editbox` |
+| geometria | `Top=391 Left=54 W=608 H=180` ÔÇö id├¬ntica ao dump |
+| `ControlSource` | `[cursor_4c_Lista.observas]` (bind efetivado, `CURSOR_USED=.T.`) |
+| `When()` | `.F.` ÔÇö comportamento do `fwmemo` reproduzido |
+| di├ílogos suprimidos | **nenhum** (nada engolido por CATCH) |
+
+CRLF preservado (`CR=953 LF=953`), zero bytes >127, `DEFINE/ENDDEFINE`, `PROCEDURE/ENDPROC`, `FUNCTION/ENDFUNC` e `WITH/ENDWITH` balanceados. `.fxp` apagado ao final para o pipeline recompilar limpo.
+
+## Fica para a Fase 6
+
+`chkPular` (`fwcheckbox`, `Top=220 Left=671 Caption="Pular Linhas" Value=.T. TabIndex=3 ForeColor=90,90,90`) ÔÇö ├® a outra metade dos dois campos fora da grade, e ├® lido no `Click` do `cntBotoes` (`Iif(Thisform.chkPular.Value, Chr(13), [])`). Junto com ele v├úo os eventos que esta fase n├úo cobre: `Column2.Text1.When = .F.`, o `GotFocus` que devolve o foco ao CheckBox, o toggle do `Column1.Header1.Click` e o `AfterRowColChange` que chama `getObs.Refresh` ÔÇö este ├║ltimo ├® o consumidor do campo que acabei de criar.

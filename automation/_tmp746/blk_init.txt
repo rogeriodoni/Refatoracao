@@ -1,0 +1,50 @@
+            IF THIS.CarregarImpressoras()
+
+                *-- 4. Barra de acao (btnReport): Imprimir + Encerrar
+                THIS.ConfigurarBotoes()
+
+                *-- 5a. Bloco da impressora e da quantidade de vias:
+                *-- Lbl_Impressora / Label1 / Label2 / Opt_Impressora /
+                *-- Get_Printer / Say9 / getQtde. DEPOIS do CarregarImpressoras
+                *-- (passo 3), que eh quem cria cursor_4c_ImpreV - o ComboBox
+                *-- Get_Printer liga RowSource nesse cursor (regra #41) - e
+                *-- ANTES do TornarControlesVisiveis (passo 6), que eh quem
+                *-- torna visivel o que acabou de ser criado.
+                THIS.ConfigurarControles()
+
+                *-- 5b. Bloco de OPCOES de impressao e conteudo do painel:
+                *-- chkCarne / chkObss / chkAgrupa / Lbl_Erro /
+                *-- cnt_4c_Container1.obj_4c_Edit1. Entre os passos 3 e 6 pelo
+                *-- mesmo motivo do 5a, e eh o ULTIMO AddObject do form - o que
+                *-- habilita os dois passos seguintes.
+                THIS.ConfigurarOpcoes()
+
+                *-- 5c. TabIndex: SO agora, com TODO AddObject do form feito.
+                *-- Atribuir antes gravaria valor CLAMPADO pela quantidade de
+                *-- controles existentes naquele instante (ver AplicarTabIndex).
+                THIS.AplicarTabIndex()
+
+                *-- 5d. BINDEVENT dos eventos (handlers PUBLIC - regra #3).
+                *-- DEPOIS de todo AddObject: BINDEVENT sobre objeto que ainda
+                *-- nao existe estoura no proprio bind, e o campo de quantidade
+                *-- (txt_4c_Qtde) so nasce no passo 5a.
+                THIS.ConfigurarEventos()
+
+                *-- 6. AddObject cria tudo com Visible = .F.; torna a arvore
+                *-- visivel preservando os controles que o legado mantem OCULTOS
+                THIS.TornarControlesVisiveis(THIS)
+
+                *-- 6a. Visibilidade dos tres checkboxes de opcao, que depende
+                *-- do tipo de boleto. OBRIGATORIAMENTE depois do passo 6, que
+                *-- forca Visible = .T. em toda a arvore e apagaria a decisao.
+                THIS.AplicarVisibilidadeOpcoes()
+
+                *-- 7. "With .btnReport / If .Cmd_Imprimir.Enabled ..." do fim
+                *-- do Init legado
+                THIS.AplicarEstadoBotoes()
+
+                *-- 8. Ultimo IF do Init legado, que dispara a impressao sozinho
+                THIS.VerificarImpressaoAutomatica()
+
+                loc_lSucesso = .T.
+            ENDIF

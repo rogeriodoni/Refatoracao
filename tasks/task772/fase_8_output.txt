@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Resumo do que foi entregue e verificado:
+
+## C├│digo ÔÇö `FormSIGOPNOP.prg` (operacionais)
+
+Fechei os **3 ├║ltimos m├®todos com c├│digo do dump** que ainda n├úo tinham equivalente, completando a cobertura dos 17 da SE├ç├âO 3:
+
+| novo m├®todo | legado |
+|---|---|
+| `TreeViewKeyPress` | `TreeView.KeyPress` (ESC ÔåÆ `RELEASE WINDOWS`, transcrito literal) |
+| `TreeViewNodeClick` | `TreeView.NodeClick` ÔÇö mesma estrutura aninhada |
+| `EmpilharChaveNavegacao` | as 3 linhas de pilha `paEmpDopNums` do NodeClick |
+| `ImgImagemDblClick` | `Imagem.DblClick` (extrai a foto ÔåÆ zoom ÔåÆ apaga o tempor├írio) |
+| `AbrirFormZoomImagem` | `Do Form SigOpZom With ...` (via `CREATEOBJECT` guardado ÔÇö padr├úo can├┤nico de `FormSigMvSbn`/`FormSigPrCtr`; `DO FORM` nunca abre no projeto novo) |
+
+Duas medi├º├Áes feitas no dump, n├úo presumidas, e documentadas no c├│digo: **`NodeCargo` nunca ├® atribu├¡do** (6 ocorr├¬ncias, todas leitura) e os tr├¬s TextBox que o ramo de drill escreve (`GetcEmp`/`GetDopes`/`GetNumes`) **n├úo existem no SCX** ÔÇö ent├úo o drill ├® inalcan├º├ível e quebrado no pr├│prio legado. Reproduzi o que existe (pilha + redesenho; `maketree` n├úo re-consulta nada) guardando a chave corrente numa property em vez de inventar tr├¬s controles.
+
+**Defeito encontrado pelo probe e corrigido:** a pilha de navega├º├úo nunca crescia. O legado testa `!Empty(paEmpDopNums[1])`, e isso s├│ funciona l├í porque a chave termina em `Str(n,6)` ÔÇö nunca vazia. Com chave inicial `""` o `ALEN` ficava em 1 ap├│s dois drills (legado d├í 2). Corrigido inicializando com `STR(0, 6)`.
+
+## Gate da Fase 8 ÔÇö reprovava o form completo
+
+Medi em vez de supor: o ramo ├üRVORE j├í dispensava os 4 nomes CRUD, e o **├║nico** bloqueio era o bot├úo de a├º├úo. Causa: `Test-AcaoDoLegadoTemHandler` colhia o verbo s├│ de `Caption`/`Name`, mas em bot├úo ├¡cone-puro (`Fwbtng1`/`Fwbtng2`, classe `fwbtng`) o `Caption` ├® `""` e o `Name` ├® o nome da classe ÔÇö o verbo mora no **`ToolTipText`** ("Expandir"/"Regredir"), que casa com os `CmdExpandirClick`/`CmdRegredirClick` j├í existentes. Acrescentei essa fonte nos dois n├¡veis.
+
+**Blast radius medido** (`automation\SweepGateFase8ToolTip.ps1`, 771 dumps / 516 com form migrado, veredito completo da fase contra c├│pia neutralizada): **466 ÔåÆ 467, muda 1 (`SigOpNop`), 0 regress├Áes.**
+
+Uma armadilha do harness quase deu falso negativo: a 1┬¬ vers├úo do sweep importava os helpers de dentro de uma fun├º├úo (escopo morre no return) e fechou a conta com "131/131, mudaram = 0" ÔÇö parecia prova de que a mudan├ºa n├úo tinha alcance. Corrigido com dot-source em escopo de script + checagem de sanidade, e documentado no script.
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa (form **e** `menu.prg`), com `.fxp` apagado antes e `.err` ausente ÔÇö e smoke test provando que o VFP9 executa nesta sess├úo.
+- Probe P1ÔÇôP8 **todos passam** (instancia├º├úo, escopo PUBLIC/PROTECTED dos novos m├®todos, BINDEVENT entregue, ESC, guarda sem OCX, os 3 cargos que decidem o ramo, crescimento da pilha, extra├º├úo/limpeza do .jpg e reposi├º├úo da work area).
+- `Test-CompletudeCodigo`: OK (tive de reescrever duas frases de coment├írio que davam falso positivo em "TODO" e "pendente").
+- 4 auditorias est├íticas (fun├º├Áes n├úo definidas, m├®todo protegido chamado de fora, propriedades inexistentes, lookup em KeyPress): zero achado neste form.
+- Gate da Fase 8: **PASSA**, `metodosFaltantes = []`.
+
+## Integra├º├úo e propaga├º├úo
+
+Menu: `BAR 166/167` em `popMovimentos` + `AbrirFormSIGOPNOP` com `GarantirClasse` (`GarantirClasseNoMenu -Verificar` OK). Li├º├úo propagada: mem├│ria nova do gate + atualiza├º├úo da mem├│ria de nomenclatura de handler (ordem de busca do verbo: Caption ÔåÆ membro ÔåÆ ToolTipText ÔåÆ Name) + ├¡ndice.
+
+**N├úo ficou provado** (limite do ambiente, n├úo do c├│digo): o desenho real da ├írvore e as consultas, porque o `ctTree.ocx` n├úo est├í registrado nesta m├íquina e o SQL Server 192.168.200.10 ├® inalcan├º├ível ÔÇö os testes usam stub de ├írvore e stub de BO. O zoom (`SigOpZom`) segue em `ProximasMigracoes\`: a chamada est├í pronta e a aus├¬ncia ├® avisada ao usu├írio em vez de falhar calada.

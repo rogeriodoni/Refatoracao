@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpLim.prg` (1812 linhas) e `SigOpLimBO.prg` (624 linhas).
+
+## O que entrou
+
+**Form ÔÇö os quatro m├®todos de consolida├º├úo, todos no caminho VIVO** (7 call sites, n├úo s├│ declarados):
+
+| m├®todo | escopo | ligado em |
+|---|---|---|
+| `FormParaBO()` | `PROTECTED FUNCTION` | `ValidarSenhaExec`, `ValidarMotivoExec` |
+| `BOParaForm()` | `PROTECTED PROCEDURE` | `ValidarMotivoExec`, `ValidarUsuarioExec` |
+| `LimparCampos()` | `PROTECTED PROCEDURE` | `AplicarRegrasDeExibicao` (funil de reentrada) |
+| `HabilitarCampos(par_lHabilitar)` | p├║blico | `AplicarRegrasDeExibicao`, `ValidarUsuarioExec` |
+
+`PROTECTED` expl├¡cito nos tr├¬s primeiros: `FormBase` os declara assim e VFP9 n├úo deixa a subclasse alargar escopo ÔÇö omitir mentiria para quem l├¬.
+
+**BO** ÔÇö 3 properties de espelho do digitado (separadas das que v├¬m do cursor, porque `Zsenha = Iif(Tipo=[X], Usuario.Value, TmpUsu.Usuarios + ...)` l├¬ as duas origens com significados opostos) e `LimparDados()`, que zera s├│ o estado da rodada e **preserva** os par├ómetros de abertura.
+
+## Dois defeitos reais corrigidos no caminho
+
+1. **Reentrada autorizava com a senha da rodada anterior.** `AplicarRegrasDeExibicao` ├® documentadamente o funil de reentrada e zerava as flags, mas n├úo os campos nem o BO ÔÇö `this_cSenhas` (senha gravada do autorizador anterior) continuava sendo o alvo da compara├º├úo de `ValidarSenhaUsuario`. A segunda rodada passaria com a senha de quem liberou a primeira, sem o novo autorizador ter sido escolhido. Sem erro, sem log.
+2. **Dom├¡nio de `Tipo` documentado errado.** Os coment├írios do form e do BO listavam `"D"/"A"/"X"/"L"`; o chamador real (`SIGMVCAB`, 6 call sites) passa **`"C"`** para acr├®scimo ÔÇö `"A"` n├úo ├® usado por ningu├®m. Comportamento j├í estava certo (`"C"` cai no `OTHERWISE`, como `"D"`), ent├úo era mentira s├│ no coment├írio ÔÇö corrigido nos dois arquivos, com a evid├¬ncia do chamador registrada no header.
+
+## Bot├Áes CRUD: n├úo inventados
+
+O legado tem **zero** `CommandButton`/`CommandGroup` e zero `.Click` ÔÇö confirma pelo pr├│prio `case 8` do orquestrador (`automation\VerificarGateFase8Task761.ps1`): passa pelo ramo **entrada-sem-bot├úo**, `metodosFaltantes = []`, que dispensa `BtnCancelarClick`/`CarregarLista`. A mensagem do gate mudou de *"BtnCancelarClick, BOParaForm, CarregarLista n├úo se aplicam"* para *"BtnCancelarClick, CarregarLista"* ÔÇö ou seja, `BOParaForm` saiu de falso-pass por coment├írio e passou a ser m├®todo de verdade.
+
+Sem entrada de menu: ├® di├ílogo FILHO chamado por `Do Form SigOpLim ... to chklim` do `SIGMVCAB`, e `indice_classes.txt` j├í registra as depend├¬ncias (`formbase`, `SigOpLimBO`).
+
+## Verifica├º├úo ÔÇö e o que n├úo consegui provar
+
+Verde: gate Fase 8 **PASSA**; completude 05d **OK** nos dois arquivos; 5 auditorias (m├®todo protegido de fora, fun├º├Áes n├úo definidas, propriedades inexistentes, lookup em KeyPress, FormBuscaAuxiliar) **sem nenhum achado** citando este form; CRLF ├¡ntegro (1812/1812 e 624/624); zero byte acentuado literal; zero `RETURN` dentro de `TRY`; blocos balanceados.
+
+**Compila├º├úo**: `.FXP` regerado para os dois (mais novo que o `.prg`) e **nenhum `.ERR`**.
+
+**N├úo provei execu├º├úo.** O smoke test de 4 linhas confirmou o comportamento j├í registrado nesta m├íquina: `vfp9.exe` compila e sai **sem executar** o `.prg` (`.fxp` criado, arquivo de sa├¡da ausente, `exit=0`). Ent├úo o round-trip `FormParaBO`/`BOParaForm` e a corre├º├úo da reentrada est├úo verificados por leitura e compila├º├úo, **n├úo** por probe em runtime ÔÇö isso precisa de uma rodada com tela. Os `vfp9.exe` que ficaram pendurados no IDE (esperado: `.prg` s├│ com `DEFINE CLASS` n├úo tem `QUIT`) foram encerrados; os tempor├írios, removidos.

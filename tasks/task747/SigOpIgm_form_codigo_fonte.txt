@@ -1,0 +1,650 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpIgm.SCX
+* Data/Hora: 06/11/2026 20:39:39
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPIGM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPIGM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPIGM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPIGM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grd
+  Parent: SIGOPIGM
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPIGM.Grd.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPIGM.Grd.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPIGM.Grd.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPIGM.Grd.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPIGM.Grd.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPIGM.Grd.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Sair
+  Parent: SIGOPIGM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGOPIGM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Imprimir
+  Parent: SIGOPIGM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnBoleto
+  Parent: SIGOPIGM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 304
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Impressão Global de Movimentações"
+  ControlBox = .F.
+  Movable = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  boleto = .F.
+  pchkimpdoc = .F.
+  movimentacao = .F.
+  Name = "SIGOPIGM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Verdana"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 212
+  Left = 12
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  SplitBar = .F.
+  TabIndex = 1
+  Top = 85
+  Width = 346
+  GridLineColor = 238,238,238
+  Name = "Grd"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Width = 17
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 193
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 102
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 25
+  Height = 17
+  Width = 60
+  FontName = "Verdana"
+  Alignment = 0
+  Caption = "Check1"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentações"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grd.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Sair
+------------------------------------------------------------
+  Top = 3
+  Left = 724
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Sair"
+  TabIndex = 4
+  ToolTipText = "[ESC] Sair"
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Grade
+------------------------------------------------------------
+  Top = 3
+  Left = 649
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_selecionar_60.jpg
+  Caption = "\<Grade"
+  TabIndex = 3
+  ToolTipText = "[F3] Grade"
+  Name = "Grade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.Imprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 574
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Caption = "\<Imprimir"
+  TabIndex = 2
+  ToolTipText = "[F2] Imprimir"
+  Name = "Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIGM.btnBoleto
+------------------------------------------------------------
+  Top = 3
+  Left = 499
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_boleto_60.jpg
+  Caption = "\<Boleto"
+  TabIndex = 2
+  ToolTipText = "[F2] Imprimir"
+  Name = "btnBoleto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPIGM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+Create Cursor csPgto (Marca L, Obs C(27), Printed L, Valos n(12,2), Emps c(3), ;
+					Dopes c(20), Numes n(6), Valdevs n(12,2), Docus n(1))
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case nKeyCode = -1 && F2
+		NoDefault
+		ThisForm.Imprimir.Click()
+
+	Case nKeyCode = -2 && F3
+		NoDefault
+		ThisForm.Grade.Click()
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters poform, _pEmps, _pDopes, _pNumes, _pChkImpDoc, _pBol
+
+ThisForm.Parentform   = poform
+ThisForm.pChkImpDoc   = _pChkImpDoc
+ThisForm.Boleto 	  = Iif(Type([_pBol])=[N], _pBol, 0)
+Thisform.oModem 	  = ThisForm.Parentform.oModemEest
+ThisForm.Movimentacao = _pDopes
+
+If (ThisForm.Boleto > 0)
+	ThisForm.Caption = [Impressão Global de Boletos]
+EndIf
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+lcEDN = _pEmps + _pDopes + Str(_pNumes,6)
+
+lcSql = [Select a.Emps, a.Dopes, a.Numes, a.EmpDopNums, a.Valos, a.ValDevs, b.Docus, c.VenBols ] + ;
+		[From SigMvCab a, SigCdOpe b, SigOpCdc c ]+;
+		[Where EmpDnCrds = ']+lcEDN+[' And a.Dopes = b.Dopes And a.Dopes = c.Dopes And b.Docus in(1,3,4)]
+
+If ThisForm.Parentform.podatamgr.Sqlexecute(lcSql,'CrTprMvCab') > 0
+	Select CrTprMvCab
+	Scan
+		Scatter Memvar
+		m.Obs   = CrTprMvCab.dopes+' '+Str(CrTprMvCab.Numes,6)
+		m.Marca = .t.
+		Printed = .f.
+		Insert into csPgto from Memvar
+	EndScan
+EndIf
+Select csPgto
+Go Top	
+If Reccount() = 0
+	ThisForm.Release
+	Return .F.
+EndIf
+
+=ThisForm.Parentform.poDataMgr.CursorQuery('SigOpCdc','crSigOpCdc','Dopes',ThisForm.Movimentacao)
+ThisForm.btnBoleto.Visible = Inlist(crSigOpCdc.VenBols, 1, 3)	
+
+With ThisForm
+	With .Grd 
+		.RecordSource          = 'csPgto'
+		.RecordSourceType      = 1
+		.Column1.ControlSource = 'csPgto.marca'
+		.Column2.ControlSource = 'csPgto.Obs'
+		.Column3.ControlSource = 'csPgto.Valos'
+		.Refresh
+	EndWith	
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Grd.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if !(csPgto.printed)
+	This.value = .t.
+endif	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Grd.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Grd.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Grade
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Grd.Column1.Setfocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.Imprimir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lOk
+lOk = .f.
+If Reccount("csPgto") <=0
+	MessageBox("Não existem observações a serem auteticadas",16,"")	
+	ThisForm.Sair.Setfocus
+EndIf
+
+Select csPgto
+Scan
+	If csPgto.marca
+		If (CsPgto.docus = 1)
+			=ThisForm.Parentform.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)
+			=ThisForm.ParentForm.PodataMgr.CursorQuery('SigOpCdc','CrSigOpCdc','Dopes',TprMvCab.Dopes)
+			DO SigPrIdc with CsPgto.Emps, CsPgto.Dopes, CsPgto.Numes,CsPgto.valdevs, crSigOpCdc.QtdDocs,.F.,.F.,.F.,.F.,crSigOpCdc.TpImpDocs,.F.,Thisform,ThisForm.pChkImpDoc
+		EndIf
+
+		If InList(CsPgto.Docus, 3, 4)
+			Do Form SigReIfx With CsPgto.Emps, CsPgto.Dopes, CsPgto.Numes, CrSigOpCdc.TpImpDocs,ThisForm.pChkImpDoc
+		EndIf
+
+		Select csPgto
+		Replace csPgto.marca with .f., csPgto.Printed with .t.
+	EndIf
+EndScan
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIGM.btnBoleto
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lOk, lnTpB
+lOk = .f.
+
+If Reccount("csPgto") <=0
+	MessageBox("Não existem observações a serem auteticadas",16,"")	
+	ThisForm.Sair.Setfocus
+EndIf
+
+Select csPgto
+Scan
+	lnTpB = 0
+	=ThisForm.Parentform.poDataMgr.CursorQuery('SigOpCdc','crSigOpCdc','Dopes',ThisForm.Movimentacao)
+
+	Do Case 
+		Case !EMPTY(substr(crSigOpCdd.ConfigGers,233,2))	&& mena - 30/06/2016 - Pega tipo de boleto para Rosana
+			lnTpB = VAL(substr(crSigOpCdd.ConfigGers,233,2))
+		
+		Case (crSigOpCdc.BolItes = 3) && SubNiveis
+			lnTpB = 11
+
+		Case (crSigOpCdc.BolItes = 4) && Detalhado
+			lnTpB = 13
+
+		Case (crSigOpCdc.BolItes = 5) && Romaneio
+			lnTpB = 14
+
+		Case (crSigOpCdc.BolItes = 7) && Controle Interno
+			lnTpB = 17
+
+		Case (crSigOpCdc.BolItes = 6) && Vendedor
+			lnTpB = 16
+
+		Case (crSigOpCdc.BolItes = 8) && mena - 03/11/2014 - Duplicata/Carne
+			lnTpB = 18
+
+		Otherwise && Sim / Não
+			lnTpB = 3
+	EndCase
+	
+	If (lnTpB > 0)
+		Do Form SigOpIbo With Thisform.Parentform, lnTpB,,csPgto.Emps, csPgto.Dopes, csPgto.Numes, 0, crSigOpCdc.qvias, crSigOpCdc.qtdbols
+	EndIf
+	*Do SigBlBol With lnTpB, [], csPgto.Emps, csPgto.Dopes, csPgto.Numes, .f., 1, 1
+EndScan
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPIGM
+RESERVED3 (ClassInfo): boleto
+omodem
+parentform
+pchkimpdoc
+movimentacao
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

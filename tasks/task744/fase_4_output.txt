@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue em `C:\4c\projeto\app\forms\operacionais\FormSigOpGvt.prg`.
+
+## O que esta fase pedia vs. o que o legado tem
+
+O prompt pede "Grid + 6 bot├Áes CRUD + `AlternarPagina`". Medi os 9 objetos da ├írvore do `SigOpGvt.SCX` e **nada disso existe**:
+
+| token no dump | ocorr├¬ncias |
+|---|---|
+| `BaseClass grid \| pageframe` | 0 |
+| `BaseClass` de entrada (textbox/editbox/combobox/listbox/checkbox/optiongroup/optionbutton/spinner) | 0 |
+| `AddCursor` / `pColuna` / `RecordSource` / `ControlSource` / `Grade\|grd` | 0 / 0 / 0 / 0 / 0 |
+| `BaseClass commandbutton` | 1 (`SIGOPGVT.ok`) |
+
+├ürvore inteira: `dataenvironment, form, container, label├ù3, shape, image, commandbutton`. ├ë o caso DESPACHANTE ÔÇö Label/Image/Shape/Container n├úo s├úo campo. Inventar grade/PageFrame/CRUD violaria o PILAR 1, e `ConfigurarPaginaLista`/`AlternarPagina`/`Btn*Click` vazios seriam o stub disfar├ºado que a regra de completude pro├¡be. **Dispensar n├úo ├® "nada a fazer"**: o entreg├ível ├® o bot├úo do legado com o Click real.
+
+## Entregue
+
+- **`ConfigurarBotoes()`** ÔÇö `cmd_4c_Ok` com `Top=3`/`Left=924`/`Caption="Encerrar"`/`Picture`/`Cancel=.T.` transcritos do SCX; fonte/cores dos defaults da classe `fwbtng`.
+- **`ConfigurarEventos()`** ÔÇö `BINDEVENT` do Click.
+- **`CmdOkClick()`** (PUBLIC, regra #3) ÔÇö transcri├º├úo do `ok.Click`: "Verificando Status" ÔåÆ `VerificarStatusGaveta()` do BO ÔåÆ "Gaveta Aberta... Feche" (early-exit por flag, sem `RETURN` em `TRY`) ÔåÆ `Release()` fora do `TRY`.
+- **`ConfigurarMensagem()`** ÔÇö `lbl_4c_Mensagem`, que o handler reescreve; `AutoSize=.F.` expl├¡cito (com `WordWrap=.T.`, `AutoSize=.T.` descartaria a `Height=64` e colapsaria as duas linhas).
+- **`CLEAR TYPEAHEAD`** no `Init` ÔÇö n├úo ├® decora├º├úo: o bot├úo tem `Cancel=.T.`, logo um ESC no buffer fecharia a tela antes de o usu├írio ler a mensagem.
+
+**`Width/Height = 75x75` e n├úo os 80x100 da classe `fwbtng`**: `924+80=1004` estouraria o `Form.Width=1000` (4px recortados, regra #30) e `3+100=103` passaria 23px abaixo da faixa. O probe confirmou `dir=999` e `base=78` ÔÇö tila exato nas duas dimens├Áes.
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou (`VIVO`, `exit=0`), ent├úo houve execu├º├úo real:
+
+- **Compila├º├úo** ÔÇö `.FXP` presente e `.ERR` ausente nos dois arquivos. Com controle negativo: uma c├│pia do form com `PUBLIC PROCEDURE` colada no fim gerou `.ERR` apontando **s├│** as linhas 428ÔÇô429, contra 426 linhas do form ÔÇö prova que o detector funciona *e* que as 426 linhas reais est├úo limpas.
+- **Runtime** ÔÇö `CREATEOBJECT` devolveu `Form` 1000x193, 3 controles; `cmd_4c_Ok` em 3/924, 75x75, `Cancel=.T.`, ├¡cone existente; `lbl_4c_Mensagem` 248x64 `AutoSize=.F.`; `PEMSTATUS(oForm,"CmdOkClick",2)=.F.` (PUBLIC).
+- **Dois cen├írios de clique**: `BEMATECH` ÔåÆ `StatGaveta()` ausente por desenho (regra #27) ÔåÆ o `CATCH` pegou, mensagem voltou a "Gaveta Aberta... Feche", **form continuou vivo** (= o `Return .f.` do legado) e a aus├¬ncia apareceu no log de di├ílogos (`File 'statgaveta.prg' does not exist`); impressora n├úo reconhecida ÔåÆ `DO CASE` sem match ÔåÆ `Release()` executou.
+
+Artefatos do probe removidos, incluindo os `.FXP` que o `SET PROCEDURE` recria.
+
+## Pendente para a Fase 5
+
+Faltam s├│ os dois controles decorativos: `shp_4c_Shape1` e `img_4c_Imagem` (`gaveta.jpg`). Deixei marcado dentro de `InicializarForm()` o **ponto de inser├º├úo** da chamada deles ÔÇö entre o cabe├ºalho e a mensagem, para preservar o z-order do SCX ÔÇö e no cabe├ºalho do `.prg` o invent├írio com o aviso de **n├úo recriar** `lbl_4c_Mensagem` (`AddObject` repetido estoura "object already exists" e derruba o `Init`). Tamb├®m n├úo defini `TabIndex` de prop├│sito: fora da faixa `1..N` ele ├® descartado em sil├¬ncio, e N s├│ fecha em 5 depois desses dois `AddObject`.

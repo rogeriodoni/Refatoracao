@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8/8 ÔÇö conclu├¡da
+
+Ao ler os arquivos antes de editar, descobri que **todo o trabalho da Fase 8** (e da Fase 7) j├í estava implementado no c├│digo ÔÇö s├│ o coment├írio de cabe├ºalho do `FormSigOpMpn.prg` estava desatualizado, ainda listando essas fases como "Ainda NAO entregue":
+
+- `BtnEncerrarClick`/`BtnCancelarClick`/`FecharDialogo` ÔÇö convergem no mesmo funil de `CmdOkClick` (o dialogo n├úo tem sa├¡da sem gravar, igual ao legado: `ControlBox=.F.`, `Closable=.F.`).
+- `CmdOkClick` ÔåÆ `SigOpMpnBO.ConfirmarMovimentacoes()` ÔÇö grava `xMFas`/`xOpi`/`xNensi` e `SigCdNec.ChkSubn`.
+- `CmdSelTudoClick`/`CmdApagaClick`/`CmdTotalizaClick`, `GradeAfterRowColChange`, `ChkSelecionarInteractiveChange`, `GarantirCheckBoxSelecionar` ÔÇö todos presentes.
+- `CarregarLista`/`AjustarBotoesPorModo`/`Destroy` ÔÇö presentes e corretos (reabilita form pai, fecha cursores pr├│prios, `DODEFAULT()` por ├║ltimo).
+- No BO: `Marcar`/`Desmarcar`/`ConfirmarMovimentacoes`/`GravarPendenciaConfirmada`/`GravarFaseConfirmada`/`GravarDetalheEnvelopeFinal`/`GravarFaseAusente` ÔÇö todos implementados, sem stubs.
+
+Corrigi o bloco "Historico de fases" do cabe├ºalho para refletir a realidade (Fase 7 e Fase 8 documentadas com o que cada uma entrega), e verifiquei o balanceamento estrutural dos dois arquivos (`DEFINE CLASS`/`ENDDEFINE`, `PROCEDURE`/`ENDPROC`, `TRY`/`ENDTRY`, `WITH`/`ENDWITH`, `IF`/`ENDIF`) ÔÇö todos batem, sem truncamento.
+
+N├úo encontrei nenhum `TODO`/`FIXME`/stub real em nenhum dos dois arquivos. Os dois permanecem como untracked (`??`) no git, prontos para o pr├│ximo passo do pipeline (SET PROCEDURE em config.prg, item de menu, etc. ÔÇö fora do escopo desta fase).

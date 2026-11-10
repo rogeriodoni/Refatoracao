@@ -1,0 +1,117 @@
+* --- O QUE ESTA FASE (6/8) ENTREGA ---------------------------------------
+* O template generico da Fase 6 pede "ultimos 50% dos campos + TODOS os
+* lookups com BINDEVENT (F4/F5) + container cnt_4c_BotoesAcao (Salvar,
+* Cancelar)". Dois dos tres itens NAO se aplicam a este legado, e isso foi
+* MEDIDO no dump, nao presumido:
+*   grep -icE 'fwbusca|mAddColuna|sigacess\(' ....... 0  (zero lookup)
+*   grep -icE 'Acesso(Campos|Contab|Contas|Empresa|
+*              Grupos|MovInd|MovMto|Produto|Titulo)\(' 0
+*   PROCEDURE Valid no dump inteiro ................. 1  (so getQtde)
+*   BaseClass: grid | pageframe ..................... 0
+* Nao ha UM campo de lookup nesta tela: o unico controle que o usuario digita
+* eh a quantidade de vias, e o unico que escolhe de uma lista eh o ComboBox de
+* impressoras, cuja fonte eh um CURSOR LOCAL montado por APRINTERS() + duas
+* consultas (RowSourceType = 2) - nao uma tabela pesquisavel. Fabricar um
+* AbrirLookup* aqui inventaria uma tabela de lookup que o legado nunca consulta
+* (viola o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"). E nao existe
+* bloco Salvar/Cancelar: este dialogo nao grava registro - ele IMPRIME; os dois
+* botoes que ele tem (Imprimir e Encerrar) sao os membros do btnReport, ja
+* entregues na Fase 4.
+*
+* O que a Fase 6 tem de concreto para entregar, entao, eh (a) a outra metade
+* dos controles, (b) a regra de visibilidade que depende do tipo de boleto,
+* (c) o Valid do unico campo digitavel e (d) o TabIndex, que as fases 3/4/5
+* registraram como pendencia explicita justamente para esta:
+*   - ConfigurarOpcoes()          -> chkCarne / chkObss / chkAgrupa /
+*                                    Lbl_Erro / Container1.Edit1
+*   - AplicarVisibilidadeOpcoes() -> as 5 linhas "ThisForm.chk*.Visible = ..."
+*                                    do Init legado, via os tres predicados do
+*                                    Business Object
+*   - AplicarTabIndex()           -> a ordem de tabulacao do SCX
+*   - ValidarQtde()               -> PROCEDURE Valid de getQtde
+*   - ValidarQtdeKeyPress()       -> guard de ENTER/TAB que delega para ela
+*   - ConfigurarEventos()         -> ganha os dois BINDEVENT de txt_4c_Qtde, e
+*                                    a CHAMADA dele muda de lugar (abaixo)
+*
+* MUDANCA DE ORDEM no InicializarForm, e o motivo: a chamada de
+* ConfigurarEventos saiu do passo 5 (antes dos campos) para o passo 5d (depois
+* de TODO AddObject). BINDEVENT sobre objeto que ainda nao existe estoura no
+* proprio bind, e txt_4c_Qtde so nasce no ConfigurarControles - deixar a
+* chamada onde estava faria o Init falhar e a tela nao abrir. Os dois
+* BINDEVENT de Click que ja estavam la nao perdem nada com o adiamento: o
+* obj_4c_BtnReport existe desde o passo 4, e nenhum evento pode disparar antes
+* de o form ficar visivel.
+*
+* Decisoes desta fase, e o motivo de cada uma:
+*   - chkCarne eh o UNICO controle do dump sem Width/Height. O valor NAO foi
+*     estimado nem herdado do default 100: foi MEDIDO no VFP9 com um
+*     procedimento que se valida nos dois irmaos de gabarito conhecido (o
+*     mesmo codigo devolve 122 para "Imprimir Observacoes" e 120 para
+*     "Agrupar Informacoes", que sao EXATAMENTE os numeros que o SCX declara
+*     nesses dois) - e devolve 88x15 para "Imprimir Carne".
+*   - os TRES checkboxes recebem AutoSize = .F. com Width/Height explicitos.
+*     Medido: CheckBox criado por AddObject com AutoSize = .T. fica nos 100x17
+*     do default enquanto esta INVISIVEL (tres ordens de atribuicao testadas),
+*     e so recalcula ao ficar visivel - declarar .T. seria uma linha que mente
+*     sobre o valor efetivo durante toda a montagem.
+*   - CheckBox.Value NUMERICO (1/1/0) e nao LOGICO (.T./.T./.F. do SCX): eh o
+*     canonico do projeto, e a leitura em SincronizarOpcoesParaBO ja passa por
+*     ConverterParaLogico, que tolera os dois tipos.
+*   - Lbl_Erro eh criado mas CONTINUA oculto: o unico bloco do legado que o
+*     exibia esta COMENTADO no SCX (ver o cabecalho de CarregarImpressoras).
+*     Reativa-lo seria inventar comportamento. O Caption transcrito eh o do
+*     SCX, que eh um texto DIFERENTE dos dois que o Init calcula em
+*     this_cErroImpressoras.
+*   - lbl_4c_Lbl_Erro recebe ZOrder(1): no SCX o Container1 eh declarado DEPOIS
+*     do Lbl_Erro e desenha por cima dele, e as duas areas se cruzam de
+*     verdade (132..468 x 250..278 contra 60..540 x 203..473). Aqui a ordem de
+*     criacao eh invertida por necessidade - o container nasce no
+*     ConfigurarPageFrame, que tem de ser o primeiro AddObject (regra #11) -,
+*     entao o ZOrder restaura o empilhamento do legado.
+*   - o PROCEDURE When de getQtde ("Return .t.") NAO vira metodo: .T.
+*     incondicional eh o default do VFP9 para When, logo escrever um handler
+*     que so devolve .T. seria um metodo vazio.
+*   - o TabIndex eh REINDEXADO para 1..7 em vez de receber os literais do SCX
+*     (2/3/7/8/9/10/10): o VFP9 clampa TabIndex a quantidade de posicoes do
+*     container, e Label/Container do legado nao tem TabStop, nao param o Tab e
+*     nao ocupam posicao efetiva - a SEQUENCIA percebida fica identica. Ver
+*     AplicarTabIndex.
+*
+* COM ISSO OS 19 OBJETOS DO DUMP ESTAO MIGRADOS. Conferencia por nome, contra
+* a secao 1 do dump e contra tasks\task746\mapeamento.json:
+*   Dataenvironment  -> (nao se migra: DataSession = 2 do form)
+*   SIGOPIBO         -> FormSigOpIbo                           (Fase 3)
+*   cntSombra        -> cnt_4c_Sombra                           (Fase 3)
+*   .lblSombra       -> cnt_4c_Sombra.lbl_4c_LblSombra          (Fase 3)
+*   .lblTitulo       -> cnt_4c_Sombra.lbl_4c_LblTitulo          (Fase 3)
+*   Container1       -> cnt_4c_Container1                       (Fase 3)
+*   btnReport        -> obj_4c_BtnReport                        (Fase 4)
+*   Lbl_Impressora   -> lbl_4c_Lbl_Impressora                   (Fase 5)
+*   Label1           -> lbl_4c_Label1                           (Fase 5)
+*   Label2           -> lbl_4c_Label2                           (Fase 5)
+*   Opt_Impressora   -> obj_4c_Opt_Impressora                   (Fase 5)
+*   Get_Printer      -> cbo_4c_Get_Printer                      (Fase 5)
+*   Say9             -> lbl_4c_Label9                           (Fase 5)
+*   getQtde          -> txt_4c_Qtde                             (Fase 5)
+*   chkCarne         -> chk_4c_ChkCarne                         (Fase 6)
+*   chkObss          -> chk_4c_ChkObss                          (Fase 6)
+*   chkAgrupa        -> chk_4c_ChkAgrupa                        (Fase 6)
+*   Lbl_Erro         -> lbl_4c_Lbl_Erro                         (Fase 6)
+*   .Edit1           -> cnt_4c_Container1.obj_4c_Edit1          (Fase 6)
+*
+* --- O QUE FICA PARA AS FASES 7 E 8 --------------------------------------
+* Nao sobra CONTROLE nem EVENTO do dump: os 6 metodos com codigo do legado
+* (Load, Init, Cmd_Imprimir.Click, Cmd_Sair.Click, getQtde.When,
+* getQtde.Valid) estao todos resolvidos - o Load de proposito NAO portado
+* (decisao 3 abaixo) e o When por ser o default do VFP9.
+*
+* ATENCAO para a Fase 8: o template dela pede FormParaBO / BOParaForm /
+* BtnSalvarClick / BtnCancelarClick. Este dialogo NAO grava registro nenhum -
+* nao tem tabela, nem chave primaria, nem cursor proprio de edicao (ver o
+* cabecalho de SigOpIboBO.prg) -, entao nao ha o que um Salvar/Cancelar
+* faria. O espelho tela->BO que esta arquitetura pede ja existe e esta
+* distribuido pelos pontos em que o legado o faz: DefinirTipoBoleto (os nove
+* parametros, no Init), ValidarQtde (a quantidade de vias) e
+* SincronizarOpcoesParaBO (impressora + os tres checkboxes, no Click do
+* Imprimir). Fabricar FormParaBO/BtnSalvarClick aqui produziria metodo vazio
+* (proibido pela regra de completude) ou um botao que o legado nao tem.

@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da.
+
+**Arquivo criado**: `C:\4c\projeto\app\classes\SigOpLopBO.prg` (106 linhas, compila limpo, instancia OK em probe VFP9 real)
+
+## O que o legado ├® (lido de `SigOpLop_form_codigo_fonte.txt`)
+
+Di├ílogo modal FILHO (`WindowType=1`, `TitleBar=0`, `Init` recebe `pFrm`, desabilita o pai e devolve o `Enabled` no Ok). **N├úo executa SQL nenhum**: a grade `grdOperacoes` est├í ligada ao cursor `LocalSacOp`, criado e populado por quem abre o di├ílogo; o `Check1` da `Column1` alterna `LocalSacOp.Selecionada` por c├│digo (`Gather Memvar Fields Selecionada`) e a `Column2` (`Dopes`) ├® `ReadOnly`.
+
+## Propriedades declaradas (todas, com Init)
+
+| Propriedade | Tipo | Origem |
+|---|---|---|
+| `this_cCursorPai` = `"LocalSacOp"` | C | alias EXATO do legado (pertence ao form pai) |
+| `this_cCursorGrade` = `"cursor_4c_Operacoes"` | C | espelho local p/ instancia├º├úo fora do fluxo |
+| `this_nSelecionada` = 0 | **N** | `LocalSacOp.Selecionada` ÔÇö o legado alterna com `Iif(Selecionada = 0, 1, 0)`, logo ├® num├®rica, **n├úo l├│gica** |
+| `this_cDopes` = `""` | C | `LocalSacOp.Dopes` ÔåÆ `SigCdOpe.dopes char(20)` |
+| `this_nTotalOperacoes` / `this_nTotalSelecionadas` | N | totalizadores da sele├º├úo |
+| `this_cOperacoesMarcadas` | C | lista devolvida ao form pai |
+| `this_nTamDopes` = 20 | N | largura real do schema (p/ `PADR`/`LEFT`/`MaxLength`) |
+
+`Init()`: `this_cTabela = "SigCdOpe"` + `this_cCampoChave = "dopes"` (conferido no `docs/schema.sql` lido com `Get-Content -Raw`, 682 tabelas ÔÇö PK `sigcdope_dopes`; `SigCdOpe` ├® single-column, n├úo tem `descrs`/`descs`). Atribui├º├úo **antes** do `DODEFAULT()` sem par├ómetro (tela n├úo grava, n├úo precisa de `DataAccess`) e `RETURN .T.` expl├¡cito. `ObterChavePrimaria()` devolve `ALLTRIM(this_cDopes)`.
+
+## Verifica├º├Áes feitas
+
+- Zero caracteres acentuados literais; nenhum `TODO/FIXME/PLACEHOLDER` que case o regex do `Test-CompletudeCodigo`; nenhum indicador de pend├¬ncia ("pr├│xima fase"/"pendente"/"nao implement").
+- CRLF normalizado como o resto do acervo.
+- `COMPILE` no VFP9 real: `.fxp` gerado, **sem `.err`**; probe instanciou (`VARTYPE=O`) e leu todas as propriedades com os tipos certos (`Selecionada` tipo `N`, `Dopes` tipo `C`). Artefatos tempor├írios (`.fxp`, probes) removidos.
+
+**Ponto para a Fase 2**: o BO ├® somente-leitura ÔÇö o legado n├úo tem `TABLEUPDATE`, `.AddCursor(` nem grava├º├úo remota (`comportamento.json`: `totalQueries: 0`). N├úo sobrescrever `Inserir()`/`Atualizar()`/`ExecutarExclusao()` seria inventar INSERT/UPDATE (regra #22); o comportamento herdado de `BusinessBase` j├í ├® o correto, e o gate da Fase 2 tem exce├º├úo fail-closed exatamente para esse caso. A Fase 2 deve entregar a camada de **cursor**: carga/espelho da grade, toggle de `Selecionada`, totalizadores e a lista de marcadas.

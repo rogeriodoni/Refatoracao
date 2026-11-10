@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 executada. Resumo:
+
+## O que a Fase 6 entregou em `FormSIGOPNOP.prg`
+
+**Esta tela n├úo tem lookup nenhum** ÔÇö conferido no dump, n├úo presumido: `SIGOPNOP_form_codigo_fonte.txt` tem **zero** `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, `mAddColuna`, `sigacess(`, `Acesso<X>(` e `FormBuscaAuxiliar` (o ├║nico `CreateObject` ├® `fSqlConector`, o gerente de conex├úo). Os dois campos s├úo n├║meros digitados ├á m├úo cujo `Valid` consulta direto. Criar `AbrirBusca*` aqui seria inventar tabela de lookup (PILAR 1). Pelo mesmo motivo n├úo h├í container Salvar/Cancelar: o SCX tem s├│ Encerrar + Expandir/Regredir.
+
+Os campos e labels j├í estavam completos (4 labels + 2 textboxes = invent├írio exato do SCX). O que **faltava de fato** eram os eventos ÔÇö o form tinha **zero BINDEVENT**. Acrescentei `ConfigurarEventos()` (chamado no `InicializarForm` antes do `SetFocus`) + 4 handlers PUBLIC:
+
+| legado | migrado |
+|---|---|
+| `GetOP.GotFocus` + `GetOP.When` | `TxtOPGotFocus` (zera Envelope + apaga a figura) |
+| `GetEnvelope.GotFocus` | `TxtEnvelopeGotFocus` (zera O.P.) |
+| `GetOP.Valid` | `ValidarOP` em `KeyPress` ENTER(13)/TAB(9) |
+| `GetEnvelope.Valid` | `ValidarEnvelope` em `KeyPress` ENTER/TAB |
+
+`KeyPress` com teste de tecla, n├úo `LostFocus` (o handler chama `CarregarDados` ÔåÆ SQLEXEC; `LostFocus` dispara sempre e recursa). A regra #47 n├úo se aplica: ela trata de handler que abre *picker* sem testar a tecla. Guarda de reentr├óncia liberada **depois do ENDTRY**, e os tr├¬s `IF` separados porque VFP9 n├úo faz short-circuit em `OR`.
+
+## Provas (arquivo de sa├¡da, n├úo exit code)
+
+- **Compila limpo** ÔÇö `.fxp` apagado antes, `.err` ausente depois.
+- **Instancia**, e `AEVENTS` lista as 4 liga├º├Áes com os nomes certos.
+- **GotFocus ├® entregue de verdade** (`WindowType=0` + `Show()` + `SetFocus`): EnvelopeÔåÆ0, ImagemÔåÆinvis├¡vel; O.P.ÔåÆ0.
+- **Gatilho correto**: ENTER com O.P.=4242 ÔåÆ BO chamado 1├ù com 4242; TAB com Envelope=3131 ÔåÆ 1├ù com 3131; tecla `A`, argumento n├úo-num├®rico, campo zerado e flag ligada ÔåÆ **nenhuma** chamada. Mensagens batem com o legado (`O.P. N├úo Localizada !!!`).
+- Auditorias: `VerificarLookupEmKeyPress` ERRO=0 AVISO=28 (nenhum neste form), `VerificarFuncoesNaoDefinidas` OK, `VerificarPropriedadesInexistentes` OK, `VerificarMetodoProtegidoChamadoDeFora` OK. Zero TODO/stub.
+
+**N├úo provado:** entrega do `KeyPress` pelo evento real ÔÇö `KEYBOARD CHR(13)` + `INKEY` n├úo ├® roteado ao controle focado em execu├º├úo headless (deu zero chamadas, o que n├úo ├® defeito do form). A entrega via `BINDEVENT` est├í provada pelo `GotFocus`, que usa o mesmo mecanismo.
+
+## Gate da Fase 6 ÔÇö faltava o ramo ├üRVORE
+
+O gate tinha 8 ramos e **nenhum** alcan├ºava form cuja lista ├® ActiveX de ├írvore (as Fases 4, 5 e 8 j├í dispensam por esse nome). Passar exigiria inventar lookup ou inventar `.ControlSource` para cair no ramo FLAT. Acrescentei o ramo ├üRVORE *fail-closed*, reusando a prova que a Fase 5 j├í valida + `legadoSemLookup`, e exigindo do migrado ├írvore + paridade num├®rica de campos + BINDEVENT + `PROCEDURE Validar*`. Medido nos **771 dumps**: dispensa **1** (o pr├│prio SIGOPNOP). Verificador: `automation\VerificarGateFase6Arvore.ps1` ÔåÆ *APROVADO pelo ramo ARVORE, e por mais nenhum*.
+
+Uma corre├º├úo que vale registrar: na primeira aplica├º├úo eu reescrevi o `OrquestradorMigracao.ps1` inteiro em CRLF (o arquivo ├® LF-only) ÔÇö 19 mil linhas de ru├¡do no diff. Refiz preservando LF; o diff agora ├® **5 hunks, 83 linhas novas e 6 alteradas**, e o arquivo passa o parser do PowerShell sem erro. Backups em `tasks\task772\*.bak`.

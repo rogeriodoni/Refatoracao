@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPOCA",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "Parameters Arquivos, pFormPai, pTipo, pTopo\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession To Arquivos\nThisForm.FormPai = pFormPai\nThisForm.pTipo   = pTipo\n\nThisForm.Top  = ThisForm.FormPai.Top + ( pTopo - 120 )\nThisForm.Left = ThisForm.FormPai.Left + ( ( ThisForm.FormPai.Width / 2 ) - ( ThisForm.Width / 2 ) )\n\nThisForm.Get_DtAudits.Value = CrSigCqOch.Datas\nThisForm.get_valor.Value = CrSigMvCcr.Valors\nThisForm.Mem... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Top +,Left +",
+        "controlesReferenciados": "Get_DtAudits,get_valor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCA",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCA.cmd_grupo",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "Replace ObsAudts With ThisForm.Memo_Obs.Value in CrSigCqOch\n\nIf ThisForm.pTipo\n\tlctipo   = 'Auditado'\n\tlcUpdate = [Update SigMvCcr Set DtAudits = ?llData, Auditors = ']+Usuar+[ ' Where Grupos = ']+crSigMvCcr.Grupos+[' And Contas = ']+;\n\t\t\t\tcrSigMvCcr.Contas+[' And Moedas = ']+crSigMvCcr.Moedas+[ ' And Nopers = ]+Str(crSigMvCcr.Nopers)\nElse\n\tlctipo   = 'DesAuditado'\n\tllData = .Null.\n\tlcUpdate = [Update SigMvCcr Set DtAudits = ?llData, Auditors = '          ' Where Grupos = ']+crSigMvCcr.Grupos+['... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCA.Get_DtAudits",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCA.Get_valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCA.Memo_Obs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "**\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPOCA.cmd_grupo.Click",
+      "queryOriginal": "\tlcUpdate = [Update SigMvCcr Set DtAudits = ?llData, Auditors = ']+Usuar+[ ' Where Grupos = ']+crSigMvCcr.Grupos+[' And Contas = ']+; \t\t\t\tcrSigMvCcr.Contas+[' And Moedas = ']+crSigMvCcr.Moedas+[ ' And Nopers = ]+Str(crSigMvCcr.Nopers) Else",
+      "tabelas": "SigMvCcr",
+      "colunas": "DtAudits,Auditors",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPOCA.cmd_grupo.Click",
+      "queryOriginal": "\tlcUpdate = [Update SigMvCcr Set DtAudits = ?llData, Auditors = '          ' Where Grupos = ']+crSigMvCcr.Grupos+['... [TRUNCADO]",
+      "tabelas": "SigMvCcr",
+      "colunas": "DtAudits,Auditors",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCcr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

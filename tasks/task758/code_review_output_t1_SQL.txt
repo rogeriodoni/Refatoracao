@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os dois achados do pass SQL e ambos s├úo **falso positivo** do detector autom├ítico:
+
+1. **`DEPO`** ÔÇö n├úo existe nenhuma coluna `DEPO` em WHERE nenhum. O "match" veio de substring dentro da palavra `DEPOIS` em coment├írios (linhas 100, 339, 575, 810 etc. do form). N├úo h├í SQL envolvido.
+
+2. **`CODIGOS`** ÔÇö a ├║nica ocorr├¬ncia ├® `WHERE Codigos = ` na linha 1621 do form, dentro do lookup de Base de Localiza├º├úo (`SigPrLcl`). Essa condi├º├úo **n├úo ├® inventada**: confirmei no dump do legado (`tasks\task758\SigOpLcZ_form_codigo_fonte.txt:919-920`):
+   ```foxpro
+   loLista = CreateObject('fwbuscaext', ..., 'SigPrLcl', 'crListaRemota', 'Codigos', This.Value, ...)
+   ```
+   O `fwbuscaext` do legado j├í filtra `SigPrLcl` por `Codigos` ÔÇö ├® exatamente o que o `SQLEXEC` migrado reproduz (match exato antes de abrir o picker, regra #37). A refer├¬ncia "WHERE original usa: CPROS, MARCAS" que o pass trouxe ├® do trecho **diferente** (filtro de `crItensLoc`/`crTpmMvItn`), e o checker comparou o arquivo inteiro contra essa ├║nica refer├¬ncia, sem saber que o form tem duas consultas SQL independentes.
+
+Da mesma forma, a outra condi├º├úo `WHERE Cpros = ` (linha 521 do BO, `ObterImagemProduto`) tamb├®m ├® fiel ao legado (`CursorQuery('SigCdPro', ..., 'Cpros', crItensLoc.Cpros, 'FigJpgs')`), mas o pass nem chegou a reclamar dela ÔÇö refor├ºa que o detector s├│ capturou parte do arquivo.
+
+Remover o `WHERE Codigos = ...` quebraria o lookup de Base de Localiza├º├úo (ficaria sem filtro algum, violando PILAR 1 e PILAR 2). N├úo fiz nenhuma altera├º├úo ÔÇö n├úo h├í nada de fato errado no SQL deste form.

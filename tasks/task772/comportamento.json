@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigopnop",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "Parameters plModal, pcEmps, pcDopes, pcNumes\n\nPrivate lcEmpDopNums, lccPros\n\nKeyboard Chr(32)\n=Inkey(0)\n\nDeclare ThisForm.paEmpDopNums[1]\nThisForm.paEmpDopNums[1] = ''\nThisForm.Arqfigura = ' '\n\nlcEmpDopNums = ''\n\nWith ThisForm\n\t.poDataMgr  = CreateObject('fSqlConector', ThisForm.Name)\nEndWith\n\n*ThisForm.WindowType = Iif(plModal,1,0)\n\nThisForm.Container2.Visible = .f.\n\nLocal loTree1\n\nloTree1 = ThisForm.Container1.TreeView\n\nloTree1.AddImage(LoadPicture('\\imagens\\geral_documento_26.jpg')) &&\\vbmp\\F... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop",
+      "evento": "Procedure",
+      "linhas": 100,
+      "codigoOriginal": "Local loTree1,lnNode\n\nThisForm.Container2.Visible = .t.\n\nm.loTree1 = ThisForm.Container1.TreeView\n\nm.loTree1.ClearNodes\nm.loTree1.TipsDisplay = .t.\nm.loTree1.ExpandOnDClick \nm.loTree1.SmallIcons = .t.\nm.loTree1.PicAlign = 0\nm.loTree1.SelectedStyle = 2\nm.loTree1.PictureType = 1\n\nlcDados   = 'O.P. : '+Alltrim(Str(nEnvs)) + [ - ] + Cpros + Iif(nOpMaes > 0,[ - O.P. Mãe: ]+Alltrim(Str(nOpMaes)),[ ] )\nm.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, 1, 0, 0)\nm.loTree1.NodeHeader(m.lnNode1) = .t.\nm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop",
+      "evento": "Procedure",
+      "linhas": 101,
+      "codigoOriginal": "Local loTree1,lnNode\n\nThisForm.Container2.Visible = .t.\n\nm.loTree1 = ThisForm.Container1.TreeView\n\nm.loTree1.ClearNodes\nm.loTree1.TipsDisplay = .t.\nm.loTree1.ExpandOnDClick \nm.loTree1.SmallIcons = .t.\nm.loTree1.PicAlign = 0\nm.loTree1.SelectedStyle = 2\nm.loTree1.PictureType = 1\n\nlcDados   = 'Envelope : '+Alltrim(Str(nEnvs))\nm.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, 5, 0, 0)\nm.loTree1.NodeHeader(m.lnNode1) = .t.\nm.loTree1.NodeExpanded(m.lnNode1) = .t.\nm.loTree1.NodeShowChecks(m.lnNode1) ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Commandgroup1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Delete File (ThisForm.Arqfigura)\nThisForm.Release\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Commandgroup1",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.TreeView",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "*** ActiveX Control Event ***\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.TreeView",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS keyascii\n\nIf KeyAscii = 27\n\tRelease Windows\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.TreeView",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS nindex, ncolumn\n\nIf ! Empty(Thisform.plDblClick)\n\tIf This.NodeCargo(nIndex) = Thisform.plDblClick\n\t\tIf !Empty(ThisForm.paEmpDopNums[1])\n\t\t\tDeclare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)+1]\n\t\tEndIf\n\t\tThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)] = ThisForm.Container1.GetcEmp.Value +;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ThisForm.Container1.GetDopes.Value +;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Str(ThisForm.Container1.GetNumes.Value,6)\n\t\tThisForm.Container1.GetcEmp.Value  = Left(Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "paEmpDopNums[Alen,Value  = Left,Value = Substr,Value = Val,Maketree,NodeCargo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetEnvelope",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.GetOP.Value = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetEnvelope",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "If ! Empty(This.Value)\n\t\n\tlcQuery = [SELECT b.Cidchaves,a.Nenvs,  a.EmpDnPs, b.Datas, b.Grupoos, b.Contaos, b.grupods, b.contads, ] + ;\n\t\t\t  [a.servicos, a.Nops,a.cmats, c.dpros, a.Qtds, c.cunis, a.peso2s, c.cunips, ]+;\n\t\t\t  [a.Pesos, Space(14) as Cpros ] + ;\n\t\t\t  [from SigCdNei a, SigCdNec b, SigCdPro c ] + ;\n\t\t\t  [where a.nenvs = ]+Alltrim(Str(This.Value))+[ and a.empdnps = b.empdnps and a.cmats = c.cpros ] + ;\n\t\t\t  [order by b.cidchaves,a.Nops,a.cmats ]\n\n\tIf ThisForm.poDataMgr.SqlExecute(lcQu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,MakeTreeEnv",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetEnvelope",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetOP",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.GetEnvelope.Value = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetOP",
+      "evento": "Valid",
+      "linhas": 79,
+      "codigoOriginal": "If ! Empty(This.Value)\n\t\n\tlcQuery = [SELECT distinct b.CidChaves,a.Nops as Nenvs, a.EmpDnPs, b.Datas, ]+;\n\t\t\t  [b.Grupoos, b.Contaos, b.grupods, b.contads, ]+;\n\t\t\t  [a.servicos,  0 as Nops,a.cmats, c.dpros, a.Qtds, ]+;\n\t\t\t  [c.cunis, a.peso2s, c.cunips, a.Pesos, d.Cpros, d.NopMaes ]+;\n\t\t\t  [from SigCdNei a, SigCdNec b, SigCdPro c, SigOpPic d ]+;\n\t\t\t  [where a.Nops = ]+Alltrim(Str(This.Value))+[ And a.empdnps = b.empdnps And ]+;\n\t\t\t  [a.cmats = c.cpros And a.Nops = d.Nops ]+;\n\t\t\t  [Union all ]+;\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Picture =,MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigopnop.Container1.GetOP",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Imagem.Visible = .f.\n*!*\tReturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Fwbtng1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "loTree1 = ThisForm.Container1.TreeView\nllExpande = .f.\n\nFor lnNode = 0 To loTree1.lIstCount-1\n\tIf ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)\n\t\tloTree1.NodeExpanded(lnNode) = .t.\n\t\tllExpande = .t.\n\tEndif\nEndFor\n\nIf llExpande \n\tThisForm.pnNodeExp = ThisForm.pnNodeExp + 1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Fwbtng2",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If Type('ThisForm.pnNodeExp') = 'N' And ThisForm.pnNodeExp > 0\n\tloTree1 = ThisForm.Container1.TreeView\n\n\tFor lnNode = 0 To loTree1.lIstCount-1\n\t\tIf ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)\n\t\t\tloTree1.NodeExpanded(lnNode) = .f.\n\t\tEndif\n\tEndFor\n\n\tThisForm.pnNodeExp = ThisForm.pnNodeExp - 1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopnop.Imagem",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Local lcArquivo\n\nlcArquivo = Sys(2023) + '\\' + Sys(2015) + '.Jpg'\n\nSelect crTmpPro\nWith This.Parent\n\t* Figura no Campo Memo\n\tIf Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)\n\t\t=StrToFile(crTmpPro.FigJpgs, lcArquivo)\n\tEndIf\n\n\tIf File(lcArquivo)\n\t\tDo Form SigOpZom With lcArquivo, ;\n\t\t\t\t\t\t\t'Produto : ' + crTmpPro.CPros + ' - ' + crTmpPro.DPros, '' \n\t\tDelete File (lcArquivo)\n\tEndIf\nEndWith\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

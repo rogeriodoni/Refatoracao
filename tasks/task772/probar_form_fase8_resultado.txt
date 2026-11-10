@@ -1,0 +1,29 @@
+M1 inicio
+M2 ambiente ok
+P1 form instanciou (VARTYPE=O)
+P2 TreeViewKeyPress existe=.T. protected=.F. (esperado .T./.F.)
+P2 TreeViewNodeClick existe=.T. protected=.F. (esperado .T./.F.)
+P2 ImgImagemDblClick existe=.T. protected=.F. (esperado .T./.F.)
+P2 EmpilharChaveNavegacao existe=.T. protected=.T. (esperado .T./.T.)
+P2 AbrirFormZoomImagem existe=.T. protected=.T. (esperado .T./.T.)
+P2 this_cChaveNavegacao existe=.T.
+P3 img_4c_Imagem <- (Object) -> IMGIMAGEMDBLCLICK
+P3 arvore no form (sem OCX)=.F. (esperado .F. nesta maquina)
+P4 KeyPress sem argumento -> sobreviveu
+P4 KeyPress 65 (tecla qualquer) -> sobreviveu
+P4 KeyPress 27 (ESC) -> sobreviveu, form VARTYPE=O (esperado O: RELEASE WINDOWS nao fecha form)
+P5 NodeClick sem arvore -> this_cUltimoNoClicado=[SENTINELA] (esperado SENTINELA: guarda barrou)
+P6 stub instalado VARTYPE=O
+P6a cargo vazio, 2 cliques -> ultimoNo=[] chaveNav=[     0] (esperado ultimoNo vazio e chaveNav intacta: drill inalcancavel, como no legado)
+P6b cargo numerico 0, 2 cliques -> ultimoNo=[] chaveNav=[     0] (esperado ultimoNo vazio e chaveNav intacta - TRANSFORM(0) daria 0 e abriria o drill)
+P6c 1o clique -> ultimoNo=[001MALOTE                   3] chaveNav=[     0] (esperado ultimoNo = cargo, chaveNav ainda = STR(0,6))
+P6c 2o clique no MESMO no -> chaveNav=[001MALOTE                   3] pilha[1]=[     0] ALEN=1 (esperado chaveNav = cargo, pilha[1] = chave ANTERIOR STR(0,6), ALEN 1)
+P6c cargo DIFERENTE -> ultimoNo=[002OUTRO                    7] ALEN=1 (esperado re-registro, sem crescer a pilha)
+P7 1o drill -> ALEN=1 [1]=[     0] chaveNav=[CHAVE-A] (esperado ALEN 1, [1] = STR(0,6), chaveNav CHAVE-A)
+P7 2o drill -> ALEN=2 chaveNav=[CHAVE-B] (esperado ALEN 2, chaveNav CHAVE-B)
+P7 pilha -> [1]=[     0] [2]=[CHAVE-A] (esperado [1] = STR(0,6) e [2] CHAVE-A)
+P8 sem cursor de produto -> sobreviveu (no-op)
+P8 cursor criado na sessao 2, alias corrente antes=[CURSOR_4C_SENTINELA]
+P8 depois: alias corrente=[CURSOR_4C_SENTINELA] (esperado CURSOR_4C_SENTINELA = area REPOSTA)
+P8 .Jpg em SYS(2023) antes=6 depois=6 saldo=0 (esperado saldo 0: o metodo apaga o que cria)
+RESULTADO=OK

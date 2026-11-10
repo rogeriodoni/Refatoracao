@@ -1,0 +1,30 @@
+PROBE F5 task757 INICIO
+ambiente OK
+1) CREATEOBJECT INSERIR -> VARTYPE=O
+   PodeEditar=.T.  Form W=968 H=500
+   shp_4c_Shape1    cls=Shape         Top=  87 Left= 646 W= 292 H= 196
+   lbl_4c_Label3    cls=Label         Top=  89 Left= 682 W=  25 H=  15 Cap=[Base] Fore=5921370 AutoSize=.F. TabIdx=5
+   txt_4c_Base      cls=Textbox       Top= 107 Left= 682 W=  54 H=  24 Fore=0 TabIdx=6
+   txt_4c_DBase     cls=Textbox       Top= 107 Left= 737 W= 174 H=  24 Fore=0 TabIdx=7
+   lbl_4c_Label1    cls=Label         Top= 134 Left= 682 W=  70 H=  15 Cap=[Segundo Nível] Fore=5921370 AutoSize=.F. TabIdx=8
+   txt_4c_Nvl2      cls=Textbox       Top= 152 Left= 682 W=  54 H=  24 Fore=0 TabIdx=9
+   txt_4c_DNvl2     cls=Textbox       Top= 152 Left= 737 W= 174 H=  24 Fore=0 TabIdx=10
+   GATE inicial: Base.Enabled=.T. (esperado .T.)  Nvl2.Enabled=.F. (esperado .F.)
+   GATE com Base=01: Nvl2.Enabled=.T. (esperado .T.)
+   GATE Base limpa: Nvl2.Enabled=.F. (esperado .F.)
+   MaxLength: Base=2 DBase=20 Nvl2=2 DNvl2=20
+   DESCRICAO: DBase.ReadOnly=.T. TabStop=.F. | DNvl2.ReadOnly=.T. TabStop=.F.
+   LIMITES: grade termina em Left=587  cabecalho termina em Top=80
+   ordem[6] = SHP_4C_SHAPE1
+   ordem[7] = LBL_4C_LABEL3
+   ordem[8] = TXT_4C_BASE
+   ordem[9] = TXT_4C_DBASE
+   ordem[10] = LBL_4C_LABEL1
+   ordem[11] = TXT_4C_NVL2
+   ordem[12] = TXT_4C_DNVL2
+2) CREATEOBJECT PROCURAR -> VARTYPE=O
+   PodeEditar=.F.  Base.Enabled=.F. (esperado .F.)  Nvl2.Enabled=.F. (esperado .F.)
+   com Base=01: Base.Enabled=.F. Nvl2.Enabled=.F. (ambos .F.)
+   VISIBLE: Shape1=.T. Label3=.T. Base=.T. DBase=.T. Label1=.T. Nvl2=.T. DNvl2=.T.
+   ImgJpg segue oculta? .T.
+PROBE F5 task757 FIM

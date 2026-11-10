@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpMpn.prg` (Fase 3/8) com a estrutura base do form:
+
+- **DEFINE CLASS FormSigOpMpn AS FormBase** com propriedades visuais exatas do SCX legado (Height=600, Width=1000, Caption via CHR() para acentos, DataSession=1 compartilhada) e properties `this_oFormPai`, `this_cModoAtual`, `this_nContador`.
+- **Init(par_oFormPai, par_nDataSession, par_cOperacao)** ÔÇö espelha o `LParameters pForm, DatSes, Operacao` legado, copia Empresa/Modo do form pai, cria o BO (`SigOpMpnBO`), delega a `DODEFAULT()`.
+- **InicializarForm()** ÔÇö fundo do form + `ConfigurarCabecalho()`.
+- **ConfigurarCabecalho()** ÔÇö faixa cinza com `lblSombra`/`lblTitulo`.
+- **Destroy()** ÔÇö reabilita o form pai, libera o BO, fecha `TmpPends` com guarda, `DODEFAULT()` por ├║ltimo.
+
+Decis├úo importante: diferente do template gen├®rico (que pressup├Áe PageFrame Page1/Page2 de CRUD), identifiquei que `SIGOPMPN` ├® um **dialogo filho OPERACIONAL de layout FLAT** (mesma fam├¡lia de `FormSigOpMpd.prg`, j├í migrado no projeto) ÔÇö sem PageFrame, filhos diretos do form. Segui o padr├úo j├í estabelecido e documentado em `FormSigOpMpd.prg` em vez do template CRUD gen├®rico, incluindo a mesma decis├úo de `DataSession=1` compartilhada (o legado troca para a sess├úo do pai logo no Init).
+
+Grid de sele├º├úo (TmpPends), grades de itens/total e bot├Áes ficam para a Fase 4, conforme o escopo pedido.

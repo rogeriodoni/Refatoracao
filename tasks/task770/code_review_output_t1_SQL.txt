@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked all 4 flagged `SQL-FILTRO-INVENTADO` findings against the actual legacy source (`tasks\task770\SigOpNch_form_codigo_fonte.txt`, lines 451-469) before touching anything, since this project has a long history of this exact detector producing false positives when the legacy filter lives in an `If`/`Scan` block instead of literal SQL.
+
+**Verdict: all 4 are false positives ÔÇö no code change needed.**
+
+The legacy `Init` does:
+```foxpro
+Select crSigOpFp
+Scan
+    If crSigOpFp.Infos = 'C' And crSigOpFp.EmiChqs = 1 And Not IsEmpty(crSigOpFp.Bancos) And ;
+            Not IsEmpty(crSigOpFp.Agencias) And Not IsEmpty(crSigOpFp.NContas)
+        ...
+```
+
+That `If` is exactly what `SigOpNchBO.CarregarFormasPagtoCheque` reproduces as SQL:
+```sql
+WHERE infos = 'C'
+  AND emichqs = 1
+  AND RTRIM(bancos) <> ''
+  AND RTRIM(agencias) <> ''
+  AND RTRIM(ncontas) <> ''
+```
+
+So `INFOS` and the `emichqs`-adjacent condition are faithful transcriptions, not invented. The reviewer's "original WHERE uses EMICHQS, VALOR" reference was built only from the literal `SELECT`/`INSERT` snippets it was given ÔÇö it never saw the `If` guard inside the `Scan`, because that logic isn't SQL in the legacy code at all.
+
+The other two flagged tokens, `MA` and `DO`, aren't real column names ÔÇö they're fragments the detector picked up from unrelated VFP control-flow keywords in the file (`SCAN FOR **Ma**rcas AND Cheques <> 0`, `**DO** CASE`), not from any WHERE clause.
+
+Removing the `infos`/`emichqs`/bancos-agencias-ncontas conditions would actually reintroduce a real bug: `CarregarFormasPagtoCheque` would then return every `SigOpFp` row instead of only cheque-type payment methods with a bank account configured ÔÇö breaking PILAR 1 fidelity and the exact condition the BO's own header comment documents preserving.
+
+No files were modified. If you want, I can add this as a documented false-positive pattern via the `propagate-lesson` skill so future SQL-FILTRO-INVENTADO passes don't re-flag filters that live in a legacy `If`/`Scan` guard rather than literal SQL ÔÇö let me know.

@@ -1,0 +1,780 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpMet.SCX
+* Data/Hora: 08/11/2026 22:56:47
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPMET
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btncarregar
+  Parent: SIGOPMET
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say1
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetValmeta
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getvalcota
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getpdes
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtini
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDtfin
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getvaldes
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getcodigo
+  Parent: SIGOPMET.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGOPMET.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Metas por Loja"
+  Name = "SIGOPMET"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 463
+  Pagina.Lista.Grade.Left = 29
+  Pagina.Lista.Grade.Top = 130
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 29
+  Pagina.Lista.cntFiltros.Left = 479
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 842
+  Pagina.Dados.Grupo_Salva.Top = -1
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -30
+  Pagina.Left = -2
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.btncarregar
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 2
+  Left = 773
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Carrega Metas"
+  MousePointer = 15
+  TabIndex = 8
+  ToolTipText = "Carregar Cadastro"
+  Visible = .F.
+  PicturePosition = 7
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btncarregar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa : "
+  Left = 437
+  Top = 181
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Meta de Vendas : "
+  Left = 401
+  Top = 262
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cota Desconto $ : "
+  Left = 398
+  Top = 289
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cota Desconto % : "
+  Left = 393
+  Top = 343
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.GetValmeta
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valmeta"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 257
+  Width = 126
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "GetValmeta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getvalcota
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valcota"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 284
+  Width = 126
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "getvalcota"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getpdes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 338
+  Width = 126
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "getpdes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getDtini
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.dtini"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 203
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "getDtini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.GetDtfin
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.dtfin"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 230
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "GetDtfin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getvaldes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valdes"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 311
+  Width = 126
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "getvaldes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Inicial : "
+  Left = 425
+  Top = 208
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Final : "
+  Left = 430
+  Top = 235
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getEmps
+------------------------------------------------------------
+  ControlSource = "CrSigCdDes.emps"
+  Height = 24
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 176
+  Width = 33
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código : "
+  Left = 445
+  Top = 154
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.getcodigo
+------------------------------------------------------------
+  ControlSource = "CrSigCdDes.codigo"
+  Height = 24
+  InputMask = "!!!!!!!!!!"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 149
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getcodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMET.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Desconto Aplicado $ : "
+  Left = 381
+  Top = 316
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPMET
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE importaplan
+------------------------------------------------------------
+PROCEDURE importaplan
+Private ldDataD
+Local alMes
+
+Declare alMes(12)
+alMes[1] = 'JANEIRO'
+alMes[2] = 'FEVEREIRO'
+alMes[3] = 'MARCO'
+alMes[4] = 'ABRIL'
+alMes[5] = 'MAIO'
+alMes[6] = 'JUNHO'
+alMes[7] = 'JULHO'
+alMes[8] = 'AGOSTO'
+alMes[9] = 'SETEMBRO'
+alMes[10] = 'OUTUBRO'
+alMes[11] = 'NOVEMBRO'
+alMes[12] = 'DEZEMBRO'
+
+lcArq = Getfile('xls*')
+
+If Empty(lcArq)
+	Return .F.
+Endif
+
+If Not ImpExcelDriver(lcArq,'Orç.Meta Dia')
+	Return .F.
+Endif
+lnCelI=0
+
+Select * From xlResults Into Cursor localMeta Readwrite
+Select localMeta
+Go Top
+*** produra o numero da coluna onde esta a data do orcamento e parte desse posicionamento para calcular as outras colunas ***
+For j=1 To 10
+	lcCampo=[LocalMeta.F]+Alltrim(Str(j))
+	If &lcCampo='ORÇAMENTO'
+		lnCelI=j	&& celula inicial onde está o mes da meta
+		Exit
+	Endif
+Endfor
+
+
+If lnCelI <> 0
+	lcCampo=[LocalMeta.F]+Alltrim(Str(lnCelI))
+	lcData = Alltrim(&lcCampo)+' '
+	lcData =Alltrim(Strextract(lcData,'DE '))
+	lcMes = Upper(fLimpaTexto(Alltrim(Strextract(lcData,'',' ',1))))
+	lcAno = Right(lcData,4)
+	For I=1 To 12
+		If lcMes=alMes[i]
+			lcMes = Padl(I,2,'0')
+			Exit
+		Endif
+	Endfor
+Endif
+
+If Not ImpExcelDriver(lcArq,'Orç.Desafio Dia')
+	Return .F.
+Endif
+Select * From xlResults Into Cursor localMetaD Readwrite
+
+Select crSigopMet
+Zap
+
+*Append From &lcArq. delimited with tab
+Select localMeta
+Go Top
+Scan
+	lcCampo=[LocalMeta.F]+Alltrim(Str(lnCelI+0))
+	lcUf   = Alltrim(Iif(Inlist(Vartype(&lcCampo),'C','M'),Nvl(&lcCampo,[]),[]))
+	lcCampo=[LocalMeta.F]+Alltrim(Str(lnCelI+2))
+	lcCEmp = Alltrim(Iif(Inlist(Vartype(&lcCampo),'C','M'),Nvl(&lcCampo,[]),[]))
+	lcCampo=[LocalMeta.F]+Alltrim(Str(lnCelI+3))
+	lcEmp  = Alltrim(Iif(Inlist(Vartype(&lcCampo),'C','M'),Nvl(&lcCampo,[]),[]))
+	lcCampo=[LocalMeta.F]+Alltrim(Str(lnCelI+4))
+	lcNomeL= Alltrim(Iif(Inlist(Vartype(&lcCampo),'C','M'),Nvl(&lcCampo,[]),[]))
+
+	lcQuery = 	[Select * From SigcdEmp where cemps = ']+lcEmp+[' ]
+	If Thisform.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return
+	Endif
+
+	lnCel = lnCelI+6
+	If Reccount('localEmp') > 0
+		Select localMeta
+		For I=1 To 31
+			lnDay=I
+			ldDataD=Ctot(Padl(lnDay,2,'0')+'/'+lcMes+'/'+lcAno)
+			lcCampo=[LocalMeta.F]+Alltrim(Str(lnDay+lnCel))
+			lnMeta =Iif(Inlist(Vartype(&lcCampo),'N','M','C'),Nvl(&lcCampo,0),0)
+			
+			If Type([lnMeta])=[C]
+				lnMeta = Val(lnMeta)
+			EndIf 
+			
+			If lnMeta <> 0
+				lcQuery = 	[Select * From SigopMet where emps = ']+lcEmp+[' and datas = ?ldDataD]
+				If Thisform.Podatamgr.Sqlexecute(lcQuery,'crAux') < 1
+					Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+					Return
+				Endif
+				If Reccount('crAux') = 0
+					lcCod = lcEmp+Padl(Alltrim(Str(fGerUniqueKey(lcEmp))),7,'0')
+				Else
+					lcCod = crAux.codigo
+				Endif
+
+				Select localMetaD
+				lcCpoUfd=[LocalMetaD.F]+Alltrim(Str(lnCelI+0))
+				lcCpoEmpd=[LocalMetaD.F]+Alltrim(Str(lnCelI+3))
+
+				Locate For &lcCpoUfd=lcUf And &lcCpoEmpd=lcEmp
+				lcCampo=[LocalMetaD.F]+Alltrim(Str(lnDay+lnCel))
+				lnMetaD =Iif(Inlist(Vartype(&lcCampo),'N','M','C'),Nvl(&lcCampo,0),0)
+
+				If Type([lnMetaD])=[C]
+				
+					lnMetaD = Val(lnMetaD)
+				EndIf 
+			
+				Insert Into crSigopMet (ufs, Emps, codemps, nomeloja, DataS, valmeta, valmetad, codigo, usualts, dtalts);
+					Value (lcUf, lcEmp, Val(lcCEmp), lcNomeL, ldDataD, lnMeta, lnMetaD, lcCod, Usuar, Datetime())
+
+			Endif
+
+		Endfor
+	Endif
+	Select localMeta
+Endscan
+
+llOks = .T.
+
+If Not Thisform.Podatamgr.Update([crSigOpMet])
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrNfe)])
+	llOks = .F.
+Endif
+If llOks
+	If (Thisform.Podatamgr.Commit() < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .F.
+	Endif
+Endif
+
+Thisform.Refresh
+Return llOks
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.Empty(ThisForm.Pagina.Dados.Getemps.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigOpMet','emps',ThisForm.Pagina.Dados.Getemps.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)
+	With .poDatamgr
+		.AddCursor('SigOpMet','codigo','crSigOpMet','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('codigo','','','Codigo',100,.t.)
+		.pfSqlTabela(1).pColuna('ufs','','','Estado',75,.t.)
+		.pfSqlTabela(1).pColuna('emps','','','Loja',75,.t.)
+		.pfSqlTabela(1).pColuna('nomeloja','','','Nome da Loja',150,.t.)
+		.pfSqlTabela(1).pColuna('datas','','','Data',75,.t.)
+		.pfSqlTabela(1).pColuna('valmeta','','','Vr Meta',75,.t.)
+		.pfSqlTabela(1).pColuna('valmetad','','','Desafio',75,.t.)
+		.pfSqlTabela(1).pColuna('usualts','','','Usuário',75,.t.)
+		.pfSqlTabela(1).pColuna('dtalts','','','Alteracao',75,.t.)
+	EndWith
+	= DoDefault()
+	.btncarregar.Visible=.t.  
+	.pagina.lista.grupo_Op.Visible=.f.    
+	.pagina.lista.grupo_Op.enabled=.f.    
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMET.btncarregar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+local llRet
+
+llRet = thisform.ImportaPlan()
+IF llRet
+	Messagebox('Planilha importada com sucesso.',(0+64),'Aviso')
+ELSE
+	Messagebox('A Planilha não foi importada.',(0+48),'Aviso')
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMET.Pagina.Dados.getvaldes
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMET.Pagina.Dados.getcodigo
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPMET
+RESERVED3 (ClassInfo): *importaplan 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

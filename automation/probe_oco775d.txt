@@ -1,0 +1,26 @@
+P01 inicio
+P02 setup OK
+P03 cursor OK reccount=1
+P04 CREATEOBJECT = [O]
+P05 ColumnCount=4
+P06 RecordSource=[cursor_4c_Historico]
+P07 Col3.ControlSource=[cursor_4c_Historico.ocors]
+P08 Col3.CurrentControl=[TXT_4C_OCORRENCIA]
+P09 Col3.Sparse=.F. Col3.ReadOnly=.F. Col3.Width=75 Header=[Ocorrência]
+P10 tem celula=.T.
+P11 celula Class=[Textboxocorrenciaoco_4c] MaxLength=10 Visible=.T.
+P12 GetObs Class=[Editboxobsoco_4c] CtrlSource=[cursor_4c_Historico.obs]
+P13 (AEVENTS omitido: forma de argumento dispara dialogo modal)
+P14 PEMSTATUS  ValidarOcorrenciaGrade=.T./prot=.F.  AbrirBuscaOcorrencia=.T./prot=.F.
+P15 PEMSTATUS  PodeEditarObservacao=.T./prot=.F.  ObservacaoLostFocus=.T./prot=.F.  FocarObservacao=.T./prot=.F.
+P16 antes de Valid(vazio)
+P17 Value limpo
+P18 Valid(vazio)=.T.
+P19 When(ocors vazio)=.F.
+P20 ocors preenchido
+P21 When(ocors cheio)=.T.
+P22 auto-preencheu obs=[OBS TESTE]
+P23 this_cObservas=[NOVA OBS] BO=[NOVA OBS]
+P24 pos-recarga CurrentControl=[TXT_4C_OCORRENCIA] Width=75 Header=[Ocorrência]
+P25 apos disparar LostFocus: this_cObservas=[VIA BINDEVENT]
+P26 FIM OK

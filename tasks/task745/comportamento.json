@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoContas", "fwBuscaExt", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPHIS",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "Local llAcTotal, lcKey, lcFrom, lcWhere, llUsuaRest\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poDataMgr = CreateObject('fSqlConector')\n\n* Inicializa as variáveis de campos\nThisForm.get_est.Value     = Space(10)\nThisForm.get_dest.Value    = Space(40)\nThisForm.get_cod.Value     = Space(10)\nThisForm.get_dcod.Value    = Space(40)\nThisForm.get_dataini.Value = Date()\nThisForm.get_datafin.Value = Date()\nThisForm.get_est.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,Value     = Space,Value    = Space,Value = Date",
+        "controlesReferenciados": "get_est,get_dest,get_cod,get_dcod,get_dataini,get_datafin",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_est",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.Get_grupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',this.Value,ThisForm.get_Est,ThisForm.get_DEst)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.get_dest.Value = ''\n\t\tThisForm.get_dest.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.get_dest.Value = ''\n\tThisForm.get_dest.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grupo,get_Est,get_DEst",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_dest",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.get_Grupo.Value\nIf !IsEmpty(this.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.get_est,ThisForm.get_dest)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.get_est.Value = ''\n\t\tThisForm.get_est.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.get_est.Value = ''\n\tThisForm.get_est.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_est,get_dest",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_dest",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_Est.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Est",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_cod",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf IsEmpty(This.Value)\n\tThisForm.get_dcod.Value = ''\n\tThisForm.get_dcod.Refresh\n\tReturn(.T.)\nEndIf\nm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Seleção',1000)\nIf .Not.m.loLista.plAchouRegistro\n\tm.loLista.mAddColuna('cpros','','Código')\n\tm.loLista.mAddColuna('dpros','','Descrição')\n\tm.loLista.Show()\nEndIf\n\nIf LastKey() <> 27 And Used('CrProds')\n\tThisForm.get_cod.Value  = Evaluate('CrProds.cpros')\n\tThisForm.get_dco... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Evaluate,Value = Evaluate",
+        "controlesReferenciados": "get_dcod,get_cod",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_dcod",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf IsEmpty(This.Value)\n\tThisForm.get_cod.Value = ''\n\tThisForm.get_cod.Refresh\n\tReturn(.T.)\nEndIf\nm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Seleção',1000)\nIf .Not.m.loLista.plAchouRegistro\n\tm.loLista.mAddColuna('dpros','','Descrição')\n\tm.loLista.mAddColuna('cpros','','Código')\n\tm.loLista.Show()\nEndIf\n\nIf LastKey() <> 27 And Used('CrProds')\n\tThisForm.get_cod.Value  = Evaluate('CrProds.cpros')\n\tThisForm.get_dcod.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Evaluate,Value = Evaluate",
+        "controlesReferenciados": "get_cod,get_dcod",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_dcod",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_cod.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cod",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.sair",
+      "evento": "Click",
+      "linhas": 56,
+      "codigoOriginal": "* Declara variáveis de campos\nPrivate pnOpcao,pcCdEstoque,pcDsEstoque,pcCdProduto,pcDsProduto,pdDataIni,pdDataFin\n\n* Inicializa variáveis de campos\npcCdGrupo\t= ThisForm.get_grupo.Value\npcCdConta\t= ThisForm.get_est.Value\npcDsConta\t= ThisForm.get_dest.Value\npcCdProduto = ThisForm.get_cod.Value\npcDsProduto = ThisForm.get_dcod.Value\npdDataIni   = ThisForm.get_dataini.Value\npdDataFin   = ThisForm.get_datafin.Value\n\n* Consiste o Campo Grupo\nIf IsEmpty(pcCdGrupo)\n\tMessageBox('Grupo Inválido !',16,'')\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_grupo,get_est,get_dest,get_cod,get_dcod,get_dataini,get_datafin,ChkRegister('SigCdCli',ChkRegister('SigCdPro'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_grupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,ThisForm.get_grupo,ThisForm.get_DGrupo)\nElse\n\tThisForm.get_DGrupo.Value = ''\n\tThisForm.get_DGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_Dgrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(this.Value)\n\tfAcessoContab(Usuar,'D',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)\nElse\n\tThisForm.get_Grupo.Value = ''\n\tThisForm.get_Grupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPHIS.Get_Dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.Get_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

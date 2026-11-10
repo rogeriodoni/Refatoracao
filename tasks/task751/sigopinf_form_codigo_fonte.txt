@@ -1,0 +1,3240 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopinf.SCX
+* Data/Hora: 07/11/2026 11:58:28
+* Total de registros: 74
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPINF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPINF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPINF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOPINF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdCotacao
+  Parent: SIGOPINF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdEntrega
+  Parent: SIGOPINF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntVolumes
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblEspes
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblQtds
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say16
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getQtds
+  Parent: SIGOPINF.cntVolumes
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEspes
+  Parent: SIGOPINF.cntVolumes
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblPLiqs
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPLiqs
+  Parent: SIGOPINF.cntVolumes
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblPBrus
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPBrus
+  Parent: SIGOPINF.cntVolumes
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPINF.cntVolumes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getValTrans
+  Parent: SIGOPINF.cntVolumes
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntObservacao
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblObservas
+  Parent: SIGOPINF.cntObservacao
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodObs
+  Parent: SIGOPINF.cntObservacao
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesObs
+  Parent: SIGOPINF.cntObservacao
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnMultObs
+  Parent: SIGOPINF.cntObservacao
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntProtocolo
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblProtocolos
+  Parent: SIGOPINF.cntProtocolo
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getProtocolos
+  Parent: SIGOPINF.cntProtocolo
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntEntrega
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblCpfs
+  Parent: SIGOPINF.cntEntrega
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblDConta
+  Parent: SIGOPINF.cntEntrega
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblContas
+  Parent: SIGOPINF.cntEntrega
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblEntregas
+  Parent: SIGOPINF.cntEntrega
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getContas
+  Parent: SIGOPINF.cntEntrega
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGOPINF.cntEntrega
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCpfs
+  Parent: SIGOPINF.cntEntrega
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdEntrega
+  Parent: SIGOPINF.cntEntrega
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntCodigos
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblCodigos
+  Parent: SIGOPINF.cntCodigos
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigos
+  Parent: SIGOPINF.cntCodigos
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntDocumentos
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: getDocumentos
+  Parent: SIGOPINF.cntDocumentos
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblDocumentos
+  Parent: SIGOPINF.cntDocumentos
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetNumeroNota
+  Parent: SIGOPINF.cntDocumentos
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPINF.cntDocumentos
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntEcfs
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: getEcfs
+  Parent: SIGOPINF.cntEcfs
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblEcfs
+  Parent: SIGOPINF.cntEcfs
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntNemps
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: getNemps
+  Parent: SIGOPINF.cntNemps
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblNemps
+  Parent: SIGOPINF.cntNemps
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntEmiss
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblEmiss
+  Parent: SIGOPINF.cntEmiss
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmiss
+  Parent: SIGOPINF.cntEmiss
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntEntregas
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblEntregas
+  Parent: SIGOPINF.cntEntregas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEntregas
+  Parent: SIGOPINF.cntEntregas
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntRecepcaos
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblRecepcaos
+  Parent: SIGOPINF.cntRecepcaos
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRecepcaos
+  Parent: SIGOPINF.cntRecepcaos
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntPrzEnts
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblPrzEnts
+  Parent: SIGOPINF.cntPrzEnts
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPrzEnts
+  Parent: SIGOPINF.cntPrzEnts
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntPedido
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: lblPedido
+  Parent: SIGOPINF.cntPedido
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPedido
+  Parent: SIGOPINF.cntPedido
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntObs2
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: btnMultObs
+  Parent: SIGOPINF.CntObs2
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblPedido
+  Parent: SIGOPINF.CntObs2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntLivre
+  Parent: SIGOPINF
+  Class: container
+  BaseClass: container
+
+Objeto: getNLivDg
+  Parent: SIGOPINF.cntLivre
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblNLivDg
+  Parent: SIGOPINF.cntLivre
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Informações Gerais"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  AlwaysOnTop = .F.
+  parentform = thisform.parentformthisform.parentform
+  Name = "SIGOPINF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 920
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 14
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Tahoma"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Gravar os Dados Informados"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSelItens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cmdCotacao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 845
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 15
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdCotacao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Tahoma"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_cambio_60.jpg
+  Command1.Caption = "\<Cotação"
+  Command1.MousePointer = 15
+  Command1.ToolTipText = "Alterar Cotação Informativa"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdCotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cmdEntrega
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 770
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 15
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdEntrega"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_relogio_60.jpg
+  Command1.Caption = "\<Entrega"
+  Command1.MousePointer = 15
+  Command1.ToolTipText = "Alterar Prazo de Entrega <F3>"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdEntrega"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes
+------------------------------------------------------------
+  Top = 264
+  Left = 488
+  Width = 509
+  Height = 66
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 13
+  Name = "cntVolumes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.lblEspes
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Espécie"
+  Left = 57
+  Top = 23
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "lblEspes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.lblQtds
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Qtde."
+  Left = 3
+  Top = 23
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "lblQtds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.Say16
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Transporte"
+  Left = 3
+  Top = 3
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say16"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.getQtds
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "TprMvCab.Qtdes"
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 3
+  Margin = 0
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 40
+  Width = 51
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getQtds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.getEspes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "TprMvCab.Espes"
+  Height = 23
+  InputMask = ""
+  Left = 57
+  Margin = 0
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 40
+  Width = 87
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getEspes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.lblPLiqs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Peso Líquido"
+  Left = 147
+  Top = 23
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "lblPLiqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.getPLiqs
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "TprMvCab.PLiqs"
+  Height = 23
+  InputMask = "99,999.99"
+  Left = 147
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 40
+  Width = 73
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getPLiqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.lblPBrus
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Peso Bruto"
+  Left = 223
+  Top = 23
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "lblPBrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.getPBrus
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "TprMvCab.PBrus"
+  Height = 23
+  InputMask = "99,999.99"
+  Left = 223
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 40
+  Width = 73
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getPBrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor Transporte"
+  Left = 299
+  Top = 23
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntVolumes.getValTrans
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "TprMvCab.ValTrans"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 299
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 40
+  Width = 90
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getValTrans"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntObservacao
+------------------------------------------------------------
+  Top = 228
+  Left = 12
+  Width = 528
+  Height = 303
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 11
+  Name = "cntObservacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntObservacao.lblObservas
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Observação :"
+  Left = 3
+  Top = 23
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 45
+  Name = "lblObservas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntObservacao.getCodObs
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "TprMvCab.CodObs"
+  Height = 23
+  InputMask = "999"
+  Left = 92
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 19
+  Width = 32
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "getCodObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntObservacao.getDesObs
+------------------------------------------------------------
+  FontSize = 8
+  Height = 254
+  Left = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 46
+  Width = 453
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ControlSource = "TprMvCab.obses"
+  Name = "getDesObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntObservacao.btnMultObs
+------------------------------------------------------------
+  Top = 5
+  Left = 135
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  ToolTipText = "Selecionar Múltiplas Observações"
+  Visible = .T.
+  Name = "btnMultObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntProtocolo
+------------------------------------------------------------
+  Top = 96
+  Left = 461
+  Width = 61
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 5
+  Name = "cntProtocolo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntProtocolo.lblProtocolos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Protocolo"
+  Left = 3
+  Top = 3
+  Width = 47
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "lblProtocolos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntProtocolo.getProtocolos
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "TprMvCab.protats"
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 3
+  Margin = 0
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 20
+  Width = 55
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getProtocolos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega
+------------------------------------------------------------
+  Top = 192
+  Left = 489
+  Width = 504
+  Height = 66
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 12
+  Name = "cntEntrega"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.lblCpfs
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Height = 15
+  Left = 77
+  Top = 23
+  Width = 56
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "lblCpfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.lblDConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Height = 15
+  Left = 210
+  Top = 23
+  Width = 29
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "lblDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.lblContas
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 3
+  Top = 23
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "lblContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.lblEntregas
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Entrega"
+  Left = 3
+  Top = 3
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "lblEntregas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.getContas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "TprMvCab.contaes"
+  Height = 23
+  Left = 3
+  Margin = 0
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 40
+  Width = 72
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 42
+  Name = "getContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.getDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 210
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 40
+  Width = 285
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 43
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.getCpfs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 77
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 40
+  Width = 131
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 66
+  Name = "getCpfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntrega.cmdEntrega
+------------------------------------------------------------
+  Top = 0
+  Left = 455
+  Picture = ..\framework\imagens\geral_relogio_26.jpg
+  Caption = ""
+  ToolTipText = "Local de Entrega"
+  Name = "cmdEntrega"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntCodigos
+------------------------------------------------------------
+  Top = 96
+  Left = 2
+  Width = 67
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 1
+  Name = "cntCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntCodigos.lblCodigos
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código "
+  Left = 3
+  Top = 3
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 61
+  Name = "lblCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntCodigos.getCodigos
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontSize = 8
+  ControlSource = "TprMvCab.mascnum"
+  Left = 3
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 20
+  Width = 61
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 26
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntDocumentos
+------------------------------------------------------------
+  Top = 96
+  Left = 69
+  Width = 170
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 2
+  Name = "cntDocumentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntDocumentos.getDocumentos
+------------------------------------------------------------
+  ControlSource = "TprMvCab.notas"
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 20
+  Width = 67
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "getDocumentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntDocumentos.lblDocumentos
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Documento"
+  Left = 3
+  Top = 3
+  Width = 56
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lblDocumentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntDocumentos.GetNumeroNota
+------------------------------------------------------------
+  ControlSource = "TprMvCab.NumeroNota"
+  Height = 23
+  Left = 73
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 20
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "GetNumeroNota"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntDocumentos.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nota"
+  Left = 73
+  Top = 3
+  Width = 25
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEcfs
+------------------------------------------------------------
+  Top = 96
+  Left = 240
+  Width = 65
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 3
+  Name = "cntEcfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEcfs.getEcfs
+------------------------------------------------------------
+  ControlSource = "TprMvCab.ecfs"
+  Height = 23
+  InputMask = "9999999"
+  Left = 3
+  Margin = 0
+  MaxLength = 7
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 20
+  Width = 59
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "getEcfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEcfs.lblEcfs
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "ECF  "
+  Height = 15
+  Left = 3
+  Top = 3
+  Width = 27
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lblEcfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntNemps
+------------------------------------------------------------
+  Top = 96
+  Left = 305
+  Width = 156
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 4
+  Name = "cntNemps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntNemps.getNemps
+------------------------------------------------------------
+  ControlSource = "TprMvCab.nemps"
+  Height = 23
+  InputMask = ""
+  Left = 3
+  Margin = 0
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 20
+  Width = 150
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "getNemps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntNemps.lblNemps
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nº Série Imp."
+  Height = 15
+  Left = 3
+  Top = 3
+  Width = 66
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lblNemps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEmiss
+------------------------------------------------------------
+  Top = 147
+  Left = 2
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 7
+  Name = "cntEmiss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEmiss.lblEmiss
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data Emissão "
+  Left = 3
+  Top = 3
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblEmiss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEmiss.getEmiss
+------------------------------------------------------------
+  ControlSource = "TprMvCab.dtemis"
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "getEmiss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntregas
+------------------------------------------------------------
+  Top = 147
+  Left = 88
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 8
+  Name = "cntEntregas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntregas.lblEntregas
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Prz. Entrega "
+  Left = 3
+  Top = 3
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblEntregas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntEntregas.getEntregas
+------------------------------------------------------------
+  ControlSource = "TprMvCab.prazoents"
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "getEntregas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntRecepcaos
+------------------------------------------------------------
+  Top = 147
+  Left = 174
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 9
+  Name = "cntRecepcaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntRecepcaos.lblRecepcaos
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Recepção "
+  Left = 3
+  Top = 3
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblRecepcaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntRecepcaos.getRecepcaos
+------------------------------------------------------------
+  ControlSource = "TprMvCab.dtrecs"
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "getRecepcaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPrzEnts
+------------------------------------------------------------
+  Top = 147
+  Left = 260
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 10
+  Name = "cntPrzEnts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPrzEnts.lblPrzEnts
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Dt. Prometida"
+  Left = 3
+  Top = 3
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblPrzEnts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPrzEnts.getPrzEnts
+------------------------------------------------------------
+  ControlSource = "TprMvCab.PRZCLIS"
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 20
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "getPrzEnts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPedido
+------------------------------------------------------------
+  Top = 96
+  Left = 522
+  Width = 61
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 6
+  Name = "cntPedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPedido.lblPedido
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Pedido"
+  Left = 3
+  Top = 3
+  Width = 34
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "lblPedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntPedido.getPedido
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "TprMvCab.nPedClis"
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 3
+  Margin = 0
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 20
+  Width = 55
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getPedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.CntObs2
+------------------------------------------------------------
+  Top = 96
+  Left = 582
+  Width = 66
+  Height = 64
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 11
+  Name = "CntObs2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.CntObs2.btnMultObs
+------------------------------------------------------------
+  Top = 20
+  Left = 3
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  ToolTipText = "Selecionar Finalidade da operação para ser usada no relatório de operações."
+  Visible = .T.
+  Name = "btnMultObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.CntObs2.lblPedido
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Finalidade"
+  Left = 3
+  Top = 3
+  Width = 50
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "lblPedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntLivre
+------------------------------------------------------------
+  Top = 189
+  Left = 2
+  Width = 352
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 4
+  Name = "cntLivre"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntLivre.getNLivDg
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "TprMvCab.NLivDg"
+  Height = 23
+  InputMask = ""
+  Left = 3
+  Margin = 0
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 20
+  Width = 169
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "getNLivDg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPINF.cntLivre.lblNLivDg
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Lacre"
+  Height = 15
+  Left = 3
+  Top = 3
+  Width = 28
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lblNLivDg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 3, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPINF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE ajustaobjs
+------------------------------------------------------------
+PROCEDURE ajustaobjs
+Local lnLf0, lnTp0, lnLft, lnTop
+
+lnLf0 = ThisForm.cntCodigos.Left
+lnTp0 = ThisForm.cntCodigos.Top
+
+* Ajustando Primeira Linha de Campos
+lnLft = lnLf0 + ThisForm.cntDocumentos.Width + ThisForm.cntCodigos.Width
+lnTop = lnTp0
+
+If ThisForm.cntEcfs.Visible
+	ThisForm.cntEcfs.Left = lnLft
+	ThisForm.cntEcfs.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntEcfs.Width
+EndIf
+
+If ThisForm.cntNemps.Visible
+	ThisForm.cntNemps.Left = lnLft
+	ThisForm.cntNemps.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntNemps.Width
+EndIf
+
+If ThisForm.cntProtocolo.Visible
+	ThisForm.cntProtocolo.Left = lnLft
+	ThisForm.cntProtocolo.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntProtocolo.Width
+EndIf
+
+If ThisForm.cntPedido.Visible
+	ThisForm.cntPedido.Left = lnLft
+	ThisForm.cntPedido.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntPedido.Width
+EndIf
+
+lnLft = lnLf0
+lnTop = lnTp0 + ThisForm.cntCodigos.Height + 1
+
+* Ajustando Segunda Linha de Campos
+If ThisForm.cntEmiss.Visible
+	ThisForm.cntEmiss.Left = lnLft
+	ThisForm.cntEmiss.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntEmiss.Width
+EndIf
+
+If ThisForm.cntEntregas.Visible
+	ThisForm.cntEntregas.Left = lnLft
+	ThisForm.cntEntregas.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntEntregas.Width
+EndIf
+
+If ThisForm.cntRecepcaos.Visible
+	ThisForm.cntRecepcaos.Left = lnLft
+	ThisForm.cntRecepcaos.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntRecepcaos.Width
+EndIf
+
+If ThisForm.cntPrzEnts.Visible
+	ThisForm.cntPrzEnts.Left = lnLft
+	ThisForm.cntPrzEnts.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntPrzEnts.Width
+EndIf
+
+If ThisForm.cntLivre.Visible
+	ThisForm.cntLivre.Left = lnLft
+	ThisForm.cntLivre.Top  = lnTop
+	lnLft = lnLft + ThisForm.cntLivre.Width
+EndIf
+
+lnLft = lnLf0
+If ThisForm.cntEmiss.Visible Or ThisForm.cntEntregas.Visible Or ThisForm.cntRecepcaos.Visible Or ThisForm.cntPrzEnts.Visible Or ThisForm.cntLivre.Visible
+	lnTop = lnTop + ThisForm.cntCodigos.Height + 1
+EndIf
+
+* Ajustando Conteiner da Observação
+If ThisForm.cntObservacao.Visible
+	ThisForm.cntObservacao.Left = lnLft
+	ThisForm.cntObservacao.Top  = lnTop
+	lnTop = lnTop + ThisForm.cntObservacao.Height + 1
+EndIf
+
+* Ajustando Conteiner da Entrega
+If ThisForm.cntEntrega.Visible
+	ThisForm.cntEntrega.Left = lnLft
+	ThisForm.cntEntrega.Top  = lnTop
+	lnTop = lnTop + ThisForm.cntEntrega.Height + 1
+EndIf
+
+* Ajustando Conteiner de Volumes
+If ThisForm.cntVolumes.Visible
+	ThisForm.cntVolumes.Left = lnLft
+	ThisForm.cntVolumes.Top  = lnTop
+	lnTop = lnTop + ThisForm.cntVolumes.Height + 1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregaprzent
+------------------------------------------------------------
+PROCEDURE carregaprzent
+Local lcCta, ldDat
+
+If (InList(crSigCdOpe.DtEntrs, 1, 4, 6) And (InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')) And ;
+   (IsEmpty(TprMvCab.PrazoEnts) Or Dtos(TprMvCab.PrazoEnts) = Dtos(Date())))
+
+	lcCta = Iif(crSigCdOpe.COpers = 1, TprMvCab.ContaDs, TprMvCab.ContaOs)
+	
+	If IsEmpty(TprMvCab.PrazoEnts)
+		ldDat = Date()
+		If CrSigOpCdc.NMinEnts = CrSigOpCdc.nMaxEnts
+			ldDat = Date() + CrSigOpCdc.nMinEnts
+			Replace PrazoEnts With ldDat In TprMvCab
+		Endif
+	Else
+		ldDat = Iif(Type('TprMvCab.PrazoEnts')='T', Ttod(TprMvCab.PrazoEnts), TprMvCab.PrazoEnts)
+	EndIf
+
+	ThisForm.Parentform.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcCta, 'PrazoEnts')
+	If Used('LocalCli') And Not Eof('LocalCli') And (LocalCli.PrazoEnts > 0)
+		ldDat = ldDat + LocalCli.PrazoEnts
+
+		Replace PrazoEnts With ldDat In TprMvCab
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaobs
+------------------------------------------------------------
+PROCEDURE montaobs
+Lparameters pCnx
+
+Local loCnt
+
+loCnt = ThisForm.cntObservacao
+
+loCnt.getCodObs.Value = crSigCdObs.Codigos
+
+lcMsg = fMontaObs(crSigCdObs.Observas, pCnx)
+
+If Not Empty(lcMsg)
+	loCnt.getDesObs.Value = lcMsg
+EndIf
+loCnt.getDesObs.Refresh
+loCnt.getCodObs.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE return
+------------------------------------------------------------
+PROCEDURE return
+Local llOk
+
+If ThisForm.Direta
+	Select CrSigMvCab
+	Zap
+	Select TprMvCab
+	Scatter Memvar memo
+	Select CrSigMvCab
+	Append Blank
+	Gather Memvar Memo
+	
+	lcSql = [Select a.*, b.TpVencs,b.Entradas,b.dias,b.tVens From SigMvPar a, SigOpFp b where a.EmpDopNums = ']+TprMvCab.EmpDopNums+[' ]+;
+			[And a.Fpags = b.fpags ]
+	If Thisform.parentForm.PodataMgr.Sqlexecute(lcSql,'LocalPar') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão ( LocalPar )')
+		Return .f.
+	EndIf
+
+	Select LocalPar
+	Index on Fpags + cnidTefs + Str(Parcs,2) Tag FpagV
+	Scan
+		If LocalPar.TpVencs = 2
+			DVenc  = ( Ttod(TprMvCab.PrazoEnts) + LocalPar.Entradas )
+			ndia   = LocalPar.dias
+			tven   = LocalPar.tvens
+			_lcFpg = LocalPar.Fpags
+			_lcIdT = LocalPar.CnIdTefs
+			Scan While Fpags = _lcFpg And cnIdTefs = _lcIdT
+				lnFer = 0
+				Verd  = .t.
+				lcQuery = [Select * From SigCdFer ]
+				If ThisForm.Parentform.podatamgr.sqlexecute(lcquery,'CrSigCdFer') < 1
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFer)')
+					Return 0
+				EndIf
+				Select CrSigCdFer
+				Index On Dtos(Datas) Tag Datas
+				Seek Dtos(DVenc)
+				Do While Verd .and. !Eof()
+					lnFer = lnFer + 1
+					Skip
+					If DVenc+lnFer # crSigCdFer.Datas .or. ;
+					   Dow(DVenc+lnFer)=1 .or. ;
+					   Dow(DVenc+lnFer)=7
+					   Verd = .f.
+					Endif
+				Enddo
+				DVenc = DVenc + lnFer
+				Replace Vencs With DVenc In LocalPar
+				If TVen='F'
+					DVenc = GoMonth( DVenc,1 )
+				Else
+					DVenc = DVenc + NDia
+				Endif
+
+				ldVenc = LocalPar.Vencs
+				lcSql = [Update SigMvPar Set Vencs = ?ldVenc Where CidChaves = ']+LocalPar.cidchaves+[']
+				If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcSql,'') < 1
+					MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigMvPar )')
+					Return .f.
+				EndIf
+			EndScan
+			Skip -1
+		Endif
+	EndScan
+
+	llOk = ThisForm.Parentform.PoDataMgr.UpDate('CrSigMvCab')
+	
+	llOk = llOk And ThisForm.ParentForm.Podatamgr.Commit() > 0 
+	If Not llOk
+		ThisForm.ParentForm.Podatamgr.RollBack()
+	Endif
+
+	Select TprMvCab
+	Zap
+	
+Endif
+ThisForm.parentform.enabled = .T.
+thisform.parentform.validok = thisform.validok
+ThisForm.parentform.pagina.dados.dados.setfocus
+ThisForm.release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm, pData, plAltDireta, plAutomatico
+
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+
+PUBLIC listaObs
+listaObs = []
+
+Set DataSession To pData
+Set Confirm On
+
+ThisForm.LockScreen = .t.
+
+With ThisForm
+	.ParentForm = pForm
+	.pcEscolha = ThisForm.ParentForm.pcEscolha
+	.ParentForm.Enabled = .f.
+	.Direta = plAltDireta	
+EndWith
+
+With ThisForm.ParentForm.poDataMgr
+	.Cursorquery('SigCdOpe',   'CrSigCdOpe',   'Dopes', TprMvCab.Dopes)
+	.Cursorquery('SigOpCdc', 'CrSigOpCdc', 'Dopes', TprMvCab.Dopes)
+	.Cursorquery('SigOpCdd',  'CrSigOpCdd',  'Dopes', TprMvCab.Dopes)
+	.Cursorquery('SigCdEmp',   'CrEmp',      'Cemps', ThisForm.Parentform.pEmps, 'Cgcs')
+EndWith
+
+*** Carrega Dados da Conta
+If (crSigCdOpe.Opers = 2) And Empty(ThisForm.cntEntrega.getContas.Value) And InList(crSigCdOpe.DtEntrs, 3, 4, 5, 6) &&opers=2(Saída)
+	With ThisForm.cntEntrega
+		.getContas.Value  = ThisForm.ParentForm.Pagina.Dados.pgfprincipal.pgcontas.Destino.Get_Conta.Value
+		.GetDConta.Value = ThisForm.ParentForm.Pagina.Dados.pgfprincipal.pgcontas.Destino.Get_DConta.Value
+		.getCpfs.Value    = ThisForm.ParentForm.Pagina.Dados.pgfprincipal.pgcontas.Destino.Get_Cpf.Value
+
+		If (crSigCdOpe.DtEntrs = 5) && Conta de Entrega do SubNível
+			Select * From TmpOperacao Into Cursor crSubDComp
+
+			Select crSubDComp
+			Go Top
+			If Not Eof('crSubDComp')
+				Set Decimals to 0
+				nDope = Val(Left(Str(crSubDComp.Codigos, 10), 4))
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdOpe', 'LocalOpe', 'NDopes', nDope)
+				Dope = LocalOpe.Dopes
+				Nume = Val(Right(Str(crSubDComp.Codigos, 10), 6))
+				Set Decimals to 2
+				lcEDNsub = crSubDComp.EmpSubns + Dope + Str(Nume,6)
+				If ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvCab', 'crSubEest', 'EmpDopNums', lcEDNsub, [ContaEs])
+					If Not Empty(crSubEest.ContaEs) And ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSubCli', 'IClis', crSubEest.ContaEs, [IClis, RClis, Cpfs])
+						.getContas.Value  = crSubCli.IClis
+						.GetDConta.Value = crSubCli.RClis
+						.getCpfs.Value    = crSubCli.Cpfs
+						Replace ContaEs With crSubCli.IClis In TprMvCab
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+		.Refresh
+	EndWith
+EndIf
+
+*** Digita Observacao
+ThisForm.cntObservacao.Visible = InList(crSigCdOpe.DigObs,  1, 3)
+ThisForm.cntEntrega.Visible    = InList(crSigCdOpe.DtEntrs, 3, 4, 5, 6)
+ThisForm.cntobs2.Visible 	   = INT(VAL(SUBSTR(crSigOpCdd.ConfigGers, 209,1)))=1
+
+
+*** Digita Dados Fiscais
+llFis = (crSigCdOpe.CupFis = 4) && Dados Informados
+ThisForm.cntEcfs.Visible  = llFis
+ThisForm.cntNemps.Visible = llFis
+
+lcObsPads = crSigCdOpe.ObsPads
+If( crSigOpCdd.ChkCFOP <> 2 )
+	If not Empty(crSigMvNfi.CfoSubs)
+		lcQuery = [Select ObsPads from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[' and Cfops = ']+crSigMvNfi.CfoSubs+[']
+	Else
+		lcQuery = [Select ObsPads from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[' and Cfops = ']+crSigMvNfi.Cfis+[']
+	Endif	
+	ThisForm.ParentForm.poDataMgr.SQLExecute(lcQuery,[crTmpCfoOp])
+	If not Eof([crTmpCfoOp])
+		lcObsPads = crTmpCfoOp.ObsPads
+	EndIf
+	If Used([crTmpCfoOp])
+		Use in crTmpCfoOp
+	EndIf
+Endif	
+
+If InList( crSigCdOpe.DigObs, 1, 3 ) And !IsEmpty(lcObsPads) And ;
+	InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And IsEmpty(TprMvCab.Obses) And ;
+	ThisForm.Parentform.podatamgr.cursorquery('SigCdObs','CrSigCdObs','Codigos',lcObsPads)
+
+	ThisForm.cntObservacao.getCodObs.Value = crSigCdObs.Codigos
+	If "#" $ crSigCdObs.Observas
+		* Completa a observação com a nota do subnível.
+		ObsPadrao = Substr( crSigCdObs.Observas, 1, At( "#", crSigCdObs.Observas ) - 1 )
+		Select TmpOperacao
+		Scan
+			If TmpOperacao.codigos = 0
+				Loop
+			Endif
+			ObsPadrao = ObsPadrao + " " + Iif( Not IsEmpty( Left( TmpOperacao.Ecfs, 3 ) ), ;
+						Left( TmpOperacao.Ecfs, 3 ) + '/', '' ) + TmpOperacao.Notas + ' / '+CrEmp.Cgcs
+		Endscan
+
+		ObsPadrao = ObsPadrao + Substr(crSigCdObs.Observas,At("#",crSigCdObs.Observas)+1)
+		ThisForm.cntObservacao.getDesObs.Value = ObsPadrao
+	Else
+		If "$" $ crSigCdObs.Observas
+			* Completa a observação com a nota do subnível.
+			ObsPadrao = Substr( crSigCdObs.Observas, 1, At( "$", crSigCdObs.Observas ) - 1 )
+			Select TmpOperacao
+			nVez = 1
+			Scan
+				If TmpOperacao.codigos = 0
+					Loop
+				Endif
+				ObsPadrao = ObsPadrao + Iif(nVez = 1," ",",") + TmpOPeracao.Series + ' / '+ TmpOperacao.Notas
+				nVez = 2
+			Endscan
+
+			ObsPadrao = ObsPadrao + Substr(crSigCdObs.Observas,At("$",crSigCdObs.Observas)+1)
+			ThisForm.cntObservacao.getDesObs.Value = ObsPadrao
+		Else
+			If "%" $ crSigCdObs.Observas
+				* Completa a observação com a Serie + Nota + Data + CNPJ do subnível.
+				ObsPadrao = Substr( crSigCdObs.Observas, 1, At( "%", crSigCdObs.Observas ) - 1 )
+				Select TmpOperacao
+				Scan
+					If TmpOperacao.codigos = 0
+						Loop
+					Endif
+					ObsPadrao = ObsPadrao + " " + Alltrim(TmpOperacao.Nemps)
+				Endscan
+				ObsPadrao = ObsPadrao + Substr(crSigCdObs.Observas,At("%",crSigCdObs.Observas)+1)
+				ThisForm.cntObservacao.getDesObs.Value = ObsPadrao
+			Else
+				If "!" $ crSigCdObs.Observas
+					* Completa a observação com a relacao de SubNiveis Utilizados
+					ObsPadrao = Substr( CrSigCdObs.Observas, 1, At( "!", CrSigCdObs.Observas ) - 1 )
+					Select TmpOperacao
+					Scan
+						If TmpOperacao.codigos = 0
+							Loop
+						Endif
+						ObsPadrao = ObsPadrao + "/" + Str(TmpOperacao.Codigos)
+					Endscan
+					ObsPadrao = ObsPadrao + Substr(CrSigCdObs.Observas,At("!",CrSigCdObs.Observas)+1)
+					Replace TprMvCab.ObsEs with ObsPadrao In TprMvCab
+				Else
+					ThisForm.cntObservacao.getDesObs.Value = crSigCdObs.Observas
+				Endif
+			Endif
+		Endif
+	Endif
+	ThisForm.cntObservacao.getDesObs.Refresh
+	ThisForm.cntObservacao.getCodObs.Refresh 
+EndIf
+ThisForm.cntVolumes.Visible   = (crSigCdOpe.DadosNotas = 1)
+ThisForm.cntProtocolo.Visible = (crSigOpCdc.EditProts = 1)
+ThisForm.cntPedido.Visible    = InList(crSigCdOpe.pedclis, 1, 3, 4, 5)
+
+lcCliente = TprMvCab.ContaEs
+ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli', 'CrTmpCli', 'Iclis', lcCliente)
+ThisForm.cntEntrega.getDConta.Value = Iif(Eof('CrTmpCli'), '', CrTmpCli.RClis)
+ThisForm.cntEntrega.getCpfs.Value    = Iif(Eof('CrTmpCli'), '', CrTmpCli.Cpfs)
+ThisForm.cntEntrega.getDConta.Refresh
+ThisForm.cntEntrega.getCpfs.Refresh
+
+*** Digita Documento
+ThisForm.cntDocumentos.Visible = InList( crSigCdOpe.DigDoc, 1, 3, 4, 5 )
+ThisForm.cntEmiss.Visible      = InList( crSigCdOpe.DtEmis, 1, 3 )
+If IsEmpty( TprMvCab.DtEmis )
+	Replace DtEmis with TprMvCab.Datas In TprMvCab
+Endif
+
+*** Digita Data de Entrega
+ThisForm.cntEntregas.Visible = InList(crSigCdOpe.DtEntrs, 1, 4, 6)
+ThisForm.cmdEntrega.Visible  = InList(crSigCdOpe.DtEntrs, 1, 4, 6) And Not InList(ThisForm.pcEscolha, 'INSERIR', 'EXCLUIR')
+ThisForm.cntEntregas.lblEntregas.Caption = [Prz. Entrega]
+If ((crSigOpCdc.DckPrze = 1) Or (crSigOpCdc.ChkPrzEnts = 1)) And Not Empty(crSigOpCdc.DocPrzE)
+	ThisForm.cntEntregas.lblEntregas.Caption = Alltrim(Proper(crSigOpCdc.DocPrzE))
+EndIf
+
+*** Digita Data de Recepção 
+ThisForm.cntRecepcaos.Visible = (crSigCdOpe.DigRecs = 1)
+
+*** Digita Data Prometida
+ThisForm.cntPrzEnts.Visible = (crSigOpCdd.PrzLjs = 1)
+ThisForm.cntPrzEnts.lblPrzEnts.Caption = Iif(Not Empty(CrSigOpCdd.DocPrzljs),CrSigOpCdd.DocPrzljs,[Dt. Prometida])
+
+ThisForm.CarregaPrzEnt
+
+ThisForm.AutoCenter = .t.
+ThisForm.Refresh
+ThisForm.LockScreen = .f.
+
+If plAutomatico
+	Keyboard '{ALT + O}'
+EndIf
+
+ThisForm.AjustaObjs
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+Lparameters nKeyCode, nShiftAltCtrl
+
+If ThisForm.cntEntrega.cmdEntrega.Visible
+	If (nKeyCode = -1) && F2
+		ThisForm.cntEntrega.cmdEntrega.SetFocus
+		Keyboard '{ENTER}'
+		NoDefault
+	EndIf
+EndIf
+
+If ThisForm.cmdEntrega.Visible
+	If (nKeyCode = -2) && F3
+		ThisForm.cmdEntrega.cmdEntrega.SetFocus
+		Keyboard '{ENTER}'
+		NoDefault
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSelItens.Click
+------------------------------------------------------------
+PROCEDURE btnSelItens.Click
+If Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+	 If crSigCdOpe.DigObs = 3 And (IsEmpty( TprMvCab.CodObs) Or IsEmpty( TprMvCab.Obses ) )
+		Messagebox( 'Obrigatório Informar ' + iif( IsEmpty( TprMvCab.CodObs ), ;
+					'Código da ','') + 'Observação para essa Operação ... ', 16, ;
+					'Observação é Informação Obrigatória' )
+		If IsEmpty( TprMvCab.CodObs)
+			ThisForm.cntObservacao.getCodObs.SetFocus
+		Else
+			ThisForm.cntObservacao.getDesObs.SetFocus
+		Endif
+		Return 
+	Endif
+
+	If IsEmpty(TprMvCab.DtEmis) And crSigCdOpe.DtEmis = 3
+		Messagebox('Data de Emissão do Documento precisa ser informada ... ', 32, ;
+				   'Data de Emissão : Informação Obrigatória')
+		ThisForm.cntEmiss.getEmiss.SetFocus
+		Return
+	EndIf
+
+	If Not IsEmpty(TprMvCab.PrazoEnts)
+		ldDat = Ttod(TprMvCab.PrazoEnts)
+		lcHra = Time(TprMvCab.PrazoEnts)
+		Replace PrazoEnts With fDtoSQL(ldDat, lcHra) In TprMvCab
+		ThisForm.cntEntregas.getEntregas.Refresh
+
+		Select xPar
+		Index on Fpags + cnidTefs + Str(Parcs,2) Tag FpagV
+		Scan
+			=ThisForm.ParentForm.PodataMgr.cursorquery('SigOpFp','LocalFpag','fpags',xPar.Fpags,[TpVencs,Entradas,Dias,tVens])
+			If LocalFpag.TpVencs = 2
+				DVenc = ( Ttod(TprMvCab.PrazoEnts) + LocalFpag.Entradas )
+				ndia  = LocalFpag.dias
+				tven  = LocalFpag.tvens
+				_lcFpg = xPar.Fpags
+				_lcIdT = xPar.CnIdTefs
+				Scan While Fpags = _lcFpg And cnIdTefs = _lcIdT
+					lnFer = 0
+					Verd  = .t.
+					lcQuery = [Select * From SigCdFer ]
+					If ThisForm.Parentform.podatamgr.sqlexecute(lcquery,'CrSigCdFer') < 1
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFer)')
+						Return 0
+					EndIf
+					Select CrSigCdFer
+					Index On Dtos(Datas) Tag Datas
+					Seek Dtos(DVenc)
+					Do While Verd .and. !Eof()
+						lnFer = lnFer + 1
+						Skip
+						If DVenc+lnFer # crSigCdFer.Datas .or. ;
+						   Dow(DVenc+lnFer)=1 .or. ;
+						   Dow(DVenc+lnFer)=7
+						   Verd = .f.
+						Endif
+					Enddo
+					DVenc = DVenc + lnFer
+					Replace Vencs With DVenc In xPar
+
+					If TVen='F'
+						DVenc = GoMonth( DVenc, 1 )
+					Else
+						DVenc = DVenc + NDia
+					Endif
+				EndScan
+				Skip -1
+			Endif
+		EndScan
+	EndIf
+	
+	If InList(crSigCdOpe.DtEntrs, 1, 4, 6)
+		If IsEmpty( TprMvCab.PrazoEnts )
+			Messagebox( 'Prazo de Entrega deve ser informado...', 32, '' )
+			ThisForm.cntEntregas.getEntregas.SetFocus
+			Return
+		EndIf
+		If (TprMvCab.PrazoEnts < TprMvCab.Datas)
+			Messagebox( 'Prazo de Entrega deve ser maior que a Data da Movimentação...', 32, '' )
+			ThisForm.cntEntregas.getEntregas.SetFocus
+			Return
+		EndIf
+
+		If Used('CrSigOpCdc') And (CrSigOpCdc.NMinEnts > 0) And !thisform.validok
+			ldEnt = (Ttod(fDtoSQL(TprMvCab.Datas)) + CrSigOpCdc.NMinEnts)
+			If (TprMvCab.PrazoEnts < ldEnt)
+				*** Tiago - 24/06/2014 - Mondoro - Checa liberação para alterar prazo de entrega fora do mínimo e máximo permitido
+				Do Form SigOpSen With 'LIBPRZENT', 'Libera Prazo de Entrega' To _Retorno
+				llOk = ( Left( _Retorno, 1 ) = "*" )
+				lcUsuLib = Substr( _Retorno, 2 )
+				If !llOk
+					Messagebox('Prazo de Entrega Mínimo é ' + Dtoc(ldEnt) + '...', 32, '' )
+					ThisForm.cntEntregas.getEntregas.Value = ldEnt
+					ThisForm.cntEntregas.getEntregas.SetFocus()
+					Return .f.
+				Else
+					thisform.validok = .t.				
+					lcTransacao = 'Emp: '+_Empr + ' Nº Oper: ' + Str(TprMvCab.Numes,6)+ ' - ' + 'Prazo Mínimo: ' + Dtoc(ldEnt) +  ;
+									' Prazo Liberado ' + Dtoc(TprMvCab.PrazoEnts)				
+					=fGravarLog('T', TprMvCab.Dopes, 'LIBPRZENT', lcTransacao, lcUsuLib )
+				EndIf							
+			EndIf
+		EndIf
+
+		If Used('CrSigOpCdc') And (CrSigOpCdc.NMaxEnts > 0) And !thisform.validok
+			ldEnt = (Ttod(fDtoSQL(TprMvCab.Datas)) + CrSigOpCdc.NMaxEnts)
+			If (Ttod(TprMvCab.PrazoEnts) > ldEnt)
+				*** Tiago - 24/06/2014 - Mondoro - Checa liberação para alterar prazo de entrega fora do mínimo e máximo permitido
+				Do Form SigOpSen With 'LIBPRZENT', 'Libera Prazo de Entrega' To _Retorno
+				llOk = ( Left( _Retorno, 1 ) = "*" )
+				lcUsuLib = Substr( _Retorno, 2 )
+				If !llOk
+					Messagebox('Prazo de Entrega Máximo é ' + Dtoc(ldEnt) + '...', 32, '' )
+					ThisForm.cntEntregas.getEntregas.Value = ldEnt					
+					ThisForm.cntEntregas.getEntregas.SetFocus()
+					Return .f.
+				Else
+					thisform.validok = .t.
+					lcTransacao = 'Emp: '+_Empr + ' Nº Oper: ' + Str(TprMvCab.Numes,6)+ ' - ' + 'Prazo Máximo: ' + Dtoc(ldEnt) +  ;
+									' Prazo Liberado ' + Dtoc(TprMvCab.PrazoEnts)				
+					=fGravarLog('T', TprMvCab.Dopes, 'LIBPRZENT', lcTransacao, lcUsuLib )
+				EndIf											
+			EndIf
+		EndIf
+	EndIf
+
+	If crSigCdOpe.DigRecs = 1
+		If IsEmpty( TprMvCab.DtRecs )
+			Messagebox( 'Data de Recepção deve ser informada ...', 32, '' )
+			ThisForm.cntRecepcaos.getRecepcaos.SetFocus
+			Return
+		Endif
+*!*			If TprMvCab.DtRecs > TprMvCab.Datas
+*!*				Messagebox( 'Data de Recepção deve ser menor ou igual a Data da Movimentação...', 32, '' )
+*!*				ThisForm.cntRecepcaos.getRecepcaos.SetFocus
+*!*				Return
+*!*			EndIf
+	EndIf
+
+	If (crSigCdOpe.CupFis = 4)
+		If Empty(TprMvCab.Ecfs)
+			=Messagebox('Número do ECF Precisa Ser Informado...', 32, '')
+			ThisForm.cntEcfs.getEcfs.SetFocus
+			Return
+		EndIf 
+
+		If Empty(TprMvCab.Nemps)
+			=Messagebox('Número de Série da Impressora Precisa Ser Informado...', 32, '')
+			ThisForm.cntNemps.getNemps.SetFocus
+			Return
+		EndIf 
+	EndIf 
+	If CrSigCdOpe.EditDocs = 4
+		Replace all NOtas With Transform(Val(TprMvCab.Notas),'@l 999999') in crTpmMvItn
+	Endif
+		
+Else
+	If fChecaAcesso( padl(crSigCdOpe.nDopes,8,'0'), "ALTINFO" ) And InList(ThisForm.pcEscolha,'CONSULTAR')
+		lcSql = [Update SigMvCab Set obses = '] + ALLTRIM(TprMvCab.obses) + [' Where CidChaves = ']+TprMvCab.cidchaves+[']
+		If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcSql,'') < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigMvCab )')
+			Return .f.
+		Endif 
+		IF ThisForm.ParentForm.Podatamgr.Commit() < 1 
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigMvCab )')
+			Return .f.
+		Endif
+	Endif 
+EndIf
+ThisForm.Return
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cmdCotacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdCotacao.Valid
+------------------------------------------------------------
+PROCEDURE cmdCotacao.Valid
+Do Form SigPrCtc With Thisform, ThisForm.DataSessionId, ThisForm.pcescolha, TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes
+
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cmdEntrega
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdEntrega.Valid
+------------------------------------------------------------
+PROCEDURE cmdEntrega.Valid
+Local ldDat, lnMin, ldEst
+
+ldDat = Iif(IsEmpty(TprMvCab.PrazoEnts), Date(), TprMvCab.PrazoEnts)
+lnMin = Iif(IsEmpty(crSigOpCdc.NMinEnts), 0, crSigOpCdc.NMinEnts)
+lnMax = Iif(IsEmpty(CrSigOpCdc.nMaxEnts), 0, CrSigOpCdc.nMaxEnts)
+ldEst = Ttod(fDtoSQL(Nvl(TprMvCab.Datas, Date())))
+
+Do Form SigOpEnt With TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, ldDat, ThisForm, lnMin, ldEst, .f., lnMax
+
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntVolumes.getQtds
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntVolumes.getEspes
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntVolumes.getPLiqs
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntVolumes.getPBrus
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntVolumes.getValTrans
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntObservacao.getCodObs
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Str(This.Value, 10)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Private pIni, pFim
+
+loCnx = ThisForm.ParentForm.poDataMgr
+
+If Not Empty(This.Value) And Not (This.Tag = Str(This.Value, 10))
+	loCnx.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', TprMvCab.Dopes, 'ObsPads, ObsInis, ObsFins')
+	pIni = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsInis), LocalOpe.ObsInis, 000)
+	pFim = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsFins), LocalOpe.ObsFins, 999)
+	
+	If not Empty(crSigMvNfi.Cfis) and (crSigOpCdd.ChkCFOP <> 2)
+		lcQuery = [Select ObsInis, ObsFins from SigCdOop where Dopes = ']+crSigCdOpe.Dopes+[' and Cfops = ']+crSigMvNfi.Cfis+['] 
+		loCnx.SQLExecute(lcQuery,[crTmpCfoOp])
+		If not Eof([crTmpCfoOp])
+			pIni = Iif( not Empty(crTmpCfoOp.ObsInis), crTmpCfoOp.ObsInis, pIni )
+			pFim = Iif( not Empty(crTmpCfoOp.ObsFins), crTmpCfoOp.ObsFins, pFim )
+		Endif
+	Endif	
+
+	lcQuery = [Select Codigos, Descrs ] + ;
+			    [From SigCdObs ] + ;
+			   [Where Codigos BetWeen ?pIni And ?pFim]
+
+	If (loCnx.SqlExecute(lcQuery, 'crLocalObs') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crLocalObs)')
+		Return 0
+	EndIf
+	Select crLocalObs
+	Index On Codigos Tag Codigos
+	Index On Descrs Tag Descrs
+
+	Set Near On
+	If Not Seek(This.Value, 'crLocalObs', 'Codigos')
+		m.loBrowse = CreateObject('fwBuscaSel', 'crLocalObs', 'Codigos', This.Value, 'Observações')
+		m.loBrowse.AddColuna('Codigos', '999', 'Cód.', .t., 'Codigos')
+		m.loBrowse.AddColuna('Descrs', '', 'Descrição', .t., 'Descrs')
+		m.loBrowse.Show
+	Endif
+	Set Near Off
+
+	If (Lastkey()=27)
+		Return 0
+	EndIf
+
+	This.Value = crLocalObs.Codigos
+	
+	loCnx.Cursorquery('SigCdObs','CrSigCdObs','Codigos',This.Value)
+		
+	Select crSigCdObs
+	ObsPadrao = Alltrim(crSigCdObs.Observas)
+
+	ThisForm.MontaObs(ThisForm.ParentForm.poDataMgr)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.Antvalu = This.Value
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntObservacao.getDesObs
+* Classe: fwmemo (Base: editbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*!*	IF not fChecaAcesso( padl(crSigCdOpe.nDopes,8,'0'), "ALTINFO" )
+*!*		Return .f.
+*!*	Else
+*!*	*!*		Dodefault()
+*!*		Return InList(ThisForm.pcEscolha,'CONSULTAR')
+*!*	Endif 
+
+IF fChecaAcesso( padl(crSigCdOpe.nDopes,8,'0'), 'ALTINFO' )
+	Return !InList(ThisForm.pcEscolha,'EXCLUIR')
+Else
+	Dodefault()
+Endif 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntObservacao.btnMultObs
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (TprMvCab.CodObs > 0)
+	=MessageBox([Para Selecionar Múltiplas Observações Não] + Chr(13) + ;
+				[Pode Ser Informado o Código de Observação], 0+16, [Atenção])
+	ThisForm.cntObservacao.getCodObs.SetFocus
+	Return .f.
+EndIf
+
+Do Form SigOpIns With ThisForm.ParentForm.poDataMgr
+
+ThisForm.cntObservacao.getDesObs.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntProtocolo.getProtocolos
+* Classe: fwget (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEntrega.getContas
+* Classe: fwget (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, '', 'C', This.Value, This, ThisForm.cntEntrega.getDConta)
+		ThisForm.cntEntrega.getDConta.Value = ''
+		ThisForm.cntEntrega.getCpfs.Value = ''
+		=MessageBox('Acesso Negado!!!', 32, '')
+		This.Value = ''
+		Return 0
+	EndIf
+	
+	lcCliente = This.Value
+	If Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',lcCliente)
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpCli)')
+		Return .f.
+	EndIf
+	If crSigCdOpe.ExibSits=4 
+		=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdCst','CrTmpScli','Codigos',CrTmpCli.Situas)
+		If CrTmpScli.DispMovs = 1 And Not IsEmpty(This.Value)
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               '' + Transform(CrTmpCli.VultComps,"@Z 999,999,999.99") + ' / ' + Iif(!IsEmpty(CrTmpCli.UltComps),Dtoc(CrTmpCli.UltComps),'') + Chr(13)+;
+	               '' + Iif(!IsEmpty(CrTmpCli.Nascs),Dtoc(CrTmpCli.Nascs),'') + Chr(13) + ;
+	               '' + CrTmpCli.Codigos
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\KUSER.BMP")
+
+			If CrTmpScli.BlqMovs = 1
+				MessageBox( 'Movimentação Bloqueada pela Situacao da Conta...', 32, '' )
+				ThisForm.cntEntrega.getContas.Value  = ''
+				ThisForm.cntEntrega.getDConta.Value = ''
+				ThisForm.cntEntrega.getCpfs.Value    = ''
+				Return 0
+			Endif
+		EndIf
+		If TprMvCab.ValVars < 0 And CrTmpScli.BlqDescs = 1
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               ' Desconto Bloqueado Pela Situação da Conta '
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\DESCONTO.ICO")
+			ThisForm.cntEntrega.getContas.Value  = ''
+			ThisForm.cntEntrega.getDConta.Value = ''
+			ThisForm.cntEntrega.getCpfs.Value    = ''
+			Return 0
+		Endif
+	EndIf
+	If ( CrSigOpCdc.ChCtEntrs = 1 And This.Value = TprMvCab.ContaDs ) Or ;
+			( CrSigOpCdc.ChCtEntrs = 2 And This.Value = TprMvCab.ContaOs )
+		MessageBox('Conta de Entrega Tem que ser diferente da Conta de '+Iif(CrSigOpCdc.ChCtEntrs=1,'Destino','Origem'),0+16,'')
+		Return .f.
+	EndIf
+	
+	ThisForm.cntEntrega.getContas.Value  = CrTmpCli.IClis
+	ThisForm.cntEntrega.getDConta.Value = CrTmpCli.RClis
+	ThisForm.cntEntrega.getCpfs.Value    = CrTmpCli.Cpfs
+Else
+	ThisForm.cntEntrega.getContas.Value  = ''
+	ThisForm.cntEntrega.getDConta.Value = ''
+	ThisForm.cntEntrega.getCpfs.Value    = ''
+EndIf
+ThisForm.cntEntrega.getContas.Refresh
+ThisForm.cntEntrega.getDConta.Refresh
+ThisForm.cntEntrega.getCpfs.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEntrega.getDConta
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, '', 'D', This.Value, ThisForm.cntEntrega.getContas, This)
+		ThisForm.cntEntrega.getContas.Value = ''
+		ThisForm.cntEntrega.getCpfs.Value = ''
+		=MessageBox('Acesso Negado!!!', 32, '')
+		This.Value = ''
+		Return 0
+	EndIf
+
+	lcCliente = This.Value
+	If Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Rclis',lcCliente)
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpCli - 3)')
+		Return .f.
+	EndIf
+
+	If crSigCdOpe.ExibSits=4 
+		=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdCst','CrTmpScli','Codigos',CrTmpCli.Situas)
+		If CrTmpScli.DispMovs = 1 And Not IsEmpty(This.Value)
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               '' + Transform(CrTmpCli.VultComps,"@Z 999,999,999.99") + ' / ' + Iif(!IsEmpty(CrTmpCli.UltComps),Dtoc(CrTmpCli.UltComps),'') + Chr(13)+;
+	               '' + Iif(!IsEmpty(CrTmpCli.Nascs),Dtoc(CrTmpCli.Nascs),'') + Chr(13) + ;
+	               '' + CrTmpCli.Codigos
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\KUSER.BMP")
+
+			If CrTmpScli.BlqMovs = 1
+				MessageBox( 'Movimentação Bloqueada pela Situacao da Conta...', 32, '' )
+				ThisForm.cntEntrega.getContas.Value  = ''
+				ThisForm.cntEntrega.getDConta.Value = ''
+				ThisForm.cntEntrega.getCpfs.Value    = ''
+				Return 0
+			Endif
+		EndIf
+		If TprMvCab.ValVars < 0 And CrTmpScli.BlqDescs = 1
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               ' Desconto Bloqueado Pela Situação da Conta '
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\DESCONTO.ICO")
+			ThisForm.cntEntrega.getContas.Value  = ''
+			ThisForm.cntEntrega.getDConta.Value = ''
+			ThisForm.cntEntrega.getCpfs.Value    = ''
+			Return 0
+		Endif
+	Endif
+	If ( CrSigOpCdc.ChCtEntrs = 1 And CrTmpCli.Iclis = TprMvCab.ContaDs ) Or ;
+			( CrSigOpCdc.ChCtEntrs = 2 And CrTmpCli.Iclis = TprMvCab.ContaOs )
+		MessageBox('Conta de Entrega Tem que ser diferente da Conta de '+Iif(CrSigOpCdc.ChCtEntrs=1,'Destino','Origem'),0+16,'')
+		Return .f.
+	EndIf
+	
+	ThisForm.cntEntrega.getContas.Value  = CrTmpCli.IClis
+	ThisForm.cntEntrega.getDConta.Value = CrTmpCli.RClis
+	ThisForm.cntEntrega.getCpfs.Value    = CrTmpCli.Cpfs
+Else
+	ThisForm.cntEntrega.getContas.Value  = ''
+	ThisForm.cntEntrega.getDConta.Value = ''
+	ThisForm.cntEntrega.getCpfs.Value    = ''
+EndIf
+ThisForm.cntEntrega.getContas.Refresh
+ThisForm.cntEntrega.getDConta.Refresh
+ThisForm.cntEntrega.getCpfs.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(ThisForm.cntEntrega.getContas.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEntrega.getCpfs
+* Classe: fwget (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local lcTpFat, lcCadGrupo
+
+lcTpFat = ''
+Cgc  = This.Value
+Cgc1 = ''
+RetCli = ''
+
+If Not Empty(This.Value)
+	Cgc = Strt(Strt(Strt(Cgc, ".", ""), "-", ""), "/", "")
+	If (Len(Alltrim(Cgc)) <> 14)
+		Cgc1 = Transform(Cgc, "@R 999.999.999-99")
+	Else
+		Cgc1 = Transform(Cgc, "@R 99.999.999/9999-99")
+	EndIf
+	
+	This.Value = Cgc1
+	
+	lcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]
+
+	lnErro = ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery,'CrTmpCli')
+	
+	If lnErro < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpCli - 4)')
+		Return 0
+	EndIf
+
+	Select CrTmpCli
+	Go Top
+	If Reccount() = 0 Or Cgc1 = "999.999.999-99" or Cgc1 = "99.999.999/9999-99" 
+		If (Thisform.pcEscolha = 'INSERIR') And MessageBox('Conta Não Cadastrada!!! Deseja Cadastrar?', 4+32+256, '')=6
+			Select CrTmpCli
+			If InList(Cgc1, '999.999.999-99', '99.999.999/9999-99')
+				This.Value = ''
+			EndIf
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPam', 'LocalParam1', .f., .f., 'GrPadClis')
+			lcCadGrupo = LocalParam1.GrPadClis
+
+			Do Form SigCdCli With This.Value, lcCadGrupo, .f., .t., .f., '1', '1' To RetCli
+		EndIf
+	Else
+		RetCli = crTmpCli.Cpfs
+	EndIf
+
+	If Empty(RetCli) And Reccount('CrTmpCli') = 0
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdconn,'SigCdCli','crTmpcli','cpfs',This.Value,'Clientes',1000)
+		If .Not.m.loLista.plAchouRegistro
+			m.loLista.mAddColuna('Cpfs' ,'', 'C.P.F. / C.N.P.J.' )
+			m.loLista.mAddColuna('Rclis',Replicate('x',50), 'Nome' )
+			m.loLista.mAddColuna('Iclis','', 'Código' )
+			m.loLista.mAddColuna('Grupos','', 'Grupo' )
+			m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+			m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crTmpcli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+			m.loLista.Show()
+		EndIf
+	Else
+		lcQuery = [Select * From SigCdCli Where ]+Iif(Len(RetCli)=10,[ Iclis = ],[ Cpfs = ])+[ ?RetCli ]
+		lnErro = ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery,'CrTmpCli')
+		If lnErro < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrTmpCli - 5)')
+			Return 0
+		EndIf
+	EndIf
+	Select CrTmpCli
+	Go Top
+	lfan = crTmpCli.Rclis
+	lcod = crTmpCli.Iclis
+	ThisForm.cntEntrega.getContas.Value  = CrTmpCli.IClis
+	ThisForm.cntEntrega.getDConta.Value = CrTmpCli.RClis
+
+	If Not fAcessoContas(Usuar, '', 'C', ThisForm.cntEntrega.getContas.Value, ThisForm.cntEntrega.getContas, ThisForm.cntEntrega.getDConta)
+		=MessageBox('Acesso Negado!!!', 48, '')
+		ThisForm.cntEntrega.getContas.Value  = ''
+		ThisForm.cntEntrega.getDConta.Value = ''
+		ThisForm.cntEntrega.getCpfs.Value    = ''
+		Return 0
+	EndIf
+
+	If crSigCdOpe.ExibSits=4 
+		=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdCst','CrTmpScli','Codigos',CrTmpCli.Situas)
+		If CrTmpScli.DispMovs = 1 And Not IsEmpty(This.Value)
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               '' + Transform(CrTmpCli.VultComps,"@Z 999,999,999.99") + ' / ' + Iif(!IsEmpty(CrTmpCli.UltComps),Dtoc(CrTmpCli.UltComps),'') + Chr(13)+;
+	               '' + Iif(!IsEmpty(CrTmpCli.Nascs),Dtoc(CrTmpCli.Nascs),'') + Chr(13) + ;
+	               '' + CrTmpCli.Codigos
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\KUSER.BMP")
+
+			If CrTmpScli.BlqMovs = 1
+				MessageBox( 'Movimentação Bloqueada pela Situacao da Conta...', 32, '' )
+				ThisForm.cntEntrega.getContas.Value  = ''
+				ThisForm.cntEntrega.getDConta.Value = ''
+				ThisForm.cntEntrega.getCpfs.Value    = ''
+				Return 0
+			Endif
+		EndIf
+		If TprMvCab.ValVars < 0 And CrTmpScli.BlqDescs = 1
+			lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+			_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;
+	               ' Desconto Bloqueado Pela Situação da Conta '
+	        
+	        =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,"\VBMP\DESCONTO.ICO")
+			ThisForm.cntEntrega.getContas.Value  = ''
+			ThisForm.cntEntrega.getDConta.Value = ''
+			ThisForm.cntEntrega.getCpfs.Value    = ''
+			Return 0
+		Endif
+	Endif
+
+	If ( CrSigOpCdc.ChCtEntrs = 1 And CrTmpCli.Iclis = TprMvCab.ContaDs ) Or ;
+			( CrSigOpCdc.ChCtEntrs = 2 And CrTmpcli.Iclis = TprMvCab.ContaOs )
+		MessageBox('Conta de Entrega Tem que ser diferente da Conta de '+Iif(CrSigOpCdc.ChCtEntrs=1,'Destino','Origem'),0+16,'')
+		Return .f.
+	EndIf
+
+	ThisForm.cntEntrega.getContas.Value  = CrTmpCli.IClis
+	ThisForm.cntEntrega.getDConta.Value = CrTmpCli.RClis
+	ThisForm.cntEntrega.getCpfs.Value    = CrTmpCli.Cpfs
+Else
+	ThisForm.cntEntrega.getContas.Value  = ''
+	ThisForm.cntEntrega.getDConta.Value = ''
+	ThisForm.cntEntrega.getCpfs.Value    = ''
+EndIf
+ThisForm.cntEntrega.getContas.Refresh
+ThisForm.cntEntrega.getDConta.Refresh
+ThisForm.cntEntrega.getCpfs.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(ThisForm.cntEntrega.getContas.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEntrega.cmdEntrega
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli', 'crDCompCli', 'Iclis', TprMvCab.ContaEs, 'Grupos, IClis, RClis')
+
+Do Form SigCdEnd With crDCompCli.Grupos, crDCompCli.IClis, crDCompCli.RClis, ThisForm.pcEscolha, ThisForm.ParentForm.poDataMgr, TprMvCab.LocalEnts
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Dimension laArray(1)
+	laArray(1) = crDCompCli.IClis
+
+	If fEndEntrega(@laArray, ThisForm.ParentForm.poDataMgr)
+		Replace LocalEnts With laArray(02) In TprMvCab
+	EndIf
+EndIf
+
+If Used('crDCompCli')
+	Use In crDCompCli
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntCodigos.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntDocumentos.getDocumentos
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;
+		 Not InList(crSigCdOpe.NFiscals,1,2) And Not InList(CrSigCdOpe.DigDoc,4,5) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntDocumentos.GetNumeroNota
+* Classe: fwget (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;
+		 Not InList(crSigCdOpe.NFiscals,1,2) And Not InList(CrSigCdOpe.DigDoc,4,5) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEcfs.getEcfs
+* Classe: fwget (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntNemps.getNemps
+* Classe: fwget (Base: textbox)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lnNoFabr = This.Value
+	lcImpf = fDecriptografar(alltrim(lnNoFabr))
+	lcWhere = [Select * From SIGFIMPF Where cimpfabs = ?lcImpf ]
+	LnErro = ThisForm.Parentform.Podatamgr.SqlExecute(lcWhere,'CrSIGFIMPF')
+	If LnErro < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrSIGFIMPF)')
+		Return .f.
+	Else
+		Select CrSIGFIMPF
+		If Reccount() = 0
+			MessageBox('Impressora Fiscal não Cadastrada!!',0+48,'ERRO')
+			Return .f.
+		Endif
+	EndIf
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEmiss.getEmiss
+* Classe: fweditdata (Base: textbox)
+* Registro: 55
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')
+	MessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')
+	Return .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntEntregas.getEntregas
+* Classe: fweditdata (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')
+	MessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')
+	Return .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntRecepcaos.getRecepcaos
+* Classe: fweditdata (Base: textbox)
+* Registro: 61
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')
+	MessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')
+	Return .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntPrzEnts.getPrzEnts
+* Classe: fweditdata (Base: textbox)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value) And This.Value < Ctod('01/01/1900')
+	MessageBox('Data incorreta. Informe uma data Valida!!!!',0+16,'')
+	Return .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntPedido.getPedido
+* Classe: fwget (Base: textbox)
+* Registro: 67
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Not (crSigCdOpe.PedClis = 5)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.CntObs2.btnMultObs
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 69
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Do Form SigOpIns With ThisForm.ParentForm.poDataMgr, TprMvCab.CodObs2
+replace CodObs2 with ALLTRIM(listaObs) in TprMvCab
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPINF.cntLivre.getNLivDg
+* Classe: fwget (Base: textbox)
+* Registro: 72
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPINF
+RESERVED3 (ClassInfo): antcpro
+antqtd
+antvalu
+citem
+cpro
+direta
+memoestourado
+parentform
+pcescolha
+validok
+*ajustaobjs 
+*carregaprzent 
+*montaobs 
+*return 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 48
+================================================================================

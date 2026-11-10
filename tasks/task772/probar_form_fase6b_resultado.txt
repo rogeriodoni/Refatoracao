@@ -1,0 +1,15 @@
+M1 inicio
+M2 ambiente ok
+CREATEOBJECT VARTYPE=O
+P1 BO trocado por stub
+ENTER com OP=4242 -> chamadasOP=1 valorOP=4242 chamadasEnv=0 (esperado 1/4242/0 = CONSULTOU por O.P.)
+  this_lEmConsulta=.F. (esperado .F. - liberada depois do ENDTRY)
+TAB com Envelope=3131 -> chamadasEnv=1 valorEnv=3131 chamadasOP=1 (esperado 1/3131/1 = CONSULTOU por Envelope, O.P. intocada)
+  this_lEmConsulta=.F. (esperado .F.)
+ENTER com this_lEmConsulta=.T. -> chamadasOP=1 (esperado 1 = guarda bloqueou, sem nova chamada)
+tecla 65 (A) com OP=6666 -> chamadasOP=1 (esperado 1 = NAO consultou)
+RESULTADO=OK
+--- MENSAGENS EM MODO TESTE ---
+[09/11/2026 05:28:00 PM] Atenção: O.P. Não Localizada !!!
+[09/11/2026 05:28:00 PM] Atenção: Envelope Não Localizado !!!
+

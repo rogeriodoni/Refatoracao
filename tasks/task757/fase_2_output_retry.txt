@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 is complete. The earlier failure was infrastructure (the CLI got no stdin), not code.
+
+## O que foi entregue
+
+**`projeto/app/classes/SigOpLclBO.prg`** ÔÇö 1257 linhas, 25 m├®todos. Compila limpo e passa o gate da Fase 2 (`CarregarDoCursor` + `Inserir` + `Atualizar`), o `ValidadorSQLSchema` (683 tabelas, 20 statements, 0 colunas inv├ílidas) e o gate de completude.
+
+O ponto central: **esta tela n├úo grava em tabela nenhuma**. Todo `Insert`/`Update`/`Delete` do legado tem por destino cursor ÔÇö `csLocals`, `crItensLoc` e o `crTpmMvItn` do form chamador. Ent├úo `Inserir()`/`Atualizar()` transcrevem as duas grava├º├Áes reais, em vez de inventar SQL (regra #22):
+
+- `Inserir()` = `btnLocalizar.Click` ÔÇö acrescenta os itens marcados a `cursor_4c_Locais` e os remove da grade.
+- `Atualizar()` = `btnConfirmar.Click` ÔÇö propaga para `crTpmMvItn.Locals` ou `.Localos` conforme `pcOrigem`.
+
+`crTpmMvItn` conservou o nome do legado por ser contrato externo; o resto segue o PILAR 3.
+
+## Medi├º├Áes que mudaram o c├│digo
+
+Rodei o VFP9 em vez de deduzir ÔÇö contrariando uma nota de mem├│ria que dizia que ele n├úo executa nesta sess├úo (j├í corrigida):
+
+- **`XMLTOCURSOR` destr├│i e recria o cursor** (com flags 0 **e** 2) e infere os tipos do XML. Sem schema XSD, `Marcas N(1)` vira L├│gico e `Cods C(2)="01"` vira num├®rico `1` ÔÇö e a├¡ `SCAN FOR Marcas <> 0` estoura, abortando a expans├úo inteira em sil├¬ncio. Minha primeira medi├º├úo checou s├│ a *exist├¬ncia* das colunas e passou batido; o smoke test ├® que pegou. Blindei com `MarcaComoNumero`/`ComoTexto`, e o teste cobre as duas variantes de XML.
+- **`SET EXACT ON` ignora brancos ├á direita**: `Cods = '01'` casa `char(4)` contendo `"01  "`, ent├úo o `WHERE` do legado foi transcrito sem altera├º├Áes.
+- **`_TALLY` ap├│s `UPDATE`** devolve as linhas afetadas ÔÇö `this_nItensConfirmados` conta grava├º├úo real, n├úo itera├º├Áes.
+
+## Dois consertos adjacentes necess├írios
+
+N├úo eram Fase 2, mas o c├│digo que escrevi dependia deles:
+
+1. **`fXmlToCursor` n├úo existia em lugar nenhum** ÔÇö fun├º├úo global Fortyus que nunca veio no acervo (regra #27). Criei `projeto/app/utils/fxmltocursor.prg`. Isso tamb├®m destravou `SigReEtlBO.prg`, que a chamava indefinida (a auditoria project-wide agora fecha em 0 chamadas ├│rf├ús em 1161 `.prg`).
+2. **`goSistema.Sys2015Tmp` nunca foi declarada** no `config.prg`, apesar de usada em 6 sites pr├®-existentes (`sigtosenBO`, `Formrst`, `Formsigtosen`). Medi: ler property ausente em objeto `Empty` estoura `Property SYS2015TMP is not found`. Acrescentei o `ADDPROPERTY` (+11 linhas).
+
+## Pontos que registro explicitamente
+
+- **`MontarLocalizacao` usa `ALLTRIM` em cada parte**, como o legado. Transcrevi literalmente (regra #17): se o usu├írio digitar c├│digo mais curto que a coluna, a concatena├º├úo desalinha ÔÇö comportamento do legado, n├úo mexi. Mencionado em coment├írio.
+- **`csLocals.cItens` foi de `N(4)` para `N(10,0)`**, casando `SigMvItn.cItens numeric(10,0)`. Desvio deliberado e documentado: largura de buffer, n├úo f├│rmula; com `N(4)` item acima de 9999 estouraria.
+- **`BuscarFotoProduto` n├úo exibe `MsgErro` no CATCH** ÔÇö roda a cada troca de linha da grade. O erro vai para `this_cMensagemErro` com linha/procedure. Desvio da regra #9 justificado em coment├írio.
+- **N├úo propaguei a li├º├úo do `XMLTOCURSOR` para os artefatos do pipeline** (prompts/skill/CorretorAutomatico) ÔÇö fica fora do escopo da Fase 2. Se quiser, o `/propagate-lesson` faz isso.
+
+Smoke test funcional em `automation/smoke_sigoplcl_f2.prg`: 18 cen├írios, todos passando, nenhum erro capturado ÔÇö inclusive grava├º├úo real em `crTpmMvItn` nos dois ramos (`Locals` e `Localos`), guard de modo e `Destroy` fechando os cursores.

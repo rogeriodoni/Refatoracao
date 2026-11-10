@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. `FormSigOpLoc.prg` atualizado (858 ÔåÆ 1017 linhas).
+
+## O que foi acrescentado
+
+Os eventos dos **tr├¬s** bot├Áes que o `SigOpLoc.SCX` realmente tem, cada `BINDEVENT` registrado junto do pr├│prio `AddObject` em `ConfigurarBotoes()`:
+
+| Handler | Legado | Implementa├º├úo |
+|---|---|---|
+| `CmdMarcarEmpClick` | `MarcarEmp.Click` | `BO.MarcarTodos()` + `grd_4c_Dados.Refresh()` |
+| `CmdDesmarcarEmpClick` | `DesmarcarEmp.Click` | `BO.DesmarcarTodos()` + `Refresh()` |
+| `CmdBtnSairClick` | `btnSair.Click` (`ThisForm.Release`) | `THIS.Release()` |
+
+Os tr├¬s s├úo PUBLIC (regra #3 ÔÇö `BINDEVENT` falha calado com PROTECTED), t├¬m `TRY/CATCH` com `MsgErro` incluindo `LineNo`/`Procedure` (regra #9) e nenhum `RETURN` dentro do `TRY` (regra #1). O `REPLACE ALL`/`GO TOP` ficam no BO (Fase 2, guardados por `USED()`); o form s├│ repinta, que ├® o `ThisForm.GridSels.Refresh` do legado (regra #21).
+
+## N├úo h├í `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`
+
+Essa ├® a conven├º├úo da barra CRUD do `frmcadastro`, e o dump prova que ela n├úo existe aqui: objeto raiz ├® `Class: form / BaseClass: form` (a string `frmcadastro` n├úo aparece), zero `Grupo_Op`, zero `pcEscolha`, e nenhum dos tr├¬s bot├Áes ├® verbo de cadastro ÔÇö os dois primeiros s├│ ligam/desligam a coluna `Imps` do cursor. Cri├í-los violaria o PILAR 1; cri├í-los vazios ├® barrado pela regra de completude. As quatro provas ficaram registradas no bloco de coment├írio junto dos handlers.
+
+## Verifica├º├Áes executadas
+
+- **Gate da Fase 7**: passa pelo ramo leg├¡timo `legadoSemCrud` ÔÇö 3 bot├Áes no legado, m├¡nimo 2 handlers exigido, 3 entregues.
+- **`Test-CompletudeCodigo`**: OK no Form e no BO.
+- **Compila├º├úo VFP9**: `.fxp` gerado para Form e BO, nenhum `.err`.
+
+Dois ajustes que valem registro, porque os dois eram defeitos silenciosos que eu mesmo introduzi e peguei nas medi├º├Áes:
+
+1. Minhas primeiras vers├Áes dos coment├írios **citavam os quatro nomes CRUD literalmente** ÔÇö e isso satisfazia o `-notmatch` do gate por coincid├¬ncia, mascarando o ramo de exce├º├úo real (armadilha `comentario_citando_nome_satisfaz_gate`). Reescrevi para "os quatro handlers da barra CRUD (Incluir / Alterar / Visualizar / Excluir)"; o gate agora reprova-por-nome e passa pela exce├º├úo medida.
+2. A palavra portuguesa **"todo"** quebrou linha e caiu no in├¡cio de um coment├írio, onde o validador de completude a leu como marcador `TODO`. Reescrevi a frase.
+
+Uma pend├¬ncia herdada de fase anterior, fora do escopo desta: `correcoes_FormSigOpLoc.prg.json` tem um `WARN-168-MISSING-PICTURE` pedindo `fundo_cad_1003.jpg`. N├úo apliquei ÔÇö ├® warning de form **REPORT** can├┤nico, e este ├® OPERACIONAL cujo SCX declara `Picture = ..\framework\imagens\new_background.jpg`, j├í transcrito no `InicializarForm`. Trocar seria desvio do PILAR 1.

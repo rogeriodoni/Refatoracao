@@ -1,0 +1,399 @@
+    *--------------------------------------------------------------------------
+    * ConfigurarOpcoes - Cria o bloco de OPCOES DE IMPRESSAO e o conteudo do
+    * painel flutuante: a OUTRA metade dos controles do dump, que a fase
+    * anterior deixou registrada como pendencia.
+    *
+    *   SIGOPIBO.chkCarne         -> chk_4c_ChkCarne   "Imprimir Carne"
+    *   SIGOPIBO.chkObss          -> chk_4c_ChkObss    "Imprimir Observacoes"
+    *   SIGOPIBO.chkAgrupa        -> chk_4c_ChkAgrupa  "Agrupar Informacoes"
+    *   SIGOPIBO.Lbl_Erro         -> lbl_4c_Lbl_Erro   (aviso OCULTO)
+    *   SIGOPIBO.Container1.Edit1 -> cnt_4c_Container1.obj_4c_Edit1  (EditBox)
+    *
+    * Os tres checkboxes e o Lbl_Erro sao filhos DIRETOS do form, como no SCX;
+    * o EditBox eh filho do cnt_4c_Container1, que a Fase 3 ja criou vazio.
+    *
+    * VISIBILIDADE: os tres checkboxes nascem com o Visible que o AddObject da
+    * (.F.) e sao resolvidos por AplicarVisibilidadeOpcoes, DEPOIS do
+    * TornarControlesVisiveis - nao aqui. Ja o Lbl_Erro nasce OCULTO por
+    * PROJETO (Visible = .F. no SCX) e o nome dele ja esta na lista de excecao
+    * do TornarControlesVisiveis desde a Fase 3, por isso a linha fica
+    * explicita abaixo.
+    *
+    * CheckBox.Value NUMERICO (1/0), nao LOGICO, apesar de o SCX declarar
+    * .T./.T./.F.: CheckBox criado por AddObject assume o TIPO do que lhe for
+    * atribuido, e o canonico do projeto eh numerico - misturar os dois tipos
+    * entre a criacao e a leitura estoura "Operator/operand type mismatch". A
+    * leitura (SincronizarOpcoesParaBO) passa por ConverterParaLogico, que
+    * tolera os dois, e o Init ja gravou os mesmos defaults no Business Object.
+    *
+    * AutoSize: os tres checkboxes declaram AutoSize = .T. no SCX e os TRES
+    * recebem .AutoSize = .F. com Width/Height EXPLICITOS - regra #23. Medido
+    * no VFP9 (automation\_tmp746\medir746b.prg): CheckBox criado por AddObject
+    * com AutoSize = .T. fica nos 100x17 do DEFAULT enquanto esta invisivel
+    * (tres ordens de atribuicao testadas, todas 100x17) e so recalcula ao
+    * ficar visivel - ou seja declarar .T. seria uma linha que mente sobre o
+    * valor efetivo durante toda a montagem, inclusive na hora em que o
+    * AplicarTabIndex e as checagens de sobreposicao olham a geometria.
+    *
+    * chkCarne eh o UNICO controle deste dump que nao declara Width/Height
+    * (os irmaos declaram: chkObss 122x15, chkAgrupa 120x15). A largura NAO eh
+    * herdada do default 100 nem estimada: foi MEDIDA no VFP9 com o mesmo
+    * procedimento que reproduz os dois valores conhecidos - ligando o controle
+    * com AutoSize = .T. e lendo a Width resultante, o caption "Imprimir
+    * Observacoes" devolve 122 e "Agrupar Informacoes" devolve 120, EXATAMENTE
+    * os numeros que o SCX declara; o mesmo procedimento devolve 88x15 para
+    * "Imprimir Carne". Isto e: 88 eh o auto-size que o Form Designer teria
+    * gravado, e o metodo se valida nos dois casos em que ha gabarito.
+    * Conferido o cruzamento lateral da linha Top = 89 (regra #28):
+    * Lbl_Impressora 121..201 / chkCarne 218..306 / chkAgrupa 351..471 - folga
+    * de 17px e de 45px, nenhuma sobreposicao. Com o default 100 a faixa iria
+    * a 318 e, embora ainda nao cruzasse o chkAgrupa, sobrariam 12px de caixa
+    * transparente depois do texto.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarOpcoes()
+        LOCAL loc_oErro
+
+        TRY
+            *-- chkCarne (SIGOPIBO.chkCarne): "Imprimir Carne". Classe
+            *-- "fwcheckbox" do framework.vcx; o SCX declara FontName/FontSize
+            *-- no instance level, entao os dois sao transcritos.
+            *-- Width/Height MEDIDOS (ver cabecalho deste metodo) - sao os
+            *-- unicos deste dump que nao vem do SCX, porque o SCX nao os tem.
+            THIS.AddObject("chk_4c_ChkCarne", "CheckBox")
+            WITH THIS.chk_4c_ChkCarne
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .AutoSize  = .F.
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Imprimir Carn" + CHR(234)
+                .Height    = 15
+                .Left      = 218
+                .Top       = 89
+                .Width     = 88
+                *-- SCX: Value = .T. (ver cabecalho: numerico, nao logico)
+                .Value     = 1
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- chkObss (SIGOPIBO.chkObss): "Imprimir Observacoes"
+            THIS.AddObject("chk_4c_ChkObss", "CheckBox")
+            WITH THIS.chk_4c_ChkObss
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .AutoSize  = .F.
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Imprimir Observa" + CHR(231) + CHR(245) + "es"
+                .Height    = 15
+                .Left      = 218
+                .Top       = 109
+                .Width     = 122
+                *-- SCX: Value = .T.
+                .Value     = 1
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- chkAgrupa (SIGOPIBO.chkAgrupa): "Agrupar Informacoes".
+            *-- Unico dos tres que nasce DESMARCADO no SCX (Value = .F.).
+            THIS.AddObject("chk_4c_ChkAgrupa", "CheckBox")
+            WITH THIS.chk_4c_ChkAgrupa
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .AutoSize  = .F.
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Agrupar Informa" + CHR(231) + CHR(245) + "es"
+                .Height    = 15
+                .Left      = 351
+                .Top       = 89
+                .Width     = 120
+                *-- SCX: Value = .F.
+                .Value     = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Lbl_Erro (SIGOPIBO.Lbl_Erro): o aviso de impressora nao
+            *-- configurada. Nasce Visible = .F. no SCX e CONTINUA oculto: o
+            *-- unico bloco do legado que o exibia (".Lbl_Erro.Visible = .T."
+            *-- junto com ".Lbl_Erro.Caption = lcErro") esta COMENTADO no SCX -
+            *-- ver o cabecalho de CarregarImpressoras. O texto calculado fica
+            *-- em THIS.this_cErroImpressoras; exibi-lo seria inventar
+            *-- comportamento que o legado nao tem.
+            *-- Caption transcrito do SCX, nao de this_cErroImpressoras: sao
+            *-- textos DIFERENTES (o do SCX fala de "Seu Computador", os dois
+            *-- calculados no Init falam de tipo de via e de "Sistema").
+            *-- Classe "label" do VFP e o SCX declara BackStyle = 0.
+            *-- Alignment = 2 (centralizado) e Width = 336 sao DECLARADOS pelo
+            *-- SCX: eh alinhamento legitimo, nao invencao (regra #23).
+            THIS.AddObject("lbl_4c_Lbl_Erro", "Label")
+            WITH THIS.lbl_4c_Lbl_Erro
+                .FontBold  = .T.
+                .FontName  = "Verdana"
+                .FontSize  = 9
+                .WordWrap  = .T.
+                *-- AutoSize = .F. EXPLICITO: com WordWrap = .T. o AutoSize
+                *-- DESCARTA a Height e colapsa as duas linhas em uma, cortando
+                *-- metade da frase (regra #23). O SCX nao declara AutoSize
+                *-- (default .F.); a linha fica para a propriedade nao ser
+                *-- "corrigida" depois para .T.
+                .AutoSize  = .F.
+                .Alignment = 2
+                .BackStyle = 0
+                .Caption   = "N" + CHR(227) + "o Existe Impressora de Boleto " + ;
+                    "Configurada no Seu Computador. Contate o Suporte T" + ;
+                    CHR(233) + "cnico."
+                .Height    = 28
+                .Left      = 132
+                .Top       = 250
+                .Width     = 336
+                .ForeColor = RGB(36, 84, 155)
+                *-- Visible = .F. do SCX. AddObject ja cria oculto, mas a linha
+                *-- fica explicita porque eh ESTADO DE PROJETO, nao artefato da
+                *-- criacao - e o nome deste controle ja esta na lista de
+                *-- excecao do TornarControlesVisiveis.
+                .Visible   = .F.
+            ENDWITH
+
+            *-- Z-ORDER: no SCX o Container1 eh declarado DEPOIS do Lbl_Erro,
+            *-- logo desenha POR CIMA dele. Aqui a ordem eh invertida por
+            *-- necessidade - cnt_4c_Container1 nasce no ConfigurarPageFrame,
+            *-- que tem de ser o PRIMEIRO AddObject do form (regra #11) - e as
+            *-- duas faixas se cruzam de verdade: Lbl_Erro ocupa 132..468 x
+            *-- 250..278 e o container ocupa 60..540 x 203..473. Mandar o label
+            *-- para o FUNDO (ZOrder(1)) restaura o empilhamento do legado.
+            *-- Hoje os dois nunca estao visiveis ao mesmo tempo, mas sem esta
+            *-- linha o label apareceria SOBRE o texto do boleto se alguem
+            *-- reativasse o bloco comentado.
+            THIS.lbl_4c_Lbl_Erro.ZOrder(1)
+
+            *-- Edit1 (SIGOPIBO.Container1.Edit1) -> obj_4c_Edit1: a caixa que
+            *-- exibe o conteudo de BOLETO.txt depois da impressao. Filho do
+            *-- cnt_4c_Container1 (criado vazio na Fase 3), e eh o membro que o
+            *-- ExibirConteudoBoleto procura por PEMSTATUS.
+            *-- AddObject chamado FORA de qualquer WITH e o WITH aberto pelo
+            *-- caminho completo: WITH aninhado sobre AddObject descarta
+            *-- propriedades em silencio.
+            *-- .Value = "" inicializa o EditBox como CHARACTER - o conteudo
+            *-- que chega eh o FILETOSTR do BOLETO.txt, e EditBox sem
+            *-- inicializacao assume o tipo do primeiro valor atribuido.
+            *-- ReadOnly = .T. do SCX: o painel eh de LEITURA.
+            *-- DisabledBackColor transcrito do dump - ele so pinta se o
+            *-- controle for desabilitado (o que o legado nunca faz), mas eh
+            *-- propriedade declarada e por isso vai junto.
+            THIS.cnt_4c_Container1.AddObject("obj_4c_Edit1", "EditBox")
+            WITH THIS.cnt_4c_Container1.obj_4c_Edit1
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Value             = ""
+                .Height            = 236
+                .Left              = 22
+                .ReadOnly          = .T.
+                .Top               = 18
+                .Width             = 434
+                .DisabledBackColor = RGB(255, 255, 255)
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpIbo.ConfigurarOpcoes")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarTabIndex - Numera a ordem de tabulacao dos controles FOCALIZAVEIS.
+    *
+    * Roda SO depois que TODOS os AddObject do form existem (eh o que as fases
+    * 3, 4 e 5 registraram como pendencia explicita): com AddObject o VFP9
+    * numera o TabIndex pela ORDEM DE CRIACAO, que nao tem relacao com a ordem
+    * do legado, e o Tab anda errado sem erro, sem log e sem aparecer em
+    * screenshot.
+    *
+    * A ordem vem dos TabIndex que o SCX declara:
+    *   Get_Printer=2, getQtde=3, Opt_Impressora=7, chkCarne=8, btnReport=9,
+    *   chkObss=10, chkAgrupa=10
+    * Os valores sao REINDEXADOS para 1..7, e isso nao eh desvio do PILAR 1:
+    * TabIndex eh POSICAO num vetor, nao identificador - o VFP9 clampa qualquer
+    * valor acima da quantidade de posicoes do container, entao ".TabIndex = 10"
+    * num form com 7 focalizaveis gravaria 7. O que o usuario percebe eh a
+    * SEQUENCIA, e ela fica identica a do legado porque os objetos do SCX que
+    * ficaram de fora da lista (Lbl_Impressora=1, Label1=4, Label2=5,
+    * Lbl_Erro=6, Container1=11, Say9=12) sao Labels e Containers: tem TabIndex
+    * mas nao tem TabStop, nunca param o Tab e portanto nao ocupam posicao
+    * efetiva. Numera-los apenas embaralharia a sequencia dos que param.
+    *
+    * chkObss e chkAgrupa tem o MESMO TabIndex = 10 no SCX (o Form Designer
+    * permite o empate). O VFP desempata pela ordem de criacao, e no SCX o
+    * chkObss eh declarado antes - por isso ele recebe 6 e o chkAgrupa 7.
+    *
+    * As atribuicoes vao em ordem ASCENDENTE porque gravar um TabIndex
+    * REORDENA os irmaos: fora de ordem, cada atribuicao empurra a anterior e o
+    * resultado final nao eh o pretendido.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AplicarTabIndex()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.cbo_4c_Get_Printer.TabIndex    = 1    && SCX Get_Printer    = 2
+            THIS.txt_4c_Qtde.TabIndex           = 2    && SCX getQtde        = 3
+            THIS.obj_4c_Opt_Impressora.TabIndex = 3    && SCX Opt_Impressora = 7
+            THIS.chk_4c_ChkCarne.TabIndex       = 4    && SCX chkCarne       = 8
+            THIS.obj_4c_BtnReport.TabIndex      = 5    && SCX btnReport      = 9
+            THIS.chk_4c_ChkObss.TabIndex        = 6    && SCX chkObss        = 10
+            THIS.chk_4c_ChkAgrupa.TabIndex      = 7    && SCX chkAgrupa      = 10
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpIbo.AplicarTabIndex")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarVisibilidadeOpcoes - Transcreve o bloco do Init legado que decide
+    * quais dos tres checkboxes de opcao aparecem, conforme o tipo de boleto:
+    *
+    *   ThisForm.chkObss.Visible   =  (.vnTpBol = 17)
+    *   ThisForm.chkCarne.Visible  = !(.vnTpBol = 17)
+    *   Thisform.chkAgrupa.Visible =  (.vnTpBol = 3)
+    *   ThisForm.chkObss.Visible   = !(.vnTpBol = 18)
+    *   ThisForm.chkCarne.Visible  =  (.vnTpBol = 18)
+    *
+    * chkObss e chkCarne recebem Visible DUAS vezes seguidas, sem IF entre as
+    * atribuicoes: so a ULTIMA tem efeito, e por isso o resultado observavel eh
+    * "chkObss aparece quando TpBol <> 18" e "chkCarne aparece quando
+    * TpBol = 18" - as duas primeiras atribuicoes (o caso 17) nunca chegam a
+    * ser vistas na tela. Os tres predicados moram no Business Object
+    * (DeveExibirImprimirObservacoes / DeveExibirImprimirCarne /
+    * DeveExibirAgruparInformacoes), que eh a fonte unica: o form so espelha.
+    *
+    * Roda DEPOIS do TornarControlesVisiveis, e nao dentro do ConfigurarOpcoes:
+    * o TornarControlesVisiveis percorre a arvore INTEIRA forcando
+    * Visible = .T., entao qualquer decisao de visibilidade tomada antes dele
+    * seria APAGADA. Nao se resolve pela lista de excecao daquele metodo porque
+    * aqui a visibilidade nao eh fixa - depende do tipo de boleto recebido.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AplicarVisibilidadeOpcoes()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.chk_4c_ChkObss.Visible = ;
+                THIS.this_oBusinessObject.DeveExibirImprimirObservacoes()
+
+            THIS.chk_4c_ChkCarne.Visible = ;
+                THIS.this_oBusinessObject.DeveExibirImprimirCarne()
+
+            THIS.chk_4c_ChkAgrupa.Visible = ;
+                THIS.this_oBusinessObject.DeveExibirAgruparInformacoes()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpIbo.AplicarVisibilidadeOpcoes")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarQtde - Transcreve o PROCEDURE Valid de getQtde (o UNICO Valid do
+    * dump deste legado):
+    *
+    *   If (ThisForm.getQtde.Value > 0)
+    *       ThisForm.vnQBols = ThisForm.getQtde.Value
+    *   EndIf
+    *
+    * Isto e: o valor digitado passa a ser a quantidade de boletos a imprimir,
+    * mas ZERO (ou campo apagado) NAO zera a quantidade - o valor anterior
+    * continua valendo. Essa guarda eh a regra, nao um detalhe: zerar faria o
+    * Do SigBlBol receber qBols = 0 e nao imprimir nada.
+    *
+    * O destino eh o Business Object. No legado vnQBols eh property do FORM e o
+    * Cmd_Imprimir.Click a le ("lnQtdBols = .vnQBols") para passar ao SigBlBol;
+    * nesta arquitetura quem monta a chamada eh SigOpIboBO.ExecutarImpressao,
+    * que le THIS.this_nQBols do BO. O espelho no form eh atualizado junto,
+    * porque eh a copia que o resto da tela consulta (mesma relacao que o Init
+    * estabelece: o BO decide, o form copia).
+    *
+    * LIGACAO AOS EVENTOS - sao DOIS, e cada um resolve um caminho diferente de
+    * o usuario sair do campo:
+    *   "LostFocus" -> este metodo. Eh o equivalente fiel do Valid: dispara ao
+    *       SAIR do campo, inclusive quando o usuario vai direto ao botao
+    *       Imprimir com o MOUSE, sem teclar nada. Sem ele, digitar 3 e clicar
+    *       Imprimir mandaria imprimir a quantidade ANTIGA - em silencio.
+    *   "KeyPress" -> ValidarQtdeKeyPress, que aplica o guard de ENTER/TAB e
+    *       delega para ca. Da a resposta imediata de quem confirma pelo
+    *       teclado. BINDEVENT em "Valid" de TextBox nao dispara de forma
+    *       confiavel, e por isso o Valid do legado nao eh ligado direto.
+    * Os dois caminhos sao idempotentes (a chamada so copia um numero), entao
+    * TAB - que dispara KeyPress e depois LostFocus - executar duas vezes nao
+    * tem efeito colateral. Nao ha guarda de reentrancia porque este metodo nao
+    * abre dialogo nenhum e nao mexe no foco: os dois motivos pelos quais um
+    * handler de LostFocus se redispara.
+    *
+    * PUBLIC (sem PROTECTED) porque eh chamado por BINDEVENT: metodo PROTECTED
+    * ligado por BINDEVENT falha em SILENCIO - o campo fica inerte e nada
+    * aparece em log (regra #3).
+    *
+    * O PROCEDURE When de getQtde ("Return .t.") NAO vira metodo: .T.
+    * incondicional eh exatamente o default do VFP9 para When, logo o
+    * comportamento ja esta reproduzido sem codigo. Escrever um handler que so
+    * devolve .T. seria um metodo vazio.
+    *
+    * O VARTYPE antes da comparacao nao eh defensividade solta: ">" entre
+    * CHARACTER e numero estoura "Operator/operand type mismatch", e .Value de
+    * TextBox assume o tipo do ultimo valor atribuido - aqui ele nasce NUMERICO
+    * (o ConfigurarControles faz ".Value = THIS.this_nQBols", como o
+    * ".getQtde.Value = .vnQBols" do Init legado), mas um codigo futuro que
+    * atribuisse string deixaria de ser pego por gate nenhum.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarQtde()
+        LOCAL loc_uValor, loc_nQtde, loc_oErro
+
+        TRY
+            loc_uValor = THIS.txt_4c_Qtde.Value
+
+            DO CASE
+                CASE VARTYPE(loc_uValor) = "N"
+                    loc_nQtde = loc_uValor
+                CASE VARTYPE(loc_uValor) = "C"
+                    loc_nQtde = VAL(loc_uValor)
+                OTHERWISE
+                    loc_nQtde = 0
+            ENDCASE
+
+            *-- "If (ThisForm.getQtde.Value > 0)" - zero NAO sobrescreve
+            IF loc_nQtde > 0
+                THIS.this_nQBols = loc_nQtde
+
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    THIS.this_oBusinessObject.this_nQBols = loc_nQtde
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpIbo.ValidarQtde")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarQtdeKeyPress - Handler de "KeyPress" do campo de quantidade.
+    * So confirma o valor em ENTER(13) e TAB(9) e delega para THIS.ValidarQtde.
+    *
+    * Os parametros do evento SAO declarados: handler ligado a "KeyPress" sem
+    * eles estoura a CADA tecla digitada (regra #3). E o guard eh obrigatorio
+    * pelo motivo oposto - sem ele o handler rodaria a cada caractere, que eh a
+    * familia de defeito da regra #47.
+    *
+    * Metodo SEPARADO de ValidarQtde, e nao o mesmo ligado aos dois eventos,
+    * porque "LostFocus" nao passa parametro nenhum: os dois argumentos
+    * chegariam como .F. LOGICO e a comparacao "par_nKeyCode = 13" estouraria
+    * "Operator/operand type mismatch" justamente no caminho do mouse.
+    *
+    * PUBLIC (sem PROTECTED) - BINDEVENT com metodo PROTECTED falha em silencio.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarQtdeKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF VARTYPE(par_nKeyCode) = "N"
+            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+                THIS.ValidarQtde()
+            ENDIF
+        ENDIF
+    ENDPROC
+

@@ -1,0 +1,1272 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpMpd.SCX
+* Data/Hora: 09/11/2026 03:25:15
+* Total de registros: 28
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPMPD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPMPD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPMPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPMPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPMPD
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.seleciona
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGOPMPD.Grade.seleciona
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.empresa
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.empresa
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.operacao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.operacao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.codigo
+  Class: header
+  BaseClass: header
+
+Objeto: Ingrid1
+  Parent: SIGOPMPD.Grade.codigo
+  Class: ingrid
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.data
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.data
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.Grupo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.Grupo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.Conta
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.Conta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPMPD.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPMPD.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape2
+  Parent: SIGOPMPD
+  Class: shape
+  BaseClass: shape
+
+Objeto: ok
+  Parent: SIGOPMPD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SELTUDO
+  Parent: SIGOPMPD
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: APAGA
+  Parent: SIGOPMPD
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 284
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Operações Pendentes"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  AlwaysOnTop = .F.
+  parentform = thisform.parentformthisform.parentform
+  Name = "SIGOPMPD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Tahoma"
+  AllowAddNew = .F.
+  AllowHeaderSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 130
+  Left = 12
+  Panel = 1
+  ReadOnly = .F.
+  RecordSource = "tmppends"
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 89
+  Visible = .T.
+  Width = 675
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 9
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.InputMask = "!!!!!!!!!!"
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "seleciona"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 25
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "empresa"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 125
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.InputMask = ""
+  Column3.Name = "operacao"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 70
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.Visible = .T.
+  Column4.InputMask = ""
+  Column4.Name = "codigo"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Width = 60
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.Visible = .T.
+  Column5.InputMask = ""
+  Column5.Name = "data"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 7
+  Column6.Width = 120
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .F.
+  Column6.Visible = .T.
+  Column6.Name = "Grupo"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 8
+  Column7.Width = 120
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Visible = .T.
+  Column7.Name = "Conta"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 6
+  Column8.Width = 103
+  Column8.ReadOnly = .T.
+  Column8.Visible = .T.
+  Column8.InputMask = ""
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.seleciona.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.seleciona.fwcheckbox1
+------------------------------------------------------------
+  Top = 31
+  Left = 12
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.empresa.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.empresa.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.operacao.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.operacao.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.codigo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.codigo.Ingrid1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 17
+  Top = 55
+  cordertag = Numes
+  cseektag = Numes
+  Name = "Ingrid1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.data.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.data.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = 0
+  ControlSource = ""
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Grupo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Grupo.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Conta.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Conta.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Grade.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.Shape2
+------------------------------------------------------------
+  Top = 12
+  Left = 702
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "OK"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.SELTUDO
+------------------------------------------------------------
+  Top = 226
+  Left = 21
+  Picture = ..\framework\imagens\geral_selecionar_26.jpg
+  Caption = ""
+  ToolTipText = "Seleciona tudo"
+  Name = "SELTUDO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPMPD.APAGA
+------------------------------------------------------------
+  Top = 226
+  Left = 63
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  ToolTipText = "Apaga tudo"
+  Name = "APAGA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPMPD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE desmarca
+------------------------------------------------------------
+PROCEDURE desmarca
+Private pNot
+Local _Nivel, _NumNivel
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpNens.Dopps, 'Dopps, NDopps, TNivels, Artigos')
+_Nivel 	  = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 10)
+_NumNivel = Val(Str(LocalOpp.Ndopps, 2) + Transform(TmpPends.Numes, '@L 9999999999'))
+
+Select xMFas
+Set Order to
+Delete All For Nenvs = TmpPends.Numes
+
+Select xOpi
+Set Order to
+Delete All For Nenvs = TmpPends.Numes
+
+Select xPesa
+Set Order to
+Delete All For Nenvs = TmpPends.Numes
+
+Select xNensi
+Set Order to
+Delete All For Nenvs = TmpPends.Numes
+
+pNot = .f.
+
+lcSql = [Select CidChaves From SigCdNec where EmpDNps = '] + _Nivel + [']
+If (ThisForm.poDataMgr.SqlExecute(lcSql, 'LocalNens') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Desmarca - Update - SigCdNec)')
+	Return 0
+EndIf
+Select LocalNens
+Scan
+	lcQuery = [Update SigCdNec Set ChkSubn = ?pNot Where CidChaves = '] + LocalNens.CidChaves + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Desmarca - Update - SigCdNec)')
+		Return 0
+	EndIf
+EndScan
+
+Select TmpOperacao
+_RecnoAnt = Recno()
+Go Top
+ThisForm.parentform.EditaOrigem = .t.
+Scan For Not Empty(Codigos)
+	ThisForm.parentform.EditaOrigem = .f.
+	Exit
+EndScan
+Go _RecnoAnt
+Skip
+If Eof()
+	Insert Into TmpOperacao (Codigos) Values (0) 
+EndIf
+ThisForm.ParentForm.Pagina.Dados.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE marca
+------------------------------------------------------------
+PROCEDURE marca
+LParameters _Automatico
+
+Private pTru, pNop
+Local _PuxaOrigem, _PuxaDestino
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpPends.Dopes, 'Dopps, NDopps, TNivels, Artigos')
+
+_Nivel 	  = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 10)
+_NumNivel = Val(Str(LocalOpp.Ndopps, 2) + Transform(TmpPends.Numes, '@L 9999999999'))
+_Titulo   = LocalOpp.TNivels
+_Artigo   = LocalOpp.Artigos
+
+If Seek(_NumNivel, 'TmpOperacao', 'Codigos')
+	If Not _Automatico
+		=Messagebox(_Titulo + ' Já Digitad' + _Artigo + '!!!', 0+48, '')
+	EndIf
+	Select TmpPends
+	Return .f.
+EndIf
+
+lcCpo = 'ConOSubs, ConDSubs, BxAutos, FixGOrigs, Nivels'
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpNens.Dopps, lcCpo)
+_Posicao 	   = TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10)
+_PuxaOrigem    = LocalOpp.ConOSubs
+_PuxaDestino   = LocalOpp.ConDSubs
+_BaixaSubnivel = (LocalOpp.BxAutos = 1)
+_Operacao = Str(TmpPends.Numes, 10) &&Str(TmpNens.Numps, 10) && Tiago - 17/04/2013 - Costantini - Não estava pegando o número da OP e sim o número da operação
+
+ThisForm.poDataMgr.CursorQuery('SigCdNec', 'LocalNens', 'EmpDNps', _Nivel)
+ThisForm.poDataMgr.CursorQuery('SigPdMvf', 'LocalMFas', 'EmpDNps', _Nivel)
+
+_Retorna = .t.
+If LocalNens.ChkSubn
+	If Not _Automatico
+		=Messagebox(_Titulo + ' Já Utilizad' + _Artigo + ' Em Outra Operação!!!', 0+48, '')
+	EndIf
+	_Retorna = .f.
+EndIf
+
+If Not _Retorna
+	Select TmpPends
+	Return .f.
+EndIf
+
+Select TmpOperacao
+Insert Into TmpOperacao (Codigos) Values (_NumNivel)
+
+Select LocalMFas
+Scan
+	_Nops = Nops
+	ThisForm.poDataMgr.CursorQuery('SigPdMvf', 'TempMFas', 'Nops', _Nops)
+	Select TempMFas
+	Index On Nops Tag Nops
+	Set Order to Nops Descending
+	Seek _Nops
+	If InList(_PuxaOrigem, 1, 2)
+		If Empty(TmpNens.GrupoOs) Or (Empty(TmpNens.ContaOs) And Not LocalOpp.FixGOrigs)
+			ThisForm.ParentForm.Pagina.Dados.Origem.Get_Grupo.Value = Iif(_PuxaOrigem=1, TempMFas.GrupoOs, TempMfas.GrupoDs)
+		EndIf
+		If Empty(TmpNens.ContaOs) 
+			ThisForm.ParentForm.Pagina.Dados.Origem.Get_Conta.Value = Iif(_PuxaOrigem=1, TempMfas.ContaOs, TempMFas.ContaDs)
+		EndIf
+	EndIf
+
+	If InList(_PuxaDestino, 1, 2)
+		If Empty(TmpNens.GrupoDs)
+			ThisForm.ParentForm.Pagina.Dados.Destino.Get_Grupo.Value = Iif(_PuxaDestino=1, TempMFas.Grupoos, TempMFas.Grupods)
+		EndIf
+		If Empty(TmpNens.Contads)
+			ThisForm.ParentForm.Pagina.Dados.Destino.Get_Conta.Value = Iif(_PuxaDestino=1, TempMFas.Contaos, TempMFas.Contads)
+		EndIf
+	EndIf
+
+	If _BaixaSubNivel
+		_CheckBaixa = LocalOpp.Nivels
+		pTru = .t.
+		lcSql = [Select CidChaves From SigCdNec Where EmpDnPs = '] + _Empr + _CheckBaixa + Str(_Nops, 10) + [']
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'LocalNens2') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Marca - Update - SigCdNec)')
+			Return 0
+		EndIf
+		Select LocalNens2
+		Scan
+			lcQuery = [Update SigCdNec Set ChkSubn = ?pTru Where CidChaves = '] +LocalNens2.CidChaves + [']
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Marca - Update - SigCdNec)')
+				Return 0
+			EndIf
+		EndScan
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigOpPic', 'LocalOpi', 'Nops', TempMFas.Nops)
+	Select LocalOpi
+	Scan
+		ThisForm.ParentForm.Amarra = ThisForm.ParentForm.Amarra + 1
+
+		Insert Into xOpi (Nops, Oper, Qtds, CPros, Indiv, Amarra, Nenvs, Emps, Dopes, Numes) ;
+				   Value (TempMFas.NOps, Alltrim(LocalOpi.Dopes ) + '/' + Alltrim(Str(LocalOpi.Numes)), ;
+						  LocalOpi.Qtds, TempMFas.CodPds, .f., ThisForm.ParentForm.Amarra, TempMFas.Nenvs, ;
+						  LocalOpi.Emps, LocalOpi.Dopes, LocalOpi.Numes)
+
+		Insert Into xPesa (Oper, CPros, Qtds, Peso, Amarra, Nenvs, Emps, Dopes, Numes, Nops) ;
+					Value (xOpi.Oper, xOpi.CPros, xOpi.Qtds, 0, ThisForm.ParentForm.Amarra, ;
+						   TempMFas.Nenvs, LocalOpi.Emps, LocalOpi.Dopes, LocalOpi.Numes, TempMFas.Nops)
+	EndScan
+
+	If Empty(TmpNens.GrVends)
+		ThisForm.ParentForm.Pagina.Dados.Responsavel.Get_Grupo.Value = LocalNens.GrVends
+	Endif
+	If Empty(TmpNens.Vends) And (TmpNens.GrVends = LocalNens.GrVends)
+		ThisForm.ParentForm.Pagina.Dados.Responsavel.Get_Conta.Value = LocalNens.Vends
+	EndIf
+
+	Insert Into xMFas (Emps, Dopps, Numps, Datars, Datas, Usuars, Opers, Grupoos, Contaos, Grupods, ;
+					   Contads, NOps, NEnvs, Codpds, Unids, Pesos, Qtds, Obsps, Ordems) ;
+			   Values (TmpNens.Emps, TmpNens.Dopps, TmpNens.Numps, LocalMFas.Datars, LocalMFas.Datas, ;
+			   		   Usuar, LocalMFas.Opers, TmpNens.Grupoos, TmpNens.Contaos, TmpNens.Grupods, ;
+			   		   TmpNens.Contads, LocalMFas.Nops, TmpPends.Numes, LocalMFas.Codpds, ;
+			   		   LocalMFas.Unids, LocalMFas.Pesos, LocalMFas.Qtds, LocalMFas.Obsps, ;
+			   		   LocalMFas.Ordems)
+
+	ThisForm.poDataMgr.CursorQuery('SigCdNei', 'LocalNensi', 'Nops', xMFas.Nops, 'Nops, Emps, Dopps, Numps')
+	Select LocalNensi
+	_ChaveOrig = LocalNensi.Emps + LocalNensi.Dopps + Str(LocalNensi.Numps, 10)
+	_TotalNop = 0
+
+	pNop = xMFas.Nops
+
+	lcQuery = [Select CMats, Qtds, Pesos ] + ;
+			    [From SigCdNei ] + ;
+			   [Where EmpDNps = '] + _ChaveOrig + [' And ] + ;
+			   		 [Nops = ?pNop]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalNensi') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNensi)')
+		Return 0
+	EndIf
+
+	Select LocalNensi
+	Scan
+		ThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', LocalNensi.CMats, 'DPros, CUnis, CGrus, Varias')
+
+		Insert Into xNensi (Emps, Dopps, Numps, Nops, NEnvs, CMats, CDescs, CUnis, ;
+							QtFaseAnt, Qtds, PsFaseAnt, Pesos, Visivel, Rateio, CGrus) ;
+					Values (TmpNens.Emps, TmpNens.Dopps, TmpNens.Numps, xMFas.Nops, TmpPends.Numes, ;
+							LocalNensi.CMats, LocalPro.DPros, LocalPro.CUnis, LocalNensi.Qtds, ;
+							LocalNensi.Qtds, LocalNensi.Pesos, LocalNensi.Pesos, .f., ;
+							Iif(LocalPro.Varias = 1, 2, 3), LocalPro.CGrus)
+		_TotalNop = _TotalNop + LocalNensi.Pesos
+	EndScan
+
+	If (_TotalNop <> 0)
+		Select xNensi
+		Set Order to NEnvCMat
+		If Not Seek(_Operacao + Space(10))
+			Insert Into xNensi (Nops, Nenvs, Visivel, Rateio, CUnis) ;
+						Values (TmpPends.Numes, TmpPends.Numes, .t., 1, crSigCdPam.CuniPPads)
+		EndIf
+		Replace PsFaseAnt With xNensi.PsFaseAnt + _TotalNop, ;
+				Pesos     With xNensi.Pesos + _TotalNop In xNensi
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', LocalMfas.CodPds, 'MatPrincs, Cgrus')
+	ThisForm.PodataMgr.CursorQuery('SigCdGrp', 'LocalGru', 'CGrus', LocalPro.Cgrus,[Mercs])
+	ThisForm.PodataMgr.CursorQuery('SigCdGpr','LocalGgrp','Codigos',LocalGru.Mercs,[MatPrincs])
+Set Step On 
+	_MatP = IIF(!EMPTY(LocalPro.MatPrincs),LocalPro.MatPrincs,IIF(!EMPTY(LocalGgrp.Matprincs),LocalGgrp.MatPrincs,CrSigCdPam.Ouros))
+
+	ThisForm.poDataMgr.CursorQuery('SigPrCpo', 'LocalCompo', 'CPros', LocalMfas.CodPds, 'Mats, Qtds, Cats')
+	Select LocalCompo
+	Scan
+		ThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', LocalCompo.Mats, 'CUnis, CGRus, DPros, Varias')
+		ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', LocalPro.CUnis, 'Fators')
+
+		If (LocalCompo.Mats = _MatP) And (LocalMFas.Pesos <> 0)
+			_QtAnt = LocalMFas.Pesos
+		Else
+			_QtAnt = LocalMFas.Qtds * LocalCompo.Qtds
+		Endif
+
+		If (LocalUni.Fators = 0)
+			_PsAnt = LocalMFas.Qtds * LocalCompo.Qtds * LocalMFas.Pesos
+		Else
+			_PsAnt = LocalMFas.Qtds * LocalCompo.Qtds * LocalUni.Fators
+		EndIf
+
+		Insert Into xNensi (Emps, Dopps, Numps, Nops, NEnvs, CMats, CDescs, CUnis, CGrus,;
+							QtFaseAnt, PsFaseAnt, Visivel, Rateio, FlagIncs, Cats, Qtds, Pesos) ;
+					Values (TmpNens.Emps, TmpNens.Dopps, TmpNens.Numps, xMFas.Nops, TmpPends.Numes, ;
+							LocalCompo.Mats, LocalPro.Dpros, LocalPro.CUnis, LocalPro.CGrus, _QtAnt, ;
+							_PsAnt, .f., Iif(LocalPro.Varias = 1, 2, 3), .t., LocalCompo.Cats, ;
+							_QtAnt, _PsAnt)
+
+		If Not Seek(_Operacao + LocalCompo.Mats, 'xNensi', 'NEnvCMat')
+			Insert Into xNensi (Nops, Nenvs, CMats, CDescs, CUnis, CGrus, Visivel, Rateio, FlagIncs, Cats) ;
+						Values (TmpPends.Numes, TmpPends.Numes, LocalCompo.Mats, LocalPro.DPros, ;
+								LocalPro.CUnis, LocalPro.CGrus, .t., 1, .t., LocalCompo.Cats)
+		EndIf
+		Replace QtFaseAnt With xNensi.QtFaseAnt + _QtAnt, ;
+				Qtds 	  With xNensi.Qtds + _QtAnt In xNensi
+
+		If (LocalUni.Fators = 0)
+			Replace PsFaseAnt With xNensi.PsFaseAnt + _PsAnt, ;
+					Pesos 	  With 0 In xNensi
+		Else
+			Replace PsFaseAnt With xNensi.PsFaseAnt + _PsAnt, ;
+					Pesos 	  With xNensi.Pesos + _PsAnt In xNensi
+		EndIf
+	EndScan
+	Select TmpNens
+EndScan
+
+With ThisForm.ParentForm.Pagina.Dados
+	Select TmpNens
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', TmpNens.ContaOs, 'RClis')
+	If Not Eof('LocalCli')
+		.Origem.get_dconta.Value = LocalCli.RClis
+	Else
+		.Origem.get_dconta.Value = ''
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', TmpNens.ContaDs, 'RClis')
+	If Not Eof('LocalCli')
+		.Destino.get_dconta.Value = LocalCli.RClis
+	Else
+		.Destino.get_dconta.Value = ''
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', TmpNens.Vends, 'RClis')
+	If Not Eof('LocalCli')
+		.Responsavel.get_dconta.Value = LocalCli.RClis
+	Else
+		.Responsavel.get_dconta.Value = ''
+	EndIf
+EndWith
+ThisForm.ParentForm.Pagina.Dados.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm, pData, pCnx
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+
+Local _PuxaOrigem, _PuxaDestino
+
+This.LockScreen = .t.
+This.ParentForm = pform
+This.poDataMgr  = pCnx
+
+Set DataSession To pData
+
+Create Cursor TmpPends(Flag l, Emps c(3), Dopes c(20), Numes n(10), Datas t Null, Origem c(21), Destino c(21), CPros c(14))
+Index On Emps + Dopes + Str(Numes, 10) tag EmpDopNum
+Index On Numes Tag Numes
+
+Select TmpOperacao
+Delete All For Empty(Codigos)
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpNens.Dopps, 'Nivels')
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', LocalOpp.Nivels, 'Dopps, NDopps, TNivels, Artigos')
+
+_Nivel 	  = LocalOpp.Dopps
+_NumNivel = LocalOpp.NDopps
+_Titulo   = LocalOpp.TNivels
+_Artigo   = LocalOpp.Artigos
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpNens.Dopps, 'ConOSubs, ConDSubs, BxAutos')
+_Posicao 	   = TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10)
+_PuxaOrigem    = LocalOpp.ConOSubs
+_PuxaDestino   = LocalOpp.ConDSubs
+_BaixaSubnivel = (LocalOpp.BxAutos = 1)
+
+lcEd1 = TmpNens.Emps + _Nivel + Str(0, 10)
+lcEd2 = TmpNens.Emps + _Nivel + Str(9999999999, 10)
+
+Wait Window 'Aguarde!!! Selecionando Operação Pendentes...' NoWait
+lcQuery = [Select Emps, Dopps, Numps, Datas, ChkSubn ] + ;
+		    [From SigCdNec ] + ;
+		   [Where EmpDNps BetWeen '] + lcEd1 + [' And '] + lcEd2 + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalNens') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNens)')
+	Return 0
+EndIf
+
+Select LocalNens
+Scan
+	If LocalNens.ChkSubn And Not Seek(_NumNivel * 10000000000 + Numps, 'TmpOperacao', 'Codigos')
+		Loop
+	Endif
+
+	_Chave = TmpNens.Emps + _Nivel + Str(LocalNens.Numps, 10)
+
+	ThisForm.poDataMgr.CursorQuery('SigPdMvf', 'LocalMFas', 'EmpDNps', _Chave, 'Nops')
+
+	lcCpo = 'Nops, GrupoOs, ContaOs, GrupoDs, COntaDs, CodPds'
+	ThisForm.poDataMgr.CursorQuery('SigPdMvf', 'LocalMFas', 'Nops', LocalMFas.Nops, lcCpo)
+	Select LocalMFas
+	Index On Nops Tag Nops
+	Set Order to Nops Descending
+	If Inlist(_PuxaOrigem, 1, 2)
+		If (_PuxaOrigem = 1)
+			If Not Empty(TmpNens.Contaos) And (TmpNens.ContaOs <> LocalMfas.ContaOs)
+				Loop
+			EndIf
+			lcOrigem = LocalMFas.GrupoOs + '/' + LocalMFas.ContaOs
+		Else
+			If Not Empty(TmpNens.ContaOs) And (TmpNens.Contaos <> LocalMFas.ContaDs)
+				Loop
+			EndIf
+			lcOrigem = LocalMFas.GrupoDs + '/' + LocalMFas.ContaDs
+		EndIf
+	Else
+		lcOrigem = LocalMFas.GrupoOs + '/' + LocalMFas.ContaOs
+	EndIf
+
+	If Inlist(_PuxaDestino, 1, 2)
+		If (_PuxaDestino = 1)
+			If Not Empty(TmpNens.ContaDs) And (TmpNens.ContaDs <> LocalMFas.ContaOs)
+				Loop
+			EndIf
+			lcDestino = LocalMFas.GrupoOs + '/' + LocalMFas.ContaOs
+		Else
+			If Not Empty(TmpNens.ContaDs) And (TmpNens.ContaDs <> LocalMFas.ContaDs)
+				Loop
+			EndIf
+			lcDestino = LocalMFas.GrupoDs + '/' + LocalMFas.ContaDs
+		EndIf
+	Else
+		lcDestino = LocalMFas.GrupoDs + '/' + LocalMFas.ContaDs
+	EndIf
+
+	_Flag = Seek(_NumNivel * 10000000000 + LocalNens.Numps, 'TmpOperacao', 'Codigos')
+
+	Insert Into TmpPends (Flag, Emps, Dopes, Numes, Datas, Origem, Destino, CPros) ;
+				  Values (_Flag, LocalNens.Emps, LocalNens.Dopps, LocalNens.Numps, ;
+						  LocalNens.Datas, lcOrigem, lcDestino, LocalMFas.CodPds)
+EndScan
+Wait Clear
+
+This.Grade.RecordSource 			= 'TmpPends'
+This.Grade.seleciona.ControlSource 	= 'TmpPends.Flag'
+This.Grade.operacao.ControlSource 	= 'TmpPends.Dopes'
+This.Grade.codigo.ControlSource 	= 'TmpPends.Numes'
+This.Grade.data.ControlSource 		= 'TmpPends.Datas'
+This.Grade.grupo.ControlSource 		= 'TmpPends.Origem'
+This.Grade.conta.ControlSource 		= 'TmpPends.Destino'
+This.Grade.column8.ControlSource 	= 'TmpPends.CPros'
+
+This.Op_Escolha = ThisForm.ParentForm.pcEscolha
+
+ThisForm.SelTudo.Visible    = (ThisForm.Op_Escolha = 'INSERIR')
+ThisForm.Apaga.Visible      = (ThisForm.Op_Escolha = 'INSERIR')
+
+ThisForm.Grade.Codigo.Ingrid1.SetFocus
+ThisForm.Refresh
+This.LockScreen = .f.
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.seleciona.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+=DoDefault()
+
+If Not This.Value
+	ThisForm.Desmarca
+Else
+	This.Value = ThisForm.Marca()
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.Op_Escolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.empresa.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.operacao.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.data.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.Grupo.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.Conta.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.Grade.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.Release
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.SELTUDO
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpPends
+Scan For Not Flag
+	Replace Flag With ThisForm.Marca(.t.)
+EndScan
+ThisForm.Grade.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPMPD.APAGA
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpPends
+Scan For Flag
+	Replace Flag With .f.
+	=ThisForm.Desmarca()
+EndScan
+ThisForm.Grade.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPMPD
+RESERVED3 (ClassInfo): op_escolha
+parentform
+podatamgr
+*desmarca 
+*marca 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

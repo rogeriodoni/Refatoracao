@@ -1,0 +1,862 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpIbo.SCX
+* Data/Hora: 06/11/2026 16:20:26
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPIBO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPIBO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPIBO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPIBO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Opt_Impressora
+  Parent: SIGOPIBO
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkCarne
+  Parent: SIGOPIBO
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnReport
+  Parent: SIGOPIBO
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Lbl_Impressora
+  Parent: SIGOPIBO
+  Class: label
+  BaseClass: label
+
+Objeto: Lbl_Erro
+  Parent: SIGOPIBO
+  Class: label
+  BaseClass: label
+
+Objeto: chkObss
+  Parent: SIGOPIBO
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGOPIBO
+  Class: container
+  BaseClass: container
+
+Objeto: Edit1
+  Parent: SIGOPIBO.Container1
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Get_Printer
+  Parent: SIGOPIBO
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: Label1
+  Parent: SIGOPIBO
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPIBO
+  Class: label
+  BaseClass: label
+
+Objeto: Say9
+  Parent: SIGOPIBO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getQtde
+  Parent: SIGOPIBO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkAgrupa
+  Parent: SIGOPIBO
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 480
+  Width = 600
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Impressão de Boleto"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  Name = "SIGOPIBO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Opt_Impressora
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 115
+  Top = 147
+  Width = 321
+  TabIndex = 7
+  Visible = .F.
+  Name = "Opt_Impressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 16
+  Option1.Left = 9
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 306
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.chkCarne
+------------------------------------------------------------
+  Top = 89
+  Left = 218
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Carnê"
+  Value = .T.
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "chkCarne"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.btnReport
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 85
+  Left = 445
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 9
+  BorderColor = 136,189,188
+  Name = "btnReport"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.ToolTipText = "Imprimir"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Cmd_Imprimir"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Cmd_Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Lbl_Impressora
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Impressoras :"
+  Height = 15
+  Left = 121
+  Top = 89
+  Width = 80
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Lbl_Impressora"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Lbl_Erro
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 9
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Não Existe Impressora de Boleto Configurada no Seu Computador. Contate o Suporte Técnico."
+  Height = 28
+  Left = 132
+  Top = 250
+  Visible = .F.
+  Width = 336
+  TabIndex = 6
+  ForeColor = 36,84,155
+  Name = "Lbl_Erro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.chkObss
+------------------------------------------------------------
+  Top = 109
+  Left = 218
+  Height = 15
+  Width = 122
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Observações"
+  Value = .T.
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "chkObss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Container1
+------------------------------------------------------------
+  Top = 203
+  Left = 60
+  Width = 480
+  Height = 270
+  BorderWidth = 0
+  Visible = .F.
+  TabIndex = 11
+  BackColor = 255,255,255
+  BorderColor = 136,189,188
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Container1.Edit1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 236
+  Left = 22
+  ReadOnly = .T.
+  Top = 18
+  Width = 434
+  DisabledBackColor = 255,255,255
+  Name = "Edit1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Get_Printer
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BoundColumn = 1
+  RowSourceType = 2
+  RowSource = "crImpreV"
+  ControlSource = ""
+  Height = 23
+  Left = 122
+  SpecialEffect = 1
+  Style = 2
+  TabIndex = 2
+  Top = 174
+  Width = 240
+  DisabledBackColor = 238,238,238
+  DisabledForeColor = 0,0,128
+  BorderColor = 100,100,100
+  BoundTo = .F.
+  Name = "Get_Printer"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Sistema"
+  Height = 15
+  Left = 125
+  Top = 137
+  Width = 39
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Windows"
+  Height = 15
+  Left = 242
+  Top = 137
+  Width = 45
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Qtde. de Vias :"
+  Height = 15
+  Left = 384
+  Top = 158
+  Width = 74
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.getQtde
+------------------------------------------------------------
+  Height = 23
+  InputMask = "9"
+  Left = 460
+  MaxLength = 1
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 154
+  Width = 24
+  BorderColor = 100,100,100
+  ZOrderSet = 44
+  Name = "getQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIBO.chkAgrupa
+------------------------------------------------------------
+  Top = 89
+  Left = 351
+  Height = 15
+  Width = 120
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Agrupar Informações"
+  Value = .F.
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "chkAgrupa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPIBO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnTpBol, pcTitEnvelope, pcEmp, pcDope, pnNum, pnDev, pnVias, pnQBols, pCursor
+
+Local llFechaCImp, lnPrinters, lnImpres, lnBottom1, lnBottom2, lcFiltro, lcErro, llSair, lcCursor
+
+Set DataSession to poForm.DataSessionId
+
+If poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+	return(.f.)
+EndIf
+
+lcErro = ''
+llSair = .F.
+With Thisform
+	.vcTitEnvelope = Iif(Type('pcTitEnvelope') = 'C', pcTitEnvelope, '')
+	.vnTpBol  = Iif(Type('pnTpBol') = 'N', pnTpBol, 0)
+	.vcEmp    = Iif(Type('pcEmp')   = 'C', pcEmp, '')
+	.vcDope   = Iif(Type('pcDope')  = 'C', pcDope, '')
+	.vnNum    = Iif(Type('pnNum')   = 'N', pnNum, 0)
+	.vnDev    = Iif(Type('pnDev')   = 'N', pnDev, 0)
+	.vnVias   = Iif(Type('pnVias')  = 'N' And pnVias > 0, pnVias, 0)
+	.vnQBols  = Iif(Type('pnQBols') = 'N' And pnQBols > 0, pnQBols, 1)
+	.vnCursor = pCursor
+	
+	.getQtde.Value = .vnQBols
+	
+	Do Case
+		Case .vnTpBol = 1
+			.Caption = Iif( Type('pcTitEnvelope') = 'C', pcTitEnvelope, ;
+					   'Impressão de Protocolo de Cheque' )
+			llSair = fChecaAcesso('SIGCHE','PROTSEMPRE') And ( Type('poForm.Op_Escolha') = 'C') And ;
+					 poForm.Op_Escolha = 'INSERIR'
+			
+		Case InList( .vnTpBol, 2, 3, 4, 5, 7, 9 )
+			.Caption = 'Impressão de Boleto'
+
+		Case .vnTpBol = 6
+			.Caption = 'Impressão de Protocolo de Cartão de Crédito'
+			
+		Case .vnTpBol = 8
+			.Caption = 'Impressão de Boleto de Conserto'
+			
+		Case .vnTpBol = 12
+			.Caption = 'Impressão de Boleto de Ordem de Serviço'
+			
+		Case .vnTpBol = 16
+			.Caption = 'Impressão de Boleto de Vendas'
+			
+		Case .vnTpBol = 18
+			.Caption = 'Impressão de Duplicata/Carne'
+		OtherWise			
+			.Caption = 'Impressão de Boleto (*)'
+	EndCas
+	*** Mena - 03/11/2014 - incluido check box para escolher duplicata ou carnê
+	ThisForm.chkObss.Visible =  (.vnTpBol = 17)
+	ThisForm.chkCarne.Visible =!(.vnTpBol = 17)	
+	
+	Thisform.chkAgrupa.Visible = (.vnTpBol = 3)
+
+	ThisForm.chkObss.Visible = !(.vnTpBol = 18)	
+	ThisForm.chkCarne.Visible = (.vnTpBol = 18)	
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ 
+lnPrinters = APrinters( laPrinters )
+*** mena - 06/03/2015 - cria cursor e inclui nele as impressoras do windows ***
+Create Cursor crImpre (impres c(50))
+If lnPrinters # 0
+	For lnI = 1 to lnPrinters
+		Insert Into crImpre	(impres) Values(Upper(laPrinters(lnI, 1)))
+*!*			laPrinters( lnI, 2 ) = laPrinters( lnI, 1 )
+*!*			laPrinters( lnI, 1 ) = Padr(Upper( laPrinters( lnI, 1 ) ),30)
+	EndFor
+*!*		=ASort( laPrinters )
+EndIf
+
+lcSql = [Select b.* From SigSyImp a, SigCdmp b Where a.UsuAcess = ']+Usuar+[' And a.Cimps = b.Impres ]+;
+		[Union all ]+;
+		[Select c.* From SigCdAcG a, SigSyImp b, SigCdmp c Where a.Usuarios=']+Usuar+[' ]+;
+		[And a.Grupos = b.GrAcess And b.Cimps = c.Impres]
+
+If poForm.podatamgr.sqlexecute(lcSql,'CrTmpCimp') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+	Return(.f.)
+EndIf
+
+Select CrTmpCimp
+If Reccount() > 0
+	Select Distinct Impres, nTpImpres, TpBarra, MaxCols ;
+	  From crTmpCimp ;
+	 Order By Impres ;
+	  Into Cursor crSigCdmp
+Endif
+
+*!*	lnImpres = 1
+*!*	lnCimp = 0
+*!*	If lnPrinters # 0
+*!*		Select CrSigCdmp
+*!*		Scan For ( Empty( CrSigCdmp.nTpImpres ) Or ( CrSigCdmp.nTpImpres = 1 ) ) And ;
+*!*				 ( CrSigCdmp.TpBarra = 0 ) And ( CrSigCdmp.MaxCols > 39 )
+*!*			Dimension laImpOk( lnImpres )
+*!*			lnOk = AScan( laPrinters, ( Upper( CrSigCdmp.Impres ) ) )
+*!*			If lnOk # 0
+*!*				laImpOk( lnImpres ) = laPrinters( lnOk + 1 )
+*!*				lnImpres = lnImpres + 1
+*!*			EndIf
+*!*			lnCImp = lnCImp + 1
+*!*		EndScan
+*!*	Else
+*!*		lcErro = 'Seu Computador Não Apresenta Impressora Configurada. Contate o Suporte Técnico.'
+*!*	EndIf
+*!*	lnImpres = lnImpres - 1
+
+If Empty(lcErro) And ( Thisform.vnTpBol = 3 ) And ( Thisform.vnVias = 0 )
+	lcErro = 'Boleto Tipo 3 Sem Configuração do Tipo de Via. Contate o Suporte Técnico.'
+EndIf
+
+*** mena - 05/03/2015 - prepara cursor com as impressoras para colocar num combobox ***
+SELECT PADR(ALLTRIM(a.Impres),15)+' '+ALLTRIM(b.impres) as IDupla, b.impres, a.impres as impresS from crSigCdmp a, crImpre b ;
+where (ALLTRIM(UPPER(b.impres)) like '%'+ALLTRIM(UPPER(a.impres))+'%' or ALLTRIM(UPPER(a.impres)) like '%'+ALLTRIM(UPPER(b.impres))+'%') ;
+group by b.impres, a.impres into cursor crImp READWRITE
+
+*!*	SELECT b.Impres from crSigCdmp a, crImpre b where a.nTpImpres=1 and (ALLTRIM(UPPER(a.impres)) like '%'+ALLTRIM(UPPER(b.impres))+'%' ;
+*!*			or ALLTRIM(UPPER(b.impres)) like '%'+ALLTRIM(UPPER(a.impres))+'%') group by b.impres order by 1 into cursor crImpreV
+
+SELECT * FROM crImp order by 1 into cursor crImpreV
+
+SELECT crImpreV
+GO top
+thisform.get_Printer.value = RECNO('crImpreV')
+thisform.get_Printer.RowSource = 'crImpreV'
+lnCimp = RECCOUNT('crImpreV')
+thisform.get_Printer.Refresh 
+*** mena - 05/03/2015 - a lista de impressoras sairam dos radio para o combobox *** 
+If lnCImp = 0
+	lcErro = 'Sistema Não Apresenta Impressora(s) de Boleto Configurada(s). Contate o Suporte Técnico.'
+EndIf
+*****************************************************************************************
+
+*!*	If Empty(lcErro) And lnImpres # 0
+*!*		With Thisform.Opt_Impressora
+*!*			lnTop = 10
+*!*			lnHeight = 15
+*!*			.ButtonCount = lnImpres
+*!*			For lnI = 1 to lnImpres
+*!*				lcI = AllTrim( Str( lnI ) )
+*!*				With .Option&lcI.
+*!*					.AutoSize = .F.
+*!*					.Caption  = ' \<' + lcI + '. ' + laImpOk( lnI )
+*!*					.FontSize = 8
+*!*					.Tag      = Upper( laImpOk( lnI ) )
+*!*					.Top      = lnTop
+*!*					.Width    = 184
+*!*				EndWith
+*!*				lnTop = lnTop + 20
+*!*				lnHeight = lnHeight + 20
+*!*			EndFor
+*!*			.Enabled = ( lnImpres > 1 )
+*!*	*!*			.Height = lnHeight
+*!*		EndWith
+*!*		With Thisform.btnReport
+*!*			.Value = 1
+*!*			.Cmd_Imprimir.SetFocus
+*!*		EndWith
+*!*	Else
+*!*		If Empty(lcErro)
+*!*			lcErro = 'Não Existe Impressora de Boleto Configurada Nesse Computador. ' + ;
+*!*					 'Contate o Suporte Técnico.'
+*!*		EndIf
+*!*		With Thisform
+*!*			.Opt_Impressora.Visible = .F.
+*!*			.Lbl_Impressora.Visible = .F.
+*!*	*!*			.Lbl_Erro.Top = .Opt_Impressora.Top
+*!*			.Lbl_Erro.Visible = .T.
+*!*			.Lbl_Erro.Caption = lcErro
+*!*	*!*			.Lbl_Erro.Height  = .Opt_Impressora.Height
+*!*	*!*			.Height = .btnReport.Top + .btnReport.Height + 20
+*!*			With .btnReport
+*!*				.Cmd_Imprimir.Enabled = .F.
+*!*			EndWith
+*!*		EndWith
+*!*	EndIf
+
+With Thisform
+*!*		With .Opt_Impressora
+*!*			lnBottom1 = .Top + .Height
+*!*		EndWith
+	
+	With .btnReport
+*!*			lnBottom2 = .Top + .Height
+*!*			If lnBottom1 > lnBottom2
+*!*				.Top = .Top + Int ( ( lnBottom1 - lnBottom2 ) / 2 )
+*!*				Thisform.Height = Thisform.Opt_Impressora.Top + Thisform.Opt_Impressora.Height + 20
+*!*			Else
+*!*				Thisform.Height = Thisform.btnReport.Top + Thisform.btnReport.Height + 20
+*!*			EndIf
+		If .Cmd_Imprimir.Enabled
+			.Value = 1
+			.Cmd_Sair.Enabled = Not llSair
+		Else
+			.Value = 2
+			.Cmd_Sair.Enabled = .T.
+			.Cmd_Sair.SetFocus
+		EndIf
+	EndWith
+EndWith
+
+*!* mena - 15/06/2015 substituido pela linha abaixo If (ThisForm.btnReport.Cmd_Imprimir.Enabled And pnTpBol = 14 And lnImpres = 1) Or (Used([crSigCdOpd]) And Inlist(crSigCdOpd.Boletos,3))
+If (ThisForm.btnReport.Cmd_Imprimir.Enabled And pnTpBol = 14 And lnCimp >= 1) Or (Used([crSigCdOpd]) And Inlist(crSigCdOpd.Boletos,3))
+	Thisform.btnReport.Value = 1
+	ThisForm.btnReport.Cmd_Imprimir.Click()
+*!*		ThisForm.Release
+*!*		Return .f.
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIBO.btnReport
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Cmd_Imprimir.Click
+------------------------------------------------------------
+PROCEDURE Cmd_Imprimir.Click
+Local lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcCursor, llAgrupa
+
+With Thisform
+	lnTpBols  = .vnTpBol
+	lcTitEnv  = .vcTitEnvelope
+	lcEmps    = .vcEmp
+	lcDopes   = .vcDope
+	lnNumes   = .vnNum
+	lnValDevs = .vnDev
+	lnTpVias  = .vnVias
+	lnQtdBols = .vnQBols
+	*** mena - 05/03/2015 - pega o nome da impressora que está no combobox *** 
+	lnImpres  = RECNO('crImpreV')
+	lcImp     = crImpreV.IDupla	&& impres
+*!*		lnImpres  = .Opt_Impressora.Value
+*!*		lcImp     = .Opt_Impressora.Buttons(lnImpres).Tag
+	lcCursor  = .vnCursor
+	llObs     = IIF(lnTpbols=18,.chkCarne.Value,.chkObss.Value )
+	llAgrupa  = (.chkagrupa.Value)
+	.btnReport.Cmd_Sair.Enabled = .T.
+EndWith
+
+Do SigBlBol With lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcImp, lcCursor, llObs, llAgrupa
+
+* Parâmetros :
+* 01. nTpbol, Tipo de Boleto
+* 02. TitEnvelope, Título
+* 03. pEmp, Empresa
+* 04. pDop, Nome da Operação de Estoque / Operação de Produção
+* 05. pNum, Número da Movimentação de Estoque / Movimentação de Produção
+* 06. pDev, Valor de Devolução
+* 07. pVias, Número da Via
+* 08. qBols, Quantidade de Boletos
+* 09. Nome da Impressora
+* 10. lcCursor, Nome do Cursor ou Tabela Para Impressão
+* 11. Imprime Observação (Tipo 17)
+
+If Used([crSigCdOpd]) And Inlist(crSigCdOpd.Boletos,1) &&& Tiago - 01/07/2013
+	Thisform.Release()
+Else
+	If File([BOLETO.txt])
+		lcConteudo = Filetostr([BOLETO.txt])
+		thisform.container1.Visible = .t.
+		thisform.container1.edit1.Value = lcConteudo
+		thisform.container1.edit1.Refresh
+		Delete File [BOLETO.txt]
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Cmd_Sair.Click
+------------------------------------------------------------
+PROCEDURE Cmd_Sair.Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIBO.getQtde
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (ThisForm.getQtde.Value > 0)
+	ThisForm.vnQBols = ThisForm.getQtde.Value
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPIBO
+RESERVED3 (ClassInfo): vcdope
+vcemp
+vctitenvelope
+vncursor
+vndev
+vnnum
+vnqbols
+vntpbol
+vnvias
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

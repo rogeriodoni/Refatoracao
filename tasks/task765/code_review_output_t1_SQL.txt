@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei as 5 colunas apontadas (`GRUCONTAS`, `GRUPOS`, `CONTAS`, `FPAGS`, `CODIGOS`) contra o dump do legado (`tasks\task765\SigOpLrC_form_codigo_fonte.txt`) e s├úo **todas falso positivo** ÔÇö n├úo h├í nada a corrigir.
+
+O pass SQL s├│ extrai colunas de `WHERE` literal dentro de `lcSql`/`lcQuery`, mas essas 5 v├¬m do helper legado `CursorQuery(tabela, cursor, 'coluna', valor)`, que monta o filtro internamente a partir do 3┬║/4┬║ argumento:
+
+| Coluna acusada | Linha legado (dump) | Linha migrado (BO) |
+|---|---|---|
+| `GruContas` | `CursorQuery('SigClLcr',...,'GruContas',_Grupo+_Conta)` (L1074) | `SigOpLrCBO.prg:540 WHERE GruContas = ...` |
+| `Grupos`/`Contas` | array `LaCampo` + `CursorQuery('SigMvSlc',@LaCampo)` (L1157-1163) | `SigOpLrCBO.prg:847-848 WHERE Grupos = ... AND Contas = ...` |
+| `Fpags` | `CursorQuery('SigOpFp',...,'Fpags',Cheques.Fpags)` (L1188) | `SigOpLrCBO.prg:924-925 WHERE Fpags = ...` |
+| `Codigos` | `CursorQuery('SigCdTom',...,'Codigos',TipoOp)` (L1233) | `SigOpLrCBO.prg:976-977 WHERE Codigos = ...` |
+
+Todas j├í estavam documentadas linha a linha nos coment├írios do pr├│prio BO citando a origem legado. Esse ├® o mesmo padr├úo catalogado na mem├│ria (`sql-filtro-inventado-if-cursor-e-cursorquery-helper`) ÔÇö inclusive uma recorr├¬ncia quase id├¬ntica ocorreu h├í poucos dias no form vizinho `SigOpLbC` (mesma fam├¡lia de forms, mesma l├│gica). Remov├¬-las quebraria os lookups de limite de cr├®dito, saldo por conta, cheques pendentes e tomador. Nenhum arquivo foi alterado; atualizei a mem├│ria com essa reincid├¬ncia para acelerar a pr├│xima vez.

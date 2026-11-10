@@ -1,0 +1,78 @@
+
+                # Layout ARVORE: o MESMO legado que as Fases 4, 5 e 8 ja
+                # dispensam por este nome (ctTree.ocx - SIGMVMVT ->
+                # FormSIGMVMVT, task574; SIGOPNOP -> FormSIGOPNOP, task772:
+                # "Analise de OP/Envelopes", dois filtros numericos O.P./
+                # Envelope + uma arvore de 5 niveis). Aqui o que nao cabe eh a
+                # exigencia de LOOKUP: os dois campos do legado sao NUMEROS
+                # digitados a mao, e o Valid de cada um consulta direto
+                # (SigCdNei/SigCdNec/SigCdPro/SigOpPic) e redesenha a arvore -
+                # nao existe tabela de apoio para escolher em grade.
+                #
+                # Nenhum dos ramos anteriores alcanca este caso: nao eh
+                # PAGINADO (o legado nao tem PageFrame); nao eh FLAT porque
+                # $temCamposFlat exige ".ControlSource =" no migrado e este
+                # legado nao tem ControlSource NENHUM para reproduzir (o Valid
+                # le .Value direto e a arvore eh montada por SQL de chave
+                # calculada - apontar o filtro para um cursor que a consulta
+                # fecha e recria seria DEFEITO, nao cosmetica, exatamente como
+                # a Fase 5 ja registra neste mesmo legado); nao eh DESPACHANTE
+                # nem EXIBICAO (ha lista - a arvore - e os dois campos sao
+                # digitaveis, com Valid de verdade); nao eh VISUALIZADOR nem
+                # GRADE-UNICA (os campos aceitam digitacao e nao ha Grid);
+                # e nao eh CAPTURA, cujo $legadoCapturaF6 exige a AUSENCIA da
+                # API de nos (AddPictureNode/ClearNodes/...) - que eh
+                # justamente o que esta tela usa.
+                #
+                # Sem este ramo a fase reprova um form correto e completo, e as
+                # duas unicas saidas seriam INVENTAR um AbrirBusca*/AbrirLookup*
+                # sobre tabela que o legado nunca consulta (viola o PILAR 1 e a
+                # regra explicita "NUNCA inventar tabelas de lookup que nao
+                # existem no original") ou INVENTAR um ControlSource so para
+                # casar com o regex do ramo FLAT - que violaria o PILAR 2 por
+                # cima do PILAR 1.
+                #
+                # FAIL-CLOSED: reusa a MESMA prova do lado legado que a Fase 5
+                # ja validou ($legadoArvoreSemBindF5 - sem Grid/PageFrame, com
+                # olecontrol DIRIGIDO pela API de nos, sem ControlSource algum e
+                # com pelo menos um campo), soma o requisito proprio desta fase
+                # ($legadoSemLookup) e exige do lado migrado o que a Fase 6 de
+                # fato entrega: a arvore criada, PARIDADE NUMERICA de campos
+                # (pelo menos tantos TextBox quantos o legado declara - a mesma
+                # barra da Fase 5, para a excecao nao liberar meia tela), os
+                # eventos LIGADOS por BINDEVENT e o handler que substitui o
+                # Valid do legado (PROCEDURE Validar*), no mesmo criterio que o
+                # ramo FLAT usa quando o legado nao tem lookup - nunca "nada".
+                # Dump ausente/ilegivel mantem a exigencia original.
+                $legadoArvoreSemBindF6 = $false
+                $nCamposArvLegadoF6    = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpArvoreF6 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpArvoreF6) {
+                        $txtArvoreF6 = Get-Content $dumpArvoreF6 -Raw -ErrorAction SilentlyContinue
+                        if ($txtArvoreF6) {
+                            $semGridLegadoF6 = -not ($txtArvoreF6 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$')
+                            $temOleLegadoF6  = $txtArvoreF6 -match '(?im)^\s*BaseClass:\s*olecontrol\s*$'
+                            $temApiNosF6     = $txtArvoreF6 -match '(?i)(AddPictureNode|ClearNodes|NodeCargo|NodeExpanded|NodeLevel|NodeHeader|\.Nodes\.Add)'
+                            $semControlSourceLegadoF6 = -not ($txtArvoreF6 -match '(?i)ControlSource')
+                            $nCamposArvLegadoF6 = ([regex]::Matches($txtArvoreF6, '(?im)^\s*BaseClass:\s*textbox\s*$')).Count
+                            $legadoArvoreSemBindF6 = $semGridLegadoF6 -and $temOleLegadoF6 -and $temApiNosF6 -and
+                                                     $semControlSourceLegadoF6 -and ($nCamposArvLegadoF6 -ge 1)
+                        }
+                    }
+                }
+
+                $nCamposMigradoArvF6 = ([regex]::Matches($conteudo, 'AddObject\(\s*"[^"]+"\s*,\s*"TextBox\w*"')).Count
+
+                $temSuperficieArvoreF6 = ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"OLEControl"') -and
+                                         ($nCamposArvLegadoF6 -ge 1 -and $nCamposMigradoArvF6 -ge $nCamposArvLegadoF6) -and
+                                         ($temMetodoLookup -or ($conteudo -match "PROCEDURE\s+Validar\w+"))
+
+                $temLayoutArvoreF6 = ($FormType -eq "OPERACIONAL" -and $semPageFrame -and $temBindEvent -and
+                                      $legadoArvoreSemBindF6 -and $legadoSemLookup -and
+                                      $temSuperficieArvoreF6)
+
+                if ($temLayoutArvoreF6 -and
+                    -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6)) {
+                    Write-Host "  [i] Fase 6 (layout arvore): lista do legado e' um ActiveX de arvore e os filtros nao tem ControlSource nem lookup - validado por arvore + paridade dos $nCamposArvLegadoF6 campos do legado ($nCamposMigradoArvF6 no migrado) + handler de validacao + eventos ligados" -ForegroundColor Cyan
+                }

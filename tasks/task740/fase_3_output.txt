@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö `gc_4c_CaminhoFramework` exists and resolves correctly. 
+
+Phase 3 is complete: `Formsigopexi.prg` was created at `C:\4c\projeto\app\forms\operacionais\Formsigopexi.prg` with the base structure (`DEFINE CLASS`, visual properties transcribed from the SCX dump, `Init`, `InicializarForm`, `Destroy`).
+
+One deviation from the generic Phase 3 template, documented in the file's header comment: the legacy `SIGOPEXI.SCX` has no PageFrame at all (`cntSombra`, `getBarras`, `grdDevols`, totals labels, and the two buttons are all direct children of the form) ÔÇö it's a FLAT operational modal dialog, not a CRUD Page1/Page2 form. This matches the established precedent `Formsigopagr.prg` (same "dialog opened by a Movimenta├º├úo parent form" family), so I followed that same pattern instead of inventing a PageFrame the legacy never had. `ConfigurarPageFrame()` was intentionally omitted for the same reason.
+
+Key points carried into this phase:
+- `DataSession = 1` (current session) instead of the SCX's literal `DataSession = 2`, since the dialog needs to see cursors the parent already opened (`crSigOpExI`, `crTpmMvItn`, `TprMvCab`, etc.) ÔÇö equivalent to the legacy `Set DataSession to pnDatSes` trick, verified against the project's `DataSession=1 eh sessao corrente` memory note.
+- `this_oFormPai` stores the caller reference (equivalent to legacy `parentform`), needed later for `ExcluirPro()`/`ApaIte()`/grid refresh callbacks.
+- `this_cOpEscolha` mirrors `poform.op_escolha`, read defensively via `PEMSTATUS` since the parent form isn't migrated yet.
+- `Destroy()` ends with `DODEFAULT()` per CLAUDE.md rule #29 (menu-shrink fix).
+
+Grid/buttons/labels are deferred to Phase 4, as instructed.

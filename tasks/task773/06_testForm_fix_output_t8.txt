@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**N├úo h├í bug de c├│digo aqui ÔÇö isso ├® a 8┬¬ tentativa id├¬ntica do pipeline numa falha de infraestrutura.**
+
+O erro 1526 (`SQL Server inexistente ou acesso negado`) acontece na ETAPA 1B, **antes** de qualquer `CREATEOBJECT`, ou seja, antes do form ou do BO sequer executarem uma linha. Confirmei agora via `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded = False`: a m├íquina do pipeline n├úo alcan├ºa o SQL Server nesta rede/porta.
+
+Isso j├í estava documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`) com 7 confirma├º├Áes anteriores ÔÇö exatamente nesta mesma task773/FormSigOpOca, com o c├│digo j├í revisado linha a linha em cada tentativa sem achar defeito. Revisei de novo agora (tentativa 8/10) e o `FormSigOpOca.prg`/`SigOpOcaBO.prg` seguem corretos: RETURN fora de TRY/CATCH, handlers PUBLIC para BINDEVENT, form nunca chama m├®todo PROTECTED do BO, CATCH sempre com MsgErro, guards de `gnConnHandle` e de `USED()`/Buffering antes de TABLEREVERT.
+
+N├úo editei os arquivos ÔÇö n├úo h├í nada para corrigir neles. Recomendo fortemente:
+
+1. **Pausar o retry autom├ítico desta task** ou
+2. **Dar excess├úo ao gate `06_testForm` para o erro 1526** (falha de conectividade, n├úo de c├│digo)
+
+Com apenas 2 tentativas restantes das 10, insistir vai s├│ repetir o mesmo resultado e a task falhar├í por esgotamento, mesmo com o c├│digo correto. Vale verificar a rede/VPN entre a m├íquina do pipeline e `192.168.200.10:1433`.

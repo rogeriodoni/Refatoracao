@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 j├í estava entregue ÔÇö o retry disparou por outro motivo. Verifiquei tudo de novo em vez de confiar no relat├│rio anterior.
+
+## Por que o retry disparou
+
+O gate da Fase 6 **n├úo tinha ramo para form cuja lista ├® ActiveX de ├írvore**. A tentativa anterior acrescentou esse ramo *durante a pr├│pria Fase 6* ÔÇö e gate corrigido numa fase n├úo vale para ela mesma: o orquestrador j├í tinha a fun├º├úo antiga em mem├│ria, reprovou, e pediu retry. O c├│digo no disco estava correto o tempo todo.
+
+Confirmei rodando as express├Áes **reais** do gate copiadas verbatim do `OrquestradorMigracao.ps1` (n├úo a reimplementa├º├úo em `VerificarGateFase6Arvore.ps1`, que poderia divergir):
+
+```
+semPageFrame=True  temBindEvent=True  legadoSemLookup=True
+legadoArvoreSemBindF6=True  (legado 2 campos / migrado 2)
+TEM LAYOUT ARVORE F6 = True
+```
+
+E `$temLayoutArvoreF6` est├í no OR final (linha 10791), ent├úo o gate aprova.
+
+## Verifica├º├úo do que foi entregue
+
+Conferi o c├│digo contra o dump linha a linha ÔÇö as afirma├º├Áes batem: `If ! Empty(This.Value)` envolvendo os dois `Valid`, os `GotFocus` zerando o campo irm├úo, o `When` do `GetOP` com `Return(.t.)` comentado (s├│ o efeito `Imagem.Visible = .f.`), e a mensagem `O.P. N├úo Localizada !!!`. **N├úo h├í lookup nesta tela** ÔÇö zero `fwBusca*`/`mAddColuna`/`sigacess(` no dump; o ├║nico `CreateObject` ├® `fSqlConector`.
+
+- **Compila limpo** ÔÇö recompilei contra o arquivo atual: `.fxp` gerado, `.err` ausente.
+- **Contratos OK** ÔÇö `PesquisarPorOP`/`PesquisarPorEnvelope` p├║blicos (regra #51); `BuscarImagemProduto` ├® PROTECTED e s├│ aparece em coment├írio, nunca chamado de fora; `this_cMensagemErro` herdado de `BusinessBase`.
+- **Caminhos de objeto** conferem com os `AddObject` reais, e a **ordem de execu├º├úo** est├í certa (os n├║meros de linha s├úo ordem de *defini├º├úo* ÔÇö `ConfigurarEventos` roda depois de `ConfigurarControles`).
+- Zero TODO/stub, zero `MESSAGEBOX` direto, zero `RETURN` dentro de TRY, zero `PUBLIC` em `DEFINE CLASS`.
+
+## Duas corre├º├Áes ao relat├│rio anterior
+
+1. **`VerificarPropriedadesInexistentes` foi dado como "OK" sobre um crash.** Com `-File` o `$PSScriptRoot` fica vazio e o script morre no `Split-Path` antes de auditar nada. Rodei pela via correta (`-Command` + `-Caminho`): genuinamente limpo. O pipeline invoca com `& $script -Caminho $alvo`, ent├úo **n├úo h├í defeito no pipeline** ÔÇö era artefato da minha/da anterior invoca├º├úo ad-hoc.
+
+2. **Medi a largura do ramo novo do gate, que eu n├úo deveria aceitar de palavra** ÔÇö ele afeta toda migra├º├úo futura. Varri os **771 dumps**: a pr├®-condi├º├úo do lado legado casa **exatamente 1 form**, o pr├│prio SIGOPNOP. O relaxamento ├® fail-closed e estreito, n├úo uma brecha.
+
+Fase 6 est├í completa e aprovada pelo gate real. As outras 28 ocorr├¬ncias de `VerificarLookupEmKeyPress` s├úo de outros forms (`Formsigopcgp` e afins), com `ERRO=0` ÔÇö nenhuma neste form.

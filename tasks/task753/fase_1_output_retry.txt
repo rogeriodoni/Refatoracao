@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da. Arquivo criado: `C:\4c\projeto\app\classes\SigOpIpBBO.prg` (12.4 KB, ASCII puro, CRLF).
+
+## O que o legado ├® (e por isso o BO n├úo tem tabela)
+
+`SIGOPIPB` ├® um **di├ílogo modal de escolha ├║nica**: grade com as impressoras, `Column1 = Impres` (read-only) e `Column2 = lSituas` (CheckBox com comportamento de radio-button). N├úo grava nada no SQL Server ÔÇö zero `TABLEUPDATE(`, zero `.AddCursor(`, zero `Insert/Update/Delete`. Os tr├¬s `Replace` do legado t├¬m por destino a coluna `lSituas`, que **n├úo existe em `SIGCDMP`** (conferido em `docs/schema.sql` via `Get-Content -Raw`, regra #14).
+
+Rastreei os dois chamadores reais nos dumps para fixar o **contrato do cursor** (isto n├úo estava em nenhum artefato da task):
+
+| dump | o que monta antes do `Do Form SigOpIpb` |
+|---|---|
+| `tasks/task530/SIGCDTBI_form_codigo_fonte.txt:518-578` | `Select Impres, nTpImpres, llFlags as lMarcas, llFlags as lSituas ... Into Cursor csSigCdmp ReadWrite` + `Index On Impres Tag Imprime For (lSituas=.T.)` + `Tag Impres` + `Goto Top`; na volta faz `Locate for lSituas` / `Set Printer To Name(AllTrim(csSigCdmp.impres))` |
+| `tasks/task695/sigopcgv_form_codigo_fonte.txt:13817-13865` | mesma forma, com `Select *` (traz tamb├®m `fontes`/`expas`/`expds`/`maxcols`) |
+
+Ou seja: **o cursor ├® do form PAI**, chega vivo por `DataSession = 1`, e a tela s├│ reordena e escreve `lSituas`. Mesma arquitetura de `SigOpClpBO.prg`, que usei como refer├¬ncia ÔÇö da├¡ `this_cTabela = ""` e `this_cCampoChave = ""`.
+
+## Entregue
+
+12 propriedades, todas documentadas com a origem no dump: t├¡tulo da janela; cursor + os dois TAG (`Impres`, `Imprime`) + ordem corrente; linha corrente (`Impres`, `lSituas`, `lMarcas`, `nTpImpres`); e o resultado da sele├º├úo (`this_cImpressoraSelecionada`, `this_nRegistroSelecionado` = o `lnRecNo` do `Check1.Valid`, `this_nTotalImpressoras`). `Init()` com `DODEFAULT()` sem argumento (confirmado em `businessbase.prg:25` ÔÇö passar tabela instanciaria um `DataAccess` in├║til aqui).
+
+Valida├º├úo: rodei os **4 checks exatos** de `Test-CompletudeCodigo` (`OrquestradorMigracao.ps1:4598`) contra o arquivo ÔåÆ **0 problemas**. Conferi tamb├®m: sem literal acentuado, sem `PUBLIC PROCEDURE`, sem `TRY/RETURN`, nomes herdados corretos.
+
+**N├úo verifiquei em runtime**: o VFP9 desta m├íquina compila o `.prg` driver em `.fxp` e sai sem execut├í-lo, ent├úo o `COMPILE` do BO n├úo p├┤de ser confirmado ÔÇö a revis├úo ├® est├ítica. Artefatos tempor├írios removidos.
+
+## Para as fases seguintes (registrado no cabe├ºalho do arquivo)
+
+- `nTpImpres` s├│ existe no cursor de *parte* dos chamadores (expl├¡cito no SIGCDTBI, impl├¡cito no `Select *` do sigopcgv) ÔÇö a leitura precisa de guarda `TYPE(...) != "U"`, nunca presumida.
+- O `Init` legado **zera `lSituas` em todas as linhas antes** de marcar a primeira: o pai entra com v├írias marcadas (marca toda impressora achada no painel do Windows) e a tela ├® de escolha ├║nica.
+- Desmarcar o CheckBox da linha corrente ├® **no-op** no legado (n├úo entra no `If This.Value`) ÔÇö a linha continua escolhida.
+- `lMarcas` tem de voltar **intacta** ao pai.
+- Fase 4+: a `Column2` ├® edit├ível, ent├úo o cursor precisa ser READWRITE e o CheckBox exige `CurrentControl` + `Sparse = .F.` + os 4 handlers de toggle (regras #18 e a do grid-checkbox).

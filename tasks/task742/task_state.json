@@ -1,0 +1,261 @@
+﻿{
+    "taskId":  "task742",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-11-05T20:44:21",
+    "atualizadoEm":  "2026-11-06T00:26:30",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-11-05T20:44:21",
+                                            "fim":  "2026-11-05T20:44:21",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task742\\sigopfis.sct",
+                                            "baseName":  "sigopfis",
+                                            "scxFile":  "C:\\4c\\tasks\\task742\\sigopfis.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-11-05T20:44:21",
+                                          "fim":  "2026-11-05T20:44:22",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigopfis",
+                                          "txtFile":  "C:\\4c\\tasks\\task742\\sigopfis_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-05T20:44:22",
+                                              "fim":  "2026-11-05T20:44:22",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task742\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-05T20:44:23",
+                                              "fim":  "2026-11-05T20:44:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task742\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task742\\meta_prompt.md",
+                                              "boClass":  "sigopfisBO",
+                                              "formClass":  "Formsigopfis",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task742\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-05T20:44:23",
+                                              "fim":  "2026-11-05T20:44:24",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task742\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-05T20:44:24",
+                                               "fim":  "2026-11-05T20:44:24",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task742\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigopfis_esqueleto.prg",
+                                                                "sigopfisBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-05T20:44:24",
+                                       "fim":  "2026-11-05T23:42:19",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopfisBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  244.52,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopfis.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  8534
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-11-05T23:42:19",
+                                                  "fim":  "2026-11-05T23:46:42",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopfisBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopfis.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-11-05T23:46:46",
+                                                 "fim":  "2026-11-05T23:46:48",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-06T00:14:43",
+                                       "fim":  "2026-11-06T00:15:28",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-06T00:15:29",
+                                               "fim":  "2026-11-06T00:26:08",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task742\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-11-06T00:26:20",
+                                        "fim":  "2026-11-06T00:26:28",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "ValidarUIFidelity nao gerou relatorio HTML"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-06T00:26:28",
+                                              "fim":  "2026-11-06T00:26:29",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task742_sigopfis.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-11-05T20:44:22",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-11-05T20:44:23",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task742\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-11-05T20:44:23",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-05T20:44:23"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-11-05T23:46:43",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-11-05T23:46:45",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigopfis_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopfis.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task742\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-11-05T23:46:49",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-11-05T23:53:49",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-11-05T23:53:49",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-11-06T00:11:35",
+                                          "passes":  2,
+                                          "problemas":  "[NAVEGACAO-PAGINA] Metodo \u0027BtnConfirmarClickExec\u0027 faz ActivePage=2 mas NAO le dados de cursor nem chama CarregarHistorico/CarregarDados. Em forms OPERACIONAL, a navegacao para Page2 DEVE carregar dados da linha selecionada no grid de Page1 (padrao legado: cmd_consulta.Click le do cursor do grid).; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027SITUAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027RAZAOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027TABLE_NAME\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027COLUMN_NAME\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027EMPCODS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LISTINDEX\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u00271\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS, I, DV, J, PEDIDO, DOPES, CTIPOS, EMPS, CPROS, MARCASUBNS, DESCS, UFIBGES, CODIGOS, IETIQS, 0, EMPDOPNUMS, ORIDOPNUMS, ETQSAIDS, FRETEDEFS, VALUE, FRTICMS, VLFRETES, FRTIPIS, SEGICMS, VLSEGUROS, SEGIPIS, DESICMS, DESPACES, DESIPIS, RCFINAS, CEMPS, ICLIS, PROTS, ITRAS, TIPONFS, OPERACAOS, OBRDTSAI, CFOPS, QTDS, DIGITENS, PARRECALS, SERIES, VOLUMES, OPERS; [METODO-INEXISTENTE] Metodo \u0027THIS.Width()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ResolverControle()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.EmModoEdicao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarListaLookup()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.LerColunaLookup()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.TeclaAbreLookup()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterCampoLookup()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterOperacaoMovimento()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.EstaIncluindo()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.AcharNaListaLookup()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.PickerCodigoRemoto()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterConfigSerieVazia()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ListaLocalDisponivel()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterConfigNumerica()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterTipoServicoSerie()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ValidarDadosFiscais()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterTipoTributacaoServico()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ColunaExisteNaTabela()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.LerTextoNota()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.MontarChaveOperacaoNota()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.PrepararCursorEtiquetas()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarItensEtiqueta()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterAbreviacaoOperacao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarListaOuVazio()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterProdutoControleLote()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarConfigUnidade()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterEtiquetaPadraoGrupo()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.LerSubItemEtiqueta()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterCupomFiscalOperacao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.AbrirCursorNota()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterPastaNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterLogotipoNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.GravarArquivoNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterPastaEmpresaNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarConfigEmpresaNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterEmailCliente()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.GerarAnexosNfe()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ConsultarColunaUnica()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Op_IssRetido\u0027 (parent: SIGOPFIS.Pagina.Servicos): Top original=270 vs migrado \u0027obj_4c_Op_IssRetido\u0027 Top=4 (diff=266px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_IssRetido\u0027 (parent: SIGOPFIS.Pagina.Servicos): Left original=211 vs migrado \u0027obj_4c_Op_IssRetido\u0027 Left=5 (diff=206px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  49
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-11-06T00:11:35",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-11-06T00:14:43",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopfisBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopfis.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-11-06T00:26:09",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-06T00:26:20",
+                                             "thresholdPx":  5,
+                                             "unmatched":  2,
+                                             "errors":  2,
+                                             "matched":  171,
+                                             "warnings":  44,
+                                             "reportFile":  "C:\\4c\\tasks\\task742\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

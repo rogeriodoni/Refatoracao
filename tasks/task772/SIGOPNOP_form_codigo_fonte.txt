@@ -1,0 +1,960 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPNOP.SCX
+* Data/Hora: 09/11/2026 15:33:57
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigopnop
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Commandgroup1
+  Parent: sigopnop
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Container1
+  Parent: sigopnop
+  Class: container
+  BaseClass: container
+
+Objeto: TreeView
+  Parent: sigopnop.Container1
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Label3
+  Parent: sigopnop.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: sigopnop.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: GetEnvelope
+  Parent: sigopnop.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetOP
+  Parent: sigopnop.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container2
+  Parent: sigopnop
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: sigopnop.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: sigopnop.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Fwbtng1
+  Parent: sigopnop
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Fwbtng2
+  Parent: sigopnop
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Imagem
+  Parent: sigopnop
+  Class: image
+  BaseClass: image
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop
+------------------------------------------------------------
+  DoCreate = .T.
+  ShowTips = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  ControlBox = .F.
+  Height = 600
+  Width = 800
+  AutoCenter = .T.
+  MaxButton = .F.
+  MinButton = .F.
+  BorderStyle = 2
+  Caption = "Análise de OP/Envelopes"
+  Themes = .F.
+  Name = "SIGOPNOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Commandgroup1
+------------------------------------------------------------
+  ButtonCount = 1
+  Top = 7
+  Left = 691
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  Value = 0
+  SpecialEffect = 1
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 100
+  Command1.Width = 80
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.TabIndex = 3
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1
+------------------------------------------------------------
+  Top = 136
+  Left = 23
+  Height = 456
+  Width = 744
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 1
+  BackColor = 212,208,200
+  BorderColor = 136,189,188
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1.TreeView
+------------------------------------------------------------
+  Top = 28
+  Left = 9
+  Height = 421
+  Width = 725
+  TabIndex = 3
+  Name = "TreeView"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "O.P. :"
+  Height = 15
+  Left = 12
+  Top = 6
+  Width = 35
+  ForeColor = 36,84,155
+  TabIndex = 4
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Envelope :"
+  Height = 15
+  Left = 146
+  Top = 7
+  Width = 63
+  ForeColor = 36,84,155
+  TabIndex = 5
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1.GetEnvelope
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 210
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 3
+  Width = 86
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  BorderColor = 36,84,155
+  Name = "GetEnvelope"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container1.GetOP
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 49
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 2
+  Width = 86
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  BorderColor = 36,84,155
+  Name = "GetOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container2
+------------------------------------------------------------
+  Top = 267
+  Left = 221
+  Height = 65
+  Width = 358
+  SpecialEffect = 0
+  TabIndex = 3
+  BackColor = 255,255,255
+  Name = "Container2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container2.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 14
+  Alignment = 2
+  BackStyle = 0
+  Caption = "AGUARDE!"
+  Height = 25
+  Left = 122
+  Top = 2
+  Width = 114
+  ForeColor = 240,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Container2.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 12
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Pesquisando as Movimentações"
+  Height = 20
+  Left = 39
+  Top = 31
+  Width = 279
+  ForeColor = 36,84,155
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Fwbtng1
+------------------------------------------------------------
+  Top = 12
+  Left = 12
+  Picture = ..\framework\imagens\geral_seta_bai_60.jpg
+  Caption = ""
+  ToolTipText = "Expandir"
+  Name = "Fwbtng1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Fwbtng2
+------------------------------------------------------------
+  Top = 12
+  Left = 96
+  Picture = ..\framework\imagens\geral_seta_cim_60.jpg
+  Caption = ""
+  ToolTipText = "Regredir"
+  Name = "Fwbtng2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopnop.Imagem
+------------------------------------------------------------
+  Stretch = 1
+  Enabled = .T.
+  Height = 109
+  Left = 474
+  Top = 11
+  Visible = .F.
+  Width = 192
+  ToolTipText = "Imagem do Produto (Clique Duplo Para Zoom)"
+  ZOrderSet = 5
+  Name = "Imagem"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigopnop
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters plModal, pcEmps, pcDopes, pcNumes
+
+Private lcEmpDopNums, lccPros
+
+Keyboard Chr(32)
+=Inkey(0)
+
+Declare ThisForm.paEmpDopNums[1]
+ThisForm.paEmpDopNums[1] = ''
+ThisForm.Arqfigura = ' '
+
+lcEmpDopNums = ''
+
+With ThisForm
+	.poDataMgr  = CreateObject('fSqlConector', ThisForm.Name)
+EndWith
+
+*ThisForm.WindowType = Iif(plModal,1,0)
+
+ThisForm.Container2.Visible = .f.
+
+Local loTree1
+
+loTree1 = ThisForm.Container1.TreeView
+
+loTree1.AddImage(LoadPicture('\imagens\geral_documento_26.jpg')) &&\vbmp\Form4.Ico'))
+loTree1.AddImage(LoadPicture('\imagens\geral_caixa_16.jpg')) &&\vbmp\depend3.bmp'))
+loTree1.AddImage(LoadPicture('\imagens\geral_pendencia_26.jpg')) &&\vbmp\OHist.Ico'))
+loTree1.AddImage(LoadPicture('\imagens\geral_palete_26.jpg')) &&\vbmp\Replace.Ico'))
+loTree1.AddImage(LoadPicture('\vbmp\EnvMail.Bmp'))
+loTree1.AddImage(LoadPicture('\imagens\geral_subnivel_26.jpg')) &&\vbmp\Server15.Ico'))
+
+ThisForm.Container1.GetOP.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE maketree
+------------------------------------------------------------
+PROCEDURE maketree
+Local loTree1,lnNode
+
+ThisForm.Container2.Visible = .t.
+
+m.loTree1 = ThisForm.Container1.TreeView
+
+m.loTree1.ClearNodes
+m.loTree1.TipsDisplay = .t.
+m.loTree1.ExpandOnDClick 
+m.loTree1.SmallIcons = .t.
+m.loTree1.PicAlign = 0
+m.loTree1.SelectedStyle = 2
+m.loTree1.PictureType = 1
+
+lcDados   = 'O.P. : '+Alltrim(Str(nEnvs)) + [ - ] + Cpros + Iif(nOpMaes > 0,[ - O.P. Mãe: ]+Alltrim(Str(nOpMaes)),[ ] )
+m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, 1, 0, 0)
+m.loTree1.NodeHeader(m.lnNode1) = .t.
+m.loTree1.NodeExpanded(m.lnNode1) = .t.
+m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+m.loTree1.NodeFontBold(m.lnNode1) = 2
+
+lcEmpDnPs = ''
+lcOriDes  = ''
+
+lnDecimal = Set("Decimals")
+Set Decimals To 3
+
+Scan 
+	If lcEmpDnPs <> EmpDnPs
+		lcDados   = "Movimentação : " + Left(EmpDnPs,3)+'/'+Alltrim(Substr(EmpDnPs,4,20))+'/'+Alltrim(Right(EmpDnPs,6)) + [ - ] + Dtoc(Datas)+ [ - ] + Transform(TotPesos,"@Z 999,999.999")+' Gr'
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 2, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcEmpDnPs = EmpDnPs
+		lcDados   = [Origem : ] + Alltrim(GrupoOS) + [/] + Alltrim(ContaOS) + [ - ] + [Destino : ] + Alltrim(GrupoDS) + [/] + Alltrim(ContaDS)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 3, 6, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcOriDes = GrupoOS+ContaOS+GrupoDs+ContaDs
+	EndIf
+	If lcOriDes <> GrupoOS+ContaOS+GrupoDs+ContaDs
+		lcDados   = [Origem : ] + Alltrim(GrupoOS) + [/] + Alltrim(ContaOS) + [ - ] + [Destino : ] + Alltrim(GrupoDS) + [/] + Alltrim(ContaDS)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 3, 6, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcOriDes = GrupoOS+ContaOS+GrupoDs+ContaDs
+	EndIf
+	
+	lcDados   = Alltrim(cMats) + [ - ] + Alltrim(dPros) 
+	m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 4, Iif(Servicos,4,2), 0, 0)
+	m.loTree1.NodeHeader(m.lnNode1) = .f.
+	m.loTree1.NodeExpanded(m.lnNode1) = .f.
+	m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+	m.loTree1.NodeFontBold(m.lnNode1) = Iif(Servicos,2,1)
+
+	lcDados   = Alltrim(Transform(Qtds,'999,999.999')) + [ ] + Iif(qtds = 0, [], cUnis)
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	EndIf
+	
+	lcDados   = Iif(Servicos,[],Iif(Peso2s = 0,[],Alltrim(Transform(Peso2s,'999,999.999')) + [ ] + cUnips))
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	Endif
+
+	lcDados   = Iif(Servicos,[],Alltrim(Transform(Pesos,'999,999.999')) + Iif(pesos = 0, [], [ GR]))
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	EndIf
+	
+EndScan 
+
+m.loTree1.ReDraw(.t.)
+m.loTree1.Refresh
+ThisForm.pnNodeExp = 1
+
+Set Decimals To lnDecimal
+
+ThisForm.Container2.Visible = .F.
+
+Return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE maketreeenv
+------------------------------------------------------------
+PROCEDURE maketreeenv
+Local loTree1,lnNode
+
+ThisForm.Container2.Visible = .t.
+
+m.loTree1 = ThisForm.Container1.TreeView
+
+m.loTree1.ClearNodes
+m.loTree1.TipsDisplay = .t.
+m.loTree1.ExpandOnDClick 
+m.loTree1.SmallIcons = .t.
+m.loTree1.PicAlign = 0
+m.loTree1.SelectedStyle = 2
+m.loTree1.PictureType = 1
+
+lcDados   = 'Envelope : '+Alltrim(Str(nEnvs))
+m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, 5, 0, 0)
+m.loTree1.NodeHeader(m.lnNode1) = .t.
+m.loTree1.NodeExpanded(m.lnNode1) = .t.
+m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+m.loTree1.NodeFontBold(m.lnNode1) = 2
+
+lcEmpDnPs = ''
+lcOriDes  = ''
+lcnOP     = 0
+
+lnDecimal = Set("Decimals")
+Set Decimals To 3
+
+Scan 
+	If lcEmpDnPs <> EmpDnPs
+		lcDados   = "Movimentação : " + Left(EmpDnPs,3)+'/'+Alltrim(Substr(EmpDnPs,4,20))+'/'+Alltrim(Right(EmpDnPs,6)) + [ - ] + Dtoc(Datas)+ [ - ] + Transform(TotPesos,"@Z 999,999.999")+' Gr'
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 2, 1, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcEmpDnPs = EmpDnPs
+		lcDados   = [Origem : ] + Alltrim(GrupoOS) + [/] + Alltrim(ContaOS) + [ - ] + [Destino : ] + Alltrim(GrupoDS) + [/] + Alltrim(ContaDS)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 3, 6, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcOriDes = GrupoOS+ContaOS+GrupoDs+ContaDs
+	EndIf
+	If lcOriDes <> GrupoOS+ContaOS+GrupoDs+ContaDs
+		lcDados   = [Origem : ] + Alltrim(GrupoOS) + [/] + Alltrim(ContaOS) + [ - ] + [Destino : ] + Alltrim(GrupoDS) + [/] + Alltrim(ContaDS)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 3, 6, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+		lcOriDes = GrupoOS+ContaOS+GrupoDs+ContaDs
+	Endif
+
+	lcDados   = Iif(nOps=0,[],Alltrim(Str(nOps)) + ' - ')+Alltrim(cMats) + [ - ] + Alltrim(dPros)
+	m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 4, Iif(Servicos,4,2), 0, 0)
+	m.loTree1.NodeHeader(m.lnNode1) = .f.
+	m.loTree1.NodeExpanded(m.lnNode1) = .f.
+	m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+	m.loTree1.NodeFontBold(m.lnNode1) = Iif(Servicos,2,1)
+
+	lcDados   = Alltrim(Transform(Qtds,'999,999.999')) + [ ] + cUnis
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	EndIf
+	
+	lcDados   = Iif(Servicos,[],Iif(Peso2s = 0,[],Alltrim(Transform(Peso2s,'999,999.999')) + [ ] + cUnips))
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	Endif
+
+	lcDados   = Iif(Servicos,[],Iif(Pesos =  0,[],Alltrim(Transform(Pesos,'999,999.999')) + [ GR]))
+	If ! Empty(lcDados)
+		m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 5, 2, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .f.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 1
+	EndIf
+
+EndScan 
+
+m.loTree1.ReDraw(.t.)
+m.loTree1.Refresh
+ThisForm.pnNodeExp = 1
+
+Set Decimals To lnDecimal
+
+ThisForm.Container2.Visible = .F.
+
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command3.Click
+------------------------------------------------------------
+PROCEDURE Command3.Click
+Delete File (ThisForm.Arqfigura)
+ThisForm.Release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command3.When
+------------------------------------------------------------
+PROCEDURE Command3.When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Container1.TreeView
+* Classe: olecontrol (Base: olecontrol)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+*** ActiveX Control Event ***
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+*** ActiveX Control Event ***
+LPARAMETERS keyascii
+
+If KeyAscii = 27
+	Release Windows
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE NodeClick
+------------------------------------------------------------
+PROCEDURE NodeClick
+*** ActiveX Control Event ***
+LPARAMETERS nindex, ncolumn
+
+If ! Empty(Thisform.plDblClick)
+	If This.NodeCargo(nIndex) = Thisform.plDblClick
+		If !Empty(ThisForm.paEmpDopNums[1])
+			Declare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)+1]
+		EndIf
+		ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)] = ThisForm.Container1.GetcEmp.Value +;
+															 ThisForm.Container1.GetDopes.Value +;
+															 Str(ThisForm.Container1.GetNumes.Value,6)
+		ThisForm.Container1.GetcEmp.Value  = Left(This.NodeCargo(nIndex),3)
+		ThisForm.Container1.GetDopes.Value = Substr(This.NodeCargo(nIndex),4,20)
+		ThisForm.Container1.GetNumes.Value = Val(Alltrim(Substr(This.NodeCargo(nIndex),24)))
+		ThisForm.Maketree()
+	Else
+		Thisform.plDblClick = This.NodeCargo(nIndex)
+	Endif
+Else
+	Thisform.plDblClick = This.NodeCargo(nIndex)
+EndIf	
+	
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Container1.GetEnvelope
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Parent.GetOP.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! Empty(This.Value)
+	
+	lcQuery = [SELECT b.Cidchaves,a.Nenvs,  a.EmpDnPs, b.Datas, b.Grupoos, b.Contaos, b.grupods, b.contads, ] + ;
+			  [a.servicos, a.Nops,a.cmats, c.dpros, a.Qtds, c.cunis, a.peso2s, c.cunips, ]+;
+			  [a.Pesos, Space(14) as Cpros ] + ;
+			  [from SigCdNei a, SigCdNec b, SigCdPro c ] + ;
+			  [where a.nenvs = ]+Alltrim(Str(This.Value))+[ and a.empdnps = b.empdnps and a.cmats = c.cpros ] + ;
+			  [order by b.cidchaves,a.Nops,a.cmats ]
+
+	If ThisForm.poDataMgr.SqlExecute(lcQuery,'TmpNensi') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Excluir - SigCdNei)')
+		Return .f.
+	EndIf
+		
+	Select TmpNensi
+	Go Top
+	If Eof()
+		MessageBox('Envelope Não Localizado !!!',16,'')
+		Return
+	EndIf 
+	Select EmpDnPs, Sum(Pesos) as Pesos From TmpNensi Where Not Servicos;
+	Into Cursor TmpNens Group by 1
+	
+	Select a.*, b.Pesos as TotPesos From TmpNensi a, TmpNens b Where ;
+	a.EmpDnPs = b.EmpDnPs Into Cursor CrSigCdNei Order by a.CidChaves,a.Nops,a.Cmats
+	
+	ThisForm.MakeTreeEnv()
+	
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Container1.GetOP
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Parent.GetEnvelope.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! Empty(This.Value)
+	
+	lcQuery = [SELECT distinct b.CidChaves,a.Nops as Nenvs, a.EmpDnPs, b.Datas, ]+;
+			  [b.Grupoos, b.Contaos, b.grupods, b.contads, ]+;
+			  [a.servicos,  0 as Nops,a.cmats, c.dpros, a.Qtds, ]+;
+			  [c.cunis, a.peso2s, c.cunips, a.Pesos, d.Cpros, d.NopMaes ]+;
+			  [from SigCdNei a, SigCdNec b, SigCdPro c, SigOpPic d ]+;
+			  [where a.Nops = ]+Alltrim(Str(This.Value))+[ And a.empdnps = b.empdnps And ]+;
+			  [a.cmats = c.cpros And a.Nops = d.Nops ]+;
+			  [Union all ]+;
+			  [SELECT distinct b.CidChaves,a.Nenvs, a.EmpDnPs, b.Datas, ]+;
+			  [b.Grupoos, b.Contaos, b.grupods, b.contads, ]+;
+			  [a.servicos,  0 as Nops,a.cmats, c.dpros, a.Qtds, ]+;
+			  [c.cunis, a.peso2s, c.cunips, a.Pesos, d.Cpros, d.NopMaes ]+;
+			  [from SigCdNei a, SigCdNec b, SigCdPro c, SigOpPic d ]+;
+			  [where (a.Nenvs = ]+Alltrim(Str(This.Value))+[ And a.Nops <> ]+Alltrim(Str(This.Value))+[ ) And a.empdnps = b.empdnps And ]+;
+			  [a.cmats = c.cpros And a.Nenvs = d.Nops ]+;
+			  [order by b.cidchaves,a.Nops,a.cmats]
+
+	If ThisForm.poDataMgr.SqlExecute(lcQuery,'TmpNensi') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpNensi)')
+		Return .f.
+	Endif	
+	Select TmpNensi
+	Go Top
+	If Eof()
+		pNot = .f.
+	
+		lcQuery = [SELECT b.cidchaves,a.Nops as Nenvs, a.EmpDnPs, b.Datas, ]+;
+				  [b.Grupoos, b.Contaos, b.grupods, b.contads, ]+;
+				  [?pNot as servicos,  0 as Nops,'Nenhum        ' as cmats, 'Nenhum Material Agregado' as dpros, ]+;
+				  [0 as Qtds, ' ' as cunis, 0 as peso2s, ' ' as cunips, 0 as Pesos, a.CodPds as Cpros, 0 as NopMaes ]+;
+				  [from SigPdMvf a, SigCdNec b ]+;
+				  [where a.Nops = ]+Alltrim(Str(This.Value))+[ and a.empdnps = b.empdnps ]+;
+				  [order by b.cidchaves,a.Nops]
+
+		If ThisForm.poDataMgr.SqlExecute(lcQuery,'TmpNensi') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpNensi)')
+			Return .f.
+		Endif
+		Select TmpNensi
+		Go Top
+		If Eof()
+			MessageBox('O.P. Não Localizada !!!',16,'')
+			Return
+		Endif
+
+	EndIf
+	
+	lcProduto = TmpNensi.Cpros
+	lcSql = [Select cpros, dpros, FigJpgs From SigCdPro Where Cpros = ']+lcProduto+[']
+	If Thisform.Podatamgr.Sqlexecute(lcSql,'CrTmpPro') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrTmpPro)')
+		Return .f.
+	Endif
+	
+	Select EmpDnPs, Sum(Pesos) as TotPesos From TmpNensi Where Not Servicos ;
+	Into Cursor TmpNens Group by 1
+	
+	Select a.*, b.TotPesos From TmpNensi a, TmpNens b Where a.EmpDnps = b.EmpDnPs ;
+	Into Cursor CrSigCdNei Order by a.CidChaves, a.Nops, a.Cmats
+
+	lcNomArq = Sys(2015)
+	lcArquivo = Sys(2023)+'\'+Alltrim(lcNomArq)+'.jpg'
+	Thisform.Arqfigura = lcArquivo
+	Clear Resources
+	ThisForm.Imagem.Picture = ''
+	ThisForm.Imagem.Visible = .f.
+
+	If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+		If (StrToFile(crTmpPro.FigJpgs, lcArquivo) > 0)
+			ThisForm.Imagem.Picture = (lcArquivo)
+			ThisForm.Imagem.Visible = .t.
+		EndIf
+	EndIf
+
+	ThisForm.MakeTree()
+	
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.Imagem.Visible = .f.
+*!*	Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Fwbtng1
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+loTree1 = ThisForm.Container1.TreeView
+llExpande = .f.
+
+For lnNode = 0 To loTree1.lIstCount-1
+	If ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)
+		loTree1.NodeExpanded(lnNode) = .t.
+		llExpande = .t.
+	Endif
+EndFor
+
+If llExpande 
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp + 1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Fwbtng2
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Type('ThisForm.pnNodeExp') = 'N' And ThisForm.pnNodeExp > 0
+	loTree1 = ThisForm.Container1.TreeView
+
+	For lnNode = 0 To loTree1.lIstCount-1
+		If ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)
+			loTree1.NodeExpanded(lnNode) = .f.
+		Endif
+	EndFor
+
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp - 1
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopnop.Imagem
+* Classe: image (Base: image)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArquivo
+
+lcArquivo = Sys(2023) + '\' + Sys(2015) + '.Jpg'
+
+Select crTmpPro
+With This.Parent
+	* Figura no Campo Memo
+	If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+		=StrToFile(crTmpPro.FigJpgs, lcArquivo)
+	EndIf
+
+	If File(lcArquivo)
+		Do Form SigOpZom With lcArquivo, ;
+							'Produto : ' + crTmpPro.CPros + ' - ' + crTmpPro.DPros, '' 
+		Delete File (lcArquivo)
+	EndIf
+EndWith
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigopnop
+RESERVED3 (ClassInfo): arqfigura
+automatico
+emptypro
+pldblclick
+pnnodeexp
+podatamgr
+^paempdopnums[1,0] 
+*hinivel 
+*maketree 
+*maketreeenv 
+*nohipro 
+*noprod 
+*subnivel 
+
+
+* Objeto: TreeView
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

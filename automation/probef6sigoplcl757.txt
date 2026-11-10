@@ -1,0 +1,33 @@
+PROBE F6 task757 INICIO
+ambiente OK
+1) CREATEOBJECT INSERIR -> VARTYPE=O
+   lbl_4c_Label2    cls=Label         Top= 183 Left= 682 W=  67 H=  15 Cap=[Terceiro Nível] Fore=5921370 Vis=.T.
+   txt_4c_Nvl3      cls=Textbox       Top= 201 Left= 682 W=  54 H=  24 Fore=0 Vis=.T.
+   txt_4c_DNvl3     cls=Textbox       Top= 201 Left= 737 W= 174 H=  24 Fore=0 Vis=.T.
+   lbl_4c_Label4    cls=Label         Top= 228 Left= 682 W=  62 H=  15 Cap=[Quarto Nível] Fore=5921370 Vis=.T.
+   txt_4c_Nvl4      cls=Textbox       Top= 246 Left= 682 W=  54 H=  24 Fore=0 Vis=.T.
+   txt_4c_DNvl4     cls=Textbox       Top= 246 Left= 737 W= 174 H=  24 Fore=0 Vis=.T.
+   shp_4c_ShpFigura cls=Shape         Top= 303 Left= 619 W= 319 H= 172 Vis=.T.
+   img_4c_ImgJpg    cls=Image         Top= 306 Left= 622 W= 313 H= 165 Vis=.F.
+   obj_4c_CmdAcoes  cls=Commandgroup  Top=  -3 Left= 662 W= 160 H=  85 Vis=.T.
+   lbl_4c_Label5    cls=Label         Top= 479 Left=  13 W=  65 H=  15 Cap=[Ordenação : ] Fore=5921370 Vis=.T.
+   obj_4c_OptOrdem  cls=Optiongroup   Top= 473 Left=  74 W= 130 H=  25 Vis=.T.
+   MaxLength: Nvl3=2 DNvl3=20 Nvl4=4 DNvl4=20
+   ImgJpg.Visible=.F. (esperado .F. - nasce oculta)
+   cmdAcoes.ButtonCount=2 Buttons(1).Caption=[\<Localizar] Buttons(2).Caption=[\<Limpar Seleção]
+   OptOrdem.Value=1 (esperado 1) Buttons(1).Caption=[Produto] Buttons(2).Caption=[Coleção]
+   GATE tudo vazio: Nvl3.Enabled=.F. (esperado .F.) Nvl4.Enabled=.F. (esperado .F.)
+   GATE Base+Nvl2 preenchidos: Nvl3.Enabled=.T. (esperado .T.) Nvl4.Enabled=.F. (esperado .F., Nvl3 vazio)
+   GATE +Nvl3: Nvl4.Enabled=.T. (esperado .T.)
+   btnLocalizar.Enabled inicial=.T. (esperado .T. - this_lPodeEditar)
+   apos marcar linha 1 + AfterRowColChange: btnLocalizar.Enabled=.T. (esperado .T.)
+   apos desmarcar + AfterRowColChange: btnLocalizar.Enabled=.F. (esperado .F.)
+   apos ChkMarcasKeyPress(13): cursor_4c_Itens.Marcas=1 (esperado 1) btnLocalizar.Enabled=.T.
+   apos BtnLocalizarClick: txt_4c_Base.Value=[] (esperado vazio se gravou) cursor_4c_Locais RECCOUNT=1
+   apos BtnLimparClick: txt_4c_Base.Value=[] (esperado vazio)
+2) CREATEOBJECT PROCURAR -> VARTYPE=O
+   btnLocalizar.Enabled=.F. (esperado .F.) btnLimpar.Enabled=.F. (esperado .F.)
+   VISIBLE: Label2=.T. Nvl3=.T. Label4=.T. Nvl4=.T. ShpFigura=.T. Label5=.T. OptOrdem=.T.
+   ImgJpg segue oculta (TornarControlesVisiveis nao forca)? .T.
+   BtnLocalizarClick em modo PROCURAR (guard this_lPodeEditar): txt_4c_Base.Value=[01] (esperado inalterado=01, guard bloqueou)
+PROBE F6 task757 FIM

@@ -1,0 +1,11 @@
+len sem schema=379   len com schema=479
+XML com schema contem 'xsd:'? .F.
+
+COM schema -> ret=2 regs=2
+   TYPE(Marcas)=N TYPE(Cods)=C TYPE(Codigo)=C
+   1a linha Cods=[01] Codigo=[0001] Marcas=[1]
+   Marcas <> 0 -> OK, 1 linha(s)
+
+SEM schema -> ret=2
+   TYPE(Marcas)=L TYPE(Cods)=N TYPE(Codigo)=N
+   1a linha Cods=[1] Codigo=[1]  <<< zeros a esquerda perdidos

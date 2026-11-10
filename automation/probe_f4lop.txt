@@ -1,0 +1,14 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+(1) sem args: Init OK | W=391 H=318 DS=1 | BO=O | alias=[cursor_4c_Operacoes] editavel=.T. | grade ColCount=2 RecSrc=[cursor_4c_Operacoes] CurCtrl=[CHK_4C_CHECK1] | CarregarLista=.T. | msgErro=[]
+(2) com pai: Init OK | paiEnabled=.F. | alias=[LocalSacOp] editavel=.T. reccount=3
+    grade T/L/W/H=85/96/198/220 vis=.T. ColCount=2 HdrH=19 RO=.F. RecSrc=[LocalSacOp]
+    col1 CtrlSrc=[LocalSacOp.Selecionada] W=15 Sparse=.F. RO=.F. CurCtrl=[CHK_4C_CHECK1] chk=.T. chkVal=N hdr=[]
+    col2 CtrlSrc=[LocalSacOp.Dopes] W=150 RO=.T. font=[Courier New] hdr=[Operações]
+    btn T/L/W/H=3/315/80/100 cap=[\<Ok] cancel=.T. themes=.T. vis=.T. picOK=.T.
+    toggle antes=0 mouseDown=1 mouseDown2=0 enter=1 | totSel=1 marcadas=[LIMPEZA]
+    pos-fechar-alias: alias=[cursor_4c_Operacoes] RecSrc=[cursor_4c_Operacoes] chk=.T. CurCtrl=[CHK_4C_CHECK1] W1=15 hdr2=[Operações]
+    protegidos? MontaGrade=.F. CarregarLista=.F. CmdSairClick=.F. ChkClick=.F. ChkMouseDown=.F. ChkMouseUp=.F. ChkKeyPress=.F. AlternarSelecaoLinha=.F.
+    pos-Ok: paiEnabled=.T. formVivo=X
+Z: fim

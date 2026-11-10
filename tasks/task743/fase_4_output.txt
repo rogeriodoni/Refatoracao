@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 4 conclu├¡da** em `projeto/app/forms/operacionais/FormSIGOPGRC.prg` (400 ÔåÆ 783 linhas).
+
+## O que o prompt pedia vs. o que o legado tem
+
+O prompt pede "Grid + `cnt_4c_Botoes` com 6 bot├Áes CRUD + `AlternarPagina`". **Isso ├® insatisfaz├¡vel neste form sem inventar UI** ÔÇö e eu medi, n├úo presumi, rodando os helpers reais do gate (extra├¡dos por AST, sem dot-source do orquestrador):
+
+| predicado no dump `SIGOPGRC` | valor |
+|---|---|
+| `BaseClass: grid\|pageframe` | **0** |
+| controle de entrada (textbox/editbox/combobox/ÔÇª) | **0** |
+| `ListBoxLigaLista` / `TokenGradeProprioForm` / `AddCursorLigaGrade` / `ControlSourceLigaLista` | todos **False** |
+| `legadoSemListaNemCampos` | **True** ÔåÆ ramo DESPACHANTE |
+| `Get-ContagemBotoesLegado` | **2** (Sair, Imprimir) |
+
+A ├║nica ocorr├¬ncia de `ControlSource` no dump ├® `.ControlSource = 'gGraficos'` dentro do `mostragrafico` ÔÇö o campo General do MSGraph, n├úo coluna de lista. ├ë o mesmo caso do g├¬meo `SIGOPGCO`/task739 que motivou a corre├º├úo do ramo DESPACHANTE em 2026-11-05.
+
+## O que foi entregue (a superf├¡cie que o legado realmente tem)
+
+Dispensar Grid/CRUD **n├úo ├® "nada a fazer"**: o ramo DESPACHANTE exige `AddObject("cmd_4c_` **e** `PROCEDURE Cmd*Click` na mesma fase, o que traz o comportamento do Click para c├í.
+
+- `ConfigurarBotoes()` ÔÇö `cmd_4c_Sair` (Top=3, Left=725, Caption `"Encerrar"`, **`Cancel = .T.`** transcrito do SCX ÔÇö diferen├ºa real contra o g├¬meo) e `cmd_4c_Imprimir` (Left=650, `"\<Imprimir"`), criados na ordem dos registros do SCX, 75├ù75 (a `fwbtng` 80├ù100 n├úo cabe: os dois se sobreporiam e o 2┬║ passaria da borda de 800px)
+- `ConfigurarEventos()` ÔÇö BINDEVENT dos dois Click (os 2 ├║nicos eventos de controle do dump)
+- `CmdSairClick()` ÔÇö `Thisform.Release` do legado
+- `CmdImprimirClick()` ÔÇö transcri├º├úo literal do `Select Graph / Go Top / Report Form SigOpGrc To Printer Prompt NoConsole / Select Graph / Go Top / Thisform.Refresh`, com guard pelo flag `this_lGraficoGerado` (n├úo por `RECCOUNT`, que conta registro marcado como exclu├¡do)
+- `ExecutarReportForm()` ÔÇö helper can├┤nico (guard de `FILE()` no FRX, cursor vazio, isolamento de locale, reconstru├º├úo do menu)
+
+## Provas
+
+- **Compila limpo**: `.FXP` gerado, zero `.err`
+- **Instancia e funciona** (probe headless, sem `Show()` ÔÇö ├® modal): `VARTYPE=O`, 800├ù600, 3 filhos (`CNT_4C_SOMBRA`, `CMD_4C_SAIR`, `CMD_4C_IMPRIMIR`); Sair em 725..800, Imprimir em 650..725 (tilam exatos); `Cancel=.T.`, `Themes=.T.`, os dois `.Picture` **existem** em `vbmp\`; handlers PUBLIC (`PEMSTATUS(...,2)=.F.`); `AEVENTS=1` em cada bot├úo
+- **Clique real**: `CmdImprimirClick()` sem gr├ífico gerado emitiu `"Gr├ífico ainda n├úo foi gerado."` e **n├úo** chamou `REPORT FORM`
+- **Completude**: `Test-CompletudeCodigo` ÔåÆ OK no Form e no BO; zero bytes >127 (acentos todos via `CHR()`); nenhum `RETURN` dentro de `TRY`; CRLF restaurado (CR=LF=783)
+- **Gate**: veredito do `case 4` = **True** pelo ramo DESPACHANTE (era `False` antes desta fase ÔÇö a fase tinha trabalho)
+
+## Dois pontos para a Fase 5
+
+Documentados no pr├│prio `.prg` para n├úo se perderem:
+
+1. A chamada de `ConfigurarPaginaDados()` tem de entrar **entre** `ConfigurarCabecalho()` e `ConfigurarBotoes()`. O `Shape2` (615..788 / 7..117) sobrep├Áe os bot├Áes e ├® `BackStyle=0`+`BorderStyle=0`: criado depois, fica por cima e **bloqueia o clique sem desenhar nada**.
+2. `AjustarOrdemTabulacao()` fica para a Fase 5 ÔÇö `TabIndex` fora da faixa `1..N` ├® descartado em sil├¬ncio, e com 3 controles numerar os bot├Áes como 3 e 4 deixaria o 4 inerte.
+
+O `RunLoop.ps1` vivo (PID 21084, subiu 17:42 de 05/11) parseou um orquestrador que **j├í cont├®m** a corre├º├úo do ramo DESPACHANTE (ela est├í em `HEAD`, commit de 17:29) ÔÇö ent├úo n├úo h├í aqui o problema de gate velho em mem├│ria.

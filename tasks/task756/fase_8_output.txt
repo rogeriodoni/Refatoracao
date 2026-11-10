@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpLbC.prg` (1915 linhas, 87,7 KB).
+
+## O que entrou
+
+**(a) `CarregarLista()` ÔÇö funil ├║nico de carga da grade.** Ligar o cursor e repintar estavam em duas chamadas (`VincularGrade` + `RepintarGrade`) replicadas nos dois caminhos de `CarregarDados` que abrem a tela. Consolidei no funil que a regra #21a/#46 pede e troquei os dois call sites ÔÇö popular o cursor n├úo repinta a grade, e com o par solto basta um caminho novo esquecer o `Refresh` para a grade ficar vazia com o cursor cheio.
+
+**(b) `TabIndex` ÔÇö pend├¬ncia que a Fase 4 adiou explicitamente** ("vai na fase que criar o ├ÜLTIMO AddObject"). Medi no VFP9 (`automation\medir_tabindex_756.prg`) em vez de estimar:
+
+| | resultado lido de volta |
+|---|---|
+| legado, logo ap├│s o `AddObject` da Grade | `TabIndex = 2` ÔÇö o **4 do dump ├® DESCARTADO** (s├│ 2 irm├úos tab-able existiam) |
+| legado, fim do load | cntSombra 1 / Grade 2 / ok 22 |
+| migrado, s├│ com os `AddObject` | cnt_4c_Sombra 1 / grd_4c_Dados 2 / cmd_4c_Ok 22 |
+| migrado, com `grd.TabIndex = 4` | grd vai para **4** ÔÇö aplicado, porque aqui a faixa j├í ├® 1..23 |
+
+Ou seja: a ordem efetiva do legado ├® a ordem de cria├º├úo, o migrado j├í ├® id├¬ntico a ela, e transcrever o literal seria a ├║nica forma de **divergir** (fiel ao arquivo, infiel ├á tela). Decis├úo e n├║meros registrados em `ConfigurarGrade` ÔÇö nenhuma atribui├º├úo de `TabIndex` no form.
+
+## O que deliberadamente n├úo entrou
+
+O roteiro gen├®rico da Fase 8 pede handlers de buscar/encerrar/salvar/cancelar, mapeamento formÔåÆBO e habilitar/limpar campos + ajuste por modo. Nada disso existe neste legado: o SCX tem **um** bot├úo (`SIGOPLBC.ok`, j├í migrado na Fase 4), os nove TextBox s├úo `ReadOnly` + `TabStop = .F.` (os dez `When ÔåÆ Return .f.` do dump) e n├úo h├í `pcEscolha` ÔÇö zero ocorr├¬ncias. O sentido BOÔåÆform existe e est├í entregue como `AtualizarCamposComposicao`. Criar os outros seria inventar UI (PILAR 1) ou escrever stub. Tudo justificado no cabe├ºalho, com os nomes grafados em prosa para n├úo satisfazer o gate por substring.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.FXP` presente, `.ERR` ausente ÔÇö com **controle negativo** na mesma rodada (c├│pia + `PUBLIC PROCEDURE`, regra #9.1) gerando `.ERR` que aponta s├│ as 2 linhas acrescentadas, provando que o detector funciona e que as 1915 linhas reais est├úo limpas.
+- **Runtime** (`automation\probeF8_756.prg`): form instancia (`VARTYPE = O`, 23 controles, 1000x347); `CarregarLista` ├® PUBLIC e devolve `.T.`; grade ligada com os dois `ControlSource`, larguras 290/126 e cabe├ºalhos preservados **depois** do bind; `CarregarDados()` `.T.`; `Release()` limpo.
+- **Gate real da Fase 8** rodado standalone (`VerificarGateFase8Task756.ps1`, bloco `case 8` extra├¡do, sem dot-source do orquestrador): **PASSA**, `metodosFaltantes = []`, pelo ramo VISUALIZADOR ÔÇö que dispensa os tr├¬s nomes de campo edit├ível/Page2 e mant├®m `CarregarLista`, justamente o que esta fase entregou.
+- **`Test-CompletudeCodigo`**: OK no form e no BO. Pegou um falso positivo meu (linha de coment├írio come├ºando com `* Pendentes"` ÔÇö a mesma armadilha j├í anotada na Fase 4); reformulei a frase.
+- Zero acentos literais, zero `this_X .Value`, 1915/1915 linhas em CRLF.
+
+**N├úo integrei ao `menu.prg`**: o legado ├® di├ílogo filho, aberto por `Do Form SigOpLbC With Thisform, crSigCdOpe.Dopes` de dentro do `sigmvcab` (confirmado no `.SCT`), e depende do cursor `TprMvCab` j├í posicionado pelo chamador. Item de menu aqui abriria a tela sem contexto.

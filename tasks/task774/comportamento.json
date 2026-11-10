@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPOCH",
+      "evento": "Init",
+      "linhas": 43,
+      "codigoOriginal": "LParameters poForm, pnNoper, pcOper\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\nEndWith\n\nlcSql = [Select * From SigMvCcr where Nopers = ]+Str(pnNoper)+[ And Opers = ']+pcOper+[']\nThisform.PodataMgr.SqlExecute(lcSql,'ContaCC')\n\nlcSql = [Select * From SigCqOch Where Nopers = ]+Str(pnNoper)+[ Order by Datars,Datas ]\nThisform.PodataMgr.SqlExecute(lcSql,'Movi')\n\nSelect *, Pad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "grd_lancamento",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCH",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCH",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCH.GridFollowUp",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.Memo_Obs.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCH.CommandGroup1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOCH.Memo_Obs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "**\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPOCH.Init",
+      "queryOriginal": "lcSql = [Select * From SigMvCcr where Nopers = ]+Str(pnNoper)+[ And Opers = ']+pcOper+['] Thisform.PodataMgr.SqlExecute(lcSql,'ContaCC')",
+      "tabelas": "SigMvCcr",
+      "colunas": "Nopers,SqlExecutelcSql,ContaCC",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPOCH.Init",
+      "queryOriginal": "lcSql = [Select * From SigCqOch Where Nopers = ]+Str(pnNoper)+[ Order by Datars,Datas ] Thisform.PodataMgr.SqlExecute(lcSql,'Movi')",
+      "tabelas": "SigCqOch",
+      "colunas": "Nopers,Datars,Datas,SqlExecutelcSql,Movi",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCcr", "SigCqOch"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

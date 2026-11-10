@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Verifiquei os 12 achados contra o c├│digo real de `FormSigOpLcl.prg` antes de aplicar qualquer mudan├ºa ÔÇö este padr├úo de review tem um hist├│rico extenso e documentado na mem├│ria de falsos positivos nas categorias exatas listadas aqui. Resultado:
+
+**11 dos 12 achados s├úo falsos positivos confirmados** (comparados linha a linha com o c├│digo):
+- `CONTAINER-VISIVEL` (CNT_4C_SOMBRA): j├í ├® `.Visible = .T.` expl├¡cito
+- `BUSCA-CURSOR`: `AbrirBuscaNivel` usa o Pattern A can├┤nico (`DefinirCursor`+`Mostrar`, que j├í seta `this_cCursorDestino` internamente)
+- `OPTIONGROUP-LEFT` e os 2 `LAYOUT-POSITION` de `obj_4c_OptOrdem`: o grupo j├í tem `Top=473`/`Left=74` id├¬nticos ao legado; o detector leu `.Buttons(1).Top/.Left` do `WITH` aninhado por engano. `Buttons(2).Left=69` j├í est├í definido.
+- 3 `METODO-INEXISTENTE` (`AbrirLookupCanonico`, `ObterCursorNivel`, `ObterTituloNivel`): o primeiro est├í em `formbase.prg:393`; os outros dois est├úo no pr├│prio arquivo como `FUNCTION`/`ENDFUNC` ÔÇö o detector s├│ reconhece `PROCEDURE`.
+- 2 `NULL-CURSOR` (`cursor_4c_Itens`/`cursor_4c_Locais`): populados s├│ a partir de cursor local (`crTpmMvItn`) ou `REPLACE` com `TratarNulo`, nunca `APPEND FROM`/SQLEXEC de SQL Server.
+- `GRID-WITH`: o texto "`ThisForm.grdItens`" citado s├│ existe dentro do coment├írio/docstring que transcreve o legado ÔÇö o c├│digo real n├úo tem esse `WITH`.
+
+Nenhuma dessas "corre├º├Áes" foi aplicada, pois reintroduziriam padr├Áes incorretos ou alterariam c├│digo j├í fiel ao legado.
+
+**1 bug real encontrado por leitura direta (n├úo pelo detector)**: em `TornarControlesVisiveis`, o ramo que trata `IMG_4C_IMGJPG` referenciava a vari├ível `loc_oControl`, nunca declarada (o loop usa `loc_oObjeto`) ÔÇö isso estourava `Variable 'LOC_OCONTROL' is not found` sempre que a recurs├úo alcan├ºasse esse controle. Corrigido para `loc_oObjeto`.
+
+Tamb├®m registrei as reincid├¬ncias nas mem├│rias correspondentes (`feedback_container_visivel_cabecalho_falso_positivo.md`, `feedback_buscacursor_definircursor_falso_positivo.md`, `feedback_layoutposition_with_aninhado_buttons.md`, `feedback_metodo_inexistente_nao_checa_formbase.md`, `feedback_metodo_inexistente_funcao_nao_reconhecida.md`, `feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco.md`, `feedback_harness_de_auditoria_mede_errado.md`).

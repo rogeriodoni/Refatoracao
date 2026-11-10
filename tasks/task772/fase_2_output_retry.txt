@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `SIGOPNOPBO.prg` (23,16 KB, 612 linhas, CRLF puro ASCII) compila com **0 erros** e passa o gate.
+
+## Por que a tentativa anterior reprovou
+
+O gate exige o token `CarregarDoCursor` ÔÇö e a vers├úo anterior n├úo tinha nenhum. A exce├º├úo "BO somente-leitura" do orquestrador **se aplica** (medi as 4 provas no dump: zero `TABLEUPDATE(`, zero `.AddCursor(`, zero alvo de escrita, BO sem SQLEXEC de escrita), ent├úo `Inserir`/`Atualizar` ficam herdados ÔÇö mas isso nunca dispensava o `CarregarDoCursor`.
+
+## O que adicionei
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `CarregarDoCursor` | Carrega o registro corrente da ├írvore nas 23 properties novas; salva/restaura a work area (o Form chama dentro de la├ºo) |
+| `MontarChaveEmpDnPs` | Comp├Áe a chave posicional com `PADR` |
+| `ObterChavePrimaria` | `PROTECTED` (regra #51) ÔÇö identidade via `EmpDnPs` |
+| `ResetarRegistroCorrente` / `LimparDados` | Reset entre pesquisas (o form n├úo fecha entre uma e outra) |
+| `FecharCursoresResultado` | `TABLEREVERT` sob guard de `Buffering` (regra #52) |
+| `ExcluirImagemTemporaria` / `Destroy` | Porta o `Delete File (ThisForm.Arqfigura)` do legado, com `SET SAFETY OFF` |
+
+## Dois defeitos latentes que corrigi na passagem
+
+**1. `empdnps` ├® `char(33)`, n├úo 29.** O schema can├┤nico tem `empdnps char(33)` **e** um `empdopnums char(29)` separado. A chave ├® posicional: `Emps(3) + Dopps(20) + Str(Numps,10)` = 33 ÔÇö exatamente como o legado fatia no `TreeView.DblClick`. Usei `PADR` expl├¡cito, sem `ALLTRIM` nas partes interiores (regra #42); medido: a forma com `ALLTRIM` d├í 19 chars e nunca casaria.
+
+**2. `WHERE !Servicos` sobre coluna `bit` ÔÇö este ├® o achado que vale reportar.** Medi no VFP9 e as duas formas s├úo **mutuamente exclusivas**:
+
+```
+coluna NUM├ëRICA:  !Servicos    -> ERRO 9   | Servicos = 0 -> OK
+coluna L├ôGICA:    !Servicos    -> OK       | Servicos = 0 -> ERRO 107
+```
+
+Como `bit` chega ora l├│gico ora num├®rico conforme o driver (regra #13, o mesmo do Erro287 da semana passada), o c├│digo da Fase 1 quebraria em *runtime* dependendo do ambiente. Forcei `CAST(a.Servicos AS INT)` nos SELECTs ÔÇö assim a coluna ├® **sempre** num├®rica ÔÇö e o predicado virou `= 0`. **S├úo um par casado**: separar os dois reintroduz o bug. O BO exp├Áe `this_lServicos` l├│gico para o Form poder usar `IIF()`.
+
+Transcrevi as SQL conferindo o dump linha a linha e validei todas as colunas contra `docs/schema.sql` (UTF-16, lido com `Get-Content -Raw`).
+
+## Verifica├º├úo
+
+5 testes de runtime no VFP9 (`tasks/task772/testar_*.prg` + resultados), todos passando: chave com 33 posi├º├Áes e round-trip id├¬ntico, leitura do cursor com ├írea restaurada, guard `TYPE()` para `TotPesos` ausente, EOF e alias inexistente sem estourar, e o agregado da ├írvore excluindo a linha de servi├ºo (150,500 em vez de 1150,500) como o `Where Not Servicos` do legado.
+
+**Dois pontos para voc├¬ decidir:**
+
+- **N├úo inventei `Inserir()`/`Atualizar()`.** O pr├│prio coment├írio do gate diz que fazer isso viola a regra #22 (lista de colunas vem do schema, nunca de adivinha├º├úo), e o dump prova que o legado n├úo grava nada. Isso contraria a letra do prompt da fase, que pedia INSERT/UPDATE completos ÔÇö registro explicitamente para voc├¬ reverter se preferir.
+- O `TreeView.DblClick` do legado (linhas 660-676) referencia `GetcEmp`/`GetDopes`/`GetNumes`, que **n├úo existem** no `layout.json` deste form ÔÇö ├® c├│digo morto no legado. N├úo inventei nada no BO para ele; ├® decis├úo das Fases 7/8.

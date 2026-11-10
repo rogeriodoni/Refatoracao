@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 2/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpLcZBO.prg` compila limpo no VFP9 (sem `.err`, `.fxp` regerado 5629ÔåÆ5716 bytes) e o gate da Fase 2 passa.
+
+## Causa da reprova├º├úo anterior
+
+O c├│digo da Fase 2 j├í havia sido escrito, mas o gate exige o token `CarregarDoCursor` ÔÇö que tinha **0 ocorr├¬ncias** no arquivo. Era o ├║nico token faltante (`Inserir`/`Atualizar` j├í casavam).
+
+## O que implementei
+
+N├úo me limitei a satisfazer o token: `CarregarDoCursor` tinha trabalho real a fazer, porque o `grdItens.AfterRowColChange` legado l├¬ tr├¬s campos da linha corrente de `crItensLoc` e isso n├úo estava migrado em lugar nenhum.
+
+| M├®todo | Equivale no legado |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | leituras de `crItensLoc.Cpros/Dpros/Locals/Marcas` do `AfterRowColChange` |
+| `PodeLocalizar()` | `If Empty(Locals) And Not Empty(Marcas)` ÔåÆ `btnLocalizar.Enabled` |
+| `PodeEditar()` | `InList(pcEscolha,'INSERIR','ALTERAR')` dos cinco `When()` |
+| `PrepararCursores()` | `If Used([csLocals]) / Use in csLocals / Create Cursor csLocals(...)` do `Init` |
+| `LimparLinhaAtual()` | reset das properties da linha corrente |
+
+Mais 4 properties (`this_cCprosAtual`, `this_cDprosAtual`, `this_cLocalAtual`, `this_nMarcasAtual` ÔÇö num├®rica, igual ao `0 as Marcas`).
+
+Tr├¬s decis├Áes que vale registrar:
+
+- **Guarda de EOF/BOF** em `CarregarDoCursor`: o cursor esvazia quando todos os itens s├úo localizados (`Localizar()` apaga as linhas marcadas), e ler campo em EOF devolveria o valor da ├║ltima linha apagada ÔÇö reabilitando o Localizar para um produto que j├í saiu da grade.
+- **`PrepararCursores` salva/restaura a ├írea de trabalho** e ├® chamado pelo `Init`. `CREATE CURSOR` seleciona o cursor criado; rodando na constru├º├úo do BO, isso trocaria o cursor corrente por baixo do form pai (que tem `crTpmMvItn` selecionado). O legado contorna com um `Select crTpmMvItn` logo depois; salvar/restaurar n├úo depende de quem chama. Derrubar um `csLocals` remanescente ├® regra, n├úo detalhe: este di├ílogo reabre a cada movimento, e um cursor sobrevivente faria o `Confirmar()` aplicar localiza├º├Áes de **outro** movimento, sem erro e sem aviso.
+- `PodeLocalizar`/`PodeEditar` ficam como **fonte ├║nica** ÔÇö o Form espelha em `.Enabled` em vez de repetir a condi├º├úo.
+
+Usei `TratarNulo(campo, "")` / `TratarNulo(campo, 0)`: o 2┬║ argumento ├® o **valor padr├úo**, n├úo um c├│digo de tipo ÔÇö o idioma `TratarNulo(cods, "C")` que aparece em `FORMCOR_LICOES_APRENDIDAS.md` est├í errado e devolveria a string `"C"` quando o campo for nulo.
+
+Tamb├®m normalizei o arquivo para **CRLF**: a Fase 1 gravou LF puro, divergindo da conven├º├úo do repo (`CorBO.prg` 325/325) e do que o CorretorAutomatico vai regravar.
+
+## Ponto de aten├º├úo ÔÇö o gate passa por motivo fraco
+
+Rodei a l├│gica exata do gate. A exce├º├úo "BO somente-leitura" **n├úo** dispara:
+
+```
+(1) sem TABLEUPDATE no dump     : True
+(2) sem .AddCursor no dump      : True
+(3) todo alvo de escrita local  : False  (alvo remoto visto: 'crTpmMvItn')
+(4) BO sem SQLEXEC de escrita   : True
+=> boSomenteLeitura = False
+```
+
+A prova (3) falha porque `crTpmMvItn` **n├úo ├® tabela** ÔÇö ├® o cursor em mem├│ria do form **pai**, declarado no dump dele, n├úo neste. Sendo `SIGOPLCZ` um di├ílogo filho, um check fail-closed por-form n├úo tem como provar isso. Logo o gate passa apenas porque o coment├írio de cabe├ºalho menciona "Inserir"/"Atualizar" (`PROCEDURE Inserir` real: `False`).
+
+Mantive assim de prop├│sito: o BO n├úo tem tabela (`this_cTabela` vazio), o legado s├│ escreve em cursores, e escrever `Inserir`/`Atualizar` seria inventar INSERT/UPDATE ÔÇö proibido pela regra #22, e o pr├│prio prompt da fase manda n├úo sobrescrever "s├│ para preencher m├®todo". Mas o resultado ├® que **esta fase passaria igual se o `CarregarDoCursor` n├úo existisse de verdade** ÔÇö a mesma fraqueza de "coment├írio citando nome satisfaz gate" j├í vista no pipeline. Se quiser, eu ensino a prova (3) a aceitar cursor declarado no dump do form **pai** quando o form ├® um di├ílogo filho, que fecharia o buraco sem afrouxar o crit├®rio.
+
+N├úo avancei para a Fase 3 (Form) ÔÇö o pedido era a Fase 2. `automation/CompilarF2SigOpLcZ758.prg` ficou no padr├úo dos outros scripts de compila├º├úo da fase; os tempor├írios foram removidos e nada foi commitado.

@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 executed. The `.fxp` (08:54:10) is newer than the `.prg` (08:53:13), so the compile covered my edits.
+
+## What Phase 7 required ÔÇö and what it actually is here
+
+The phase prompt asks for `BtnIncluirClick` / `BtnAlterarClick` / `BtnVisualizarClick` / `BtnExcluirClick`. **SIGOPLCZ has no CRUD surface**, so creating those would mean inventing buttons the legacy doesn't have (PILAR 1) or leaving empty methods (completude rule). I measured the gate's own carve-out rather than assuming it:
+
+| predicado | valor |
+|---|---|
+| `frmcadastro` no dump | False (classe base ├® `form` puro) |
+| `Grupo_Op` (CommandGroup da barra CRUD) | False |
+| bot├úo com nome de verbo CRUD | False |
+| `pcEscolha` vivo | 8 ÔÇö mas `ModoRecebidoDoChamador = True` |
+| `legadoSemCrud` | **True** |
+| bot├Áes do legado / piso / handlers | 6 / 2 / **6** |
+| **GATE FASE 7** | **APROVADO pelo carve-out** |
+
+`faltantes = 4` ÔÇö the approval comes from the real dump check, not from the names appearing somewhere.
+
+## The six legacy buttons were already mapped 1:1
+
+Phases 4ÔÇô6 had implemented all of them (`BtnSairClick`, `BtnConfirmarClick`, `BtnLocalizarClick`, `BtnLimparClick`, `CmdSelTudoClick`, `CmdApagaClick`), and I verified them against the legacy Clicks ÔÇö including that `BtnLimparClick` deliberately does *not* re-bind `RecordSource` (that would destroy the Column3 CheckBox added via `AddObject`), that `DataSession = 1` keeps `SET DELETED ON` so `DELETE FOR Marcas <> 0` actually hides rows, and that `BO.Destroy` closes only its own two cursors, leaving the caller's `crTpmMvItn` alone.
+
+## What I changed
+
+1. **Fixed an actively false comment**: `ConfigurarCampoBase` claimed the `getBase` lookup and `InteractiveChange` "entram numa fase seguinte" ÔÇö Phase 6 had already implemented them (`BaseLostFocus`/`BaseLostFocusExec`/`AbrirBuscaBase`/`BaseInteractiveChange`, wired by `BINDEVENT`). Left as-is it would invite a duplicate lookup.
+2. **Added the Phase 7 header block**: the legacy-buttonÔåÆhandler map, why the `When` guard lives inside the Click for the two icon-only buttons (#106), and the three-way dump evidence for the CRUD absence. I wrote that prose **without the four literal identifiers** on purpose ÔÇö the gate matches names over the whole `.prg` including comments, so naming them would have flipped `faltantes` to 0 and approved the phase by the wrong path.
+
+Edits used `perl` with a fail-fast anchor check writing to a temp file, since `sed -i` and the Edit tool strip the CRLF these `.prg` files use; the file is still CRLF, zero non-ASCII bytes, and clean against all four completude patterns.
+
+## One gap I did not close ÔÇö it belongs to Phase 8
+
+The product photo is genuinely missing: the legacy `grdItens.AfterRowColChange` loads `SigCdPro.FigJpgs` into `ImgJpg`, but the form creates no `img_4c_ImgJpg` (nor `Shape1`/`ShpFigura`), and `SigOpLcZBO.ObterImagemProduto` ÔÇö written in Phase 2 for exactly this ÔÇö is **never called**, so it's currently dead code. I left the header note flagging it rather than deleting it, so the absence stays visible. I didn't implement it here because it's outside the button-events scope and sits on two known traps (`goSistema.Sys2015Tmp` undefined, and double-decoding the base64); it should be done as Phase 8's "form completo", where the `Image` control and the `STRCONV` pipeline are the subject.

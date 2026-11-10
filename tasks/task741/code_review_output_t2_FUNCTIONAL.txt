@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked each of the 14 flagged findings against the actual file content and against this project's memory of previous reviews of this exact file. **All 14 are false positives** ÔÇö no changes are needed.
+
+**The 10 METODO-INEXISTENTE findings** ÔÇö every one of these methods already exists in the file, just declared as `FUNCTION` instead of `PROCEDURE`, which the review tool's detector doesn't recognize:
+
+| Flagged as missing | Actually defined at |
+|---|---|
+| `ObterDescricaoPorCodigo()` | line 861 (`PROTECTED FUNCTION`) |
+| `ListaLocalDisponivel()` | line 2378 (`PROTECTED FUNCTION`) |
+| `TeclaAbreLookup()` | line 1711 (`PROTECTED FUNCTION`) |
+| `ObterCampoLookup()` | line 2328 (`PROTECTED FUNCTION`) |
+| `MostrarPickerListaLocal()` | line 2407 (`PROTECTED FUNCTION`) |
+| `EmModoEdicao()` | line 2872 (`FUNCTION`) |
+| `ObterDescricaoOrigem()` | line 2659 (`PROTECTED FUNCTION`) |
+| `ValidarGradeValores()` | line 3338 (`PROTECTED FUNCTION`) |
+| `AtualizarConfigFinanceiraOperacao()` | line 3576 (`PROTECTED FUNCTION`) |
+| `THIS.Width()` | never called anywhere in the file ÔÇö zero occurrences; fabricated finding |
+
+**The 2 GRID-WITH findings** (`ConfigurarGrid`, `MontaGrade`): the premise is architecturally wrong. `WITH <obj>` in VFP9 is pure syntax sugar ÔÇö it never defers execution. `.ColumnCount = 1` creates `Column1` immediately, inside or outside a `WITH`. Both blocks already follow the canonical order from CLAUDE.md rule #41 (`ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption`) with no inversion.
+
+**The 2 GRID-HEADER findings**: the caption the tool flags as "not found" is just the literal prefix before the `CHR()` concatenation (`"Origem dos Valores a Serem Lan" + CHR(231) + "ados..."`). Decoded, it's byte-for-byte identical to the "legado encontrados" text the finding itself quotes (`Origem dos Valores a Serem Lan?ados na Movimenta??o Financeira`, where `?` is the mojibake for `├º`/`├ú`). The detector just compares the pre-concatenation substring.
+
+This exact file, exact pass, and exact 14 findings were already reviewed and confirmed 100% false positive in a prior session today (logged in memory as the "13a reincid├¬ncia" of this detector pattern, with only an unrelated `[NULL-CURSOR]` finding from that same report having been legitimately fixed already). I'm not re-applying any edits ÔÇö doing so would alter working, previously-verified code based on a detector that doesn't parse `FUNCTION` declarations and truncates concatenated strings before comparing them.

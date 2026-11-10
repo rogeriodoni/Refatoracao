@@ -1,0 +1,1606 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpLrC.SCX
+* Data/Hora: 08/11/2026 19:54:56
+* Total de registros: 48
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPLRC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPLRC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPLRC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPLRC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Container1
+  Parent: SIGOPLRC
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_limcred
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_pendente
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_contac
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cheque
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_disponivel
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_moeda
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say7
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_chqpend
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_nconta
+  Parent: SIGOPLRC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Say8
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cotacao
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say9
+  Parent: SIGOPLRC.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_PendOutr
+  Parent: SIGOPLRC.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGOPLRC.Container1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPLRC.Container1.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLRC.Container1.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLRC.Container1.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLRC.Container1.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPLRC.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Container2
+  Parent: SIGOPLRC
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGOPLRC.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: fwmemo1
+  Parent: SIGOPLRC.Container2
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_nconta
+  Parent: SIGOPLRC.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Container3
+  Parent: SIGOPLRC
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Lb_msg1
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Lb_msg2
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Lb_msg3
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Lb_msg4
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: lb_msg5
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: get_nconta
+  Parent: SIGOPLRC.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Sit_Origem
+  Parent: SIGOPLRC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Sit_Destino
+  Parent: SIGOPLRC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: ok
+  Parent: SIGOPLRC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Liberação de Crédito"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  AlwaysOnTop = .T.
+  clickorides = 0
+  operacao = 
+  orides = 0
+  poformcaixa = .F.
+  retorno = 
+  topform = 
+  _memberdata =      349<VFPData>
+  <memberdata name="orides" type="property" display="OriDes"/>
+  <memberdata name="clickorides" type="property" display="ClickOriDes"/>
+  <memberdata name="operacao" type="property" display="Operacao"/>
+  <memberdata name="retorno" type="property" display="Retorno"/>
+  <memberdata name="topform" type="property" display="Topform"/>
+  </VFPData>
+  Name = "SIGOPLRC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1005
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1
+------------------------------------------------------------
+  Top = 81
+  Left = 9
+  Width = 890
+  Height = 253
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  TabIndex = 2
+  BackColor = 188,201,254
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Limite Crédito :"
+  Left = 82
+  Top = 80
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total Pendente :"
+  Left = 74
+  Top = 130
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total C/C :"
+  Left = 102
+  Top = 180
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total Cheques :"
+  Left = 78
+  Top = 205
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say5
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Disponível :"
+  Left = 90
+  Top = 229
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_limcred
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 76
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_limcred"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_pendente
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 126
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_pendente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_contac
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 176
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_contac"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_cheque
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 201
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_cheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_disponivel
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 226
+  Width = 119
+  ForeColor = 192,46,20
+  DisabledBackColor = 255,255,255
+  Name = "get_disponivel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Moeda :"
+  Left = 115
+  Top = 30
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_moeda
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  Left = 159
+  ReadOnly = .T.
+  Top = 26
+  Width = 31
+  DisabledBackColor = 255,255,255
+  Name = "get_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Pendente :"
+  Left = 101
+  Top = 155
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_chqpend
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 151
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_chqpend"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_nconta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cliente"
+  Height = 15
+  Left = 30
+  Top = 25
+  Width = 41
+  ForeColor = 90,90,90
+  Name = "get_nconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Câmbio :"
+  Left = 112
+  Top = 55
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_cotacao
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "99,999.9999"
+  Left = 159
+  ReadOnly = .T.
+  Top = 51
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_cotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total da Movimentação :"
+  Height = 15
+  Left = 36
+  Top = 105
+  Width = 120
+  ForeColor = 90,90,90
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.get_PendOutr
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 159
+  ReadOnly = .T.
+  Top = 101
+  Width = 119
+  DisabledBackColor = 255,255,255
+  Name = "get_PendOutr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Enabled = .T.
+  Height = 195
+  Left = 295
+  ReadOnly = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 53
+  Width = 434
+  Name = "Grade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Enabled = .T.
+  Column1.Width = 290
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Enabled = .T.
+  Column2.Width = 112
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentações Pendentes"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  BackStyle = 0
+  Caption = "Liberação de Crédito"
+  Height = 20
+  Left = 5
+  Top = 0
+  Width = 157
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container2
+------------------------------------------------------------
+  Top = 336
+  Left = 9
+  Width = 890
+  Height = 114
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  TabIndex = 5
+  BackColor = 188,201,254
+  Name = "Container2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container2.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  BackStyle = 0
+  Caption = "Observação da Conta"
+  Height = 20
+  Left = 5
+  Top = 3
+  Width = 160
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container2.fwmemo1
+------------------------------------------------------------
+  Height = 70
+  Left = 9
+  ReadOnly = .T.
+  TabIndex = 30
+  Top = 39
+  Width = 871
+  BackColor = 231,242,254
+  DisabledBackColor = 231,242,254
+  NullDisplay = " "
+  Name = "fwmemo1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container2.get_nconta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cliente"
+  Height = 15
+  Left = 30
+  Top = 25
+  Width = 41
+  ForeColor = 90,90,90
+  Name = "get_nconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3
+------------------------------------------------------------
+  Top = 452
+  Left = 9
+  Width = 890
+  Height = 138
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  TabIndex = 6
+  BackColor = 188,201,254
+  Name = "Container3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  BackStyle = 0
+  Caption = "Situação da Conta"
+  Height = 20
+  Left = 5
+  Top = 5
+  Width = 136
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.Lb_msg1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Mensagem1"
+  Height = 17
+  Left = 31
+  Top = 46
+  Width = 839
+  ForeColor = 90,90,90
+  Name = "Lb_msg1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.Lb_msg2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Mensagem2"
+  Height = 17
+  Left = 31
+  Top = 64
+  Width = 839
+  ForeColor = 90,90,90
+  Name = "Lb_msg2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.Lb_msg3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Mensagem3"
+  Height = 17
+  Left = 31
+  Top = 80
+  Width = 839
+  ForeColor = 90,90,90
+  Name = "Lb_msg3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.Lb_msg4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Mensagem4"
+  Height = 17
+  Left = 31
+  Top = 96
+  Width = 839
+  ForeColor = 90,90,90
+  Name = "Lb_msg4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.lb_msg5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "status"
+  Height = 18
+  Left = 92
+  Top = 115
+  Width = 44
+  ForeColor = 90,90,90
+  BackColor = 255,255,217
+  Name = "lb_msg5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Container3.get_nconta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cliente"
+  Height = 15
+  Left = 30
+  Top = 28
+  Width = 41
+  ForeColor = 90,90,90
+  Name = "get_nconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Sit_Origem
+------------------------------------------------------------
+  Top = 143
+  Left = 754
+  Height = 35
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_usuarios_26.jpg
+  Alignment = 0
+  Caption = "Conta Origem"
+  Value = .F.
+  ControlSource = ""
+  MousePointer = 15
+  Style = 1
+  TabIndex = 3
+  ToolTipText = "Origem"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Sit_Origem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.Sit_Destino
+------------------------------------------------------------
+  Top = 179
+  Left = 754
+  Height = 35
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_usuarios_26.jpg
+  Alignment = 0
+  Caption = "Conta Destino"
+  Value = .F.
+  ControlSource = ""
+  MousePointer = 15
+  Style = 1
+  TabIndex = 4
+  ToolTipText = "Destino"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Sit_Destino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLRC.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 923
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 1
+  ToolTipText = "[ESC] Encerrar"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Courier New, 1, 9, 7, 16, 12, 11, 4, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPLRC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+Local llAtvCnt
+
+llAtvCnt = .f.
+lcSql = [Select Dopes,TipoOps,Nivels,LimCres,ObsOrigs,ObsDests,ExibSits From SigCdOpe Where Dopes = ']+ThisForm.Operacao+[']
+If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcsql,'LocalOpe') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalOpe)')
+	Return(.F.)
+EndIf
+Tipoop = LocalOpe.TipoOps
+_Nivel = LocalOpe.Nivels
+
+Thisform.Container1.Visible = .f.
+ThisForm.Container2.Visible = .f.
+ThisForm.Container3.Visible = .f.
+
+If ThisForm.OriDes > 0
+	ThisForm.Sit_Destino.Enabled = .f.
+	ThisForm.Sit_Origem.Enabled = .f.
+EndIf
+
+ThisForm.Retorno = .t.
+
+_GrupoO = TprMvCab.grupoos
+_ContaO = TprMvCab.Contaos
+_GrupoD = TprMvCab.grupods
+_ContaD = TprMvCab.Contads
+
+Select TprMvCab
+Do Case
+	Case ThisForm.OriDes = 1 Or ThisForm.ClickOriDes = 1
+		_Grupo = TprMvCab.grupoos
+		_Conta = TprMvCab.Contaos
+		ThisForm.Sit_Origem.Enabled = .t.
+
+	Case ThisForm.OriDes = 2 Or ThisForm.ClickOriDes = 2
+		_Grupo = TprMvCab.grupods
+		_Conta = TprMvCab.Contads
+		ThisForm.Sit_Destino.Enabled = .t.
+
+	OtherWise
+	
+		If InList(LocalOpe.limcres,1,3,5)
+			_Grupo = TprMvCab.grupoos
+			_Conta = TprMvCab.Contaos
+		Else
+			If InList(LocalOpe.LimCres,2,3,6)
+				_Grupo = TprMvCab.grupods
+				_Conta = TprMvCab.Contads
+			Else
+				_Grupo = ' '
+				_Conta = ' '
+			EndIf
+		Endif
+EndCase
+
+If ( InList(LocalOpe.LimCres,1,3,5) And ( ( InList(ThisForm.OriDes,0,1) And ThisForm.ClickOriDes = 0 ) Or ThisForm.ClickOriDes = 1 ) ) Or ;
+	( InList(LocalOpe.LimCres,2,3,6) And ( ( InList(ThisForm.OriDes,0,2) And ThisForm.ClickOriDes = 0 ) Or ThisForm.ClickOriDes = 2 ) )
+
+	llAtvCnt = .t.
+	Thisform.Container1.Visible = .t.
+
+	=ThisForm.parentForm.PoDataMgr.CursorQuery( 'SigClLcr','CrSigClLcr','GruContas',_Grupo + _Conta )
+
+	lcSql = [Select * From SigOpPed ]
+	If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcsql,'LocalOpePd') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalOpePd)')
+		Return(.F.)
+	EndIf
+
+	Select DbOpera
+	Index On dopes Tag Dopes
+
+	If Reccount('LocalOpePd') > 0
+
+		lStrQuery = [Select Dopes,OpPends From SigCdOpe ]
+		If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery, 'CrTmpOpe') < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrTmpOpe)')
+			Return(.F.)
+		EndIf
+
+		Select CrTmpOpe
+		Index On Dopes Tag dopes
+
+		lStrQuery = [Select a.dopes, a.EmpDopNums, a.ChkPagos, a.ChkSubn, a.Utilizados,a.Valos From SigMvCab a, SigOpPed b ]+;
+					[Where a.ContaDs = ']+_Conta+[' And a.Dopes = b.Dopes ]+ ;
+					[Union all ]+;
+					[Select a.dopes, a.EmpDopNums, a.ChkPagos, a.ChkSubn, a.Utilizados,a.Valos From SigMvCab a, SigOpPed b ]+;
+					[Where a.ContaOs = ']+_Conta+[' And a.ContaDs <> ']+_Conta+[' And a.Dopes = b.Dopes ]
+		If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery, 'CrTprMvCab') < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrTprMvCab)')
+			Return(.F.)
+		EndIf
+
+		Select a.dopes,a.empDopNums,a.Valos, a.ChkSubn From CrTprMvCab a, LocalOpePd b Where a.Dopes = b.Dopes And ;
+		Iif(b.Tpagos = 1,a.ChkPagos,Iif(b.Tpagos = 2,Not a.ChkPagos, 0=0 )) And ;
+		Iif(b.Tutils = 1,a.Utilizados = 1,Iif(b.Tutils = 2,Utilizados = 0, 0=0 ) ) ;
+		Into Cursor CrConserto2
+		
+		Select CrConserto2
+		Scan
+			lcSql = [Select Dopes, Moedas, Sum( ( Qtds-QtBaixas ) * (Units+ValRats) ) as Totas From SigMvItn ]+;
+					[Where EmpDopNums = ']+CrConserto2.EmpDopNums+[' Group by Dopes, Moedas]
+			ThisForm.ParentForm.PodataMgr.Sqlexecute(lcSql,'lCredEesti')
+			If Reccount('lCredEestI') > 0
+				Select lCredEesti
+				Scan
+					If Not Seek(lCredEesti.Dopes,'DbOpera')
+						Insert Into DbOpera (Dopes,Totas) Values (lCredEesti.Dopes,0)
+					EndIf
+					_ttConv = Round( lCredEesti.Totas * fBuscarCotacao(lCredEesti.moedas,date()) / fBuscarCotacao( crSigClLcr.moedas,date() ), 2 )
+					Replace Totas With Totas + _ttConv in DbOpera
+				EndScan
+			Else
+ 				If Not CrConserto2.ChkSubn
+	 				If Not Seek(CrConserto2.Dopes,'DbOpera')
+						Insert Into DbOpera (Dopes,Totas) Values (CrConserto2.Dopes,0)
+					EndIf
+					Replace Totas With Totas + CrConserto2.Valos In DbOpera
+				Endif
+			Endif
+		EndScan
+	EndIf
+
+	lcSql = [Select Rclis From SigCdCli where Iclis = ']+_Conta+[']
+	If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcSql,'CrTmpCli') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrTmpCli)')
+		Return(.F.)
+	Endif
+
+	lcRazao = CrTmpCli.Rclis
+
+	ThisForm.Container1.get_nconta.Caption = _Conta + ' '+Alltrim(lcRazao)
+
+	lcSql = [Select distinct GrupoDs From SigOpFp Where Situas = 'S' And GrupoDs <> ' ' ]
+	If ThisForm.ParentForm.PodataMgr.SqlExecute(lcSql,'LocFpg') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocFpg)')
+		Return .f.
+	EndIf
+	_GrupoCc = _Grupo
+	If Reccount('LocFpg') > 0 And .f. &&desabilitado para ajuste no adiantamento a fornecedores
+		Go Top in LocFpg
+		_GrupoCc = LocFpg.GrupoDs
+	Endif
+
+	Declare LaCampo(2,2)
+	LaCampo(1,1)='Grupos'
+	LaCampo(2,1)='Contas'
+	LaCampo(1,2)=_GrupoCc
+	LaCampo(2,2)=_Conta
+
+	=ThisForm.ParentForm.PoDataMgr.CursorQuery('SigMvSlc','CrTmpSccr',@LaCampo)
+
+	Select CrTmpSccr
+	_Saldocc = 0
+	Scan
+		_Saldocc = _Saldocc + Round(Saldos * fBuscarCotacao(CrTmpSccr.moedas,date()) / fBuscarCotacao(CrSigClLcr.moedas,date()), 2 )
+	Endscan
+	ThisForm.Container1.get_contac.Value = _Saldocc
+
+	lcQuery = [Select b.grclis, b.iclis, sum(b.valors) as Valors, b.fpags ]+;
+			  [From SigCqChm a, SigChe b, SigCdOpt c Where ]+;
+			  [b.GrClis = ']+_Grupo+[' And b.Iclis = ']+_Conta+[' And b.umovs = c.operacaos and ]+;
+			  [c.tipos='DB' and a.nums = b.nums Group by b.GrClis, b.Iclis, b.Fpags]
+
+	If ThisForm.ParentForm.PodataMgr.SqlExecute(lcQuery,'Cheques') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (cheques)')
+		Return .f.
+	Endif
+	_chequec = 0
+	_chequep = 0
+	Select Cheques
+	Scan
+		If IsEmpty(fpags)
+			_chequep = _chequec + valors
+		Else
+			=Thisform.parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',Cheques.Fpags)
+			If crSigOpFp.valpends # 1
+				_chequec = _chequec + valors
+			Else
+				_chequep = _chequep + valors
+			Endif
+		Endif
+	Endscan
+	_Chequec = Round( _chequec / fBuscarCotacao( crSigClLcr.moedas,date() ), 2 )
+	_Chequep = Round( _chequep / fBuscarCotacao( crSigClLcr.moedas,date() ), 2 )
+
+	ThisForm.Container1.get_cheque.Value = _chequec 
+	ThisForm.Container1.get_chqpend.Value = _chequep
+
+	_ChvLCred = TprMvCab.Emps + _Nivel + Str(TprMvCab.Numes,6)
+
+	lcQuery = [Select sum( (b.Qtds - b.QtBaixas) * b.Units ) as Totas, b.Moedas, a.Dopes From SigMvCab a, SigMvItn b, SigCdOpe c ]+;
+			  [Where ]+Iif(InList(LocalOpe.LimCres,1,3,5),[a.Grupoos='],[a.Grupods='])+_Grupo+[' And ]+;
+			  Iif(InList(LocalOpe.LimCres,1,3,5),[a.Contaos='],[a.contads='])+_Conta+[' And Not a.EmpDopNums=']+_chvlCred+[' And ]+;
+			  [a.EmpDopNums = b.EmpDopNums and a.Dopes = c.Dopes And c.Tipoops = ]+Str(CrSigCdPam.Oppends,2)+[ ]+;
+			  [Group by b.moedas,a.Dopes]
+
+	If ThisForm.ParentForm.PodataMgr.SqlExecute(lcQuery,'Pendencia') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Pendencia)')
+		Return .f.
+	Endif
+
+	_Pendente = Round( TprMvCab.valos / fBuscarCotacao( crSigClLcr.moedas,date() ), 2 )
+	_PendOutr = 00
+
+	Select Pendencia
+	Scan
+		_ttConv = Round( totas * fBuscarCotacao(moedas,date()) / fBuscarCotacao( crSigClLcr.moedas,date() ), 2 )
+		_PendOutr = _PendOutr + _ttConv
+	EndScan
+
+	Select DbOpera
+	Go Top
+	With ThisForm.container1.Grade
+		.RecordSource = "DbOpera"
+		.Column1.ControlSource = "DbOpera.Dopes"
+		.Column2.ControlSource = "DbOpera.Totas"
+		.Refresh
+	EndWith
+
+	ThisForm.Parentform.poDataMgr.Cursorquery('SigCdTom', 'LocalTOpe', 'Codigos', TipoOp)
+
+	_SaldoFinal = crSigClLcr.limcres - Iif(LocalTOpe.GerGdmis=3,(_Pendente + _PendOutr),0) - ;
+				  _Saldocc - Iif(LocalTOpe.GerGdmis=3 Or crSigCdPam.ChqlCreds,_Chequec,0)
+
+	ThisForm.Container1.get_limcred.Value = crSigClLcr.limcres
+	ThisForm.Container1.get_moeda.Value = crSigClLcr.moedas
+	ThisForm.Container1.get_cotacao.Value = fBuscarCotacao( crSigClLcr.moedas, date() )
+	ThisForm.Container1.get_pendente.Value = _Pendoutr
+	ThisForm.Container1.get_pendoutr.Value = _Pendente
+	ThisForm.Container1.get_disponivel.forecolor=Iif(_SaldoFinal < 0,RGB(255,0,0),RGB(0,0,255))
+	ThisForm.Container1.get_disponivel.Value = _SaldoFinal
+
+EndIf
+
+If ( ( ( InList(ThisForm.OriDes,0,1) And Thisform.ClickOriDes=0 ) Or ThisForm.ClickOriDes = 1 ) And LocalOpe.ObsOrigs = 1 ) Or ;
+	( ( ( InList(ThisForm.OriDes,0,2) And Thisform.ClickOriDes=0 )Or ThisForm.ClickOriDes = 2 ) And LocalOpe.ObsDests = 1 )
+	
+	If ( ( ( InList(ThisForm.OriDes,0,1) And Thisform.ClickOriDes=0 ) Or ThisForm.ClickOriDes = 1 ) And LocalOpe.ObsOrigs = 1 )
+		lcSql = [Select Obs,Situas,VultComps,UltComps,Nascs,Codigos  From SigCdCli Where Iclis = ']+_contaO+[']
+	Else
+		lcSql = [Select Obs,Situas,VultComps,UltComps,Nascs,Codigos  From SigCdCli Where Iclis = ']+_contaD+[']
+	Endif
+	=ThisForm.ParentForm.Podatamgr.Sqlexecute(lcSql,'CrTmpcli')
+	If Not IsEmpty( CrTmpCli.Obs )
+		llAtvCnt = .t.
+		ThisForm.Container2.Visible = .t.
+		ThisForm.container2.fwmemo1.Value = CrTmpCli.Obs
+		ThisForm.container2.fwmemo1.Refresh
+		ThisForm.Container2.Get_nconta.Caption = _Conta
+	Endif
+EndIf
+
+If ( ( ( InList(ThisForm.OriDes,0,1) And Thisform.ClickOriDes=0 ) Or ThisForm.ClickOriDes = 1) And LocalOpe.ExibSits = 3 ) Or ;
+	( ( ( InList(ThisForm.OriDes,0,2) And Thisform.ClickOriDes=0 ) Or ThisForm.ClickOriDes = 2 ) And LocalOpe.ExibSits = 1 )
+
+	If ( ( ( InList(ThisForm.OriDes,0,1) And Thisform.ClickOriDes=0 ) Or ThisForm.ClickOriDes = 1) And LocalOpe.ExibSits = 3 )
+		lcSql = [Select Obs,Situas,VultComps,UltComps,Nascs,Codigos,DtnCons,DtCasas  From SigCdCli Where Iclis = ']+_contaO+[']
+	Else
+		lcSql = [Select Obs,Situas,VultComps,UltComps,Nascs,Codigos,DtnCons,DtCasas  From SigCdCli Where Iclis = ']+_contaD+[']
+	Endif
+	=ThisForm.ParentForm.Podatamgr.Sqlexecute(lcSql,'CrTmpcli')
+	=ThisForm.parentForm.PodataMgr.Cursorquery('SigCdCst','CrTmpScli','Codigos',CrTmpCli.Situas)
+
+	If CrtmpScli.DispMovs = 1 And Not Empty(_Conta)
+	
+		lcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)
+
+		llAtvCnt = .t.
+		ThisForm.Container3.Visible = .t.
+		ThisForm.Container3.Get_nconta.Caption = _Conta
+		ThisForm.container3.lb_msg1.Caption = CrtmpCli.Situas + ' - ' + Alltrim(lcdSit)
+		ThisForm.Container3.lb_msg2.Caption = Alltrim(Transform(CrTmpCli.VultComps,"@Z 999,999,999.99")) + ' / ' + Iif(!IsEmpty(CrTmpCli.UltComps),Dtoc(CrTmpCli.UltComps),'')
+		ThisForm.Container3.lb_msg3.Caption = Iif(!IsEmpty(CrTmpCli.Nascs),Dtoc(CrTmpCli.Nascs),'')
+		ThisForm.Container3.lb_msg4.Caption = CrTmpCli.Codigos + ' ' + Iif(!IsEmpty(CrTmpCli.DtnCons),'j - '+Dtoc(CrTmpCli.DtnCons),'') + ;
+											' ' + Iif(!IsEmpty(CrTmpCli.DtCasas),'c - '+Dtoc(CrTmpCli.Dtcasas),'' )
+		ThisForm.container3.lb_MSG5.Visible = .f.
+			        
+		If Thisform.OriDes > 0
+			If CrTmpScli.BlqMovs = 1
+				ThisForm.container3.lb_MSG5.Visible = .t.
+				Thisform.Container3.lb_msg5.Caption = 'Movimentação Bloqueada pela Situacao da Conta'
+				ThisForm.Retorno = .f.
+			Else
+				If TprMvCab.ValVars < 0 And CrTmpScli.BlqDescs = 1
+					ThisForm.container3.lb_MSG5.Visible = .t.
+					Thisform.Container3.lb_msg5.Caption = 'Desconto Bloqueado Pela Situação da Conta'
+					ThisForm.Retorno = .f.
+				EndIf
+			EndIf
+		EndIf
+	Endif
+EndIf
+
+Thisform.Refresh
+
+Return ( llAtvCnt )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lparameters loForm,pOperacao, pOriDes, loForm2
+
+set datasession to loForm.DataSessionId
+
+ThisForm.Parentform = loForm
+Thisform.OriDes = Iif(Type('pOriDes')='N',pOriDes,0)
+ThisForm.ClickOriDes = 0
+ThisForm.Operacao = pOperacao
+ThisForm.Retorno = .t.
+ThisForm.PoFormCaixa = loForm2
+
+If ThisForm.OriDes = 0
+	ThisForm.Sit_Destino.Enabled = .t.
+	ThisForm.Sit_Origem.Enabled = .t.
+EndIf
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Topform = ThisForm.Top
+
+If Not Thisform.Processa()
+	If ThisForm.OriDes > 0
+		If Type('ThisForm.poFormCaixa') = "O"
+			ThisForm.PoFormCaixa.Enabled = .t.
+		Endif
+		ThisForm.Release
+	Else
+		ThisForm.OriDes = 2
+		If Not ThisForm.Processa()
+			If Type('ThisForm.poFormCaixa') = "O"
+				ThisForm.PoFormCaixa.Enabled = .t.
+			Endif
+			ThisForm.Release
+		EndIf
+	Endif
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+Create Cursor DbOpera (dopes c(20), totas n(12,2))
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return (ThisForm.Retorno)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_limcred
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_pendente
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_contac
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_cheque
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_disponivel
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_chqpend
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_cotacao
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container1.get_PendOutr
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Container2.fwmemo1
+* Classe: fwmemo (Base: editbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Sit_Origem
+* Classe: checkbox (Base: checkbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.OriDes = 0
+	ThisForm.Sit_Origem.Enabled = .f.
+	ThisForm.Sit_Destino.Enabled = .t.
+Endif
+ThisForm.ClickOriDes = 1
+If Not ThisForm.Processa()
+	ThisForm.Sit_Destino.Click()
+EndIf
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.Sit_Destino
+* Classe: checkbox (Base: checkbox)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.OriDes = 0
+	ThisForm.Sit_Destino.Enabled = .f.
+	ThisForm.Sit_Origem.Enabled = .t.
+Endif
+This.Value = 0
+This.Refresh
+ThisForm.ClickOriDes = 2
+If Not ThisForm.Processa()
+	ThisForm.Sit_Origem.Click()
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLRC.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Type('ThisForm.poFormCaixa') = "O"
+	ThisForm.PoFormCaixa.Enabled = .t.
+Endif
+Thisform.release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPLRC
+RESERVED3 (ClassInfo): clickorides
+operacao
+orides
+parentform
+poformcaixa
+retorno
+topform
+_memberdata XML Metadata for customizable properties
+*processa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

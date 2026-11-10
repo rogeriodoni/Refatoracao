@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 3 conclu├¡da ÔÇö `FormSigOpIgm.prg` criado
+
+**Por que a tentativa anterior falhou:** n├úo foi c├│digo ruim ÔÇö o subprocesso do Claude CLI **nunca criou arquivo nenhum**. O `fase_3_output.txt` cont├®m apenas avisos de regra de permiss├úo do `settings.local.json` e a frase *"Estou pronto para ajudar. Qual tarefa voc├¬ quer que eu execute agora?"*. O arquivo n├úo existia no disco.
+
+### Entregue
+`C:\4c\projeto\app\forms\operacionais\FormSigOpIgm.prg` ÔÇö 21.737 bytes, ASCII puro (acentos s├│ via `CHR()`), CRLF.
+
+| Membro | Conte├║do |
+|---|---|
+| Propriedades visuais | `Width=800 Height=304 BorderStyle=2 ControlBox=.F. Movable=.F. KeyPreview=.T. TitleBar=0 WindowType=1` ÔÇö transcritos do dump |
+| Estado | `this_oFormPai`, `this_oModem`, `this_cMovimentacao`, `this_cEmps`, `this_nNumes`, `this_lChkImpDoc`, `this_nBoleto` (as 5 props de `RESERVED3/ClassInfo` renomeadas pelo PILAR 3) |
+| `Init()` | 6 par├ómetros **na ordem do legado** (`poform, _pEmps, _pDopes, _pNumes, _pChkImpDoc, _pBol`), `oModem` lido do pai, troca de Caption no modo Boleto, BO criado antes do `DODEFAULT()` |
+| `InicializarForm()` | Picture do framework com guard `FILE()`, `BO.DefinirParametros()`, `BO.CriarCursorMovimentacoes()` (= `Create Cursor csPgto` do `Load`), montagem, `TornarControlesVisiveis` |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` com os valores exatos do dump |
+| `Destroy()` | reabilita o pai, solta refer├¬ncias, `DODEFAULT()` na ├║ltima linha |
+
+### Desvio deliberado do texto do prompt
+O prompt pedia "PageFrame com Page1 (Lista) e Page2 (Dados)". **N├úo criei PageFrame** ÔÇö o dump prova `Class: form / BaseClass: form` na raiz e nenhum `BaseClass: pageframe`. Inventar um violaria o PILAR 1 **e reprovaria o gate**, que no ramo FLAT exige `-notmatch 'AddObject("pgf_4c_'`. Tamb├®m n├úo criei m├®todos vazios para as fases 4-8 (regra de completude).
+
+### Verifica├º├Áes executadas
+- **Gate da Fase 3** (regexes reais do `case 3`, replicadas sem dot-source do orquestrador ÔÇö isso dispararia uma migra├º├úo): passa pelos **dois** ramos ÔÇö `temEstruturaPaginada=True` e `temEstruturaFlat=True`.
+- **`Test-CompletudeCodigo`** (4 regexes): zero problemas ÔÇö nenhum TODO, procedure vazia, indicador de pend├¬ncia ou stub `MsgAviso`.
+- **Compila├º├úo VFP9**: `formsigopigm.FXP` gerado, **sem `.ERR`**. Com **controle negativo na mesma rodada** (c├│pia + 2 linhas quebradas) que produziu `.ERR` apontando s├│ as linhas injetadas ÔÇö prova que o `COMPILE` realmente rodou, j├í que nesta sess├úo `exit=0` n├úo significa nada.
+- Estrutural: 0 `RETURN` dentro de `TRY/CATCH`, 0 `PUBLIC` em `DEFINE CLASS`, 0 `MESSAGEBOX` direto, 0 `AddObject("pgf_4c_`.
+
+Removi o `ShowWindow = 1` que o form de refer├¬ncia (`Formsigopfin`) traz: nem o dump do SIGOPIGM nem o do task741 declaram essa propriedade ÔÇö era inven├º├úo herdada.
+
+**O que n├úo consegui provar:** instancia├º├úo. Nesta sess├úo o `vfp9.exe` compila e sai sem executar o `.prg` (medido e documentado), ent├úo n├úo h├í como rodar `CREATEOBJECT("FormSigOpIgm")`. O `Init()` tem o bypass de par├ómetros sob `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` exigido pelo `TestFormWrapper` ÔÇö mas isso s├│ ser├í confirmado na etapa `06_testForm`. Os tempor├írios de compila├º├úo foram apagados; os demais arquivos n├úo rastreados no `git status` s├úo de tasks anteriores, n├úo meus.

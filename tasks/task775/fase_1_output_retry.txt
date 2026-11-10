@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpOcoBO.prg` criado (10.265 bytes, 194 linhas, CRLF, ASCII sem acentos literais). Compila limpo no VFP9 (`COMPILE` gerou `.fxp` sem `.err`; o `.fxp` foi apagado em seguida).
+
+## O que foi descoberto antes de escrever (n├úo estava na an├ílise autom├ítica)
+
+O `analise.json` vinha com `tabela: ""` e `campos: []` ÔÇö a an├ílise n├úo achou a entidade. Rastreei no acervo legado:
+
+| Item | Achado |
+|---|---|
+| Cursor `Historico` do SCX | `.AddCursor('SigIvTrH','CIdChaves','Historico','','',lcQryInvH)` em **sigcdbal.SCT** |
+| Tabela real | **`SigIvTrH`** (PK `cidchaves`), + coluna derivada `cbars_old` do `LEFT JOIN SigOpEta` |
+| Quem abre este di├ílogo | `Do Form SigOpOco With Historico.CBars, Thisform, This.Parent.Chk_RepeteObs.Value, Thisform.ObsAnterior, Thisform.Top, Thisform.Left` ÔÇö **SIGCDBAL**, hoje `FormBAL.prg` |
+| Lookup | `SigBaOco` com `Tipos = 'O' And Autos <> 'S'` (transcrito literal ÔÇö regra #17) |
+
+Confirmei no `docs/schema.sql` com `Get-Content -Raw` (682 tabelas, regra #14): `SigIvTrH` e `SigBaOco` existem; **n├úo** existe tabela `Historico`.
+
+## Decis├Áes registradas no arquivo
+
+- `this_cTabela = "SigIvTrH"` / `this_cCampoChave = "cidchaves"`.
+- **21 propriedades** espelhando as colunas de `SigIvTrH` com tipo/tamanho do schema em coment├írio, + `this_nCbarsOld` marcada como DERIVADA (nunca entra em INSERT/UPDATE), + 8 do lookup `SigBaOco`, + os 6 par├ómetros que o chamador passa (`lcCodBarra/oOldForm/llRepete/lcObs/lnTop/lnLeft`), + 3 aliases de cursor como propriedade (n├úo literal espalhado).
+- `Init()` s├│ configura estado: `DODEFAULT()`, tabela/chave, `gc_4c_UsuarioLogado` (o `Usuar` do legado) e `go_4c_Sistema.cCodEmpresa`. Sem SQL e sem tocar no cursor do pai ÔÇö `Init` que devolve `.F.` mata o form, e o alias pode n├úo estar aberto no harness.
+- O cabe├ºalho documenta o **contrato externo**: o alias de hist├│rico ├® do chamador, este BO n├úo abre nem fecha o cursor. E documenta que o legado **n├úo persiste** aqui (o `UPDATE` do `Sa├¡da.Click` est├í todo comentado `*!*`) ÔÇö ent├úo `Inserir/Atualizar/ExecutarExclusao` ficam com o comportamento herdado do `BusinessBase`, conforme a pr├│pria exce├º├úo "BO somente-leitura" do gate da Fase 2.
+
+## Dois pontos para as fases seguintes (n├úo bloqueiam a Fase 1)
+
+1. **`FormBAL.BtnOcorrenciaClick` ├® um placeholder** (`MsgInfo("Fun├º├úo de Ocorr├¬ncia em desenvolvimento")`, linha ~4163). ├ë esse bot├úo que deve passar a abrir o `FormSigOpOco` ÔÇö a liga├º├úo precisa ser feita quando o form existir (Fase 3+).
+2. **O `cursor_4c_Historico` do `FormBAL` hoje n├úo traz as colunas que este di├ílogo edita.** O SELECT dele (linha ~3409) lista `cbars, cpros, qtds, localis, codcors, codtams, pesreals AS Qtds2, BarsOld` ÔÇö faltam `ocors`, `obs`, `usuars` e `cidchaves`, que s├úo exatamente as tr├¬s colunas que a grade do `SIGOPOCO` escreve mais a PK. O legado usa `Select a.*`. Sem corrigir isso no pai, a grade do di├ílogo n├úo ter├í o que editar.

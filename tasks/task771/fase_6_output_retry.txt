@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da e verificada.
+
+## Por que a fase tinha reprovado
+
+Medi os ramos do gate com as **pr├│prias fun├º├Áes do orquestrador** (extra├¡das de `OrquestradorMigracao.ps1:6543-6872`): o ├║nico ramo que serve a este form ├® o **CAPTURA** (legado FLAT, sem lista, sem lookup, com campos de entrada n├úo vinculados). Faltava exatamente um item: `PROCEDURE Validar\w+`. Os outros requisitos (`semPageFrame`, `BINDEVENT`, `InicializarForm`, 4 TextBox ÔëÑ piso 2) j├í estavam atendidos.
+
+E o gate estava **certo**: o legado tem dois campos digit├íveis (`When ÔåÆ .T.`) e nenhum deles tinha valida├º├úo no migrado.
+
+## O que entreguei
+
+**Lookups: nenhum ÔÇö e isso ├® fiel.** Busquei os 6 padr├Áes (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*()`, `FormBuscaAuxiliar`) no dump: **zero ocorr├¬ncias**. Criar `AbrirLookup*` aqui seria inventar picker e tabela.
+
+**Form** ÔÇö as duas valida├º├Áes, em `LostFocus` (regra #47):
+- `ValidarDescricaoEvento` ÔÇö substitui o `ControlSource = "crSigMvNfd.nfedesc"` do `getDesc`. Sem isso, `ChkRefazerClick`/`AtualizarCursorEvento` reescrevem o EditBox a partir de `this_cNfedesc` e **apagam o que o usu├írio digitou** (no legado o ControlSource j├í havia gravado no cursor). N├úo exibe mensagem: o ControlSource n├úo avisa, e a cr├¡tica `LEN < 15` mora no Click.
+- `ValidarDataEvento` + `Exec` ÔÇö rep├Áe a restri├º├úo que a classe `fweditdata` dava ao `getData`. O migrado virou TextBox de valor caractere, ent├úo `CTOT()` de lixo devolvia **DATETIME vazio em sil├¬ncio** e o evento seria enviado sem `dhEvento`. Aceita vazio (`NullDisplay = "//"`), normaliza para `TTOC()`, rep├Áe o ├║ltimo v├ílido no inv├ílido. Wrapper + `Exec` com `TRY` **no wrapper** ÔÇö exce├º├úo no `SetFocus` deixaria a flag ligada e mataria a valida├º├úo.
+
+**Defeitos reais que corrigi no c├│digo desta pr├│pria fase** (detalhe em mem├│ria para o pipeline):
+- `AtualizarUltimoEvento` chamava `Salvar()`. O `atucur` legado s├│ faz `APPEND BLANK` **no cursor em mem├│ria**; quem grava ├® o Click (`Update`+`Commit`). Como estava: registro ├│rf├úo a cada abertura + duplicado a cada envio.
+- Ramo de reuso agora usa `EditarRegistro()` ÔåÆ `Salvar()` roteia para `Atualizar()` (UPDATE), n├úo um 2┬║ INSERT.
+- `MontarInsertEvento` gravava `EscaparSQL("")` em `nfedesc` ÔÇö perderia a justificativa de todo evento novo.
+- `BtnEnviarClick` n├úo chama mais `NovoRegistro()` (for├ºaria INSERT no reuso).
+- `ChkRefazerClick` passa a espelhar `this_lRefazer` (property existia desde a Fase 1, nenhuma fase a alimentava).
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 6 (ramo CAPTURA) | **V├üLIDA: True** |
+| `Test-CompletudeCodigo` (form + BO) | OK ÔÇö sem TODO/stub |
+| `ValidadorSQLSchema.ps1` | PASSOU ÔÇö 683 tabelas, 4 statements, inclui `Validate-InsertNotNull` |
+| Compila├º├úo VFP9 | limpa, sem `.err` |
+| Probe headless (10 asser├º├Áes) | form instancia; 3 handlers **PUBLIC**; 2 BINDEVENT ligados (`VALIDARDESCRICAOEVENTO`/`VALIDARDATAEVENTO`); data v├ílida normalizada e espelhada no BO como tipo `T`; data inv├ílida revertida; vazio aceito; guarda de reentr├óncia corta; descri├º├úo espelhada; `this_lRefazer` nos dois sentidos |
+
+A 1┬¬ execu├º├úo do probe **pendurou o VFP9** (erro solto abre o `Program Error` com `-t`); reescrevi com `ON ERROR` + `TRY` por passo. Artefatos de probe removidos.
+
+## Pend├¬ncias que deixo expl├¡citas
+
+- **Contexto da nota** (`SigMvNfi`/`SigPrNfe`/`SigMvCab`/`SigCdOpe`+`SigOpCd*`) continua n├úo lido ÔÇö as properties existem (Fase 1), nenhum m├®todo as popula. `ConsultarUltimoEvento`/`AtualizarUltimoEvento` t├¬m guarda contra `this_cNfiEmpDopNums` vazio, documentada em 3 lugares. Confirmado no probe: BO fica fora de edi├º├úo.
+- DarumaFramework/SAT.dll, protocolo UniNFe, XML do evento, e-mail e `Gerarnota` ÔÇö deferidos desde a Fase 2, com coment├írio.
+- `TabIndex` do dump n├úo ├® transcrito em nenhuma fase (lacuna pr├®-existente das Fases 3-6, n├úo introduzida aqui).
+- A ├írvore de trabalho j├í estava suja de execu├º├Áes anteriores; `indice_classes.txt`/`carga_sobdemanda.log`/`config.FXP` mudaram porque o probe rodou `config.prg` (auto-regenera├º├úo documentada).

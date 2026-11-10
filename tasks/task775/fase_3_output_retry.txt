@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpOco.prg` (661 linhas, 30.4 KB).
+
+**Por que a tentativa anterior falhou:** o Claude CLI nunca recebeu a tarefa ÔÇö o `fase_3_output.txt` cont├®m s├│ avisos de permiss├úo do `settings.local.json` e um "n├úo vi nenhuma pergunta na sua mensagem". O prompt n├úo chegou ao modelo; n├úo foi defeito de gera├º├úo de c├│digo.
+
+## Ramo do gate: FLAT (medido, n├úo presumido)
+
+O dump prova as duas condi├º├Áes do ramo flat: raiz `Class: form / BaseClass: form` (form gen├®rico) e **zero** `BaseClass: pageframe`. H├í `BaseClass: container` (cntSombra), ent├úo vale o FLAT comum ÔÇö que exige `cnt_4c_`, n├úo o sub-ramo "sem container". Verifiquei os 5 predicados do orquestrador: todos `True`, inclusive o negativo (nenhum `AddObject("pgf_4c_`). **N├úo criei PageFrame** ÔÇö invent├í-lo violaria o PILAR 1.
+
+## Entregue
+
+`DEFINE CLASS FormSigOpOco AS FormBase` + `Init()` (captura os 6 par├ómetros do legado), `PosicionarJanela()`, `InicializarForm()`, `SincronizarParametrosComBO()`, `ConfigurarCabecalho()`, `PosicionarHistorico()`, `ExisteTagCursor()`, `TornarControlesVisiveis()`, `Destroy()`. Sem TODO, sem stub, sem m├®todo vazio.
+
+Tr├¬s decis├Áes que vale voc├¬ conferir:
+
+**1. `ThisForm.Left = lnTop + 390`** ÔÇö o legado usa `lnTop` nas **duas** coordenadas. Parece erro de digita├º├úo, mas transcrevi literalmente (regra #17) porque ├® a posi├º├úo que o usu├írio v├¬ hoje; o desvio est├í documentado no arquivo. `AutoCenter = .F.` na classe ├® obrigat├│rio para isso n├úo ser sobrescrito no `Show`; sem coordenadas o `Init` religa o AutoCenter.
+
+**2. Larguras do cabe├ºalho** ÔÇö o SCX declara `cntSombra.Width = 800` e labels `769` contra `Form.Width = 665`. Usei `THIS.Width` e `THIS.Width - 20`: copiar o literal cortaria o t├¡tulo (regra #30).
+
+**3. `Init` n├úo valida par├ómetro** ÔÇö o harness faz `CREATEOBJECT` sem argumento; um bloco "MsgErro + .F." reprovaria sempre a etapa 06. Guarda por `VARTYPE`, e `PCOUNT()` no par├ómetro l├│gico.
+
+## Verifica├º├úo
+
+- **Compila├º├úo PROVADA**, com smoke test medido nesta sess├úo (`STRTOFILE` gravou, execu├º├úo real) e **controle negativo**: uma c├│pia com `PUBLIC PROCEDURE` gerou `.ERR` apontando s├│ as linhas injetadas (664-665) ÔÇö prova que o detector funciona *e* que as 661 linhas compilam limpas. Form e BO: `.FXP` gerado, nenhum `.ERR`.
+- **Runtime PROVADO** (probe sem `ConfigurarAmbiente`, que trava nesta m├íquina): `CREATEOBJECT` devolve objeto, Caption `Ocorr├¬ncia` correto via CHR(234), 665x323, WindowType 1, DataSession 1, BO instanciado, `cnt_4c_Sombra` vis├¡vel 665x80, labels com Width 645 e caption propagado, `Picture` resolvido com `FILE()` = `.T.`, `Release()` sem erro.
+- Est├ítico, tudo zero: acento literal (0 bytes >127), `RETURN` dentro de `TRY` (por profundidade), `ISEMPTY`/`MostrarAviso`/`.Self`/`Controls("nome")`/`MESSAGEBOX`/`this_X .Value`/`PUBLIC PROCEDURE`/`TABLEREVERT`/`ZOrderSet`. Removi os `.fxp` para a Fase 4 n├úo rodar c├│digo velho.
+
+## Lacuna real do contrato ÔÇö para as Fases 4-6
+
+O `SELECT` do chamador (`FormBAL.prg:3409-3414`) traz `cbars, cpros, qtds, localis, codcors, codtams, pesreals AS Qtds2, BarsOld` ÔÇö **n├úo traz `ocors` nem `obs`**, e renomeia `pesreals`. Mas a Grade do legado liga em `historico.ocors`/`historico.pesreals` e o EditBox em `Historico.Obs`: as tr├¬s colunas que esta tela existe para editar n├úo est├úo no cursor que o pai monta hoje. O BO j├í l├¬ tudo com guarda `TYPE() != "U"` e este form nunca devolve `.F.` por coluna ausente, ent├úo nada quebra agora ÔÇö mas **a corre├º├úo ├® acrescentar as colunas ao SELECT do FormBAL**, n├úo inventar coluna aqui. Est├í anotado no cabe├ºalho do arquivo.
+
+Tamb├®m registrei no c├│digo um efeito colateral fiel ao legado: `SET KEY`/`SET ORDER` agem na work area compartilhada com o pai (DataSession 1) e o legado n├úo os desfaz ao sair ÔÇö a grade do pai fica filtrada depois de fechar o di├ílogo. Reproduzi como est├í (desfazer mudaria o comportamento atual), mas conv├®m confirmar com quem conhece o fluxo de contagem.

@@ -1,0 +1,372 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpIpB.SCX
+* Data/Hora: 07/11/2026 16:25:49
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPIPB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: GrdImpres
+  Parent: SIGOPIPB
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPIPB.GrdImpres.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPIPB.GrdImpres.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPIPB.GrdImpres.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPIPB.GrdImpres.Column2
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: cntSombra
+  Parent: SIGOPIPB
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPIPB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPIPB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdSair
+  Parent: SIGOPIPB
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 222
+  Width = 429
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleciona Impressora de Etiquetas / Boletos"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Themes = .F.
+  Name = "SIGOPIPB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.GrdImpres
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 130
+  Left = 20
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 83
+  Width = 290
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "GrdImpres"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 220
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Alignment = 3
+  Column2.Width = 30
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Sparse = .F.
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.GrdImpres.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome da Impressora"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.GrdImpres.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.GrdImpres.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = " # "
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.GrdImpres.Column2.Check1
+------------------------------------------------------------
+  Top = 24
+  Left = 7
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Value = .F.
+  ForeColor = 90,90,90
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.cntSombra
+------------------------------------------------------------
+  Top = -2
+  Left = -1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPIPB.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 354
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPIPB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Select csSigCdmp
+Set Order to Impres
+Scan
+	Replace csSigCdmp.lSituas With .F.
+EndScan
+
+Goto Top
+Replace csSigCdmp.lSituas With .T.
+
+With Thisform.GrdImpres
+	.RecordSource          = 'csSigCdmp'
+	.Column1.ControlSource = 'csSigCdmp.Impres'
+	.Column2.ControlSource = 'csSigCdmp.lSituas'
+	.Refresh
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIPB.GrdImpres.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIPB.GrdImpres.Column2.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lnRecNo
+
+If This.Value
+	Select csSigCdmp
+	lnRecNo = RecNo('csSigCdmp')
+	Replace All lSituas With .F.
+	Goto ( lnRecNo )
+	Replace lSituas With .T.
+EndIf
+	
+	
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPIPB.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

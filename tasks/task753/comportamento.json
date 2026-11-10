@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIPB",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSelect csSigCdmp\nSet Order to Impres\nScan\n\tReplace csSigCdmp.lSituas With .F.\nEndScan\n\nGoto Top\nReplace csSigCdmp.lSituas With .T.\n\nWith Thisform.GrdImpres\n\t.RecordSource          = 'csSigCdmp'\n\t.Column1.ControlSource = 'csSigCdmp.Impres'\n\t.Column2.ControlSource = 'csSigCdmp.lSituas'\n\t.Refresh\nEndWith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPB.GrdImpres.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPB.GrdImpres.Column2.Check1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "Local lnRecNo\n\nIf This.Value\n\tSelect csSigCdmp\n\tlnRecNo = RecNo('csSigCdmp')\n\tReplace All lSituas With .F.\n\tGoto ( lnRecNo )\n\tReplace lSituas With .T.\nEndIf\n\t\n\t",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPB.cmdSair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

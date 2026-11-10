@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete. I added to `FormSigOpLcZ.prg`:
+
+- **`ConfigurarGrid()`** ÔÇö the `grd_4c_Dados` grid (mapped from legacy `grdItens`), 4 columns bound to the BO's `cursor_4c_Itens`: Produto/Descri├º├úo/Localiza├º├úo read-only, and a `chk_4c_Check1` CheckBox column (Marcas) with the full Click/MouseDown/MouseUp/KeyPress toggle wiring the legacy grid requires (regra #46/#47) and `AfterRowColChange` binding.
+- **`ConfigurarBotoesPrincipais()`** ÔÇö `obj_4c_CntBotoes` (Confirmar/Sair), wired to `BtnConfirmarClick`/`BtnSairClick`.
+- **`ConfigurarBotoesAcoes()`** ÔÇö `obj_4c_CmdAcoes` (Localizar/Limpar Sele├º├úo), wired to `BtnLocalizarClick`/`BtnLimparClick`.
+- **`ConfigurarBotoesSelecao()`** ÔÇö standalone `cmd_4c_SelTudo`/`cmd_4c_Apaga`, with the mode-gate kept *inside* the Click handler rather than toggling `.Enabled` (icon-only buttons lose their icon when disabled ÔÇö CorretorAutomatico #106).
+- **`GradeAfterRowColChange()`** ÔÇö single source of truth for the "Localizar" enable rule (`SigOpLcZBO.PodeEditar()` + `PodeLocalizar()`), called both via `BINDEVENT` and directly from the action buttons, matching the legacy's direct `ThisForm.grdItens.AfterRowColChange()` calls.
+
+I deliberately left `getBase`/`getDBase`/`Label3`/`ImgJpg`/`Shape1`/`ShpFigura` out of this phase ÔÇö those are data fields/decoration, not grid/CRUD, and belong to the later phases per this pipeline's own gates (and per phase 3's own comments, which explicitly deferred only the grid + six buttons to phase 4).
+
+Verified two ways:
+1. `COMPILE` via VFP9 ÔÇö produced a clean `.fxp`, no `.err` file.
+2. Ran `TestFormWrapper` against the real SQL Server connection ÔÇö the form instantiated, `InicializarForm` ran end-to-end, and the form showed successfully (`Status: SUCESSO`, no entries in `vfp_error_details.txt`).
+
+Cleaned up the compiled `.fxp` artifacts afterward; kept `automation/CompilarF4SigOpLcZ758.prg` (matches the existing per-phase compile-check convention already used for this task).

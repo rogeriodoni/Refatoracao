@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da ÔÇö `FormSigOpLop.prg` finalizado (1.329 linhas, 62 KB).
+
+## O que entrei nesta fase
+
+**1. Par de hooks de transfer├¬ncia, real (n├úo stub)**
+Nesta tela a "ficha" ├® a **linha da grade** (n├úo h├í Page de Dados), ent├úo os dois hooks t├¬m conte├║do de verdade:
+- `PROTECTED PROCEDURE FormParaBO()` ÔÇö resolve o alias a partir de `grd_4c_Dados.RecordSource` (a tela corrige o `this_cAliasGrade` quando o pai abre o `LocalSacOp` depois da montagem), delega `CarregarDoCursor()` para as 7 colunas da linha e `AtualizarTotais()` para a contagem/lista que o form pai consome. Grade sem linha ÔåÆ `LimparDados()` + `.F.`.
+- `PROTECTED PROCEDURE BOParaForm()` ÔÇö ├® o `Gather Memvar Fields Selecionada` + `grdOperacoes.Refresh` do legado: grava `this_nSelecionada` na linha corrente (guardas de grade edit├ível, linha existente e **identidade pelo `Dopes`**) e repinta.
+
+Ambos `PROTECTED` porque `FormBase` os declara assim (VFP9 n├úo alarga escopo herdado). Ligados nos funis: `MontaGrade` ÔåÆ `FormParaBO`; `AlternarSelecaoLinha` ÔåÆ `FormParaBO` + `BOParaForm`; `BtnOkClick` ÔåÆ `FormParaBO` (├║ltima leitura antes do `Release`, j├í que o BO morre no `Destroy`).
+
+**2. Handler do bot├úo de a├º├úo nomeado pela a├º├úo** ÔÇö `CmdSairClick`/`cmd_4c_CmdSair` ÔåÆ `BtnOkClick`/`cmd_4c_Ok`. O objeto legado chama-se `cmdSair`, mas o Caption que o usu├írio l├¬ ├® `"\<Ok"` e o ├¡cone ├® `cadastro_salvar_60.jpg`. `tasks/task764/mapeamento.json` atualizado no mesmo passo (├® dele que o `ValidarUIFidelity` monta o caminho), preservando o CRLF original.
+
+**3. N├úo inventei** `BtnÔÇªCancelarClick`, `HabilitarÔÇªCampos`, `LimparÔÇªCampos` nem `AjustarÔÇªPorModo`: o SCX tem **um** bot├úo (o Ok, `Cancel = .T.` s├│ faz o ESC disparar esse mesmo Click), nenhum modo e nenhuma ficha a limpar ÔÇö zerar a marca├º├úo destruiria a sele├º├úo que o pai vai ler. Documentado no cabe├ºalho com os nomes **elididos**, para n├úo satisfazer o gate por substring em coment├írio.
+
+## Medi├º├Áes (n├úo inferidas)
+
+| verifica├º├úo | resultado |
+|---|---|
+| smoke test do VFP9 nesta sess├úo | `exit=0`, arquivo de sa├¡da escrito ÔåÆ VFP **executa** |
+| `COMPILE` do form | `FXP=SIM, ERR=NAO`; controle negativo (`IF .T.` solto) gerou `.ERR` ÔåÆ o check ├® real |
+| probe de instancia├º├úo (`ProbeF8SigOpLop764.prg`) | abre sem args **e** com pai; toggle grava no cursor (0ÔåÆ1ÔåÆ0ÔåÆ1); `BO.Dopes = cursor.Dopes`, `BO.Selecionada = cursor.Selecionada`, `totSel=1 marcadas=[LIMPEZA]`; Ok devolve `paiEnabled=.T.`; nenhum di├ílogo suprimido |
+| escopo | `FormParaBO`/`BOParaForm` PROTECTED; os 5 handlers de BINDEVENT PUBLIC |
+| gate real da Fase 8 (`case 8` do orquestrador, rodado isolado) | **PASSA** ÔÇö `metodosFaltantes = []`, ramo FLUXO-UNICO dispensa s├│ `BtnCancelarClick` |
+| `Test-CompletudeCodigo` (a pr├│pria do orquestrador) | FORM = True, BO = True |
+
+Dois achados no caminho, que custaram corre├º├úo de texto e de c├│digo:
+- O validador de completude casa **`\bpendente`** em qualquer coment├írio: meu primeiro cabe├ºalho reprovava o form por "PENDENTES de prop├│sito"/"edi├º├úo pendente". Reescrito.
+- Escrever `chk_4c_Check1.Value` **n├úo serve** como BOParaForm: o probe leu `chkVal=0` com a linha em 1 (o `Refresh` devolve o valor do bind), e escrita em controle com `ControlSource` propaga ao cursor sem passar por guarda. Troquei por `REPLACE` expl├¡cito com guarda de identidade ÔÇö sem ela, um BO parado na linha A com o ponteiro na linha B gravaria a marca├º├úo de A em B, corrup├º├úo silenciosa exatamente na coluna que o pai l├¬.
+
+N├úo mexi no `OrquestradorMigracao.ps1`: o gate j├í era satisfaz├¡vel para este legado. Tamb├®m n├úo gerei `indice_classes.txt` nem entrada de menu ÔÇö ├® di├ílogo **filho** (abre por `CREATEOBJECT("FormSigOpLop", oPai)` do `sigatsac`, ainda n├úo migrado), e o ├¡ndice se regenera sozinho na abertura porque os `.prg` est├úo mais novos que ele.

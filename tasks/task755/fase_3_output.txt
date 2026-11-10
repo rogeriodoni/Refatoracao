@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpJob.prg` com a estrutura base:
+
+- `DEFINE CLASS FormSigOpJob AS FormBase` ÔÇö form filho (n├úo CRUD), `TitleBar=1`/`ControlBox=.T.` porque o SCX legado n├úo tem a faixa cinza de cabe├ºalho (cntSombra), apenas os campos de identifica├º├úo do Job direto na raiz.
+- Propriedades `this_oFormPai`, `this_cContas`, `this_cEmps`, `this_cDopes`, `this_nNumes` ÔÇö equivalentes ao `LParameters pFrm, pCta` do Init legado e ├ás partes da chave posicional `EmpDopNums`.
+- `Init()` recebendo os par├ómetros opcionais e delegando a `DODEFAULT()`.
+- `InicializarForm()` instanciando `SigOpJobBO`, chamando `ConfigurarPageFrame()` e `ConfigurarBotaoRetornar()`.
+- `ConfigurarPageFrame()` criando `pgf_4c_Job` com as 6 abas exatas do dump (`Top=130, Left=-1, Width=1005, Height=473`, `Tabs=.T.` porque n├úo h├í CommandGroup de navega├º├úo entre p├íginas no legado).
+- `ConfigurarBotaoRetornar()` criando `obj_4c_CmdRetornar` (posi├º├úo exata `Top=13, Left=907, W=85, H=85`), sem o `Click` ainda (fica para Fase 7/8).
+- `TornarControlesVisiveis()` recursivo (Pages + Controls).
+- `Destroy()` reabilitando o form pai antes de `DODEFAULT()`.
+
+Validei compilando com `vfp9.exe -t` ÔÇö gerou `.fxp` sem `.err`, ou seja, sintaxe limpa. Grids, bot├Áes CRUD, campos de dados e eventos ficam para as pr├│ximas fases, como previsto.

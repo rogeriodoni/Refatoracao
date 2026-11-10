@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmado: `TcpTestSucceeded = False` para 192.168.200.10:1433. Atualizei a mem├│ria do projeto com esse resultado.
+
+**Diagn├│stico: n├úo h├í bug de c├│digo aqui.** Este ├® o erro de ambiente j├í documentado em `[[project_sqlserver_200_10_inalcancavel_maquina_pipeline]]`, reconfirmado agora pela **9┬¬ vez consecutiva nesta mesma task770/FormSigOpNch**:
+
+- O erro ocorre na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pre-flight gen├®rico de conex├úo SQL que roda **antes** de qualquer `CREATEOBJECT("FormSigOpNch")`. N├úo depende em nada do conte├║do de `FormSigOpNch.prg`/`SigOpNchBO.prg`.
+- O c├│digo j├í tem os guards corretos: `ValidarParametros()` testa `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` antes de checar `gnConnHandle`; `CarregarGrade()` tem `loc_lBypassTeste`; todas as rotinas SQL do BO t├¬m TRY/CATCH completo.
+- `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` confirma a rota indispon├¡vel desta m├íquina agora.
+
+Pela regra da mem├│ria (confirmada 8 vezes antes nesta mesma task), editar `.prg` "para tentar algo" seria o anti-padr├úo que essa mem├│ria existe para evitar ÔÇö n├úo vou alterar `FormSigOpNch.prg` ou `SigOpNchBO.prg`, pois n├úo h├í defeito neles.
+
+**A├º├úo recomendada**: o retry autom├ítico do pipeline n├úo vai resolver um problema de rede ÔÇö vale investigar a conectividade da m├íquina do pipeline at├® 192.168.200.10:1433 fora do ciclo de migra├º├úo, ou pausar o retry para esta task at├® a rota voltar.

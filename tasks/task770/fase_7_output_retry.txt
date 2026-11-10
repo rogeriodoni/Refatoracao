@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e verificada.
+
+## O que a Fase 7 entregou
+
+O legado `SIGOPNCH` tem **dois** bot├Áes, pendurados direto no form, e os dois t├¬m handler:
+
+| SCX legado | Caption | handler migrado |
+|---|---|---|
+| `btnAlterar` | `"\<Confirmar"` | `BtnConfirmarClick` |
+| `btnCancelar` | `"Encerrar"` (`Cancel = .T.`) | `BtnEncerrarClick` |
+
+O la├ºo, a chave posicional, o `-1` e a transa├º├úo j├í estavam no `SigOpNchBO.GravarNumeracao` (PUBLIC ÔÇö regra #51); o handler ├® s├│ o gatilho. `BINDEVENT` dos dois em `ConfigurarBotoesAcao`, **depois** dos `AddObject` e com os handlers PUBLIC (regra #3).
+
+## Verifica├º├Áes (medidas, n├úo presumidas)
+
+- **Gate da Fase 7: `RESULTADO: FASE 7 VALIDADA`** ÔÇö replicado com as fun├º├Áes instaladas: `soGravarFecharF7=True` ÔåÆ `legadoSemCrud=True`, `nBotoesLegado=2`, `minHandlersF7=2`, `nHandlers=2`. Confirmei que n├úo h├í outra evid├¬ncia de CRUD no dump (`frmcadastro`, `Grupo_Op`, `pcEscolha`, `cmdIncluir/Excluir/Visualizar` = **0** ocorr├¬ncias); o nome `btnAlterar` era a ├║nica, e a dispensa `Test-VerbosCrudSaoTodosDeGravarEFechar` a cobre pelo Caption ("Confirmar"), persist├¬ncia e `ThisForm.Release`.
+- **Compila limpo no VFP9**: `FORM_FXP=SIM / FORM_ERR=NAO / BO_FXP=SIM / BO_ERR=NAO`. Apaguei os `.fxp` nas duas grafias antes, e **provei que o script executou** (smoke test `STRTOFILE` ÔåÆ `VIVO 09/11/2026 11:20:47`) ÔÇö o `.fxp` e o `exit=0` sozinhos n├úo provam nada.
+- **Completude**: zero TODO/FIXME/stub real, zero procedure vazia, zero `MESSAGEBOX`, **zero byte n├úo-ASCII** (acentos todos por `CHR()`), CRLF preservado (CR=LF=1078), blocos balanceados (14/14 `PROCEDURE`, 3/3 `TRY`, 24/24 `WITH`), nenhum `RETURN` dentro de `TRY/CATCH`.
+- **Regras pontuais**: limpo em `Controls("nome")` (#34), `.Self` (#38), `TTOD` (#16), `TABLEREVERT` (#52), `ISEMPTY`/`MostrarAviso`/`PUBLIC` em classe. Sem lookup e sem `KeyPress`, ent├úo #47 n├úo se aplica.
+- **Fidelidade ao dump**: `Top=3/Left=650` e `Top=3/Left=725`, captions e `Cancel=.T.` transcritos; os dois ├¡cones (`cadastro_salvar_60.jpg`, `cadastro_sair_60.jpg`) **existem** em `vbmp/` (regra #25 ÔÇö `.Picture` inexistente falha em sil├¬ncio).
+- Auditorias `VerificarMetodoProtegidoChamadoDeFora` e `VerificarFuncoesNaoDefinidas`: sem achado para `SigOpNch`.
+
+## Dois pontos que voc├¬ precisa saber
+
+**1. Os objetos foram renomeados** ÔÇö `cmd_4c_BtnAlterar`/`BtnCancelar` ÔåÆ `cmd_4c_Confirmar`/`cmd_4c_Encerrar`. O `Name` do legado mente: `btnAlterar` n├úo ├® o "Alterar" da barra CRUD ÔÇö o usu├írio l├¬ "Confirmar" e o Click grava e fecha. `tasks/task770/mapeamento.json` foi atualizado no mesmo passo (o `ValidarUIFidelity` monta o caminho a partir dele).
+
+**2. `automation/OrquestradorMigracao.ps1` est├í modificado** (` M` no git status) ÔÇö ├® a dispensa que a execu├º├úo anterior adicionou, e ├® dela que depende o gate passar. Foi ela que medi acima, e est├í fora do escopo da Fase 7: avise se preferir que eu a revise ou reverta.
+
+**Fica para a Fase 8**: a valida├º├úo da c├®lula do pr├│ximo cheque (`Column5.Text1.Valid` + `When`), que ├® quem escreve `csCheques.Marcas`. N├úo ├® evento de bot├úo e, pela regra #46, mora no `Valid` de um TextBox instalado na Column (`AddObject` + `CurrentControl` + `Sparse = .F.`). Enquanto n├úo entrar, nada marca linha e o Confirmar encerra sem gravar ÔÇö igual ao legado quando o usu├írio n├úo toca em n├║mero nenhum.

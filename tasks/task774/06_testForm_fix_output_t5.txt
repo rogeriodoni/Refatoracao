@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este erro **n├úo ├® um bug de c├│digo** ÔÇö ├® a 5┬¬ reconfirma├º├úo consecutiva (dentro desta mesma task774) de que o SQL Server `192.168.200.10:1433` est├í inalcan├º├ível desta m├íquina do pipeline:
+
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+```
+
+O erro 1526 DBNETLIB acontece na ETAPA 1B do `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT` de `FormSigOpOch`/`SigOpOchBO` ÔÇö ou seja, antes de qualquer c├│digo do form rodar.
+
+Revisei `FormSigOpOch.prg` e `SigOpOchBO.prg` linha a linha de novo (conte├║do id├¬ntico ao j├í revisado nas tentativas 1-4) contra o checklist padr├úo: `RETURN DODEFAULT()` fora do TRY/CATCH, handlers `CmdEncerrarClick`/`GrdFollowUpAfterRowColChange` PUBLIC (exigido por BINDEVENT), o form s├│ chama m├®todos PUBLIC do BO (`CarregarContaCorrente`/`CarregarFollowUp`/`CarregarDoCursor`, nunca `ExecutarExclusao` ou equivalente PROTECTED), todo CATCH com `MsgErro`, guard de `gnConnHandle` antes de cada `SQLEXEC` e guard de `USED()` antes de `ZAP`/`USE IN`. Nenhum defeito encontrado ÔÇö **n├úo editei os arquivos**, pois alter├í-los s├│ para "tentar algo" seria dano, n├úo corre├º├úo.
+
+J├í s├úo 5 tentativas id├¬nticas sem a rota voltar (restam 5 das 10). Recomendo fortemente pausar o retry autom├ítico desta task ou dar exce├º├úo ao gate `06_testForm` para o erro 1526/conectividade ÔÇö sen├úo a task vai falhar por esgotamento de tentativas apesar do c├│digo estar correto. J├í documentei esta 5┬¬ confirma├º├úo na mem├│ria do projeto.

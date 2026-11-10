@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 complete. `FormSIGOPNOP.prg` now has the three button Click handlers the legacy form actually has ÔÇö transcribed line by line from the SCX dump.
+
+## What was added
+
+| Handler | Legacy origin | What it does |
+|---|---|---|
+| `CmdEncerrarClick` | `Commandgroup1.Command3.Click` | `Delete File (ThisForm.Arqfigura)` + `ThisForm.Release` |
+| `CmdExpandirClick` | `Fwbtng1.Click` ("Expandir") | Expands the level *after* the current one; advances `this_nNodeExp` only if a node existed there (`llExpande`) |
+| `CmdRegredirClick` | `Fwbtng2.Click` ("Regredir") | Collapses the *current* level and decrements, never below zero |
+
+Bound in `ConfigurarEventos` ÔÇö `cmg_4c_Commandgroup1.Buttons(1)` (the legacy puts the code on the **button**, not the group), plus the two standalone `CommandButton`s.
+
+Three judgment calls, all documented in the code:
+- **Delete goes through `SIGOPNOPBO.ExcluirImagemTemporaria()`**, which guards with `FILE()` + `SET SAFETY OFF`. The legacy deletes blind and errors when the product has no photo. Deliberate, invisible divergence.
+- **`.Picture = ""` before deleting** ÔÇö the Image control holds the file open, so `CLEAR RESOURCES` alone leaves the `.jpg` behind in `SYS(2023)` on every search.
+- **`Release()` and not `Hide()`** ÔÇö checked, not assumed: no `PROCEDURE Unload` in the dump, no return property, and zero call sites of SIGOPNOP in either the legacy acervo or the migrated project. The `Hide()` rule is for child dialogs whose parent reads a result.
+
+## Verification (all from output files, not exit codes)
+
+- VFP9 smoke test passed first, so execution is proven for this session.
+- `COMPILE` clean ÔÇö `.fxp` erased beforehand and recreated, no `.err`.
+- Probe (`tasks/task772/probar_form_fase7.prg`): form instantiates; all three handlers exist and are **PUBLIC** (`PEMSTATUS(...,2) = .F.`); `AEVENTS` confirms each `BINDEVENT` was delivered; `Encerrar` deleted the temp file, zeroed `this_cArquivoFigura` and released the form (`VARTYPE ÔåÆ "X"`); counter arithmetic correct at 1ÔåÆ1 (expand, empty tree), 1ÔåÆ0, 0ÔåÆ0, 3ÔåÆ2. **Zero CATCH fired.**
+- Completeness replica (`Test-CompletudeCodigo` logic): clean. Phase 7 gate replica: `nBotoesLegado=3` ÔåÆ floor 2, `nHandlers=3`, `legadoSemCrud=True` ÔåÆ **PASSA**.
+- CRLF preserved (1704 CR = 1704 LF); diff is +207/ÔêÆ3, not a whole-file rewrite.
+
+## Not proven, and why
+
+The per-node loop (`NodeLevel`/`NodeExpanded`) never executed: `cttree.cttreeview` is **not registered on this machine** (measured ÔÇö `Class definition CTTREE.CTTREEVIEW is not found`), and a VFP stub can't substitute because its arrays are 1-based against the legacy's 0-based loop. The fake tree ran with `ListCount = 0`, which exercises the guard, the `.ListCount` read inside the `WITH`, and the counter arithmetic ÔÇö but not the per-node branch. That needs a station with the OCX.
+
+Two legacy events remain for Phase 8, since neither is a button: `Imagem.DblClick` (zoom via `SigOpZom`) and `TreeView.NodeClick` (the drill-down that pushes onto `paEmpDopNums` and re-runs `MakeTree`).
+
+One side effect worth flagging: I added `ExcluirImagemTemporaria` to `tasks/task772/stubbosigopnop.prg`. The first probe run failed on its absence ÔÇö that was a gap in the Phase 6 stub, not in the form, and the failure incidentally proved note (c): the form still closed after the CATCH reported the error.

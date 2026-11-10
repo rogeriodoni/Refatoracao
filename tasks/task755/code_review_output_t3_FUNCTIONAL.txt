@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 8 problemas apontados comparando contra o conte├║do atual de `FormSigOpJob.prg` (id├¬ntico ao `.bak` salvo antes deste pass). Nenhum deles ├® um defeito real no estado atual do arquivo ÔÇö n├úo fiz nenhuma altera├º├úo.
+
+**Verifica├º├úo item a item:**
+
+1. **[CONTAINER-VISIVEL] CNT_4C_EMP1** ÔÇö `TornarControlesVisiveis` (linha 3683) j├í tem o guard: `!INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_EMP1", "CNT_4C_EMP2")` (linha 3696), exatamente o fix pedido. J├í implementado.
+
+2. **[METODO-INEXISTENTE] ObterFiltroContaEquipe()** ÔÇö definido em `PROTECTED FUNCTION ObterFiltroContaEquipe()` (linha 1477). Chamado via `THIS.` dentro da pr├│pria classe (linha 1552) ÔÇö PROTECTED n├úo bloqueia chamada interna, s├│ chamada de fora da classe (regra #51 do CLAUDE.md ├® sobre forms chamando BO de fora, n├úo se aplica aqui).
+
+3. **[METODO-INEXISTENTE] ObterNomeConta()** ÔÇö definido em `PROTECTED FUNCTION ObterNomeConta(par_cCodigo)` (linha 3147), chamado internamente (linha 3119+).
+
+4. **[METODO-INEXISTENTE] pgf_4c_Job()** ÔÇö n├úo existe nenhuma chamada `.pgf_4c_Job(...)` no arquivo (confirmei via grep). `pgf_4c_Job` ├® s├│ a property do PageFrame (`THIS.pgf_4c_Job.Page1...`); falso positivo do detector.
+
+5. **[METODO-INEXISTENTE] ResolverControle()** ÔÇö definido em `PROTECTED FUNCTION ResolverControle(par_cCaminho)` (linha 3784).
+
+6. **[METODO-INEXISTENTE] CampoPreenchido()** ÔÇö definido em `PROTECTED FUNCTION CampoPreenchido(par_cCaminho)` (linha 3815).
+
+7. **[METODO-INEXISTENTE] ValorCheck()** ÔÇö definido em `PROTECTED FUNCTION ValorCheck(par_cCaminho)` (linha 3840).
+
+8. **[LAYOUT-POSITION] lbl_01_019 vs lbl_4c_Lbl_01_019a** ÔÇö pareamento errado do comparador: o legado `lbl_01_019` (Left=417) corresponde ao migrado `lbl_4c_Lbl_01_019` (Left=417, linha 458) ÔÇö match exato. `lbl_4c_Lbl_01_019a` ├® um controle **diferente** (o r├│tulo "at├®" entre as duas datas, Left=501, linha 482), colidido por substring ("019" casa com "019a"). Mesmo padr├úo de falso positivo documentado na regra #39/#30 do CLAUDE.md (pareamento por nome geral falha quando PILAR 3 renomeia objetos).
+
+Nenhuma mudan├ºa de c├│digo foi necess├íria.

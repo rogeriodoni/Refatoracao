@@ -1,0 +1,566 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpLoc.SCX
+* Data/Hora: 08/11/2026 16:50:39
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPLOC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPLOC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPLOC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPLOC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup3
+  Parent: SIGOPLOC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: GridSels
+  Parent: SIGOPLOC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPLOC.GridSels.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPLOC.GridSels.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPLOC.GridSels.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLOC.GridSels.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLOC.GridSels.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLOC.GridSels.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape2
+  Parent: SIGOPLOC
+  Class: shape
+  BaseClass: shape
+
+Objeto: DesmarcarEmp
+  Parent: SIGOPLOC
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: MarcarEmp
+  Parent: SIGOPLOC
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnSair
+  Parent: SIGOPLOC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 2
+  Left = 2
+  Width = 577
+  Height = 218
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 350
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleção de Ocorrências Para Impressão"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGOPLOC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.Commandgroup3
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 698
+  SpecialEffect = 1
+  Top = 7
+  Width = 90
+  TabIndex = 7
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "Commandgroup3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 0
+  Height = 165
+  Left = 192
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 132
+  Width = 337
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "GridSels"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 80
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 220
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.GridSels.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.Shape2
+------------------------------------------------------------
+  Top = 170
+  Left = 536
+  Height = 90
+  Width = 50
+  BackStyle = 0
+  BorderStyle = 0
+  FillStyle = 1
+  SpecialEffect = 0
+  ColorScheme = 1
+  ZOrderSet = 3
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.DesmarcarEmp
+------------------------------------------------------------
+  Top = 215
+  Left = 541
+  Picture = ..\vbmp\onebit_33.ico
+  Caption = ""
+  ToolTipText = "Desmarca Todas as Linhas de Produto"
+  Name = "DesmarcarEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.MarcarEmp
+------------------------------------------------------------
+  Top = 175
+  Left = 541
+  Picture = ..\vbmp\to-do-list_checked2.ico
+  Caption = ""
+  ToolTipText = "Marca Todas as Linhas de Produto"
+  Name = "MarcarEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLOC.btnSair
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPLOC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Select crSigOpOco
+With ThisForm.GridSels
+	.ColumnCount = 3
+	.RecordSource = 'crSigOpOco'
+	.HeaderHeight = 0
+	.DeleteMark = .f.
+	.RecordMark = .f.
+	.ReadOnly = .f.
+	.RowHeight = 18
+	.Scrollbars = 2
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing = .f.
+
+	.Column1.ControlSource = 'crSigOpOco.Imps'
+	.Column1.FontName = 'Courier New'
+	.Column1.Movable = .f.
+	.Column1.Resizable = .f.
+	.Column1.ReadOnly = .f.
+	.Column1.Sparse = .f.
+	.Column1.Check1.AutoSize = .t.
+
+	.Column2.ControlSource = 'crSigOpOco.Codigos'
+	.Column2.FontName = 'Courier New'
+	.Column2.Movable = .f.
+	.Column2.Resizable = .f.
+	.Column2.ReadOnly = .t.
+
+	.Column3.ControlSource = 'crSigOpOco.Descrs'
+	.Column3.FontName = 'Courier New'
+	.Column3.Movable = .f.
+	.Column3.Resizable = .f.
+	.Column3.ReadOnly = .t.
+EndWith
+
+Select crSigOpOco
+Go Top
+ThisForm.GridSels.Refresh
+*********************************************************************************
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.GridSels.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Imps
+
+If InList(nKeyCode, 13, 32)
+	m.Imps = (!SigOpOco.Imps)
+
+	Select crSigOpOco
+	Gather Memvar Fields Imps
+	ThisForm.GridSels.Refresh
+
+	NoDefault
+Endif
+*********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Imps
+
+m.Imps = (Not crSigOpOco.Imps)
+
+Select crSigOpOco
+Gather Memvar Fields Imps
+ThisForm.GridSels.Refresh
+
+NoDefault
+*********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+*********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.GridSels.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.GridSels.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.DesmarcarEmp
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpOco
+Replace All Imps with .f.
+Go Top
+ThisForm.GridSels.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.MarcarEmp
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpOco
+Replace All Imps with .t.
+Go Top
+ThisForm.GridSels.Refresh
+*********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLOC.btnSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

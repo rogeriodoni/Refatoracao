@@ -1,0 +1,41 @@
+DEPENDENCIAS CARREGADAS
+CURSOR DO PAI: RECCOUNT=3
+VARTYPE(loForm)       = O
+BaseClass             = Form
+Caption               = [Seleciona Impressora de Etiquetas / Boletos]
+--- METODOS DA FASE 7 ---
+ConfigurarEventosGrade       ex=.T. prot=.T.
+GradeNomeImpressoraLostFocus ex=.T. prot=.F.
+SelecionarImpressoraCorrente ex=.T. prot=.F.
+ChkImpressoraKeyPress        ex=.T. prot=.F.
+ChkImpressoraMouseUp         ex=.T. prot=.F.
+ChkImpressoraMouseDown       ex=.T.
+ChkImpressoraClick           ex=.T.
+RepintarGrade                ex=.T. prot=.F.
+--- BINDEVENT REGISTRADOS ---
+Column1.Text1  nEventos=1
+   [LOSTFOCUS] -> GRADENOMEIMPRESSORALOSTFOCUS
+Column2.Check  nEventos=4
+   [KEYPRESS] -> CHKIMPRESSORAKEYPRESS
+   [MOUSEUP] -> CHKIMPRESSORAMOUSEUP
+   [MOUSEDOWN] -> CHKIMPRESSORAMOUSEDOWN
+   [CLICK] -> CHKIMPRESSORACLICK
+--- APOS ABERTURA ---
+Grid RecordSource     = [cursor_4c_Impressoras]
+Col1 ControlSource    = [cursor_4c_Impressoras.Impres]
+Col2 ControlSource    = [cursor_4c_Impressoras.lSituas]
+Col2 CurrentControl   = [CHK_4C_CHECK1]
+marcadas=1 [ARGOX OS-214/]
+--- ESCOLHA NA LINHA 3 (RADIO) ---
+RECNO antes           = 1  Impres=[ZEBRA ZT230]
+SelecionarCorrente    = .T.
+marcadas=1 [ZEBRA ZT230/]
+BO.selecionada        = [ZEBRA ZT230]
+2a vez: marcadas      = 1
+--- LOSTFOCUS ---
+LostFocus vazio       = OK (sem excecao)
+LostFocus preenchido  = OK (sem excecao)
+--- KEYPRESS ---
+Espaco -> selecionada = [ARGOX OS-214]
+Tecla A -> selecionada= [ARGOX OS-214]  (deve seguir a do Espaco)
+RELEASE OK

@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada e **medida no VFP9** (n├úo presumida).
+
+## O que entrou em `FormSigOpLib.prg`
+
+**`ConfigurarCampos()`** ÔÇö os 5 objetos de dados restantes do SCX, criados na **ordem exata dos registros do legado** (`Shape1`, `Say2`, `get_codigo`, `get_descr`, `Say1`), inseridos entre `ConfigurarCabecalho()` e `ConfigurarBotoes()` para preservar o z-order: `Shape1` ├® a moldura dos dois campos e precisa nascer **antes** deles.
+
+A fase pedia "metade dos campos" ÔÇö entreguei os **dois** TextBox (piso do gate era 1), porque o legado tem s├│ dois e meia tela seria vers├úo reduzida.
+
+**`AjustarOrdemTabulacao()`** ÔÇö passe ├║nico **depois de todos os `AddObject`**. Isto era defeito real, n├úo cosm├®tica: o par `Shape2`/`ok` ├® o ├║ltimo registro do SCX mas no migrado nasce **antes** dos campos (o bot├úo fica dentro da faixa e precisa desenhar por cima dela), ent├úo o ciclo de Tab sairia `Ok ÔåÆ C├│digo ÔåÆ Descri├º├úo`, com o bot├úo de sa├¡da no meio da digita├º├úo.
+
+A ordem-alvo veio de **simular o load** do SCX, n├úo dos literais do dump (o VFP descarta valor que exceda a contagem de objetos tab-├íveis no instante da cria├º├úo). Lido de volta na instancia├º├úo: `Label1=1, Sombra=2, Label2=3, codigo=4, descr=5, Ok=6` ÔÇö ciclo focaliz├ível `C├│digo ÔåÆ Descri├º├úo ÔåÆ Ok`, com o Ok em ├║ltimo.
+
+## Decis├Áes que medi em vez de chutar
+
+| | medido |
+|---|---|
+| `MaxLength` | do schema (`cods` char(10), `descs` char(60)), nunca do `Width` em px ÔÇö e o 10 bate com os dez `!` do InputMask |
+| `Say2.Width` (├║nico valor ausente no dump) | texto renderiza **43px**, `Width=46` termina em **152**, 3px antes do campo em 155 ÔÇö a conta do pr├│prio legado |
+| `Say1` | texto **259px** contra `Width=261` do dump ÔÇö confirma que o 261 ├® o auto-size real |
+| `AutoSize` | `.F.` expl├¡cito nos dois labels (├® no-op em Label de `AddObject`) |
+| `Century=2`, `Format="K"` | propriedades reais de TextBox, conferidas na tabela de base classes; aceitas sem erro |
+| faixa do TabIndex | 1..6 ÔÇö os dois `Shape` **n├úo t├¬m** a propriedade (confirmado no probe: coluna `-`) |
+
+## Verifica├º├úo
+
+Compila sem `.ERR`, instancia (`VARTYPE=[O]`, Caption acentuado correto via `CHR()`), 8 controles vis├¡veis com geometria id├¬ntica ao dump. Balan├ºos `WITH/TRY/IF/PROCEDURE` fechados; zero TODO/stub; zero `RETURN` dentro de `TRY`; zero literal acentuado; zero propriedade inexistente na classe (validado controle a controle contra `propriedades_baseclasses.txt`); `VerificarFormatInputMask -Form FormSigOpLib` ÔåÆ **ALTA=0 MEDIA=0 BAIXA=0**; `VerificarFuncoesNaoDefinidas` ÔåÆ sem chamada ├│rf├ú. Gate da Fase 5 passa pelo ramo CAPTURA (o legado n├úo vincula campo a cursor ÔÇö as duas caixas s├│ coletam valor). CRLF restaurado, arquivo ASCII puro.
+
+## Dois pontos para o seu conhecimento
+
+1. **N├úo implementei o lookup** ÔÇö `get_codigo.Valid` (browse `fwBuscaSel`) e `get_descr.When` (descri├º├úo s├│ edit├ível quando `Fixos = 2`) s├úo a fase de lookups. Os controles j├í existem e o BO j├í tem `ValidarCodigoDigitado`/`VerificarDescricaoEditavel`; deixei registrado em `ConfigurarEventos` que os `BINDEVENT` entram naquele m├®todo, em `"LostFocus"` e n├úo `"KeyPress"`.
+
+2. **Diverg├¬ncia pr├®-existente da Fase 3, que n├úo toquei**: o `mapeamento.json` chama os labels do cabe├ºalho de `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, e o `.prg` usa `lbl_4c_Sombra`/`lbl_4c_Titulo` (os nomes can├┤nicos da regra #11). O `.prg` est├í certo; o `ValidarUIFidelity` vai acusar esses 2 objetos como ausentes at├® o JSON ser alinhado. Fica fora do escopo desta fase ÔÇö s├│ sinalizo para n├úo virar falso defeito mais adiante.

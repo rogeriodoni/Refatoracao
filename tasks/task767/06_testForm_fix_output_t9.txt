@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmei: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` devolveu `TcpTestSucceeded = False` agora mesmo. Esta ├® a 9┬¬ reconfirma├º├úo consecutiva (tentativas 5, 6, 7, 8 e agora 9) do mesmo problema, documentado na mem├│ria `[[project_sqlserver_200_10_inalcancavel_maquina_pipeline]]`.
+
+**Diagn├│stico ÔÇö n├úo ├® defeito de c├│digo:**
+
+O log mostra o erro na **ETAPA 1B** (`Conectando ao banco de dados`), **antes** de qualquer `CREATEOBJECT("FormSigOpMop")`. O erro 1526 DBNETLIB (`SQL Server inexistente ou acesso negado`) ├® disparado pelo `TestFormWrapper.prg` ao testar a conex├úo, n├úo pela classe do form. Isso ├® consistente com a rota de rede `192.168.200.0/24` estar indispon├¡vel desta m├íquina ÔÇö confirmado agora por medi├º├úo direta de rede, independente do conte├║do de `.prg`.
+
+**Por que n├úo editei os arquivos:**
+
+`FormSigOpMop.prg` e `SigOpMopBO.prg` j├í foram revisados linha a linha nas tentativas 5, 6, 7 e 8 sem nenhum defeito encontrado, e o c├│digo j├í trata corretamente a aus├¬ncia de conex├úo:
+- `SigOpMopBO.ConexaoAtiva()` e os guards `TYPE("gnConnHandle") = "N" AND gnConnHandle > 0` em todo lookup
+- `CarregarGrade()`/`CarregarConfiguracaoOperacao()` caem no fallback de cursor vazio (`CriarCursorGradeVazio`) quando n├úo h├í SQL
+- `InicializarForm()` s├│ falha se `CREATEOBJECT("SigOpMopBO")` ou a montagem visual falharem ÔÇö nenhum dos dois depende do banco estar de p├®
+
+Editar c├│digo correto "para tentar algo" seria exatamente o anti-padr├úo que a mem├│ria registra como j├í ter custado 8 retries in├║teis. N├úo fiz nenhuma altera├º├úo nos arquivos ÔÇö o problema ├® de infraestrutura (rota de rede at├® 192.168.200.10:1433), e precisa ser resolvido na camada de rede/VPN da m├íquina do pipeline, n├úo no `.prg`.

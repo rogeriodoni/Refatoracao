@@ -1,0 +1,36 @@
+=== PROBE Fase 8 - FormSigOpNch (Numeracao de Cheques) ===
+1) CREATEOBJECT -> VARTYPE=O
+   BO VARTYPE=O  Caption=[Numeração de Cheques]
+
+2) escopos (atributo 2 = PROTECTED):
+   CelulaChequeWhen  PROT = .F.
+   CelulaChequeValid PROT = .F.
+   BtnCancelarClick  PROT = .F.
+   CarregarLista     PROT = .F.
+   FormParaBO        PROT = .T.
+   BOParaForm        PROT = .T.
+
+3) celula instalada na Column5:
+   txt_4c_Celula existe = .T.
+   BaseClass=[Textbox] Class=[Textboxchequesigopnch_4c] CurrentControl=[TXT_4C_CELULA] Sparse=.F. Col.ReadOnly=.F. InputMask=[999999]
+   contrato da regra #18 conferido = .T.
+
+4) rebind da grade (CarregarGrade de novo):
+   CarregarLista=.T.  RecordSource=[cursor_4c_Cheques]  celula sobreviveu = .T.
+
+5) CelulaChequeWhen guarda o anterior:
+   retorno=.T.  this_nAntChqVal=100
+
+6) CelulaChequeValid com numero NEGATIVO:
+   retorno=[0] VARTYPE=N  celula=100  Marcas=.F.
+   recusa do legado reproduzida = .T.
+
+7) CelulaChequeValid com numero MUDADO:
+   retorno=.T.  Marcas=.T.  BO.this_nProxCheque=150  BO.this_nConteudo=149  BO.this_cValor=[23756780099887766        ] len=25
+   linha marcada e BO carregado = .T.
+   BO.ContarChequesAlterados=1
+
+8) CelulaChequeValid com numero IGUAL (2a linha):
+   retorno=.T.  Marcas=.F.
+
+PROBE_OK

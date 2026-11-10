@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmei a conectividade: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` devolveu `TcpTestSucceeded = False` novamente.
+
+**N├úo ├® um bug de c├│digo.** O log mostra a falha na ETAPA 1B ("Falha na conexao SQL: Codigo 1526, SQL Server inexistente ou acesso negado") **antes** de qualquer `CREATEOBJECT` de `FormSigOpOco`/`SigOpOcoBO` ÔÇö ├® o pre-flight gen├®rico de conectividade do `TestFormWrapper.prg`, que roda independente do form sendo testado.
+
+Revisei `FormSigOpOco.prg` e `SigOpOcoBO.prg` inteiros (conte├║do recebido neste prompt) contra o checklist padr├úo ÔÇö ambos id├¬nticos ao j├í revisado nas Tentativas 1/10 a 8/10 desta mesma task775, sem nenhum defeito:
+- `RETURN` sempre fora do TRY/CATCH (regra #1)
+- Handlers `BtnSairClick`, `GradeAfterRowColChange`, `ObservacaoLostFocus`, `ValidarOcorrenciaGrade`, `ConfirmarPesoReal`, `FocarObservacao` todos PUBLIC para BINDEVENT (regra #3)
+- Form nunca chama m├®todo PROTECTED do BO (`ValidarOcorrencia`/`GravarUsuarioHistorico` s├úo PUBLIC; `PopularOcorrencias` ├® PROTECTED mas s├│ chamado internamente pelo pr├│prio BO ÔÇö regra #51)
+- Todo CATCH com `MsgErro` (regra #9)
+- `EscaparSQL` usado sem aspas extras em `PopularOcorrencias`
+
+Esta ├® a **9┬¬ confirma├º├úo consecutiva** nesta mesma task de que o problema ├® rede da m├íquina do pipeline (SQL Server 192.168.200.10:1433 inalcan├º├ível), n├úo o `.prg`. **N├úo editei os arquivos** ÔÇö editar c├│digo correto s├│ para "satisfazer" o gate seria dano, n├úo corre├º├úo (ver mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`).
+
+**Resta apenas 1 tentativa (10/10)** no retry autom├ítico. Recomendo com urg├¬ncia m├íxima: pausar o retry desta task ou abrir excess├úo no gate `06_testForm` para erro 1526/conectividade, sen├úo a task vai falhar por esgotamento mesmo com o c├│digo correto.

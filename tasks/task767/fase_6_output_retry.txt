@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 entregue. O gate agora passa.
+
+## Causa da reprova├º├úo anterior
+
+N├úo era c├│digo faltando ÔÇö os tr├¬s lookups j├í estavam l├í, corretos. O gate da Fase 6 (`OrquestradorMigracao.ps1`, `switch` em `6 {`) exige o **nome** do m├®todo:
+
+```powershell
+$temMetodoLookup = ($conteudo -match "PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*")
+```
+
+A tentativa anterior escreveu o `CREATEOBJECT("FormBuscaAuxiliar")` **inline** dentro de `Validar<X>MopCorpo`, sem nenhum `AbrirBusca*`. Como o dump tem `fwbusca`/`mAddColuna`, `legadoSemLookup = False` e o caminho alternativo tamb├®m fechava ÔåÆ `temLayoutFlat = False`. Medi as condi├º├Áes uma a uma: s├│ `temMetodoLookup` falhava. O log da fase registrava `Exit Code: 0` / `SUCESSO` e n├úo dizia qual condi├º├úo reprovou.
+
+## O que fiz
+
+Extra├¡ cada picker para m├®todo pr├│prio, chamado pelo `Validar<X>MopCorpo`:
+
+| Coluna | Tabela | M├®todo novo |
+|---|---|---|
+| Column1 "Movimenta├º├úo" | `SigCdOpe` (`dopes`/`ndopes`) | `AbrirBuscaMovimentacaoMop` |
+| Column6 "G.Grp" | `SigCdGpr` (`codigos`/`descs`) | `AbrirBuscaGrandeGrupoMop` |
+| Column7 "Emp." | `SigCdEmp` (`cemps`/`razas`) | `AbrirBuscaEmpresaMop` |
+
+N├úo ├® s├│ o gate: os patterns #114/#217/#215 do CorretorAutomatico ancoram em `(?:AbrirBusca|AbrirLookup)` ÔÇö picker inline ficava **invis├¡vel** para todos eles, nos sweeps de hoje e nos futuros.
+
+Preservei o comportamento: guarda de reentr├óncia (`Validar<X>Exec`, regra #47), `this_lAchouRegistro` antes do `Show()` e `this_lSelecionou` antes de atribuir (#37), 1┬║ argumento `gnConnHandle` (#36), universo vazio sem aviso nem apagar o digitado (#50), recusa de opera├º├úo INATIVA e o `REPLACE ndopes` transcritos do legado, `RETURN` sempre fora do `TRY` (#1).
+
+## Verifica├º├úo
+
+Primeiro rodei um smoke test do VFP9 ÔÇö **ele executa nesta sess├úo** (gravou "VIVO"), ao contr├írio do que minha nota de 2026-10-19 dizia. Ent├úo a compila├º├úo ├® prova real, n├úo inferida do `.FXP`:
+
+- `FormSigOpMop.prg` e `textboxgridlookup.PRG`: compilam, `.err` ausente
+- Gate Fase 6: `True` (era `False`)
+- `Test-CompletudeCodigo` do orquestrador (regex exata): limpo nos dois arquivos
+- Auditorias `VerificarLookupEmKeyPress`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`: zero achados para este form
+- Os 9 delegates chamados pelas classes de `TextBoxGridLookup` existem e s├úo PUBLIC (#3/#51)
+- Blocos balanceados (IF/DO CASE/WITH/FOR/TRY/PROC/DEFINE); sem acento literal em linha de c├│digo; `IsEmpty` s├│ em coment├írio citando o legado
+- `.fxp` apagado ao final, para a fase seguinte n├úo rodar p-code velho
+
+Corrigi a mem├│ria sobre o VFP9 (presumir que nunca executa levaria futuras sess├Áes a pular verifica├º├úo real) e registrei a li├º├úo do gate.
+
+## Dois pontos que deixo expl├¡citos
+
+**N├úo entreguei `cnt_4c_BotoesAcao` com Salvar/Cancelar**, que o prompt pede como item gen├®rico. Conferi a SE├ç├âO 1 do dump: o legado tem tr├¬s `CommandButton` ÔÇö `cmdInserir`, `cmdExcluir`, `cmdSair` ÔÇö e zero ocorr├¬ncia de Salvar/Confirmar/Cancelar. Cri├í-los seria inventar UI (viola o PILAR 1). A grava├º├úo mora no `cmdSair` ("Encerrar"), que ├® onde o legado roda o `UpDate`/`Commit` ÔÇö Fase 8.
+
+**`VerificarFormBuscaAuxiliar.ps1` n├úo rodou**: morre num `Split-Path` com argumento vazio, independente do meu form. Conferi o contrato ├á m├úo (os 3 `CREATEOBJECT` passam `gnConnHandle` no 1┬║ argumento). Esse script parece quebrado para qualquer invoca├º├úo ÔÇö vale olhar separadamente.

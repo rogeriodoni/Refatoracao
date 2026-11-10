@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Esse trecho confirma que a edi├º├úo foi aplicada corretamente e o bloco fecha bem. A implementa├º├úo est├í completa e consistente.
+
+**Resumo do que foi feito (Fase 5/8, Parte 1):**
+
+- Novo m├®todo `ConfigurarCamposGrupoContaEmissorPortador()`, chamado em `ConfigurarPageFrame()`:
+  - Cabe├ºalhos de coluna compartilhados (D├®bito/Cr├®dito, Grupo/Conta x2) ÔÇö aparecem uma ├║nica vez no dump, acima das 4 linhas.
+  - R├│tulos de linha "Emissor" e "Portador".
+  - 8 TextBoxes (`txt_4c_GrupoEDs/ContaEDs/GrupoECs/ContaECs/GrupoPDs/ContaPDs/GrupoPCs/ContaPCs`), com `Top`/`Left`/`Width`/`Height` exatos do dump e `MaxLength=11` (do schema `char(11)`, n├úo do pixel width).
+  - Nomes deduplicados manualmente porque `mapeamento.json` colide todos os `getGrupo*` em `txt_4c_Grupo` ÔÇö usei o sufixo completo do legado para evitar "object already exists".
+  - `ControlSource` ligado direto a `cursor_4c_GrdValores.<Campo>`, reproduzindo o padr├úo mestre-detalhe do `montagrades` legado (textbox fora do grid, mesmo cursor).
+- `MontaGrade()` atualizado para re-aplicar esses `ControlSource` + `Refresh()`, guardado por `PEMSTATUS`, espelhando o religamento que o legado faz a cada repintura.
+- Coment├írios do cabe├ºalho do arquivo atualizados indicando que esta ├® a Parte 1 (Emissor/Portador) e que a Parte 2 (Centro de Custo/Agente Cobrador + CMoes/TitBans/Tipos/MovTits) ainda est├í pendente.
+
+Pr├│ximo passo: Parte 2 da Fase 5, com as linhas restantes.

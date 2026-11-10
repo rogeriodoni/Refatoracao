@@ -1,0 +1,1809 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpNFd.SCX
+* Data/Hora: 09/11/2026 12:53:04
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPNFD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPNFD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPNFD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPNFD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntObservacao
+  Parent: SIGOPNFD
+  Class: container
+  BaseClass: container
+
+Objeto: lblEve
+  Parent: SIGOPNFD.cntObservacao
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesc
+  Parent: SIGOPNFD.cntObservacao
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntBotoes
+  Parent: SIGOPNFD
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntNFe
+  Parent: SIGOPNFD
+  Class: container
+  BaseClass: container
+
+Objeto: lblEmiss
+  Parent: SIGOPNFD.cntNFe
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNfe
+  Parent: SIGOPNFD.cntNFe
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntData
+  Parent: SIGOPNFD
+  Class: container
+  BaseClass: container
+
+Objeto: lblEntregas
+  Parent: SIGOPNFD.cntData
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getData
+  Parent: SIGOPNFD.cntData
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSeq
+  Parent: SIGOPNFD
+  Class: container
+  BaseClass: container
+
+Objeto: lblRecepcaos
+  Parent: SIGOPNFD.cntSeq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getSeq
+  Parent: SIGOPNFD.cntSeq
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEvento
+  Parent: SIGOPNFD
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Refazer
+  Parent: SIGOPNFD
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Verao
+  Parent: SIGOPNFD
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 387
+  Width = 758
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Eventos NFe"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  AlwaysOnTop = .F.
+  evento = .F.
+  parentform = thisform.parentformthisform.parentform
+  parentform2 = .F.
+  Name = "SIGOPNFD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntObservacao
+------------------------------------------------------------
+  Top = 167
+  Left = 40
+  Width = 722
+  Height = 219
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 1
+  Name = "cntObservacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntObservacao.lblEve
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição do evento:"
+  Left = 3
+  Top = 23
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 45
+  Name = "lblEve"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntObservacao.getDesc
+------------------------------------------------------------
+  Height = 144
+  Left = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 46
+  Width = 691
+  BorderColor = 90,90,90
+  ControlSource = "crSigMvNfd.nfedesc"
+  Name = "getDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 601
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Enviar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Gravar os Dados Informados"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSelItens"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 4
+  Command2.ToolTipText = "[Esc] Sair Sem Gravar os Dados"
+  Command2.SpecialEffect = 0
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntNFe
+------------------------------------------------------------
+  Top = 119
+  Left = 45
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 5
+  Name = "cntNFe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntNFe.lblEmiss
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Numero Nfe"
+  Left = 3
+  Top = 3
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblEmiss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntNFe.getNfe
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 20
+  Width = 80
+  BorderColor = 90,90,90
+  ZOrderSet = 27
+  NullDisplay = ""
+  Name = "getNfe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntData
+------------------------------------------------------------
+  Top = 119
+  Left = 142
+  Width = 150
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 6
+  Name = "cntData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntData.lblEntregas
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data/Hora"
+  Left = 3
+  Top = 3
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblEntregas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntData.getData
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 20
+  Width = 138
+  BorderColor = 90,90,90
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "getData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSeq
+------------------------------------------------------------
+  Top = 119
+  Left = 303
+  Width = 86
+  Height = 45
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 7
+  Name = "cntSeq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSeq.lblRecepcaos
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Sequência"
+  Height = 15
+  Left = 3
+  Top = 3
+  Width = 60
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lblRecepcaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.cntSeq.getSeq
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 3
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 20
+  Width = 80
+  BorderColor = 90,90,90
+  ZOrderSet = 27
+  NullDisplay = ""
+  Name = "getSeq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.GetEvento
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 48
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 87
+  Width = 265
+  BorderColor = 90,90,90
+  ZOrderSet = 27
+  NullDisplay = "//"
+  Name = "GetEvento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.Refazer
+------------------------------------------------------------
+  Top = 89
+  Left = 358
+  Height = 15
+  Width = 62
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Refazer"
+  Style = 0
+  TabIndex = 3
+  ToolTipText = "Selecione para reimprimir a ultima carta ou refazer o xml do cancelamento"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Refazer"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPNFD.Verao
+------------------------------------------------------------
+  Top = 89
+  Left = 439
+  Height = 15
+  Width = 113
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Horario de Verao"
+  Style = 0
+  TabIndex = 3
+  ToolTipText = "Selecione para reimprimir a ultima carta ou refazer o xml do cancelamento"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Verao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPNFD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atucur
+------------------------------------------------------------
+PROCEDURE atucur
+****** atualiza cursor *****
+LOCAL lnUltSeq
+
+lcEDN = crSigmvNfi.empdopnums
+lcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfd]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfd)])
+	llRet=.F.
+EndIf
+lnUltSeq=IIF(EOF('crSigMvNfd'), 1, crSigMvNfd.nfeseq+1)
+
+SELECT crSigMvNfd
+*!*	nfedte with DATETIME()
+
+IF thisform.evento = 'CAR' or EOF('crSigMvNfd')
+	APPEND BLANK
+	replace cidchaves with fUniqueIds(), ;
+			nfis with crsigmvnfi.nfis,;
+			dopes with crsigmvnfi.dopes,;
+			numes with crsigmvnfi.numes,;
+			emps with crsigmvnfi.emps,;
+			empdopnums with crsigmvnfi.empdopnums,;
+			nfedte with CTOT(thisform.cntData.getData.Value),;
+			nfedesc with '',;
+			nfeeve with thisform.Evento,;
+			nfeseq with lnUltSeq in crSigMvNfd
+ENDIF
+
+thisform.cntNFe.getNfe.value = crsigmvnfi.nfis
+thisform.cntSeq.getSeq.value = lnUltSeq
+thisform.cntObservacao.getDesc.value = crsigmvnfd.nfedesc
+
+
+ThisForm.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE canccfe
+------------------------------------------------------------
+PROCEDURE canccfe
+*** gera xml para o SAT diretamente pelo SAT.dll ***
+LOCAL lcDt, lcTm, lcAmb, lcCnpjAC, lcAssi, lcRat, lnRet, llSatShar
+
+*** mena 10/07/2015 - cria estrutura do xml de cancelamento para o CFe - SAT
+CREATE CURSOR CFTags  (c1 c(20), c2 c(20), c3 c(20), c4 c(20), c5 c(20), c6 c(20), c7 c(20), c8 c(20), c9 c(20), c10 c(20), c11 c(20), c12 c(20), c13 c(20), c14 c(20), c15 c(20), c16 c(20), c17 c(20), c18 c(20), c19 c(20), c20 c(20), c21 c(20), c22 c(20), c23 c(20), c24 L, ;
+					   c1a n(1,0), c2a n(1,0), c3a n(1,0), c4a n(1,0), c5a n(1,0), c6a n(1,0), c7a n(1,0), c8a n(1,0), c9a n(1,0), c10a n(1,0), c11a n(1,0), c12a n(1,0), c13a n(1,0), c14a n(1,0), c15a n(1,0), c16a n(1,0), c17a n(1,0), c18a n(1,0), c19a n(1,0), c20a n(1,0), c21a n(1,0), c22a n(1,0), c23a n(1,0), ;
+					   c1b n(3,0), c2b n(3,0), c3b n(3,0), c4b n(3,0), c5b n(3,0), c6b n(3,0), c7b n(3,0), c8b n(3,0), c9b n(3,0), c10b n(3,0), c11b n(3,0), c12b n(3,0), c13b n(3,0), c14b n(3,0), c15b n(3,0), c16b n(3,0), c17b n(3,0), c18b n(3,0), c19b n(3,0), c20b n(3,0), c21b n(3,0), c22b n(3,0), c23b n(3,0), ;
+					   c1c n(3,0), c2c n(3,0), c3c n(3,0), c4c n(3,0), c5c n(3,0), c6c n(3,0), c7c n(3,0), c8c n(3,0), c9c n(3,0), c10c n(3,0), c11c n(3,0), c12c n(3,0), c13c n(3,0), c14c n(3,0), c15c n(3,0), c16c n(3,0), c17c n(3,0), c18c n(3,0), c19c n(3,0), c20c n(3,0), c21c n(3,0), c22c n(3,0), c23c n(3,0))
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('A', .F., 'CFeCanc')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('A', .F., 'infCFe')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('A', .T., 'chCanc')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('B', .F., 'ide')   
+
+INSERT into CFTags (c1, c24, c2, c3, c4) ;
+			values ('B', .T., 'CNPJ', 'signAC', 'numeroCaixa')
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('C', .F., 'emit')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('E', .F., 'dest')   
+
+INSERT into CFTags (c1, c24, c2, c3, c4) ;
+			values ('E', .T., 'CNPJ', 'CPF', 'xNome')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('W', .F., 'total')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('Z', .F., 'infAdic')   
+
+INSERT into CFTags (c1, c24, c2) ;
+			values ('Z', .T., 'infCpl')   
+
+SELECT CFTags
+INDEX on ALLTRIM(C1) tag C1
+SET ORDER TO tag C1
+
+lcEmps = TprMvCab.emps
+Select localOpe
+lcEmpEmi = 	IIF(Substr(LocalOpe.ConfigGers, 239,3) != "   ",Substr(LocalOpe.ConfigGers, 239,3), lcEmps)
+
+**** prepara dados do emitente *****************************
+lcQuery = [Select RazSocs, Razas, Endes, Numeros, Compls, Bairs, Cidas, Estas, Ceps, ] + ;
+				 [Paises, Cgcs, Ies, Tel1s, Tel2s, PorcPis, PorcCons, ACSN, Ims, CNAE, MostraIm, MostraPara, AliqIA, textoPaf ] + ;
+		    [From SigCdEmp ] + ;
+		   [Where CEmps = '] + lcEmpEmi + [']
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalEmp]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEmp)])
+	Return 0
+EndIf
+*** mena - 03/12/2015 - alterado para ler a marca do SAT (esta depois da assinatura) ***
+lcCai = ALLTRIM(crSigOpCdc.cncaixas)			&&'001'
+lcCnpjAC = ALLTRIM(SUBSTR(localEmp.textoPaf,1,14))		&& AC de teste cadastrar no texto do ECF '16716114000172'	&&'11458830000183'
+lcAssi = ALLTRIM(SUBSTR(localEmp.textoPaf,16,344))		&& cadastrar no texto do ECF a partir da posicao 16	'SGR-SAT SISTEMA DE GESTAO E RETAGUARDA DO SAT'
+lcCha  = 'CFe'+ALLTRIM(crSigmvNfi.nfechv)
+lcFab  = ALLTRIM(SUBSTR(localEmp.textoPaf,361,10))		&& pega fabricante do SAT
+lnFab  = IIF(lcFab='SWEDA','3',IIF(lcFab='BEMAT','2','0'))
+lcArq = '.\SATDados.xml'
+lcChr = CHR(13) + CHR(10)
+
+*** Mota arquivo XML de cancelamento ***
+
+SELECT CFTags
+SEEK 'A'
+lcTag4 = ALLTRIM(c2)
+=Strtofile(Alltrim([<] +lcTag4 + [>]+ lcChr), lcArq, .F.)
+SKIP
+lcTag3 = ALLTRIM(c2)
+SKIP
+lcTag2 = ALLTRIM(c2)
+=Strtofile(Alltrim([<] + [infCFe ]+lcTag2+[="]+lcCha + [">]+lcChr), lcArq, .T.)
+
+
+**** Monta linha B *****************************
+SEEK 'B'
+lcTag1 = ALLTRIM(c2)
+=Strtofile(Alltrim([<] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+SKIP
+lcTag2 = ALLTRIM(c2)
+=Strtofile(Alltrim([<] +lcTag2 + [>]+ lcCnpjAC +[</] +lcTag2 + [>]+lcChr), lcArq, .T.)
+lcTag2 = ALLTRIM(c3)
+=Strtofile(Alltrim([<] +lcTag2 + [>] + lcAssi + [</] +lcTag2 + [>]+lcChr), lcArq, .T.)
+lcTag2 = ALLTRIM(c4)
+=Strtofile(Alltrim([<] +lcTag2 + [>]+ lcCai +[</] +lcTag2 + [>]+lcChr), lcArq, .T.)
+=Strtofile(Alltrim([</] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+
+
+**** Monta linha de emitente *****************************
+*** mena 03/12/2015 alteracao na montagem da linha para ser aceita no Sat Tanca e Sweda ***
+SEEK 'C'
+lcTag1 = ALLTRIM(c2)+ ' /'
+=Strtofile(Alltrim([<] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+*!*=Strtofile(Alltrim([</] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+***********************************************************
+
+
+**** Monta linha do destinatario *****************************
+**** mena - 12/09/2016 - pega cpf usado na emissao do CFe
+lcXml = crSigmvNfi.nfexml	
+lcCpD = STREXTRACT(lcXml,'<CNPJ>','</CNPJ>',3)
+lcCpD = []		&& Mena - 13/08/2018 deixar cpf em branco no cancelamento &&IIF(!EMPTY(lcCpD), lcCpD, STREXTRACT(lcXml,'<CPF>','</CPF>',1))
+
+*!*	lcQuery = [Select Cpfs From SigCdCli Where IClis = '] + TprMvCab.contaDs + [']
+*!*	If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCliD]) < 1)
+*!*		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCliD)])
+*!*		Return 0
+*!*	EndIf
+
+*!*	Select LocalCliD
+*!*	Go Top In LocalCliD
+*!*	lcCpD = ALLTRIM(Strtran(Strtran(Strtran(LocalCliD.Cpfs, [.], []), [-], []), [/], []))
+
+*** mena 03/12/2015 alteracao na montagem da linha para ser aceita no Sat Tanca e Sweda ***
+IF !EMPTY(lcCPD)
+	SELECT CFTags
+	SEEK 'E'
+	lcTag1 = ALLTRIM(c2)
+	=Strtofile(Alltrim([<] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+	SKIP
+	lcTag2 = ALLTRIM(IIF(LEN(lcCpD) = 11, c3, c2))
+	=Strtofile(Alltrim([<] +lcTag2 + [>]+ lcCPD +[</] +lcTag2 + [>]+lcChr), lcArq, .T.)
+	=Strtofile(Alltrim([</] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+ELSE
+	SELECT CFTags
+	SEEK 'E'
+	lcTag1 = ALLTRIM(c2)+ ' /'
+	=Strtofile(Alltrim([<] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+ENDIF
+***********************************************************
+
+*** mena 03/12/2015 alteracao na montagem da linha para ser aceita no Sat Tanca e Sweda ***
+SELECT CFTags
+SEEK 'W'
+lcTag1 = ALLTRIM(c2) + ' /'
+=Strtofile(Alltrim([<] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+*!*=Strtofile(Alltrim([</] +lcTag1 + [>]+ lcChr), lcArq, .T.)
+
+=Strtofile(Alltrim([</] +lcTag3 + [>]+ lcChr), lcArq, .T.)
+=Strtofile(Alltrim([</] +lcTag4 + [>]+ lcChr), lcArq, .T.)
+
+*** mena 03/12/2015 numero da sessao é integer ***
+Declare String CancelarUltimaVenda   IN "SAT.dll" Integer numeroSessao, String codigoDeAtivacao, String chave, String dadosCancelamento
+Declare String ConsultarSAT          IN "SAT.dll" Integer numeroSessao
+
+*!*	ELSE
+*!*		Declare String CancelarUltimaVenda   IN "SAT.dll" String numeroSessao, String codigoDeAtivacao, String chave, String dadosCancelamento
+*!*		Declare String ConsultarSAT          IN "SAT.dll" String numeroSessao
+*!*	ENDIF
+
+llSatShar = IIF(!EMPTY(crSigcdpac.dirresta),.t.,.f.)	&& se o aparelho do sat for compartilhado, envia arquivos para area comum
+lnRet=.f.
+IF FILE(lcArq)
+	lcTexto = FILETOSTR(lcArq)
+	lcCodAti=[12345678]
+	DO WHILE .T.
+	 	lcArqLog = 'SatLog'
+		lnSessao = fGerUniqueKey('SAT')
+		lcSessao = PADL(alltrim(STR(lnSessao)),8,'0')	&& mena - para o SAT sweda	&&IIF(INLIST(lnFab,2,3), lnSessao, PADL(alltrim(STR(lnSessao)),6,'0'))	&& mena - para o SAT sweda
+		lcRetorno = IIF(llSatShar,EnviarComandoSat('ConsultarSAT',lcSessao, lnFab),ConsultarSAT(lnSessao))
+		lcMsg1 = STREXTRACT(lcRetorno, [|],[|],1)
+
+		IF lcMsg1 = '08000'	&& Verifica se SAT está ativo
+			lnSessao = fGerUniqueKey('SAT')
+			lcSessao = PADL(alltrim(STR(lnSessao)),8,'0')	&& mena - para o SAT sweda	&&IIF(INLIST(lnFab,2,3), lnSessao, PADL(alltrim(STR(lnSessao)),6,'0'))	&& mena - para o SAT sweda
+			*** verifica se sat local ou compartilhado ***
+			lcRetorno = IIF(llSatShar,EnviarComandoSat('CancelarUltimaVenda',lcSessao, lnFab, lcCodAti, lcCha, lcTexto),CancelarUltimaVenda(lnSessao, lcCodAti, lcCha, lcTexto))
+			lcMsg1 = STREXTRACT(lcRetorno, [|],[|],1)
+			lcMsg2 = STREXTRACT(lcRetorno, [|],[|],2)
+			lcMsg3 = STREXTRACT(lcRetorno, [|],[|],3)
+			=Strtofile(lcChr+TTOC(DATETIME())+' Retorno Cancelamento CFe - SESSAO:' + ALLTRIM(STR(lnSessao))+lcChr+lcRetorno, lcArqLog, .T.)
+						
+			lcMsg="Codigo de retorno: " + lcMsg1 + ' ' + lcMsg2 + ' ' + lcMsg3 + ' Sessão: ' + ALLTRIM(STR(lnSessao))
+			IF lcMsg1 = '07000'	&& cupom cancelado
+				Messagebox(lcMsg, 0+64, [Retorno do SAT])
+				*** mena - 03/08/2015 - prepara dados para impressão de cancelamento e gravação de XML
+				pcXml = STREXTRACT(lcRetorno, [|],[|],6)
+				pcXml = STRCONV(pcXml,14,1046)
+				lnRet = .T.
+			else			
+				Messagebox(lcMsg, 0+64, [Retorno do SAT])
+			ENDIF
+			EXIT
+		ELSE
+			Messagebox(lcRetorno, 0+64, [Retorno do SAT])
+			lnRet = .f.
+			EXIT
+		ENDIF
+	ENDDO
+ENDIF
+
+RETURN lnRet
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE conscan
+------------------------------------------------------------
+PROCEDURE conscan
+LOCAL cCampo, lcPed, lcDest, lcAux, lcLinha, lcLog, lOk
+
+lcPed = cPathUni + lcPTxt + cId+"-ped-sit.XML"
+lcLog = cPathUni + lcPTxt + 'logNfe.txt'
+
+DELETE FILE &lcPed
+=StrToFile([], lcPed)
+
+*** mena 18/03/2016 - alterada a versao para 3.10, estava a antiga (2.0..)
+*** mena 18/06/2018 - alterada a versao para 4.00, estava a antiga (2.0..)
+=Strtofile(Alltrim([<?xml version="1.0" encoding="UTF-8"?>]+ lcChr), lcPed,.T.)
+=Strtofile(Alltrim([<consSitNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">]+ lcChr), lcPed, .T.)
+=Strtofile(Alltrim([<tpAmb>]+lcTAmb+[</tpAmb>]+ lcChr), lcPed, .T.)
+=Strtofile(Alltrim([<xServ>]+"CONSULTAR"+[</xServ>]+ lcChr), lcPed, .T.)
+=Strtofile(Alltrim([<chNFe>]+cId+[</chNFe>]+ lcChr), lcPed, .T.)
+=Strtofile([</consSitNFe>]+ lcChr, lcPed, .T.)
+
+lOk = .F.
+cCampo=''
+
+DO WHILE .T.
+**** Pede re envio de XML para nota cancelada ****
+*!*		lcDest = lcPathNFe + lcPAutorizados + SUBSTR(cDEmis, 1, 6) + [01\] + cId + [-procCancNFe.xml]
+*!*		lcDest = lcPathNFe + lcPAutorizados + SUBSTR(cDEmis, 1, 8) + [\] + cId + [-procCancNFe.xml]
+*!*		IF !FILE(lcDest) and crSigPrNfe.stats = 'CAN'
+	lcAux = lcPathNFe + lcPEmProc + lcXml
+	lcDest = lcArq			&& pedido de cancelamento assinado
+	COPY FILE &lcDest to &lcAux
+	DELETE FILE &lcDest
+*!*		ENDIF
+
+	lcXml = cId+"-ped-sit.XML"
+	**** delete arquivo de processo anterior (se houver)
+	lcDest=lcPathNFe+lcPRetorno+cId+"-sit.XML"
+	DELETE FILE &lcDest
+	
+	*** Enviar arquivo atraves da UNINFe
+	lcDest=lcPathNFe+lcPEnvio+lcXml
+	COPY file &lcPed to &lcDest
+
+	*** Verifica se retornou erro
+	lcDest=lcPathNFe+lcPRetorno+cId+"-sit.err"
+	=THISFORM.ParentForm2.esperaarq(lcDest, 3)
+	IF FILE(lcDest)
+		exit
+	ENDIF
+	
+	lcDest=lcPathNFe+lcPRetorno+cId+"-sit.XML"
+	=THISFORM.ParentForm2.esperaarq(lcDest, 180)
+	IF FILE(lcDest)
+		cLinha = FILETOSTR(lcDest)
+		pIni=ATC("<cStat>", cLinha, 1)	&& pega CODIGO DE RETORNO dentro do xml
+		pFim=ATC("</cStat>", cLinha, 1)
+		lcStat=SUBSTR(cLinha,pIni+7, pFim-(pIni+7))
+		pIni=ATC("<nProt>", cLinha, 1)	&& pega CODIGO DE RETORNO dentro do xml
+		pFim=ATC("</nProt>", cLinha, 1)
+		cProt=SUBSTR(cLinha,pIni+7, pFim-(pIni+7))
+		pIni=ATC("<xMotivo>", cLinha, 1)
+		pFim=ATC("</xMotivo>", cLinha, 1)
+		cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + SUBSTR(cLinha,pIni+9, pFim-(pIni+9))
+		DELETE FILE &lcDest
+		lOk = "101"$(lcStat) or "100"$(lcStat) &&and "AUTORIZA"$(upper(cCampo)) 
+		IF lOk
+			replace stats with 'CAN' in crSigPrNfe
+			replace statts with '0' in crSigPrNfe
+			replace prots with cProt in crSigPrNfe
+		endif
+	ELSE
+		cCampo = "NF:" + SUBSTR(cId, 26, 9) + Chr(10) + 'Não houve resposta da Sefaz. Tente mais tarde.'
+		=StrToFile(lcChr+space(4)+[-Retorno da Consulta não veio. ]+lcDest, lcLog, .T.)
+	EndIf
+	EXIT	
+EndDo
+
+If !lOk
+	**** verifica e mostra erros retornados
+	lcDest=lcPathNFe+lcPRetorno+cId+"-sit.err"
+	IF FILE(lcDest)
+		cLinha = FILETOSTR(lcDest)
+		cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + alltrim(cLinha)
+		=StrToFile(lcChr+space(4)+[-Erro retornado: ]+lcChr+cLinha, lcLog, .T.)
+		DELETE FILE &lcDest
+	EndIf
+	Messagebox(cCampo, 0+64, [Retorno da SEFAZ])
+ENDIF
+	
+RETURN lOk
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm1, pForm2, pDId, pEvento
+LOCAL lcEDN
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+thisform.Evento = pEvento
+
+Set Confirm On
+
+*!*	ThisForm.LockScreen = .f.
+*!*	ThisForm.LockScreen = .t.
+Set DataSession to pDId
+With ThisForm
+	.ParentForm  = pForm1
+	.ParentForm2 = pForm2
+	.ParentForm.Enabled = .T.
+EndWith
+
+IF thisform.Evento = 'CAN'
+	thisform.getEvento.Value  = 'CANCELAMENTO'
+ELSE
+	thisform.getEvento.Value = 'CARTA DE CORREÇÃO'
+ENDIF
+
+thisform.cntData.getData.Value  = ttoc(DATEtime())
+
+thisform.atucur()	&& atualiza  cursor de eventos da nfe
+ 
+*** mena - 13/08/2014 - seleciona operação ***
+lcEDN = crSigmvNfi.empdopnums
+If (ThisForm.ParentForm.poDataMgr.SqlExecute([Select * From SigMvCab Where empdopnums = '] + lcEDN + [' ], [crSigMvCab]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvCab)])
+	llRet=.F.
+EndIf
+
+lcQuery = [Select a.NFiscals, a.Parcs, b.ImpDFProNf, b.ImpDFObsNf, d.ImpdfRefNf, b.Distribs, ] + ;
+		[c.FreteDefs, b.AgeMasks, a.nfcompls, b.ConfigGers, d.subcdprorf, d.impob2s, d.exicbsimp, d.ckvendafis ] + ;
+		[From SigCdOpe a ] + ;
+		[Left Join SigOpCdd b On a.Dopes = b.Dopes ] + ;
+		[Left Join SigOpCdc c On a.Dopes = c.Dopes ] + ;
+		[Left Join SigOpCdi d On a.Dopes = d.Dopes ] + ;
+		[Where a.Dopes = '] + crSigMvCab.Dopes + [']
+	
+If (Thisform.Parentform.poDataMgr.SqlExecute(lcQuery, [LocalOpe]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpe)])
+	llRet=.F.
+Endif
+
+ThisForm.AutoCenter = .t.
+ThisForm.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+&&Do Parametros_Iniciais
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.cntObservacao.getDesc
+* Classe: fwmemo (Base: editbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSelItens.Click
+------------------------------------------------------------
+PROCEDURE btnSelItens.Click
+PRIVATE cTo, cAssunto, cAnexo, cCorpo, cFrom, cCC, cServer, cSenha, nPorta
+PRIVATE lOk, cCampo, cComando, lcTeste, lcStat
+PRIVATE lcDest, lcXml, lcQuery, lcArqXML, lcArqPDF
+PRIVATE lcArq, lcTAmb, lcProt, lcEmp, lcQuery, lcCH, lcPathNfe, cCnpj, cDemis, lcLinha, pIni, pFim, llOks, lcTemp
+PRIVATE lcVerao
+LOCAL lcCha, lcNf, lcSer, lcPt, lcJu, llOks, lnRet
+PRIVATE pcXml
+
+*** mena - 29/05/2015 - cancela NFCe emitida pelo migrate ***
+IF crSigCdOpe.CupFis=5
+	llOks=.t.
+	DECLARE integer tCFCancelar_NFCe_Daruma in 'DarumaFramework' string StrNNF, string StrNSerie, string StrChAcesso, string StrProtAutorizacao, string StrJustificativa
+	DECLARE integer rAvisoErro_NFCe_Daruma in 'DarumaFramework' String StrCodigo, String StrMensagem
+	DECLARE integer regRetornarValor_NFCe_Daruma in 'DarumaFramework' String StrTagNFCe, String StrValorTagNFCe
+	DECLARE integer rRetornarInformacao_NFCe_Daruma in 'DarumaFramework' String strTipo, String ini, String fim, String ser, String chav, String info, String resp
+
+	IF 	crSigPrNfe.stats = 'EMI'	&& cancelamento de NFCe
+		lcCha = ALLTRIM(crSigmvNfi.nfechv)
+		lcNf  = ALLTRIM(crSigmvNfi.nfis)
+		lcSer = ALLTRIM(crSigmvNfi.series)
+		lcPt  = ALLTRIM(crSigmvNfi.nfeprt)
+		lcJu  = ALLTRIM(thisform.cntObservacao.getDesc.Value)
+		lcResp = SPACE(500)
+
+		lnRet = rRetornarInformacao_NFCe_Daruma('CHAVE', '', '', '', lcCha, '1+2', @lcResp)
+		IF lnRet <> 1
+			=MostraErro(lnRet)	&& mostra o erro sem cancelar para não correr o risco de cancelar nota emitida anteriormente 
+			RETURN .f.
+		ENDIF
+		lcSitu = IIF(EMPTY(lcResp), '', STREXTRACT(lcResp,'<DocSitCodigo>', '</DocSitCodigo>',1))
+
+		IF lcSitu <> '100'		&& se a nota está em contingencia ou nao foi autorizada pela SEFAZ não pode ser cancelada. Para evitar inconsistencias
+			MESSAGEBOX('Retornou situacao da nota ' + lcSitu + ' Nota não autorizada não pode ser cancelada. Verifique!!', 0, 'Aviso')
+			return .f.
+		ENDIF
+		
+		lnRet = tCFCancelar_NFCe_Daruma(lcNf, lcSer, lcCha, lcPt, lcJu)
+		IF lnRet <> 1
+			=MostraErro(lnRet)	&& mostra o erro sem cancelar para não correr o risco de cancelar nota emitida anteriormente 
+		ENDIF
+
+		lcCod = SPACE(4)
+		lcDes = SPACE(600)
+		IF rAvisoErro_NFCe_Daruma(@lcCod, @lcDes)=1
+			MESSAGEBOX(ALLTRIM(lcDes), 0, 'Retorno NFCe')
+		ENDIF
+
+		IF lnRet = 1 or lnRet = 0 or 'DUPLICIDADE'$UPPER(lcDes) or 'HOMOLOGADO'$UPPER(lcDes)
+			replace cancelas with .T. in crSigMvNfi
+			replace stats with 'CAN' in crSigPrNfe
+			replace statts with '0' in crSigPrNfe
+			replace arquivos with lcJu in crSigPrNfe
+			replace lcancelas with .T. in crSigMvCab		&& mena 13/08/2014 - seta operacao como cancelada
+
+			llOks=.t.
+			If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvNfi])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvNfi)])
+				llOks = .f.
+			EndIf
+			If Not ThisForm.ParentForm.poDataMgr.Update([crSigPrNfe])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrNfe)])
+				llOks = .f.
+			EndIf
+			If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvCab])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvCab)])
+				llOks = .f.
+			EndIf
+			If llOks
+				If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+					llOks = .f.
+				EndIf
+			ENDIF
+		ENDIF
+	ENDIF
+	RETURN llOks
+ENDIF
+***********************************************************************************************
+
+*** mena - 10/07/2015 - cancela CF-e emitido pelo SAT ***
+IF crSigCdOpe.CupFis=6
+	pcXml = ''
+	llOKs = THISFORM.canccfe() 
+	IF llOKs
+		replace cancelas with .T. in crSigMvNfi
+		replace stats with 'CAN' in crSigPrNfe
+		replace statts with '0' in crSigPrNfe
+		replace lcancelas with .T. in crSigMvCab		&& mena 24/07/2015 - seta operacao como cancelada
+		replace canxml with pcXml in crSigMvNfi			&& mena 03/08/2015 - grava xml de cancelamento na base de dados
+		
+		llOks=.t.
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvNfi])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvNfi)])
+			llOks = .f.
+		EndIf
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigPrNfe])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrNfe)])
+			llOks = .f.
+		EndIf
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvCab])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvCab)])
+			llOks = .f.
+		EndIf
+		If llOks
+			If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+				llOks = .f.
+			EndIf
+		ENDIF
+
+		If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+			llOks = .f.
+		EndIf
+
+		IF !EMPTY(crSigMvNfi.canxml)
+			lnRetG=GrvArqxml('C')	&& grava arquivo xml de cancelamento
+			IF !lnRetG
+				=MessageBox([Não foi possível gravar xml do SAT.], 16, [Gravacao Xml])
+			ENDIF
+			=PrintCfeCan(crSigMvNfi.canxml)	&& imprime CFe de cancelamento
+			=CancelCVCfe(TprMvCab.empdopnums,ThisForm.ParentForm.poDataMgr) && cancela e imprime cancelamento de cupom vinculado
+
+		ENDIF
+	ENDIF
+	RETURN llOks
+ENDIF
+***********************************************************************************************
+
+IF thisform.evento = 'CAR' and crSigPrNfe.stats <> 'EMI'
+	Messagebox('Carta de correção não pode ser feita. Esta nota não está emitida.', 0+64, [])
+	return
+ENDIF
+IF thisform.evento = 'CAN' and crSigPrNfe.stats <> 'EMI' and crSigPrNfe.stats <> 'CAN'
+	Messagebox('Cancelamento não pode ser executado. Verifique!!', 0+64, [])
+	return
+ENDIF
+IF EMPTY(crSigMvNfi.nfexml) or EMPTY(crSigmvNfi.nfeprt) 
+	Messagebox('Evento de Cancelamento e Carta de Correção não podem ser executados. Não há dados de nota autorização. Verifique!!', 0+64, [])
+	return
+ENDIF
+
+IF LEN(ALLTRIM(crsigmvnfd.nfedesc)) <15
+	Messagebox('Descrição do evento inválida', 0+64, [])
+	return
+ENDIF
+
+lcChr = CHR(13) + CHR(10)
+lcPEnvio = "envio\"
+lcPEnviado = "Enviado\"
+lcPEmProc = "Enviado\EmProcessamento\"
+lcPEnvioEmLote = "EnvioEmLote\"
+lcPErro= "Erro\"
+lcPRetorno="Retorno\"
+lcPValidar="Validar\"
+lcPBKenviados="BKenviados\"
+lcPAssinado="Assinado\"
+lcPValidado="Validado\"
+lcPAutorizados = "Enviado\Autorizados\"
+lcPPdf = "PDF\"
+
+lcPBkp = ALLTRIM(crSigCdPac.direxpsdfs)		&& mena - 22/06/2017 - set pasta de backup configurada
+lcPBkp = IIF(!EMPTY(lcPBkp),lcPBkp,cPathUni+'BKP\')
+lcPTxt = "TXT\"
+lcVerao = IIF(thisform.verao.Value=1,'02:00' ,'03:00')
+
+**** Pega o tipo de ambiente onde a nota foi emitida ****
+lcLinha = crSigMvNfi.nfexml
+pIni=ATC("<tpAmb>", lcLinha, 1)	&& pega tipo de ambiente dentro do xml de emissao
+pFim=ATC("</tpAmb>", lcLinha, 1)
+lcTAmb=SUBSTR(lcLinha,pIni+7, pFim-(pIni+7))
+
+lcEmp = crSigmvNfi.emps	&& empresa
+Select localOpe
+lcEmpEmi = 	IIF(Substr(LocalOpe.ConfigGers, 239,3) != "   ",Substr(LocalOpe.ConfigGers, 239,3), lcEmp)
+
+lcQuery = [Select * From SigCdEmp Where CEmps = '] + lcEmpEmi + [']
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalEmp]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEmp)])
+	llRet=.F.
+EndIf
+
+lcProt= crSigmvNfi.nfeprt
+lcCh  = crSigmvNfi.empdopnums	&& nfiscal
+
+cCorpo = ALLTRIM(LocalEmp.textonfe)
+cFrom  = ALLTRIM(LocalEmp.emailnfe)
+cCC    = ALLTRIM(LocalEmp.emailnfe)
+cServer= ALLTRIM(LocalEmp.servs)
+cSenha = ALLTRIM(LocalEmp.senhas)
+nPorta = LocalEmp.portas
+cPathUni = ALLTRIM(LocalEmp.pastas)
+cCnpj= ALLTRIM(Strtran(Strtran(Strtran(LocalEmp.Cgcs, [.], []), [-], []), [/], []))
+cId = ALLTRIM(crSigmvNfi.nfechv)
+&&cId = ThisForm.ParentForm2.criachave()
+lcPathNFe= cPathUni + cCnpj + "\"
+lcTemp = cPathUni+lcPTxt +'arqTemp.xml'
+lcEmis= SUBSTR(DTOs(crSigmvnfi.emis), 1, 8)
+cDEmis= SUBSTR(DTOs(crSigmvnfd.nfedte), 1, 8)
+lcHoje= SUBSTR(DTOs(DATE()), 1, 8)
+
+**** Prepara pasta de backup ****
+lcBkp = lcPBkp+cCnpj+[\]+SUBSTR(cDEmis, 1, 6)+[\]	&& seta pasta de buckup
+IF not DIRECTORY(lcBkp)
+	MKDIR &lcBkp
+endif	
+
+IF EMPTY(cPathUni)
+	Messagebox('O Sistema não está configurado para emissão de NFe', 0+64, [])
+	return
+ENDIF
+
+*** mena - 05/10/2017 - verifica se tem pasta de autorizacao ***
+lcAut = lcPathNFe + lcPAutorizados + lcEmis + [\]	&& cria pasta de autorizacao na data da emissao se necessario
+IF not DIRECTORY(lcAut)
+	MKDIR &lcAut
+endif	
+lcAut = lcPathNFe + lcPAutorizados + cDEmis + [\]	&& cria pasta de autorizacao na data do dia se necessario
+IF not DIRECTORY(lcAut)
+	MKDIR &lcAut
+endif	
+lcTempNfe=lcPathNFe + lcPAutorizados + lcEmis + [\] + crSigMvNfi.nfechv+[-procNFe.xml]	&& coloca a NFe na pasta da emissao
+IF !FILE(lcTempNfe)
+	StrToFile(lcLinha, lcTempNfe)
+endif
+lcTempNfe=lcPathNFe + lcPAutorizados + cDEmis + [\] + crSigMvNfi.nfechv+[-procNFe.xml]	&& coloca a NFe na pasta do dia
+IF !FILE(lcTempNfe)
+	StrToFile(lcLinha, lcTempNfe)
+endif
+***********************************************************************
+
+lcDesc = ALLTRIM(fLimpaTexto(crSigMvNfd.nfedesc))
+lcDesc = Strtran(Strtran(Strtran(lcDesc, CHR(10), []), CHR(13), []), [\], [])
+
+IF thisform.Evento = 'CAN'
+	lcMun  = SUBSTR(cId,1,2)
+	lcCnpj = SUBSTR(cId,7,14)
+
+	lcSeq  = ALLTRIM(STR(crsigmvNfd.nfeSeq))
+	lcSeq2 = TRANSFORM(crsigmvNfd.nfeSeq, '@L 99')
+	
+*!*		b=ttoc(crSigmvNfd.nfedte)
+	b=ttoc(CTOT(thisform.cntData.getData.Value))
+	lcData = SUBSTR(b,7,4) + '-'+SUBSTR(b,4,2) + '-'+SUBSTR(b,1,2) + 'T'+SUBSTR(b,12,8) + '-'+lcVerao
+
+	lcArq = cPathUni  + lcPTxt + cId+"-"+lcSeq2+"-env-canc.XML"
+*!*		lcArq = cPathUni  + lcPTxt + cId+"-ped-can.XML"
+	DELETE FILE &lcArq
+	=StrToFile([], lcArq)
+
+	=Strtofile(Alltrim([<?xml version="1.0" encoding="UTF-8"?>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">]+ lcChr), lcArq, .T.)
+	=Strtofile(Alltrim([<idLote>000000000000001</idLote>]+ lcChr), lcArq, .T.)
+	=Strtofile(Alltrim([<evento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">]+ lcChr), lcArq, .T.)
+	=Strtofile(Alltrim([<infEvento Id="ID110111] +cId+lcSeq2+[">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<cOrgao>]+lcMun+[</cOrgao>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<tpAmb>]+Alltrim(lcTAmb)+[</tpAmb>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<CNPJ>]+lcCnpj+[</CNPJ>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<chNFe>]+cId+[</chNFe>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<dhEvento>]+lcData+[</dhEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<tpEvento>110111</tpEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<nSeqEvento>]+lcSeq + [</nSeqEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<verEvento>1.00</verEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<detEvento versao="1.00">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<descEvento>Cancelamento</descEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<nProt>]+Alltrim(lcProt)+[</nProt>]+ lcChr), lcArq, .T.)
+	=Strtofile(Alltrim([<xJust>]+lcDesc+[</xJust>]+ lcChr), lcArq, .T.)
+	=Strtofile(ALLTRIM([</detEvento>]+ lcChr), lcArq, .T.)
+	=Strtofile(ALLTRIM([</infEvento>]+ lcChr), lcArq, .T.)
+	=Strtofile(ALLTRIM([</evento>]+ lcChr), lcArq, .T.)
+	=Strtofile(ALLTRIM([</envEvento>]+ lcChr), lcArq, .T.)
+
+	lOk = .F.
+	cCampo=''
+
+	**** testa se já existe uma instancia do uninfe rodando - cria arquivo vazio no envio e verifica se foi lido****
+	lcDanfe  = cPathUni + "unidanfe.exe"
+	lcUniNFe = cPathUni + "uninfe.exe"
+	cPath = cPathUni + "TXT\"
+	lcTeste = lcPathNFe+lcPEnvio+'uninfe-alt-con.xml' 
+	=Strtofile([<?xml version="1.0" encoding="utf-8"?><altConfUniNFe></altConfUniNFe>], lcTeste, .T.)
+	=ThisForm.ParentForm2.esperauniler(lcTeste, 5)
+	IF FILE(lcTeste) 	&&Ativa UniNFe para controle das NFEs
+		cComando = lcUniNFe
+		RUN /N &cComando
+	ENDIF
+
+	DO WHILE .T.
+*!*		lcXml = cId+"-ped-can.XML"
+		lcXml = cId+"-"+lcSeq2+"-env-canc.XML"
+
+		*** Valida arquivo atraves da UNINFe
+		lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-canc.XML"
+		DELETE FILE &lcDest
+		lcDest=lcPathNFe+lcPValidar+lcPValidado+"*.XML"	
+		DELETE FILE &lcDest		&& apaga arquivos validados anteriormente		
+		lcDest=lcPathNFe+lcPValidar+lcXml
+		COPY file &lcArq to &lcDest
+
+		** Verifica se arquivo validado ok
+		lcDest=lcPathNFe+lcPValidar+lcPValidado+lcXml
+		=THISFORM.ParentForm2.esperaarq(lcDest, 10, 'Aguardando validação')
+		IF FILE(lcDest)
+			lcArq = lcDest		&& salva para consultar status
+		ELSE
+			lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-canc.XML"
+			IF FILE(lcDest)
+				cLinha=FILETOSTR(lcDest)
+				i=4
+				lcStat = ''
+				do while LEN(lcStat)=0 and i>0			&& procura ultima ocorrencia válida do cStat 
+					lcStat = STREXTRACT(cLinha,"<cStat>","</cStat>",i)
+					i=i-1
+				ENDDO
+				i=4
+				lcMotivo = ''
+				do while LEN(lcMotivo)=0 and i>0			&& procura ultima ocorrencia válida de xMotivo 
+					lcMotivo = STREXTRACT(cLinha,"<xMotivo>","</xMotivo>",i)
+					i=i-1
+				ENDDO
+				cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + 'STATUS:' + lcStat + CHR(10) + lcMotivo
+				DELETE FILE &lcDest
+			ELSE
+				cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + 'Problema ao assinar o arquivo. Verifique o certificado.'
+			EndIf
+			EXIT 
+		ENDIF
+
+		***********************************************************************
+		***********************************************************************
+		**** Pede reenvio de xml de cancelamento
+
+		IF thisform.refazer.Value=1 		&& pede reenvio de xml de cancelamento
+			Messagebox('Cancelamento será reenviado.', 0+64, [])
+			**** limpa pasta de processamento
+			lcDest=lcPathNFe + lcPEmProc + [*.xml]
+			DELETE file &lcDest
+			lOk= thisform.conscan() 
+			IF lOk
+				lcDest=lcPathNFe + lcPAutorizados + cDEmis + [\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+				IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+					lcDest=lcPathNFe + lcPAutorizados + SUBSTR(cDEmis, 1, 6) + [01\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+					IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+						lcDest=lcPathNFe + lcPAutorizados + lcHoje + [\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+						IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+							cCampo="NÃO HOUVE RETORNO DA SEFAZ"
+							lOk = .f.
+						ENDIF
+					ENDIF
+				ENDIF
+			ENDIF
+			EXIT
+		***********************************************************************
+		ELSE
+			*** Enviar arquivo atraves da UNINFe
+			lcDest=lcPathNFe+lcPEnvio+lcXml
+			COPY file &lcArq to &lcDest
+			DELETE FILE &lcArq
+			lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-ret-env-canc.XML"
+			=ThisForm.ParentForm2.esperaarq(lcDest, 180)
+			IF FILE(lcDest)
+				cLinha = FILETOSTR(lcDest)
+				i=4
+				lcStat = ''
+				do while LEN(lcStat)=0 and i>0			&& procura ultima ocorrencia válida do cStat 
+					lcStat = STREXTRACT(cLinha,"<cStat>","</cStat>",i)
+					i=i-1
+				ENDDO
+				i=4
+				lcMotivo = ''
+				do while LEN(lcMotivo)=0 and i>0			&& procura ultima ocorrencia válida de xMotivo 
+					lcMotivo = STREXTRACT(cLinha,"<xMotivo>","</xMotivo>",i)
+					i=i-1
+				ENDDO
+				cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + lcMotivo
+				DELETE FILE &lcDest
+				lOk = "135"$(lcStat) or "EVENTO REGISTRADO"$(upper(cCampo)) 
+				IF lOk
+					lcDest=lcPathNFe + lcPAutorizados + cDEmis + [\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+					IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+						lcDest=lcPathNFe + lcPAutorizados + SUBSTR(cDEmis, 1, 6) + [01\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+						IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+							lcDest=lcPathNFe + lcPAutorizados + lcHoje + [\] + cId + "_110111_"+lcSeq2+[-procEventoNFe.xml]
+							IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+								cCampo="NÃO HOUVE RETORNO DA SEFAZ"
+								lOk = .f.
+							ENDIF
+						endif			
+					endif			
+				endif
+			EndIf
+			EXIT	
+		ENDIF
+	EndDo
+		  
+	IF lOk	
+
+		*** pega email do cliente ***
+		lcQuery = [Select eMails From SigCdCli Where IClis = '] + crSigMvNfi.CliFors + [']
+
+		If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCliD]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCliD)])
+			Return 0
+		EndIf
+
+		cTo = LocalClid.emails
+		cAssunto = "Nota fiscal cancelada: " + SUBSTR(cId, 26, 9)
+		cAnexo = lcDest
+
+		IF Messagebox([Confirma envio de e-mail para: ] + cTo + ["?"], 4+32, [Nota fiscal cancelada]) = 6
+			IF enviaEmail(cTo, cCorpo, cAssunto, cAnexo, cFrom, cCC)
+				WAIT window [Email enviado com sucesso]
+			ENDIF
+		ENDIF
+
+		*** Faz bachup do xml
+		lcArq = lcDest
+		lcDest=lcBkp+cId+"_"+lcSeq2+[-procEventoNFe.xml]
+		COPY file &lcArq to &lcDest
+
+		*** Le conteudo do xml para gravar no sigmvnfi***
+		cConteudoxml = FILETOSTR(lcArq)
+		**** atualiza a base com os arquivos gerados ****
+		replace canxml with cConteudoxml in crSigMvNfi
+		replace cancelas with .T. in crSigMvNfi
+		replace stats with 'CAN' in crSigPrNfe
+		replace statts with '0' in crSigPrNfe
+		replace nfexml with cConteudoxml in crSigMvNfd
+		replace nfedesc with lcdesc in crSigMvNfd
+		replace lcancelas with .T. in crSigMvCab		&& mena 13/08/2014 - seta operacao como cancelada
+
+		llOks=.t.
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvNfi])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvNfi)])
+			llOks = .f.
+		EndIf
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigPrNfe])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrNfe)])
+			llOks = .f.
+		EndIf
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvNfd])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvNfd)])
+			llOks = .f.
+		EndIf
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvCab])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvCab)])
+			llOks = .f.
+		EndIf
+		If llOks
+			If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+				lOk = .f.
+			EndIf
+		ENDIF
+		If llOks And crSigopcdc.Geropes = 4 And !Empty(crSigopcdc.Dopenfs)
+		&& mena - 16/06/2020
+			lcDopenfs = crSigopcdc.Dopenfs
+			Select a.*, lcDopenfs  As DopeAuts From crTpmMvItn a ;
+				Into Cursor csItemAut
+			Index On Emps + DopeAuts + Str(Numes,6) Tag EmpDopNum
+
+			Select a.*, lcDopenfs As DopeAuts From crTpmMvItn a, csOpeTrf b ;
+				Where Not IsEmpty(a.Cpros) And a.Cpros == b.Cpros and 1=0 ;
+				Into Cursor csItemOpe
+
+			Select Distinct DopeAuts As Dopes ;
+				From csItemAut where 1=0 ;
+				Into Cursor csCabAut
+
+			Thisform.Parentform.Gerarnota(Alltrim(crSigopcdc.Dopenfs))		&& gera operacao automatica
+			If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+				lOk = .f.
+			EndIf
+		Endif
+	ELSE
+		**** verifica e mostra erros retornados
+		lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-canc.xml"
+		IF FILE(lcDest)
+			cLinha = FILETOSTR(lcDest)
+			cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + alltrim(cLinha)
+			DELETE FILE &lcDest
+		EndIf
+		Messagebox(STRCONV(cCampo,11), 0+64, [Retorno da SEFAZ])
+	ENDIF
+ELSE
+************ CARTA DE CORREÇÃO *************
+	lcMun  = SUBSTR(cId,1,2)
+	lcCnpj = SUBSTR(cId,7,14)
+	lcSeq  = ALLTRIM(STR(crsigmvNfd.nfeSeq))
+	lcSeq2 = TRANSFORM(crsigmvNfd.nfeSeq, '@L 99')
+	b=ttoc(CTOT(thisform.cntData.getData.Value))
+	lcData = SUBSTR(b,7,4) + '-'+SUBSTR(b,4,2) + '-'+SUBSTR(b,1,2) + 'T'+SUBSTR(b,12,8) + '-'+lcVerao
+
+	lcArq = cPathUni  + lcPTxt + cId+"-"+lcSeq2+"-env-cce.XML"
+	DELETE FILE &lcArq
+	=StrToFile([], lcArq)
+	
+	=Strtofile(Alltrim([<?xml version="1.0" encoding="UTF-8"?>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<idLote>0000000001</idLote>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<evento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<infEvento Id="ID110110] +cId+lcSeq2+[">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<cOrgao>]+lcMun+[</cOrgao>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<tpAmb>]+Alltrim(lcTAmb)+[</tpAmb>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<CNPJ>]+lcCnpj+[</CNPJ>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<chNFe>]+cId+[</chNFe>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<dhEvento>]+lcData+[</dhEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<tpEvento>110110</tpEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<nSeqEvento>]+lcSeq + [</nSeqEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<verEvento>1.00</verEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<detEvento versao="1.00">]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<descEvento>Carta de Correcao</descEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<xCorrecao>]+lcDesc+[</xCorrecao>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([<xCondUso>A Carta de Correcao e disciplinada pelo paragrafo 1o-A do art. 7o do Convenio S/N, de 15 de dezembro de 1970 e pode ser]+;
+					   [ utilizada para regularizacao de erro ocorrido na emissao de documento fiscal, desde que o erro nao esteja relacionado com: I - as]+;
+					   [ variaveis que determinam o valor do imposto tais como: base de calculo, aliquota, diferenca de preco, quantidade, valor da operacao]+;
+					   [ ou da prestacao; II - a correcao de dados cadastrais que implique mudanca do remetente ou do destinatario; III - a data de emissao]+;
+					   [ ou de saida.</xCondUso>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([</detEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([</infEvento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([</evento>]+ lcChr), lcArq,.T.)
+	=Strtofile(Alltrim([</envEvento>]+ lcChr), lcArq,.T.)
+
+	lOk = .F.
+	cCampo=''
+
+	**** testa se já existe uma instancia do uninfe rodando - cria arquivo vazio no envio e verifica se foi lido****
+	lcDanfe  = cPathUni + "unidanfe.exe"
+	lcUniNFe = cPathUni + "uninfe.exe"
+	cPath = cPathUni + "TXT\"
+	lcTeste = lcPathNFe+lcPEnvio+'uninfe-alt-con.xml' 
+	=Strtofile([<?xml version="1.0" encoding="utf-8"?><altConfUniNFe></altConfUniNFe>], lcTeste, .T.)
+	=ThisForm.ParentForm2.esperauniler(lcTeste, 5)
+	IF FILE(lcTeste) 	&&Ativa UniNFe para controle das NFEs
+		cComando = lcUniNFe
+		RUN /N &cComando
+	ENDIF
+	DO WHILE .T.
+
+		*** Verifica se reimprime a carta ***
+		IF crSigPrNfe.stats = 'EMI' and thisform.refazer.Value=1 		&& pede reimpressao da ultima carta
+			*** mena - 28/09/2017 - pega xml da carta da tabela SIGMVNFD ***
+			lcDest = lcPathNFe + lcPAutorizados + lcEmis + [\] + crSigMvNfi.nfechv+[_01-procEventoNFe.xml]
+			lcXml = crSigMvNfd.nfexml
+			IF !FILE(lcDest)			
+				=Strtofile(lcXml, lcDest, .F.)
+			ENDIF
+			lOk=.t.	
+			EXIT
+		ENDIF
+		
+		lcXml = cId+"-"+lcSeq2+"-env-cce.XML"
+
+		*** Valida arquivo atraves da UNINFe
+		lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-cce-ret.XML"
+		DELETE FILE &lcDest
+		lcDest=lcPathNFe+lcPValidar+lcXml
+		COPY file &lcArq to &lcDest
+
+		** Verifica se arquivo validado ok
+		lcDest=lcPathNFe+lcPValidar+lcPValidado+lcXml
+		=THISFORM.ParentForm2.esperaarq(lcDest, 10, 'Aguardando validação')
+		IF FILE(lcDest)
+			DELETE FILE &lcDest
+		ELSE
+			lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-cce-ret.XML"
+			IF FILE(lcDest)
+				cLinha=FILETOSTR(lcDest)
+				i=4
+				lcStat = ''
+				do while LEN(lcStat)=0 and i>0			&& procura ultima ocorrencia válida do cStat 
+					lcStat = STREXTRACT(cLinha,"<cStat>","</cStat>",i)
+					i=i-1
+				ENDDO
+				i=4
+				lcMotivo = ''
+				do while LEN(lcMotivo)=0 and i>0			&& procura ultima ocorrencia válida de xMotivo 
+					lcMotivo = STREXTRACT(cLinha,"<xMotivo>","</xMotivo>",i)
+					i=i-1
+				ENDDO
+				cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + 'STATUS:' + lcStat + CHR(10) + lcMotivo
+				DELETE FILE &lcDest
+			ELSE
+				cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + 'Problema ao assinar o arquivo. Verifique o certificado.'
+			EndIf
+			EXIT 
+		ENDIF
+		***********************************************************************
+		
+		
+		*** Enviar arquivo atraves da UNINFe
+		lcDest=lcPathNFe+lcPEnvio+lcXml
+		COPY file &lcArq to &lcDest
+
+		lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-ret-env-cce.XML"
+		=ThisForm.ParentForm2.esperaarq(lcDest, 180)
+		IF FILE(lcDest)
+			cLinha = FILETOSTR(lcDest)
+			i=4
+			lcStat = ''
+			do while LEN(lcStat)=0 and i>0			&& procura ultima ocorrencia válida do cStat 
+				lcStat = STREXTRACT(cLinha,"<cStat>","</cStat>",i)
+				i=i-1
+			ENDDO
+			i=4
+			lcMotivo = ''
+			do while LEN(lcMotivo)=0 and i>0			&& procura ultima ocorrencia válida de xMotivo 
+				lcMotivo = STREXTRACT(cLinha,"<xMotivo>","</xMotivo>",i)
+				i=i-1
+			ENDDO
+			cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + lcMotivo
+			DELETE FILE &lcDest
+			lOk = "EVENTO REGISTRADO"$(upper(cCampo)) 
+			IF lOk
+				lcDest=lcPathNFe + lcPAutorizados + lcEmis + [\] +cId+"_"+lcSeq2+[-procEventoNFe.xml]
+				IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+					lcDest=lcPathNFe + lcPAutorizados + SUBSTR(lcEmis, 1, 6) + [01\]+cId+"_"+lcSeq2+[-procEventoNFe.xml]
+					IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+						lcDest=lcPathNFe + lcPAutorizados + lcHoje + [\] +cId+"_"+lcSeq2+[-procEventoNFe.xml]
+						IF not (ThisForm.ParentForm2.esperaarq(lcDest, 10))
+							cCampo="NÃO HOUVE RETORNO DA SEFAZ"
+							lOk = .f.
+						ENDIF
+					endif
+				endif			
+			endif
+		EndIf
+		EXIT	
+	EndDo
+		  
+	IF lOk	
+		*** Imprime a carta de correção ***
+		IF FILE(lcDest)
+			cAnexo = lcDest
+*!*				IF lcDest <> lcTemp
+*!*					COPY FILE &lcDest to &lcTemp
+*!*				ENDIF
+			cComando =	lcDanfe + [ ARQUIVO="] + lcDest + [" configuração=1]+[ V=1 M=1] +;
+						[ NP="] + SUBSTR(cId, 26, 9) + [.PDF" PP="] + cPathUni + lcPPdf + SUBSTR(cDEmis, 1, 6) + ["]
+			RUN /N &cComando
+		ELSE
+			cAnexo = ''
+		ENDIF
+
+		*** pega email do cliente ***
+		lcQuery = [Select eMails From SigCdCli Where IClis = '] + crSigMvNfi.CliFors + [']
+
+		If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCliD]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCliD)])
+			Return 0
+		EndIf
+
+		cTo = LocalClid.emails
+		cAssunto = "Carta de Correção: " + SUBSTR(cId, 26, 9)
+
+		IF Messagebox([Confirma envio de e-mail para: ] + cTo + ["?"], 4+32, [Nota fiscal cancelada]) = 6
+			IF enviaEmail(cTo, cCorpo, cAssunto, cAnexo, cFrom, cCC)
+				WAIT window [Email enviado com sucesso]
+			ENDIF
+		ENDIF
+
+		*** Faz bachup do xml
+		lcArq = lcDest
+		lcDest=lcBkp+cId+"_"+lcSeq2+[-procEventoNFe.xml]
+		COPY file &lcArq to &lcDest
+
+		*** Le conteudo do xml para gravar no sigmvnfi***
+		cConteudoxml = FILETOSTR(lcArq)
+		**** atualiza a base com os arquivos gerados ****
+		replace nfexml with cConteudoxml in crSigMvNfd
+		replace nfedesc with lcdesc in crSigMvNfd
+
+		llOks=.t.
+		If Not ThisForm.ParentForm.poDataMgr.Update([crSigMvNfd])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvNfd)])
+			llOks = .f.
+		EndIf
+		If llOks
+			If (ThisForm.ParentForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+				lOk = .f.
+			EndIf
+		EndIf
+	ELSE
+		**** verifica e mostra erros retornados
+		lcDest=lcPathNFe+lcPRetorno+cId+"-"+lcSeq2+"-env-cce-ret.err"
+		IF FILE(lcDest)
+			cLinha = FILETOSTR(lcDest)
+			cCampo="NF:" + SUBSTR(cId, 26, 9) + Chr(10) + alltrim(cLinha)
+			DELETE FILE &lcDest
+		EndIf
+		Messagebox(STRCONV(cCampo,11), 0+64, [Retorno da SEFAZ])
+	ENDIF
+
+ENDIF
+
+thisform.atucur()	&& atualiza cursor
+RETURN lOk
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.cntNFe.getNfe
+* Classe: fweditdata (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.cntData.getData
+* Classe: fweditdata (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.cntSeq.getSeq
+* Classe: fweditdata (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.GetEvento
+* Classe: fweditdata (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPNFD.Refazer
+* Classe: checkbox (Base: checkbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+IF this.value = 1
+	lcEDN = crSigmvNfi.empdopnums
+	lcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]
+	***Seleciona o ultimo evento desta operação***
+	If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfd]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfd)])
+		llRet=.F.
+	EndIf
+
+	IF EOF('crSigMvNfd')	&& Se não houver nenhuma linha, cria a linha
+		thisform.atucur
+	else
+		thisform.cntNFe.getNfe.value = crsigmvnfi.nfis
+*!*			thisform.cntData.getData.Value  = ttoc(DATEtime())
+		thisform.cntSeq.getSeq.value = crsigmvnfd.nfeseq
+		thisform.cntObservacao.getDesc.value = crsigmvnfd.nfedesc
+		ThisForm.Refresh
+	endif
+ELSE
+	thisform.atucur
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPNFD
+RESERVED3 (ClassInfo): evento
+parentform
+parentform2
+*atucur 
+*canccfe 
+*conscan 
+*strusat 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

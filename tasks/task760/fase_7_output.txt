@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 executada. Mas o resultado n├úo ├® o que o prompt pedia, e preciso ser expl├¡cito sobre isso.
+
+## Os 4 eventos CRUD n├úo existem neste legado ÔÇö e n├úo podiam ser criados
+
+`SIGOPLIB` ├® um di├ílogo modal 550x200 ("Libera├º├úo de Peso") que devolve `codigo+descri├º├úo` ao form chamador. O dump tem **11 objetos e UM ├║nico bot├úo** (`ok`, `BaseClass: commandbutton`, `Click = ThisForm.Release`). Medido: zero `commandgroup`, e nenhuma evid├¬ncia de CRUD (`frmcadastro`, `pcEscolha`, `Grupo_Op`, `btnIncluir/Alterar/Excluir/Visualizar`, `mGravaDados`, `AddCursor` ÔÇö todos ausentes).
+
+Escrever `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` aqui exigiria inventar bot├Áes (viola o PILAR 1) ou criar 4 m├®todos vazios (proibido pela regra de completude). O handler do ├║nico bot├úo do legado ÔÇö `CmdOkClick` ÔÇö j├í estava implementado desde a Fase 4. O gate aprova por esse caminho: `nBotoesLegado = 1` ÔåÆ `minHandlersF7 = 1`, `nHandlers = 1`, `legadoSemCrud = .T.`
+
+## O que fiz: dois defeitos reais no caminho de evento do campo
+
+**1. `SEEK` sem padding nunca acha ÔÇö o picker abria SEMPRE** (`SigOpLibBO.ValidarCodigoDigitado`)
+
+```foxpro
+loc_lAchou = SEEK(loc_cCodigo, ...)              && loc_cCodigo veio de ALLTRIM
+loc_lAchou = SEEK(PADR(loc_cCodigo, 10), ...)    && corrigido
+```
+
+`SigCdNcf.cods` ├® `char(10)` (schema, lido com `Get-Content -Raw`) e o ├¡ndice ├® `INDEX ON Cods`. O `config.prg:242` faz `SET EXACT ON`, onde o `SEEK` exige o tamanho da chave inteira ÔÇö procurar `"01"` numa chave `"01        "` devolve `.F.` sem erro e sem log. O legado n├úo sofria porque rodava com o `SET EXACT OFF` default (SEEK por prefixo) e passava `This.Value` de um campo com `InputMask` de 10 posi├º├Áes. Sintoma: o usu├írio digitava um c├│digo **v├ílido**, sa├¡a do campo e o picker abria do mesmo jeito.
+
+**2. Consulta que falha abria picker VAZIO e calado** (`FormSigOpLib.AbrirLookupTipoLiberacao`)
+
+`ValidarCodigoDigitado` devolve `.F.` tanto quando o c├│digo n├úo existe quanto quando o `SELECT` falhou, e a regra #50 pro├¡be avisar no primeiro caso. O funil agora separa os dois pela `this_cMensagemErro` do BO (limpa na entrada de `CarregarTiposPermitidos`/`VerificarDescricaoEditavel` justamente para isso), reporta o erro e n├úo abre o picker. Flag em vez de `RETURN` porque o bloco est├í dentro do `TRY` (regra #1). Aproveitei para declarar `loc_oErro` no `LOCAL` dos dois m├®todos ÔÇö sem isso o `CATCH TO` criava PRIVATE que vazava.
+
+## Verifica├º├úo
+
+- `COMPILE` dos dois `.prg` no VFP9: `.fxp` gerado, **sem `.err`** (depois removi os `.fxp` para a pr├│xima etapa recompilar do fonte)
+- CRLF preservado: `CR == LF` nos dois arquivos (medido com `tr -dc`, n├úo com grep)
+- `diff -u` contra backup: 30 linhas `+` / 2 `-` no form, 3 hunks no BO ÔÇö cir├║rgico
+- Nenhum `TODO`/`FIXME`/stub/"nao implement" introduzido
+
+## Um item em aberto que n├úo toquei
+
+`cmd_4c_Ok` tem `.Cancel = .T.` (transcrito do SCX). Clique de mouse dispara o `LostFocus` do campo **antes** do `Click`, ent├úo o retorno se fecha normalmente ÔÇö mas **ESC** dispara o `Click` direto, e a├¡ o `LostFocus` pode rodar depois do `Hide()`, abrindo o picker sobre um di├ílogo j├í fechado. N├úo adicionei guarda porque **n├úo consigo medir**: nesta sess├úo o VFP9 compila e sai sem executar, e o legado tem o mesmo desenho (ESC ÔåÆ `ok.Click` ÔåÆ `Release`). Vale um teste manual da tecla ESC na Fase 6/8 do pipeline antes de decidir se precisa de guarda de fechamento.

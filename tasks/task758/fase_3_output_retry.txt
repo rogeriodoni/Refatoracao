@@ -1,0 +1,56 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 3/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpLcZ.prg` (388 linhas, CRLF) compila limpo no VFP9, instancia de verdade e o gate da Fase 3 passa.
+
+## Por que as duas tentativas anteriores falharam
+
+O arquivo **nunca foi criado**. O output da Fase 3 (2474 bytes) ├® s├│ o aviso de regra de permiss├úo do `settings.local.json` ÔÇö a sess├úo gastou os 27s nisso e n├úo escreveu nada. Mesmo sintoma no output da Fase 2.
+
+## A decis├úo que define esta fase: nem PageFrame, nem os containers que o prompt pediu
+
+O prompt da fase manda criar `PageFrame` com Page1/Page2 e os containers `cnt_4c_Cabecalho`/`cnt_4c_Botoes`/`cnt_4c_BotoesAcao`. **Isso n├úo se aplica a este form** e cumprir ao p├® da letra seria inventar estrutura ÔÇö o `SIGOPLCZ` ├® `Class: form` puro, com **zero PageFrame** e **um ├║nico Container** (`cntSombra`). Rodei a l├│gica real do `case 3` do orquestrador:
+
+```
+raizFormGenerico/semPageFrame : True      temEstruturaFlat             : True
+legadoSemContainer            : False     temEstruturaPaginada         : False
+GATE FASE 3 => True
+```
+
+Passa pelo ramo **FLAT** ÔÇö o ramo honesto. `temEstruturaPaginada` ├® `False` de prop├│sito: evitei at├® escrever o literal `ConfigurarPageFrame` em coment├írio, porque o gate casa o token em qualquer lugar do arquivo e um coment├írio faria a fase passar por motivo falso (a fraqueza que a Fase 2 j├í apontou no crit├®rio dela).
+
+## O que entreguei
+
+`DEFINE CLASS ... AS FormBase` + propriedades visuais transcritas do dump, `Init(par_oCnx, par_cEscolha, par_cOrigem)`, `InicializarForm`, `ConfigurarCabecalho` (cntSombra + os dois labels), `TornarControlesVisiveis` e `Destroy`.
+
+Tr├¬s pontos que n├úo s├úo ├│bvios:
+
+- **`DataSession = 1`** ├® contrato, n├úo c├│pia: `crTpmMvItn` ├® do form **pai**. Com `2` a sess├úo isolaria e a grade abriria vazia *sem erro nenhum*.
+- **Nenhum mirror de `PodeEditar`** no form. A Fase 2 deixou `SigOpLcZBO.PodeEditar()` como fonte ├║nica; declarar uma property espelho aqui s├│ criaria as duas para divergirem. Confirmei que nenhum m├®todo que o form chama ├® `PROTECTED` em `BusinessBase` (regra #51).
+- **`Picture` recuperado** ÔÇö o irm├úo `FormSigOpLcl` (task757) *perdeu* o `Picture` do SCX. Aqui est├í presente e provei que o arquivo existe (`FILE()` = `.T.`), porque `.Picture` inexistente falha em sil├¬ncio (regra #25).
+
+O `PROCEDURE Load` (`=fConfigGeral()`) **n├úo foi portado**, e isso ├® deliberado: o wrapper `utils\fconfiggeral.prg` ├® um `RETURN .T.` que existe s├│ para p-code legado e o pr├│prio cabe├ºalho dele determina que c├│digo nosso nunca o chame.
+
+## Provas, n├úo suposi├º├Áes
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Compila├º├úo VFP9 (`.fxp` regerado, sem `.err`) | limpo |
+| Gate Fase 3 (l├│gica real do orquestrador) | `True`, via ramo FLAT |
+| Completude 05d (4 regexes reais) | nenhum TODO/stub/procedure vazia |
+| Instancia├º├úo sem args (caminho do harness) | `Init OK`, W=968 H=382 DS=1 WT=1 TB=0, BO=`O` |
+| Instancia├º├úo real (`INSERIR`/`ORIGEM`) | contexto propagado, `PodeEditar=.T.` |
+| Instancia├º├úo real (`PROCURAR`) | `PodeEditar=.F.` ÔÇö gate de modo correto |
+| Geometria do cabe├ºalho | `0/0/968/80`, BackColor `6579300` = RGB(100,100,100) |
+| `cursor_4c_Itens` a partir do pai | `reccount=2` de 4 linhas ÔÇö o `DISTINCT` + `Not Empty(Cpros)` do legado |
+| Ciclo de vida no `Release()` | cursores do BO fecham; `crTpmMvItn` do pai **sobrevive** |
+| Auditorias (props inexistentes, fun├º├Áes ├│rf├ús, PROTECTED) | 0 achados |
+| Regras #1/#15/#33/#34/#38/#52, `ISEMPTY`, `MESSAGEBOX`, CATCH silencioso | 0 ocorr├¬ncias |
+
+Duas corre├º├Áes que fiz **no meu pr├│prio ferramental**, n├úo no form: o probe violava a regra #1 (`RETURN` dentro de `TRY`), e na primeira rodada ele reportou os cursores ainda abertos ap├│s o `Release()` ÔÇö era o `loc_oBO` do probe mantendo a refer├¬ncia viva, n├úo defeito do form. Soltando as locais antes, fecham (`.F./.F.`). Vale registrar porque o falso positivo aponta exatamente para onde o instinto manda mexer no `.prg` migrado.
+
+Scripts em `automation\CompilarF3SigOpLcZ758.prg` e `automation\ProbeF3SigOpLcZ758.prg`, no padr├úo dos existentes; `.fxp` transientes removidos; nada commitado.
+
+**Ponto de aten├º├úo para a Fase 4**: a grade `grdItens` tem `Column3` com `CheckBox` (`Sparse = .F.` j├í no dump) e o legado suprime o toggle nativo com `NoDefault` nos quatro eventos (`Click`/`MouseDown`/`MouseUp`/`KeyPress`), alternando `Marcas` por c├│digo. Sem os quatro handlers o checkbox renderiza, recebe foco e **n├úo marca nada** ÔÇö e `cursor_4c_Itens` precisa ser `READWRITE` (o `CarregarItens` do BO j├í cria assim) para o `REPLACE` funcionar.

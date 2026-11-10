@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 6/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpOca.prg` (597 linhas, 26,91 KB), compila├º├úo limpa no VFP9 (`.fxp` gerado, nenhum `.err`; o script de compila├º├úo comprovou execu├º├úo via marcador `SMOKE=EXECUTOU`, conforme a nota de que `vfp9.exe` pode sair sem rodar o corpo).
+
+## Campos restantes (metade 2/2)
+
+`ConfigurarCamposDados()` completou os dois ├║ltimos objetos do dump, com os nomes fixados em `mapeamento.json`:
+
+| Legado | Migrado | Transcrito |
+|---|---|---|
+| `Label3` | `lbl_4c_Label3` | Top 115 / Left 23 / 67x15, Tahoma 8, `BackStyle=0`, `ForeColor RGB(90,90,90)` (regra #12), `Alignment=0` (regra #23), caption via `CHR()` |
+| `Memo_Obs` | `obj_4c_Memo_Obs` (EditBox) | Top 110 / Left 92 / 294x84, `SpecialEffect=1`, `BorderColor RGB(100,100,100)`, `NullDisplay=" "`, `.Value = " "` (do `Init` legado) |
+
+Decis├Áes que vale destacar:
+- **Sem `MaxLength`**: `SigCqOch.obsaudts` ├® `text` NULL (medido em `docs/schema.sql` com `Get-Content -Raw`) ÔÇö n├úo h├í largura a impor, e copiar o `Width=294` seria exatamente a regra #19.
+- **Sem `ScrollBars`**: o dump n├úo declara, ent├úo deixei o default valer em vez de chutar um valor que eu n├úo medi na classe `fwmemo`.
+- `Memo_Obs` ├® o **├║nico campo digit├ível**: o dump n├úo declara `ReadOnly` e o `When` dele tem corpo vazio (`**`), ao contr├írio dos dois TextBox da Fase 5, cujo `When` devolve `.F.` sempre.
+
+## Lookups: o legado n├úo tem nenhum ÔÇö e nenhum foi criado
+
+Medido no dump: **zero** ocorr├¬ncia de `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, `mAddColuna`, `sigacess()`/`Acesso*()`, `CreateObject()` e **nenhum** `PROCEDURE Valid`. Os tr├¬s campos s├úo colunas que o form pai j├í resolveu antes de abrir o di├ílogo ÔÇö n├úo existe tabela de apoio para escolher em grade. Criar `AbrirLookup*`/`AbrirBusca*` aqui seria inventar consulta que a tela nunca faz. Deixei isso documentado no cabe├ºalho com a evid├¬ncia.
+
+O que a fase entrega **al├®m** do campo:
+- **`ValidarObservacao()`** (PUBLIC, regra #3) ÔÇö ligado a `"LostFocus"` **e** `"InteractiveChange"` (nunca `"KeyPress"`, regra #47). ├ë o equivalente migrado do `Replace ObsAudts With ThisForm.Memo_Obs.Value in CrSigCqOch` do `cmd_ok.Click`: como o di├ílogo n├úo compartilha DataSession, o destino do texto ├® `this_oBusinessObject.this_cObsAudts`, que o `Atualizar()` da Fase 2 j├í usa no `UPDATE SigCqOch SET obsaudts`. Texto transferido **cru** (o legado grava `.Value` como est├í e inicializa com um espa├ºo ÔÇö trimar mudaria o dado). **N├úo** inventei obrigatoriedade de preenchimento: o legado grava em branco.
+- **`Activate()`** ÔÇö aplica o `ThisForm.Memo_obs.Setfocus` da ├║ltima linha do `Init` legado, uma vez s├│ (flag `this_lFocoInicialAplicado`), porque `SetFocus` em `InicializarForm` falharia com o form ainda invis├¡vel.
+
+## Container de bot├Áes
+
+O legado tem **um ├║nico** bot├úo (`cmd_grupo`, `ButtonCount = 1`, `Command1 = cmd_ok`, `Caption "\<Confirmar"`) ÔÇö **n├úo existe Cancelar no SCX**, ent├úo o par "Salvar + Cancelar" do template CRUD n├úo se aplica aqui; acrescentar um Cancelar seria desvio do PILAR 1. Esse CommandGroup com o Click real fica para as Fases 7-8, como as Fases 3 e 4 j├í registravam. Registrei isso explicitamente no cabe├ºalho para a pr├│xima fase n├úo trope├ºar.
+
+## Verifica├º├Áes
+
+ASCII puro (0 bytes acentuados), blocos balanceados (9 WITH/ENDWITH, 3 TRY/ENDTRY, 9 PROCEDURE/ENDPROC, 16 IF/ENDIF), nenhum `RETURN` dentro de TRY, nenhum `MESSAGEBOX`/`ISEMPTY`/`MostrarAviso`/`.Self`/`Controls("nome")`, nenhum `PUBLIC PROCEDURE` em `DEFINE CLASS`. Rodei os padr├Áes do validador 05d contra o Form e o BO: `TODO=0 LATER=0`, nenhuma procedure vazia. Tamb├®m repliquei os predicados do gate da Fase 6 ÔÇö o form cai no ramo **CAPTURA** (legado sem lista, sem lookup, com campos de entrada n├úo vinculados) e todos os requisitos batem: `legadoSemLookup=True`, `semPageFrame=True`, `temBindEvent=True`, `temValidar=True`, paridade de campos 2 ÔëÑ piso 1.

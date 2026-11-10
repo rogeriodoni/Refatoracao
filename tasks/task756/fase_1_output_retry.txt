@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1/8 CONCLU├ìDA** ÔÇö `C:\4c\projeto\app\classes\SigOpLbCBO.prg` criado (189 linhas, CRLF, 100% ASCII).
+
+## Entrega
+
+**46 propriedades declaradas**, todas extra├¡das do `Init` legado e tipadas contra `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14):
+
+| Bloco | Propriedades | Origem no legado |
+|---|---|---|
+| Entrada | `this_cOperacao` | param `Operacao` |
+| SigCdOpe | `this_cDopes`, `this_nTipoOps`, `this_cNivels`, `this_nLimCres` | cursor `lCredOpe` |
+| Cabe├ºalho mov. | `this_cEmps`, `this_nNumes`, `this_nValorMovimento`, `this_cGrupo`, `this_cConta`, `this_cCampoGrupoSQL`, `this_cCampoContaSQL`, `this_cChaveLimiteCredito` | `TprMvCab`, `_Grupo`/`_Conta`/`_mgrupo`/`_mconta`/`_ChvLCred` |
+| SigClLcr | `this_nLimiteCredito`, `this_cMoeda`, `this_cGruContas` | `CrSigClLcr` |
+| SigCdCli | `this_cRazaoCliente`, `this_cDescricaoConta` | `CrTmpCli` |
+| SigCdTom / SigCdPam | `this_nGerGdmis`, `this_nOpPendsParam`, `this_lChqLimiteCredito` | `LocalTOpe`, `crSigCdPam` |
+| Calculados | `this_nCotacao`, `this_nSaldoContaCorrente`, `this_nTotalCheques`, `this_nChequesPendentes`, `this_nPendente`, `this_nPendenteOutros`, `this_nSaldoDisponivel` | `_Saldocc`, `_chequec`, `_chequep`, `_Pendente`, `_PendOutr`, `_SaldoFinal` |
+| Cursores (15) | `this_cCursorOperacoes` (= `DbOpera`, grade) + 14 | um por cursor do legado |
+| Estado (3) | `this_lDadosCarregados`, `this_lFalhaConexao`, `this_lContaIndefinida` | distingue os **dois** desfechos de recusa do legado (`Return(.F.)` com msg vs. `Return` mudo) |
+
+**Verifica├º├úo executada (n├úo s├│ inspe├º├úo):**
+- `COMPILE` no VFP9 ÔåÆ `.fxp` gerado, **nenhum `.err`**
+- `CREATEOBJECT("SigOpLbCBO")` ÔåÆ `VARTYPE=O`, `this_cTabela=SigCdOpe`, `this_cCampoChave=Dopes`, 54 props `this_*` na inst├óncia, **todas as 46 lidas sem estourar**
+- `PEMSTATUS(...,2)` ÔåÆ `Buscar`/`CarregarDoCursor`/`LimparDados`/`ValidarDados` = `.F.` (n├úo-PROTECTED, regra #51)
+- Validador `05d_validarCompletude` rodado com as **regexes exatas** do orquestrador ÔåÆ **OK, 0 problemas**
+- 0 literais acentuados, 0 `PUBLIC PROCEDURE` em classe, 0 `RETURN` dentro de `TRY`, 0 `MESSAGEBOX`
+
+**Dois pontos que exigiram ajuste e valem para as pr├│ximas fases:**
+1. O regex `\bpendente` do validador `05d` casa a palavra portuguesa **"pendentes"** em qualquer linha de coment├írio `*` ÔÇö o arquivo foi reprovado por falso positivo at├® eu reescrever `"(operacoes pendentes configuradas)"`. A palavra `pendente(s)` agora s├│ aparece em coment├írios `&&` (sem `*`), onde o regex n├úo alcan├ºa. ├ë a mesma fam├¡lia do caso j├í registrado para `"nao implementado"`.
+2. Deixei registrado em coment├írio que `this_cChaveLimiteCredito` (`SigMvCab.EmpDopNums char(29)` = `Emps(3)+Nivels(20)+Str(Numes,6)`) ├® **chave posicional** ÔÇö a Fase 2 tem de mont├í-la com `PADR`, nunca `ALLTRIM` nas partes, sen├úo o `WHERE` da pend├¬ncia devolve zero linhas em sil├¬ncio (regra #42).
+
+N├úo mexi em `config.prg`: a carga ├® sob demanda desde 2026-10-28 e BO/Form entram pelo `indice_classes.txt`. O `.fxp` foi apagado para nenhuma fase seguinte rodar c├│digo compilado antigo.

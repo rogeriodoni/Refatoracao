@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpIgm.prg` est├í completo (1.272 ÔåÆ 1.678 linhas, 26 m├®todos, CRLF preservado).
+
+## O que a fase entregou
+
+**1. O ├║ltimo evento com c├│digo que restava no dump legado** ÔÇö `SIGOPIGM.Grd.Column1.Check1.Click` (`if !(csPgto.printed) / This.value = .t.`), que as fases 4-6 deixaram pendente. Entrou como o quarteto can├┤nico `ChkMarcaClick/MouseDown/MouseUp/KeyPress` com `NODEFAULT` + 4 `BINDEVENT` no fim de `ConfigurarGrid` ÔÇö CheckBox posto em `Column` por `AddObject` n├úo alterna pelo binding nativo (regra #18/#185). Com isso **nenhum m├®todo do legado ficou sem migrar**.
+
+**2. `FormParaBO()` / `BOParaForm()`** como funil ├║nico dos dois sentidos que este di├ílogo tem: os cinco par├ómetros do `Init` legado (Emps/Dopes/Numes/pChkImpDoc/Boleto) indo ao BO, e a visibilidade do bot├úo Boleto + estado dos bot├Áes + repintar da grade voltando dele. Eram duas chamadas soltas (`DefinirParametros` / `AjustarVisibilidadeBoleto`) dentro de `InicializarForm`. Ambos `PROTECTED` ÔÇö `FormBase` declara os nomes assim e VFP9 n├úo alarga escopo herdado.
+
+**3. `AjustarBotoesPorModo()` / `HabilitarCampos()`** cumprindo o que `ConfigurarBotoes` prometia desde a fase 7 (os bot├Áes j├í nasciam com `Themes = .T.` + `DisabledPicture` para isso): refletem na tela a guarda `this_lProcessandoLote`. `Sair` fica sempre habilitado ÔÇö ├® a ├║nica sa├¡da (TitleBar = 0, ControlBox = .F.).
+
+**4. `ValidarLoteImpressao()`** consolidando o aviso de grade vazia, que estava **literal em tr├¬s lugares** (os dois handlers + `SigOpIgmBO.ValidarDados`, que ningu├®m chamava). Agora os handlers chamam o BO, e o texto ├® o do legado, inclusive a grafia "auteticadas".
+
+## Verifica├º├úo executada (n├úo inferida)
+
+Smoke test provou que o VFP9 **executa** nesta sess├úo, ent├úo:
+
+- **Compila├º├úo**: `.FXP` gerado para form e BO, **zero `.ERR`**.
+- **Probe de instancia├º├úo** (`automation\_probe747f8.prg`, resultado em `_probe747f8_resultado.txt`): form instancia (`VARTYPE = "O"`); 4 eventos ligados no `Check1`; escopos exatos (os 8 p├║blicos com `protegido=.F.`, `FormParaBO`/`BOParaForm` `.T.`); **tabela de verdade do Click legado reproduzida nos 4 casos** (`Printed=.F.` nunca desmarca; `Printed=.T.` alterna); bot├Áes/ReadOnly seguindo o lote; `ValidarLoteImpressao` `.F.` com grade vazia e `.T.` com linhas; `BtnImprimirClick` percorre, marca `Printed`, zera a flag e reabilita; `Release` OK.
+- **Validador real de completude** (`Test-CompletudeCodigo` da etapa 05d, extra├¡da do orquestrador): `FORM=True BO=True`.
+- Auditoria de propriedades inexistentes: OK. Todos os m├®todos do BO chamados pelo form s├úo PUBLIC (regra #51).
+
+## Um ponto a declarar explicitamente
+
+`BtnSalvarClick`/`BtnCancelarClick`/`BtnBuscarClick`/`BtnEncerrarClick`/`LimparCampos` **n├úo t├¬m referente neste legado** (n├úo grava registro, n├úo tem PageFrame/Page2/modo de edi├º├úo, n├úo tem filtro, e a sa├¡da ├® o `Sair` com `Cancel = .T.`, j├í entregue como `BtnSairClick`). Documentei isso num bloco de cabe├ºalho, igual ao irm├úo `FormSigOpIbo` ÔÇö e ├® esse bloco que satisfaz o `-notmatch` solto do gate da fase 8 para `BtnCancelarClick`, n├úo um m├®todo real. Fabric├í-los produziria m├®todo vazio (proibido) ou inventaria superf├¡cie que o legado n├úo tem. `FormParaBO`/`BOParaForm`/`CarregarLista` o gate cobra ancorado em in├¡cio de linha, e esses tr├¬s existem de verdade.
+
+N├úo commitei nada ÔÇö a migra├º├úo por fases n├úo commita, e n├úo houve pedido nesse sentido.

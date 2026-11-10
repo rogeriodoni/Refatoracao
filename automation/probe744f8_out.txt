@@ -1,0 +1,25 @@
+A01 VARTYPE(oForm)=[O]
+A02 BaseClass=[Form] Caption=[Gaveta]
+A03 Form WxH=1000x193 TitleBar=0 WindowType=1 Closable=.F. DataSession=2
+A04 ControlCount=5
+A05.1 CNT_4C_CABECALHO   Container      T=   0 L=   0 W= 1000 H=  80 Vis=.T.
+A05.2 SHP_4C_SHAPE1      Shape          T=  79 L=  23 W=  105 H= 104 Vis=.T.
+A05.3 IMG_4C_IMAGEM      Image          T=  95 L=  84 W=   76 H=  77 Vis=.T.
+A05.4 LBL_4C_MENSAGEM    Label          T= 101 L= 171 W=  248 H=  64 Vis=.T.
+A05.5 CMD_4C_OK          Commandbutton  T=   3 L= 924 W=   75 H=  75 Vis=.T.
+A06 lblSombra.Caption=[Gaveta] lblTitulo.Caption=[Gaveta]
+A07 lbl_4c_Mensagem.Caption=[Gaveta Aberta... Feche] AutoSize=.F. WxH=248x64
+A08 Form.Picture=[c:\4c\vbmp\new_background.jpg] FILE=.T.
+A09 img.Picture=[c:\4c\vbmp\gaveta.jpg] FILE=.T.
+A10 cmd.Picture=[c:\4c\vbmp\cadastro_sair_60.jpg] FILE=.T.
+A11 cmd dir=999 base=78 Cancel=.T. Caption=[Encerrar]
+A12 BO.Impressora=[Gaveta Serial] BO.PortaSerial=7 BO.oFormulario=O
+A13 BO.oFormulario.cMarca=[PAI-FALSO]
+A14 PEMSTATUS(oForm,CmdOkClick,2)=.F.
+A15 PEMSTATUS(BO,VerificarStatusGaveta,2)=.F.
+A16 pos-Click VARTYPE(oForm)=[O]
+A17 pos-Click Mensagem=[Gaveta Aberta... Feche]
+A18 2args VARTYPE=[O]
+A19 2args BO.Impressora=[BEMATECH] BO.PortaSerial=0 VARTYPE=N
+A20 semramo VerificarStatusGaveta()=.T.
+FIM-OK

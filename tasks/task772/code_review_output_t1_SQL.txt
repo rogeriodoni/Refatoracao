@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked both findings against the actual legacy dump (`tasks\task772\SIGOPNOP_form_codigo_fonte.txt`) before touching anything, per the project's standing rule that automated SQL-filtro checks are noisy and must be verified against the original source (`feedback_warning_massivo_verificar_premissa`).
+
+**Finding 1 (coluna `SERVICOS`) ÔÇö false positive.** The migrated `SIGOPNOPBO.MontarCursorArvore`:
+```foxpro
+SELECT EmpDnPs, SUM(Pesos) AS TotPesos FROM (par_cCursorOrigem) WHERE Servicos = 0 ;
+    INTO CURSOR (loc_cCursorTotais) GROUP BY 1
+```
+is a faithful transcription of the legacy lines 718 and 810:
+```foxpro
+Select EmpDnPs, Sum(Pesos) as Pesos From TmpNensi Where Not Servicos;
+Select EmpDnPs, Sum(Pesos) as TotPesos From TmpNensi Where Not Servicos ;
+```
+`Servicos` is a bit/logical column, so `Where Not Servicos` Ôçö `WHERE Servicos = 0` ÔÇö same filter, not invented. The validator's reference-column list (`NENVS, EMPDNPS, CMATS, NOPS, CPROS, ...`) was evidently built only from the multi-table join queries and missed this separate aggregation query because it uses the `Where Not X` negation form instead of `X = value`.
+
+**Finding 2 (coluna `DO`) ÔÇö false positive / no such condition exists.** I grepped the entire BO (all SQL lives there ÔÇö fully shown above, no truncation) and the Form (`FormSIGOPNOP.prg`, checked with Grep for every `SELECT`/`WHERE`/`SQLEXEC`) for any WHERE clause referencing a column literally named `do`. None exists in either file ÔÇö every WHERE in the BO matches a corresponding legacy WHERE line (`a.Nenvs = ...`, `a.EmpDnPs = b.EmpDnPs`, `a.Cmats = c.Cpros`, `a.Nops = d.Nops`, `a.Nenvs = d.Nops`, `Cpros = ...`), and the "SELECT"s in the Form are plain `SELECT (alias)` work-area switches, not SQL. The reference list from the validator (`LNNODE, PNNODEEXP, CUN`, etc.) also doesn't correspond to any real SQL identifiers in this form, which indicates its column-extraction heuristic is picking up noise from unrelated tree-control code, not actual SQL.
+
+Since removing `WHERE Servicos = 0` would reintroduce a divergence from the legacy aggregation logic (it would start summing service-line weights into `TotPesos`), and there is no `DO`-column condition anywhere to remove, I made no changes to `FormSIGOPNOP.prg` or `SIGOPNOPBO.prg` ÔÇö applying either "fix" would have broken correct, dump-faithful code rather than corrected a real defect.

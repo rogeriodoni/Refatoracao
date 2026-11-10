@@ -1,0 +1,57 @@
+VARTYPE(loForm) = O
+INSTANCIACAO     = OK
+BaseClass        = Form
+Caption          = Histórico de Produtos
+Width x Height   = 650 x 300
+--- (1) campos de filtro ---
+  txt_4c_Grupo     existe=.T.  VARTYPE(.Value)=C  MaxLength=10
+  txt_4c_Dgrupo    existe=.T.  VARTYPE(.Value)=C  MaxLength=40
+  txt_4c_Est       existe=.T.  VARTYPE(.Value)=C  MaxLength=10
+  txt_4c_Dest      existe=.T.  VARTYPE(.Value)=C  MaxLength=50
+  txt_4c_Cod       existe=.T.  VARTYPE(.Value)=C  MaxLength=14
+  txt_4c_Dcod      existe=.T.  VARTYPE(.Value)=C  MaxLength=65
+  txt_4c_DataIni   existe=.T.  VARTYPE(.Value)=D  MaxLength=10
+  txt_4c_DataFin   existe=.T.  VARTYPE(.Value)=D  MaxLength=10
+  DataIni.Value = 06/11/2026   DataFin.Value = 06/11/2026
+--- (2) handlers de lookup: existe / protegido ---
+  GrupoLostFocus               existe=.T.  protegido=.F.
+  GrupoKeyPress                existe=.T.  protegido=.F.
+  DgrupoLostFocus              existe=.T.  protegido=.F.
+  DgrupoKeyPress               existe=.T.  protegido=.F.
+  EstLostFocus                 existe=.T.  protegido=.F.
+  EstKeyPress                  existe=.T.  protegido=.F.
+  DestLostFocus                existe=.T.  protegido=.F.
+  DestKeyPress                 existe=.T.  protegido=.F.
+  CodLostFocus                 existe=.T.  protegido=.F.
+  CodKeyPress                  existe=.T.  protegido=.F.
+  DcodLostFocus                existe=.T.  protegido=.F.
+  DcodKeyPress                 existe=.T.  protegido=.F.
+  AbrirLookupGrupoCodigo       existe=.T.  protegido=.F.
+  AbrirLookupGrupoDescricao    existe=.T.  protegido=.F.
+  AbrirLookupContaCodigo       existe=.T.  protegido=.F.
+  AbrirLookupContaDescricao    existe=.T.  protegido=.F.
+  AbrirLookupProdutoCodigo     existe=.T.  protegido=.F.
+  AbrirLookupProdutoDescricao  existe=.T.  protegido=.F.
+  AjustarCamposDependentes     existe=.T.  protegido=.F.
+--- (3) BINDEVENT ligados por controle ---
+  txt_4c_Grupo     eventos=2
+  txt_4c_Dgrupo    eventos=2
+  txt_4c_Est       eventos=2
+  txt_4c_Dest      eventos=2
+  txt_4c_Cod       eventos=2
+  txt_4c_Dcod      eventos=2
+--- (4) When do legado via .Enabled ---
+  codigos VAZIOS   -> Dgrupo.Enabled=.T. Dest.Enabled=.T. Dcod.Enabled=.T.
+  codigos CHEIOS   -> Dgrupo.Enabled=.F. Dest.Enabled=.F. Dcod.Enabled=.F.
+--- (5) funil com campo vazio (ramo Else do Valid) ---
+  GrupoLostFocus  -> Dgrupo.Value=[]
+  EstLostFocus    -> Dest.Value=[]
+  CodLostFocus    -> Dcod.Value=[]
+  DcodLostFocus   -> Cod.Value=[]
+  this_lEmLookup apos os funis = .F.
+--- (6) guarda de reentrancia ---
+  flag=.T. -> Dgrupo.Value=[NAO DEVE LIMPAR] (esperado NAO DEVE LIMPAR)
+--- (7) guard de .Enabled dos AbrirLookup* ---
+  tres AbrirLookup*Descricao com campo desabilitado -> retornaram sem picker
+--- dialogos suprimidos ---
+--- FIM DO PROBE ---

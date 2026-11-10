@@ -1,0 +1,18 @@
+M1 inicio
+M2 ambiente ok
+CREATEOBJECT VARTYPE=O
+--- AEVENTS txt_4c_OP ---
+ligacoes=2
+  [1] ev=(Object) -> metodo=TXTOPGOTFOCUS
+  [2] ev=(Object) -> metodo=VALIDAROP
+--- AEVENTS txt_4c_Envelope ---
+ligacoes=2
+  [1] ev=(Object) -> metodo=TXTENVELOPEGOTFOCUS
+  [2] ev=(Object) -> metodo=VALIDARENVELOPE
+--- GOTFOCUS (exclusao mutua + When) ---
+apos TxtOPGotFocus: OP=777 Envelope=0 (esperado 777/0) Imagem.Visible=.F. (esperado .F.)
+apos TxtEnvelopeGotFocus: OP=0 Envelope=888 (esperado 0/888)
+--- KEYPRESS (gate de tecla e de campo vazio) ---
+tecla 65 (A), OP=4242 -> BO.this_nNumeroOP=0 (esperado 0 = NAO consultou)
+tecla nao-numerica -> BO.this_nNumeroOP=0 (esperado 0 = NAO consultou, sem excecao)
+ENTER com OP=0 -> BO.this_nNumeroOP=0 (esperado 0 = NAO consultou)

@@ -1,0 +1,54 @@
+{
+  "resumo": {
+    "totalMetodos": 2,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecarSerial"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPGVT",
+      "evento": "Init",
+      "linhas": 8,
+      "codigoOriginal": "LParameters _Imp, _OForm, _nPorta\n\nThisForm.Impressora = _Imp\nThisForm.oFormulario = _oForm\nThisForm.Portaserial = _nPorta\nClear Typeahead\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPGVT.ok",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "Local llOk\nThisForm.Mensagem.Caption = 'Verificando Status'\nllOk = .t.\nDO Case\n\tCase  InList(ThisForm.Impressora,'DATAREGIS','NDATAREGIS')\n\t\tVerStatus = RotStatus(.t.,ThisForm.oFormulario)\n\t\tIf Type('VerStatus')<>'L' And Substr(VerStatus,4,1) = 'S'\n\t\t\tllOk = .f.\n\t\tEndif\n\tCase InList(ThisForm.Impressora,'SWEDA','NSWEDA')\n\t\tVerStatus = StatGaveta(ThisForm.oFormulario)\n\t\tIf VerStatus = '0'\n\t\t\tllOk = .f.\n\t\tEndif\n\tCase InList(ThisForm.Impressora,'BEMATECH','BEMA8501','DARUMA','EPSON')\n\t\tVerStatus = S... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecarSerial",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+It's untracked (new file from Phase 1), so no diff baseline ÔÇö that's expected. Fase 2 is complete.
+
+**Resumo**: `SigOpLibBO.prg` completo com m├®todos de neg├│cio (n├úo ├® CRUD tradicional ÔÇö este di├ílogo nunca grava em `SigCdNcf`, s├│ consulta):
+- `CarregarDoCursor()` ÔÇö mapeia cods/descs/fixos/tipos/emps do cursor
+- `ObterChavePrimaria()` ÔÇö retorna `cods`
+- `CarregarTiposPermitidos()` ÔÇö espelha o SELECT filtrado do `get_codigo.Valid`
+- `ValidarCodigoDigitado()` ÔÇö SEEK no universo filtrado, monta retorno quando `fixos <> 2`
+- `VerificarDescricaoEditavel()` ÔÇö espelha o `get_descr.When`
+- `ConfirmarDescricaoDigitada()` ÔÇö espelha o `get_descr.Valid`
+- `Inserir`/`Atualizar`/`ExecutarExclusao`/`RegistrarAuditoria` deliberadamente n├úo sobrescritos, com coment├írio explicando por qu├¬ (comportamento herdado da BusinessBase j├í ├® o correto).
+
+Pr├│ximo passo: Fase 3 (cria├º├úo do Form).

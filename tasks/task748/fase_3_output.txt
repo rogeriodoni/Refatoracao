@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Estrutura criada corretamente. Criei `FormSigOpImg.prg` (Fase 3/8 - Estrutura Base) para o form OPERACIONAL FLAT (sem PageFrame, pois o legado SIGOPIMG n├úo tem abas):
+
+- `DEFINE CLASS FormSigOpImg AS FormBase` com propriedades visuais can├┤nicas (DataSession=2, Width=1000, Height=600, Caption="Captura de Imagens")
+- `Init()` ÔåÆ s├│ `DODEFAULT()`
+- `InicializarForm()` ÔåÆ instancia `SigOpImgBO` e monta a estrutura via `ConfigurarPageFrame()`
+- `ConfigurarCabecalho()` ÔåÆ cria `cnt_4c_Cabecalho` can├┤nico (RGB(100,100,100), labels Sombra/T├¡tulo)
+- `ConfigurarContainerBotoes()` / `ConfigurarContainerBotoesAcao()` ÔåÆ containers vazios (posicionados conforme o dump legado) para os bot├Áes Processar/Zap/Encerrar e o grupo de imagem, a serem populados nas pr├│ximas fases
+- `TornarControlesVisiveis()` e `Destroy()` (libera cursores que as pr├│ximas fases v├úo criar)
+
+Pr├│ximo passo: Fase 4/8 deve adicionar o grid de produtos e os bot├Áes dentro desses containers.

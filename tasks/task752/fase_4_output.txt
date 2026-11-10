@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada no VFP9.
+
+## O que entrou
+
+**`FormSIGOPins.prg`** (415 ÔåÆ 812 linhas)
+
+| M├®todo | Conte├║do |
+|---|---|
+| `ConfigurarGradeObservacoes()` | `grd_4c_Dados` transcrito do dump (ColumnCount 2, Tahoma 8, HeaderHeight 22, Top 88/Left 54/608x297, RowHeight 16, ScrollBars 2, `ReadOnly=.F.` **antes** dos `Column.ReadOnly`, RecordMark/DeleteMark `.F.`); Column1 com `AddObject("chk_4c_Selecao","CheckBox")` + as 7 props expl├¡citas + `CurrentControl` + `Sparse=.F.`; Header1 com `CHECKBX.BMP`; Column2 + Header1 "Observa├º├Áes" + Text1 |
+| `ConfigurarContainerBotoes()` | agora configura `Buttons(1)` = btnSair ("\<Cancelar", `Cancel=.T.`, Left 80) e `Buttons(2)` = btnConfirmar ("\<Confirmar", Left 5), via vari├ível local (n├úo `WITH THIS.cmg_...` aninhado) e **antes** da geometria do grupo (AutoSize recalcula) |
+| `CarregarLista()` | funil de carga: cria o cursor, chama o BO, liga a grade; `DO CASE` em vez de ramo vazio |
+| `VincularGrade()` | `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Header1.Caption` ÔåÆ **`Width` por ├║ltimo**, reafirma `Sparse`/`CurrentControl`, fecha com `GO TOP` + `Refresh` |
+| `EstaEmModoTeste()` | bypass por `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`, n├úo por `gnConnHandle` |
+
+**`SIGOPinsBO.prg`** (360 ÔåÆ 1025 linhas) ÔÇö a Fase 2 tinha declarado o BO somente-leitura e **n├úo deixou nenhum m├®todo de consulta**, ent├úo `CarregarLista()` seria um stub. Portei os 5 `SqlExecute` do `Init` legado (ambos os fluxos: FINALIDADES com os tr├¬s ramos `pcTipo` ausente/`GRP`/`ITN`, e OBSERVA├ç├òES DA OPERA├ç├âO via faixa de `SigCdOpe`), mais marca├º├úo e restri├º├úo por grupo.
+
+`AlternarPagina()` **n├úo** foi criado: o SCX ├® FLAT (sem PageFrame/Page) e o ramo FLAT do gate mede `grade=True botoes=True carga=True FormType=OPERACIONAL` ÔåÆ `FLAT = True`. Criar o m├®todo seria stub.
+
+## Verificado por medi├º├úo (VFP9 executou nesta sess├úo ÔÇö smoke test gravou arquivo)
+
+- compila sem `.err`; `CREATEOBJECT` ÔåÆ `VARTYPE=O`, `BaseClass=Form`, 800x600, 3 controles na ordem do SCX
+- grade ligada: `RecordSource=cursor_4c_Lista`, `Column1.CurrentControl=CHK_4C_SELECAO`, Sparse `.F.`, W 23/562, header "Observa├º├Áes", ├¡cone resolvido
+- bot├Áes: Cancelar `Cancel=.T.`, os dois `.Picture` existem em disco (`FILE()=.T.`)
+- cursor com os **4** campos do SELECT (sem estreitamento no `APPEND FROM DBF`)
+- l├│gica exercitada com dados em subclasse de teste: `MarcarSelecionadas` marcou 2 de 3 (ignorou c├│digo ausente); `MarcarObservacaoPadrao(-1)`=0 e `(4)`=1; `RestringirListaAoGrupo` 5ÔåÆ3 linhas **sem duplicar** o c├│digo repetido no grupo e preservando o memo de 301 chars; `LimparCursorLista` manteve alias e estrutura; `MontarWhereLista` ÔåÆ `IN (1,7)` / `< 0` para vazio e para entrada suja
+- `PEMSTATUS(...,2)=.F.` em todos os m├®todos chamados de fora (regras #3/#51); zero `RETURN` dentro de `TRY`; zero acentos literais; `Test-CompletudeCodigo` = **True** nos dois arquivos
+- CRLF preservado nos dois arquivos
+
+## Dois pontos que voc├¬ deve saber
+
+1. **`Test-CompletudeCodigo` reprovou o BO por um coment├írio**: a palavra "placeholder" dentro de `*` casa com o regex de marcador ÔÇö mesma armadilha j├í registrada para "n├úo implementado". Reescrevi o coment├írio; a frase n├úo descrevia stub nenhum.
+2. **`tasks/task752/mapeamento.json`**: troquei `chk_4c_Fwcheckbox1` por `chk_4c_Selecao` para casar com o `.prg`, j├í que o `ValidarUIFidelity` monta o caminho a partir do JSON.
+
+N├úo testei o SQL real (sem conex├úo no harness ÔÇö `gnConnHandle=0` ├® sentinela do pr├│prio harness). As consultas foram conferidas coluna a coluna contra `docs/schema.sql` lido com `Get-Content -Raw`: `SigCdObs(codigos/observas/descrs)`, `SigCdOpe(obspads/obsinis/obsfins/dopes)`, `SigOpFnl(5 colunas)`, `SigCdPro(cgrus/cpros)` ÔÇö todas existem.

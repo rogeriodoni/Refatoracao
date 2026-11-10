@@ -1,0 +1,300 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLRC",
+      "evento": "Procedure",
+      "linhas": 298,
+      "codigoOriginal": "Local llAtvCnt\n\nllAtvCnt = .f.\nlcSql = [Select Dopes,TipoOps,Nivels,LimCres,ObsOrigs,ObsDests,ExibSits From SigCdOpe Where Dopes = ']+ThisForm.Operacao+[']\nIf ThisForm.ParentForm.PodataMgr.Sqlexecute(lcsql,'LocalOpe') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalOpe)')\n\tReturn(.F.)\nEndIf\nTipoop = LocalOpe.TipoOps\n_Nivel = LocalOpe.Nivels\n\nThisform.Container1.Visible = .f.\nThisForm.Container2.Visible = .f.\nThisForm.Container3.Visible = .f.\n\nIf ThisForm.OriDes > 0\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,CursorQuery",
+        "controlesReferenciados": "ChkPagos,ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC",
+      "evento": "Init",
+      "linhas": 38,
+      "codigoOriginal": "lparameters loForm,pOperacao, pOriDes, loForm2\n\nset datasession to loForm.DataSessionId\n\nThisForm.Parentform = loForm\nThisform.OriDes = Iif(Type('pOriDes')='N',pOriDes,0)\nThisForm.ClickOriDes = 0\nThisForm.Operacao = pOperacao\nThisForm.Retorno = .t.\nThisForm.PoFormCaixa = loForm2\n\nIf ThisForm.OriDes = 0\n\tThisForm.Sit_Destino.Enabled = .t.\n\tThisForm.Sit_Origem.Enabled = .t.\nEndIf\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "OriDes = Iif,Processa",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\nCreate Cursor DbOpera (dopes c(20), totas n(12,2))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Retorno)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_limcred",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_pendente",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_contac",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_cheque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_disponivel",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_chqpend",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_cotacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container1.get_PendOutr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Container2.fwmemo1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Sit_Origem",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If ThisForm.OriDes = 0\n\tThisForm.Sit_Origem.Enabled = .f.\n\tThisForm.Sit_Destino.Enabled = .t.\nEndif\nThisForm.ClickOriDes = 1\nIf Not ThisForm.Processa()\n\tThisForm.Sit_Destino.Click()\nEndIf\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.Sit_Destino",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If ThisForm.OriDes = 0\n\tThisForm.Sit_Destino.Enabled = .f.\n\tThisForm.Sit_Origem.Enabled = .t.\nEndif\nThis.Value = 0\nThis.Refresh\nThisForm.ClickOriDes = 2\nIf Not ThisForm.Processa()\n\tThisForm.Sit_Origem.Click()\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLRC.ok",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Type('ThisForm.poFormCaixa') = \"O\"\n\tThisForm.PoFormCaixa.Enabled = .t.\nEndif\nThisform.release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPLRC.Procedure",
+      "queryOriginal": "lcSql = [Select Dopes,TipoOps,Nivels,LimCres,ObsOrigs,ObsDests,ExibSits From SigCdOpe Where Dopes = ']+ThisForm.Operacao+['] If ThisForm.ParentForm.PodataMgr.Sqlexecute(lcsql,'LocalOpe') < 1",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,TipoOps,Nivels,LimCres,ObsOrigs,ObsDests,ExibSits,Operacao+[],Sqlexecutelcsql,LocalOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

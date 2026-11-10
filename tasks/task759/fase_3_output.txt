@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSigOpLhi.prg` com a estrutura base.
+
+Como este ├® um dialogo modal flat (n├úo um CRUD com PageFrame Page1/Page2 ÔÇö o SCX legado n├úo tem abas, ├® um ├║nico form com cabe├ºalho + grid + 2 bot├Áes), adaptei o template gen├®rico da fase para a estrutura real:
+
+- `DEFINE CLASS FormSigOpLhi AS FormBase` com as propriedades visuais transcritas do SCX (Width=800, Height=400, WindowType=1 modal, TitleBar=0, ControlBox=.F., etc.)
+- `Init(par_oFormPai, par_cAliasContexto, par_cAliasLancamentos)` ÔÇö captura a refer├¬ncia ao Formpgr (equivalente ao `LParameters _Form` do legado) e os aliases dos cursores que o pai j├í mant├®m abertos
+- `InicializarForm()` ÔÇö cria o `SigOpLhiBO`, carrega o t├¡tulo via `CarregarDoCursor`/`this_cTituloDialogo`, e monta a estrutura visual
+- `ConfigurarCabecalho()` ÔÇö faixa cinza com `lbl_4c_Sombra`/`lbl_4c_Titulo` (geometria exata do dump)
+- `ConfigurarBotoes()` ÔÇö container vazio posicionado onde Confirma/Cancela entrar├úo na Fase 4
+- `Destroy()` ÔÇö delega para FormBase
+
+Validei compilando no VFP9 (`COMPILE`) com controle negativo: o form real gerou `.fxp` sem `.err`; uma c├│pia com erro de sintaxe proposital gerou `.err` ÔÇö confirmando que o compile check ├® real.
+
+Pr├│xima fase (4/8) adiciona o grid de lan├ºamentos e os bot├Áes Confirma/Cancela dentro dos containers j├í criados.

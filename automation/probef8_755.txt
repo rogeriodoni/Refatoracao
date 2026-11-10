@@ -1,0 +1,27 @@
+PROBE F8 task755 INICIO
+ambiente OK
+CK01 CREATEOBJECT -> VARTYPE=O
+CK02 BO VARTYPE=O
+CK03 CarregarLista PROTECTED?=.F.
+CK04 ChecarCamposObrigatorios PROTECTED?=.F.
+CK05 CarregarLista executado; grade RecordSource=[Cursor_4c_fontes] ColumnCount=4 Header1=[Cliente]
+CK06 sem mascara -> [OK]  (esperado OK)
+CK07 mascara pos1=1 + campo vazio -> [ERRO]  (esperado ERRO)  BorderColor=255  vermelho=.T.
+CK08 mascara pos1=1 + campo preenchido -> [OK]  (esperado OK)  BorderColor=10179620  azul=.T.
+CK09 par de datas incompleto -> [ERRO]  (esperado ERRO)  18.BorderColor vermelho=.T.
+CK10 par de datas completo   -> [OK]  (esperado OK)
+CK11 grupo 4 chk nenhum marcado -> [ERRO]  (esperado ERRO)  lbl_02_003.ForeColor vermelho=.T.
+CK12 grupo 4 chk um marcado     -> [OK]  (esperado OK)
+CK13 mascara so na pos 65 -> CampoObrigatorio(65)=.T. (a mascara DIZ 65)
+CK14 ...mas o indice 65 le a pos 69 -> [OK] (esperado OK: pos 69 = 0)
+CK15 mascara na pos 69 + Outras Receitas vazio -> [ERRO] (esperado ERRO)
+CK16 ObterTituloPersonalizado(101)=[BRIEF CUSTOM]
+CK17 ObterRotuloPersonalizado(3351)=[EXTRA CUSTOM]
+CK18 Page1.Caption=[BRIEF CUSTOM]
+CK19 Page2.Caption=[BRIEF CUSTOM Continuação]
+CK20 Emp1.lbl_02_001=[EQUIPE UM]
+CK21 lbl_Extra=[EXTRA CUSTOM]
+CK22 divnotas=2 -> Emp1.Visible=.T. Emp2.Visible=.F.
+CK23 divnotas=3 -> Emp1.Visible=.F. Emp2.Visible=.T. Emp2.Left=23 Emp1.Left=23
+CK24 divnotas=4 -> Emp1.Visible=.F. Emp2.Visible=.F.
+PROBE F8 FIM

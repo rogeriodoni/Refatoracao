@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `projeto\app\forms\operacionais\FormSigOpLoc.prg` criado (13,7 KB).
+
+**Por que a tentativa anterior falhou:** o sub-agente recebeu s├│ o contexto, sem a tarefa ÔÇö a resposta dele em `fase_3_output.txt` ├® literalmente *"no actual task or question was included in your message"*. Nenhum arquivo foi gerado.
+
+**Decis├úo estrutural (divergi do texto gen├®rico do prompt, de prop├│sito):** o prompt da Fase 3 pede "PageFrame com Page1 (Lista) e Page2 (Dados)", mas o `SIGOPLOC.SCX` tem raiz `Class: form` gen├®rica e **nenhum** `BaseClass: pageframe` ÔÇö ├® layout FLAT. Criar PageFrame violaria o PILAR 1 e, na pr├ítica, **reprovaria** o gate: o ramo FLAT do `OrquestradorMigracao.ps1:9095` exige `AddObject("pgf_4c_` **ausente**. Segui o precedente mais pr├│ximo, `FormSigOpLcl` (task757, mesma fam├¡lia SigOp, bloco de cabe├ºalho id├¬ntico no dump).
+
+**Entregue:** `DEFINE CLASS FormSigOpLoc AS FormBase` + propriedades visuais transcritas (800x350, TitleBar=0, WindowType=1), `Init`, `InicializarForm`, `ConfigurarCabecalho` (cnt_4c_Sombra + 2 labels), `TornarControlesVisiveis` recursivo e `Destroy`.
+
+**Dois pontos que exigiram cuidado:**
+- **`DataSession = 1`** ├® obrigat├│rio, n├úo cosm├®tico: o `Init` legado abre com `Select crSigOpOco` sem criar o cursor ÔÇö ele vem do form **chamador**. Com `DataSession = 2` o cursor ficaria invis├¡vel. Pelo mesmo motivo o `Destroy` **n├úo** fecha `crSigOpOco` (├® o alias do pai, e ├® nele que fica o resultado da sele├º├úo). Est├í documentado no cabe├ºalho.
+- **`Commandgroup3` n├úo foi migrado**: `ButtonCount = 0` + `BackStyle = 0` + `BorderStyle = 0` ÔÇö grupo sem bot├úo que n├úo pinta nada e n├úo ├® pai de ningu├®m (`btnSair` tem `Parent: SIGOPLOC`). Mesmo crit├®rio j├í aplicado em `FormSigMvVde` para o `Commandgroup3` id├¬ntico do SIGMVVDE.
+
+**Verifica├º├Áes executadas (n├úo s├│ "parece certo"):**
+- Gate da Fase 3 reavaliado com as regex reais do orquestrador: `temEstruturaFlat = True`.
+- Compila limpo no VFP9 (`.fxp` gerado, nenhum `.err`).
+- **Instanciado de verdade** (regra "a tela abre s├│ se prova instanciando"): `CREATEOBJECT` devolve `VARTYPE=O`, `BaseClass=Form`, `this_cMensagemErro` vazio, BO criado, `Picture` resolve para arquivo **existente** (`FILE()=.T.`, regra #25), container em `RGB(100,100,100)` 800x80 e os dois labels preservando 769x40 / 769x46 ÔÇö prova que `AutoSize = .F.` segurou e o `WordWrap` n├úo colapsou a altura (regra #23).
+- `CorretorAutomatico` rodado duas vezes: injetou s├│ `ShowWindow = 1` (can├┤nico de di├ílogo modal, igual aos irm├úos) e na segunda passada ficou idempotente.
+- Zero byte n├úo-ASCII, zero `RETURN` dentro de `TRY`, zero procedure vazia, zero marcador de pend├¬ncia.
+
+**Um aviso que deixei em aberto, deliberadamente:** o `CorretorAutomatico` emite `WARN-168-MISSING-PICTURE` pedindo `fundo_cad_1003.jpg`. ├ë falso positivo aqui ÔÇö esse ├® o fundo das Pages de CRUD; o legado deste form usa `..\framework\imagens\new_background.jpg`, que ├® o que est├í no c├│digo (e o que o irm├úo `FormSigOpLcZ` tamb├®m usa). ├ë warning, n├úo bloqueia.
+
+Criei dois scripts auxiliares em `automation\` (`CompilarF3SigOpLoc763.prg`, `ProbeF3SigOpLoc763.prg`), seguindo a conven├º├úo dos demais. N├úo commitei nada ÔÇö `tasks/task763/` e os novos arquivos est├úo untracked.

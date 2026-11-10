@@ -1,0 +1,170 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 4,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fValidarCNPJ", "fwBuscaSel", "fCriptografar", "From LocalMdsc1 Where Nvl"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLIM",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Lparameter _data\npridig = 0\nsegdig = 0\n_var = substr(dtoc(_data),1,2)+substr(dtoc(_data),4,2)+substr(dtoc(_data),7,2)\n_var = _var + _var\n_var1 = transf(_var + \"00\" ,\"@R 99999999/9999-99\")\nret = fValidarCNPJ(_var1)\n_senha = str(pridig,1) + str(segdig,1)\npridig = 0\nsegdig = 0\n_var1 = padl(alltrim(str(val(_var) + val(_senha),12)),12,\"0\")\n_var1 = transf(_var1 + \"00\" ,\"@R 99999999/9999-99\")\n_senha = _senha + str(pridig,1) + str(segdig,1)\nReturn _senha",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValidarCNPJ",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.zsenha",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "Parameter totite,valor,pvalor,tipo,poform,Pcx,pMotivo,pClaConta,plCheckBin,plCheckTabD,pcEmpresa\n\nThisform.totite=totite\nThisform.valdesc=valor\nThisform.pdescs=pvalor\nThisForm.Parentform = poform\nThisform.PodataMgr = Pcx\nThisForm.Claconta = Iif(Type('pClaConta')='C',pClaConta,' ')\nThisForm.CheckBin = plCheckBin\nThisForm.CheckTbd = PlCheckTabD\nThisForm.pEmps    = Iif(Type('pcempresa') = [C],pcempresa,_Empr)\nThisForm.Motivo = pMotivo\nThisForm.Tipo = Iif(Type([TIPO])<>[C], [D], Tipo)\nThisForm.Somot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Claconta = Iif,pEmps    = Iif,Tipo = Iif,Somotivo =",
+        "controlesReferenciados": "Get_Motivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM.usuario",
+      "evento": "Valid",
+      "linhas": 68,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,totite\n\nIf !IsEmpty(This.Value)\n\tusual=''\n\ttotite=thisform.totite\n\tvaldesc=thisform.valdesc\n\ttipo=thisform.tipo\n\tpdesc=thisform.pdescs\n\tsd = .t.\n\t\n\tDo Case\n\t\tCase (ThisForm.Tipo = [D])\n\t\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b Where Not a.cAtivos='N' And ]+;\n\t\t\t\t\t[(b.Limdescs = 0 or b.limdescs >= ]+Str(ValDesc,12,2)+[) And ]+;\n\t\t\t\t\t[(b.descpors = 0 or b.descpors >= ]+Str(pdesc,6,2)+[) And ]+;\n\t\t\t\t\t[(b.limdescs <> 0 Or b.descpors <> 0 ) And a.ccargs = b.ccar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,fCriptografar",
+        "metodosFormChamados": "SqlExecute,GeraSenha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM.senha",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (!Empty(ThisForm.Usuario.Value) Or Thisform.Tipo = 'L') && 20/04/2016 - Senha livre\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM.senha",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "local senha,resp\n\nIf Thisform.Tipo = 'L' && 20/04/2016 - Senha livre - Checa se a senha digita é válida e já foi utilizada \n\tlcQuery = [Select EmpDopNums, CidChaves From SigPrSnd Where SenhaDs = '] + Alltrim(This.Value) + [']\n\tThisform.podatamgr.SqlExecute(lcQuery,[TmpPrSnd])\n\tIf Eof([TmpPrSnd])\n\t\t=Messagebox([Senha inválida.],48,[Senha livre])\n\t\tThisForm.Zsenha=.F.\n\t\tthisform.release()\n\t\tReturn .f.\n\tElse\n\t\tIf !Empty(TmpPrSnd.EmpDopNums)\n\t\t\t=Messagebox([Senha já utilizada.],48,[Senha livre])\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCriptografar",
+        "metodosFormChamados": "SqlExecute,release",
+        "controlesReferenciados": "Get_motivo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIM.get_Motivo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( ThisForm.Motivo )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIM.get_Motivo",
+      "evento": "Valid",
+      "linhas": 72,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,totite\n\nIf Not IsEmpty(This.Value)\n\tlcQuery = [Select a.*, b.Emps ] + ;\n\t\t\t\t[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ;\n\t\t\t   [Where a.Tipos = '] + ThisForm.Tipo + [' ] + ;\n\t\t\t\t\t  Iif(ThisForm.Checkbin, [And a.ChkBins  <> 1 ],[ ]) + ;\n\t\t\t\t\t  Iif(ThisForm.Checktbd, [And a.BlqTabDs <> 1 ],[ ]) + ;\n\t\t\t   [Order By a.Codigos]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMdsc1]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,From LocalMdsc1 Where Nvl",
+        "metodosFormChamados": "SqlExecute,Zsenha = Space",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPLIM.usuario.Valid",
+      "queryOriginal": "\t\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b Where Not a.cAtivos='N' And ]+; \t\t\t\t\t[(b.Limdescs = 0 or b.limdescs >= ]+Str(ValDesc,12,2)+[) And ]+; \t\t\t\t\t[(b.descpors = 0 or b.descpors >= ]+Str(pdesc,6,2)+[) And ]+; \t\t\t\t\t[(b.limdescs <> 0 Or b.descpors <> 0 ) And a.ccargs = b.ccar... [TRUNCADO]",
+      "tabelas": "SigCdUsu",
+      "colunas": "cAtivos,Limdescs,ccargs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIM.senha.Valid",
+      "queryOriginal": "\tlcQuery = [Select EmpDopNums, CidChaves From SigPrSnd Where SenhaDs = '] + Alltrim(This.Value) + [']",
+      "tabelas": "SigPrSnd",
+      "colunas": "EmpDopNums,CidChaves,SenhaDs,Value",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIM.get_Motivo.Valid",
+      "queryOriginal": "\tlcQuery = [Select a.*, b.Emps ] + ; \t\t\t\t[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ; \t\t\t   [Where a.Tipos = '] + ThisForm.Tipo + [' ] + ; \t\t\t\t\t  Iif(ThisForm.Checkbin, [And a.ChkBins  <> 1 ],[ ]) + ; \t\t\t\t\t  Iif(ThisForm.Checktbd, [And a.BlqTabDs <> 1 ],[ ]) + ; \t\t\t   [Order By a.Codigos]",
+      "tabelas": "SigCdFsI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu", "SigPrSnd", "SigCdFsI"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

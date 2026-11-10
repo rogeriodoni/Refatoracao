@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete and verified. 
+
+## What I did
+
+Phase 7's generic script asks for `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **This form has no CRUD surface** ÔÇö measured in the dump: 1 `commandbutton` (`cmdSair`), 0 `commandgroup`, 0 occurrences of `frmcadastro`/`Grupo_Op`/`pcEscolha`, and zero CRUD verbs anywhere in the file. Writing those four would mean inventing buttons (PILAR 1) or four empty methods (completeness rule). So I delivered the **real** remaining Phase-7 work: the two cell events the legacy actually declares, which the file header itself had scheduled for this phase.
+
+**Added to `FormSigOpIpB.prg`** (+358 / ÔêÆ24 lines):
+
+| Method | Legacy origin |
+|---|---|
+| `ConfigurarEventosGrade` | registers the 5 BINDEVENTs, last in the montage |
+| `GradeNomeImpressoraLostFocus` | `Column1.Text1.LostFocus` ÔÇö empty cell ÔåÆ focus to Encerrar |
+| `SelecionarImpressoraCorrente` | `Column2.Check1.Valid` ÔÇö reads RECNO, calls `BO.SelecionarImpressora`, repaints |
+| `ChkImpressoraKeyPress` / `MouseUp` | the choice (Enter/Space, click) |
+| `ChkImpressoraMouseDown` / `Click` | `NODEFAULT` ÔÇö suppress the native toggle (rule #18 / Pattern #185) |
+| `RepintarGrade` | single repaint funnel, now with two callers |
+
+Two judgement calls, both documented in the file:
+
+1. **The toggle path does not go through `CarregarLista`** ÔÇö the earlier phase's comment said it would, but reassigning `RecordSource`/`ControlSource` from inside a cell event tears down the active cell and is pointless (the alias never changes, only row contents). It goes through `RepintarGrade`, which is what the legacy does and what the project's canonical grid-checkbox pattern does. I updated that stale comment.
+2. **Clicking an already-selected row keeps it selected** (idempotent radio). The legacy's native toggle wrote `.F.` before `Valid` ran, so clicking the marked row left **zero** selected ÔÇö which breaks the caller's `Locate for lSituas` + `Set Printer To Name`. This is the one deliberate divergence; it matches the contract the BO already documents.
+
+## Verification (VFP9 actually executed ÔÇö output files in hand)
+
+- **Compiles clean**: `.FXP` generated, no `.ERR`.
+- **Instantiates**: `VARTYPE = O`, `BaseClass = Form`, Caption correct ÔÇö proving the 5 new BINDEVENTs don't kill `Init`.
+- **BINDEVENTs registered** (via `AEVENTS`): `Column1.Text1 ÔåÆ LOSTFOCUS`; `Column2.chk_4c_Check1 ÔåÆ KEYPRESS, MOUSEUP, MOUSEDOWN, CLICK`.
+- **Scope**: `ConfigurarEventosGrade` PROTECTED; the 6 BINDEVENT/harness targets PUBLIC (rule #3).
+- **Radio semantics proven with real data**: cursor entered with 2 rows marked ÔåÆ after open, 1 (`ARGOX`, first alphabetically); selecting row 3 ÔåÆ exactly 1 marked (`ZEBRA`), previous cleared; repeating on the same row ÔåÆ still 1.
+- **KeyPress filter**: Space(32) selects; key `A`(65) does nothing.
+- **LostFocus** runs with empty and filled cell on a non-shown form without error (the `Visible`/`Enabled` guard holds).
+- `Test-CompletudeCodigo` logic run verbatim: **no problems**. No literal accents, no `RETURN` inside `TRY`, no `PUBLIC PROCEDURE`, no `MESSAGEBOX`.
+- CRLF preserved integrally (CR=LF=1396); `.fxp` deleted so the pipeline regenerates it.
+
+Probe kept at `automation/ProbeF7SigOpIpB753.prg`; results at `automation/_f7_753_probe.txt`. With this, **all 5 legacy methods are now ported** ÔÇö no event in the dump is left without a destination.

@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue e provada por instancia├º├úo.
+
+## O que a fase entregou
+
+`projeto/app/forms/operacionais/FormSigOpOch.prg` (274 ÔåÆ 968 linhas):
+
+| M├®todo | Conte├║do |
+|---|---|
+| `InicializarCursores` | `cursor_4c_ContaCc` (8 campos) e `cursor_4c_FollowUp` (6 campos), `SET NULL ON`, lista id├¬ntica ├á dos `SELECT` do BO |
+| `ConfigurarGradeLancamento` | `grd_lancamento` ÔåÆ `grd_4c_Lancamento`: 6 colunas, geometria 89/60/679x76, m├íscaras, `ColumnOrder` 5Ôåö6 e as cores din├ómicas do `Init` legado |
+| `ConfigurarGradeFollowUp` | `GridFollowUp` ÔåÆ `grd_4c_FollowUp`: 5 colunas, 173/60/679x200, Courier New nas 4 primeiras + Arial na 5┬¬ |
+| `ConfigurarBotoes` | `CommandGroup1` ÔåÆ `cmg_4c_Botoes` (1 bot├úo "Encerrar", 75x75, `Cancel = .T.`) |
+| `ConfigurarEventos` + `CmdEncerrarClick` | `BINDEVENT` do `Click` ÔåÆ `THIS.Release()` (equivale a `Sair.Valid`) |
+| `CarregarLista` + `AtualizarGrades` | as duas consultas do `Init` legado + `GO TOP`/`Refresh` num funil ├║nico |
+
+## Desvio do roteiro gen├®rico, e por qu├¬
+
+O roteiro pedia `ConfigurarPaginaLista` + 6 bot├Áes CRUD + `AlternarPagina`. Medi no dump: **0** `BaseClass: pageframe`, **2** grades, **1** bot├úo, **0** INSERT/UPDATE/DELETE. N├úo h├í Lista├ùDados para alternar nem registro para incluir/alterar/excluir ÔÇö criar isso seria inventar UI, e um `AlternarPagina` que n├úo alterna nada seria stub. Entreguei a estrutura que o form tem (ramo FLAT do gate, que medi como `temLayoutFlat = True`) e deixei a medi├º├úo escrita no cabe├ºalho do `.prg`.
+
+## Fora do escopo estrito da fase (sinalizando)
+
+- **Alterei o BO** (arquivo da Fase 2): o `SELECT` de `CarregarContaCorrente` n├úo trazia `Concs` nem `DtAudits`, que s├úo justamente as colunas que o `DynamicForeColor`/`DynamicBackColor` do `Init` legado l├¬. Sem elas as cores de linha (azul = conciliado, verde = auditado) se perderiam em sil├¬ncio. `CAST(concs AS numeric(1,0))` para o bit n├úo chegar ora L├│gico ora Num├®rico.
+- **Corrigi `tasks/task774/mapeamento.json`**: o gerador colidia as duas grades em `grd_4c_Dados` (o 2┬║ `AddObject` estouraria "already defined"), nomeava o CommandGroup como `obj_4c_` e mapeava cada `Column` para `Page_4c_1`. 42 entradas, JSON revalidado.
+- **`TabIndex` n├úo transcrito** ÔÇö os valores legados (3, 6, 8, 34) est├úo fora da faixa `1..N` e seriam descartados em sil├¬ncio; a ordem de tabula├º├úo cabe na fase que cria o ├║ltimo `AddObject` (Memo_Obs, Fase 5).
+
+## Provas
+
+`COMPILE` dos dois arquivos: `.fxp` OK, **zero** `.err`. `CREATEOBJECT` em dois modos (valida├º├úo de UI e fluxo real):
+
+- `VARTYPE = O`, 800x450, 4 filhos diretos com a geometria exata do SCX
+- cursores criados na datasession privada 2 com os tipos certos (`CONCS N`, `DTAUDITS T`, `OBSAUDTS M`)
+- `ColumnOrder` 5=6 / 6=5 confirmado ÔÇö Saldo antes de Emp, como o SCX declara
+- `BINDEVENT` registrado: `CLICK ÔåÆ CMDENCERRARCLICK`; `PEMSTATUS(...,2) = .F.` nos tr├¬s m├®todos chamados de fora
+- `CarregarLista()` sem banco devolve `.F.` **sem exce├º├úo**, e o `Release()` passa
+
+**Limite do que foi verificado:** n├úo h├í SQL Server alcan├º├ível nesta m├íquina, ent├úo provei estrutura, binding e degrada├º├úo limpa ÔÇö **n├úo** provei que as linhas aparecem pintadas nas grades. Isso exige rodar com banco.

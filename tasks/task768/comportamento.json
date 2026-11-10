@@ -1,0 +1,342 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Not Empty", "For Empty", "fConfigGeral", "Flag With ThisForm.Marca"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPMPD",
+      "evento": "Procedure",
+      "linhas": 55,
+      "codigoOriginal": "Private pNot\nLocal _Nivel, _NumNivel\n\nThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpNens.Dopps, 'Dopps, NDopps, TNivels, Artigos')\n_Nivel \t  = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 10)\n_NumNivel = Val(Str(LocalOpp.Ndopps, 2) + Transform(TmpPends.Numes, '@L 9999999999'))\n\nSelect xMFas\nSet Order to\nDelete All For Nenvs = TmpPends.Numes\n\nSelect xOpi\nSet Order to\nDelete All For Nenvs = TmpPends.Numes\n\nSelect xPesa\nSet Order to\nDelete All For Nenvs = TmpPends.Numes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Not Empty",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD",
+      "evento": "Procedure",
+      "linhas": 238,
+      "codigoOriginal": "LParameters _Automatico\n\nPrivate pTru, pNop\nLocal _PuxaOrigem, _PuxaDestino\n\nThisForm.poDataMgr.CursorQuery('SigCdOpd', 'LocalOpp', 'Dopps', TmpPends.Dopes, 'Dopps, NDopps, TNivels, Artigos')\n\n_Nivel \t  = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 10)\n_NumNivel = Val(Str(LocalOpp.Ndopps, 2) + Transform(TmpPends.Numes, '@L 9999999999'))\n_Titulo   = LocalOpp.TNivels\n_Artigo   = LocalOpp.Artigos\n\nIf Seek(_NumNivel, 'TmpOperacao', 'Codigos')\n\tIf Not _Automatico\n\t\t=Messagebox(_Titulo + ' Já... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "ChkSubn,Get_Grupo,Get_Conta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPMPD",
+      "evento": "Init",
+      "linhas": 122,
+      "codigoOriginal": "LParameters pForm, pData, pCnx\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\nLocal _PuxaOrigem, _PuxaDestino\n\nThis.LockScreen = .t.\nThis.ParentForm = pform\nThis.poDataMgr  = pCnx\n\nSet DataSession To pData\n\nCreate Cursor TmpPends(Flag l, Emps c(3), Dopes c(20), Numes n(10), Datas t Null, Origem c(21), Destino c(21), CPros c(14))\nIndex On Emps + Dopes + Str(Numes, 10) tag EmpDopNum\nIndex On Numes Tag Numes\n\nSelect TmpOperacao\nDel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Visible    =,Visible      =",
+        "controlesReferenciados": "ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.seleciona.fwcheckbox1",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "=DoDefault()\n\nIf Not This.Value\n\tThisForm.Desmarca\nElse\n\tThis.Value = ThisForm.Marca()\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Marca",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.seleciona.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Op_Escolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.empresa.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.empresa.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.operacao.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.operacao.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.data.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.data.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.Grupo.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.Conta.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.Grade.Column8.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.ok",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.SELTUDO",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpPends\nScan For Not Flag\n\tReplace Flag With ThisForm.Marca(.t.)\nEndScan\nThisForm.Grade.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Flag With ThisForm.Marca",
+        "metodosFormChamados": "Marca",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.SELTUDO",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.APAGA",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select TmpPends\nScan For Flag\n\tReplace Flag With .f.\n\t=ThisForm.Desmarca()\nEndScan\nThisForm.Grade.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Desmarca",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPMPD.APAGA",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

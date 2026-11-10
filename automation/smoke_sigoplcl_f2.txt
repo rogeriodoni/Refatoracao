@@ -1,0 +1,30 @@
+1) CREATEOBJECT SigOpLclBO -> O
+2) CriarCursorLocalizacoes -> .T.
+3) CarregarItens -> .T.  itens visiveis=3 (esperado 3: item 4 tem Cpros vazio)
+   TAGs: cItens=1 Cpros=2 Categoria=3
+4) OrdenarItens 1 Cpros -> .T.  ORDER=CPROS
+   OrdenarItens 2 Categoria -> .T.  ORDER=CATEGORIA
+5) CarregarDoCursor default -> .T.  cItens=1  Cpros=[PROD001]
+   CarregarDoCursor crTpmMvItn -> .T.
+6) MarcarTodosItens 1 -> .T.  selecionados=3  temSel=.T.
+   MarcarTodosItens 0 -> .T.  selecionados=0
+7) AlternarMarcaItem -> .T.  selecionados=1
+8) ValidarNiveis sem Base -> .F.  msg=[Informar a Base da Localização.]
+9) ValidarNiveis com Base -> .T.
+   MontarLocalizacao -> [0102030004] len=10 esperado 10
+10) Inserir -> .T.  gravados=1
+    cursor_4c_Locais regs=1  1a linha cItens=1 Locals=[0102030004]
+    itens restantes na grade=2 esperado 2
+    niveis limpos? Base=[]
+11) Atualizar -> .T.  confirmados=1
+    crTpmMvItn item1 Locals=[0102030004] Localos=[          ]
+12) Atualizar ramo ORIGEM -> .T.  confirmados=1
+    crTpmMvItn item1 Localos=[0102030004]
+13) ReverterXML XML COM schema -> .T.  cursor_4c_LcNv2 regs=1 esperado 1 (so o Marcas<>0)
+    Cods pai=[01] Codigo proprio=[02] Descs=[NIVEL DOIS]  esperado Cods=01 Codigo=02
+13b) ReverterXML XML SEM schema -> .T.  cursor_4c_LcNv3 regs=1 nao deve abortar
+14) CarregarNivelFiltrado LcNv2 / 01 -> 1 linha(s)
+15) BuscarFotoProduto sem conexao -> [] esperado vazio
+16) Inserir em modo PROCURAR -> .F.  msg=[Operação não permitida no modo atual.] esperado .F.
+17) LimparDados -> .T.
+18) Destroy; cursor_4c_Itens aberto? .F. esperado .F.

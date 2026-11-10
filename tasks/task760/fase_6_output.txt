@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpLib.prg` (958 ÔåÆ 1449 linhas).
+
+## Campos restantes
+
+N├úo havia nenhum. Medido no dump (`tasks\task760\SigOpLib_form_codigo_fonte.txt`): a ├írvore do SCX tem 12 objetos e os **5 controles de dados** (`Shape1`, `Say2`, `get_codigo`, `get_descr`, `Say1`) j├í foram criados na Fase 5 em `ConfigurarCampos`, com `InputMask = "!!!!!!!!!!"`, `MaxLength` 10/60 conferidos contra `SigCdNcf` (`cods char(10)`, `descs char(60)`). Inventar campo violaria o PILAR 1.
+
+## Lookups implementados (completos, sem TODO/stub)
+
+Os tr├¬s m├®todos do dump que tocam os campos, transcritos:
+
+| Legado | Migrado |
+|---|---|
+| `get_codigo.Valid` | `ValidarCodigoLostFocus` ÔåÆ `AbrirLookupTipoLiberacao` |
+| (atalhos F4 / duplo clique) | `TxtCodigoKeyPress` / `TxtCodigoDblClick` |
+| bloco final do `Valid` | `AplicarTipoSelecionado` |
+| `get_descr.When` | `AtualizarEstadoDescricao` |
+| `get_descr.Valid` | `ValidarDescricaoLostFocus` |
+
+Decis├Áes que exigiram medir, n├úo presumir:
+
+- **Picker recebe o cursor J├ü POPULADO** (`CREATEOBJECT("FormBuscaAuxiliar")` sem par├ómetros + `this_cCursorDestino` + `mAddColuna` + `Show()`). Passar `"SigCdNcf"` no 2┬║ argumento faria o picker consultar a tabela **sem** o filtro `Emps`/`Tipos` do legado, e o usu├írio escolheria um tipo que o chamador n├úo autorizou. Pelo mesmo motivo o match exato n├úo foi delegado ao `Init` do picker (regra #37): o `Seek` do legado roda no universo filtrado.
+- **Lookup em `"LostFocus"`**, nunca em `"KeyPress"` sem testar a tecla ÔÇö o `KeyPress` registrado s├│ atende F4 (115). Provado: `TxtCodigoKeyPress(65)` n├úo acionou o funil.
+- **Tr├¬s guardas**: reentr├óncia (`this_lEmLookup`, liberada **depois** do `ENDTRY`), valor-n├úo-mudou (`this_cUltimoCodigoValidado`, porque `LostFocus` Ôëá `Valid`) e campo vazio.
+- **`When` n├úo vira BINDEVENT** (o bind descarta o retorno do delegate) ÔÇö a descri├º├úo ├® reconfigurada com `ReadOnly`/`TabStop`, n├úo `Enabled`, para n├úo acrescentar o fundo cinza que o legado n├úo tem.
+- **Nada de `MsgAviso` + apagar o digitado** no caminho "n├úo achou" (regra #50).
+
+## Verifica├º├úo
+
+- **Compila limpo** no VFP9 (`.FXP` gerado, nenhum `.ERR`).
+- **Probe real** (`automation\ProbeF6SigOpLib760.prg`): form instancia, 7 m├®todos presentes e todos PUBLIC, 5 BINDEVENTs registrados, as 3 guardas funcionam, o funil marca o valor e **preserva o c├│digo digitado**, retorno posicional sai com 70 chars (10+60), `Fixos = 2` deixa a descri├º├úo em branco (fidelidade ao legado), cursor do picker n├úo fica pendurado. Nenhum erro, nenhum modal.
+- **Auditorias**: `VerificarLookupEmKeyPress` (ERRO=0), `VerificarFormBuscaAuxiliar`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes` ÔÇö todas sem achado neste arquivo.
+- **Gate da Fase 6** (ramo FLAT) e **gate de completude** simulados: passam.
+- **CorretorAutomatico** rodado em c├│pia sob `\forms\`: **zero mudan├ºa**, s├│ 2 WARNINGs do #74 (n├úo muta) ÔÇö o LostFocus n├úo ├® revertido.
+
+Duas ressalvas que registro explicitamente:
+
+1. O ramo do **picker n├úo foi exercitado em runtime** ÔÇö o SQL Server (192.168.200.10) ├® inalcan├º├ível nesta m├íquina, ent├úo `CarregarTiposPermitidos` cai no CATCH e o cursor nem existe. O que ficou provado ├® que, nessa condi├º├úo, nenhum di├ílogo sobe indevidamente (o processo terminou; picker modal travaria o headless).
+2. Reproduzi de prop├│sito um comportamento **discut├¡vel do legado**, documentado no c├│digo: escolhendo um tipo de descri├º├úo livre (`Fixos = 2`) e clicando Ok **sem** digitar a descri├º├úo, o retorno devolvido ├® o anterior ÔÇö o legado s├│ fecha o retorno no `get_descr.Valid`. "Consertar" isso seria inventar regra (regra #17).

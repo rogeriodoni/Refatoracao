@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpLbC.prg` (1107 ÔåÆ 1502 linhas).
+
+## O que entrou
+
+`ConfigurarCamposDados()` ÔÇö chamada **entre** `ConfigurarGrade()` e `ConfigurarBotoes()` (o z-order: no SCX o `ok` ├® o ├║ltimo filho, e bot├úo criado antes de irm├úo que o sobreponha fica coberto ÔÇö regra #30). 10 dos 20 controles de dados, a metade superior do bloco:
+
+| legado | migrado | Top/Left do dump |
+|---|---|---|
+| `get_nconta` | `lbl_4c_Get_nconta` | 84 / 14 |
+| `Shape4` | `shp_4c_Shape4` | 102 / 12 |
+| `Say6` + `get_moeda` | `lbl_4c_Label6` + `txt_4c__moeda` | 119┬À115 / 138┬À184 |
+| `Say8` + `get_cotacao` | `lbl_4c_Label8` + `txt_4c__cotacao` | 144┬À140 |
+| `Say1` + `get_limcred` | `lbl_4c_Label1` + `txt_4c__limcred` | 169┬À165 |
+| `Say9` + `get_PendOutr` | `lbl_4c_Label9` + `txt_4c__PendOutr` | 194┬À190 |
+
+Nomes conferidos contra `mapeamento.json`. Layout FLAT: Top absolutos, sem o +29 de PageFrame.
+
+`AtualizarCamposComposicao()` ÔÇö espelha o BO nos campos, chamada em `CarregarDados` (modo teste e caminho de sucesso). Criei este m├®todo agora porque campo criado e nunca alimentado ├® defeito: a tela abriria com a composi├º├úo em zero sem erro nenhum. A fase 6 estende com os 5 campos de baixo.
+
+## Decis├Áes que valem registro
+
+**`get_nconta` diverge do dump, deliberadamente.** O dump tem `AutoSize=.T.` + `Width=46`, mas em runtime o legado troca o Caption por `_Conta + ' ' + Alltrim(RClis)` (~60 chars) e contava com o AutoSize crescer. `AutoSize` ├® no-op em Label de `AddObject` (regra #23), ent├úo as duas transcri├º├Áes literais falham: com `Width=46` o nome sai cortado, com `AutoSize=.T.` ele para nos 100px do default. Ficou `AutoSize=.F.` + `Width=380` (14+380=394, antes da grade em 405) + `WordWrap=.F.`. Reproduz o comportamento, que ├® o que o PILAR 1 pede.
+
+**Os `say` levam `Alignment=0`** ÔÇö a classe ├® AutoSize/esquerda e os `Left` escalonados do SCX j├í terminam antes dos TextBox em 184; inventar `Alignment=1` jogaria o texto dentro do campo (regra #23). `Width = (184 - Left) + 8`; o `Say9`, ├║nico com Width/Height no dump (120├ù15), foi transcrito literal.
+
+**O cruzamento de nomes do legado foi preservado:** `get_pendoutr.Value = _Pendente` ÔÇö o campo rotulado "Total da Movimenta├º├úo" recebe o valor *desta* movimenta├º├úo. A invers├úo est├í no nome das vari├íveis do legado, n├úo na atribui├º├úo; r├│tulo e valor casam (regra #17).
+
+**`ZOrderSet=2` do `Shape4` foi omitido** ÔÇö bookkeeping do Form Designer, n├úo existe em runtime e derrubaria o Init (regra #33). `MaxLength=3` no `get_moeda` vem de `SigClLcr.Moedas char(3)` no schema, n├úo dos 31px de Width (regra #19). `TabStop=.F.` + `ReadOnly=.T.` reproduz o `When / Return .f.` dos 10 campos.
+
+## Verifica├º├Áes executadas
+
+- **Compila limpo** no VFP9 real: `.FXP` gerado, nenhum `.ERR` (artefatos removidos depois).
+- **Propriedades conferidas uma a uma** contra `automation\propriedades_baseclasses.txt` (a tabela real via `AMEMBERS`) para Shape/Label/TextBox ÔÇö zero ausentes.
+- **Completude**: rodei a pr├│pria l├│gica do `Test-CompletudeCodigo` do orquestrador ÔÇö 0 problemas. Os coment├írios com `get_pendente`/`_Pendente` passam porque o `\bpendente` do validador exige fronteira de palavra e o `_` antes n├úo ├® fronteira.
+- Blocos balanceados (22 WITH/ENDWITH, 9 TRY/ENDTRY, 21 PROCEDURE/ENDPROC), arquivo ASCII puro (acentos s├│ por `CHR()`), propriedades do BO referenciadas todas declaradas.
+
+## Um incidente que preciso reportar
+
+Na primeira tentativa de edi├º├úo usei `perl -0777 -pi -e` com um `do{}` para ler o texto de substitui├º├úo ÔÇö **isso zerou o arquivo** (0 bytes). ├ë exatamente a armadilha que eu j├í tinha registrado em mem├│ria (`perl -i` n├úo ├® transacional) e usei de novo. Recuperei integralmente do `persisted-output` do `cat` que eu havia feito antes (1107 linhas, 48723 bytes, id├¬ntico), fiz backup em `/tmp/f5bak/` e passei a usar a ferramenta `Edit`.
+
+Na recupera├º├úo, medindo os fins de linha por contagem de bytes (`tr -dc`, n├úo `grep`), descobri que **este arquivo e o `SigOpLbCBO.prg` da task756 s├úo LF-only** ÔÇö ao contr├írio dos forms antigos como `FormCor.prg`, que s├úo CRLF. Mantive LF para ficar consistente com o irm├úo gerado nesta mesma run; o VFP compila igual. Se o pipeline esperar CRLF nesses arquivos novos, isso ├® algo a decidir em n├¡vel de orquestrador, n├úo desta fase.

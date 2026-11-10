@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and verified. Summary:
+
+## What Phase 8 delivered
+
+**The two remaining legacy events** ÔÇö after this, every one of the dump's 11 `PROCEDURE`s has an equivalent (the other nine landed in Phases 3ÔÇô7):
+
+1. **`GradeAfterRowColChange(par_nColIndex)`** ÔÇö transcribes `Grade.AfterRowColChange` (`ThisForm.Get_Obs.Refresh`). Bound by `BINDEVENT` at the end of `ConfigurarGrade`; declares the event's parameter (rule #3). No column filter ÔÇö this is the *correct* use of `AfterRowColChange` (repaint the current row's detail), not cell validation, whose `nColIndex` would be the destination column (rule #46). Without it the Obs box keeps showing the **previous** row's text and the user overwrites the wrong record, silently.
+
+2. **Column4 (Peso Real) `Valid`** ÔÇö `If Lastkey() # 27 / KeyBoard '{DNARROW}' Plain / Endif`. Implemented as a cell control (`TextBoxPesoRealOco_4c` + `InstalarCelulaPesoReal()` + PUBLIC `ConfirmarPesoReal()`), same pattern as Column3, because `BINDEVENT` on `Valid` inside a `Column` is unreliable. Installed from the same `VincularGrade` funnel so it survives the `ColumnCount` reset (rule #18).
+
+**One consequence I had to fix, not a detail:** `FocarPesoReal()` was pointing at `Column4.Text1`. With `CurrentControl` switched, `Text1` is no longer what the column draws, so `SetFocus` there would silently fail ÔÇö TAB out of the Obs field would go nowhere. It now targets the installed control, with `Text1` as fallback.
+
+## Verification (measured, not assumed)
+
+- **Compiles clean**: both `.fxp` generated, no `.ERR`.
+- **Probe** (`automation\ProbeOcoF8775.prg`, exit 0): `Col4.CurrentControl=TXT_4C_PESOREAL`, `Sparse=.F.`, `ReadOnly=.F.`, `InputMask=9999.99`, `VARTYPE(Value)=N`, header/width preserved; Column3 untouched; both new methods PUBLIC (`prot=.F.`); `AEVENTS` shows `AFTERROWCOLCHANGE->GRADEAFTERROWCOLCHANGE` registered; firing the event works; `ConfirmarPesoReal` enqueues the key (`CHRSAW=.T.`, drained code **24 = Down Arrow**) and enqueues **nothing** when the caller's alias is absent; cell + binding survive a `CarregarDados()` reload with no duplicate binding.
+- **Audits**: completeness 0 problems; `VerificarPropriedadesInexistentes` OK; `VerificarMetodoProtegidoChamadoDeFora` OK; `VerificarFuncoesNaoDefinidas` OK; `VerificarLookupEmKeyPress` ÔÇö 28 warnings, all in `Formsigopcgp.prg` (pre-existing, other form).
+- `indice_classes.txt` regenerated ÔÇö `textboxpesorealoco_4c` registered.
+
+## Two things I deliberately did not do, and why
+
+**The four canonical CRUD consolidation names.** Measured in the dump: zero `pageframe`, zero `commandgroup`, zero occurrences of `pcEscolha`/`frmcadastro`/`Grupo_Op`, one `commandbutton` whose only `Click` is `ThisForm.Release` (the `Update Historico Set ObsÔÇª` lines above it are commented out with the Form Designer's `*!*`). The three editable fields are bound by `ControlSource` **directly to the caller's cursor**, and the formÔåÆBO side of that path is already `SigOpOcoBO.CarregarDoCursor`. Writing the transfer pair here would be dead code; writing them empty is a stub. Per your own recorded guidance, the fix for this shape belongs in the gate (`$legadoFluxoUnicoF8`, which this form satisfies), never in the `.prg`. The reasoning is in the header with the names **miolo-elided** so the comment can't satisfy the gate by substring ÔÇö same trick Phase 7 used.
+
+**Menu / caller wiring.** The task text asks for a `popMovimentos` entry. I left it out: this is a modal **child** dialog that requires a parent form plus its `Historico` cursor, so a menu entry would open a permanently empty screen. The real integration point is `FormBAL`, and it's blocked by the lacuna already documented in the header ÔÇö `FormBAL.prg:3409-3414` doesn't select `ocors` or `obs`, the very columns this screen exists to edit. Wiring the call before that `SELECT` is fixed would ship a dialog that can't save anything. That's a FormBAL change, outside this phase, and it's your call whether to schedule it.

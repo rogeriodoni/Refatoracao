@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpLim.prg` (573 ÔåÆ 1573 linhas).
+
+## O que entrou
+
+**Campos restantes (Parte 2)** ÔÇö `Say3` + `senha`, transcritos do dump: `Left=120/168`, `Top=212/203`, `PasswordChar="*"`, `InputMask="!!!!!!!!!!"`, `MaxLength=10` (de `SigCdUsu.senhas char(10)`, nunca do Width). `Format`/`DisabledBackColor`/`DisabledForeColor` vieram da classe `fwget`, lida como DBF do `framework.vcx` nesta sess├úo ÔÇö confirmando que o que a Fase 5 j├í tinha posto nos outros dois campos era transcri├º├úo de classe, n├úo inven├º├úo. `senha` **n├úo** recebeu `Alignment` porque o dump n├úo declara (os irm├úos declaram 3).
+
+**Os dois lookups, completos** ÔÇö `fwBuscaSel` do legado busca em **cursor local**, ent├úo usei a API de cursor pr├®-populado (`CREATEOBJECT` sem args + `DefinirCursor` + `Mostrar`), n├úo o `Init` com par├ómetros, que faria `SQLEXEC` contra uma tabela e abriria o picker vazio ignorando os filtros de `Emps`/`ClaConta` que o BO aplica. Captions refeitos para os do legado (C├│digo/Cargo, C├│digo/Descri├º├úo). Ligados em `"LostFocus"` (o `Valid` do legado), com F4/F5 e duplo clique como portas adicionais para o mesmo funil, guarda de tecla e guarda de reentr├óncia save/restore.
+
+**Tamb├®m entrou, por serem pr├®-requisito do que a fase entrega:**
+- `SincronizarParametrosBO()` ÔÇö sem isso as duas consultas de lookup rodariam com os defaults do BO e devolveriam o conjunto errado em sil├¬ncio.
+- `AplicarRegrasDeExibicao()` ÔÇö o bloco de visibilidade do `Init` legado; s├│ pode rodar depois de `TornarControlesVisiveis`, que for├ºa tudo vis├¡vel.
+- `ValidarSenha` ÔÇö `senha` ├® campo desta fase; entregar a caixa sem o `Valid` dela deixaria a a├º├úo principal sem efeito.
+- `FecharDialogo()` com **`Hide()`, nunca `Release()`** (o chamador l├¬ o resultado depois do `Show()`), `ObterResultado()` e `Unload`.
+
+## Duas omiss├Áes deliberadas, documentadas no arquivo
+
+- **`zsen`/`zsen1`** do `usuario.Valid` n├úo foram reproduzidos: s├úo dead stores no pr├│prio legado, e `fCriptografar()` n├úo foi portada ÔÇö reproduzi-los mataria o campo usu├írio em 100% dos usos por uma vari├ível que ningu├®m l├¬.
+- **Bot├Áes Salvar/Cancelar** pedidos no prompt n├úo existem: o dump tem **zero** CommandButton/CommandGroup, o di├ílogo se encerra pelos pr├│prios `Valid`. Cri├í-los violaria o PILAR 1.
+
+## Verifica├º├úo
+
+Compila sem `.ERR`; gate da Fase 6 passa pelo ramo FLAT com as exig├¬ncias integrais (`temMetodoLookup=True`), sem carve-out. Quatro probes medidos: geometria/TabIndex/BINDEVENT (3+3+1 ligados), escopo PUBLIC dos delegados e dos 10 m├®todos do BO chamados de fora (regra #51, zero falhas), os 4 fluxos de visibilidade (D / L / s├│-motivo / X), chave posicional `EmpDopNums` = 29 chars, `Hide` mantendo o objeto vivo, e reentrada.
+
+Duas corre├º├Áes que os probes renderam: meu coment├írio sobre o `SEEK` dava o motivo errado (medido: chave curta casa por **prefixo** ÔÇö `"7"` casaria com `"70"` e autorizaria o c├│digo errado, n├úo falha por `SET EXACT`), e `AplicarRegrasDeExibicao`, que documentei como porta de reabertura, n├úo zerava `this_lEncerrando` ÔÇö um segundo `Show()` abriria com as valida├º├Áes mortas. Ambas corrigidas e reverificadas.
+
+**Pend├¬ncia que n├úo ├® desta fase:** a ordem dos argumentos do `Init` migrado difere do legado (poform/Pcx caem, tudo depois anda dois lugares). Eu mesmo errei isso no primeiro probe, ent├úo fixei a tabela de tradu├º├úo no cabe├ºalho ÔÇö mas qualquer chamador migrado depois precisa seguir a ordem nova.

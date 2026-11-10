@@ -432,6 +432,10 @@ PROCEDURE CriarMenuPrincipal()
     *-- SigCdMrr), que e outra tabela.
     DEFINE BAR 199 OF popCadastros PROMPT "Demonstrativos de Balan" + CHR(231) + "o" ;
            MESSAGE "Cadastro de Demonstrativos de Balan" + CHR(231) + "o (SigPrDmo)"
+    DEFINE BAR 200 OF popCadastros PROMPT "Lote de Instru" + CHR(231) + CHR(245) + "es" ;
+           MESSAGE "Cadastro de Lote de Instru" + CHR(231) + CHR(245) + "es (SigPrLit)"
+    DEFINE BAR 201 OF popCadastros PROMPT "Metas por Loja" ;
+           MESSAGE "Cadastro de Metas por Loja (SigOpMet)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -625,6 +629,8 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 197 OF popCadastros DO AbrirFormVis
     ON SELECTION BAR 198 OF popCadastros DO AbrirFormsigprcom
     ON SELECTION BAR 199 OF popCadastros DO AbrirFormSigOpDmp
+    ON SELECTION BAR 200 OF popCadastros DO AbrirFormsigoplin
+    ON SELECTION BAR 201 OF popCadastros DO AbrirFormSigOpMet
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -1081,6 +1087,18 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Hist" + CHR(243) + "rico de Cheques por Conta/CPF - vencimento, movimenta" + CHR(231) + CHR(227) + "o e prorroga" + CHR(231) + CHR(245) + "es (SIGOPCHI)"
 
     ON SELECTION BAR 163 OF popMovimentos DO AbrirFormSigOpChi
+
+    DEFINE BAR 164 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 165 OF popMovimentos PROMPT "Captura de Imagens" ;
+           MESSAGE "Captura/Visualiza" + CHR(231) + CHR(227) + "o de Imagens de Produtos por Periodo/Grupo/Produto/Linha (SIGOPIMG)"
+
+    ON SELECTION BAR 165 OF popMovimentos DO AbrirFormSigOpImg
+
+    DEFINE BAR 166 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 167 OF popMovimentos PROMPT "An" + CHR(225) + "lise de OP/Envelopes" ;
+           MESSAGE "Consulta em " + CHR(225) + "rvore das movimenta" + CHR(231) + CHR(245) + "es de uma O.P. ou de um Envelope (SIGOPNOP)"
+
+    ON SELECTION BAR 167 OF popMovimentos DO AbrirFormSIGOPNOP
 
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
@@ -12685,6 +12703,73 @@ PROCEDURE AbrirFormSigOpChi()
 ENDPROC
 
 *------------------------------------------------------------------------------
+* AbrirFormSigOpImg - Abre a Captura de Imagens de Produtos (SIGOPIMG)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpImg()
+    LOCAL loForm, loException
+
+    TRY
+        GarantirClasse("FormSigOpImg")
+        loForm = CREATEOBJECT("FormSigOpImg")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Captura de Imagens" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Captura de Imagens:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGOPNOP - Abre a Analise de OP/Envelopes (SIGOPNOP)
+*
+* Consulta em arvore (TreeView ActiveX) das movimentacoes de producao de uma
+* O.P. ou de um Envelope. O Init do form aceita os quatro parametros do legado
+* (plModal, pcEmps, pcDopes, pcNumes), todos opcionais - o menu abre sem
+* nenhum, como o legado faz quando a tela eh chamada direto.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGOPNOP()
+    LOCAL loForm, loException
+
+    TRY
+        GarantirClasse("FormSIGOPNOP")
+        loForm = CREATEOBJECT("FormSIGOPNOP")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar An" + CHR(225) + "lise de OP/Envelopes" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir An" + CHR(225) + "lise de OP/Envelopes:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
 * AbrirFormSIGOPCHR - Abre o Relatorio de Relacao de Cheques (SIGOPCHR)
 *------------------------------------------------------------------------------
 PROCEDURE AbrirFormSIGOPCHR()
@@ -12749,6 +12834,80 @@ PROCEDURE AbrirFormSigOpDmp()
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir Cadastro de Demonstrativos de Balan" + ;
                      CHR(231) + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigoplin - Abre formulario de Cadastro de Lote de Instrucoes
+* (SigPrLit). O TRY cobre SO a criacao; o Show() fica FORA (CLAUDE.md #29) -
+* form modal dentro do TRY faria qualquer erro de runtime cair no CATCH e
+* destruir a referencia, fechando a tela sozinha.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigoplin()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("Formsigoplin")
+        loForm = CREATEOBJECT("Formsigoplin")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario Formsigoplin" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Cadastro de Lote de Instru" + CHR(231) + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpMet - Abre formulario de Cadastro de Metas por Loja
+* (SigOpMet). O TRY cobre SO a criacao; o Show() fica FORA (CLAUDE.md #29) -
+* form modal dentro do TRY faria qualquer erro de runtime cair no CATCH e
+* destruir a referencia, fechando a tela sozinha.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpMet()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("FormSigOpMet")
+        loForm = CREATEOBJECT("FormSigOpMet")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario FormSigOpMet" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Cadastro de Metas por Loja:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message + CHR(13) + ;
                      "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

@@ -1,0 +1,32 @@
+PROBE F6 task760 INICIO
+ambiente OK - gnConnHandle=0
+1) CREATEOBJECT(1, '') -> VARTYPE=O
+2) metodos: ValidarCodigoLostFocus=.T. TxtCodigoKeyPress=.T. TxtCodigoDblClick=.T. AbrirLookupTipoLiberacao=.T.
+   AplicarTipoSelecionado=.T. AtualizarEstadoDescricao=.T. ValidarDescricaoLostFocus=.T.
+   PROTECTED? ValidarCodigoLostFocus=.F. TxtCodigoKeyPress=.F. TxtCodigoDblClick=.F. ValidarDescricaoLostFocus=.F. (todos esperados .F.)
+3) BINDEVENT por controle:
+   txt_4c__codigo   bindings=3
+      evento=(Object)     -> metodo=VALIDARCODIGOLOSTFOCUS
+      evento=(Object)     -> metodo=TXTCODIGOKEYPRESS
+      evento=(Object)     -> metodo=TXTCODIGODBLCLICK
+   txt_4c__descr    bindings=1
+      evento=(Object)     -> metodo=VALIDARDESCRICAOLOSTFOCUS
+   cmd_4c_Ok        bindings=1
+      evento=(Object)     -> metodo=CMDOKCLICK
+4) abertura com codigo vazio: txt_4c__descr.ReadOnly=.T. (esperado .T.) TabStop=.F. (esperado .F.)
+5) GUARDA reentrancia: descr.ReadOnly=.F. (esperado .F. - funil NAO rodou) marca=[] (esperado vazio)
+6) GUARDA valor-nao-mudou: descr.ReadOnly=.F. (esperado .F. - funil NAO rodou)
+7) GUARDA campo vazio: descr.ReadOnly=.F. (esperado .F. - funil NAO rodou)
+8) FUNIL executado: descr.ReadOnly=.T. (esperado .T.) TabStop=.F. (esperado .F.) marca=[XY1] (esperado XY1) EmLookup=.F. (esperado .F. - liberada apos o ENDTRY)
+   codigo digitado PRESERVADO? [XY1] (esperado XY1 - regra #50 proibe apagar)
+9) AplicarTipoSelecionado com Fixos=1: codigo=[01        ] descr=[LIBERACAO TOTAL]
+   retorno LEN=70 (esperado 70 = 10 + 60) retorno=[01        LIBERACAO TOTAL                                             ]
+   Fixos=2: codigo=[02        ] descr=[] (esperado VAZIO - legado so preenche quando Fixos <> 2)
+10) ValidarDescricaoLostFocus: retorno=[02        DESCRICAO DIGITADA]
+    comeca com cods padded? .T. (esperado .T. - concatenacao POSICIONAL, regra #42)
+    descr vazia: retorno=[RETORNO-ANTERIOR] (esperado RETORNO-ANTERIOR, inalterado)
+11) TxtCodigoKeyPress(115) OK - codigo=[03]
+    TxtCodigoKeyPress(65='A'): marca=[SENTINELA] (esperado SENTINELA - tecla comum NAO abre lookup)
+    TxtCodigoDblClick OK
+12) cursor_4c_SigCdNcf aberto? .F. (esperado .F. - o funil fecha o alias)
+PROBE F6 task760 FIM

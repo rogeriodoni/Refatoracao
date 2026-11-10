@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## Causa da reprova├º├úo anterior
+
+O gate da Fase 4 (`case 4`, `OrquestradorMigracao.ps1:9286-9289`) aceita o ramo **FLAT** para `OPERACIONAL` exigindo **tr├¬s** predicados. Medidos contra o form como estava:
+
+| predicado | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_` | True | True |
+| `AddObject("cmg_4c_\|cmd_4c_` | True | True |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **False** | True |
+
+A fase anterior entregou as tr├¬s grades e os bot├Áes, mas adiou *todo* o `RecordSource`/`ControlSource` e o m├®todo de carga "para a fase que carrega os dados" ÔÇö fase que n├úo existe no roteiro de 8 (5/6 = campos, 7/8 = eventos). O gate ├® satisfaz├¡vel e leg├¡timo aqui (o legado tem grades reais), ent├úo o conserto ├® no `.prg`, n├úo no gate.
+
+## O que foi entregue
+
+**`SigOpMpnBO.prg`** ÔÇö transcri├º├úo do trecho do `Init` legado que monta e popula os cursores:
+- `CarregarPendencias()` (PUBLIC) + `CarregarPendenciasExec()` ÔÇö par wrapper/Exec porque as guardas abortam no meio e `RETURN` dentro de `TRY` ├® proibido (regra #1)
+- `CriarCursoresGrades()` ÔÇö `TmpPends` id├¬ntico ao `Create Cursor` legado; `xPNensi`/`xPNensiT` com as **43 colunas de `SigCdNei` + as 10 calculadas** (o legado usa `Select * From CrSigCdNei`, que n├úo ├® cursor nesta arquitetura), e os 4 ├¡ndices originais
+- `CarregarNivel()` ÔÇö as duas buscas em `SigCdOpd` em sequ├¬ncia; `CompAgrus`/`SepPedras` saem da **segunda** (o registro do n├¡vel), como no legado
+- `CarregarItensDaPendencia()` / `ConsolidarTotaisPendencias()` ÔÇö o la├ºo aninhado e o roll-up, com as f├│rmulas de rateio, os guards de `FlagIncs`/`CompAgrus`/`SepPedras` e o `Skip -1` transcritos (regra #17)
+
+**`FormSigOpMpn.prg`** ÔÇö `CarregarGrade()`/`CarregarLista()` (PUBLIC, regra #3), `VincularGradeDetalhe()`, `GarantirCheckBoxSelecionar()`; `AjustarBotoesPorModo` passou a PUBLIC.
+
+## Duas coisas que vale voc├¬ saber
+
+1. **Um defeito meu, achado em revis├úo e corrigido**: eu computava a chave mestre-detalhe a partir da *primeira* linha de `TmpPends` enquanto a grade terminava na *├║ltima* ÔÇö as grades de baixo mostrariam itens de outra pend├¬ncia. O legado faz `Go Bottom` **antes** do `Set Key To`; agora est├í nessa ordem.
+
+2. **Duas diverg├¬ncias HERDADAS do legado, transcritas e documentadas ÔÇö n├úo "corrigidas"**: `Ps2FaseAnt With xNensi.Ps2FaseAnt` (as outras 4 linhas do mesmo `Replace` leem `xPNensi`; o bloco g├¬meo do "OK" n├úo tem essa linha ÔÇö tem cara de alias n├úo renomeado na c├│pia) e `aQtds ÔåÉ LocalNensi.Qtds` no roll-up, que l├¬ o cursor da volta anterior. Trocar mudaria valor gravado em sil├¬ncio, que ├® o que a regra #17 pro├¡be. Ficaram com guarda de alias e coment├írio apontando o suspeito ÔÇö **decis├úo humana pendente**.
+
+## Verifica├º├Áes
+
+| verifica├º├úo | resultado |
+|---|---|
+| Smoke test VFP9 (o probe de fato executa) | `VIVO` gravado |
+| `COMPILE` BO + Form | `.fxp` OK, **zero `.err`** nos dois |
+| **Instancia├º├úo real** | `VARTYPE=O`, `BaseClass=Form`, 1000x600, 9 controles, grades 7/9/9 colunas, 4 bot├Áes |
+| `CarregarLista()` chamada **de fora** da classe | retornou `.T.`, sem erro |
+| `PEMSTATUS(...,2)` em CarregarLista/CarregarGrade/AjustarBotoesPorModo/CarregarPendencias | `.F.` (PUBLIC, regra #3/#51) |
+| Gate `case 4` com express├Áes literais do orquestrador | **`validado = True`** |
+| `ValidadorSQLSchema` (683 tabelas) | PASSOU, nenhuma coluna inv├ílida |
+| `VerificarMetodoProtegidoChamadoDeFora` (acervo) | OK |
+| `VerificarColunaEmpresaSQL` (1186 arquivos) | ERRO=0 |
+| `RETURN` dentro de `TRY`, acentos literais, `MESSAGEBOX`, `ISEMPTY`, `.Self`, `Controls("nome")`, `TTOD`, `TABLEREVERT`, `PUBLIC` em classe, TODO/stub/procedure vazia | 0 ocorr├¬ncias |
+| Balan├ºo `WITH`/`PROCEDURE`/`TRY`/`SCAN`/`FOR`, contagem colunaÔåövalor dos 5 INSERTs, campos de cursor vs `SELECT` | todos conferem |
+
+Dois pontos de contexto, n├úo bloqueantes: o `RunLoop.ps1` vivo revalida com a c├│pia do gate **em mem├│ria** ÔÇö o gate n├úo mudou aqui, ent├úo a reavalia├º├úo usa os mesmos predicados e deve passar. E h├í um `CATCH` silencioso pr├®-existente da Fase 1 (`SigOpMpnBO.prg:315`, fallback do `crSigCdPam`) que ├® o padr├úo can├┤nico do projeto (`ClienteBO`); deixei intacto por estar fora do escopo desta fase.

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4 conclu├¡da em `projeto/app/forms/operacionais/FormSigOpNch.prg` (375 ÔåÆ 943 linhas), compilado no VFP9 sem nenhum erro (`.fxp` regerado, nenhum `.err`).
+
+## O que entrou
+
+Este ├® um form **OPERACIONAL FLAT**: o dump do SIGOPNCH tem `BaseClass: grid` e **zero** `BaseClass: pageframe`. Ent├úo n├úo h├í `ConfigurarPaginaLista`/`AlternarPagina` a escrever ÔÇö n├úo existe par de p├íginas Lista/Dados a alternar, e invent├í-las (ou escrev├¬-las vazias) seria violar o PILAR 1 / a regra de completude. O gate da Fase 4 trata esse caso pelo ramo FLAT, que eu validei explicitamente: `temGrade=True temBotoes=True temCarga=True`.
+
+| M├®todo | Objeto do dump |
+|---|---|
+| `ConfigurarDecoracao` | `shp_4c_Shape1` (Shape1 ÔÇö moldura transparente, `BackStyle=0`+`BorderStyle=0`) |
+| `ConfigurarGrade` | `grd_4c_Dados` (Grade, 5 colunas, 104/183/434x238, larguras 123/35/55/80/105) |
+| `ConfigurarBotoesAcao` | `cmd_4c_BtnAlterar` ("\<Confirmar") e `cmd_4c_BtnCancelar` ("Encerrar", `Cancel=.T.`) |
+| `CarregarGrade` / `CarregarLista` | o `Scan`+`Go Top`+`Grade.Refresh` do Init legado, via `BO.CarregarDados()` |
+| `Activate` | o `.Column5.SetFocus` do fim do Init legado |
+
+**Apenas os dois bot├Áes do legado** ÔÇö n├úo h├í os cinco CRUD, porque o SCX n├úo tem nenhum deles, nem modo de edi├º├úo.
+
+## Decis├Áes que valem registro
+
+- **Ordem dos AddObject = ordem do dump** (cabe├ºalho ÔåÆ Shape ÔåÆ Grade ÔåÆ bot├Áes). Duas raz├Áes de z-order: o Shape transparente criado depois bloquearia cliques; e o cabe├ºalho (Top 29..80) criado depois **cobriria** os dois bot├Áes, que ficam em Top 3..78.
+- **`Width/Height = 75` dos bot├Áes** n├úo est├úo no dump (v├¬m da classe `fwbtng`), mas a aritm├®tica do pr├│prio dump confirma: 650+75 = 725 (Left do bot├úo seguinte) e 725+75 = 800 = `Form.Width`.
+- **`Themes=.T.` + `DisabledPicture`** nos dois bot├Áes: CommandButton solto com `.Picture` n├úo desenha ├¡cone com `Themes=.F.` (Pattern #99).
+- **`InputMask = "999999"`** da Column5 transcrito e **reaplicado depois do `RecordSource`**, junto com Width/Header/ReadOnly ÔÇö `RecordSource` recria as Column e zera isso (Problema 48).
+- **`SetFocus` foi para o `Activate`**, n├úo para `InicializarForm`: l├í ele roda antes do `Show` e o VFP recusa foco em controle de form que n├úo apareceu. Guardado por `this_lFocoInicialDado` para n├úo sequestrar o cursor a cada volta de foco.
+
+## Um ponto para a Fase 7 (n├úo mexi)
+
+`tasks/task770/mapeamento.json` tem mapeamento inv├ílido para a grade: as cinco `Grade.ColumnN` apontam todas para `"Page_4c_1"` e os cinco `Header1` para o mesmo `"obj_4c_Header1"`. N├úo renomeei Columns (regra do projeto: nunca usar `.Name` em Page/Column), mas isso vai gerar ru├¡do no `07_validarUI` ÔÇö o JSON ├® que precisa ser corrigido l├í, n├úo o `.prg`.

@@ -1,0 +1,2737 @@
+{
+  "resumo": {
+    "totalMetodos": 168,
+    "metodosComSQL": 36,
+    "metodosComValidacao": 37,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade", "fwBuscaInt", "For IClis = Padr", "For RClis = Padr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 80,
+      "codigoOriginal": "* Carrega os Campos do Cabeçalho da Tela\nLocal lnClr, lcCpo\n\nFor lnClr = 1 To 12\n\tIf Not InList(lnClr, 3, 4, 7, 8, 9, 11, 12)\n\t\tlcCpo = [ThisForm.getCab] + Padl(lnClr, 3, [0])\n\t\t&lcCpo..Value = []\n\t\t&lcCpo..Refresh\n\tEndIf \nNext\n\nThisForm.getCab001.Value = TprMvCab.Jobs\nIf Not Empty(TprMvCab.Jobs)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], TprMvCab.Jobs, [RClis, DataIncs, Usuars])\n\tIf Not Used([LocalBus])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conex... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "getCab] + Padl,CursorQuery,SqlExecute,Value = Ttod",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 408,
+      "codigoOriginal": "If Not Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3351, 50)))\n\t* Caption Do Título \"Briefing Extra\"\n\tThisForm.lbl_Extra.Caption = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3351, 50))\nEndIf\n\nIf Not Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 101, 50)))\n\t* Caption Da Pasta \"Briefing\" e \"Briefing Continuação\"\n\tThisForm.pgfPagina.pgPagina1.Caption = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 101, 50))\n\tThisForm.pgfPagina.pgPagina2.Caption = Alltrim(Substr(Nvl(crSigOpCdI.J... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption = Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 179,
+      "codigoOriginal": "Local lcRet, llOks, lnCpo\n\nlcRet = [OK]\n\nlnCpo = 69\nDimension laCpo(lnCpo)\n* Página 1\nlaCpo(01) = [pgPagina1.get_01_001] && Apresentação\nlaCpo(02) = [pgPagina1.get_01_002] && Orçamento\nlaCpo(03) = [pgPagina1.get_01_017] && Período do Evento\nlaCpo(04) = [pgPagina1.get_01_019] && Período de Montagem\nlaCpo(05) = [pgPagina1.get_01_022] && Público Estimado\nlaCpo(06) = [pgPagina1.get_01_023] && Budget Estimado\nlaCpo(07) = [pgPagina1.get_01_021] && Local do Evento\nlaCpo(08) = [pgPagina1.get_01_003] && ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_001],get_01_002],get_01_017],get_01_019],get_01_022],get_01_023],get_01_021],get_01_003],get_01_004],get_01_005],get_01_006],get_01_007],get_01_008],get_01_009],get_01_010],get_01_011],get_01_012],get_01_013],get_01_014],get_01_015],get_01_016],get_01_024],get_01_025],get_01_028],get_01_026],get_01_029],get_01_027],get_01_030],get_01_031],get_01_032],get_01_035],get_01_033],get_01_036],get_01_034],get_01_037],get_01_045],get_01_046],get_01_047],get_01_048],get_01_061],get_01_057],get_01_058],get_01_070],get_01_062],get_01_071],get_Extra]",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "For lnCnt = 24 To 37\n\tlcCpo = Padl(lnCnt, 3, [0])\n\tlcObj = [ThisForm.PgfPagina.pgPagina3.cntEmp] + Iif(lnCnt > 30, [2], [1])\n\t\n\tIf Not Empty(crSigMvJbC.Jb_&lcCpo.)\n\t\tThisForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], crSigMvJbC.Jb_&lcCpo., [RClis])\n\t\tIf Not Used([LocalBus])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus)])\n\t\t\tReturn .f.\n\t\tEndIf\n\t\tGo Top In LocalBus\n\t\t&lcObj..get_01_&lcCpo.a.Value = LocalBus.RClis\n\t\t&lcObj..get_01_&l... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cntEmp] + Iif,CursorQuery",
+        "controlesReferenciados": "get_01_&lcCpo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 46,
+      "codigoOriginal": "With ThisForm.PgfPagina.PgPagina5.grdFontes\n\t.ColumnCount  = 4\n\t.RecordSource = [crSigMvJbI]\n\t.DeleteMark   = .f.\n\t.ReadOnly     = .f.\n\t.Scrollbars   = 2\n\t.AllowHeaderSizing = .f.\n\t.AllowRowSizing    = .f.\n\n\t.Column1.ControlSource = [crSigMvJbI.JBI_Fontes]\n\t.Column2.ControlSource = [crSigMvJbI.JBI_Modelos]\n\t.Column3.ControlSource = [crSigMvJbI.JBI_Autors]\n\t.Column4.ControlSource = [crSigMvJbI.JBI_Valors]\n\n\tFor I=1 To .ColumnCount\n\t\tlcCol = Alltrim(Str(I))\n\t\t.Column&lcCol..FontName  = [Courier Ne... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB",
+      "evento": "Init",
+      "linhas": 61,
+      "codigoOriginal": "LParameters pFrm, pCta\n\nWith ThisForm\n\t.ParentForm = pFrm\n\n\tSet Datasession To .ParentForm.DataSessionId\n\n\t.pcEscolha = .ParentForm.pcEscolha\n\t.poDataMgr = .ParentForm.poDataMgr\n\t.Caption   = [Complementos : ] + Alltrim(Proper(TprMvCab.Dopes))\n\t.Contas    = pCta\n\t\n\t.poDataMgr.CursorQuery([SigCdEmp], [LocalEmps], [Cemps], TprMvCab.Emps, [DivNotas])\n\tIf Not Used([LocalEmps])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalEmps)])\n\t\tReturn .f.\n\tEndIf\n\tSe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.cmdRetornar",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And (ThisForm.ChecaObrigs() = [ERRO])\n\tIf (MessageBox([Existem Campos Obrigatórios Que Não Foram Preenchidos!!!] + Chr(13) + ;\n\t\t\t\t   [Esses Campos Estão Marcados em Vermelho Para Verificação] + Chr(13) + ;\n\t\t\t\t   [E Não é Possível Salvar a Movimentação Sem Preenchê-los.] + Chr(13) + ;\n\t\t\t\t   [Deseja Corrigir Esses Campos Agora?], 4+32+256, [Atenção!!!]) = 6)\n\t\tReturn .f.\n\tEndIf\nEndIf\n\nGo Top In crSigMvJbI\nIf InList(ThisForm.pcEscolha, [INSERIR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha, [INSERIR], [ALTERAR]) And",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_001",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_001",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_002",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_002",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_003",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_004",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_005",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_006",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_007",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_008",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_017",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_017",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_018",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_018",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_019",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_019",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_020",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_020",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_021",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_022",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina1.get_01_023",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_009",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_010",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_011",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_012",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_013",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_014",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_015",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina2.get_01_016",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_024",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_024.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_024a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_024.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_024,get_01_024a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_024",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_024a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_024.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_024",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_024a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_024.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_024a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_024.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_024,get_01_024a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_024a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_025",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_025.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_025a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_025.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_025,get_01_025a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_025",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_025a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_025.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_025",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_025a",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_025.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_025a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_025.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_025,get_01_025a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_025a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_028",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_028.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_028a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_028.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_028,get_01_028a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_028",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_028a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_028.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_028",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_028a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_028.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_028a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_028.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_028,get_01_028a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_028a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_026",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_026.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_026a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_026.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_026,get_01_026a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_026",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_026a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_026.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_026",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_026a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_026.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_026a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_026.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_026,get_01_026a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_026a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_029",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_029.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_029a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_029.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_029,get_01_029a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_029",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_029a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_029.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_029",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_029a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_029.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_029a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_029.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_029,get_01_029a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_029a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_027",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_027.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_027a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_027.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_027,get_01_027a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_027",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_027a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_027.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_027",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_027a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_027.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_027a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_027.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_027,get_01_027a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_027a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_030",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_030.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_030a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_030.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_030,get_01_030a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_030",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_030a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_030.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_030",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_030a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_030.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_030a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_030.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_030,get_01_030a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp1.get_01_030a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_038",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_039",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_040",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_041",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_042",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_043",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.get_01_044",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_031",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_031.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_031a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_031.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_031,get_01_031a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_031",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_031a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_031.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_031",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_031a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_031.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_031a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_031.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_031,get_01_031a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_031a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_032",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_032.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_032a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_032.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_032,get_01_032a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_032",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_032a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_032.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_032",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_032a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_032.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_032a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_032.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_032,get_01_032a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_032a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_035",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_035.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_035a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_035.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_035,get_01_035a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_035",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_035a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_035.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_035",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_035a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_035.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_035a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_035.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_035,get_01_035a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_035a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_033",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_033.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_033a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_033.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_033,get_01_033a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_033",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_033a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_033.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_033",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_033a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_033.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_033a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_033.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_033,get_01_033a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_033a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_036",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_036.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_036a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_036.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_036,get_01_036a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_036",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_036a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_036.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_036",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_036a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_036.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_036a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_036.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_036,get_01_036a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_036a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_034",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_034.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_034a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_034.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_034,get_01_034a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_034",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_034a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_034.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_034",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_034a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_034.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_034a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_034.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_034,get_01_034a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_034a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_037",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For IClis = Padr(This.Value, 10)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [IClis], Padr(This.Value, 10), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_037.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_037a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_037.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For IClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_037,get_01_037a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_037",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_037a",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_01_037.Value) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_037",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_037a",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nSelect crEquipes\nGo Top In crEquipes\nLocate For RClis = Padr(This.Value, 50)\nIf Eof([crEquipes])\n\tloBrow = CreateObject([fwBuscaInt], [crEquipes], [RClis], Padr(This.Value, 50), [Seleção de Filtros], .t.)\n\tloBrow.mAddColuna([RClis],  [], [Nome], .t.)\n\tloBrow.mAddColuna([IClis],  [], [Código], .t.)\n\tloBrow.Show\t\t\n\tloBrow = Null\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.get_01_037.Value  = crEquipes.IClis\n\t\tThis.Parent.get_01_037a.Value = crEquipes.RClis\n\tElse\n\t\tThis.Parent.get_01_037.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For RClis = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_01_037,get_01_037a",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina3.cntEmp2.get_01_037a",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_045",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_046",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_047",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_048",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_061",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_045",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_045",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcCpo, lcDir\n\nlcCpo = Substr(This.Name, 4, 7)\n\nlcDir = GetDir([], [Selecione o Diretório, Pasta ou Caminho de Rede], [Seleção de Diretórios], 2)\nIf Not IsEmpty(lcDir)\n\tThis.Parent.get&lcCpo..Value = Alltrim(lcDir)\nElse\n\tThis.Parent.get&lcCpo..Value = []\nEndIf\nThis.Parent.get&lcCpo..Refresh \n\nThisForm.ChecaObrigs()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_045b",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 7)\nlcDir = Alltrim(This.Parent.get&lcCpo..Value)\nIf Not Empty(lcDir)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcDir)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_046",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_046",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcCpo, lcDir\n\nlcCpo = Substr(This.Name, 4, 7)\n\nlcDir = GetDir([], [Selecione o Diretório, Pasta ou Caminho de Rede], [Seleção de Diretórios], 2)\nIf Not IsEmpty(lcDir)\n\tThis.Parent.get&lcCpo..Value = Alltrim(lcDir)\nElse\n\tThis.Parent.get&lcCpo..Value = []\nEndIf\nThis.Parent.get&lcCpo..Refresh \n\nThisForm.ChecaObrigs()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_047",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_047",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcCpo, lcDir\n\nlcCpo = Substr(This.Name, 4, 7)\n\nlcDir = GetDir([], [Selecione o Diretório, Pasta ou Caminho de Rede], [Seleção de Diretórios], 2)\nIf Not IsEmpty(lcDir)\n\tThis.Parent.get&lcCpo..Value = Alltrim(lcDir)\nElse\n\tThis.Parent.get&lcCpo..Value = []\nEndIf\nThis.Parent.get&lcCpo..Refresh \n\nThisForm.ChecaObrigs()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_048",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_048",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcCpo, lcDir\n\nlcCpo = Substr(This.Name, 4, 7)\n\nlcDir = GetDir([], [Selecione o Diretório, Pasta ou Caminho de Rede], [Seleção de Diretórios], 2)\nIf Not IsEmpty(lcDir)\n\tThis.Parent.get&lcCpo..Value = Alltrim(lcDir)\nElse\n\tThis.Parent.get&lcCpo..Value = []\nEndIf\nThis.Parent.get&lcCpo..Refresh \n\nThisForm.ChecaObrigs()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_061",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_061",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcCpo, lcDir\n\nlcCpo = Substr(This.Name, 4, 7)\n\nlcDir = GetDir([], [Selecione o Diretório, Pasta ou Caminho de Rede], [Seleção de Diretórios], 2)\nIf Not IsEmpty(lcDir)\n\tThis.Parent.get&lcCpo..Value = Alltrim(lcDir)\nElse\n\tThis.Parent.get&lcCpo..Value = []\nEndIf\nThis.Parent.get&lcCpo..Refresh \n\nThisForm.ChecaObrigs()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_046b",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 7)\nlcDir = Alltrim(This.Parent.get&lcCpo..Value)\nIf Not Empty(lcDir)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcDir)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_047b",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 7)\nlcDir = Alltrim(This.Parent.get&lcCpo..Value)\nIf Not Empty(lcDir)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcDir)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_048b",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 7)\nlcDir = Alltrim(This.Parent.get&lcCpo..Value)\nIf Not Empty(lcDir)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcDir)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.btn_01_061b",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 7)\nlcDir = Alltrim(This.Parent.get&lcCpo..Value)\nIf Not Empty(lcDir)\n\tloApp = CreateObject([Shell.Application])\n\tloApp.Open(lcDir)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina4.get_01_058",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_063",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_064",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_065",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_066",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_067",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_068",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_069",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_071",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_062",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Lparameters nColIndex\n\nSelect EmpDopNums, Count(1) as Soma, Sum(JBI_Valors) as Valors ;\n  From crSigMvJbI ;\n Group By EmpDopNums ;\n  Into Cursor LocalBus\nGo Top In LocalBus\n\nThisForm.PgfPagina.PgPagina5.getTotFontes.Value  = Transform(LocalBus.Soma,   [999,999,999])\nThisForm.PgfPagina.PgPagina5.getTotValores.Value = Transform(LocalBus.Valors, [999,999,999,999.99])\nThisForm.PgfPagina.PgPagina5.getTotFontes.Refresh \nThisForm.PgfPagina.PgPagina5.getTotValores.Refresh \n* Fim ************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If Not Empty(crSigMvJbI.JBI_Fontes) And Not Empty(crSigMvJbI.JBI_Modelos) And Not Eof([crSigMvJbI])\n\tSkip In crSigMvJbI\n\tIf Eof([crSigMvJbI])\n\t\tInsert Into crSigMvJbI (EmpDopNums, pkChaves) Values (crSigMvJbC.EmpDopNums, fUniqueIds())\n\tEndIf\nEndIf\n\nGo Top In crSigMvJbI\nThisForm.PgfPagina.PgPagina5.grdFontes.Refresh \nGo Bottom In crSigMvJbI\nKeyboard '{DNARROW}'\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.btnInserir",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Select * From crSigMvJbI ;\n Where Empty(crSigMvJbI.JBI_Fontes) And ;\n \t   Empty(crSigMvJbI.JBI_Modelos) ;\n  Into Cursor LocalBus\nGo Top In LocalBus\nIf Eof([LocalBus])\n\tInsert Into crSigMvJbI (EmpDopNums, pkChaves) Values (crSigMvJbC.EmpDopNums, fUniqueIds())\nEndIf\nUse In LocalBus\n\nGo Top In crSigMvJbI\nThisForm.PgfPagina.PgPagina5.grdFontes.Refresh \nGo Bottom In crSigMvJbI\nThisForm.PgfPagina.PgPagina5.grdFontes.Column1.Text1.SetFocus\nKeyboard '{DNARROW}'\n* Fim ************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.btnExcluir",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nlnRec = Recno([crSigMvJbI])\nIf Not Eof([crSigMvJbI])\n\tDelete In crSigMvJbI\nEndIf\nGo Top In crSigMvJbI\nThisForm.PgfPagina.PgPagina5.grdFontes.Refresh \nGo lnRec In crSigMvJbI\nThisForm.PgfPagina.PgPagina5.grdFontes.Refresh \nThisForm.PgfPagina.PgPagina5.grdFontes.Column1.SetFocus\nThisForm.LockScreen = .f.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_070",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina5.get_01_075",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_051",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_052",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_053",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_054",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_055",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_056",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_049",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_050",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_057",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_073",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.pgfPagina.pgPagina6.get_01_074",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.get_Extra",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChecaObrigs()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaObrigs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPJOB.getCabContatos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Procedure",
+      "queryOriginal": "Select EmpDopNums, Count(1) as Soma, Sum(JBI_Valors) as Valors ; From crSigMvJbI ; Group By EmpDopNums ; Into Cursor LocalBus",
+      "tabelas": "crSigMvJbI",
+      "colunas": "EmpDopNums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPJOB.pgfPagina.pgPagina5.grdFontes.Column4.Text1.Valid",
+      "queryOriginal": "\t\tInsert Into crSigMvJbI (EmpDopNums, pkChaves) Values (crSigMvJbC.EmpDopNums, fUniqueIds())",
+      "tabelas": "crSigMvJbI",
+      "colunas": "EmpDopNums,pkChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPJOB.pgfPagina.pgPagina5.btnInserir.Click",
+      "queryOriginal": "Select * From crSigMvJbI ; Where Empty(crSigMvJbI.JBI_Fontes) And ; \t   Empty(crSigMvJbI.JBI_Modelos) ; Into Cursor LocalBus",
+      "tabelas": "crSigMvJbI",
+      "colunas": "JBI_Fontes,JBI_Modelos,LocalBus",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPJOB.pgfPagina.pgPagina5.btnInserir.Click",
+      "queryOriginal": "\tInsert Into crSigMvJbI (EmpDopNums, pkChaves) Values (crSigMvJbC.EmpDopNums, fUniqueIds())",
+      "tabelas": "crSigMvJbI",
+      "colunas": "EmpDopNums,pkChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigMvJbI"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

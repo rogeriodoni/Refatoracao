@@ -1,0 +1,31 @@
+PROBE F8 task757 v1 INICIO
+ambiente OK
+0) CREATEOBJECT (subclasse de teste) -> VARTYPE=O
+1) CarregarLista    existe=SIM protected=NAO
+1) FormParaBO       existe=SIM protected=SIM
+1) BOParaForm       existe=SIM protected=SIM
+2) CarregarLista() de fora -> .T.
+   RECCOUNT(cursor_4c_Itens)=3 (esperado 3)
+   RecordSource=[cursor_4c_Itens] ColumnCount=5
+   Col1.CS=[cursor_4c_Itens.Cpros] Col3.CS=[cursor_4c_Itens.Marcas] Col3.CurrentControl=[CHK_4C_MARCAS] Col3.Sparse=.F.
+   Col1.Width=122 Col1.Header=[Produto] Col5.Header=[Localização]
+   ORDER corrente=[CITENS] (esperado CITENS)
+3) FormParaBO() -> .T.
+   BO: Base=[01] Desc=[DEPOSITO UM]
+   BO: Nvl2=[02] Desc=[CORREDOR DOIS]
+   BO: Nvl3=[03] Desc=[PRATELEIRA TRES]
+   BO: Nvl4=[0004] Desc=[CAIXA QUATRO]
+   MontarLocalizacao() -> [0102030004] (esperado 010203 0004 colado = [01020300 04] sem espacos)
+4a) BOParaForm() -> .T.
+    tela: Base=[01] (esperado 01) DBase=[DEPOSITO UM] (esperado DEPOSITO UM) Nvl4=[0004] (esperado 0004)
+4b) LimparNiveis()+BOParaForm() -> .T.
+    tela vazia nos OITO? .T.
+5) BtnLocalizarClick: itensGravados=2
+   cursor_4c_Locais RECCOUNT=2 1a linha Locals=[0102030004]
+   tela limpa apos Localizar? .T.
+6) BtnLimparClick: Base=[] DBase=[] (esperado os dois vazios)
+   grade religada? RecordSource=[cursor_4c_Itens] Col3.CurrentControl=[CHK_4C_MARCAS]
+7) PROCURAR: BtnLocalizarClick nao agiu? Base=[01] (esperado 01 - guard bloqueou)
+   CarregarLista() segue ok -> .T.
+   FormParaBO() segue ok -> .T. BO.Base=[01]
+PROBE F8 task757 FIM

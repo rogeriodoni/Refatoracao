@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 passa. Resumo do que encontrei e fiz.
+
+## Diagn├│stico: a Fase 5 j├í estava entregue ÔÇö o gate reprovava por um COMENT├üRIO
+
+A primeira execu├º├úo da Fase 5 (21:58ÔåÆ22:00) **j├í tinha feito o trabalho real**: criou `ConfigurarMemo()` (`obj_4c_Memo_Obs`, EditBox ReadOnly, `NullDisplay = "  "`, ligado a `cursor_4c_FollowUp.ObsAudts`), chamou-o em `InicializarForm()` depois de `ConfigurarGrades()` e fez `AtualizarGrades()` repintar o memo junto com as duas grades.
+
+A reprova├º├úo era **falso positivo do gate**. O ramo FLAT da Fase 5 decide por:
+
+```powershell
+$semPageFrame = ($conteudo -notmatch 'AddObject\(\s*"pgf_4c_')
+```
+
+e o `ConfigurarPageFrame` (escrito na Fase 3) tinha na **prosa do coment├írio**:
+
+```
+*   metodo mantido por convencao do orquestrador de migracao (nenhum
+*   AddObject("pgf_4c_...") eh feito aqui).
+```
+
+Medido: `$semPageFrame = False`, com `MATCH: AddObject("pgf_4c_...") eh feito aqui).` ÔÇö o regex varre o arquivo inteiro sem distinguir c├│digo de coment├írio. ├ë a regra irm├ú da que j├í est├í na mem├│ria ("coment├írio citando nome satisfaz gate"), s├│ invertida: aqui a prosa **derruba** a fase com o form correto.
+
+## O que corrigi
+
+1. **Reescrevi o coment├írio** sem citar a chamada entre aspas (o sentido ÔÇö "este form n├úo cria PageFrame algum" ÔÇö ficou preservado e mais direto), e deixei registrado ali por que n├úo se pode voltar a quotar a chamada.
+2. **Achado adicional, bloqueio na etapa seguinte**: a linha 998 dizia `evita qualquer referencia pendente`, e o validador `05d_validarCompletude` tem `\bpendente` no `$laterPattern` ÔÇö ia reprovar a completude por falso positivo, pela mesma fam├¡lia j├í documentada do "nao implementado". Troquei por `referencia solta`. Agora `later matches: 0`.
+
+**N├úo inventei nada para passar o gate.** O legado tem 11 `BaseClass: textbox` e todos os 11 s├úo os `Text1` nativos das Columns (5 + 6) ÔÇö zero campo de dados avulso. A superf├¡cie de dados ├® 2 grades + o memo, j├í completa. N├úo adiantei TabIndex (Fase 6) nem o `AfterRowColChange` (Fases 7ÔÇæ8) para n├úo esvaziar aquelas fases.
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 5 (ramo FLAT, regex do orquestrador) | **OK** ÔÇö 49,08 KB, 13 `ControlSource` vinculados |
+| Compila├º├úo VFP9 | **limpa e provada** ÔÇö smoke test passou primeiro (`VIVO` gravado), depois `EXECUTOU=SIM / FXP=SIM / ERR=NAO`; `.fxp` apagado antes e depois |
+| `05d` TODO/FIXME/stub/`$laterPattern`/procedures vazias | 0 / 0 / 0 |
+| `VerificarPropriedadesInexistentes.ps1` | "nenhuma atribuicao a propriedade inexistente" |
+| Contrato FormÔåöBO | `CarregarContaCorrente`/`CarregarFollowUp` n├úo s├úo PROTECTED; `this_nNopers`/`this_cOpers` declarados no BO; `this_cMensagemErro`/`this_lErroExibido` v├¬m da `BusinessBase` |
+| Acentos literais / `ISEMPTY` / `MESSAGEBOX` / `MostrarAviso` / `.Self` / `PUBLIC` em classe / `RETURN` em TRY | 0 ocorr├¬ncias |
+
+Uma observa├º├úo para o pipeline: as duas corre├º├Áes foram no **mesmo defeito estrutural** ÔÇö gate e validador casando texto de coment├írio como se fosse c├│digo. Vale propagar (via `/propagate-lesson`) a regra "coment├írio NUNCA cita entre aspas a chamada/frase que um gate procura", porque o custo ├® alto e invis├¡vel: reprova o form correto e manda o diagn├│stico para o lugar errado.

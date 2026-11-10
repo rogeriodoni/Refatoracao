@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada: `C:\4c\projeto\app\forms\operacionais\FormSigOpIbo.prg` atualizado (1191 ÔåÆ 1526 linhas, CRLF preservado, 350 linhas acrescentadas / 14 substitu├¡das).
+
+## O que foi entregue
+
+O template da Fase 5 pede `ConfigurarPaginaDados()` com metade dos campos da Page2 ÔÇö **este legado n├úo tem Page2 nem PageFrame** (medido: 0 ocorr├¬ncias de `BaseClass: grid|pageframe` no dump). O m├®todo recebeu o nome do placeholder que a Fase 4 deixou no `InicializarForm`: `ConfigurarControles()`, com os controles direto no form, como no SCX.
+
+**Metade entregue ÔÇö o bloco da impressora e da quantidade de vias** (7 dos 12 controles de campo/r├│tulo, Top 89..174, uma unidade funcional):
+
+| SCX | migrado | pos. |
+|---|---|---|
+| `Lbl_Impressora` | `lbl_4c_Lbl_Impressora` | 121, 89 |
+| `Label1` / `Label2` | `lbl_4c_Label1` / `lbl_4c_Label2` | 125/242, 137 |
+| `Opt_Impressora` | `obj_4c_Opt_Impressora` (oculto) | 115, 147 |
+| `Get_Printer` | `cbo_4c_Get_Printer` | 122, 174 |
+| `Say9` | `lbl_4c_Label9` | 384, 158 |
+| `getQtde` | `txt_4c_Qtde` | 460, 154 |
+
+A chamada entrou **entre** `CarregarImpressoras()` e `TornarControlesVisiveis()`, n├úo no fim: o ComboBox liga `RowSource` em `cursor_4c_ImpreV` (regra #41) e o passo 6 ├® quem torna vis├¡vel o que acabou de nascer.
+
+## Decis├Áes que evitam defeito silencioso
+
+- **`ControlSource = ""`** do dump do combo **n├úo** transcrito (override vazio, regra #49); **`ZOrderSet`** do `Say9`/`getQtde` **n├úo** transcrito (n├úo existe em runtime, derruba o `Init` ÔÇö regra #33).
+- **`AutoSize = .F.` expl├¡cito** nos 4 r├│tulos com `Width` *e* `Height` do dump: `AutoSize` ├® no-op em Label criado por `AddObject` (regra #23).
+- **`BackStyle = 0` reposto** em `lbl_4c_Label9`: classe `say` ├® transparente por heran├ºa, mas o migrado cria Label **base**, cujo default ├® opaco ÔÇö sem a linha sairia um ret├óngulo pintado. Mesma l├│gica para Tahoma 8 em `txt_4c_Qtde` (classe `fwget`).
+- **OptionGroup**: `ButtonCount` como primeira atribui├º├úo; `ForeColor`/fonte no **membro** (o grupo n├úo tem ÔÇö regra #33); `Option1.Value = 1` do dump **n├úo** escrito (sele├º├úo ├® do grupo, `Buttons(N).Value` produz bot├úo marcado esp├║rio).
+- **V├¡nculo do combo sob `IF USED()`**: em harness o cursor n├úo existe e `RowSource` para alias inexistente derruba o `Init` sem erro no log. Ordem do legado preservada (`Value = RECNO` **antes** de `RowSource`).
+- **`TabIndex` n├úo atribu├¡do**, e documentado: o VFP clampa ao n├║mero de focaliz├íveis existentes (4 ap├│s esta fase) contra os 2/3/7/8/9/10 do SCX ÔÇö escrever `7` gravaria `4`, uma linha que mente. Vai na fase do ├║ltimo `AddObject`. O `Buttons(1).TabIndex = 1` **├®** transcrito porque cabe na faixa `1..ButtonCount`.
+
+## Verifica├º├Áes feitas
+
+- Blocos balanceados (WITH/ENDWITH 16, TRY/CATCH/ENDTRY 15, IF/ENDIF 35); nenhum `RETURN` dentro de TRY (regra #1); todo `WITH` ├® `WITH THIS.<obj>` qualificado, nenhum aninhado sobre `AddObject`.
+- **55 propriedades atribu├¡das conferidas uma a uma** contra `automation/propriedades_baseclasses.txt` ÔÇö todas existem na classe base (regra #33): 0 faltantes.
+- Cruzamento lateral de vizinhos de mesma linha (regra #28): `Lbl_Impressora` termina em 201 vs `chkCarne` em 218; `Label1` em 164 vs `Label2` em 242; `Say9` em 458 vs `getQtde` em 460. Nenhum sobrep├Áe `obj_4c_BtnReport` (Top ÔêÆ2..83).
+- Gate da Fase 5, ramo CAPTURA, conferido no dump: 0 grid/pageframe, 0 ListBox, 0 `AddCursor`, 0 token Grade, ├║nico `ControlSource` ├® vazio (linha 391), 7 campos de entrada, 1 `BaseClass: textbox` ÔåÆ piso 1, migrado tem 1; s├│ 1 dos 7 campos ├® ReadOnly (n├úo ├® EXIBI├ç├âO); 0 API de n├│s (n├úo ├® ├üRVORE).
+- `Test-CompletudeCodigo`: 0 marcadores TODO/FIXME, 0 procedures vazias, 0 indicadores de pend├¬ncia (testado com a **regex exata** do validador ÔÇö `grep -E` sem `\b` dava falso positivo em "inde**pendente**s"), 0 stub de `MsgAviso`.
+- `diff -u` contra c├│pia de seguran├ºa: apenas as 3 regi├Áes pretendidas mudaram; CR == LF == 1526 (CRLF ├¡ntegro, medido por contagem de bytes com `tr -cd`).
+
+**N├úo consegui provar compila├º├úo.** O `vfp9.exe` desta sess├úo compila e sai sem executar: o smoke test de 4 linhas (`STRTOFILE` + `QUIT`) pendurou at├® o timeout e saiu com c├│digo 2, sem gerar o arquivo de sa├¡da. Ent├úo n├úo h├í COMPILE_OK nem instancia├º├úo verificada aqui ÔÇö a valida├º├úo acima ├® estrutural (parser de blocos + tabela real de propriedades das classes base).
+
+## Deferido, com exig├¬ncias registradas no cabe├ºalho
+
+`chkCarne`/`chkObss`/`chkAgrupa`, `Lbl_Erro`, `Container1.Edit1`, o `Valid` de `getQtde` (ÔåÆ m├®todo PUBLIC em `KeyPress` com guarda ENTER/TAB, j├í que a Fase 6 exige `PROCEDURE Validar\w+`) e os `TabIndex`. Um achado que a pr├│xima fase n├úo pode perder: **`chkCarne` ├® o ├║nico controle do dump sem `Width`/`Height` declarados** ÔÇö herdar o default 100 o jogaria de 218 at├® 318, por cima do `chkAgrupa` (351) na mesma linha 89.

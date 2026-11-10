@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 8/8 conclu├¡da.** Resumo honesto, porque a resposta tem duas metades: o form j├í estava quase pronto e o que de fato bloqueava era o **gate**.
+
+## Por que os m├®todos do template n├úo se aplicam
+
+`SIGOPLRC` n├úo ├® CRUD: herda de `form` puro, os 9 TextBox t├¬m `When ÔåÆ Return .f.`, o EditBox tem `When ÔåÆ NoDefault`, n├úo h├í lookup, e o dump **n├úo persiste nada** ÔÇö o ├║nico `Insert Into` tem como alvo o cursor LOCAL `DbOpera`, criado no pr├│prio `Load`. `BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`HabilitarCampos`/`AjustarBotoesPorModo` n├úo t├¬m referente; cri├í-los seria inventar (PILAR 1) ou escrever stub. O pr├│prio gate concorda: `legadoFluxoUnicoF8 = True` dispensa `BtnCancelarClick`/`CarregarLista`.
+
+## Form ÔÇö 3 diverg├¬ncias REAIS corrigidas (conferidas no dump)
+
+| | legado | estava | agora |
+|---|---|---|---|
+| 9 TextBox do Container1 | `FontName = "Courier New"` | `"Tahoma"` | `"Courier New"` |
+| `get_cotacao.InputMask` | `"99,999.9999"` | `"9,999.9999"` (perdia um d├¡gito) | `"99,999.9999"` |
+| `get_disponivel.FontBold` | **n├úo declara** (s├│ o label `Say5` declara) | `.T.` inventado | removido |
+
+Mais os hooks can├┤nicos que **t├¬m** referente: `FormParaBO` (s├│ `this_nOriDes`/`this_nClickOriDes` ÔÇö mapear os campos somente-leitura de volta sobrescreveria o que o BO acabou de calcular) e `BOParaForm` (delega aos 4 espelhos, na ordem que a grade exige). `ProcessarLado` virou `FormParaBO ÔåÆ BO.Processar ÔåÆ BOParaForm ÔåÆ Refresh`. Zero mudan├ºa de comportamento.
+
+N├úo transcrevi `DisabledBackColor = 255,255,255`: nada no migrado desabilita esses campos, seria propriedade morta.
+
+## Gate ÔÇö era falso positivo, e o conserto ├® no pipeline
+
+`.ps1` gravado 08/11 01:31, task iniciada 19:54 ÔåÆ o gate que rodou era o do disco, logo a reprova foi **bug de gate leg├¡timo**, n├úo self-reference. Causa: `Test-LegadoCliqueSoFecha` pergunta *"algum Click faz trabalho?"* varrendo todo `PROCEDURE *Click` (inclusive os dois CheckBox que recarregam a tela), quando o bloco pergunta *"o BOT├âO faz trabalho?"*. Resultado: exigia `BtnSalvarClick` de uma tela que n├úo grava nada.
+
+Consertado com predicado **pr├│prio** `Test-LegadoBotaoUnicoSoFecha` (1 call site, mensagem pr├│pria) + extra├º├úo de `Test-LinhaDeFechamentoLegado` como fonte ├║nica, com toler├óncia ao idioma "reabilitar o form PAI antes de fechar". **N├úo** alarguei `Test-LegadoCliqueSoFecha` para "s├│ Click de bot├úo" ÔÇö medi: mudaria 168 dos 764 dumps, com uma regress├úo.
+
+**Medi├º├Áes:** toler├óncias flipam 5/764 dumps, todos `FalseÔåÆTrue` (dire├º├úo mon├│tona segura); predicado novo ├® `True` em 26 dumps mas s├│ **2** chegam ao call site; harness 755/756/757/760/761/764 `PASSA` em ambas as vers├Áes (zero regress├úo); task765 `REPROVA ÔåÆ PASSA`. Encoding do orquestrador preservado byte a byte (361 linhas non-ASCII, 172 `U+FFFD`, 0 CR, id├¬nticos).
+
+## Verifica├º├Áes
+
+Compila limpo (`.fxp` 29.505 / 25.375 bytes, zero `.err`) ┬À `Test-CompletudeCodigo` = True nos dois ┬À gate `metodosFaltantes = []` ┬À auditorias de fun├º├Áes ├│rf├ús, m├®todo PROTECTED chamado de fora, coluna de empresa e campos de cursor: todas zero ┬À nenhum `RETURN` dentro de `TRY` ┬À CRLF restaurado no BO (o Edit tool o havia normalizado para LF).
+
+## Tr├¬s ressalvas
+
+1. **A Fase 8 desta task vai reportar "N├âO passou" de novo** ÔÇö o orquestrador em execu├º├úo parseou o `.ps1` ├ás 19:54 e n├úo recarrega. O conserto vale da pr├│xima task em diante; o artefato est├í correto (provado por fora, acima).
+2. **N├úo adicionei item de menu**, mantendo a decis├úo da tentativa anterior: ├® di├ílogo filho que exige `oFormPai`/`cOperacao`/`oFormCaixa`. Confirmei o precedente ÔÇö `FormSigPrCar`, `FormSigOpCcj`, `FormSigOpCtd`, `FormSIGPRSTF`, `FormSigPrEml`: nenhum tem entrada no `menu.prg`.
+3. **N├úo compilei nem instanciei de fato o form em runtime** ÔÇö o `vfp9.exe` nesta sess├úo gera o `.FXP` e sai **sem executar** (smoke test confirmou: `exit=0`, arquivo de sa├¡da ausente). O `.FXP` prova compila├º├úo, n├úo instancia├º├úo.
+
+N├úo commitei. Artefatos novos: `automation/VerificarGateFase8Task765.ps1`, `automation/MedirCliqueSoFechaTask765.ps1`, `automation/_Orq_antes_task765.ps1` (baseline), e a li├º├úo registrada em mem├│ria.

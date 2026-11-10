@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 entregue e verificada. Resumo:
+
+## O que a fase entregou
+
+**`projeto/app/forms/operacionais/FormSigOpIbo.prg`** (├║nico arquivo alterado ÔÇö 1526 ÔåÆ 2041 linhas):
+
+| m├®todo novo | o que transcreve do legado |
+|---|---|
+| `ConfigurarOpcoes()` | `chkCarne` / `chkObss` / `chkAgrupa` / `Lbl_Erro` / `Container1.Edit1` |
+| `AplicarVisibilidadeOpcoes()` | as 5 linhas `ThisForm.chk*.Visible = ...` do `Init` |
+| `AplicarTabIndex()` | a ordem de tabula├º├úo do SCX (pend├¬ncia registrada nas fases 3/4/5) |
+| `ValidarQtde()` | `PROCEDURE Valid` de `getQtde` ÔÇö o ├║nico `Valid` do dump |
+| `ValidarQtdeKeyPress()` | guard ENTER(13)/TAB(9) que delega para ela |
+
+`ConfigurarEventos()` ganhou os dois BINDEVENT de `txt_4c_Qtde` e **a chamada dele mudou de lugar** no `InicializarForm` (passo 5 ÔåÆ 5d): `BINDEVENT` sobre objeto inexistente estoura no pr├│prio bind, e `txt_4c_Qtde` s├│ nasce no `ConfigurarControles`.
+
+**Com isso os 19 objetos do dump est├úo migrados** ÔÇö a confer├¬ncia nome a nome est├í no cabe├ºalho do arquivo.
+
+## Sobre os lookups: n├úo existe nenhum neste legado
+
+Medido no dump, n├úo presumido ÔÇö os 5 padr├Áes do gate (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`) d├úo **0 ocorr├¬ncias**. O ├║nico campo digit├ível ├® a quantidade de vias; o ComboBox de impressoras tem `RowSourceType = 2` sobre um cursor local montado por `APRINTERS()`, n├úo uma tabela pesquis├ível. Fabricar um `AbrirLookup*` inventaria tabela que o legado nunca consulta. A fase passa pelo ramo **CAPTURA** do gate, cuja exig├¬ncia pr├│pria ├® `PROCEDURE Validar\w+` ÔÇö satisfeita pelo `Valid` real do campo.
+
+## Verifica├º├úo (VFP9 executou nesta sess├úo ÔÇö smoke test passou)
+
+- **Compila├º├úo**: `FXP=.T. ERR=.F.` nos dois arquivos
+- **Instancia├º├úo**: `VARTYPE = O` em 4 cen├írios (TpBol 2 / 18 / 3 / sem par├ómetro)
+- **Visibilidade**: TpBol=2 ÔåÆ Obss .T., Carne .F., Agrupa .F.; TpBol=18 ÔåÆ Carne .T., Obss .F.; TpBol=3 ÔåÆ Agrupa .T.
+- **TabIndex**: 1..7 na ordem do legado; labels/containers empurrados para 9..13
+- **BINDEVENT** (`AEVENTS` com o objeto de origem, por causa do `DataSession = 2`): `LOSTFOCUS ÔåÆ VALIDARQTDE`, `KEYPRESS ÔåÆ VALIDARQTDEKEYPRESS`; handlers PUBLIC (`PEMSTATUS(...,2) = .F.`)
+- **`Valid` nos tr├¬s caminhos, n├úo s├│ no feliz**: `4 ÔåÆ 4`; `0 ÔåÆ continua 4` (o guard `If > 0` do legado, que ├® a regra); `"7" ÔåÆ 7` (CHAR n├úo estoura); `'A'(65)` n├úo muda; ENTER/TAB/LostFocus sincronizam
+- **Est├íticos**: completude 0 problemas, 0 acentos literais, 0 `RETURN` dentro de `TRY`, blocos balanceados, todo `nome(` do form resolve
+- **Gate da Fase 6**: `RAMO CAPTURA VALIDA? True` ÔÇö rodado fora do orquestrador, com as fun├º├Áes auxiliares extra├¡das por AST do `OrquestradorMigracao.ps1` atual (a `LibGateFase6Task738.ps1` existente ├® mais antiga que o orquestrador, ent├úo n├úo confiei nela)
+
+## Dois pontos que valem seu olhar
+
+1. **`chkCarne` ├® o ├║nico controle do dump sem `Width`/`Height`.** Medi no VFP9 em vez de estimar, e o procedimento se valida: ligando `AutoSize = .T.` + `Visible = .T.` ele devolve 122 e 120 para os dois irm├úos ÔÇö exatamente o que o SCX declara neles ÔÇö e **88x15** para "Imprimir Carn├¬". Achado colateral: `AutoSize` em CheckBox n├úo ├® no-op, ├® *adiado* at├® o controle ficar vis├¡vel (mem├│ria atualizada).
+
+2. **Liguei `ValidarQtde` a `"LostFocus"` al├®m de `"KeyPress"`.** S├│ com KeyPress, quem digita 3 e clica Imprimir com o mouse imprimiria a quantidade antiga, em sil├¬ncio ÔÇö `LostFocus` ├® o equivalente fiel do `Valid`. S├úo dois m├®todos e n├úo um ligado aos dois eventos porque `LostFocus` n├úo passa par├ómetro: os argumentos chegariam como `.F.` l├│gico e `par_nKeyCode = 13` estouraria justamente no caminho do mouse.
+
+Artefatos de medi├º├úo em `automation/_tmp746/` (referenciados nos coment├írios do c├│digo) e o probe em `automation/TestSigOpIbo746F6.prg`. Os dois `.prg` continuam untracked no git ÔÇö ├® migra├º├úo nova, sem diff contra HEAD.

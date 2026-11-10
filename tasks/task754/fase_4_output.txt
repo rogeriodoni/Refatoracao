@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4/8 is done and verified.
+
+## What was delivered
+
+`projeto\app\forms\operacionais\FormSigOpIpE.prg` ÔÇö 404 ÔåÆ 1421 lines, six new methods:
+
+| Method | Content |
+|---|---|
+| `ConfigurarGrade` | `grd_historico` ÔåÆ `grd_4c_Dados`, 12 Columns, Text1s, CheckBox of the marking column |
+| `CriarCursorEtiquetas` | the 61-column cursor (`DbEtiqueta`) + the 6 legacy `INDEX ON` |
+| `MontaGradeEtiquetas` | `RecordSource` + the 12 `ControlSource` + `GO TOP`/`Refresh` |
+| `FormatarColunasGrade` | widths, headers, `CurrentControl`, `Sparse`, `ReadOnly`, `ColumnOrder` |
+| `ConfigurarBotoes` | `cntBotoes` (Armazenar/Imprimir/Boleto/Sair) and `cmdTestaPos` |
+| `AjustarBotoesPorTipoChamador` | the legacy `btnDepois.Enabled = .F. se Tipo <> 'CADASTRO'` |
+
+## The trap in this form
+
+The legacy **renames four Columns**, and the dump reports it two ways that disagree: the grid property block is keyed by **SCX position**, while the `Header1`/`Text1` blocks and the Init binding are keyed by **name** ÔÇö position 6ÔåÆ`Column7`, 7ÔåÆ`Column8`, 8ÔåÆ`Column9`, 9ÔåÆ`Column6`. Reading both by the same key would have scrambled header, width, mask and data column on four columns, and the screen would have opened with **no error at all**, just data in the wrong columns. The mapping is confirmed semantically: header Ôåö ControlSource agrees on all 12. Also, the `ControlSource` values stored in the SCX are **stale** (it puts `dbetiqueta.pesos` on the "Pre├ºo De" column); the Init rebinds all 12, so that is the source I transcribed.
+
+## Proof (not just "it compiles")
+
+`COMPILE` clean, zero `.err`; instantiated in a minimal harness: `VARTYPE=O`, 1000x600, 4 controls, cursor with **FCOUNT 61 / 6 tags**, grid with the 12 bound columns, widths/headers/ReadOnly correct, `ColumnOrder` an exact 1..12 permutation, CheckBox with `CurrentControl` set and `Sparse=.F.`, all 5 `Picture` resolving to existing files, `MontaGradeEtiquetas` idempotent on a second call, cursor closed on `Release`, **zero suppressed dialogs** (no CATCH swallowing anything).
+
+I also fixed one real defect I had introduced: `SET NULL ON` leaked out of the form if `CREATE CURSOR` threw. Measured after the fix: `OFF ÔåÆ OFF`, restored.
+
+## Two things to know
+
+**`mapeamento.json` was wrong and I corrected it** (Phase-4 scope only): the two CommandGroups came out as `obj_4c_*` because the generator does not recognise `CommandGroup`, and all 12 Columns pointed at the *same* target `Page_4c_1` ÔÇö which would have produced a wave of false UI-fidelity diffs. Columns now map nameÔåÆposition, `Header1`/`Text1` to themselves, `Check1` to `chk_4c_Check1`.
+
+**One collision remains, deliberately left:** `SIGOPIPE.Say5` and `SIGOPIPE.Label5` both resolve to `Form.lbl_4c_Label5`. Both labels are created in Phase 5/6, so naming it now would be guessing at a later phase's choice ÔÇö it needs fixing when those controls are built.
+
+I did **not** write `ConfigurarPaginaLista`/`AlternarPagina` that the generic prompt asks for: there are 0 `BaseClass: pageframe` in the dump, so there is no Page1/Page2, and the 5 legacy buttons are Armazenar/Imprimir/Boleto/Sair/Testar Posi├º├úo ÔÇö not Incluir/Alterar/Excluir. Those methods would have paginated nothing. The measurement justifying this is recorded in the file header, and the FLAT branch of the phase gate passes on all four predicates (`OPERACIONAL`, `grd_4c_`, `cmg_4c_`, `MontaGrade`). Row loading stays in Phase 7 by real dependency, not convenience ÔÇö the six `ParentForm.Tipo` branches touch `getOcoEtiqs`/`getJustifs`/`LocalParam`, which only exist from Phase 5.

@@ -642,6 +642,16 @@ function Validate-TableNames {
         if ($tableNameLower -match '^(cursor_4c_|tmp_|cr[a-z]|#)') { continue }
         # Ignorar palavras-chave SQL que podem ser capturadas
         if ($tableNameLower -in @('select','set','values','where','table')) { continue }
+        # Ignorar CATALOGO DO SISTEMA do SQL Server: INFORMATION_SCHEMA.* e
+        # sys.* sao views do servidor, nao tabelas da aplicacao, e por isso
+        # NUNCA aparecem em docs/schema.sql (que so tem CREATE TABLE [dbo]).
+        # Sem este skip, consultar INFORMATION_SCHEMA.COLUMNS - a forma
+        # canonica de reproduzir o guard "Type([crX.Coluna]) = [N]" do legado,
+        # e a mesma que VerificarInsertNotNull.ps1 usa - viraria um achado
+        # FALSO que dispara a rodada de correcao automatica da etapa 05f, cujo
+        # conserto provavel seria REMOVER o guard e quebrar codigo correto.
+        # O regex de captura para no ponto, entao basta o nome do schema.
+        if ($tableNameLower -in @('information_schema','sys')) { continue }
 
         # Verificar se existe no schema (file ou DB)
         $tableColumns = Get-SchemaForTable -TableName $tableNameLower -FileSchema $Schema

@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpIgm.prg`.
+
+## O que a fase entregou
+
+O prompt pedia `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`, mas esses quatro nomes s├úo conven├º├úo de form **CRUD** e o SIGOPIGM ├® OPERACIONAL: o legado herda de `form` puro e tem exatamente **quatro bot├Áes** ÔÇö `Imprimir`, `btnBoleto`, `Grade`, `Sair`. Inventar os bot├Áes CRUD violaria o PILAR 1; criar os m├®todos vazios cairia na regra de completude. Entreguei os eventos dos bot├Áes que o legado **realmente tem** (o carve-out que o pr├│prio gate da Fase 7 prev├¬, confirmado abaixo).
+
+| M├®todo | Origem no dump |
+|---|---|
+| `KeyPress` | `PROCEDURE KeyPress` do form ÔÇö F2(`-1`)ÔåÆImprimir, F3(`-2`)ÔåÆGrade |
+| `BtnImprimirClick` + `ImprimirLinhaCorrente` | `Imprimir.Click` (la├ºo + `SigPrIdc` / `SigReIfx`) |
+| `BtnBoletoClick` + `EmitirBoletoLinhaCorrente` | `btnBoleto.Click` (la├ºo + `Do Case` do tipo + `SigOpIbo`) |
+| `BtnGradeClick` | `Grade.Click` (`Grd.Column1.Setfocus`) |
+| `BtnSairClick` | `Sair.Click` (`ThisForm.Release`) |
+
+Mais os 4 `BINDEVENT` em `ConfigurarBotoes` e a property `this_lProcessandoLote`.
+
+## Decis├Áes que valem revis├úo
+
+- **`CREATEOBJECT`, n├úo `DO FORM`** ÔÇö `SigReIfx.scx`/`SigOpIbo.scx` n├úo existem no projeto novo; o `DO FORM` transcrito compilaria e o di├ílogo nunca abriria.
+- **`Show()` fora do TRY** (regra #29) ÔÇö por isso os la├ºos foram quebrados em `*LinhaCorrente()`: um CATCH na pilha durante `Show()` de modal fecha a tela filha. Os erros seguem reportados pelos TRY/CATCH internos do BO.
+- **`SCAN` ÔåÆ la├ºo por n┬║ de registro** ÔÇö `FormSigOpIbo` entra na datasession do chamador de prop├│sito, podendo deixar outra ├írea selecionada; `SELECT` + `GO` a cada volta imuniza a varredura.
+- **Diverg├¬ncia deliberada, documentada**: no ramo `Docus in (3,4)` o `TpImpDocs` ├® recarregado pelo `Dopes` **da linha**. No legado esse valor depende de um cursor estagnado e varia com a ordem das linhas ÔÇö artefato, n├úo regra. J├í o `BtnBoletoClick` usa `this_cMovimentacao` (opera├º├úo de origem), que **├®** deliberado no legado ÔÇö transcrito literalmente, junto com as outras duas peculiaridades dele: percorre todas as linhas (sem `If marca`) e n├úo marca nada como impresso.
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou, ent├úo os resultados abaixo s├úo medidos, n├úo inferidos:
+
+- **Compila├º├úo limpa** ÔÇö `.FXP` presente, `.ERR` ausente, com **controle negativo** (`PUBLIC PROCEDURE` injetado) produzindo `.ERR` apenas nas 3 linhas inseridas ÔÇö o que prova que o detector funciona e que as 1272 linhas reais est├úo limpas.
+- **Runtime** ÔÇö `CREATEOBJECT` devolve objeto; os 7 m├®todos novos s├úo PUBLIC (`PEMSTATUS(...,2)=.F.`); os 4 `BINDEVENT` registrados (`AEVENTS` por objeto: `CLICK ÔåÆ BTNBOLETOCLICK/BTNIMPRIMIRCLICK/BTNGRADECLICK/BTNSAIRCLICK`); guarda de reentr├óncia e caminho de cursor vazio retornam sem abrir modal, com exatamente os 2 avisos esperados no `_dialogs.txt`.
+- **Est├ítico** ÔÇö 0 acentos literais, 0 `RETURN` dentro de TRY (contagem de profundidade), 0 `MESSAGEBOX` real (as 3 ocorr├¬ncias s├úo coment├írios de transcri├º├úo), 0 `DO FORM`, 0 `Controls("nome")`, 0 `this_X .Value`; todo `THIS.<membro>` resolvido; os 9 m├®todos do BO chamados pelo form s├úo PUBLIC em toda a hierarquia (regra #51); validador de completude OK.
+- **Gate da Fase 7** replicado standalone: `legadoSemCrud=True`, `nHandlers=4 ÔëÑ min=2` ÔåÆ **PASSOU**.
+
+Dois pontos que **n├úo** foram provados, para n├úo haver d├║vida: a impress├úo em si (`SigPrIdc` ├® procedure global do Fortyus que n├úo veio no acervo ÔÇö o BO j├í documenta e exp├Áe a falha via `MsgErro`) e o conte├║do real das telas filhas, que exigem SQL Server alcan├º├ível. Artefatos tempor├írios e `.fxp` foram removidos.
+
+Pendente para a Fase 8: `FormParaBO`/`BOParaForm`, o `Click` do `Check1` da grade (`if !(csPgto.printed) / This.value = .t.`) e o `When` das colunas 2/3.

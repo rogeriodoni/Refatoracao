@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Completei a **Fase 2/8** do `sigopfisBO.prg` (BO do form operacional "Dados Fiscais" da Nota Fiscal ÔÇö tabela `SigMvNfi`):
+
+- **Propriedades adicionadas**: 39 novas `this_*` para cobrir colunas `NOT NULL` do schema que n├úo tinham controle correspondente na tela (regra CLAUDE.md #22) ÔÇö mantidas como propriedades (n├úo literais fixos no SQL) justamente para que um valor gravado por outra rotina (ex.: "Cancela Nota", "Carta de Corre├º├úo") n├úo seja perdido no pr├│ximo `Atualizar()` desta aba.
+- **`CarregarDoCursor()`**: mapeia todas as ~100 colunas de `SigMvNfi` usando `SELECT (alias)` + `TratarNulo`, com tratamento tolerante a `bit`/`numeric` para colunas l├│gicas (`cancelas`, `regs`, `correcs`).
+- **`Inserir()`**: gera a PK via `fUniqueIds()` se vazia, monta `EmpDopNums` com `PADR` (nunca `ALLTRIM` nas partes ÔÇö regra #42), e faz `INSERT` cobrindo literalmente toda coluna `NOT NULL` da tabela.
+- **`Atualizar()`**: `UPDATE ... WHERE cidchaves = ...`, mesma cobertura de colunas.
+- **`ObterChavePrimaria()`**: ajustado para `ALLTRIM(NVL(...))`.
+- Ambos chamam `RegistrarAuditoria("INSERT"/"UPDATE")` e seguem o padr├úo de erro do projeto (`MsgErro` + `CapturarErroSQL()`, cursores de SQLEXEC fechados antes de reabrir).
+
+Validei compilando com `vfp9.exe -C` contra o `.prg` real ÔÇö compilou sem erro ÔÇö e depois removi os artefatos de teste (`.fxp`, script auxiliar). O padr├úo seguido foi o mesmo de `sigmvcabBO.prg` (BO irm├úo, tabela mestre `SigMvCab`), j├í estabelecido no projeto.

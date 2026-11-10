@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Verifiquei as 25 ocorr├¬ncias contra o dump legado (`tasks/task750/sigopind_form_codigo_fonte.txt`) antes de aplicar qualquer altera├º├úo, j├í que este form tem hist├│rico extenso de falsos positivos nesta categoria.
+
+**Corrigido (2 problemas reais):**
+- **[GRID-HEADER]** `Column1.Header1.Caption` tinha espa├ºo sobrando (`"Conta "` ÔåÆ `"Conta"`) nos dois pontos do arquivo (cria├º├úo inicial e reconfigura├º├úo p├│s-`RecordSource`), agora id├¬ntico ao legado.
+- **[LAYOUT-POSITION]** `cnt_4c_Container1` (Page.HIST) tinha `Left=69` quando o legado usa `Left=100` ÔÇö corrigido apenas essa propriedade (a flagrada).
+
+**N├úo alterado (23 problemas ÔÇö falsos positivos confirmados contra o dump):**
+- **[GRID-WITH]**: a vari├ível citada (`loc_nSal`) ├® um acumulador num├®rico, n├úo um objeto Grid ÔÇö achado alucinado.
+- **2├ù [NAVEGACAO-PAGINA]**: `BtnConfirmarClick`/`BtnCancelarClick` nunca atribuem `ActivePage` ÔÇö s├│ fazem `IF ... ActivePage = 2` (compara├º├úo) para despachar para outros handlers que j├í cuidam da carga de dados.
+- **18├ù [LAYOUT-POSITION]**: colis├úo de nome gen├®rico (`Label1`, `Cmd_Visual`, `Cmd_Imprimir`, `Command1`) entre pain├®is/p├íginas diferentes (SALDO vs HIST) ÔÇö os controles migrados j├í batem exatos com seus pr├│prios trechos do dump; o comparador cruzou contra o objeto hom├┤nimo errado. Um grupo (`lbl_lancamentos`/"Moeda"/`Procura`) ├® um deslocamento uniforme de -10px intencional, consistente em toda a linha de filtro.
+
+Registrei esses padr├Áes na mem├│ria (`feedback_layout_position_colisao_nome_generico.md`, `feedback_navegacao_pagina_if_comparacao_lida_como_atribuicao.md` e uma nova `feedback_gridwith_variavel_numerica_alucinada.md`) e compactei o ├¡ndice `MEMORY.md`, que estava perto do limite de leitura.
+
+Nenhuma outra linha do arquivo foi tocada.

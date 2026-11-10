@@ -1,0 +1,27 @@
+INICIO
+PROCEDURES OK
+CREATEOBJECT VARTYPE=O
+BaseClass=Form
+Caption=[Geração de Multiplas Operações Venda]
+WxH=759x430
+ControlCount=6
+GRID ColumnCount=7
+GRID RecordSource=[cursor_4c_Dados]
+GRID TopLeftWH=99,58,483,311
+C1 CS=[cursor_4c_Dados.cnivels] W=150 H=[Movimentação]
+C2 CS=[cursor_4c_Dados.ndopes] W=38 RO=.T.
+C3 CS=[cursor_4c_Dados.ncors] W=80 RO=.T.
+C4 CS=[cursor_4c_Dados.padraos] W=50 CC=[CHK_4C_CHECK1] Sparse=.F.
+C4 chk existe=.T.
+C4 chk ValueType=N TLWH=0,0,10,10
+C5 CS=[cursor_4c_Dados.ordems] W=45
+C6 CS=[cursor_4c_Dados.mercs] W=42
+C7 CS=[cursor_4c_Dados.empds] W=40 H=[Emp.]
+BTN INS TLWH=3,533,75,75 Vis=.T. Ena=.T. Tab=4
+BTN EXC Vis=.T. Tab=2
+BTN SAI Vis=.T. Cancel=.T. Tab=3
+SHAPE LeftW=528,241
+CURSOR dados USED=.T. cfg USED=.T.
+PROT CarregarDados=.F. MontaGrade=.F.
+RECARGA ok=.T. CC=[CHK_4C_CHECK1] chk=.T. C1W=150 C1H=[Movimentação]
+FIM

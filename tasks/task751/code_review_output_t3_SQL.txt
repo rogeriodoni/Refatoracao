@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 9 achados de `[SQL-FILTRO-INVENTADO]` comparando com todas as strings SQL reais do arquivo (listadas abaixo, via grep de `WHERE`):
+
+```
+cimpfabs = ... | Dopes = ... | Codigos BETWEEN/=... | IClis = ... | CidChaves = ... | Fpags = ... | EmpDopNums = ...
+```
+
+Nenhuma dessas 9 colunas (`TAG`, `EXIBSITS`, `VALVARS`, `NMINENTS`, `PRAZOENTS`, `CHKPRZENTS`, `PCESCOLHA`, `NMAXENTS`, `TPVENCS`) aparece em WHERE de SQL string nenhuma. Onde elas realmente aparecem:
+
+- **TAG** ÔåÆ `INDEX ON ... TAG FpagV` (linha 3339) ÔÇö palavra-chave de tag de ├¡ndice VFP, n├úo coluna de WHERE SQL.
+- **EXIBSITS** ÔåÆ `IF USED("crSigCdOpe") AND crSigCdOpe.ExibSits = 4` (linha 2211) ÔÇö compara├º├úo em mem├│ria sobre cursor j├í carregado, n├úo SQL. ├ë a transcri├º├úo literal do `If crSigCdOpe.ExibSits=4` do legado (citado no coment├írio da pr├│pria linha 2197).
+- **VALVARS** ÔåÆ `TprMvCab.ValVars < 0` (linha 2232) ÔÇö idem, IF em mem├│ria sobre o cursor de trabalho do form pai.
+- **NMINENTS/NMAXENTS** ÔåÆ `CrSigOpCdc.NMinEnts`/`NMaxEnts` (v├írias linhas, 2621-2648, 2772-2773, 3149-3165) ÔÇö IFs em mem├│ria, transcri├º├úo do `crSigOpCdc.NMinEnts`/`NMaxEnts` legado citado nos coment├írios.
+- **PRAZOENTS** ÔåÆ `ControlSource = "TprMvCab.prazoents"` (que ├® a pr├│pria refer├¬ncia "original" listada no enunciado) e IFs em mem├│ria sobre `TprMvCab.PrazoEnts`.
+- **CHKPRZENTS** ÔåÆ `CrSigOpCdc.ChkPrzEnts = 1` (linha 2860) ÔÇö IF em mem├│ria.
+- **PCESCOLHA** ÔåÆ `THIS.this_cPcEscolha` em `INLIST(...)` ÔÇö transcri├º├úo literal do `Inlist(ThisForm.pcEscolha, ...)` do legado, documentado nos coment├írios de cada metodo.
+- **TPVENCS** ÔåÆ `cursor_4c_FpgVenc.TpVencs = 2` / `LocalFpag.TpVencs = 2` ÔÇö IF em mem├│ria depois de um SELECT que j├í traz TpVencs como coluna retornada (`SELECT TpVencs, Entradas, Dias, tVens FROM SigOpFp WHERE Fpags = ...`), n├úo um filtro WHERE.
+
+Ou seja: o detector est├í casando qualquer `Coluna = valor` no arquivo (inclusive em `IF`/`INDEX ... TAG` de VFP puro, fora de qualquer string SQL) como se fosse condi├º├úo de WHERE inventada. Nenhum dos 9 ├® de fato uma condi├º├úo SQL WHERE adicionada pela migra├º├úo ÔÇö s├úo compara├º├Áes em mem├│ria que reproduzem fielmente o legado (os pr├│prios coment├írios do c├│digo citam a linha original do SCX/VCX para cada caso).
+
+Conclus├úo: n├úo h├í nada a corrigir neste pass ÔÇö os 9 achados s├úo falsos positivos do detector (mesma fam├¡lia de `SQLFILTROoutrat`/`SQLFILTROnegacao`/`ParentesesIFCur` j├í registrada na mem├│ria do projeto). N├úo alterei nenhum arquivo, para n├úo remover l├│gica leg├¡tima que espelha o legado.

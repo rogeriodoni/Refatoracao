@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Summary
+
+I implemented Fase 7/8 ("Form - Eventos Principais") for `FormSigOpMpn` (task769). Since this is an OPERACIONAL dialog (not a CRUD form), the generic `BtnIncluirClick`/`BtnAlterarClick` template in `fase_7_prompt.md` didn't apply ÔÇö instead I followed the form's own header docstring (and the proven sibling pattern in `FormSigOpMpd.prg`) to implement the real legacy events:
+
+**FormSigOpMpn.prg:**
+- `ConfigurarEventosBotoes()` / `ConfigurarEventosGrade()` ÔÇö wire up Click/AfterRowColChange/GotFocus bindings
+- `GarantirCheckBoxSelecionar()` ÔÇö now binds `InteractiveChange` on the embedded checkbox
+- `ChkSelecionarInteractiveChange`, `CmdSelTudoClick`, `CmdApagaClick`, `CmdTotalizaClick`, `GradeAfterRowColChange`, `CmdOkClick`, `FecharDialogo`, `BtnEncerrarClick`, `BtnCancelarClick`
+
+**SigOpMpnBO.prg** (the "ok" click's business logic belongs here per PILAR 3 and the `SigOpMpdBO` precedent, not in the Form):
+- `Marcar`/`MarcarExec`, `Desmarcar`/`DesmarcarExec` ÔÇö transcribed from legacy `marca`/`desmarca`
+- `ConfirmarMovimentacoes` ÔåÆ `GravarPendenciaConfirmada` ÔåÆ `GravarFaseConfirmada` / `GravarDetalheEnvelopeFinal` ÔåÆ `GravarFaseAusente` ÔÇö transcribed from the ~280-line legacy `ok.Click`, verified against exact Scan/EndScan nesting from the dump
+
+I documented several judgment calls inline (e.g., widening a `CursorQuery` field list that the legacy referenced but never selected; using `TmpOperacao`/`Desmarcar` semantics consistent with the sibling form rather than literally replicating a legacy quirk that would crash with a type mismatch). Both files are structurally balanced (TRY/ENDTRY, IF/ENDIF, SCAN/ENDSCAN, PROCEDURE/ENDPROC all match).
+
+Not yet compiled/tested in VFP9 ÔÇö that's the next pipeline step (`05c_validarCompilacao`/`06_testForm`).

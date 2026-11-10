@@ -1,0 +1,2270 @@
+{
+  "resumo": {
+    "totalMetodos": 134,
+    "metodosComSQL": 19,
+    "metodosComValidacao": 71,
+    "totalQueries": 15,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fChecaAcesso", "MontaGrade", "fGerUniqueKey", "fUniqueIds", "fBuscarCotacao", "fCanUniqueKey", "fwBuscaExt", "fAcessoContas", "fwBuscaSel", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "LParameters pStatus\n\nThisForm.KeyPreview \t\t  = pStatus\nThisForm.Pagina.Dados.Enabled = pStatus\n\nWith ThisForm.Pagina.Lista\n\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t.cntBuscaCheques.ZOrder(0)\n\t\t.cntBuscaCheques.Visible = \tNot pStatus\n\t\t.cntBuscaTitulos.Visible = .f.\n\tELSE\n\t\t.cntBuscaTitulos.ZOrder(0)\n\t\t.cntBuscaCheques.Visible = .f.\n\t\t.cntBuscaTitulos.Visible = Not pStatus\n\tEndIf\n\n\t.Grupo_op.Visible\t\t  = pStatus\n\t.cmdImprimir.Visible\t  = pStatus\n\t.cmdBuscar.Visible\t\t  = pStatus\n\t.Grupo_Saida.Sair.En... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 86,
+      "codigoOriginal": "Private pTip, pLot\n\nLocal lcChv\n\nIf Not Eof('crSigPrLit')\n\tlcChv = crSigPrLit.NumLotes\n\n\tpTip  = ThisForm.Tipos\n\tpLot  = lcChv\n\t\n\tThisForm.Pagina.Dados.cntGradeCheques.GradeCheques.RecordSource = ''\n\tThisForm.Pagina.Dados.cntGradeTitulos.GradeTitulos.RecordSource = ''\n\t\n\tThisform.poDataMgr.Requery('crSigPrLii')\n\n\tSelect crSigPrLii\n\tScan\n\t\tIf IsNull(DtVencs)\n\t\t\tReplace DtVencs With Ctod('') In crSigPrLii\n\t\tEndIf\n\n\t\tIf IsNull(PrVencs)\n\t\t\tReplace PrVencs With Ctod('') In crSigPrLii\n\t\tEndIf\n\t\t\n\t\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 88,
+      "codigoOriginal": "Select crSigPrLii\nGo Top\n\nWith ThisForm.Pagina.Dados\n\t.getUsuar.ControlSource \t  = 'crSigPrLit.Usuarios'\n\t.getLote.ControlSource \t\t  = 'crSigPrLit.NumLotes'\n\t.getData.ControlSource\t\t  = 'crSigPrLit.Datas'\n\t.getInstrucao.ControlSource   = 'crSigPrLit.Cods'\n\t.getCdGrEstoque.ControlSource = 'crSigPrLit.Grupos'\n\t.getCdEstoque.ControlSource   = 'crSigPrLit.Contas'\nEndWith\n\nWith ThisForm.Pagina.Dados.cntGradeCheques.GradeCheques\n\t.ColumnCount = 10\n\t.ReadOnly = .t.\n\t.RecordSource = 'crSigPrLii'\n\n\t.Colu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Update crSigPrLit Set Datas = Ctod('') Where IsNull(Datas)\nUpdate crSigPrLit Set Obs   = '' Where IsNull(Obs)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Private pDtI, pDtF, pTip\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\n\nIf (pDtF < pDtI)\n\t=MessageBox('Data Final Menor Do Que a Inicial!!!', 0+64, 'Atenção!!!')\n\tThisForm.Pagina.Lista.getDtFim.SetFocus\n\tReturn 0\nEndIf\n\nZap In crProcurar\n\nThisForm.poDataMgr.Requery('crSigPrLit')\nThisForm.RetiraNulls\n\nSelect crSigPrLit\nIndex On NumLotes Tag NumLotes\n\nIf (RecCount('crSigPrLit') < 1)\n\tThisForm.Pagina.List... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Valid",
+      "linhas": 148,
+      "codigoOriginal": "ThisForm.FocarBanco = .t.\n\nSELECT crSigPrLii\nGO bott\nlnRec = Recno('crSigPrLii')\n\nIf (ThisForm.Tipos = 1) && Cheques\n\tSelect Tipos ;\n\t  From crSigPrLii ;\n\t Where Empty(Bancos) Or Empty(Agencias) Or Empty(NContas) Or Empty(NCheques) ;\n\t  Into Cursor crBrancos\n\n\tlcChq = crSigPrLii.Bancos + crSigPrLii.Agencias + crSigPrLii.NContas + crSigPrLii.NCheques\n\n\tSelect Bancos, Agencias, NContas, NCheques ;\n\t  From crSigPrLii ;\n\t Where Bancos + Agencias + NContas + NCheques = lcChq And ;\n\t \t   Recno() <> ln... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Private lnLot, lnTip\n\nlnLot = ThisForm.Pagina.Dados.getLote.Value\nlnTip = ThisForm.Tipos\n\nIf Not Empty(lnLot)\n\tThisForm.poDataMgr.SqlExecute('Select * From SigPrLit Where NumLotes = ?lnLot And Tipos = ?lnTip', 'crTmp')\n\n\tIf Used('crTmp') And (Reccount('crTmp') > 0)\n\t\tSelect crTmp\n\t\tScan\n\t\t\tlcChv = crTmp.NumLotes\n\t\t\tIf Not Seek(lcChv, 'crProcurar', 'NumLotes')\n\t\t\t\tScatter MemVar Memo\n\t\t\t \tInsert Into crProcurar From MemVar\n\t\t\tEndIf \n\t\tEndScan\n\t\tGo Top In crTmp\n\n\t\tThisForm.NumLotes = crTmp.NumLote... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "Private pDtI, pDtF, pTip, pLot\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\npLot = crSigPrLit.NumLotes\n\n* Linhas Abaixo Colocadas Até Que a Classe Seja Corrigida, Depois Trocar Por .Update()\nIf Not ThisForm.poDataMgr.Update('crSigPrLit')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão...')\n\tReturn 0\nEndIf\n\nIf Not ThisForm.poDataMgr.Update('crSigPrLii')\n\t=MessageBox('Favor Reini... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Private pDtI, pDtF, pTip, pLot\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\npLot = crSigPrLit.NumLotes\n\n* Linhas Abaixo Colocadas Até Que a Classe Seja Corrigida, Depois Trocar Por .Update()\nIf (ThisForm.poDataMgr.SqlExecute('Delete From SigPrLit Where NumLotes = ?pLot And Tipos = ?pTip', '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão...')\n\tReturn 0\nEndIf\n\nIf (ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "Private pDtI, pDtF, pTip, pLot\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\npLot = crSigPrLit.NumLotes\n\n* Linhas Abaixo Colocadas Até Que a Classe Seja Corrigida, Depois Trocar Por .Update()\nIf (ThisForm.poDataMgr.SqlExecute('Delete From SigPrLit Where NumLotes = ?pLot And Tipos = ?pTip', '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão...')\n\tReturn 0\nEndIf\n\nIf Not This... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "Private pDtI, pDtF, pTip\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\n\n=DoDefault()\n\nThisForm.LockScreen = .t.\n\nSelect crSigPrLit\nIndex On NumLotes Tag NumLotes\nIf (Reccount('crProcurar') > 0)\n\tSelect crProcurar\n\tScan\n\t\tlcChv = crProcurar.NumLotes\n\t\tIf Not Seek(lcChv, 'crSigPrLit', 'NumLotes')\n\t\t\tScatter MemVar Memo\n\t\t \tInsert Into crSigPrLit From MemVar\n\t\tEndIf \n\tEndScan\nEndIf\nThisForm.RetiraNulls\n\nS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Init",
+      "linhas": 96,
+      "codigoOriginal": "LParameters pTipo\n* pTipo = 1-Cheques; 2-Títulos\n\nPrivate pDtI, pDtF, pTip, pLot\n\nIf (Type('pTipo') <> 'N')\n\t=MessageBox('Parâmetro Inválido!!!', 16, 'Erro...')\n\tReturn 0\n\tThisForm.Release\nEndIf\n\nIf (pTipo = 1) && Cheques\n\tThis.Name = 'SIGOPLINC'\nElse\n\tThis.Name = 'SIGOPLINT'\nEndif\nSet Step On \nThisForm.Pagina.Lista.getDtIni.Value = Date() - 30\nThisForm.Pagina.Lista.getDtFim.Value = Date()\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fDtoSQL",
+        "metodosFormChamados": "Value = Date,HabilitaControles",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Click",
+      "linhas": 177,
+      "codigoOriginal": "LParameters Opcao\n\nPrivate pDtI, pDtF, pTip, pLot\n\npDtI = fDtoSQL(ThisForm.Pagina.Lista.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.Pagina.Lista.getDtFim.Value, '23:59:59')\npTip = ThisForm.Tipos\npLot = crSigPrLit.NumLotes\n\nThisForm.NumLotes = pLot\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf \n\nIf (This.Value = 6)\n\tDo Form SigLiPfd With Thisform.Tipos\n\tReturn 0\nEndIf\n\nSelect crSigOpIns\nLocate For Cods = crSigPrLit.Cods\n\nSelect crSigPrLit\n\nIf InList(This.Value, 3, 4)\n\tIf (fVerificaBloqueio(crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,MontaGrade,fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Click",
+      "linhas": 70,
+      "codigoOriginal": "Local lcCod, ldDat, lcCod, lnVal, llGravar, lcBuscar\n\nllGravar = .f.\nlcBuscar = ''\nSelect crSigPrLit\nlcBuscar = crSigPrLit.NumLotes\n\nIf InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(ThisForm.Pagina.Dados.getInstrucao.Value)\n\t\t=MessageBox('Instrução Inválida!!!', 0+48, '')\n\t\tThisForm.Pagina.Dados.getInstrucao.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tSelect crSigPrLii\n\tScan\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\tIf (Empty(Bancos) Or Empty(Agencias)  Or Empty(NContas) Or Empty(NCheques) Or ;\n\t\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,fBuscarCotacao",
+        "metodosFormChamados": "podatamgr ) / fBuscarCotacao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Local lnCodigo\n\nlnCod = crSigPrLit.NumLotes\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tIf (ThisForm.pcEscolha = 'INSERIR')\n\t\t=fCanUniqueKey(lnCod, 'LOTEINST' + Iif(ThisForm.Tipos = 1, 'CHQ', 'TIT'))\n\tEndIf \n\tThisForm.mAtivapagina1\n\tThisForm.Pagina.Lista.Grade.Column1.SetFocus\n\tThisForm.Pagina.Lista.Grade.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getBanco",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getBanco",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (This.Value <> This.peAntvalue)\n\tThisForm.Pagina.Lista.cntBuscaCheques.btnLocalizar.ToolTipText = 'Localizar'\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getBanco",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getAgencia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getAgencia",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (This.Value <> This.peAntvalue)\n\tThisForm.Pagina.Lista.cntBuscaCheques.btnLocalizar.ToolTipText = 'Localizar'\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getAgencia",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getConta",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (This.Value <> This.peAntvalue)\n\tThisForm.Pagina.Lista.cntBuscaCheques.btnLocalizar.ToolTipText = 'Localizar'\nEndIf \n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getConta",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCheque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCheque",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (This.Value <> This.peAntvalue)\n\tThisForm.Pagina.Lista.cntBuscaCheques.btnLocalizar.ToolTipText = 'Localizar'\nEndIf \n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCheque",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getIClis",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Return (Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getBanco.Value)   And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getAgencia.Value) And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getConta.Value)   And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getCheque.Value))\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getIClis",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Lista.cntBuscaCheques\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'IClis', This.Value, 'Seleção', 1000)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('IClis', '', 'Código')\n\t\t\tloLista.mAddColuna('RClis', '', 'Descrição')\n\t\t\tloLista.mAddColuna('Cpfs',  '', 'CPF/CNPJ')\n\t\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\t\tloLista.gridProc.SetAll('Dy... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getIClis",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCpf",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Return (Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getBanco.Value)   And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getAgencia.Value) And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getConta.Value)   And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getCheque.Value)  And ;\n\t    Empty(ThisForm.Pagina.Lista.cntBuscaCheques.getIClis.Value))\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCpf",
+      "evento": "Valid",
+      "linhas": 58,
+      "codigoOriginal": "Private pCgc\nLocal lcCgc, lcCli\n\npCgc = ''\nWith ThisForm.Pagina.Lista.cntBuscaCheques\n\tIf Not Empty(This.Value)\n\t\tlcCgc = Strtran(Strtran(Strtran(This.Value, '.', ''), '-', ''), '/', '')\n\t\tpCgc  = TransForm(lcCgc, Iif(Len(Alltrim(lcCgc))=14, '@R 99.999.999/9999-99', '@R 999.999.999-99'))\n\n\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)\n\t\t\t=MessageBox('Favor Reinici... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCpf",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.btnLocalizar",
+      "evento": "Click",
+      "linhas": 62,
+      "codigoOriginal": "Private lcBus, lnLot, lcChv\n\nWith ThisForm.Pagina.Lista.cntBuscaCheques\n\tIf Empty(.getIClis.Value)\n\t\tlcBus   = .getBanco.Value + .getAgencia.Value + .getConta.Value + .getCheque.Value\n\t\tlcQuery = 'Select * From SigPrLii Where Bancos + Agencias + NContas + NCheques = ?lcBus'\n\tElse\n\t\tlcBus   = .getIClis.Value\n\t\tlcQuery = 'Select * From SigPrLii Where IClis = ?lcBus'\n\tEndIf\n\n\tThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmp')\n\t\n\tIf Used('crTmp') And (Reccount('crTmp') > 0)\n\t\tGo Top In crTmp\n\t\tThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute,NumLotes = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.btncons",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Thisform.HabilitaControles(.t.)\nThisform.Pagina.Lista.Grade.Column1.SetFocus\nThisform.Pagina.Lista.grupo_op.Consultar.Click\nThisform.Pagina.Lista.grupo_op.Click()\nThisform.HabilitaControles(.f.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "HabilitaControles,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.Command1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.HabilitaControles(.t.)\nThisform.Pagina.Lista.Grade.Column1.SetFocus\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "HabilitaControles",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.getTitulo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.getTitulo",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (This.Value <> This.peAntvalue)\n\tThisForm.Pagina.Lista.cntBuscaTitulos.btnLocalizar.ToolTipText  = 'Localizar'\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.getTitulo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.btnSair",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.HabilitaControles(.t.)\nThisform.Pagina.Lista.Grade.Column1.SetFocus\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "HabilitaControles",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.btnLocalizar",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "Private lcBus, lnLot\n\nlnLot = ThisForm.NumLotes\n\nWith ThisForm.Pagina.Lista.cntBuscaTitulos \n\tlcBus = .getTitulo.Value\n\tIf (.btnLocalizar.ToolTipText <> 'Continuar')\n\t\tThisForm.NumLotes = 0\n\tEndIf \n\n\t.btnLocalizar.ToolTipText = 'Continuar'\n\tSelect crSigPrLii\n\tlcQuery = 'Select * From SigPrLii Where Titulos = ?lcBus And NumLotes > ?lnLot'\n\n\tThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmp')\n\n\tIf Used('crTmp') And (Reccount('crTmp') > 0)\n\t\tSelect crTmp\n\t\tScan\n\t\t\tlcChv = crTmp.NumLotes\n\t\t\tIf Not Seek(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cmdImprimir",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Imprimir\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.cmdBuscar",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "Thisform.HabilitaControles(.f.)\nIf (ThisForm.Tipos = 1) && Cheques\n\tThisform.Pagina.Lista.cntBuscaCheques.getBanco.SetFocus\nElse\n\tThisform.Pagina.Lista.cntBuscaTitulos.getTitulo.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "HabilitaControles",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.getDtFim",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "NoDefault\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.getDtFim",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Lastkey() = 13) Or (Lastkey() > 47 And Lastkey() < 58) && Enter Ou Números\n\tThisForm.Selecionar\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.getDtIni",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "NoDefault\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Lista.getDtIni",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Lista.getDtFim.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters nColIndex\n\nWith ThisForm.Pagina.Dados.cntGradeTitulos\n\t.getTitulo.Refresh\n\t.getDtVencs.Refresh\n\t.getPrVencs.Refresh\n\t.getValor.Refresh\n\t.getMoeda.Refresh\n\t.getBordero.Refresh\n\t.getIClis.Refresh\n\t.getCpf.Refresh\n\t.getDConta.Refresh\n\n\tIf ThisForm.FocarBanco Or (Lastkey() = 9) Or ;\n\t  (Not InList(Lastkey(), 5, 18) And Empty(.GradeTitulos.Column1.Text1.Value))\n\t\t.getTitulo.SetFocus\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "FocarBanco Or",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getTitulo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getTitulo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getDtVencs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getDtVencs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getPrVencs",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getPrVencs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getValor",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getValor",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getMoeda",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getValor.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getMoeda",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n* Fim **************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getMoeda",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getIClis",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getValor.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getMoeda.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getBordero.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim ****************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getIClis",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'IClis', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('IClis', '', 'Código')\n\t\tloLista.mAddColuna('RClis', '', 'Descrição')\n\t\tloLista.mAddColuna('Cpfs',  '', 'CPF/CNPJ')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getIClis",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getCpf",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getValor.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getMoeda.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getBordero.Value) And ;\n\t   Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getIClis.Value) \t\t And ;\n\t   InList(Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getCpf",
+      "evento": "Valid",
+      "linhas": 59,
+      "codigoOriginal": "Private pCgc\nLocal lcCgc, lcCli\n\npCgc = ''\nWith ThisForm.Pagina.Dados.cntGradeTitulos\n\tIf Not Empty(This.Value)\n\t\tlcCgc = Strtran(Strtran(Strtran(This.Value, '.', ''), '-', ''), '/', '')\n\t\tpCgc  = TransForm(lcCgc, Iif(Len(Alltrim(lcCgc))=14, '@R 99.999.999/9999-99', '@R 999.999.999-99'))\n\n\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)\n\t\t\t=MessageBox('Favor Reinici... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getCpf",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getDConta",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getTitulo.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getValor.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getMoeda.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getBordero.Value) And ;\n\t   Empty(ThisForm.Pagina.Dados.cntGradeTitulos.getIClis.Value)       And ;\n\t   Empty(T... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getDConta",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'RClis', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('RClis', '', 'Descrição')\n\t\tloLista.mAddColuna('IClis', '', 'Código')\n\t\tloLista.mAddColuna('Cpfs',  '', 'CPF/CNPJ')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getDConta",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.cmdApagar",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Eof('crSigPrLii')\n\tDelete In crSigPrLii\n\n\tThisForm.Pagina.Dados.cntGradeTitulos.GradeTitulos.Column1.SetFocus\n\tThisForm.Pagina.Dados.cntGradeTitulos.GradeTitulos.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getBordero",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getBordero",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getLote",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If (ThisForm.pcEscolha <> 'PROCURAR')\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getUsuar",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getDsEstoque",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getCdEstoque.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getDsEstoque",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local llRetorno\n\nWith Thisform.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tllRetorno = (fAcessoContas(Usuar, .getCdGrEstoque.Value, 'D', This.Value, .getCdEstoque, .getDsEstoque))\n\t\tIf !llRetorno\n\t\t\t=MessageBox('Conta Inválida, Acesso Negado!!!', 16, '')\n\t\t\t.getCdEstoque.Value = ''\n\t\t\t.getDsEstoque.Value = ''\n\t\t\t.getCdEstoque.Refresh\n\t\t\t.getDsEstoque.Refresh\n\t\tEndif\n\t\tReturn(llRetorno)\n\tElse\n\t\t.getCdEstoque.Value = ''\n\t\t.getCdEstoque.Refresh\n\tEndIf \nEndWith\n* Fim ***********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getDsEstoque",
+      "evento": "LostFocus",
+      "linhas": 25,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf Not Empty(.getData.Value) And Not Empty(.getInstrucao.Value) And ;\n\t   Not Empty(.getCdGrEstoque.Value) And Not Empty(.getCdEstoque.Value)\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGradeCheques.Visible = .t.\n\t\tElse\n\t\t\t.cntGradeTitulos.Visible = .t.\n\t\tEndIf\n\t\t\n\t\t.getData.Enabled        = .f.\n\t\t.getInstrucao.Enabled   = .f.\n\t\t.getCdGrEstoque.Enabled = .f.\n\t\t.getCdEstoque.Enabled   = .f.\n\t\t.getDsEstoque.Enabled   = .f.\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntG... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdEstoque",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdEstoque",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local llRetorno\n\nWith Thisform.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tllRetorno = (fAcessoContas(Usuar, .getCdGrEstoque.Value, 'C', This.Value, .getCdEstoque, .getDsEstoque))\n\t\tIf Not llRetorno\n\t\t\t=MessageBox('Conta Inválida, Acesso Negado!!!', 16, '')\n\t\t\t.getCdEstoque.Value = ''\n\t\t\t.getDsEstoque.Value = ''\n\t\t\t.getCdEstoque.Refresh\n\t\t\t.getDsEstoque.Refresh\n\t\tEndIf \n\t\tReturn(llRetorno)\n\tElse\n\t\t.getDsEstoque.Value = ''\t\n\t\t.getDsEstoque.Refresh\n\tEndIf \nEndWith\n* Fim ******************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdEstoque",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf Not Empty(.getData.Value) And Not Empty(.getInstrucao.Value) And ;\n\t   Not Empty(.getCdGrEstoque.Value) And Not Empty(.getCdEstoque.Value)\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGradeCheques.Visible = .t.\n\t\tElse\n\t\t\t.cntGradeTitulos.Visible = .t.\n\t\tEndIf\n\t\t\n\t\t.getData.Enabled        = .f.\n\t\t.getInstrucao.Enabled   = .f.\n\t\t.getCdGrEstoque.Enabled = .f.\n\t\t.getCdEstoque.Enabled   = .f.\n\t\t.getDsEstoque.Enabled   = .f.\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdGrEstoque",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdGrEstoque",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, This)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getCdGrEstoque",
+      "evento": "LostFocus",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf Not Empty(.getData.Value) And Not Empty(.getInstrucao.Value) And ;\n\t   Not Empty(.getCdGrEstoque.Value) And Not Empty(.getCdEstoque.Value)\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGradeCheques.Visible = .t.\n\t\tElse\n\t\t\t.cntGradeTitulos.Visible = .t.\n\t\tEndIf\n\t\t\n\t\t.getData.Enabled         = .f.\n\t\t.getInstrucao.Enabled    = .f.\n\t\t.getCdGrEstoque.Enabled  = .f.\n\t\t.getCdEstoque.Enabled    = .f.\n\t\t.getDsEstoque.Enabled    = .f.\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getInstrucao",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'INSERIR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getInstrucao",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Seek(This.Value, 'crSigOpIns', 'Cods')\n\tloBrowse = CreateObject('fwBuscaSel', 'crSigOpIns', 'Cods', This.Value, 'Instruções')\n\tloBrowse.AddColuna('Cods', '', 'Código', .t., 'Cods')\n\tloBrowse.AddColuna('Descrs', '', 'Descrição')\n\tloBrowse.Show\n\tThis.Value = Iif(Lastkey()==27, '', crSigOpIns.Cods)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getInstrucao",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf Not Empty(.getData.Value) And Not Empty(.getInstrucao.Value) And ;\n\t   Not Empty(.getCdGrEstoque.Value) And Not Empty(.getCdEstoque.Value)\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGradeCheques.Visible = .t.\n\t\tElse\n\t\t\t.cntGradeTitulos.Visible = .t.\n\t\tEndif\n\n\t\t.getData.Enabled         = .f.\n\t\t.getInstrucao.Enabled    = .f.\n\t\t.getCdGrEstoque.Enabled  = .f.\n\t\t.getCdEstoque.Enabled    = .f.\n\t\t.getDsEstoque.Enabled    = .f.\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getData",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (Thisform.pcEscolha = 'INSERIR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getData",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If (fVerificaBloqueio(This.Value, ThisForm.poDatamgr) <> 0)\n\t=MessageBox('Período Bloqueado!!!', 32)\n\tThis.Value = This.peAntvalue\n\tReturn 0\nEndIf\nIf (fBloqueioPorPeriodo(This.Value, ThisForm.poDatamgr) <> 0)\n\t=MessageBox('Período Bloqueado!!!', 32)\n\tThis.Value = This.peAntvalue\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.getData",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf Not Empty(.getData.Value) And Not Empty(.getInstrucao.Value) And ;\n\t   Not Empty(.getCdGrEstoque.Value) And Not Empty(.getCdEstoque.Value)\n\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.cntGradeCheques.Visible = .t.\n\t\tElse\n\t\t\t.cntGradeTitulos.Visible = .t.\n\t\tEndIf\n\t\t\n\t\t.getData.Enabled         = .f.\n\t\t.getInstrucao.Enabled    = .f.\n\t\t.getCdGrEstoque.Enabled  = .f.\n\t\t.getCdEstoque.Enabled    = .f.\n\t\t.getDsEstoque.Enabled    = .f.\n\t\tIf (ThisForm.Tipos = 1) && Cheques\n\t\t\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getBanco",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getBanco",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getAgencia",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim ********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getAgencia",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getConta",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n       InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim ********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getConta",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ValidaCheque\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCheque",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim ********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCheque",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getDtVencs",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim ********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getDtVencs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getPrVencs",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getPrVencs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getValor",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getValor",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getMoeda",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   InList(Thisform.pcEscolha, 'INSERIR',... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getMoeda",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n* Fim ****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getMoeda",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getIClis",
+      "evento": "When",
+      "linhas": 13,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   Not Emp... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getIClis",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'IClis', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('IClis', '', 'Código')\n\t\tloLista.mAddColuna('RClis', '', 'Descrição')\n\t\tloLista.mAddColuna('Cpfs',  '', 'CPF/CNPJ')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getIClis",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCpf",
+      "evento": "When",
+      "linhas": 14,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   Not Emp... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCpf",
+      "evento": "Valid",
+      "linhas": 59,
+      "codigoOriginal": "Private pCgc\nLocal lcCgc, lcCli\n\npCgc = ''\nWith ThisForm.Pagina.Dados.cntGradeCheques\n\tIf Not Empty(This.Value)\n\t\tlcCgc = Strtran(Strtran(Strtran(This.Value, '.', ''), '-', ''), '/', '')\n\t\tpCgc  = TransForm(lcCgc, Iif(Len(Alltrim(lcCgc))=14, '@R 99.999.999/9999-99', '@R 999.999.999-99'))\n\n\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)\n\t\t\t=MessageBox('Favor Reinici... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCpf",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ValidaCheque\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getDConta",
+      "evento": "When",
+      "linhas": 15,
+      "codigoOriginal": "This.peAntvalue = This.Value\n\nReturn Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   Not Emp... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getDConta",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'RClis', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('RClis', '', 'Descrição')\n\t\tloLista.mAddColuna('IClis', '', 'Código')\n\t\tloLista.mAddColuna('Cpfs',  '', 'CPF/CNPJ')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getDConta",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ValidaCheque\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "Lparameters nColIndex\n\nWith ThisForm.Pagina.Dados.cntGradeCheques\n\t.getBanco.Refresh\n\t.getAgencia.Refresh\n\t.getConta.Refresh\n\t.getCheque.Refresh\n\t.getDtVencs.Refresh\n\t.getPrVencs.Refresh\n\t.getValor.Refresh\n\t.getMoeda.Refresh\n\t.getBordero.Refresh\n\t.getIClis.Refresh\n\t.getCpf.Refresh\n\t.getDConta.Refresh\n\n\tIf ThisForm.FocarBanco Or (Lastkey() = 9) Or ;\n\t  (Not InList(Lastkey(), 5, 18) And Empty(.GradeCheques.Column1.Text1.Value))\n\t\t.getBanco.SetFocus\n\tEndIf \nEndWith\n* Fim ***************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "FocarBanco Or",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.GradeCheques.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.cmdApagar",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Eof('crSigPrLii')\n\tDelete In crSigPrLii\n\n\tThisForm.Pagina.Dados.cntGradeCheques.GradeCheques.Column1.SetFocus\n\tThisForm.Pagina.Dados.cntGradeCheques.GradeCheques.Refresh\nEndIf \n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getBordero",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Return Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getBanco.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getAgencia.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getConta.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getCheque.Value)  And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getDtVencs.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGradeCheques.getValor.Value)   And ;\n\t   Not Empty(ThisForm.Pagina.Dados.cntGr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getBordero",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaCheque",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "Update crSigPrLit Set Datas = Ctod('') Where IsNull(Datas)",
+      "tabelas": "crSigPrLit",
+      "colunas": "Datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "Update crSigPrLit Set Obs   = '' Where IsNull(Obs)",
+      "tabelas": "crSigPrLit",
+      "colunas": "Obs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Valid",
+      "queryOriginal": "\tSelect Tipos ; \t  From crSigPrLii ; \t Where Empty(Bancos) Or Empty(Agencias) Or Empty(NContas) Or Empty(NCheques) ; \t  Into Cursor crBrancos",
+      "tabelas": "crSigPrLii",
+      "colunas": "crBrancos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Valid",
+      "queryOriginal": "\tSelect Bancos, Agencias, NContas, NCheques ; \t  From crSigPrLii ; \t Where Bancos + Agencias + NContas + NCheques = lcChq And ; \t \t   Recno() <> ln... [TRUNCADO]",
+      "tabelas": "crSigPrLii",
+      "colunas": "Bancos,Agencias,NContas,NCheques,lcChq,Recno",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "\tThisForm.poDataMgr.SqlExecute('Select * From SigPrLit Where NumLotes = ?lnLot And Tipos = ?lnTip', 'crTmp')",
+      "tabelas": "SigPrLit",
+      "colunas": "NumLotes,Tipos,crTmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "\t\t\t \tInsert Into crProcurar From MemVar",
+      "tabelas": "crProcurar",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SqlExecute('Delete From SigPrLit Where NumLotes = ?pLot And Tipos = ?pTip', '') < 1)",
+      "tabelas": "SigPrLit",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SqlExecute('Delete From SigPrLit Where NumLotes = ?pLot And Tipos = ?pTip', '') < 1)",
+      "tabelas": "SigPrLit",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Procedure",
+      "queryOriginal": "\t\t \tInsert Into crSigPrLit From MemVar",
+      "tabelas": "crSigPrLit",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.getCpf.Valid",
+      "queryOriginal": "\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Cpfs,Rclis,Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.btnLocalizar.Click",
+      "queryOriginal": "\t\tlcQuery = 'Select * From SigPrLii Where Bancos + Agencias + NContas + NCheques = ?lcBus'",
+      "tabelas": "SigPrLii",
+      "colunas": "Bancos,Agencias,NContas,NCheques",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Lista.cntBuscaCheques.btnLocalizar.Click",
+      "queryOriginal": "\t\tlcQuery = 'Select * From SigPrLii Where IClis = ?lcBus'",
+      "tabelas": "SigPrLii",
+      "colunas": "IClis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Lista.cntBuscaTitulos.btnLocalizar.Click",
+      "queryOriginal": "\tlcQuery = 'Select * From SigPrLii Where Titulos = ?lcBus And NumLotes > ?lnLot'",
+      "tabelas": "SigPrLii",
+      "colunas": "Titulos,NumLotes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Dados.cntGradeTitulos.getCpf.Valid",
+      "queryOriginal": "\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Cpfs,Rclis,Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPLIN.Pagina.Dados.cntGradeCheques.getCpf.Valid",
+      "queryOriginal": "\t\tlcQuery = 'Select Iclis, Cpfs, Rclis, Grupos From SigCdCli Where Cpfs = ?pCgc Order By Iclis, Cpfs, Rclis, Grupos'",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Cpfs,Rclis,Grupos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigPrLit", "crSigPrLii", "SigPrLit", "crProcurar", "SigCdCli", "SigPrLii"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete for **FormSigOpImp / SigOpImpBO**. Summary of what was added:
+
+**Form (`FormSigOpImp.prg`)**
+- `ConfigurarCamposImpostosParte2()`: the remaining 8 tax fields (BC Imps, PIS, COFINS, II, ISS, IRRF, INSS, CSSL) + their 8 labels, positions/masks transcribed from the SCX dump.
+- `ConfigurarLookupsFiscais()`: the 4 lookup fields (Classifica├º├úo Fiscal code/desc, CFOP code/desc) with full `BINDEVENT` wiring (`GotFocus`/`LostFocus`, never `KeyPress` ÔÇö regra #47).
+- Complete lookup implementation: `ValidarClFiscalCodigo/Descricao`, `ValidarCfopCodigo/Descricao` (reentrancy-guarded wrappers + `*Exec()` bodies per regra #47), `ResolverClassificacaoFiscal`/`ResolverCfop`, `AplicarClassificacaoFiscalEncontrada`/`AplicarCfopEncontrado`, and `AbrirLookupClFiscal`/`AbrirLookupCfop` using the canonical `FormBuscaAuxiliar` pattern (regra #37: `Show()` only when no exact match; assignment only under `this_lSelecionou`).
+
+**BO (`SigOpImpBO.prg`)**
+- `BuscarClassificacaoFiscal` / `AplicarAliquotaIcmsAoCursor` / `AtualizarClassificacaoFiscalProduto` ÔÇö reproduces the legacy ICMS-aliquot auto-recalc vs. the "update product's fiscal classification?" confirm branch.
+- `BuscarCfop` / `AplicarCfopSelecionado` ÔÇö reproduces the legacy tax-base rearm (tributa├º├úo flags ├ù item total) and the chained IPI/ICMS recalculation with the new CFOP's rates, literally transcribed (regra #17), including the asymmetry where IPI value is only recomputed when its rate is non-zero but ICMS is always recomputed.
+
+Verified: no duplicate `AddObject` names, balanced `PROCEDURE/ENDPROC` and `TRY/ENDTRY`, all referenced SQL columns confirmed against `docs/schema.sql`, and helper functions (`CapturarErroSQL`, `MsgConfirma`, `NVL`) exist with correct signatures.
+
+Deferred to later phases (documented in the file header): `obj_4c_CntBotoes` (Confirmar/Cancelar, which depend on the parent form's `CalcImposto`/`Atuatot`) and the dialog's initial `CarregarDoCursor`/`BOParaForm` wiring, consistent with the deferral boundaries already established in Fases 3ÔÇô5.

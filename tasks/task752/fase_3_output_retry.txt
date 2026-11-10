@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGOPins.prg` criado (415 linhas, 17.5 KB).
+
+**Por que a tentativa anterior falhou:** o Claude CLI abortou num aviso de regra de permiss├úo e **nenhum arquivo foi gerado** ÔÇö o log mostra `Exit Code: 0` e "SUCESSO" com output de 2419 bytes que era a pr├│pria mensagem de erro. N├úo havia c├│digo errado para corrigir.
+
+**Decis├úo de arquitetura:** o SIGOPINS legado ├® um **di├ílogo modal FLAT** ÔÇö raiz `Class: form` gen├®rico, **zero PageFrame**, controles pendurados direto no form. N├úo inventei `pgf_4c_`/Page1/Page2 (violaria o PILAR 1 e a regra "NUNCA inventar"); o gate da Fase 3 j├í tem ramo FLAT para isso e passa por ele (`temEstruturaFlat=True`, `temEstruturaPaginada=False`).
+
+**Entregue:** propriedades visuais transcritas do dump; `Init` com os 4 par├ómetros opcionais do legado (`PCOUNT()` distingue ausente de vazio ÔÇö lista vazia ainda ├® modo FINALIDADES); `InicializarForm` instanciando `SIGOPinsBO`; `cnt_4c_Sombra` + os 2 labels; o CommandGroup; `AplicarTitulo` via `ObterTituloDialogo()` do BO; `TornarControlesVisiveis`; `Destroy`.
+
+**Dois pontos que exigiram desvio deliberado:**
+- **`cmg_4c_Botoes`, n├úo `obj_4c_CntBotoes`** como mandava o `mapeamento.json`. O `obj_4c_` vem do prefixo gen├®rico que o GeradorMapeamento usa para tipo n├úo reconhecido, e **reprovaria a Fase 4** (o ramo FLAT exige `cmg_4c_`|`cmd_4c_`). Corrigi o JSON junto. Isso aconteceu ontem no task750.
+- **`DataSession = 1` ├® contrato, n├úo default copiado:** o di├ílogo l├¬/grava nos cursores do form *chamador* (`crSigOpFnl`, `TprMvCab`, `crTpmMvItn`); com datasession privada eles ficariam invis├¡veis. Documentei no arquivo, e o `Destroy` fecha s├│ os cursores pr├│prios.
+
+**Verifica├º├úo ÔÇö o que ficou provado:**
+- **Compila├º├úo limpa**, com controle negativo obrigat├│rio: o smoke test falhou (`exit=0`, `.FXP` presente, sem arquivo de sa├¡da ÔåÆ VFP compila mas n├úo executa nesta sess├úo), ent├úo usei a variante `-T <form.prg>`: `.FXP` gerado, `.ERR` ausente. Uma c├│pia com `PUBLIC PROCEDURE` (regra #9.1) produziu `.ERR` apontando **s├│** as 3 linhas acrescentadas ÔÇö prova de que o detector funciona *e* que as 415 linhas est├úo limpas.
+- `Test-CompletudeCodigo` real (extra├¡do por AST, **sem** dot-source ÔÇö isso dispararia uma migra├º├úo): sem TODO/stub/procedure vazia.
+- Zero acentos literais, zero `RETURN` em TRY, TRY/ENDTRY balanceado, CATCH reporta erro, todo nome chamado resolve, e `ObterTituloDialogo` + as 5 properties de cursor do BO s├úo alcan├º├íveis de fora (regra #51).
+- Imagem e caminho conferidos: `Framework/imagens/new_background.jpg` existe, via `gc_4c_CaminhoFramework`.
+
+**N├úo provado:** instancia├º├úo/runtime ÔÇö o VFP n├úo executa nesta sess├úo (o smoke test reprovou). `.FXP` foi apagado para o pipeline n├úo rodar c├│digo velho.
+
+Tamb├®m corrigi duas colis├Áes reais no `mapeamento.json` que gerariam falsos "DIFEREN├çA" na valida├º├úo de UI: ambas as Columns apontavam para `Page_4c_1` e ambos os Headers para `obj_4c_Header1`, objeto que n├úo existe. Ficaram `Column1`/`Column2`/`Header1` ÔÇö confirmei no `ComparadorUI.prg` que a resolu├º├úo ├® por segmento, logo os dois `Header1` resolvem para caminhos distintos.
+
+Fora do escopo desta fase, para a Fase 4: faltam a grade (`grd_4c_Dados`) e a carga ÔÇö os predicados `grade` e `carga` do gate da Fase 4 est├úo em `False`; `botoes` j├í est├í satisfeito.

@@ -1,0 +1,893 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopexi.SCX
+* Data/Hora: 05/11/2026 17:42:40
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPEXI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPEXI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPEXI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPEXI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Say7
+  Parent: SIGOPEXI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getBarras
+  Parent: SIGOPEXI
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdDevols
+  Parent: SIGOPEXI
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPEXI.grdDevols.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEXI.grdDevols.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEXI.grdDevols.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEXI.grdDevols.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEXI.grdDevols.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEXI.grdDevols.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPEXI.grdDevols.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPEXI.grdDevols.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGOPEXI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: gettotitens
+  Parent: SIGOPEXI
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPEXI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: gettotven
+  Parent: SIGOPEXI
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPEXI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: confirmar
+  Parent: SIGOPEXI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCancelar
+  Parent: SIGOPEXI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Devolução de Produtos"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  op_escolha = .F.
+  parentform = .F.
+  Name = "SIGOPEXI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1004
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.Say7
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "\<Barra :"
+  Left = 16
+  Top = 87
+  TabIndex = 1
+  ForeColor = 0,0,0
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.getBarras
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K!"
+  Height = 24
+  InputMask = "99999999999999"
+  Left = 61
+  TabIndex = 2
+  Top = 84
+  Width = 108
+  BackColor = 234,255,234
+  Name = "getBarras"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Courier New"
+  AllowAddNew = .F.
+  AllowHeaderSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 452
+  Left = 9
+  ScrollBars = 2
+  TabIndex = 12
+  ToolTipText = "Grade de Produtos Para Devolução"
+  Top = 112
+  Visible = .T.
+  Width = 809
+  Name = "grdDevols"
+  Column1.FontName = "Courier New"
+  Column1.ControlSource = ""
+  Column1.Width = 31
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.InputMask = "9999"
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 122
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "Column3"
+  Column3.FontName = "Courier New"
+  Column3.ColumnOrder = 4
+  Column3.ControlSource = ""
+  Column3.Width = 513
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.Name = "Column4"
+  Column4.FontName = "Courier New"
+  Column4.ColumnOrder = 2
+  Column4.ControlSource = ""
+  Column4.Width = 108
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .T.
+  Column4.InputMask = "99999999999999"
+  Column4.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Item"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column1.Text1
+------------------------------------------------------------
+  Margin = 0
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column3.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column3.Text1
+------------------------------------------------------------
+  ReadOnly = .T.
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column4.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column4.Text1
+------------------------------------------------------------
+  Height = 23
+  Left = 35
+  Top = 19
+  Width = 100
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Barras"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.grdDevols.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  BorderStyle = 0
+  InputMask = "99999999"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 16
+  Caption = "Devolução de Produtos"
+  Left = 370
+  Top = 24
+  Visible = .F.
+  TabIndex = 1
+  ForeColor = 0,0,0
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.gettotitens
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K!"
+  Height = 23
+  Left = 89
+  TabIndex = 2
+  Top = 569
+  Width = 66
+  BackColor = 234,255,234
+  Name = "gettotitens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Total itens:"
+  Left = 22
+  Top = 574
+  TabIndex = 1
+  ForeColor = 0,0,0
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.gettotven
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K!"
+  Height = 23
+  Left = 249
+  TabIndex = 2
+  Top = 569
+  Width = 80
+  BackColor = 234,255,234
+  Name = "gettotven"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Total valor:"
+  Left = 176
+  Top = 574
+  TabIndex = 1
+  ForeColor = 0,0,0
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.confirmar
+------------------------------------------------------------
+  Top = 3
+  Left = 848
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirmar"
+  Name = "confirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPEXI.btnCancelar
+------------------------------------------------------------
+  Top = 3
+  Left = 923
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Retornar"
+  Name = "btnCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPEXI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS poform, pnDatSes
+
+Set DataSession to pnDatSes
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+thisform.parentform = poform
+
+If Used([crSigOpExI])
+	IF TYPE('crSigOpExI.CItens') = 'U'
+		SELECT * , 0000000000 as citens, SPACE(50) as dpros from crSigOpeXi into cursor crSigOpeXi readwrite
+	ENDIF
+	ThisForm.grdDevols.RecordSource = [crSigOpExI]
+	ThisForm.grdDevols.Column1.ControlSource = [crSigOpExI.CItens]
+	ThisForm.grdDevols.Column2.ControlSource = [crSigOpExI.CBars]
+	ThisForm.grdDevols.Column3.ControlSource = [crSigOpExI.CPros]
+	ThisForm.grdDevols.Column4.ControlSource = [crSigOpExI.DPros]
+	SELECT crSigOpExI
+	SUM valors to lntotven
+	COUNT to lnitn
+	thisform.gettotven.value = TRANSFORM(lntotven, '999,999.99')
+	thisform.gettotitens.Value = lnItn
+
+EndIf
+Set Confirm on
+
+thisform.op_escolha = poform.op_escolha
+
+thisform.Refresh()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.getBarras
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lnBar = This.Value
+	Select Recno() as NRec, CPros, BlqAlts, qtds, units From crTpmMvItn Where CodBarras = lnBar Into Cursor csProcura1
+	Go Top In csProcura1
+	If Not Eof([csProcura1])
+		If csProcura1.BlqAlts
+			MessageBox('Código do Produto não pode ser Alterado',0+48,'Operação com Baixa Parcial')
+			RETURN .f.
+		ENDIF
+	
+		Select Recno() as NRec From crSigOpExI Where CBars = lnBar Into Cursor csProcura
+		Go Top In csProcura
+		If Eof([csProcura])
+			lnItn = 0
+			Select crSigOpExI
+			Scan
+				lnItn = lnItn + 1
+				Replace CItens With lnItn In crSigOpExI
+			EndScan
+			lnItn = lnItn + 1
+			
+			thisform.parentform.parentform.podatamgr.sqlexecute('select dpros from SigCdPro where cpros = ?csProcura1.CPros','LocalPro')
+			
+			Insert Into crSigOpExI (EmpDopNums, Datas, pkChaves, CBars, CPros, dpros, valors, CItens) ;
+						    Values (TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes,6), ;
+						    		Datetime(), fUniqueIds(), lnBar, csProcura1.CPros, LocalPro.dpros, csProcura1.qtds * csProcura1.units, lnItn)
+			This.Value = 0
+			Use In csProcura1
+			Use In csProcura
+			
+			thisform.gettotitens.Value = lnItn
+			SELECT crSigOpExI
+			SUM valors to lntotven
+			thisform.gettotven.value = TRANSFORM(lntotven, '999,999.99')
+			
+			thisform.grdDevols.Refresh()
+			Return .f.
+		ENDIF
+	ELSE
+		MESSAGEBOX('Item inexistente nessa operação',64,'Aviso')
+		this.Value = 0
+		RETURN .f.
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.grdDevols.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.grdDevols.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.grdDevols.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.grdDevols.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.gettotitens
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.gettotven
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.confirmar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT crSigOpeXi
+SCAN
+	Select crTpmMvItn 
+	LOCATE for CodBarras = crSigOpeXi.cbars
+	IF !EOF()
+		If crTpmMvItn.BlqAlts
+			MessageBox('Código do Produto não pode ser Alterado',0+48,'Operação com Baixa Parcial')
+		Else
+			If !IsEmpty(crTpmMvItn.cpros)
+				_CItem = crTpmMvItn.CItens
+				_Cpro  = crTpmMvItn.Cpros
+				_Qtde  = crTpmMvItn.Qtds
+				_CarregaItens = InList( CrSigCdOpe.ItAutos,1,3,4,5 ) And ThisForm.op_escolha = 'INSERIR'
+				_ChecaQtde    = InList( CrSigCdOpe.ChkQtdss,1,3,4 )
+				_ChecaOper    = ( Empty(CrSigOpCdc.ChkOpers) Or crTpmMvItn.Opers = CrSigOpCdc.ChkOpers )
+
+				lnReg = Recno()
+				llDel = .f.
+				
+				Locate For .f.
+				If Between(lnReg,1,Reccount('crTpmMvItn'))
+					Go lnReg
+					Delete
+					Delete For cItem2 = _cItem
+					llDel = .t.
+				EndIf
+
+				If llDel
+					Select TmpOperacao
+					_SubNiv = .f.
+					Scan for !IsEmpty( Codigos )
+						_SubNiv = .t.
+					Endscan
+
+					If _SubNiv And _ChecaQtde And _ChecaOper And Not _CarregaItens 
+						Select xBaixa
+						If Seek( _Cpro )
+							Replace xbaixa.qtbaixas With xbaixa.qtbaixas - _Qtde in xBaixa
+						Endif
+					Endif
+
+					Select crTpmMvIts
+					Set Order to
+					Set Order to CItens
+					Seek ( _CItem )
+					Do While Not Eof('crTpmMvIts') And crTpmMvIts.CItens = _CItem
+						Delete 
+						Seek ( _CItem )
+					EndDo
+
+					If CrSigCdOpe.CadProds = 3
+						lcSql = [Select Cpros From SigMvItn Where Cpros = ']+_cPRO+[' And EmpDopNums <> ']+TprMvCab.EmpdopNums+[']
+						ThisForm.parentform.parentForm.PodataMgr.SqlExecute(lcSql,'LocEesti')
+
+						lcSql = [Select Cpros From SigMvHst  Where Cpros = ']+_cPRO+[' And EmpDopNums <> ']+TprMvCab.EmpdopNums+[']
+						ThisForm.parentForm.parentform.PodataMgr.SqlExecute(lcSql,'LocHis')
+						
+						lcSql = [Select Mats From SigPrCpo Where Mats = ']+_cPro+[']
+						ThisForm.parentForm.parentform.PodataMgr.SqlExecute(lcSql,'LocCompo')
+
+						If Reccount('LocEesti') = 0	And Reccount('LocHis') = 0 And Reccount('LocCompo') = 0
+							If MessageBox('Deseja Excluir O Cadastro de Produto ? ',4+16+256,'') = 6
+								=ThisForm.parentform.ExcluirPro(_cPro)
+							Endif
+						Endif
+					Endif
+
+				Endif
+			Else
+				Select [ ] as Agrupar,Count(1) As Total From crTpmMvItn Where IsEmpty(CPros) Into Cursor xApaga Group by 1
+				If xApaga.Total > 1
+					Select crTpmMvItn
+					Delete
+				Else
+					Thisform.parentform.ApaIte()
+				EndIf
+				If Used('xApaga')
+					Use In xApaga
+				Endif
+			Endif
+
+			Select crTpmMvItn
+			Set Order To Citens
+			Go top
+			If Eof()
+				Insert Into crTpmMvItn( Emps, Dopes, Numes, CItens) ;
+					Values ( TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, 1 )
+			Endif
+			Cont = 0
+			Scan
+				Cont = Cont + 1
+				Select crTpmMvIts
+				Set Order To
+				Set Order to CItens
+				Seek crTpmMvItn.CItens
+				Scan While CItens = crTpmMvItn.CItens
+					Replace CItens With Cont
+				Endscan
+				Select crTpmMvItn
+				_cIt = CItens
+				_RecNo2 = Recno()
+				Replace cItem2 With Cont For cItem2 = _cit
+				Go _RecNo2
+				Replace CItens With Cont
+			Endscan
+
+			Thisform.parentform.CItem = Cont
+
+			Select crTpmMvItn
+			Set Order To 
+			Goto Bottom
+			If !Eof()
+				Select crTpmMvIts
+				Set Order to CItens
+				Set Key to crTpmMvItn.CItens
+			EndIf
+		Endif
+
+		Select crTpmMvItn
+		With Thisform.parentform.fwgrade
+			If .Visible
+				.Refresh
+				.Produto.SetFocus
+			EndIf
+		EndWith
+
+		With Thisform.parentform.fwgradeR
+			If .Visible
+				.Refresh
+				.Produto.SetFocus
+			EndIf
+		EndWith	
+	ENDIF
+ENDSCAN
+
+Set Confirm off
+thisform.Release()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPEXI.btnCancelar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT crSigOpExI
+Zap
+
+Set Confirm off
+
+thisform.Release()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPEXI
+RESERVED3 (ClassInfo): op_escolha
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

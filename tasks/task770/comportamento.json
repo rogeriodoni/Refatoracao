@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPNCH",
+      "evento": "Init",
+      "linhas": 54,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate lcNew, lcChave\n\nlcChave = NULL\n\nThisform.nAntChqVal = 0\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpFp','FPags','crSigOpFp','FPags',.f.)\n\t\t.AddCursor('SigSySeq','Valor','crA... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNCH",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csCheques ( FPags C(12), Bancos C(3), Agencias C(4), NContas C(10), ;\n\t\t\t\t\t\t  Cheques N(6), Marcas L(1) )\nIndex On Fpags Tag FPags",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Número do Cheque Inválido.', 48, '')\n\tThis.Value = Thisform.nAntChqVal\n\tReturn 0\nEndIf\n\nIf This.Value # Thisform.nAntChqVal\n\tSelect csCheques\n\tReplace csCheques.Marcas With .T.\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.nAntChqVal = This.Value\n\nReturn( .T. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.btnAlterar",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "Local lcChave\n\nSelect csCheques\nScan For Marcas\n\tIf !IsEmpty(csCheques.Cheques)\n\t\tlcChave = PADR(csCheques.Bancos + csCheques.Agencias + csCheques.NContas,25)\n\t\tSELECT crAutoriza\n\t\tLOCATE FOR valor = lcChave\n\t\tIf ! EOF()\n\t\t\tDo While !Rlock()\n\t\t\tEnddo\n\t\t\tReplace Conteudo With csCheques.Cheques - 1\n\t\t\tUnlock\n\t\tElse\n\t\t\tInsert Into crAutoriza (Valor, Conteudo) Values (lcChave, csCheques.Cheques-1)\n\t\tEndif\n\tEndif\n\tSelect csCheques\nEndScan\n\nSELECT crAutoriza\n\nLocal m.lnErro1\n\nm.lnErro1 = ThisForm.poDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNCH.btnCancelar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPNCH.btnAlterar.Click",
+      "queryOriginal": "\t\t\tInsert Into crAutoriza (Valor, Conteudo) Values (lcChave, csCheques.Cheques-1)",
+      "tabelas": "crAutoriza",
+      "colunas": "Valor,Conteudo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crAutoriza"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

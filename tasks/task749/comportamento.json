@@ -1,0 +1,854 @@
+{
+  "resumo": {
+    "totalMetodos": 52,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 11,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt", "fGravarLog"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIMP",
+      "evento": "Init",
+      "linhas": 73,
+      "codigoOriginal": "LParameters pForm, pnDatSes, pConexao\n\nSet DataSession to pnDatSes\npForm.Enabled = .F.\nThisForm.Parentform = pform\nThisForm.PodataMgr = pconexao\nThisForm.maniPulou = .f.\n\nThisForm.Left = ThisForm.ParentForm.Left\nThisForm.Top  = ThisForm.ParentForm.Top  + 346\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.get_Produto.Value = crTpmMvItn.Cpros\n\t.Get_Total.Value   = crTpmMvItn.Totas\n\t.Get_pIPI.Value    = crTpmMvItn.Al... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_Produto,Get_Total,Get_pIPI,Get_ipi,Get_picm,Get_icms,Get_icmss,Get_bIPI,Get_BIcm,Get_bIcms,Get_Descr,get_CCfop,get_DCfop",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_Produto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_icmss",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nRETURN .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_icmss",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace Icmss With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_ipi",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn (crTpmMvItn.BcIpis > 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_ipi",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace ValIpis With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_ipi",
+      "evento": "LostFocus",
+      "linhas": 13,
+      "codigoOriginal": "Local lnCItem\nlncItem = crTpmMvItn.cItens\nThisForm.ParentForm.ParentForm.CalcImposto(.f.,crTpmMvItn.Citens,.t.)\nSelect crTpmMvItn\nLocate For cItens = lncItem\nThisForm.Get_BICM.Value = crTpmMvItn.BaseIcms\nThisForm.Get_icms.Value = crTpmMvItn.Icms\nThisForm.Get_picm.Value = crTpmMvItn.AliqIcms\nThisForm.Get_BICM.Refresh\nThisForm.Get_icms.Refresh\nThisForm.Get_picm.Refresh\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcImposto",
+        "controlesReferenciados": "Get_BICM,Get_icms,Get_picm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_picm",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_picm",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local xValor\n\nReplace AliqIcms With This.Value in crTpmMvItn\nxValor = ( crTpmMvItn.BaseIcms * This.Value / 100 )\nReplace crTpmMvItn.Icms With xValor in crTpmMvItn\nThisForm.Get_icms.Value = xValor\n\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_icms",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_icms",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn .t. ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_icms",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace Icms With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BIPI",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BIPI",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "Replace BcIpis With This.Value in crTpmMvItn\nIf This.Value <> 0 And This.Value <> This.peantvalue\n\txValor = ( crTpmMvItn.BcIpis * crTpmMvItn.Aliqs / 100 )\n\tReplace crTpmMvItn.ValIpis With xValor in crTpmMvItn\n\tThisForm.Get_ipi.Value = xValor\nEndif\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ipi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BIPI",
+      "evento": "LostFocus",
+      "linhas": 12,
+      "codigoOriginal": "Local lnCItem\nlncItem = crTpmMvItn.cItens\nThisForm.ParentForm.ParentForm.CalcImposto(.f.,crTpmMvItn.Citens,.t.)\nSelect crTpmMvItn\nLocate For cItens = lncItem\nThisForm.Get_BICM.Value = crTpmMvItn.BaseIcms\nThisForm.Get_icms.Value = crTpmMvItn.Icms\nThisForm.Get_picm.Value = crTpmMvItn.AliqIcms\nThisForm.Get_BICM.Refresh\nThisForm.Get_icms.Refresh\nThisForm.Get_picm.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcImposto",
+        "controlesReferenciados": "Get_BICM,Get_icms,Get_picm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BICMS",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BICMS",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "Replace crTpmMvItn.BcIcmsS With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getClFiscals",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getClFiscals",
+      "evento": "Valid",
+      "linhas": 46,
+      "codigoOriginal": "Local loLista, xValor\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdClf', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.mAddColuna('BICMS', '999.99', 'ICMS')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getClFiscals.Value  = CrListaRemota.Codigos\n\tThisForm.getDClFiscals.Value = CrListaRemot... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_PIcm,Get_icms",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getClFiscals",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_Total",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_pIPI",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_pIPI",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "Replace Aliqs With This.Value in crTpmMvItn\nIf This.Value <> 0\n\txValor = ( crTpmMvItn.BcIpis * This.Value / 100 )\n\tReplace crTpmMvItn.ValIpis With xValor in crTpmMvItn\n\tThisForm.Get_ipi.Value = xValor\nEndIf\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ipi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BICM",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_BICM",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local xValor\nReplace BaseIcms With This.Value in crTpmMvItn\nIf This.Value <> 0 And This.Value <> This.peantvalue\n\txValor = ( crTpmMvItn.BaseIcms * crTpmMvItn.AliqIcms / 100 )\n\tReplace crTpmMvItn.Icms With xValor in crTpmMvItn\n\tThisForm.Get_icms.Value = xValor\nEndif\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_icms",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.Get_descr",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getDClFiscals",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getClFiscals.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getDClFiscals",
+      "evento": "Valid",
+      "linhas": 42,
+      "codigoOriginal": "Local loLista, xValor\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdClf', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('BICMS', '999.99', 'ICMS')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getClFiscals.Value  = CrListaRemota.Codigos\n\tThisForm.getDClFiscals.Value = CrListaRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_PIcm,Get_icms",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getDClFiscals",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 40)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.cntBotoes",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Local xcItem\nxcItem = crTpmMvItn.cItens\nReplace AltImpost With .T. in crTpmMvItn\nThisForm.ParentForm.ParentForm.Atuatot()\nThisform.ParentForm.Parentform.CalcImposto(.f.,xcItem,,.t.)\nSelect crTpmMvItn\nLocate For cItens = xcItem\nWith ThisForm\n\t.get_Produto.Value = crTpmMvItn.Cpros\n\t.Get_Total.Value   = crTpmMvItn.Totas\n\t.Get_pIPI.Value    = crTpmMvItn.Aliqs\n\t.Get_ipi.Value     = crTpmMvItn.ValIpis\n\t.Get_picm.Value    = crTpmMvItn.AliqIcms\n\t.Get_icms.Value    = crTpmMvItn.Icms\n\t.Get_icmss.Value   =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Atuatot,CalcImposto",
+        "controlesReferenciados": "get_Produto,Get_Total,Get_pIPI,Get_ipi,Get_picm,Get_icms,Get_icmss,Get_bIPI,Get_BIcm,Get_bIcms,Get_Descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.cntBotoes",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "With ThisForm \n\tIf ( (Empty(.Get_BIPI.Value) And Not Empty(.Get_Ipi.Value) ) Or ;\n\t\t\t(Empty(.Get_BIcm.Value) And Not Empty(.Get_Icms.Value) ) Or ;\n\t\t\t\t(Empty(.Get_BIcms.Value) And Not Empty(.Get_Icmss.Value) ) ) And ThisForm.Manipulou\n\n\t\tIf MessageBox('Confirma alteração de imposto, zerando a base e mantendo o imposto?',4+256,'') = 7\n\t\t\tReturn .f.\n\t\tEndif\n\tEndif\nEndWith\n\nReplace crTpmMvItn.AltImpost With .t. in crTpmMvItn\nThisForm.ParentForm.Enabled = .t.\n\nIf ThisForm.maniPulou \n\tlcTransacao = T... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_BIPI,Get_Ipi,Get_BIcm,Get_Icms,Get_BIcms,Get_Icmss",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_ccfop",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_ccfop",
+      "evento": "Valid",
+      "linhas": 50,
+      "codigoOriginal": "Local loLista, xValor\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCFO', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tThisForm.get_CCfop.Value = CrListaRemota.Codigos\n\tThisForm.get_DCfop.Value = CrListaRemota.Descricaos\n\tIf Padr(This.Tag, 10) <> Padr(This.Value, 10... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_CCfop,get_DCfop,get_bIPI,get_Total,get_bicm,get_pIPI,get_pICM",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_ccfop",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_dcfop",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_ccfop.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ccfop",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_dcfop",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista, xValor\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCFO', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_CCfop.Value = CrListaRemota.Codigos\n\tThisForm.get_DCfop.Value = CrListaRemota.Descricaos\n\t\n\tIf Padr(This.Tag, 40) <> Padr(This.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_CCfop,get_DCfop,get_pIPI,get_pICM",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.get_dcfop",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 40)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVpis",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar ***\nThis.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVpis",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace vpis With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVcof",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar ***\nThis.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVcof",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace vcofins With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVii",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar se for cfop de importacao ***\nThis.peantvalue = This.Value\nRETURN SUBSTR(crTpmMvItn.cfops,1,1) = '3'\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVii",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace taxaiis With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVBc",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar ***\nThis.peantvalue = This.Value\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVBc",
+      "evento": "Valid",
+      "linhas": 50,
+      "codigoOriginal": "LOCAL lnAli, lnBas\n\nlcConta = crsigmvnfi.clifors\nReplace Valbases With This.Value in crTpmMvItn\nIf This.Value <> 0 And This.Value <> This.peantvalue\n\t***mena 17/04/2014 - calcula impostos baseados nessa base ***\n\tlnBas = this.value\n\tlnAli = LocalCfo.aliqpis\n\tlnAli = IIF(lnAli <> 0, lnAli, VAL(SUBSTR(FSigOpFin_imp(lcConta, [], [PIS], ThisForm.PodataMgr ), 21,5)))\n\tReplace crTpmMvItn.vpis With ROUND(lnBas*lnAli/100,2) in crTpmMvItn\n\tThisForm.GetVpis.Value = crTpmMvItn.vpis\n\n\tlnAli = LocalCfo.aliqc... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVIrrf",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar se for servico ***\nThis.peantvalue = This.Value\nRETURN LocalGrp.servicos=1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVIrrf",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace irrf With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVInss",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar se for servico ***\nThis.peantvalue = This.Value\nRETURN LocalGrp.servicos=1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVInss",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace inss With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVCssl",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar se for servico ***\nThis.peantvalue = This.Value\nRETURN LocalGrp.servicos=1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVCssl",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace cssl With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVIss",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena - 14/04/2014 - permite alterar se for servico ***\nThis.peantvalue = This.Value\nRETURN LocalGrp.servicos=1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMP.getVIss",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Replace iss With This.Value in crTpmMvItn\nIf This.Value <> This.peantvalue\n\tThisForm.maniPulou = .t.\nEndif\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

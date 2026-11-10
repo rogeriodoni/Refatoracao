@@ -1,0 +1,407 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpLib.SCX
+* Data/Hora: 08/11/2026 11:02:51
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPLIB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPLIB
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPLIB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPLIB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPLIB
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say2
+  Parent: SIGOPLIB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_codigo
+  Parent: SIGOPLIB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_descr
+  Parent: SIGOPLIB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPLIB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape2
+  Parent: SIGOPLIB
+  Class: shape
+  BaseClass: shape
+
+Objeto: ok
+  Parent: SIGOPLIB
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 200
+  Width = 550
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Liberação de Peso"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPLIB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.Shape1
+------------------------------------------------------------
+  Top = 118
+  Left = 104
+  Height = 33
+  Width = 342
+  BackStyle = 0
+  BorderColor = 90,90,90
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.Say2
+------------------------------------------------------------
+  Caption = "Código : "
+  Left = 109
+  Top = 127
+  TabIndex = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.get_codigo
+------------------------------------------------------------
+  Century = 2
+  Alignment = 3
+  InputMask = "!!!!!!!!!!"
+  Left = 155
+  TabIndex = 3
+  Top = 123
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.get_descr
+------------------------------------------------------------
+  Height = 23
+  Left = 238
+  TabIndex = 4
+  Top = 123
+  Visible = .T.
+  Width = 202
+  ForeColor = 0,0,0
+  Name = "get_descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  WordWrap = .F.
+  Caption = "Informe o Tipo de Liberação para prosseguir : "
+  Height = 15
+  Left = 106
+  Top = 99
+  Width = 261
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.Shape2
+------------------------------------------------------------
+  Top = 7
+  Left = 444
+  Height = 29
+  Width = 12
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIB.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 475
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<Ok"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPLIB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Tipo
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+
+Thisform.poDatamgr = CreateObject('fSqlConector','SigOpLib')
+ThisForm.Tipo = Iif(Type("_Tipo") # 'N', 0 , _Tipo )
+ThisForm.Get_codigo.Value = xNensi.CodnConfs
+ThisForm.Retorno = Space(10)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDatamgr.Release
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return ThisForm.Retorno
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIB.get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	lcSql = [Select * From SigCdNcf Where (Emps = ']+_Empr+[' Or Emps = ' ') And ]+;
+			Iif(InList(Thisform.Tipo,2,3,4), [Tipos = ]+Str(ThisForm.Tipo),;
+			[Tipos <= ]+Str(Thisform.Tipo) )
+	ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')
+	Select CrSigCdNcf
+	Index On Cods  tag Cods
+	Index On Descs tag descs
+
+	If Not Seek(This.Value, 'CrSigCdNcf', 'Cods')
+		loBrowse = CreateObject('fwBuscaSel', 'CrSigCdNcf', 'Cods', This.Value, 'Tipo de Liberação')
+		loBrowse.AddColuna('Cods', '', 'Código',    .t., 'Cods')
+		loBrowse.AddColuna('Descs',  '', 'Descrição', .t., 'Descs')
+		loBrowse.Show
+	Endif
+	This.Value = CrSigCdNcf.Cods
+	If CrSigCdNcf.Fixos <> 2
+		ThisForm.Get_descr.Value = CrSigCdNcf.Descs
+		ThisForm.Retorno = CrSigCdNcf.cods + CrSigCdNcf.Descs
+	Endif
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIB.get_descr
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	ThisForm.Retorno = ThisForm.Get_codigo.Value + ThisForm.get_descr.Value
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Local lcCod
+
+lcCod = ThisForm.Get_codigo.Value
+lcSql = [Select * From SigCdNcf Where cods = ']+lcCod+[']
+ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdNcf')
+
+Return (NOt Empty(lcCod) And CrSigCdNcf.Fixos = 2 )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIB.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPLIB
+RESERVED3 (ClassInfo): podatamgr
+retorno
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

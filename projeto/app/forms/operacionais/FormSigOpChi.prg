@@ -3514,8 +3514,9 @@ DEFINE CLASS FormSigOpChi AS FormBase
                 loc_oForm.Show()
             ENDIF
         CATCH TO loc_oErro
-            MsgAviso("Tela de Impress" + CHR(227) + "o de Protocolo (SigOpIbo) ainda n" + ;
-                CHR(227) + "o foi migrada.", "Indispon" + CHR(237) + "vel")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpChi.AcaoProtocoloClick (FormSigOpIbo)")
         ENDTRY
     ENDPROC
 

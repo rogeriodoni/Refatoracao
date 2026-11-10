@@ -1,0 +1,98 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpIpE.prg",
+    "timestamp":  "2026-11-07T21:44:58",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  1742,
+                          "Original":  ".Width       = 106",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_Opt_Conjunto.Width=106 menor que MAX(Buttons.Left+Width)+10 = 108. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  1804,
+                          "Original":  ".Width       = 111",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_Opt_Preco.Width=111 menor que MAX(Buttons.Left+Width)+10 = 114. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  1921,
+                          "Original":  ".Width       = 100",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_Opt_peso.Width=100 menor que MAX(Buttons.Left+Width)+10 = 108. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  2057,
+                          "Original":  ".Width       = 76",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_Opcao_imp.Width=76 menor que MAX(Buttons.Left+Width)+10 = 81. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  2262,
+                          "Original":  ".Width         = 181",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_Opt_Impressora.Width=181 menor que MAX(Buttons.Left+Width)+10 = 189. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "SQL_COLUNA_LEGADA",
+                          "Linha":  5024,
+                          "Original":  "UsuaAlts (na linha: loc_cQuery = \"SELECT TOP 1 UsuaAlts FROM SigCdPrc WHERE CPros = \" + ;)",
+                          "Corrigido":  "(WARNING) Usar \u0027usuaalts\u0027 em vez de \u0027UsuaAlts\u0027",
+                          "Descricao":  "Coluna \u0027UsuaAlts\u0027 eh nome legado CamelCase - schema real usa \u0027usuaalts\u0027"
+                      },
+                      {
+                          "Tipo":  "SQL_COLUNA_LEGADA",
+                          "Linha":  5025,
+                          "Original":  "DataAlts (na linha: EscaparSQL(TmpTmp1.Cpros) + \" ORDER BY DataAlts DESC, HoraAlts DESC\")",
+                          "Corrigido":  "(WARNING) Usar \u0027dtalts\u0027 em vez de \u0027DataAlts\u0027",
+                          "Descricao":  "Coluna \u0027DataAlts\u0027 eh nome legado CamelCase - schema real usa \u0027dtalts\u0027"
+                      },
+                      {
+                          "Tipo":  "SQL_COLUNA_LEGADA",
+                          "Linha":  5025,
+                          "Original":  "HoraAlts (na linha: EscaparSQL(TmpTmp1.Cpros) + \" ORDER BY DataAlts DESC, HoraAlts DESC\")",
+                          "Corrigido":  "(WARNING) Usar \u0027horaalts\u0027 em vez de \u0027HoraAlts\u0027",
+                          "Descricao":  "Coluna \u0027HoraAlts\u0027 eh nome legado CamelCase - schema real usa \u0027horaalts\u0027"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  4467,
+                          "Original":  "USED(\"LocalParaC\") AND NVL(LocalParaC.EtqSeps, 0) = 1))",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  2896,
+                          "Original":  "BINDEVENT(THIS.txt_4c_OcoEtiqs, \"LostFocus\", THIS, \"ValidarOcorrenciaEtiqueta\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup ValidarOcorrenciaEtiqueta. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  2900,
+                          "Original":  "BINDEVENT(THIS.txt_4c_DOcoEtiqs, \"LostFocus\", THIS, \"ValidarOcorrenciaEtiqueta\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup ValidarOcorrenciaEtiqueta. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-216-FORMAT-INPUTMASK-AUSENTE",
+                          "Linha":  0,
+                          "Original":  "(form inteiro)",
+                          "Corrigido":  "(nao mutado - o valor sai do dump, controle a controle)",
+                          "Descricao":  "Pattern #216 WARNING: o dump do legado declara 4 Format e 3 InputMask nao-vazios, mas este .prg tem 3 e 2 - faltam 1 Format e 1 InputMask. Severidade ALTA (InputMask muda o que eh digitado/gravado). O migrador descarta essas duas propriedades e o defeito so aparece na TELA: no FormCEP o CEP exibia \"07083280\" em vez de \"07083-280\" (InputMask = \"99999-999\") e os campos aceitavam minuscula onde o legado forca MAIUSCULA (Format = \"K!\"). Compila limpo, nenhum outro gate pega. NAO auto-fixado: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -\u003e objeto migrado eh HUMANO porque o PILAR 3 manda renomear (getTipoNomes -\u003e txt_4c_TipoNomes) - casar por nome nunca funciona (regras #30/#39). Conferir no dump e transcrever. Cuidado: \"Format = \u0027\u0027\" / \"InputMask = \u0027\u0027\" no dump sao override VAZIO do Form Designer, nao formatacao - ignorar. Auditoria em lote: automation\\VerificarFormatInputMask.ps1. Skill: secao 243. Origem: Erro197 (FormCEP)."
+                      }
+                  ],
+    "totalCorrecoes":  13
+}

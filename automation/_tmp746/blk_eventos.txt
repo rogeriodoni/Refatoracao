@@ -1,0 +1,42 @@
+    *--------------------------------------------------------------------------
+    * ConfigurarEventos - Liga os eventos dos controles aos metodos do form.
+    * Os handlers sao PUBLIC (sem PROTECTED): BINDEVENT com metodo PROTECTED
+    * falha em SILENCIO - o controle fica inerte e nada aparece em log (regra
+    * #3). Pelo mesmo motivo os handlers de "KeyPress" declaram os parametros
+    * do evento.
+    *
+    * Chamado DEPOIS de todos os AddObject do form (ver InicializarForm, passo
+    * 5d): BINDEVENT sobre objeto inexistente estoura no proprio bind, e
+    * txt_4c_Qtde so nasce no ConfigurarControles.
+    *
+    * Os DOIS eventos do campo de quantidade apontam para o mesmo
+    * comportamento, por caminhos diferentes de o usuario sair do campo
+    * (mouse x teclado) - ver o cabecalho de ValidarQtde. O Valid do legado NAO
+    * eh ligado direto: BINDEVENT em "Valid" de TextBox nao dispara de forma
+    * confiavel.
+    *
+    * O ComboBox cbo_4c_Get_Printer e os tres checkboxes NAO recebem evento, e
+    * isso eh fiel: o dump do legado nao tem Valid/When/LostFocus/
+    * InteractiveChange em nenhum deles. A impressora escolhida eh lida do
+    * CURSOR na hora de imprimir (SincronizarOpcoesParaBO), que eh o que o
+    * Cmd_Imprimir.Click legado faz ("lcImp = crImpreV.IDupla"), e os
+    * checkboxes sao lidos no mesmo momento.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarEventos()
+        LOCAL loc_oErro
+
+        TRY
+            BINDEVENT(THIS.obj_4c_BtnReport.Buttons(1), "Click", THIS, "CmdImprimirClick")
+            BINDEVENT(THIS.obj_4c_BtnReport.Buttons(2), "Click", THIS, "CmdSairClick")
+
+            *-- getQtde: PROCEDURE Valid legado. "LostFocus" eh o equivalente
+            *-- fiel (dispara ao SAIR do campo, inclusive pelo mouse);
+            *-- "KeyPress" da a confirmacao imediata em ENTER/TAB.
+            BINDEVENT(THIS.txt_4c_Qtde, "LostFocus", THIS, "ValidarQtde")
+            BINDEVENT(THIS.txt_4c_Qtde, "KeyPress", THIS, "ValidarQtdeKeyPress")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigOpIbo.ConfigurarEventos")
+        ENDTRY
+    ENDPROC

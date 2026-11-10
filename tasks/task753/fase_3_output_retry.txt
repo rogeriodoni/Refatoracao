@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. O retry anterior n├úo gerou c├│digo nenhum ÔÇö o Claude CLI s├│ imprimiu uma sauda├º├úo (`fase_3_output.txt` tinha 2 KB de avisos de permiss├úo + "o que voc├¬ gostaria que eu fizesse?"), e `FormSigOpIpB.prg` n├úo existia.
+
+## Entregue
+
+`projeto\app\forms\operacionais\FormSigOpIpB.prg` ÔÇö 541 linhas, CRLF, zero bytes acentuados literais.
+
+| M├®todo | Papel |
+|---|---|
+| `Init` | cria `SigOpIpBBO`, resolve Caption pelo BO, `DODEFAULT()` |
+| `InicializarForm` | Picture + superf├¡cie + propaga Caption aos 2 labels + prepara cursor |
+| `ConfigurarPageFrame` | orquestrador da montagem flat |
+| `ConfigurarCabecalho` | `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` |
+| `PrepararGrade` | o trecho do `Init` legado sobre o cursor do pai (PUBLIC ÔÇö a Fase 4 chama do funil da grade) |
+| `TornarControlesVisiveis` | `AddObject` nasce com `Visible = .F.` |
+| `Destroy` | solta o BO, `DODEFAULT()` por ├║ltimo |
+
+**Decis├Áes que n├úo s├úo transcri├º├úo literal, e por qu├¬:**
+- **Larguras do cabe├ºalho**: o dump tem `cntSombra.Width = 800` e labels `769` num form de `Width = 429` ÔÇö artefato do Form Designer. Usei `THIS.Width + 2` no container (o `Left = -1` do dump sangra 1px, ent├úo precisa dos 2px para cobrir at├® a direita) e `THIS.Width - 20` nos labels. Copiar os literais cortaria o t├¡tulo no meio. `ValidarUIFidelity` vai acusar essas duas larguras ÔÇö ├® falso positivo j├í catalogado.
+- **`Closable` n├úo declarado**: o dump n├úo o declara, e as 5 propriedades de janela s├úo independentes. Medido no probe: ficou `.T.`, preservando o Alt+F4 como sa├¡da.
+- **`ConfigurarPageFrame` sem PageFrame**: o legado ├® flat (raiz `Class: form`, 11 objetos, nenhum `BaseClass: pageframe`). O nome ├® mantido por contrato do pipeline e s├│ delega ÔÇö mesmo desenho do irm├úo `FormSigOpClp`.
+- **Grade e bot├úo Encerrar ficaram para a Fase 4**, como o prompt da fase manda.
+
+## Verifica├º├úo
+
+O smoke test do VFP9 **passou** nesta sess├úo, ent├úo houve verifica├º├úo de runtime real, n├úo s├│ est├ítica:
+
+- **Compila├º├úo**: `.FXP` gerado, `.ERR` ausente ÔÇö com controle negativo (c├│pia + `IF .T.` solto) produzindo `.ERR` apontando s├│ as 2 linhas injetadas, o que prova que o detector funciona *e* que as 541 linhas est├úo limpas.
+- **Instancia├º├úo**: `CREATEOBJECT` devolveu objeto, `BaseClass=Form`, 429x222, `TitleBar=0`, `WindowType=1`, `DataSession=1`, Picture resolvendo para arquivo existente; faixa em `-2/-1/431/80` com `BackColor` RGB(100,100,100); labels em Top 18/17, `AutoSize=.F.`, Caption propagado. Zero di├ílogos suprimidos.
+- **Comportamento do `Init` legado**: com 3 impressoras todas marcadas e inseridas fora de ordem alfab├®tica, ap├│s abrir a tela sobrou **exatamente 1** marcada ÔÇö `ALFA LASER 100`, a primeira *alfab├®tica*, n├úo a primeira inserida. Isso prova que o `Set Order to Impres` roda antes do scan.
+- **Regra #51/#3**: `PrepararGrade`, `PrepararSelecaoInicial` e `CursorPronto` medidos como n├úo-PROTECTED.
+- **Gate da Fase 3**: extra├¡ o corpo real do `case 3` do orquestrador (124 linhas) e rodei standalone ÔÇö 2 positivos e **4 negativos** (form inexistente, form casca, fail-closed sem dump, form que inventa superf├¡cie de p├íginas) todos corretos. A primeira vers├úo desse harness estava errada (`& $sb` roda em escopo filho, ent├úo `$validado` nunca propagava); corrigi para dot-source antes de confiar no resultado.
+
+O harness ficou em `automation\TesteGateF3Task753.ps1`; os scripts de smoke/compile/probe e os `.FXP` gerados foram removidos para n├úo deixar `.fxp` velho rodando c├│digo antigo nas fases seguintes.
+
+Uma coisa que **n├úo** fiz, de prop├│sito: n├úo registrei a tela no `menu.prg`. Esta ├® um di├ílogo filho que o pai abre com `Do Form SigOpIpb` de dentro de `SIGCDTBI`/`sigopcgv` ÔÇö n├úo ├® item de menu, e inventar um seria acrescentar caminho que o legado n├úo tem.

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The form compiles cleanly (VFP9, no .err, .fxp generated successfully).
+
+## Summary
+
+Phase 4/8 for `Formsigopinf.prg` is complete. Since this is an OPERACIONAL **child dialog** (not a CRUD form ÔÇö no PageFrame, no grid, confirmed by `analise.json`'s `temGrid: false` and the Phase 3 header notes), the generic "Grid + 6 CRUD buttons" template didn't apply. I adapted the phase to what the form actually has:
+
+- **`ConfigurarBotoesAcao()`** ÔÇö creates the three real CommandGroup buttons from the dump (`obj_4c_CntBotoes`/Salvar, `obj_4c_CmdCotacao`, `obj_4c_CmdEntrega`), positioned exactly as in `layout.json`, drawn after the header so they sit on top of it.
+- **`CmdCotacaoClick()`** and **`CmdEntregaClick()`** ÔÇö fully functional, transcribed from `cmdCotacao.Valid`/`cmdEntrega.Valid`, opening the already-migrated `FormSigPrCtc`/`FormSigOpEnt` dialogs with the exact legacy parameter order, following that form's own `ObterPrazoConfirmado()`/`Release()` contract.
+- **`AtualizarVisibilidadeCmdEntrega()`** ÔÇö ports the `DtEntrs`/`pcEscolha` visibility rule, guarded with `USED()` since `crSigCdOpe` isn't loaded until a later phase (fails safe to hidden).
+- The "Salvar" button (`obj_4c_CntBotoes`) is created visually only ÔÇö its 170-line legacy `Click` depends on containers and cursors that don't exist yet; per this project's convention, the final action button is Fase 8's job, so it's left unwired rather than faked with a stub.
+
+The file header was updated to document this phase's actual scope for whoever picks up Fase 5+.

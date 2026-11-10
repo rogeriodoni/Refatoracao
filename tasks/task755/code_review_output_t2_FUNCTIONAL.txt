@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Ambas as corre├º├Áes ficaram ├¡ntegras na estrutura do m├®todo.
+
+## Resumo
+
+Corrigi os 2 problemas que eram defeitos reais:
+
+1. **[GRID-WITH]** `CarregarLista()` (linha ~3000): movi `.RecordSource` para fora do `WITH loc_oGrid` (atribui├º├úo expl├¡cita `loc_oGrid.RecordSource = loc_cAlias` antes do bloco), evitando `Unknown member COLUMN1` ao recarregar a grade de Fontes Pagadoras.
+
+2. **[CONTAINER-VISIVEL]** `TornarControlesVisiveis()`: adicionei `!INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_EMP1", "CNT_4C_EMP2")` para n├úo for├ºar `Visible = .T.` nesses dois containers, cuja visibilidade ├® regra de neg├│cio decidida por `AplicarVisibilidadeEquipes()` (baseada em `SigCdEmp.divnotas`).
+
+Os outros 7 achados s├úo **falsos positivos** do detector ÔÇö verifiquei cada um no c├│digo atual:
+
+- `ObterFiltroContaEquipe()` (linha 1477), `ObterNomeConta()` (linha 3143), `ResolverControle()` (linha 3774), `CampoPreenchido()` (linha 3805) e `ValorCheck()` (linha 3830) **j├í est├úo definidos**, s├│ que como `FUNCTION` em vez de `PROCEDURE` ÔÇö o detector parece s├│ reconhecer `PROCEDURE`. Nenhuma mudan├ºa necess├íria.
+- `THIS.pgf_4c_Job()` ÔÇö n├úo existe nenhuma chamada desse m├®todo no arquivo; `pgf_4c_Job` ├® s├│ a property do PageFrame acessada normalmente (`THIS.pgf_4c_Job.Page1...`), nunca invocada com `()`.
+- **[LAYOUT-POSITION]** `lbl_4c_Lbl_01_019a` Left=501 est├í correto: ├® o label "at ├®" entre `txt_4c__01_019` (Montagem) e `txt_4c__01_020` (Desmontagem), espelhando o padr├úo j├í usado em `lbl_4c_Lbl_01_017a` (Left=295). O Left=417 citado no legado na verdade corresponde ao label `lbl_4c_Lbl_01_019` (n├úo ao `019a`), que j├í est├í correto ÔÇö o comparador casou o par errado. Alterar o `019a` quebraria o layout real.
+
+Nenhuma l├│gica de neg├│cio, campo, lookup ou propriedade visual (fora do necess├írio) foi alterada.

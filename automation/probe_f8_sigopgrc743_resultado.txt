@@ -1,0 +1,23 @@
+[1] inicio
+[2] ambiente OK  DataSession corrente=1
+[3] crFinal criado  n=4  tagGrupom=1  tagImp=2
+[4] pai falso  DataSessionId=1  Aguarde.Visible=.T.
+[5] VARTYPE(form)=O
+[6] DataSessionId form=1 (pai=1)  enxerga crFinal=.T.
+A1 alias_grafico=[Graph]  esperado=[Graph]  campo=[gGraficos]  USED=.T.
+A2 TotalMeses=2 (esp 2)  TotalGrupos=2 (esp 2)
+A3 grupos_ordenados=[12025 22026 ]  esperado=[12025 22026]
+A4 perc(1,1)=10 (esp 10)  perc(1,2)=20 (esp 20)  perc(2,1)=30 (esp 30)  perc(2,2)=40 (esp 40)  perc(9,9)=0 (esp 0)
+A5 Titulo=[Gráfico Comparativo]
+   Sub1=[01/01/2025 até 31/12/2026]
+   Sub2=[Matriz / Filial]
+   Sub3=[Moeda Fechamento : REAL]
+A6 DadosValidos=.T.  len=90
+   matriz=[<TAB>Janeiro<TAB>Fevereiro<CRLF>GRUPO A2025<TAB>       100<TAB>       200<CRLF>GRUPO B2026<TAB>       300<TAB>       400<CRLF>]
+A7 GraficoGerado=.F. (esp .F. aqui)  GraficoPronto=.F. (esp .F. aqui)  RECCOUNT(Graph)=1 <- conta o registro EXCLUIDO, eh por isso que o guard eh o flag  ControlSource=[]
+A8 pai.Aguarde.Visible=.F. (esp .F.)
+A9 CmdImprimirClick executado (ver dialogs: tem de AVISAR, nao imprimir)
+A10 PROTECTED? GerarGrafico=.F.  MostrarGrafico=.F.  BO.CarregarDoCursor=.F.  BO.ObterPercentual=.F.  BO.LimparCursores=.F.  (todos tem de ser .F.)
+A11 antes do Release  Graph=.T. Meses=.T. Grupos=.T. Perc=.T. crFinal=.T.
+A11 depois do Release Graph=.F. Meses=.F. Grupos=.F. Perc=.F. crFinal=.T.  (os 4 primeiros .F., crFinal .T.)
+[7] FIM

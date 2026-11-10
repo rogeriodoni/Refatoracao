@@ -1,0 +1,849 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpOch.SCX
+* Data/Hora: 09/11/2026 21:29:41
+* Total de registros: 33
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPOCH
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPOCH
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPOCH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPOCH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GridFollowUp
+  Parent: SIGOPOCH
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPOCH.GridFollowUp.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.GridFollowUp.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.GridFollowUp.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.GridFollowUp.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.GridFollowUp.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.GridFollowUp.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.GridFollowUp.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.GridFollowUp.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.GridFollowUp.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.GridFollowUp.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: CommandGroup1
+  Parent: SIGOPOCH
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grd_lancamento
+  Parent: SIGOPOCH
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Data
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Data
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Hist
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Hist
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Oper
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Oper
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Emp
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Emp
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCH.grd_lancamento.Col_Saldo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCH.grd_lancamento.Col_Saldo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Memo_Obs
+  Parent: SIGOPOCH
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 82
+  Left = 38
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 450
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Consulta de FollowUp"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGOPOCH"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Arial"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 200
+  Left = 60
+  ReadOnly = .T.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 3
+  Top = 173
+  Width = 679
+  Name = "GridFollowUp"
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.Enabled = .T.
+  Column1.Width = 138
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Width = 90
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Courier New"
+  Column3.FontSize = 8
+  Column3.Width = 75
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Courier New"
+  Column4.FontSize = 8
+  Column4.Width = 75
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.Width = 268
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data / Hora Lancto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column2.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo Lancto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column3.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column4.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column5.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Observação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.GridFollowUp.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.CommandGroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 720
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "CommandGroup1"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "<ESC> Sair"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 76
+  Left = 60
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 89
+  Value = 0
+  Width = 679
+  GridLineColor = 238,238,238
+  Name = "grd_lancamento"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 74
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Sparse = .F.
+  Column1.Name = "Col_Data"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 280
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Sparse = .F.
+  Column2.Name = "Col_Hist"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 86
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Sparse = .F.
+  Column3.Format = ""
+  Column3.InputMask = "9,999,999.99"
+  Column3.Name = "Col_Valor"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = ""
+  Column4.Width = 16
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Sparse = .F.
+  Column4.Format = ""
+  Column4.Name = "Col_Oper"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 6
+  Column5.ControlSource = ""
+  Column5.Width = 30
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Sparse = .F.
+  Column5.Name = "Col_Emp"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 5
+  Column6.ControlSource = ""
+  Column6.Width = 102
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Sparse = .F.
+  Column6.InputMask = "999,999,999.99"
+  Column6.Name = "Col_Saldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Data.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Data.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Hist.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Histórico"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Hist.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Valor.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Valor.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Format = "9,999,999.99"
+  InputMask = "9,999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Oper.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "O"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Oper.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Emp.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Emp.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Saldo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Saldo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.grd_lancamento.Col_Saldo.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCH.Memo_Obs
+------------------------------------------------------------
+  Height = 60
+  Left = 59
+  ReadOnly = .T.
+  TabIndex = 34
+  Top = 381
+  Width = 682
+  ControlSource = "Movimento.ObsAudts"
+  NullDisplay = "  "
+  Name = "Memo_Obs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPOCH
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnNoper, pcOper
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector')
+EndWith
+
+lcSql = [Select * From SigMvCcr where Nopers = ]+Str(pnNoper)+[ And Opers = ']+pcOper+[']
+Thisform.PodataMgr.SqlExecute(lcSql,'ContaCC')
+
+lcSql = [Select * From SigCqOch Where Nopers = ]+Str(pnNoper)+[ Order by Datars,Datas ]
+Thisform.PodataMgr.SqlExecute(lcSql,'Movi')
+
+Select *, Padr(Nvl(ObsAudts,' '),50) as ObsAudt2 From Movi Into Cursor Movimento Order by datars,datas
+
+Select ContaCc
+Go Top
+
+With ThisForm.grd_lancamento
+	.RecordSource = "Contacc"
+	.Col_data.ControlSource = "Datas"
+	.Col_saldo.ControlSource = "Saldos"
+	.Col_hist.ControlSource = "Hists"
+	.col_valor.ControlSource = "Valors"
+	.col_oper.ControlSource = "Opers"
+	.col_emp.ControlSource = "Emps"
+	.Col_Saldo.InputMask = '999,999,999.99'
+	.Col_Saldo.Text1.InputMask = '999,999,999.99'
+	.SetAll('DynamicForeColor','Iif(Concs, RGB(0,0,255), RGB(0,0,0) )','Column')
+	.SetAll('DynamicBackColor','Iif(!IsEmpty(DtAudits), RGB(220,255,220), RGB(255,255,255) )','Column') && Verde Claro
+EndWith
+
+With ThisForm.GridFollowUp
+	.RecordSource = 'Movimento'
+	.Column1.ControlSource = 'Movimento.Datars'
+	.Column2.ControlSource = 'Movimento.TpLancs'
+	.Column3.ControlSource = 'Movimento.datas'
+	.Column4.ControlSource = 'Movimento.Usuars'
+	.Column5.ControlSource = 'Movimento.ObsAudt2'
+	.Refresh
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCH.GridFollowUp
+* Classe: fwgrade (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.Memo_Obs.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCH.CommandGroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Sair.Valid
+------------------------------------------------------------
+PROCEDURE Sair.Valid
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCH.Memo_Obs
+* Classe: fwmemo (Base: editbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+**
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPOCH
+RESERVED3 (ClassInfo): conta
+grupo
+podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Verifiquei cada uma das 10 colunas apontadas contra o c├│digo real do form (`grep -n -i`), seguindo o padr├úo j├í documentado na mem├│ria do projeto (esse validador SQL-FILTRO-INVENTADO tem hist├│rico extenso de falsos positivos nesta branch).
+
+**9 de 10 s├úo falso positivo ÔÇö nenhuma altera├º├úo feita:**
+- `EXIBSITS`, `VALVARS`, `NMINENTS`, `NMAXENTS`, `CHKPRZENTS`, `TPVENCS` ÔÇö s├úo `IF`/`AND` do FoxPro sobre cursores j├í carregados (`crSigCdOpe`, `TprMvCab`, `CrSigOpCdc`, `cursor_4c_FpgVenc`), n├úo filtros SQL.
+- `PCESCOLHA` ÔÇö ├® a property `THIS.this_cPcEscolha`, n├úo coluna.
+- `TAG` ÔÇö ├® a cl├íusula `TAG FpagV` de um `INDEX ON ... TAG`, n├úo coluna.
+- `PRAZOENTS` ÔÇö s├│ aparece como coluna selecionada ou em `REPLACE`/`ControlSource`; o `WHERE` real da query usa `IClis`, que j├í est├í na lista de refer├¬ncia.
+
+Corrigir qualquer uma delas removeria l├│gica de neg├│cio leg├¡tima transcrita do legado (bloqueios por situa├º├úo de conta, prazo de entrega, vencimento) ÔÇö violaria a regra "NAO alterar logica de negocio".
+
+**1 de 10 era real, mas inofensiva ÔÇö corrigida:**
+- `DATAS` em `CarregarFeriados()` (`Formsigopinf.prg:3384`): o SQL tinha `WHERE datas IS NOT NULL`, inexistente no legado (`Select * From SigCdFer`, sem WHERE). Como o `SCAN` seguinte j├í refaz essa mesma guarda (`IF !ISNULL(datas) AND !EMPTY(datas)`), remover o filtro ├® seguro e n├úo muda o resultado. Alterado para `SELECT DISTINCT datas FROM SigCdFer`.
+
+Documentei a 11┬¬ reincid├¬ncia deste padr├úo de falso positivo na mem├│ria existente (`feedback_sql_filtro_inventado_comentario_prop_legado.md`) para refer├¬ncia em passes futuros.

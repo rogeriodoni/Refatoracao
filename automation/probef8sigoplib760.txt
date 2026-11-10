@@ -1,0 +1,31 @@
+PROBE F8 task760 v1 INICIO
+ambiente OK - gnConnHandle=0
+0a) CREATEOBJECT sem parametro -> VARTYPE=O
+0b) CREATEOBJECT(3, TIPO01) -> VARTYPE=O
+1) FormParaBO               existe=SIM protected=SIM
+1) BOParaForm               existe=SIM protected=SIM
+1) AplicarTipoSelecionado   existe=SIM protected=NAO
+1) AtualizarEstadoDescricao existe=SIM protected=NAO
+1) BtnOkClick               existe=SIM protected=NAO
+1) FecharRetornoDoTipo      existe=SIM protected=NAO
+2) campo codigo=[TIPO01] (esperado TIPO01)
+   BO.this_nTipoFiltro=3 (esperado 3)
+   BO.this_cCods=[TIPO01    ] LEN=10 (esperado LEN 10 - PADR)
+3) FormParaBO: BO.this_cCods=[A9        ] LEN=10 (esperado A9 + brancos, LEN 10)
+   BO.this_cDescs=[DESCRICAO DIGITADA] (CRU, sem ALLTRIM)
+4) Fixos=1 -> campo codigo=[11101     ] (esperado 11101)
+   campo descr=[LIBERACAO TOTAL] (esperado LIBERACAO TOTAL)
+   BO.retorno LEN=70 (esperado 70 = 10+60 posicional)
+   retorno 1..10=[11101     ] retorno 11..=[LIBERACAO TOTAL]
+   form.this_cRetorno espelhou o BO? .T.
+5) Fixos=2 -> campo codigo=[22202     ] (esperado 22202 - codigo repinta SEMPRE)
+   campo descr=[TEXTO QUE O USUARIO DIGITOU]
+   DIGITACAO PRESERVADA? .T. (tem de ser .T.)
+   FecharRetornoDoTipo com Fixos=2 nao mexeu no retorno? .T.
+6) descricao livre -> retorno=[22202     LIVRE AQUI]
+   codigo nos 10 primeiros=[22202     ] (esperado 22202 + brancos)
+   descricao a partir do 11=[LIVRE AQUI] (esperado LIVRE AQUI)
+7) sem conexao -> descr.ReadOnly=.T. TabStop=.F.
+8) Unload -> [22202     LIVRE AQUI]
+   depois do BtnOkClick: VARTYPE=O Visible=.F. retorno ainda legivel=[22202     LIVRE AQUI]
+PROBE F8 task760 FIM

@@ -1,0 +1,20 @@
+M1 inicio
+M2 ambiente ok
+P1 form instanciou (VARTYPE=O)
+P2 CmdEncerrarClick existe=.T. protected=.F.
+P2 CmdExpandirClick existe=.T. protected=.F.
+P2 CmdRegredirClick existe=.T. protected=.F.
+P3 Encerrar <- (Object) -> CMDENCERRARCLICK
+P3 Fwbtng1 <- (Object) -> CMDEXPANDIRCLICK
+P3 Fwbtng2 <- (Object) -> CMDREGREDIRCLICK
+P4 ArvoreDisponivel (sem OCX)=.F.
+P4 Expandir sem arvore -> nNodeExp=1 (esperado 1, guarda barrou)
+P4 Regredir sem arvore -> nNodeExp=1 (esperado 1, guarda barrou)
+P5 stub instalado VARTYPE=O ListCount=0
+P5 Expandir arvore vazia -> nNodeExp=1 (esperado 1: llExpande ficou .F., legado nao avanca)
+P5 Regredir de 1 -> nNodeExp=0 (esperado 0: legado recua sempre que a guarda passa)
+P5 Regredir de 0 -> nNodeExp=0 (esperado 0: nunca negativo)
+P5 Regredir de 3 -> nNodeExp=2 (esperado 2)
+P6 antes: arquivo existe=.T. this_cArquivoFigura=[C:\4c\tasks\task772\probe7_figura.jpg]
+P6 depois: form VARTYPE=X (esperado X = Release) arquivo existe=.F. (esperado .F.) stub zerou caminho=.T.
+RESULTADO=OK

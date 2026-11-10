@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 3/8 conclu├¡da e verificada.**
+
+## O que estava errado
+
+A tentativa anterior criou `FormSIGOPNOP.prg` s├│ com a classe (propriedades + `Init`/`InicializarForm`/`Destroy`), **sem nenhum `AddObject`**. O gate da Fase 3 (`OrquestradorMigracao.ps1:9324-9443`) tem tr├¬s ramos e o SIGOPNOP cai no ramo **FLAT**, n├úo no "flat sem container":
+
+| predicado | valor | efeito |
+|---|---|---|
+| `raizFormGenerico` (raiz `Class: form`) | `True` | habilita a exce├º├úo OPERACIONAL |
+| `legadoSemPageFrame` | `True` | dispensa `ConfigurarPageFrame` |
+| `legadoSemContainer` | **`False`** | o SCX **tem** `Container1`/`Container2` |
+
+Por ter containers, o ramo "flat sem container" ├® inalcan├º├ível e o ramo FLAT exige `AddObject("cnt_4c_...")` ÔÇö que n├úo existia. Da├¡ a reprova├º├úo.
+
+## Corre├º├úo aplicada
+
+`C:\4c\projeto\app\forms\operacionais\FormSIGOPNOP.prg` ÔÇö adicionado `ConfigurarContainers()`, chamado de `InicializarForm()`, criando as duas cascas de topo com geometria **transcrita literalmente** da SE├ç├âO 2 do dump (nada inventado):
+
+- `cnt_4c_Container1` ÔÇö Top=136 Left=23 744x456, `BackStyle=0`, `BorderWidth=0`, `BackColor=RGB(212,208,200)`, `BorderColor=RGB(136,189,188)`, vis├¡vel
+- `cnt_4c_Container2` ÔÇö Top=267 Left=221 358x65, `BackColor=RGB(255,255,255)`, **`Visible = .F.`** (reproduz o fim do `Init` legado: `ThisForm.Container2.Visible = .f.`; ├® o painel "AGUARDE!" que `MakeTree`/`MakeTreeEnv` acendem)
+
+Comentado no m├®todo que o `Container2` ├® **flutuante** e por isso tem de ficar fora do `TornarControlesVisiveis` que entra na Fase 4 ÔÇö sen├úo o aviso de aguarde fica aceso desde a abertura. Nomes conforme `mapeamento.json`. Nenhum `pgf_4c_*` inventado.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+Gate da Fase 3 replicado em PowerShell: `temEstruturaFlat = True` ÔåÆ **GATE PASSA** (9,24 KB).
+
+Compila├º├úo VFP9: `FXP=SIM`, `.err` ausente.
+
+Instancia├º├úo real (`CREATEOBJECT` com `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`):
+```
+CREATEOBJECT VARTYPE=O   Caption=[An├ílise de OP/Envelopes]   BaseClass=[Form] 800x600
+ControlCount=2
+cnt_4c_Container1: Top=136 Left=23 744x456 BackStyle=0 Visible=.T.
+cnt_4c_Container2: Top=267 Left=221 358x65          Visible=.F.
+BO VARTYPE=O            RESULTADO=INSTANCIOU
+```
+Checagens est├íticas: zero TODO/stub real, zero caractere acentuado literal, `RETURN` s├│ fora de TRY, sem `PUBLIC` em `DEFINE CLASS`, IF/ENDIF, WITH/ENDWITH e PROCEDURE/ENDPROC balanceados.
+
+## Dois achados de ferramenta, n├úo do form
+
+1. **`.FXP` velho sequestrou o probe.** A primeira vers├úo do meu script de compila├º├úo tinha `COMPILE ... ENCRYPT NOLOGO` (`NOLOGO` n├úo existe em `COMPILE`); isso gerou `.ERR` e um `.FXP` que o `DO` seguinte **reexecutou** mesmo depois de eu reescrever o `.prg` ÔÇö o VFP travava num modal oculto e nem o primeiro marcador `STRTOFILE` gravava. Confirma├º├úo da nota j├í registrada: **apagar o `.fxp` antes**, e marcadores incrementais localizam o travamento.
+2. **`vfp9.exe` executa nesta sess├úo** (smoke test medido ├ás 16:13 via `Start-Process` + `WaitForExit`), ao contr├írio do que a nota de mem├│ria permite assumir.
+
+Fica para a Fase 4: conte├║do dos containers (TreeView ActiveX, `GetOP`, `GetEnvelope`, `Label3`, `Label1`, `Label2`) e os controles soltos na Form (`Commandgroup1`/Encerrar, `Fwbtng1`/`Fwbtng2` de expandir-regredir, `Imagem`).

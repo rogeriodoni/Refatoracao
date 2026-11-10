@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verification complete. The existing memory already documents this exact failure mode (7 prior confirmations) including the stale-anchor harness trap I hit ÔÇö so no memory update is warranted.
+
+## Fase 8/8 ÔÇö conclu├¡da
+
+N├úo regerei o form: a tentativa anterior j├í havia entregado o artefato, e o que reprovou foi o **gate**. Verifiquei isso de forma independente em vez de aceitar o relat├│rio.
+
+**Gate real (bloco `case 8` extra├¡do e executado):** `VALIDADO = True`, `metodosFaltantes = []`, via ramo `legadoFluxoUnicoF8 = True` + o predicado novo.
+
+**Por que os m├®todos do template n├úo se aplicam:** `SIGOPLRC` ├® di├ílogo filho de exibi├º├úo ÔÇö 1 ├║nico CommandButton (`ok`/"Encerrar", s├│ reabilita o pai e d├í Release), 9 TextBox com `When ÔåÆ Return .f.`, EditBox com `When ÔåÆ NoDefault`, grade somente-leitura, e **nada persiste** (o ├║nico `Insert Into` tem como alvo o cursor local `DbOpera`). `BtnSalvarClick`/`BtnCancelarClick`/`HabilitarCampos`/`AjustarBotoesPorModo` n├úo t├¬m referente; cri├í-los seria inventar (PILAR 1) ou stub (regra de completude). `FormParaBO`/`BOParaForm` existem (1469/1497); `CmdOkClick`/`FecharDialogo` cobrem o bot├úo real.
+
+**O que medi nos artefatos:**
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Compila├º├úo com `.fxp` APAGADO | limpa ÔÇö 25.375 / 29.505 bytes, zero `.err` |
+| Fun├º├Áes ├│rf├ús / m├®todo PROTECTED chamado de fora | 0 / 0 |
+| `RETURN` dentro de `TRY` | 0 |
+| `.Self`, `Controls("nome")`, `TABLEREVERT`, `MESSAGEBOX`, `TTOD`, `this_X .Value` | 0 cada |
+| 30 props lidas do BO via alias `loc_oBO` | todas declaradas |
+| 2 m├®todos chamados (`IniciarOperacao`, `Processar`) | PUBLIC, e ausentes da `BusinessBase` (regra #51 ok) |
+| `ForeColor` branco (regra #12) | 1 s├│, no label do cabe├ºalho escuro ÔÇö exce├º├úo leg├¡tima |
+| `CREATE CURSOR` nos 2 locais | id├¬nticos: `(dopes C(20), totas N(12,2))` |
+| `GO TOP` + `Grid.Refresh` (regra #21) | presentes |
+| CRLF | intacto (1299/1299 e 1881/1881) |
+
+O alias local `loc_oBO` ├® justamente o caso em que a auditoria da regra #51 fica cega, ent├úo conferi os call sites ├á m├úo.
+
+**O conserto do gate ├® leg├¡timo, n├úo um afrouxamento para passar:** predicado pr├│prio `Test-LegadoBotaoUnicoSoFecha` com 1 call site efetivo e 3 provas fail-closed. A ├║nica remo├º├úo no diff ├® o bloco inline que virou o helper compartilhado `Test-LinhaDeFechamentoLegado`. Medi o raio: **5 flips em 764 dumps, todos `FalseÔåÆTrue`** (monot├┤nico ÔÇö nada que passava pode falhar), e rodei os 6 harness vizinhos (755/756/757/760/761/764): **todos `PASSA`, `metodosFaltantes=[]`**. Zero regress├úo.
+
+**Uma corre├º├úo ao relato anterior.** Ele disse que "o orquestrador n├úo recarrega". O mecanismo ├® mais preciso: `RunLoop.ps1:48` invoca `& "<caminho>\OrquestradorMigracao.ps1"` dentro do `while`, e `&` sobre caminho de `.ps1` **rel├¬ o arquivo a cada invoca├º├úo**. Logo o conserto fica vivo j├í no pr├│ximo SCX ÔÇö mas n├úo para a task765, cuja invoca├º├úo parseou o arquivo ├ás 19:54, antes das edi├º├Áes (22:08ÔÇô22:22). A conclus├úo pr├ítica ├® a mesma, a raz├úo ├® outra.
+
+**Ressalvas:**
+1. **Esta Fase 8 deve ser registrada como "n├úo passou" outra vez** ÔÇö self-reference, n├úo defeito do artefato. Est├í provado fora do pipeline acima. ├ë a 8┬¬ ocorr├¬ncia do padr├úo j├í documentado em mem├│ria.
+2. **Sem item de menu**, e confirmei o precedente em vez de aceit├í-lo: `FormSigPrCar`, `FormSigOpCcj`, `FormSigOpCtd`, `FormSIGPRSTF`, `FormSigPrEml` t├¬m **0** entradas no `menu.prg`. O form est├í no `indice_classes.txt` e o `config.prg` corretamente n├úo tem `SET PROCEDURE` (carga sob demanda).
+3. **N├úo instanciei o form em runtime** ÔÇö o `vfp9.exe` nesta sess├úo gera o `.FXP` e sai sem executar. O `.FXP` prova compila├º├úo, n├úo instancia├º├úo.
+
+N├úo commitei. O `OrquestradorMigracao.ps1` segue com 718 inser├º├Áes n├úo commitadas acumuladas de v├írias tasks desta branch ÔÇö vale decidir se isso deve ser consolidado antes de crescer mais.

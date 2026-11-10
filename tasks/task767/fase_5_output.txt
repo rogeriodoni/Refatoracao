@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks consistent. The implementation is complete and compiles cleanly. Let me give a final summary.
+
+## Summary
+
+Completed Fase 5/8 for `FormSigOpMop` (Gera├º├úo de M├║ltiplas Opera├º├Áes). This form is a flat OPERACIONAL dialog (not a CRUD Page1/Page2 form), so I followed the roadmap already written into the file's own header comments (from fases 3-4) rather than the generic template, which assumes a cadastro structure this form doesn't have.
+
+**What was added** (non-lookup grid-cell behavior for the two columns the header scoped to this phase ÔÇö Movimenta├º├úo and Cores):
+
+- `projeto/app/classes/TextBoxGridLookup.prg`: two new TextBox subclasses, `TextBoxMovimentacaoMop_4c` and `TextBoxCoresMop_4c`, following the project's established pattern (regra #18/#46) ÔÇö `Column.AddObject` + `CurrentControl` + `Sparse=.F.`, with `When`/`Valid`/`LostFocus` delegating to `THISFORM` methods guarded by `PEMSTATUS`.
+- `projeto/app/forms/operacionais/FormSigOpMop.prg`:
+  - `GarantirCelulasEditaveisGrade()` ÔÇö idempotently (re)installs the two custom cells on every `MontaGrade()` call, since `CarregarGrade` tears down the grid's cursor alias each reload.
+  - `CelulaMovimentacaoMopEditavel`, `MovimentacaoMopLostFocusExec`, `CelulaCoresMopEditavel`, `ValidarCoresMopExec` ÔÇö transcribed from the legacy `Column1`/`Column3` `When`/`Valid`/`LostFocus`. The Cores `Valid` uses VFP9's native `GETCOLOR()` (Windows color picker), which is why it's handled now rather than deferred to Fase 6 (lookups).
+  - Removed now-superseded `Text1.*` styling lines for those two columns (the custom classes carry their own appearance).
+  - Updated the header comment to record what Fase 5 delivered and re-scoped the remaining work (Fase 6: lookups for Movimenta├º├úo/G.Grp/Emp.; Fase 7: button handlers + Padr├úo checkbox toggle; Fase 8: save/commit).
+
+Verified with a clean VFP9 compile of both files (no `.err`, both produced `.fxp`) via a throwaway probe script I then removed; kept `automation/CompilarF5SigOpMop767.prg` since it matches the project's existing per-fase compile-probe convention.

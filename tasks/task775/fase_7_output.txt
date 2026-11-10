@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is done in `projeto\app\forms\operacionais\FormSigOpOco.prg`.
+
+## O que entrou
+
+```foxpro
+BINDEVENT(THIS.cmd_4c_Saida, "Click", THIS, "BtnSairClick")   && fim de ConfigurarBotaoSaida
+
+PROCEDURE BtnSairClick()      && PUBLIC - alvo de BINDEVENT (regra #3)
+    THIS.FecharDialogo()
+PROCEDURE FecharDialogo()     && funil unico de fechamento
+    THIS.Hide()
+```
+
+**Os 4 handlers CRUD n├úo existem neste legado ÔÇö e isso ├® medido, n├úo presumido.** O dump de `SIGOPOCO` (629 linhas) tem **um** objeto `BaseClass: commandbutton` (o "Sa├¡da"), **zero** `commandgroup`, e nenhuma cita├º├úo de `frmcadastro`, `Grupo_Op` ou `pcEscolha`. Inventar os quatro bot├Áes violaria o PILAR 1; declar├í-los vazios violaria a regra de completude. Os nomes can├┤nicos ficaram grafados com o **miolo elidido** (`Btn...IncluirClick`) nos coment├írios de prop├│sito: o gate os procura por substring no arquivo inteiro, e escrev├¬-los por extenso faria a fase passar por um coment├írio em vez de por c├│digo.
+
+**Diverg├¬ncia deliberada de PILAR 3, documentada no m├®todo:** o legado faz `ThisForm.Release`, e aqui fecha com `Hide()`. ├ë di├ílogo filho (chamador = `SIGCDBAL`/`FormBAL`) que guarda `this_cObservas` ÔÇö a "observa├º├úo anterior" que alimenta o *repete obs* da etiqueta seguinte. O legado abre com `Do Form ... With` e n├úo segura refer├¬ncia; o sistema novo abre com `CREATEOBJECT + Show()`, onde `Release()` mataria o objeto antes de o chamador ler. `Hide()` em modal tamb├®m devolve o `Show()`, ent├úo para o usu├írio a tela fecha igual. Varri o `Destroy` como a regra manda: ele s├│ solta refer├¬ncias, nada que o chamador leia na sequ├¬ncia.
+
+O bloco `Update Historico Set Obs = ...` que precede o `Release` est├í **comentado no SCX** (`*!*`) ÔÇö n├úo foi portado, e ficou transcrito como evid├¬ncia de que a aus├¬ncia de grava├º├úo ├® do legado.
+
+## Verifica├º├Áes
+
+| | resultado |
+|---|---|
+| Gate Fase 7 (bloco `case 7` real, recortado do orquestrador) | **PASSA** ÔÇö `nBotoesLegado=1` ÔåÆ piso 1, `nHandlers=1`, os 4 tokens CRUD ausentes |
+| `Test-CompletudeCodigo` (a pr├│pria do pipeline) | **OK** ÔÇö zero TODO/stub/procedure vazia |
+| `COMPILE` no VFP9 | `FXP=.T. ERR=.F.` ÔÇö compila├º├úo limpa |
+| Inst├óncia viva | `VARTYPE=O`; `BtnSairClick`/`FecharDialogo` existem e s├úo PUBLIC; BINDEVENT real no bot├úo ÔåÆ `BTNSAIRCLICK`; `Cancel=.T.` |
+| Contrato do `Hide()` | p├│s-`BtnSairClick()`: `VARTYPE` segue `O` e `this_cObservas` leg├¡vel; `Release()` do chamador ÔåÆ `X` |
+
+Duas armadilhas do ambiente, para registro: o primeiro `COMPILE` **pendurou** o VFP9 e as duas rodadas seguintes executaram **p-code velho** do `.FXP` do script auxiliar que eu n├úo havia apagado ÔÇö o resultado "sa├¡da ausente" era isso, n├úo erro no form. Apagar o `.FXP` antes de cada rodada resolveu. Fica para a Fase 8: `Valid` da coluna Peso Real (`KeyBoard {DNARROW}`) e `AfterRowColChange` da grade (`ThisForm.Get_Obs.Refresh`).

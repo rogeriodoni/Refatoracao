@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 entregue e **verificada em runtime** em `projeto/app/forms/operacionais/FormSIGOPGRC.prg`.
+
+## O que foi feito
+
+A Fase 5 pede "metade dos campos da Page2". **Esta tela n├úo tem campo nenhum nem Page nenhuma** ÔÇö medido no dump, n├úo presumido: zero objeto de BaseClass `textbox/editbox/combobox/listbox/checkbox/optiongroup/spinner` e zero `pageframe`. A ├írvore inteira do SCX s├úo 8 objetos (faixa do cabe├ºalho com 2 labels, um Shape decorativo, o OleBoundControl do gr├ífico, 2 CommandButton). Metade de zero campos ├® zero ÔÇö inventar TextBox violaria o PILAR 1, e um `ConfigurarPaginaDados` vazio seria o "stub disfar├ºado" que a regra de completude pro├¡be.
+
+Entreguei, ent├úo, a ├║nica superf├¡cie de **dado** que o legado realmente tem ÔÇö a ├írea onde o gr├ífico ├® desenhado ÔÇö mais o que s├│ podia ser feito depois de todos os `AddObject` existirem:
+
+- **`ConfigurarPaginaDados()`** ÔÇö `shp_4c_Shape2` e `obj_4c_OleGrafico`, transcritos do dump sem offset (n├úo h├í PageFrame, logo nem o +29 nem a subtra├º├úo dos forms REPORT). Chamado **entre** `ConfigurarCabecalho` e `ConfigurarBotoes`: o Shape transparente (615..788 / 7..117) sobrep├Áe os dois bot├Áes (650..800 / 3..78) e, criado depois deles, engoliria o clique sem desenhar nada (regra #30). `ControlSource = ""` expl├¡cito ÔÇö quem liga ├® o m├®todo de desenho das Fases 7-8, como o `mostragrafico` do legado; apontar para alias inexistente derrubaria o `Init` e a tela n├úo abriria (regra #41).
+- **`AjustarOrdemTabulacao()`** ÔÇö TabIndex 1..4 nos ordinais efetivos. O `TabIndex = 0` do dump est├í fora da faixa v├ílida e o VFP o descarta, ent├úo o legado fica com a ordem dos registros do SCX.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| Smoke test (porta obrigat├│ria) | `VIVO` escrito, `exit=0` ÔÇö o VFP **executa** nesta sess├úo |
+| `COMPILE` | `.FXP` 10480 bytes, **sem `.ERR`** |
+| Controle negativo | c├│pia com `IF .T.`/`? "x"` no fim ÔåÆ `.ERR` acusando **s├│** as linhas 988-989 injetadas, provando que o detector funciona e que as 986 linhas reais est├úo limpas |
+| Instancia├º├úo | `VARTYPE = O`, Caption "Gr├ífico Comparativo", 800x600, `ControlCount = 5` |
+| Z-order | `cnt_4c_Sombra ÔåÆ shp_4c_Shape2 ÔåÆ obj_4c_OleGrafico ÔåÆ cmd_4c_Sair ÔåÆ cmd_4c_Imprimir` ÔÇö Shape **antes** dos bot├Áes |
+| Shape | Top=7 Left=615 W=173 H=110, BackStyle=0, BorderStyle=0, BorderColor=12369288 = RGB(136,189,188) ÔÇö id├¬ntico ao dump |
+| OLE | Top=130 Left=12 W=776 H=418, AutoActivate=0, `ControlSource=[]` ÔÇö id├¬ntico ao dump |
+| TabIndex | 1, 2, 3, 4 ÔÇö ├║nicos e na faixa; Shape confirmado **sem** `TabIndex` (`PEMSTATUS = .F.`) |
+| Geometria | nada recortado (dirÔëñ800, baixoÔëñ600) e OLE abaixo da faixa (Top 130 ÔëÑ 80) |
+| Di├ílogos suprimidos | **vazio** ÔÇö nenhum `MsgErro` disparou de CATCH algum |
+| Completude (`Test-CompletudeCodigo` replicado) | 0 problemas |
+| Propriedades inexistentes (regra #33) | OK |
+| Acentos literais / regra #43 | 0 / 0 |
+
+Paridade de objetos fechada: os 8 do `layout.json` est├úo todos criados (7 `AddObject` + o Form).
+
+Um ponto que registrei em coment├írio por honestidade: aqui a ordem de cria├º├úo **j├í coincidia** com a do legado (o `ConfigurarBotoes` da Fase 4 cria Sair antes de Imprimir, como o SCX), ent├úo `AjustarOrdemTabulacao` **fixa** a ordem em vez de corrigi-la ÔÇö diferente do g├¬meo `FormSigOpGco`, onde os bot├Áes nascem invertidos e o m├®todo desfaz a invers├úo. Fixar protege a tela de uma fase seguinte inserir um `AddObject` no meio da montagem e embaralhar a sequ├¬ncia sem ningu├®m perceber.
+
+Ficou fora, de prop├│sito: Fase 6 (confirma├º├úo de que n├úo h├í lookup ÔÇö o dump j├í mostra zero) e Fases 7-8 (`GerarGrafico`/`MostrarGrafico`, que ├® quem liga o `ControlSource`, e as leituras do form pai).

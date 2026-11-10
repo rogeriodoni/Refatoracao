@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct. Here's the summary of the review pass:
+
+**Fixed:**
+- `[LOSTFOCUS-SEM-GUARDIA]` `CodObsLostFocus`: added `this_cUltimoCodObsLostFocusValidado` property (declared alongside the existing `this_cUltimoContasLostFocusValidado`/etc. block) and the standard guard-compare-at-top / update-after pattern, layered on top of the existing Tag-based guard (which already mirrored the legacy `This.Tag = Str(This.Value,10)` mechanism) rather than replacing it.
+
+**False positives (verified against the actual file, no change made):**
+- `THIS.ValidarDataMinima()`, `THIS.VolumesWhen()`, `THIS.BuscarContaEntrega()`, `THIS.ValidarContaEntregaEncontrada()`, `THIS.SolicitarLiberacaoPrazoEntrega()`, `THIS.AvancarAlemDosFeriados()` ÔÇö all six are defined in the file (confirmed via grep at lines 1195, 1466, 2106, 2188, 3230, 3429 respectively). The review tool only saw truncated excerpts and missed the definitions further down in the 3554-line file.
+- `[LAYOUT-POSITION]` `cmd_4c_BtnMultObs` in `cnt_4c_Observacao`: already has `.Left = 135`, matching the legacy value ÔÇö no diff exists in the current file.
+
+No visual properties were altered and no business logic was changed.

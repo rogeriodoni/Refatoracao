@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 28 wrappers + the `ValidarContaLinha` helper (ENDPROC at 1700) balance correctly. The functional pass is complete.
+
+## Summary
+
+Of the 38 reported findings, I verified each against the actual code (per the project's heavy history of detector false positives) before touching anything:
+
+**Fixed (real issues):**
+- **28├ù `[LOSTFOCUS-SEM-GUARDIA]`** (`ValidarConta024-037` / `ValidarNomeConta024-037`): added a shared "value didn't change" guard. Introduced 14 per-row properties (`this_cUltimoValidarConta024Validado`...`037Validado`, shared between the c├│digo/nome pair of each equipe row, matching the established `FormSigOpIpE.ValidarOcorrenciaEtiqueta` pattern) and a new `ValidarContaLinha` helper that the 28 thin wrappers now delegate to.
+- **1├ù `[NULL-CURSOR]`** (`cursor_4c_Fontes`): wrapped the `CREATE CURSOR` with `SET NULL ON`/`SET NULL OFF`, applied by precaution per project convention.
+
+**Confirmed false positives (no change, per documented detector blind spots):**
+- `[CONTAINER-VISIVEL] CNT_4C_EMP1` ÔÇö already `.Visible=.T.` at creation; its conditional hide/show is correctly applied *after* `TornarControlesVisiveis()` via `AplicarVisibilidadeEquipes()`.
+- 6├ù `[METODO-INEXISTENTE]` ÔÇö `ObterFiltroContaEquipe`, `ObterNomeConta`, `ResolverControle`, `CampoPreenchido`, `ValorCheck` are all defined in-file (detector misses `FUNCTION`/`ENDFUNC`); `pgf_4c_Job` isn't a method at all ÔÇö it's the PageFrame object (a new false-positive variant, now logged in memory).
+- `[GRID-WITH]` ÔÇö the `WITH loc_oGrid` block follows the exact canonical `RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header` order; WITH doesn't defer column creation in VFP9.
+- `[LAYOUT-POSITION]` ÔÇö `lbl_4c_Lbl_01_019` already matches the legado `lbl_01_019` exactly (Left=417); the finding compared against the wrong sibling label (`lbl_4c_Lbl_01_019a`, the "at├®" date-separator).
+
+I updated two memory files to record this session's confirmations (including the new `pgf_4c_Job` false-positive variant) for future review passes.

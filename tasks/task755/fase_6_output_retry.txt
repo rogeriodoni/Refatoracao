@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpJob.prg` ÔÇö 3171 ÔåÆ 3465 linhas.
+
+## Por que a tentativa anterior reprovou
+
+Uma coisa s├│: o gate da Fase 6 exige `PROCEDURE AbrirLookup*` / `AbrirBusca*`, e o funil do lookup tinha sido batizado `ProcessarLookupConta`. Todas as outras condi├º├Áes j├í passavam (PageFrame presente, BINDEVENT, 41 campos contra piso de 21, 6 Pages de dom├¡nio sem Page de Dados). ├ë a armadilha da regra #44.6 ÔÇö gate ancorado em NOME.
+
+Mas ao conferir o dump do legado apareceram **tr├¬s defeitos reais** de lookup, n├úo s├│ o nome:
+
+| defeito | o que o legado faz | o que estava migrado |
+|---|---|---|
+| **metade do lookup ausente** | `Valid` em `get_01_0NN` (por `IClis`) **e** em `get_01_0NNa` (por `RClis`) ÔÇö 28 handlers | s├│ os 14 de c├│digo; quem digitasse o NOME da conta n├úo tinha como resolver |
+| **universo errado** | `crEquipes` = `SigCdCli a, SigCdGcr b WHERE a.Grupos = b.Codigos AND b.Coletors = 8` (Atendimento) | `FormBuscaAuxiliar` contra `SigCdCli` cru ÔÇö o picker mostraria todos os clientes |
+| **`When` descartado** | `Empty(get_01_0NN.Value) And InList(pcEscolha, INSERIR, ALTERAR)` | campo de nome sempre edit├ível |
+
+## O que foi feito
+
+- `AbrirLookupConta(txtCod, txtNome, cCampo)` ÔÇö funil ├║nico nos dois sentidos, com o filtro `Coletors = 8` transcrito no 9┬║ par├ómetro (`par_cFiltro`) do `FormBuscaAuxiliar`, que o aplica nos tr├¬s caminhos dele (exato, LIKE, show-all). Sem `SQLEXEC` pr├│prio de pr├®-checagem (regra #37 ÔÇö o `Init` j├í faz o match exato). ESC/cancelar limpa os **dois** campos, como o `If (Lastkey() <> 27) ... Else` do legado; `Refresh` nos dois no fim. Guarda de reentr├óncia save/restore, reposta depois do `ENDTRY`.
+- 14 `ValidarNomeConta0NN` + os 14 BINDEVENT de `LostFocus` que faltavam, e `ContaEquipeInteractiveChange` nos campos de c├│digo.
+- `AtualizarEstadoContasEquipe` / `AjustarNomeContaEquipe` para o `When`, chamados no funil do lookup e no fim do `BOParaForm`.
+- **Fora do escopo nominal, mas no arquivo entregue**: `BtnInserirClick` e `BtnExcluirClick` (Fase 4) tinham 4 `RETURN` bare dentro de `TRY` ÔÇö viola├º├úo da regra #1, que estoura em runtime s├│ no caminho da guarda. Convertidos para flag + `IF loc_lProsseguir`.
+
+Duas decis├Áes que divergem do legado, deliberadamente e documentadas no c├│digo: campo de origem **vazio n├úo abre picker** (o legado abriria ÔÇö `Padr([],10)` nunca casa ÔÇö e o di├ílogo subiria a cada Tab pelos 14 pap├®is); e o campo de **c├│digo n├úo ├® desabilitado por modo**, porque no dump ele n├úo tem `When`.
+
+## Verifica├º├úo
+
+Smoke test do VFP9 passou, ent├úo houve execu├º├úo real ÔÇö n├úo s├│ compila├º├úo:
+
+- `COMPILE` do form e do BO: `.FXP` presente, `.ERR` ausente. **Controle negativo** feito na mesma rodada (c├│pia do form + `IF .T.` / `? "x"`): o `.ERR` saiu acusando s├│ as linhas 3448ÔÇô3449 acrescentadas, o que prova que o detector funciona e que as 3447 linhas estavam limpas.
+- `CREATEOBJECT("FormSigOpJob")` ÔåÆ objeto. Os 5 m├®todos novos s├úo PUBLIC (`PEMSTATUS(...,2)=.F.` ÔÇö regras #3/#51).
+- `When` medido: nome habilitado com c├│digo vazio; preencher 024 desabilita s├│ o 024a; `VISUALIZAR` desabilita mesmo com c├│digo vazio.
+- Campo vazio n├úo abriu picker (o processo n├úo pendurou ÔÇö regra #37 ao contr├írio).
+- **Os dois caminhos vivos do lookup foram exercitados** e o `_dialogs.txt` registrou `Erro em AbrirLookupConta: Connection handle is invalid. Linha: 114 Procedure: init` duas vezes ÔÇö ou seja, c├│digo e nome chegaram ao `FormBuscaAuxiliar.Init`; o SQL falha porque esta m├íquina roda com `gnConnHandle = 0` e sem o SQL Server. O valor digitado sobreviveu ao erro e a flag voltou a `.F.`.
+- Est├íticos: `this_X .Value` = 0 (regra #43), `RETURN` em `TRY` = 0, acentos literais = 0, blocos balanceados (WITH 114/114, TRY 22/22, IF 60/60, PROC 76/76), completude sem TODO/stub/procedure vazia. CRLF preservado (3465/3465).
+- Gate da Fase 6, ramo paginado n├úo-CRUD, avaliado standalone: **True**.
+
+**N├úo provado**: o lookup contra dados reais ÔÇö o SQL Server 192.168.200.10 ├® inalcan├º├ível nesta m├íquina, ent├úo a sele├º├úo no picker e o `Coletors = 8` devolvendo linhas s├│ se confirmam em ambiente com banco.

@@ -1,0 +1,49 @@
+PROBE FormSigOpLoc - 08/11/2026 17:31:09
+
+CENARIO 1: sem crSigOpOco, alias corrente = crOutroQualquer
+  CREATEOBJECT VARTYPE = [O]
+  ColumnCount = 3
+  RecordSource = []
+  C1.CurrentControl = [Text1]
+  Larguras = 15/80/220
+  CarregarDados() = .F. (esperado .F.)
+  this_cMensagemErro = []
+
+CENARIO 2: com crSigOpOco (estrutura de SigOpOco)
+  CREATEOBJECT VARTYPE = [O]
+  ColumnCount = 3
+  RecordSource = [crSigOpOco] Type=1
+  C1.ControlSource = [crSigOpOco.Imps]
+  C2.ControlSource = [crSigOpOco.Codigos]
+  C3.ControlSource = [crSigOpOco.Descrs]
+  Larguras = 15/80/220
+  C1.CurrentControl = [CHK_4C_CHECK1] Sparse=.F. ReadOnly=.F.
+  C2.ReadOnly=.T. C3.ReadOnly=.T.
+  chk existe=.T. VARTYPE(.Value)=L WxH=10x10 Visible=.T.
+  Grid Top/Left/WxH = 132/192/337x165 RowHeight=18 HeaderHeight=0
+  Objetos: shp=.T. desm=.T. marc=.T. sair=.T.
+  TabIndex grade/desm/marc/sair = 1/2/3/4
+  ORDEM DE CRIACAO (ControlCount=6):
+    [1] CNT_4C_SOMBRA Visible=.T.
+    [2] GRD_4C_DADOS Visible=.T.
+    [3] SHP_4C_SHAPE2 Visible=.T.
+    [4] CMD_4C_DESMARCAREMP Visible=.T.
+    [5] CMD_4C_MARCAREMP Visible=.T.
+    [6] CMD_4C_BTNSAIR Visible=.T.
+  PROTECTED? (esperado tudo .F.) KeyPress=.F. MouseUp=.F. MouseDown=.F. Click=.F. CarregarDados=.F.
+  BINDEVENT na caixa: 4 ligacao(oes)
+    ev=[(Object)] dest=[CHKMARCACAOKEYPRESS]
+    ev=[(Object)] dest=[CHKMARCACAOMOUSEUP]
+    ev=[(Object)] dest=[CHKMARCACAOMOUSEDOWN]
+    ev=[(Object)] dest=[CHKMARCACAOCLICK]
+  Imps linha1 ANTES = .F.
+  Imps linha1 pos Espaco = .T.
+  Imps linha1 pos MouseUp = .F.
+  Imps linha1 pos tecla A (nao deve mudar) = .F.
+  MarcarTodos -> 3 de 3
+  DesmarcarTodos -> 0
+  CarregarDados() 2a vez = .T.
+  C1.CurrentControl pos 2a carga = [CHK_4C_CHECK1]
+  Larguras pos 2a carga = 15/80/220
+  this_cMensagemErro = []
+  USED(crSigOpOco) ao fim = .T.

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da. Criei `FormSigOpHis.prg` com a estrutura base:
+
+- `DEFINE CLASS FormSigOpHis AS FormBase` com as propriedades exatas do dump legado (Width=650, Height=300, DataSession=2, BorderStyle=2, ControlBox=.F., etc.)
+- `Init()` criando o `SigOpHisBO` antes do `DODEFAULT()`
+- `Destroy()` encadeando para `FormBase.Destroy()`
+- `InicializarForm()` chamando `ConfigurarPageFrame()` + `TornarControlesVisiveis()`
+- `ConfigurarPageFrame()` como orquestrador (form ├® OPERACIONAL flat, sem PageFrame ÔÇö todos os objetos do SCX s├úo filhos diretos do form ou de `cntSombra`, igual ao padr├úo j├í usado em `Formsigopfin`/`FormSigPrHpr` desta mesma leva)
+- `ConfigurarCabecalho()` criando `cnt_4c_Sombra` com os dois labels (sombra/t├¡tulo), usando `THIS.Width` no lugar do literal 800 do dump (que extrapolaria os 650px do form)
+
+Grid/bot├Áes CRUD n├úo se aplicam (form sem lista nem tabela pr├│pria) ÔÇö os campos de filtro (Grupo/Conta/Produto/Per├¡odo) e o CommandGroup "sair" (Consulta/Encerrar) ficam para as Fases 5-8, conforme comentado no cabe├ºalho do arquivo.
+
+Validei a sintaxe compilando com o VFP9 real (`vfp9.exe -t`): gerou o `.fxp` sem `.err`, compila├º├úo limpa.

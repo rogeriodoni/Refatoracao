@@ -1,0 +1,6 @@
+SET EXACT ON (como o config.prg)
+WHERE Cods = m.loc_cFiltro ('01')        -> 2 linha(s)
+WHERE ALLTRIM(Cods) == m.loc_cFiltro    -> 2 linha(s)
+WHERE Cods = '0100' (filtro mais longo)  -> 0 linha(s)
+SEEK('0002') tag Codigo                  -> .T.
+SEEK('2') tag Codigo (parcial)           -> .F.

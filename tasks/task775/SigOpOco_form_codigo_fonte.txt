@@ -1,0 +1,629 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpOco.SCX
+* Data/Hora: 09/11/2026 22:57:29
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPOCO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPOCO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPOCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPOCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPOCO
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPOCO.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCO.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCO.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCO.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCO.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCO.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPOCO.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPOCO.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Saída
+  Parent: SIGOPOCO
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say7
+  Parent: SIGOPOCO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Obs
+  Parent: SIGOPOCO
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPOCO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO
+------------------------------------------------------------
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 323
+  Width = 665
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Ocorrência"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPOCO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 87
+  Left = 170
+  Panel = 1
+  RecordSource = "historico"
+  RowHeight = 17
+  ScrollBars = 0
+  Top = 104
+  Width = 346
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontSize = 8
+  Column1.ControlSource = "historico.cbars"
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .T.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = "historico.localis"
+  Column2.Width = 75
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = "historico.ocors"
+  Column3.Width = 75
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ControlSource = "Historico.PesReals"
+  Column4.Width = 70
+  Column4.Resizable = .F.
+  Column4.InputMask = "9999.99"
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Barras"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.cbars"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Local"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.localis"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ocorrência"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.ocors"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Peso Real"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Grade.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "historico.pesreals"
+  InputMask = "9999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Saída
+------------------------------------------------------------
+  Top = 3
+  Left = 588
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Sair"
+  ToolTipText = "[ESC]"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Saída"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Alignment = 0
+  Caption = "Obs : "
+  Height = 15
+  Left = 196
+  Top = 195
+  Visible = .T.
+  Width = 31
+  TabIndex = 18
+  ZOrderSet = 10
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Get_Obs
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Height = 87
+  Left = 222
+  Top = 195
+  Width = 195
+  ControlSource = "Historico.Obs"
+  Name = "Get_Obs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPOCO.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Alignment = 0
+  Caption = "Tecle [TAB]  p/ sair da Observação"
+  Height = 15
+  Left = 224
+  Top = 283
+  Visible = .T.
+  Width = 169
+  TabIndex = 18
+  ZOrderSet = 10
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPOCO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcCodBarra,oOldForm,llRepete,lcObs,lnTop,lnLeft
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm = oOldForm
+ThisForm.RepeteObs  = llRepete
+ThisForm.Observas   = lcObs
+
+Select Historico
+Set Order To CBars
+Set Key To lcCodBarra
+Go Top
+
+ThisForm.Top  = lnTop + 22
+ThisForm.Left = lnTop + 390
+ThisForm.Refresh
+
+ThisForm.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Grade
+* Classe: grid (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+ThisForm.Get_Obs.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !isEmpty(This.Value)
+	lStrQuery = [Select * From SigBaOco Where Tipos = 'O' And Autos <> 'S' ]
+	If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CsOcorr') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsOcorr)')
+		Return(.F.)
+	EndIf
+	Select CsOcorr
+	Index On Codigos Tag Codigos
+	Index On Descrs  Tag Descrs
+	Set Order To Codigos
+	Go Top
+	If !Seek(This.Value)
+		m.loLista = CreateObject('fwBuscaInt','CsOcorr','Codigos',This.Value,'Ocorrências',.T.)
+		m.loLista.mAddColuna('codigos','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('descrs','','Descrição')
+		m.loLista.Show()
+		If LastKey() <> 27
+			This.Value = Evaluate('CsOcorr.codigos')
+			Replace Usuars With Usuar In Historico
+		Else
+			This.Value = ''
+		EndIf	
+	EndIf
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Lastkey() = 9 Or Lastkey() = 13   && TAB Ou ENTER
+	ThisForm.Get_Obs.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Lastkey() # 27
+	KeyBoard '{DNARROW}' Plain
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Saída
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*!*	lnRegHis = Recno('Historico')
+*!*	lcEmpObs = Historico.Emps
+*!*	lnCodObs = Historico.Codigos
+*!*	lnBarObs = Historico.CBars
+*!*	lcObs    = Historico.Obs
+*!*	Update Historico Set Obs = lcObs Where Emps = lcEmpObs And Codigos = lnCodObs And CBars = lnBarObs
+*!*	Select Historico
+*!*	Go lnRegHis
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPOCO.Get_Obs
+* Classe: fwmemo (Base: editbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If ThisForm.RepeteObs And !IsEmpty(ThisForm.Grade.Column3.Text1.Value) And IsEmpty(This.Value)
+	This.Value = ThisForm.Observas
+EndIf
+Return(!IsEmpty(ThisForm.Grade.Column3.Text1.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !ISEmpty(This.Value)
+	ThisForm.ParentForm.ObsAnterior = This.Value
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.Observas = This.Value
+If Lastkey() = 9   && TAB
+	ThisForm.Grade.Column4.Text1.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPOCO
+RESERVED3 (ClassInfo): observas
+parentform
+repeteobs
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

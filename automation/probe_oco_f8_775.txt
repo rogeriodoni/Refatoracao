@@ -1,0 +1,23 @@
+P01 inicio
+P02 setup OK
+P03 cursor OK reccount=2
+P04 CREATEOBJECT = [O]
+P05 Col4.ControlSource=[cursor_4c_Historico.pesreals]
+P06 Col4.CurrentControl=[TXT_4C_PESOREAL]
+P07 Col4.Sparse=.F. Col4.ReadOnly=.F. Col4.Width=70 Col4.InputMask=[9999.99] Header=[Peso Real]
+P08 tem celula=.T.
+P09 celula Class=[Textboxpesorealoco_4c] VARTYPE(Value)=[N] Value=56,78 InputMask=[9999.99] Visible=.T.
+P10 Col3.CurrentControl=[TXT_4C_OCORRENCIA] Col3.Width=75
+P11 PEMSTATUS ConfirmarPesoReal=.T./prot=.F.  GradeAfterRowColChange=.T./prot=.F.
+P12 bindings do grid: AFTERROWCOLCHANGE->GRADEAFTERROWCOLCHANGE 
+P13 AfterRowColChange(4) disparado sem erro
+P14 GradeAfterRowColChange(4)=.T.
+P15 antes: CHRSAW=.F. LASTKEY=0
+P16 ConfirmarPesoReal()=.T.
+P17 depois: CHRSAW=.T.  (.T. = DNARROW enfileirado)
+P18 tecla drenada=24  (5 = DNARROW)  CHRSAW agora=.F.
+P19 sem alias: ConfirmarPesoReal()=.T. CHRSAW=.F.  (esperado .F.)
+P20 pos-recarga Col4.CurrentControl=[TXT_4C_PESOREAL] Width=70 Header=[Peso Real] Sparse=.F.
+P21 pos-recarga bindings do grid=1
+P22 Valid da celula disparado; CHRSAW=.T.  (.T. = delegou e enfileirou)
+P23 FIM OK

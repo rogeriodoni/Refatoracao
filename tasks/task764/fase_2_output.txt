@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpLopBO.prg` (693 linhas, ASCII puro, CRLF).
+
+## Achado que mudou a fase
+
+O dump do `SigOpLop.SCX` n├úo diz de onde vem o cursor `LocalSacOp`. Procurei o chamador no acervo legado e achei em `4install\FortyusMC\Fortyus\sigatsac.SCT`, m├®todo `gerarope`:
+
+```foxpro
+lcQuery = [Select 0 as Selecionada, Dopes, GerOpServs, cCodServs, nVlServs, nAliIss, fPags ] + ;
+          [From SigCdSOp ] + [Where Codigos = '] + crSigCdSOs.CodDeps + [' And ] + [GerOpers = 1]
+poDataMgr.SqlExecute(lcQuery, [LocalSacOp])
+Go Top In LocalSacOp
+Do Form SigOpLop With ThisForm
+```
+
+Duas corre├º├Áes ├á Fase 1:
+- **Tabela ├® `SigCdSOp`, n├úo `SigCdOpe`** (conferido em `docs/schema.sql` via `Get-Content -Raw`). Deixar `SigCdOpe` levaria as Fases 3-8 a construir lookups na tabela errada.
+- **O cursor tem SETE colunas, n├úo duas.** A Fase 1 declarou s├│ `Selecionada`/`Dopes` (as vis├¡veis), mas o form pai l├¬ `GerOpServs`, `cCodServs`, `nVlServs`, `nAliIss` e `fPags` do mesmo alias *depois* que o di├ílogo fecha. Acrescentei as 5 propriedades e `CarregarDoCursor` mapeia todas.
+
+## M├®todos entregues
+
+Camada de dados de **cursor**, n├úo de INSERT/UPDATE: `CarregarDoCursor` (7 colunas, guarda de EOF, `TYPE()` por coluna, `VARTYPE` antes de comparar numeric(1,0), work area restaurada), `CarregarOperacoes` (a query do legado transcrita literalmente), `GarantirCursorGrade`, `ObterAliasGrade`, `GradeEditavel`, `AlternarSelecao` (o `Gather Memvar` do Check1), `AtualizarTotais` (o `Scan` do pai, repondo o RECNO), `TemSelecao`, `LimparDados`, `ObterChavePrimaria`, `Destroy`.
+
+`Inserir`/`Atualizar`/`ExecutarExclusao`/`RegistrarAuditoria` ficam **herdados**: o dump n├úo tem `TABLEUPDATE`, nem `.AddCursor`, nem nenhum `Insert/Update/Delete` ÔÇö medi os tr├¬s. Sobrescrever exigiria inventar grava├º├úo. O gate da Fase 2 reconhece isso (`boSomenteLeitura = True`, verificado rodando a l├│gica do orquestrador).
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| Gate Fase 2 (l├│gica do `OrquestradorMigracao.ps1`) | `GATE FASE 2 = True` |
+| `Test-CompletudeCodigo` (05d) | OK ÔÇö sem TODO/stub/procedure vazia |
+| `ValidadorSQLSchema.ps1` (05f) | PASSOU ÔÇö nenhuma coluna inv├ílida |
+| `COMPILE` no VFP9 | `FXP=SIM ERR=NENHUM` |
+| Probe de runtime (10 cen├írios) | `PROBE_OK` |
+| Est├íticas: regra #43, MESSAGEBOX, `PUBLIC` em classe, `RETURN` dentro de `TRY`, CATCH silencioso, acento literal | 0 ocorr├¬ncias cada |
+
+O probe n├úo s├│ instanciou ÔÇö exercitou o comportamento: `CarregarDoCursor` devolveu `Dopes=[MONTAGEM] GerOpServs=1 cCodServs=[SRV001] nVlServs=150.75 nAliIss=5 fPags=[FP01]`; `AlternarSelecao` fez 0ÔåÆ1ÔåÆ0 no cursor preservando o RECNO; `TotalSel=2 Marcadas=[MONTAGEM, POLIMENTO]`; o `SELECT` do chamador voltou intacto; cursor somente-leitura devolveu `-1` com mensagem em vez de ficar inerte; e o `Destroy` fechou o espelho local **preservando** o `LocalSacOp` do pai.
+
+Antes de rodar o smoke test confirmei que o `vfp9.exe` executa de verdade nesta sess├úo (gravou o arquivo de sa├¡da) ÔÇö sem isso o `.FXP` e o `exit=0` n├úo provariam nada.
+
+**Um ponto para a Fase 3:** o CheckBox da Column1 s├│ alterna se o alias da grade for READWRITE. Cursor de `SQLEXEC` nasce somente-leitura e o controle fica vis├¡vel, recebe foco e n├úo muda ÔÇö por isso `CarregarOperacoes` monta `LocalSacOp` com `INTO CURSOR ... READWRITE` e o `GradeEditavel()` existe para o Form avisar em vez de ficar inerte.

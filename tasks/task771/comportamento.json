@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 9,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "FILE", "FILETOSTR"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPNFD",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "****** atualiza cursor *****\nLOCAL lnUltSeq\n\nlcEDN = crSigmvNfi.empdopnums\nlcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]\nIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfd]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfd)])\n\tllRet=.F.\nEndIf\nlnUltSeq=IIF(EOF('crSigMvNfd'), 1, crSigMvNfd.nfeseq+1)\n\nSELECT crSigMvNfd\n*!*\tnfedte with DATETIME()\n\nIF thisform.eve... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,evento = 'CAR' or EOF",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD",
+      "evento": "Procedure",
+      "linhas": 201,
+      "codigoOriginal": "*** gera xml para o SAT diretamente pelo SAT.dll ***\nLOCAL lcDt, lcTm, lcAmb, lcCnpjAC, lcAssi, lcRat, lnRet, llSatShar\n\n*** mena 10/07/2015 - cria estrutura do xml de cancelamento para o CFe - SAT\nCREATE CURSOR CFTags  (c1 c(20), c2 c(20), c3 c(20), c4 c(20), c5 c(20), c6 c(20), c7 c(20), c8 c(20), c9 c(20), c10 c(20), c11 c(20), c12 c(20), c13 c(20), c14 c(20), c15 c(20), c16 c(20), c17 c(20), c18 c(20), c19 c(20), c20 c(20), c21 c(20), c22 c(20), c23 c(20), c24 L, ;\n\t\t\t\t\t   c1a n(1,0), c2a n(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD",
+      "evento": "Procedure",
+      "linhas": 88,
+      "codigoOriginal": "LOCAL cCampo, lcPed, lcDest, lcAux, lcLinha, lcLog, lOk\n\nlcPed = cPathUni + lcPTxt + cId+\"-ped-sit.XML\"\nlcLog = cPathUni + lcPTxt + 'logNfe.txt'\n\nDELETE FILE &lcPed\n=StrToFile([], lcPed)\n\n*** mena 18/03/2016 - alterada a versao para 3.10, estava a antiga (2.0..)\n*** mena 18/06/2018 - alterada a versao para 4.00, estava a antiga (2.0..)\n=Strtofile(Alltrim([<?xml version=\"1.0\" encoding=\"UTF-8\"?>]+ lcChr), lcPed,.T.)\n=Strtofile(Alltrim([<consSitNFe versao=\"4.00\" xmlns=\"http://www.portalfiscal.inf.b... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILE,FILETOSTR",
+        "metodosFormChamados": "esperaarq",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "Lparameters pForm1, pForm2, pDId, pEvento\nLOCAL lcEDN\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nthisform.Evento = pEvento\n\nSet Confirm On\n\n*!*\tThisForm.LockScreen = .f.\n*!*\tThisForm.LockScreen = .t.\nSet DataSession to pDId\nWith ThisForm\n\t.ParentForm  = pForm1\n\t.ParentForm2 = pForm2\n\t.ParentForm.Enabled = .T.\nEndWith\n\nIF thisform.Evento = 'CAN'\n\tthisform.getEvento.Value  = 'CANCELAMENTO'\nELSE\n\tthisform.getEvento.Value = 'CART... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value  = ttoc,atucur,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "&&Do Parametros_Iniciais",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntObservacao.getDesc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntBotoes",
+      "evento": "Click",
+      "linhas": 700,
+      "codigoOriginal": "PRIVATE cTo, cAssunto, cAnexo, cCorpo, cFrom, cCC, cServer, cSenha, nPorta\nPRIVATE lOk, cCampo, cComando, lcTeste, lcStat\nPRIVATE lcDest, lcXml, lcQuery, lcArqXML, lcArqPDF\nPRIVATE lcArq, lcTAmb, lcProt, lcEmp, lcQuery, lcCH, lcPathNfe, cCnpj, cDemis, lcLinha, pIni, pFim, llOks, lcTemp\nPRIVATE lcVerao\nLOCAL lcCha, lcNf, lcSer, lcPt, lcJu, llOks, lnRet\nPRIVATE pcXml\n\n*** mena - 29/05/2015 - cancela NFCe emitida pelo migrate ***\nIF crSigCdOpe.CupFis=5\n\tllOks=.t.\n\tDECLARE integer tCFCancelar_NFCe_D... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,canccfe",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntBotoes",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntNFe.getNfe",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntData.getData",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.cntSeq.getSeq",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.GetEvento",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPNFD.Refazer",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "IF this.value = 1\n\tlcEDN = crSigmvNfi.empdopnums\n\tlcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]\n\t***Seleciona o ultimo evento desta operação***\n\tIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfd]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfd)])\n\t\tllRet=.F.\n\tEndIf\n\n\tIF EOF('crSigMvNfd')\t&& Se não houver nenhuma linha, cria a linha\n\t\tthisform.atucur\n\telse... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPNFD.Procedure",
+      "queryOriginal": "lcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]",
+      "tabelas": "SigMvNfd",
+      "colunas": "empdopnums,lcEDN,nfeEve,Evento,nfeseq",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPNFD.Refazer.Click",
+      "queryOriginal": "\tlcQuery = [Select * From SigMvNfd Where empdopnums = '] + lcEDN + [' and nfeEve = '] + thisform.Evento + [' order by nfeseq desc]",
+      "tabelas": "SigMvNfd",
+      "colunas": "empdopnums,lcEDN,nfeEve,Evento,nfeseq",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvNfd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

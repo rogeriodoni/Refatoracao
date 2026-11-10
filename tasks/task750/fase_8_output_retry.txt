@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8 conclu├¡da. `Formsigopind.prg` est├í completo (6.924 linhas, 104 PROCEDURE/ENDPROC balanceados) e **compila limpo no VFP9** (`.fxp` gerado, nenhum `.err`).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 8 exige os quatro nomes `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` **mais** um bot├úo de a├º├úo com nome can├┤nico. Faltavam dois:
+
+| Exig├¬ncia | Antes | Agora |
+|---|---|---|
+| `BtnCancelarClick` | **ausente** | implementado |
+| `Btn(Salvar\|Confirmar\|Gravar\|Processa\|ÔÇª)Click` | **ausente** | `BtnConfirmarClick` |
+| `BtnSalvarClick` | ausente | dispensado ÔÇö o dump legado n├úo tem `btnSalvar`/`btnGravar`/`mGravaDados` (0 ocorr├¬ncias), SIGOPIND n├úo grava cadastro |
+
+## O que foi implementado (l├│gica real, nenhum stub)
+
+**`BtnConfirmarClick()` / `BtnCancelarClick()`** ÔÇö despachantes por contexto, porque o legado n├úo tem Salvar/Cancelar globais: a confirma├º├úo e o abandono moram em cada painel flutuante. Ambos percorrem os pain├®is na ordem de preced├¬ncia (`cnt_4c_Consulta` ÔåÆ `cnt_4c_Saldo` ÔåÆ `cnt_4c_Imprime` ÔåÆ `cnt_4c_Quitas`) e, sem painel aberto, caem no equivalente da p├ígina ativa: Confirmar ÔåÆ `Cmd_Consulta` (HIST) ou `cmd_consulta` (SALDO); Cancelar ÔåÆ `grp_operacao` op├º├úo Sair da HIST (`Operacao = ''` + `ActivePage = 1`), que ├® exatamente o que o SCX faz.
+
+**Defeito real corrigido no caminho:** `cntConsulta.obj_4c_Cmd_grupo` tem dois bot├Áes no legado ÔÇö `OK` (posiciona o cursor na conta digitada e fecha) e `Cancelar` (s├│ fecha). O migrado ligava os dois ao mesmo handler ignorando o `.Value`, ent├úo **"Cancelar" aplicava o `LOCATE` igual ao OK**. Agora despacha por `Value`, com o corpo compartilhado extra├¡do em `ConfirmarPainelConsultaSaldo()` + `FecharPainelConsultaSaldo()` (fonte ├║nica das seis linhas de reabilita├º├úo).
+
+**`FormParaBO`/`BOParaForm`** ÔÇö auditei as 60 propriedades `this_*` do `sigopindBO` contra os dois m├®todos. Faltavam tr├¬s campos de tela:
+- `this_cCdContaBusca` / `this_cDsContaBusca` (os TextBox do painel `cntConsulta`) ÔÇö nos dois sentidos;
+- `this_nCmbConcilia` estava s├│ no `FormParaBO`, assim├®trico ÔÇö acrescentado ao `BOParaForm` com guarda `>= 1` (ListIndex ├® 1-based).
+
+Tamb├®m sincronizei o estado operacional que o BO declara e o form nunca alimentava (`this_cGrupoOper`, `this_cCliente`, `this_cOperacao`, `this_lMatrizes`, `this_dDataConcilia`, `this_cUsuario`). As 30 propriedades restantes **n├úo** entram nesses m├®todos por serem espelhos de linha de cursor ÔÇö alimentadas por `CarregarDoCursor`/`CarregarLancamento`/`CarregarDadosCliente` no BO, verificado.
+
+## Verifica├º├Áes
+
+- Gate: 4/4 nomes presentes, `acaoGravar` casa, `legadoSemSalvar` confirmado no dump.
+- Completude: 0 TODO/FIXME, 0 indicador de pend├¬ncia, 0 stub com `MsgAviso`, 0 procedure vazia (varredura pr├│pria), 0 `MESSAGEBOX`.
+- Estrutura: PROCEDURE/ENDPROC 104/104, TRY/ENDTRY 65/65, IF/ENDIF 539/539.
+- Helpers `PROTECTED` chamados sempre com `THIS.` (regra #8); `BtnConfirmarClick`/`BtnCancelarClick` s├úo PUBLIC (regra #3).
+- Integra├º├úo j├í estava feita: `menu.prg` bar 6 de `popMovimentos` ÔåÆ `AbrirFormsigopind` com `GarantirClasse`, e `indice_classes.txt` com as depend├¬ncias.
+
+Backup do arquivo anterior em `/tmp/Formsigopind.prg.bak`, caso queira comparar.

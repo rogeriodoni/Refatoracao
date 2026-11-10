@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3 conclu├¡da: `C:\4c\projeto\app\forms\operacionais\FormSigOpLop.prg` criado (422 linhas, 18,8 KB).
+
+## Por que a tentativa anterior falhou
+
+N├úo foi reprova├º├úo de valida├º├úo ÔÇö o log mostra o Claude CLI abortando em 26s com erro de PowerShell numa regra de permiss├úo (`claude.ps1:12`), sem produzir arquivo nenhum. O gate ent├úo s├│ reportou "Form N├âO foi criado".
+
+## Decis├úo estrutural: layout FLAT, sem PageFrame
+
+O prompt gen├®rico da Fase 3 pede "PageFrame com Page1 (Lista) e Page2 (Dados)", mas o `SIGOPLOP.SCX` **n├úo tem PageFrame**: a raiz ├® um `form` gen├®rico (n├úo `frmcadastro`/`frmrelatorio`) e nenhum objeto da ├írvore tem `BaseClass: pageframe`. Criar um violaria o PILAR 1. Verifiquei o gate em `OrquestradorMigracao.ps1:9031-9150` e esta tela cai no ramo **"layout flat"** (tem `Container`, logo n├úo ├® o sub-ramo "flat sem container") ÔÇö medido:
+
+| condi├º├úo do gate | resultado |
+|---|---|
+| `raizFormGenerico` | True |
+| `legadoSemPageFrame` | True |
+| `legadoSemContainer` | False ÔåÆ ramo FLAT |
+| **GATE FASE 3 (flat)** | **True** |
+
+## O que foi entregue
+
+Estrutura base fiel ao dump: classe sobre `FormBase` com as propriedades visuais transcritas (391├ù318, `DataSession = 1`, `TitleBar = 0`, `WindowType = 1`, `AlwaysOnTop`, `Movable = .F.`), `Init()` recebendo o form pai e desabilitando-o (transcri├º├úo do `pFrm` legado), `InicializarForm()`, `ConfigurarCabecalho()` com `cnt_4c_Sombra` + os dois labels sombra/t├¡tulo, `AtualizarCabecalho()`, `PrepararAliasGrade()`, `RestaurarFormPai()`, `TornarControlesVisiveis()` e `Destroy()` com `DODEFAULT()` na ├║ltima linha. Nomes conforme `mapeamento.json`. Grade `grd_4c_Dados` e bot├úo `cmd_4c_CmdSair` ficam para a Fase 4.
+
+Tr├¬s pontos que exigiram desvio consciente do dump, todos comentados no arquivo:
+- `cntSombra.Width = 800` e labels `Width = 769` s├úo **maiores que o pr├│prio form** (391) ÔÇö usei `THIS.Width` / `THIS.Width - 20`, sen├úo a faixa e as legendas sairiam recortadas.
+- `AutoSize = .F.` expl├¡cito nos labels: com `WordWrap = .T.` o `AutoSize` descarta a `Height` transcrita (regra #23).
+- O `Load` legado chama `fConfigGeral()`, e o pr├│prio `utils\fconfiggeral.prg` determina que c├│digo nosso nunca o chame ÔÇö o form n├úo sobrescreve `Load`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9 real**: `_TALLY = 0`, nenhum `.err`, `.fxp` regenerado (apaguei antes para n├úo testar c├│digo velho). `.fxp` e scripts tempor├írios removidos depois.
+- Zero `RETURN` dentro de `TRY/CATCH`; zero `PUBLIC FUNCTION/PROCEDURE` em `DEFINE CLASS`; zero acentos literais; nenhum `AddObject("pgf_4c_`.
+- Validador de completude (`Test-CompletudeCodigo`, rodado com os regexes exatos): 0 marcadores TODO, 0 indicadores de pend├¬ncia, 0 stubs `MsgAviso`, 0 procedures vazias nos 8 analisados.
+- M├®todos do BO chamados de fora (`GarantirCursorGrade`, `GradeEditavel`) conferidos como n├úo-`PROTECTED` (regra #51).
+
+N├úo toquei em `config.prg`/`menu.prg`: este ├® um di├ílogo filho aberto pelo form pai, n├úo entra no menu, e o ├¡ndice de classes ├® regerado sozinho.

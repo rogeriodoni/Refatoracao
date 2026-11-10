@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada. `FormSigOpIbo.prg`: 540 ÔåÆ 1191 linhas.
+
+## O que foi medido antes de escrever
+
+O template da Fase 4 pede Grid + 6 bot├Áes CRUD + navega├º├úo Lista/Dados. Rodei os cinco testes de lista do gate contra o dump, um a um (n├úo deduzi):
+
+| teste | resultado |
+|---|---|
+| `BaseClass grid\|pageframe` | 0 |
+| ListBox que lista registros | nenhum ListBox |
+| token `Grade`/`grd` do pr├│prio form | 0 |
+| `AddCursor` que liga grade (5┬║ arg) | 0 (nenhum `AddCursor`) |
+| `RecordSource` / `ControlSource` com valor | 0 (o ├║nico `ControlSource` ├® `""` vazio) |
+
+N├úo h├í lista. H├í 7 controles de entrada, s├│ o EditBox ├® `ReadOnly` ÔåÆ n├úo ├® DESPACHANTE nem EXIBICAO: ├® **di├ílogo de CAPTURA**. Confirmei `legadoCapturaF4 = True` e `temSuperficieCaptura = True`.
+
+## O que a fase entregou (o equivalente real de "bot├Áes" nesta tela)
+
+`ConfigurarBotoes` (CommandGroup `btnReport` ÔÇö Imprimir/Encerrar, props transcritas do dump), `ConfigurarEventos` (BINDEVENT), `CmdImprimirClick` e `CmdSairClick` reais, `CarregarImpressoras`, `AplicarEstadoBotoes`, `VerificarImpressaoAutomatica` (o IF final do `Init` que clica Imprimir sozinho), `SincronizarOpcoesParaBO`, `ExibirConteudoBoleto`, `ObterBoletosSigCdOpd` + par Entrar/Restaurar datasession.
+
+Tr├¬s pontos que exigiram decis├úo:
+
+- **Ordem no `InicializarForm`** est├í fixada e comentada: `CarregarImpressoras` vem **antes** dos campos porque o ComboBox da fase seguinte liga `RowSource` em `cursor_4c_ImpreV` ÔÇö ligar cursor inexistente derruba o `Init` (regra #41). E os bot├Áes v├¬m **depois** da faixa do cabe├ºalho, que eles sobrep├Áem (Top -2..83 contra 0..80). Deixei o marcador de onde a fase dos campos deve entrar.
+- **Datasession**: discharguei a pend├¬ncia que a Fase 3 registrou. `crSigCdOpd` e o cursor de impress├úo s├úo do form **chamador**; com `DataSession = 2` eles ficam fora de alcance e as duas condi├º├Áes do legado morreriam caladas. A troca ├® tempor├íria, s├│ em volta da chamada, com restauro tamb├®m no CATCH.
+- **`lcErro` ├® calculado e n├úo exibido ÔÇö isso ├® fiel.** O ├║nico bloco que mostra o `Lbl_Erro` (e o ├║nico que desabilita Imprimir) est├í comentado `*!*` no SCX. Reativar seria inventar comportamento; o texto fica em `this_cErroImpressoras`.
+
+`TabIndex` ficou de fora de prop├│sito: fora da faixa `1..N` ├® descartado em sil├¬ncio, e com poucos controles o `TabIndex = 9` seria clampado.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa**, provada com controle negativo: `SigOpIboBO.prg` e `FormSigOpIbo.prg` deram `FXP=SIM ERR=NAO`, e o `.prg` de controle (com `PUBLIC PROCEDURE` proibido) deu `ERR=SIM` com o erro esperado ÔÇö ou seja o harness realmente compilou, n├úo saiu sem executar. `.FXP` apagados depois.
+- Auditoria de propriedades inexistentes: `OK - nenhuma atribuicao a propriedade inexistente`.
+- Blocos balanceados (18/18 PROC, 14/14 TRY, 8/8 WITH, 2/2 DO CASE); zero `RETURN` dentro de TRY; zero `PUBLIC PROCEDURE`; zero byte >127 (acentos s├│ por `CHR()`); CRLF preservado.
+- M├®todos do BO chamados de fora: os 4 s├úo PUBLIC; as 14 propriedades usadas est├úo declaradas.
+
+**Um defeito meu, encontrado e corrigido:** meu coment├írio citava `ConfigurarPaginaLista` e `AlternarPagina` por extenso ao explicar por que n├úo se aplicam ÔÇö e isso fazia o gate aprovar pelo ramo PAGINADO sem existir m├®todo nenhum (aprova├º├úo falsa que esconderia o ramo real). Reescrevi a prosa sem os tokens; medido depois: `temLayoutPaginado = False`, passando legitimamente por CAPTURA.
+
+**O que n├úo pude verificar:** nesta sess├úo o VFP9 compila mas n├úo executa o corpo dos scripts, ent├úo n├úo instanciei o form ÔÇö n├úo h├í prova de runtime de que a tela abre, nem do fluxo de impress├úo (que depende de `SigBlBol`, rotina global do Fortyus ausente do acervo). A instancia├º├úo fica para a etapa `06_testForm` do pipeline.

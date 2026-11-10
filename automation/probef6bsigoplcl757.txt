@@ -1,0 +1,24 @@
+PROBE F6b task757 INICIO
+ambiente OK
+1) CREATEOBJECT INSERIR -> VARTYPE=O
+2) AbrirBuscaBase  existe=.T. protected=.F. (esperado .T. / .F.)
+   AbrirBuscaNivel existe=.T. protected=.F. (esperado .T. / .F.)
+   ValidarNivelExec existe=.T. protected=.F. (esperado .T. / .F.)
+3) nomes reais: Nvl2=[TXT_4C_NVL2] DNvl2=[TXT_4C_DNVL2] Base=[TXT_4C_BASE]
+   nomes reais: Nvl3=[TXT_4C_NVL3] DNvl3=[TXT_4C_DNVL3] Nvl4=[TXT_4C_NVL4] DNvl4=[TXT_4C_DNVL4]
+4) ACHOU: Nvl2=[BB] (esperado BB) DNvl2=[MARCA PRESERVADA] (esperado MARCA PRESERVADA - o legado nao reatribui no ramo achou)
+   cursor_4c_LocalNivel usado=.T. reccount=2 (esperado 2 - filtrado por Cods='01')
+   this_lEmLookup apos ValidarNivelExec=.F. (esperado .F.)
+5) VAZIO: ValidarNivelExec(3) retornou sem picker; this_lEmLookup=.F. (esperado .F.)
+6) NIVEL INVALIDO 9: retornou sem erro e sem picker
+7) ANINHADO: flag antes=.T. -> depois=.T. (esperado .T.)
+   STANDALONE: flag antes=.F. -> depois=.F. (esperado .F.)
+8) gnConnHandle=-1
+   ANINHADO: flag antes=.T. -> depois=.T. (esperado .T.)
+   STANDALONE: flag antes=.F. -> depois=.F. (esperado .F.)
+   Base preservada=[01] (esperado 01 - nunca apagar o digitado, regra #50)
+9) txt_4c_Base -> 2 binding(s) [LOSTFOCUS -> BASELOSTFOCUS] [INTERACTIVECHANGE -> BASEINTERACTIVECHANGE]
+9) txt_4c_Nvl2 -> 2 binding(s) [LOSTFOCUS -> NVL2LOSTFOCUS] [INTERACTIVECHANGE -> NVL2INTERACTIVECHANGE]
+9) txt_4c_Nvl3 -> 2 binding(s) [LOSTFOCUS -> NVL3LOSTFOCUS] [INTERACTIVECHANGE -> NVL3INTERACTIVECHANGE]
+9) txt_4c_Nvl4 -> 2 binding(s) [LOSTFOCUS -> NVL4LOSTFOCUS] [INTERACTIVECHANGE -> NVL4INTERACTIVECHANGE]
+PROBE F6b FIM

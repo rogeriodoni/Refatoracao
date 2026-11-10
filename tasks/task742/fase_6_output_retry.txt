@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e validada.
+
+## O que foi entregue
+
+`projeto/app/forms/operacionais/Formsigopfis.prg` ÔÇö 3.379 ÔåÆ 4.878 linhas.
+
+Os **78 campos** j├í estavam completos (fases 4/5). O que faltava era o bloco de lookups, agora implementado: **13 campos ligados por BINDEVENT** (`LostFocus` = o `Valid` do legado, `KeyPress` com teste F4/F5, `DblClick`) e **8 lookups** transcritos do dump, todos funcionais:
+
+| Campo | Origem (conferida em `docs/schema.sql`) |
+|---|---|
+| CFOP c├│digo / descri├º├úo | `SigCdCfo` ÔÇö com os 3 filtros do legado (`operacaos` E/S por `SigCdOpe.opers`, `codigos IN SigCdOop` quando `llFiltraCfo`, `situas <> 2` em inclus├úo) + a troca `desc2s`ÔåÆ`descricaos` |
+| S├®rie | `SigCnFNf` ÔÇö `DISTINCT` global ou por empresa conforme `SigOpCdd.servzs`, com o fallback para empresa gen├®rica; aplica `marpads`/`esppads` |
+| Esp├®cie da nota | `SigCdEsp` (`especies`/`descs`) |
+| Transportadora c├│digo / nome | `SigPrTrp` ÔÇö preenche os 5 campos (c├│digo, raz├úo, endere├ºo, cidade, UF); busca por nome usa o `LIKE '%x%'` do legado |
+| UF da placa / UF do servi├ºo | `SigCdUfs` (`estados`/`descrs`), com o `PADR(,2)` |
+| Munic├¡pio | `SigCdMun` Ô¿Ø `SigCdUfs` filtrado pela UF; grava o IBGE em `prestservs` |
+| Benef├¡cio fiscal / Servi├ºo municipal | cursores locais `crBeneficioRJ` / `crSrvMuns` |
+
+## Decis├Áes que vale registrar
+
+**Sess├úo de dados.** O form ├® `DataSession = 2` (fiel ao SCX) e o `FormBuscaAuxiliar` n├úo declara `DataSession` ÔÇö o cursor dele vive na sess├úo default e n├úo ├® leg├¡vel deste lado. Por isso toda coluna necess├íria ├® lida de um cursor **local** e do picker vem s├│ o c├│digo escolhido (via `Mostrar()`, que l├¬ na pr├│pria sess├úo dele).
+
+**Dois lookups sem tabela.** `crBeneficioRJ` e `crSrvMuns` vinham de `fBeneficio_RJ()` / `fCodMunicipal()`, do `SIGFUNCS.PRG` legado, que n├úo est├í no acervo ÔÇö e conferi as 682 tabelas do schema: n├úo h├í correspondente. Apontar para `SigCdSrv` (cujas colunas s├úo `codservs`/`descservs`, outro dom├¡nio) gravaria c├│digo errado em `codsrvfis`, violando o PILAR 2. Mantive a origem no cursor; sem ele, a indisponibilidade ├® **avisada nomeando a fun├º├úo ausente** e o valor digitado ├® preservado (regras #27 e #50).
+
+**Corrigi um `ReadOnly = .T.` fixo** em `txt_4c_DClFiscal` deixado pela fase anterior: o legado tem `When ... And IsEmpty(Get_ClFiscal.Value)`, ou seja a descri├º├úo ├® digit├ível enquanto o c├│digo est├í vazio. Fixo, o lookup por descri├º├úo ficaria morto. Agora a condi├º├úo ├® avaliada por `AtualizarDependenciasCampos()` ÔÇö mesma regra aplicada a `Dbene` e `dsrvfis`.
+
+**N├úo criei `cnt_4c_BotoesAcao` (Salvar/Cancelar)** que o prompt gen├®rico menciona: o legado tem um ├║nico bot├úo de a├º├úo (`ok`, "Retornar", j├í criado na fase 4) e grava pelo form pai. Invent├í-los violaria o PILAR 1.
+
+## Verifica├º├úo
+
+- **Compila limpo** no VFP9 (`.FXP` regerado ap├│s `DELETE FILE`, sem `.err`) ÔÇö blocos balanceados, zero bytes n├úo-ASCII, nenhum `RETURN` dentro de `TRY`.
+- **Gate da Fase 6 passa** pelo ramo *paginado n├úo-CRUD*, avaliado com os helpers reais do orquestrador: `legadoPaginadoSemDados=True`, 78 campos migrados contra piso 39, BINDEVENT e `AbrirLookup*` presentes.
+- **`ValidadorSQLSchema`**: 12 statements, nenhuma coluna inv├ílida.
+- **Completude** (`Test-CompletudeCodigo`): nenhum TODO, stub ou procedure vazia.
+- **Auditores** `VerificarLookupEmKeyPress`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarFormBuscaAuxiliar`, `VerificarPropriedadesInexistentes`: **nenhum achado neste form**.
+- Os 13 handlers ligados batem exatamente com os 13 definidos; as 23 properties de BO e todos os m├®todos `THIS.` referenciados existem (incluindo os herdados de `FormBase`/`BusinessBase`).
+
+Uma ressalva honesta sobre escopo: a renumera├º├úo da nota e o selo fiscal (`fGerUniqueKey`/`fCanUniqueKey`/`fVerImpPends`), a checagem CFOP-versus-UF do destinat├írio e o `CalcImposto` dependem de cursores que pertencem ao form chamador e est├úo marcados no roadmap do pr├│prio arquivo para as fases 7/8 ÔÇö ficaram documentados em coment├írio, sem stub.

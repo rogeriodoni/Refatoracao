@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced. The Fase 3 Form file (`Formsigoplin.prg`) is created with:
+
+- `DEFINE CLASS Formsigoplin AS FormBase` with canonical visual properties (Height=600, Width=1000, Caption transcribed with `CHR()` accents)
+- `Init()` ÔåÆ only `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ creates `sigoplinBO`, builds the PageFrame, propagates Caption to header labels
+- `ConfigurarPageFrame()` ÔåÆ PageFrame with `Top=-29`, `Tabs=.F.`, Page1="Lista", Page2="Dados"
+- `ConfigurarPaginaLista()` / `ConfigurarPaginaDados()` ÔåÆ cabe├ºalho (faixa cinza + labels, on **both** pages per regra #11) plus the empty `cnt_4c_Botoes` / `cnt_4c_BotoesAcao` containers (no buttons yet ÔÇö Fase 4)
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` ÔÇö complete, functional helpers
+- `FormParaBO()`/`BOParaForm()` left as empty stubs (no fields exist until Fases 5-6)
+
+Grid, CRUD buttons, data fields, and event handlers were intentionally omitted per the Fase 3 scope ÔÇö those land in Fases 4-8.

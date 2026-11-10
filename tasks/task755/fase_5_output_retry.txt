@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da e verificada.
+
+## Entregue
+
+**`FormSigOpJob.prg`** (1045 ÔåÆ 2497 linhas) e **`SigOpJobBO.prg`** (complementado):
+
+| Bloco | Conte├║do |
+|---|---|
+| `ConfigurarCabecalhoJob()` | Bloco de identifica├º├úo na raiz do form: 5 TextBox read-only (`Enabled=.F.`, creme 255,255,244), CheckBox "Briefing Extra" (`Jb_072`), EditBox de contatos, 7 Labels ÔÇö tudo com `Top/Left/Width/TabIndex` do dump |
+| `ConfigurarAbaEquipes()` | Page3: `cnt_4c_Emp1` ("P&G") e `cnt_4c_Emp2` ("SRCOM"), 7 linhas cada = **28 TextBox** (nome char(50) + c├│digo char(10)), linha divis├│ria, 7 CheckBox de Tipo de Projeto/Desenvolvimento |
+| `CarregarCabecalhoJob()` / `BO.CarregarCabecalho()` / `BO.ObterRazaoConta()` | Transcri├º├úo do `PROCEDURE carregacabs` legado (Jobs, descri├º├Áes via SigCdCli, `MIN(datas)` de SigMvCab) |
+| `CarregarNomesEquipes()` | Equivalente ao `mdadosequipes` ÔÇö os campos "a" n├úo t├¬m ControlSource no legado |
+| `BOParaForm`/`FormParaBO` | Estendidos para `Jb_024..044` e `Jb_072`, com `IIF(... = 1, 1, 0)` nos CheckBox numeric(1,0) |
+
+**Gate da Fase 5 (ramo PAGINADO-N├âO-CRUD): PASSA** ÔÇö 41 campos migrados contra piso de 21.
+
+## Verifica├º├úo
+
+- `COMPILE` em VFP9: ambos limpos (`.err` vazio, `.fxp` regerado)
+- **Instancia├º├úo real**: form abre, 41 TextBox na tela, nenhum controle recortado (header termina em 124 < PageFrame.Top=130; c├│digo termina em 440 Ôëñ 442; tipos em 425 Ôëñ PageHeight 447), sem sobreposi├º├úo (nome 357 < c├│digo 360), ida-e-volta FormÔåöBO confirmada, **zero erro registrado**
+- `ValidadorSQLSchema` (683 tabelas), `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, checks de completude: todos OK
+
+## Tr├¬s defeitos pr├®-existentes que o retry desenterrou
+
+N├úo eram do escopo da Fase 5, mas eram bloqueantes e estavam no mesmo bloco que eu tinha de preencher:
+
+1. **O form nunca havia compilado.** 208 linhas no formato `.Top = 7 : .Left = 13` ÔÇö VFP9 n├úo aceita `:` como separador de statements. As Fases 3 e 4 passaram porque os gates s├úo regex sobre texto, n├úo compila├º├úo. Corrigido com quebra quote-aware (a linha 102 tem `:` dentro de string) e CRLF reposto.
+2. **`PageFrame.FontName/.FontSize` e 6├ù `Page.Visible`** n├úo existem nessas classes ÔÇö abortavam `ConfigurarPageFrame` *antes* de `.Visible = .T.` e das captions, deixando o PageFrame invis├¡vel. A fonte do legado mora na `Page`, que foi configurada corretamente.
+3. **As 6 captions das abas estavam inventadas.** A Fase 3 afirmou em coment├írio que "o dump n├úo exp├Áe Page.Caption" ÔÇö ele exp├Áe (`Page<N>.Caption`, `PageOrder`, `Picture`, cores). As reais s├úo Briefing / Briefing Continua├º├úo / Informa├º├Áes Gerais / Informa├º├Áes Gerais Continua├º├úo / ControladoriaÔÇôFiscal / Apresenta├º├úo, e o `PageOrder` do legado p├Áe `pgPagina6` em **3┬║**. Medi no VFP9 que uma ├║nica atribui├º├úo `.Page6.PageOrder = 3` reproduz a ordem e preserva o acesso por nome.
+
+## Pend├¬ncia consciente
+
+`getCabContatos` liga a `crSigMvJbC.Jb_Contatos` no legado, e **essa coluna n├úo existe** no schema can├┤nico (SigMvJbC tem 77 colunas; s├│ h├í `jb_contato` datetime). Dump mais novo que o banco ÔÇö caso da regra #14/#45. Reproduzi o campo (PILAR 1) e deixei **sem persist├¬ncia, com coment├írio expl├¡cito**: criar a coluna violaria o PILAR 2 e apontar para `jb_contato` gravaria texto em campo datetime. A aus├¬ncia est├í vis├¡vel de prop├│sito.
+
+As duas li├º├Áes generaliz├íveis (`:` n├úo separa statement; captions/PageOrder est├úo no dump) ficaram na mem├│ria. Propag├í-las para os prompts/CorretorAutomatico via `/propagate-lesson` ├® uma decis├úo sua ÔÇö mexe em artefatos bem al├®m desta fase.

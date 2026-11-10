@@ -1,0 +1,14 @@
+[1] inicio
+[2] config.prg OK
+[3] SET PROCEDURE OK
+[4] VARTYPE(form) = O
+BaseClass=Form Caption=[Gráfico Comparativo] W=800 H=600 ControlCount=3
+  filho 1: CNT_4C_SOMBRA (Container)
+  filho 2: CMD_4C_SAIR (Commandbutton)
+  filho 3: CMD_4C_IMPRIMIR (Commandbutton)
+SAIR     Top=3 Left=725 W=75 H=75 Caption=[Encerrar] Cancel=.T. Themes=.T. Visible=.T. PicOK=.T. dir=800
+IMPRIMIR Top=3 Left=650 W=75 H=75 Caption=[\<Imprimir] Themes=.T. Visible=.T. PicOK=.T. dir=725
+PROTECTED? CmdSairClick=.F. CmdImprimirClick=.F. ExecutarReportForm=.F.
+BINDEVENT Sair=1 Imprimir=1
+[5] CmdImprimirClick voltou sem estourar
+[6] FIM

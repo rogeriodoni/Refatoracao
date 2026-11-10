@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 est├í completa. `C:\4c\projeto\app\forms\operacionais\FormSigOpOco.prg` passou de 1216 para 1871 linhas (+662 / -7, CRLF preservado: CR=LF=1871).
+
+## O que a fase entregou
+
+**O lookup** (a metade que faltava e que fez a fase reprovar antes). O ├║nico do form est├í no `Valid` de `SIGOPOCO.Grade.Column3.Text1` e consulta `SigBaOco` via `fwBuscaInt` ÔÇö identificado no dump, n├úo inventado:
+
+| m├®todo | papel |
+|---|---|
+| `TextBoxOcorrenciaOco_4c` (classe nova) | `Valid` + `LostFocus` **embutidos** ÔÇö BINDEVENT em `Valid` de TextBox dentro de `Column` n├úo dispara e descartaria o retorno (o legado devolve `.F.` para prender o foco); `AfterRowColChange` entregaria a coluna de **destino** (regras #3/#46) |
+| `InstalarCelulaOcorrencia()` | `AddObject` + `CurrentControl` + `Sparse = .F.` + `Visible` (regra #18). Chamado no **fim de `VincularGrade`** e idempotente, porque o `ColumnCount` de l├í recria as `Column` |
+| `ValidarOcorrenciaGrade()` / `...Exec()` | wrapper com guarda de reentr├óncia + corpo. L├¬ o valor **do controle**, nunca do cursor |
+| `AbrirBuscaOcorrencia()` | `DefinirCursor`/`Mostrar` do `FormBuscaAuxiliar` sobre o cursor j├í filtrado pelo BO ÔÇö **n├úo** o `Init` com par├ómetros, que duplicaria a consulta (#36/#37) |
+
+**Os handlers do campo de observa├º├úo**, que ├® o controle que a Fase 5/6 colocou na tela: `PodeEditarObservacao` (`When`, embutido na classe `EditBoxObsOco_4c` porque governa a edi├º├úo) e `ObservacaoLostFocus` (`Valid` + `LostFocus` num handler s├│, ligado por **BINDEVENT "LostFocus"**), mais os dois `SetFocus` de navega├º├úo.
+
+## Verifica├º├úo (n├úo ├® alega├º├úo ÔÇö est├í medida)
+
+Smoke test confirmou que o VFP9 executa nesta sess├úo; s├│ ent├úo rodei compile e probe.
+
+- **Compila limpo**: sem `.ERR`, `.FXP` de 18.026 bytes
+- **A tela abre**: `CREATEOBJECT` devolveu `[O]` com o cursor do chamador aberto
+- `Column3.CurrentControl = TXT_4C_OCORRENCIA`, `Sparse=.F.`, `ReadOnly=.F.`, `MaxLength=10` (de `ocors char(10)`, n├úo do Width) ÔÇö o controle **aparece** de verdade
+- Os 5 m├®todos delegados existem e s├úo **PUBLIC** (`PROTECTED=.F.` nos cinco) ÔÇö regra #51
+- `When` com `ocors` vazio ÔåÆ `.F.` (campo bloqueado); preenchido ÔåÆ `.T.` e auto-preencheu com `OBS TESTE`, como o legado
+- **O BINDEVENT dispara**: acionando o *evento* (n├úo o handler), `this_cObservas` foi de `ZERADO` para `VIA BINDEVENT`
+- Ap├│s reexecutar `CarregarDados`, a c├®lula continua instalada e `Width`/`Header` sobreviveram
+- Configura├º├úo do picker: as duas colunas saem com a m├íscara `XXXXXXXXXX` e os t├¡tulos `C├│digo`/`Descri├º├úo` do dump
+- Auditorias `VerificarLookupEmKeyPress` e `VerificarFormBuscaAuxiliar`: zero achado neste form
+- Gate da Fase 6 reproduzido: `temLayoutFlat = True`
+
+## Dois pontos para voc├¬ saber
+
+1. **O caminho SQL do lookup n├úo foi exercitado em runtime** ÔÇö o SQL Server 192.168.200.10 ├® inalcan├º├ível nesta m├íquina, e o `Show()` do picker ├® modal (penduraria o probe headless). Testei tudo em volta: o ramo de valor vazio, a configura├º├úo completa do picker e a leitura que o `Mostrar()` faz. O `SELECT`/`Seek` em si ├® o que j├í estava no BO das Fases 1-2.
+
+2. **O gate tamb├®m casa `temPaginaDados` por um coment├írio** da Fase 5 (linha 158) que cita `ConfigurarPaginaDados()` s├│ para dizer que o roteiro gen├®rico n├úo se aplica a este form flat. N├úo mexi: ├® documenta├º├úo correta e pr├®-existente, e a aprova├º├úo ├® leg├¡tima pelo ramo flat, que passa por m├®rito pr├│prio. Mas vale registrar que o gate tem essa porta ÔÇö ├® a armadilha do "coment├írio satisfaz gate".
+
+Ficaram explicitamente para as Fases 7-8, registrado no cabe├ºalho do arquivo: `Click` da sa├¡da, `Valid` da coluna Peso Real (`KeyBoard {DNARROW}`) e o `AfterRowColChange` da grade. Nenhum stub, nenhum TODO.

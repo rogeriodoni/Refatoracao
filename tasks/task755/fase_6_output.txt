@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All names match the mapeamento.json exactly. Phase 6 is complete.
+
+## Summary
+
+Added to `FormSigOpJob.prg` (now 2817 lines, was 2497):
+
+1. **Page4 ("Materiais de Apoio")**: 5 path fields (Logomarca, Manual de Marca, Imagens, Refer├¬ncias, Atas/correspond├¬ncias) each with "..." (escolher pasta via `GETDIR()`) and "Abrir" (via `Shell.Application`) buttons ÔÇö no invented icon paths, per regra #25, since the dump didn't confirm any `.Picture`. Plus the "Avalia├º├úo do Job" memo.
+2. **Page5 ("Controladoria/Fiscal") remaining fields**: section title, 8 checkboxes (NF Servi├ºo, Nota de D├®bito, NF Loca├º├úo, Conta Corrente, Incentivo ICMS/Rouanet/ISS, Patroc├¡nio), C├│digo de Atividade, Outras Receitas, and Coment├írios Financeiros.
+3. **Page6 ("Apresenta├º├úo")**: Presencial/Eletr├┤nica, Proposta Comercial (Impress├úo/CD/Outros + descri├º├úo), Proposta T├®cnica (idem), and the large "Documentos Necess├írios" memo.
+4. **Lookups for the 14 Page3 team-account fields**: a shared `ProcessarLookupConta` core (exact-match via `BO.ObterRazaoConta`, falling back to the canonical `FormBuscaAuxiliar` picker against `SigCdCli`) with reentrancy guard, plus 14 thin `ValidarConta0NN` wrappers bound on `LostFocus` of each code field (regra #47 ÔÇö not `KeyPress`, since there's no F3/F4 key test).
+5. Extended `BOParaForm`/`FormParaBO` to mirror all the new Page4/5/6 controls against the already-existing BO properties (no BO changes needed ÔÇö Fase 1/2 already declared everything).
+
+Verified structural balance (WITH/ENDWITH, TRY/ENDTRY, FOR/ENDFOR, IF/ENDIF, and 58 methods Ôåö 58 ENDPROC/ENDFUNC) and cross-checked every new object name against `tasks/task755/mapeamento.json`.
+
+Next (Fase 7/8) would wire up the Retornar button's click handler, obrigatoriedade/ChecaObrigs logic, and Salvar/Cancelar wiring ÔÇö not in scope for this phase.

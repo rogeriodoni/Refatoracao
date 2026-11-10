@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+A segunda auditoria que ficou em background terminou ÔÇö passou tamb├®m:
+
+```
+OK - nenhum form chama metodo PROTECTED de BO.
+MetodoProtegido: nenhum achado em SigOpIgm*
+```
+
+Isso fecha a verifica├º├úo da regra #51 em escala de projeto (n├úo s├│ por inspe├º├úo do arquivo novo): nenhum form chama m├®todo `PROTECTED` de BO em lugar nenhum, e os 4 `PROTECTED` que declarei (`LerColunaNumerica`, `LerColunaTexto`, `LerColunaLogica`, `ObterChavePrimaria`) s├│ s├úo alcan├ºados pelos 25 call sites `THIS.`-prefixados de dentro da pr├│pria classe.
+
+Fase 2/8 est├í completa e verificada. Os dois artefatos de prova ficaram em `automation\_probe747f2.prg` / `_probe747f2.txt` (compila├º├úo + instancia├º├úo + os 8 ramos do boleto) e `_probe747f2b.prg` / `_probe747f2b.txt` (o `SCAN` sobrevivendo ao `INSERT INTO` de outro cursor), caso a Fase 3 ou um code-review queira reconferir.

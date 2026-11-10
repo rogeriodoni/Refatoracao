@@ -1,0 +1,498 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpLhi.SCX
+* Data/Hora: 08/11/2026 09:48:44
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPLHI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPLHI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPLHI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPLHI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPLHI
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPLHI.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLHI.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLHI.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLHI.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLHI.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLHI.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLHI.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLHI.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPLHI.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPLHI.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPLHI
+  Class: label
+  BaseClass: label
+
+Objeto: Cancela
+  Parent: SIGOPLHI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Confirma
+  Parent: SIGOPLHI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = " "
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPLHI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 158
+  Left = 114
+  Panel = 1
+  RecordSource = "TmpLanca"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 152
+  Width = 571
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "GRUPOS"
+  Column1.Width = 65
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "CONTAS"
+  Column2.Width = 65
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "HISTS"
+  Column3.Width = 290
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = "VALOR"
+  Column4.Width = 83
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ControlSource = "MOEDA"
+  Column5.Width = 25
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Grupos"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Contas"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Histórico"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Nomes"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Lançamentos que serão efetuados em Conta Corrente"
+  Height = 15
+  Left = 117
+  Top = 133
+  Width = 263
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLHI.Confirma
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Ok"
+  Name = "Confirma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPLHI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Form
+This.ParentForm = _Form
+This.Caption = 'Lançamentos para ' + Alltrim( crSigCdPgr.Dopes ) + ' - ' + Alltrim( crSigCdPgr.MascNum )
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+Select TmpLanca
+Go Top
+This.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLHI.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.CanceladoExterno = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLHI.Confirma
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPLHI
+RESERVED3 (ClassInfo): parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

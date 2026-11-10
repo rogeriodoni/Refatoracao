@@ -1,0 +1,577 @@
+{
+  "resumo": {
+    "totalMetodos": 33,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 10,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "fCarregarImps"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Procedure",
+      "linhas": 522,
+      "codigoOriginal": "Lparameters pTipo\n* Parametros : \"I\" - Impressão Imediata\n*\t\t\t   \"A\" - Impressão Posterior\nLocal vTipEtq, vnTpImpressora, vnAjVerts, vnAjHorzs, vnAjDenss, lnConfirma, llImpPreco, ;\n\t  llImprSepar, lnTipo, lnTpEti, lnTpImp, lnImpres, lcNomeImp, lcOcEti, llImpPesTot \n\nPrivate pTru, pDat\n\npTru = .T.\nSet Step On \nllPreco = (ThisForm.opt_Preco.Value <> 2)\n\nIf Not Used('dbImpressao')\n\tCreate Cursor dbImpressao (CPros c(14), Qtds n(10,3), QtdeEtiq n(10,3), Pedido c(30), Obs c(10), Cbars n(16), Pvens n(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GravaOcorrencia And Empty,SqlExecute,Montaconjunto",
+        "controlesReferenciados": "opt_Preco,OptPreco,Opt_Tipo,Opt_peso,get_Printer",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Procedure",
+      "linhas": 81,
+      "codigoOriginal": "LPARAMETERS lnTpEti, llImpPreco, pTipo\n\nSELECT LocalTpEti\nLOCATE for LocalTpEti.nTipos = lnTpEti\nIF !EOF() and LocalTpEti.tpespes = 2 && 2 = [TAG MODELO 1]\n\tCreate Cursor dbImpressao (CPros c(14), dpros c(40), Cbars n(14), Pvens n(12,2), razas c(30), Reffs c(40), codtams c(4), CodCors c(4))\n\tindex on cpros tag cpros\n\n\tThisForm.ParentForm.poDataMgr.Sqlexecute('select cemps, razas from SigCdEmp', 'crSigCdEmp')\n\tThisForm.ParentForm.poDataMgr.Sqlexecute('select observas, codigos from SigCdObs', 'crS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,CursorQuery",
+        "controlesReferenciados": "Get_nm_Operacao,opt_Preco",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nIf ThisForm.Opt_Conjunto.Value = 1\n\tSelect Max(cpros) as Cpros, Max(Qtds) as Qtds, Max(QtdeEtiq) as QtdeEtiq, Max(Pedido) as Pedido, ;\n\t'' as Obs, Sum(Pvens) as Pvens, Max(Moedas) as Moedas, '' as Empos, Max(cpros1) as cpros1, ;\n\tSum(PrecoDe) as PrecoDe, Max(Parcelas) as Parcelas ;\n\tFrom DbImpressao ;\n\tInto cursor csConjunto ReadWrite \n\n\tSelect DbImpressao\n\tZap in DbImpressao \n\n\tSelect csConjunto\n\tGo Top\n\tScan \n\t\tScatter Memvar\n\t\t\n\t\tSelect DbImpressao\n\t\tAppend... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Conjunto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Init",
+      "linhas": 712,
+      "codigoOriginal": "Lparameters lfFormAnterior, llGravaPro\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pBrI, pBrF, pDtI, pDtF, pOpI, pOpF\nset step on\n\nThisform.ParentForm = lfFormAnterior\nIf Type('lfFormAnterior') = 'O'\n\tlfFormAnterior.Enabled = .F.\nEndif\n\nIf Type('pcGdeGrupo') = 'U'\n\tpcGdeGrupo = Space(3)\nEndif\n\nIf Type('pcCol') = 'U'\n\tpcCol = Space(3)\nEndif\n\nIf Type('pnordem') = 'U'\n\tThisform.Ordemimp = 1\nElse\n\tThisform.Ordemimp = PnOrd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,pcEscolha])=[C]) And",
+        "controlesReferenciados": "grd_Historico,Chk_Preco],opt_Preco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If (ThisForm.poDataGrv.Commit() < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')\n\tReturn 0\nEndIf\n\nThisForm.poDataGrv.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Thisform.ParentForm.Tipo = 'DIGITACAO')\n\tThisForm.grd_Historico.Column4.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column2.Header1",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If (ThisForm.grd_Historico.Column2.Header1.Tag = [X])\n\tThisForm.grd_Historico.Column2.Header1.Tag = []\n\tReplace All Flag With .f. In dbEtiqueta\nElse\n\tThisForm.grd_Historico.Column2.Header1.Tag = [X]\n\tReplace All Flag With .t. In dbEtiqueta\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Thisform.ParentForm.Tipo = 'DIGITACAO')\n\tThisForm.grd_Historico.Column4.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Str(This.Value, 14)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 67,
+      "codigoOriginal": "Local lnEti\n\nlnEti = This.Value\n\nIf Not Empty(lnEti) And (This.Tag <> Str(This.Value, 14))\n\t\n\tlcCBars = Alltrim(Str(This.Value,14))\n\t\n\tlStrQuery = [Select a.CPros,a.CBars ] + ;\n\t\t\t[From SigOpEtq a ] + ;\n\t\t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ;\n\t\t\t[Where (a.CBars = ]+lcCBars+[ or b.cbars_old = ]+lcCBars+[) ]\n\tIf ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrEtiqs)')\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Thisform.ParentForm.Tipo = 'DIGITACAO')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column5.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Thisform.ParentForm.Tipo = 'DIGITACAO') \n\tThisForm.grd_Historico.Column4.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column7.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Thisform.ParentForm.Tipo = 'DIGITACAO')\n\tThisForm.grd_Historico.Column4.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column8.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If (Thisform.ParentForm.Tipo = 'DIGITACAO')\n\tThisForm.grd_Historico.Column4.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Empty(LocalParaC.QtdMarPar)\n\t\tIf LocalParaC.QtdMarPar < This.Value\n\t\t\tMessageBox([Quantidade de Parcelas informadas ultrapassa o Maxímo Permitido.],0+64,[Verifique],5000)\n\t\t\tThis.Value = 0 \n\t\t\tReturn .F.\n\t\tEndIf \n\tEndIf \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.grd_historico.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.opt_Preco.Value = 6)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_Preco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.Opt_Tipo",
+      "evento": "InteractiveChange",
+      "linhas": 13,
+      "codigoOriginal": "Local lnTpEti \n\nlnTpEti = Int(Val(This.Buttons(This.Value).Tag))\n\nThisForm.cmdTestaPos.Visible = (lnTpEti = 80) \n\nThisForm.getTexto.Visible = INLIST(lnTpEti,127,131,164,168)\t&& mena 02/03/2016 - inclusao da etiqueta 131 para cadana\n\nThisform.Label8.Visible \t= Inlist(lnTpEti,136)\t&& Rafael - Quantidade de Parcelas\nThisform.getQtParcs.Visible = Inlist(lnTpEti,136)\t&& Rafael - Quantidade de Parcelas\n \nThisForm.label7.Visible = INLIST(lnTpEti,127,131,164,168) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =,Visible = INLIST,Visible \t= Inlist",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.getOcoEtiqs",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigEtOco', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cods', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',   '', 'Código')\n\t\tloLista.mAddColuna('Descrs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getOcoEtiqs.Value  = crListaRemota.Cods\n\tThisForm.getDOcoEtiqs.Value = crListaRemota.Descrs\n\tUse In crListaRemota\nElse\n\tThisForm.getOcoEtiqs.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.getDOcoEtiqs",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigEtOco', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descrs', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descrs', '', 'Descrição')\n\t\tloLista.mAddColuna('Cods',   '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getOcoEtiqs.Value  = crListaRemota.Cods\n\tThisForm.getDOcoEtiqs.Value = crListaRemota.Descrs\n\tUse In crListaRemota\nElse\n\tThisForm.getOcoEtiqs.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.getDOcoEtiqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getOcoEtiqs.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.getQtParcs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.Opt_Impressora",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "*!*\tloImp = ThisForm.cnt_Impressora\n*!*\t=fCarregarImps(ThisForm.Opt_Impressora.Buttons(ThisForm.Opt_Impressora.Value).Tag, loImp.Opcao_Imp, ;\n*!*\t\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ThisForm.ParentForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.GetJustifs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.Cnt_Impressora.Opcao_imp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "This.Parent.Chk_Resete.Visible = .f.\n\nThis.Parent.Chk_Resete.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_Resete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.cntBotoes",
+      "evento": "Click",
+      "linhas": 51,
+      "codigoOriginal": "If MessageBox('Confirma a Impressão do(s) Boleto(s)?', 4+32+256, 'Boleto') = 6\n\tIf (Thisform.ParentForm.Tipo = 'ARQUIVADAS')\n\t\tThisForm.ImpArquivadas = .T.\n\tEndIf\n\n\tCreate Cursor csEmpresas (ImpEmps l(1), CEmps c(3), Razas c(40))\n\tIndex On CEmps Tag CEmps\n\n\tlcQuery = [Select Cemps, Razas ] + ;\n\t\t\t    [From SigCdEmp ] + ;\n\t\t\t   [Where Ativas = 1 ] + ;\n\t\t\t   [Order By Cemps]\n\n\tIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'LocalEmp') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.cntBotoes",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "Private pNot\n\npNot = .F.\n\nIf ThisForm.ImpArquivadas\n\tSelect dbEtiqueta\n\tScan\n\t\tlcQuery = [Update SigCdPro ] + ;\n\t\t\t\t\t [Set ImpEtiqs = ?pNot ] + ;\n\t\t\t\t   [Where CPros = '] + dbEtiqueta.CPros + [']\n\n\t\tIf (ThisForm.poDataGrv.SqlExecute(lcQuery, '') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigCdPro)')\n\t\t\tReturn 0\n\t\tEndIf\n\tEndScan\nEndIf\n\nIf Type('Thisform.ParentForm') = 'O'\n\tThisform.ParentForm.Enabled = .T.\nEndIf\t\n\nThisform.Release\n* Fim **************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.cntBotoes",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Impressao('A')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Impressao('I')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.cmdTestaPos",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "Local vTipEtq, vnTpImpressora, vnAjVerts, vnAjHorzs, vnAjDenss, lnConfirma, llImpPreco, ;\n\t  llImprSepar, lnTipo, lnTpEti, lnTpImp, lnImpres, lcNomeImp, lcOcEti, llImpPesTot \n\nIf Not Used('dbImpressao')\n\tCreate Cursor dbImpressao (CPros c(14), Qtds n(10,3), QtdeEtiq n(10,3), Pedido c(30), Obs c(10), ;\n\t\t\t\t\t\t\t\tCbars n(14), Pvens n(12,2), PrecoDe N(12,2), Parcelas N(2,0), Moedas c(3), ;\n\t\t\t\t\t\t\t\tEmpDopNums c(29), Reffs c(40), codtams c(4))\nEndIf\n\nlnTpEti = 99\n\nWith Thisform.Cnt_Impressora\n\tlnTpImp ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Printer,Chk_Resete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.Get_Printer",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "\t*** mena - 06/03/2015 - incluido para atualizar flags da impressora escolhida ***\t\n\tloImp = ThisForm.cnt_Impressora\n\t=fCarregarImps(ALLTRIM(crImpreV.impresS), loImp.Opcao_Imp, ;\n\t\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ThisForm.ParentForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.GetTexto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIPE.Opt_Conjunto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Thisform.ParentForm.Tipo = 'DIGITACAO')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPIPE.Procedure",
+      "queryOriginal": "\tThisForm.ParentForm.poDataMgr.Sqlexecute('select cemps, razas from SigCdEmp', 'crSigCdEmp')",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPIPE.Procedure",
+      "queryOriginal": "\tThisForm.ParentForm.poDataMgr.Sqlexecute('select observas, codigos from SigCdObs', 'crS... [TRUNCADO]",
+      "tabelas": "SigCdObs",
+      "colunas": "observas,codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPIPE.grd_historico.Column4.Text1.Valid",
+      "queryOriginal": "\tlStrQuery = [Select a.CPros,a.CBars ] + ; \t\t\t[From SigOpEtq a ] + ; \t\t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ; \t\t\t[Where (a.CBars = ]+lcCBars+[ or b.cbars_old = ]+lcCBars+[) ] \tIf ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1",
+      "tabelas": "sigopeta",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPIPE.cntBotoes.Click",
+      "queryOriginal": "\t\tlcQuery = [Update SigCdPro ] + ; \t\t\t\t\t [Set ImpEtiqs = ?pNot ] + ; \t\t\t\t   [Where CPros = '] + dbEtiqueta.CPros + [']",
+      "tabelas": "SigCdPro",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "SigCdObs", "sigopeta", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

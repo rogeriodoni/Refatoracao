@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All edits are structurally sound ÔÇö each new handler closes correctly before the next `PROCEDURE`/`ENDPROC`.
+
+## Summary
+
+Applied fixes to `FormSigOpImg.prg`:
+
+1. **6├ù `[LOSTFOCUS-SEM-GUARDIA]`** ÔÇö added `this_cUltimoValidar*LostFocusValidado` properties and an early-return guard in each of the 6 handlers (Grupo/DescGrupo/Produto/DescProduto/Linha/DescLinha), so tabbing through an unchanged field no longer re-triggers the lookup query, matching the legado's `Valid`-only-on-change behavior.
+2. **`[NULL-CURSOR]`** ÔÇö wrapped `CREATE CURSOR cursor_4c_Produtos` in `ConfigurarCursorProdutos()` with `SET NULL ON`/restore, since `ifors`/`reffs`/`cgrus`/`linhas` can come back NULL from SQL Server and the char fields weren't declared to accept it, which would abort the `APPEND FROM DBF` in `CarregarLista`.
+
+**Skipped as confirmed false positives** (per extensive project memory with dozens of matching reincidences):
+- **`[CONTAINER-VISIVEL]` on `CNT_4C_CABECALHO`** ÔÇö verified by grep: the container only ever gets `.Visible = .T.`, never `.F.`, anywhere in the file. `TornarControlesVisiveis` currently has no name filter at all, and none is needed here.
+- **`[GRID-WITH]`** ÔÇö the `WITH THIS.grd_4c_Produtos` block follows the exact canonical order from CLAUDE.md regra #41 (`ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption`), which is architecturally safe in VFP9 (`WITH` is pure syntax, no lazy evaluation).

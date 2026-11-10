@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked both flagged findings against `C:\4c\projeto\app\classes\SigOpMpdBO.prg` and `FormSigOpMpd.prg`, and neither is a real invented WHERE filter ÔÇö they're false positives from the automated SQL checker.
+
+**PESOS** (line 1237):
+```foxpro
+loc_cSQL = "SELECT CMats, Qtds, Pesos FROM SigCdNei WHERE EmpDNps = " + EscaparSQL(loc_cChaveOrig) + ;
+    " AND Nops = " + FormatarNumeroSQL(EVALUATE(loc_cAliasMFasParent + ".Nops"), 0)
+```
+`Pesos` is a **SELECT column**, not a WHERE condition ÔÇö the WHERE only filters on `EmpDNps`/`Nops`, exactly matching the legacy dump quoted in this very review (`lcQuery = [Select CMats, Qtds, Pesos ] + [From SigCdNei ] + ...`). The reviewer's SQL parser apparently picked up `Pesos` from the SELECT list because it sits in the same multi-line string as the WHERE.
+
+**FATORS** (line 1132, via `ExecutarCursorQuery`):
+```foxpro
+THIS.ExecutarCursorQuery("SigCdUni", "cursor_4c_LocalUni", "CUnis", cursor_4c_LocalPro.CUnis, "Fators")
+```
+This generic helper builds `SELECT <par_cCampos> FROM <tabela> WHERE <par_cCampo> = <valor>` ÔÇö here `par_cCampo = "CUnis"` is the actual filter, and `"Fators"` is just the column list being selected (reproducing the legacy `CursorQuery(cTabela,...,cListaCampos)` pattern, identical to the same idiom in `SigPrGlxBO.prg:751` and `sigpdmp2BO.prg:832/842`: `SELECT Fators FROM SigCdUni WHERE Cunis = ...`).
+
+Both `Pesos` and `Fators` are also consumed afterward (`cursor_4c_LocalUni.Fators` at lines 1140/1141/1143/1164, `cursor_4c_LocalNensi.Pesos` at lines 1259/1260/1263) ÔÇö removing them as "invented filters" would delete real columns the code depends on and break the logic, which the review's own rules prohibit ("NAO remover campos, funcionalidades").
+
+No changes made ÔÇö there's nothing to fix here; both findings should be dismissed as false positives.

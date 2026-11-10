@@ -1,0 +1,45 @@
+DEPENDENCIAS CARREGADAS
+CURSOR DO PAI: RECCOUNT=2
+VARTYPE(loForm)       = O
+BaseClass             = Form
+Caption               = [Lançamentos para DUPLICATA - 000123]
+--- METODOS DA FASE 7 (ex=existe, prot=protegido) ---
+SincronizarLinhaCorrente   ex=.T. prot=.F.
+GrdDadosAfterRowColChange  ex=.T. prot=.F.
+MarcarCanceladoNoPai       ex=.T. prot=.F.
+CmdConfirmaClick           ex=.T. prot=.F.
+CmdCancelaClick            ex=.T. prot=.F.
+--- BINDEVENT REGISTRADOS ---
+grd_4c_Dados    nEventos=1
+   [AFTERROWCOLCHANGE] -> GRDDADOSAFTERROWCOLCHANGE
+cmd_4c_Confirma nEventos=1
+   [CLICK] -> CMDCONFIRMACLICK
+cmd_4c_Cancela  nEventos=1
+   [CLICK] -> CMDCANCELACLICK
+--- GRID ---
+RecordSource          = [cursor_4c_Lancamentos]
+ColumnCount           = 5
+Col3 ControlSource    = [cursor_4c_Lancamentos.Hists]
+Col3 ReadOnly         = .F.
+Col1 ReadOnly         = .T.
+BO total lancamentos  = 2
+--- SINCRONIA DO HISTORICO EDITADO ---
+alias antes           = [CURSOR_4C_CTX]
+Sincronizar           = .T.
+alias depois          = [CURSOR_4C_CTX]  (tem de ser o MESMO)
+BO.this_cHists        = [HISTORICO EDITADO PELO USUARIO]
+BO.this_cGrupos       = [001]
+BO.this_nValor        = 1500
+AfterRowColChange(3)  -> BO.this_cGrupos=[002] (linha 2)
+--- MARCAR CANCELADO NO PAI ---
+pai MIGRADO : marcou=.T.  flag=.T.
+pai LEGADO  : marcou=.T.  flag=.T.
+pai SEM FLAG: marcou=.T.  criou=.T.
+pai NULO    : marcou=.F.  (tem de ser .F., sem excecao)
+RELEASE OK
+--- CLICK CONFIRMA ---
+pai.flag apos Ok      = .F.  (tem de ser .F.)
+form apos Release     = X
+--- CLICK CANCELA ---
+pai.flag apos Encerrar= .T.  (tem de ser .T.)
+form apos Release     = X

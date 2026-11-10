@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 executada em `C:\4c\projeto\app\forms\operacionais\FormSIGOPNOP.prg`.
+
+## O que esta fase era, neste form
+
+O prompt pede "primeiros 50% dos campos da Page2". Este legado **n├úo tem Page2** ÔÇö o SCX (`layout.json`/`SECAO 1`) ├® `Class: form` puro, sem `BaseClass: pageframe`, e seus 2 ├║nicos campos (`GetOP`, `GetEnvelope`) j├í foram entregues na Fase 4. Inventar uma Page2 violaria o PILAR 1 e um m├®todo vazio ├® stub proibido. Segui o precedente registrado para esse caso (task648/`FormSIGOPBOL`, Fase 5): **a fase virou auditoria propriedade-a-propriedade contra o dump**, e ela achou defeitos reais.
+
+## Defeitos corrigidos
+
+| # | Defeito | Consequ├¬ncia |
+|---|---|---|
+| 1 | Os **4 Labels** com `AutoSize = .T.` e **sem `Width`/`Height`** | `AutoSize` ├® **no-op** em Label de `AddObject` (regra #23): a Width fica nos 100 do default. `"AGUARDE!"` (dump 114) e `"Pesquisando as Movimenta├º├Áes"` (dump **279**) sairiam **cortados** no painel de aguarde. Corrigido para `AutoSize = .F.` + 35x15 / 63x15 / 114x25 / 279x20 do dump |
+| 2 | `Closable = .F.` **inventado** (o dump declara s├│ `ControlBox`/`MaxButton`/`MinButton`) | as 5 propriedades s├úo independentes ÔÇö sem barra de t├¡tulo os bot├Áes n├úo desenham mas `Closable` continua `.T.`; fixar `.F.` matava o Alt+F4 que o legado tinha. Removido (ESC segue garantido por `Buttons(1).Cancel = .T.`) |
+| 3 | `cmd_4c_Fwbtng1/2` com propriedades herdadas **chutadas** | o SCX s├│ declara Top/Left/Picture/Caption/ToolTipText; o resto vem da classe `fwbtng`, que li em `docs/FRAMEWORK_class_codigo_fonte.txt`: FontName era **"Verdana"** (classe: **"Comic Sans MS"**), ForeColor era **36,84,155** (classe: **90,90,90**), e faltavam `FontBold`/`FontItalic`/`WordWrap`/`MousePointer`. O 80x100 que estava l├í como palpite ficou **confirmado** pela classe |
+| 4 | `TabIndex` descartado | ordem de Tab sa├¡a da ordem de cria├º├úo. Novo `AplicarOrdemTabulacao()`, chamado depois de todos os `AddObject` |
+
+Sobre o #4: **n├úo** transcrevi os literais do SCX. O VFP clampa o `TabIndex` gravado na contagem de irm├úos existentes no instante da cria├º├úo ÔÇö simulando o load, a ordem **efetiva** do legado ├® `GetOP ÔåÆ TreeView ÔåÆ GetEnvelope`, n├úo `GetOP ÔåÆ GetEnvelope ÔåÆ TreeView` que o literal sugere. A simula├º├úo est├í escrita no coment├írio do m├®todo para revis├úo.
+
+## Verificado (medido, n├úo presumido)
+
+Smoke test do VFP9 passou primeiro (ele ├ás vezes compila e sai sem executar), depois:
+
+- **COMPILE limpo** ÔÇö `.fxp` presente, `.err` ausente.
+- **`CREATEOBJECT` = `O`** ÔÇö o form instancia; nenhum arquivo de erro de runtime.
+- Labels lidos de volta: `AutoSize=.F.`, `W/H` = 35x15, 63x15, 114x25, 279x20 ÔÇö batem com o dump.
+- Sem sobreposi├º├úo label├ùcampo no mesmo pai (Label3 termina em 47 / OP come├ºa em 49; Label1 em 209 / Envelope em 210).
+- `Fwbtng1`: `Comic Sans MS`, Bold/Italic/WordWrap `.T.`, MousePointer 15, ForeColor **5921370 = RGB(90,90,90)**, 80x100.
+- As **3 `.Picture`** existem em disco (regra #25 ÔÇö falham em sil├¬ncio).
+- TabIndex: Form `1,2,3,4,5`; em `Container1` `OP=1, Envelope=2` ÔÇö o contador compactou sozinho porque em modo teste a ├írvore n├úo ├® instanciada, e a guarda n├úo derrubou o `Init`.
+- `Container2.Visible=.F.` e `img_4c_Imagem.Visible=.F.` preservados.
+- `Test-CompletudeCodigo`: **OK**, nenhum TODO/stub.
+- `VerificarPropriedadesInexistentes.ps1`: **OK**.
+- **Gate da Fase 5 do orquestrador** (ramo ARVORE) replicado e aprovado: `legadoArvoreSemBind=True`, `temSuperficieArvore=True`.
+- CRLF preservado (CR=LF=1278) ÔÇö o diff fica leg├¡vel.
+
+`VerificarFuncoesNaoDefinidas.ps1` acusou 25 chamadas ├│rf├ús (`MsgErro`/`MsgAviso`/`TratarNulo`): **falso positivo** do escopo de 1 arquivo ÔÇö ele reportou "Funcoes globais: 0" porque `utils/functions.prg` e `messages.prg` n├úo entraram na varredura.
+
+Uma li├º├úo nova foi anexada ├á mem├│ria `feedback_tabindex_do_scx_nao_transcrito`: o clamp do `TabIndex` ├® **por container**, n├úo s├│ no n├¡vel da Form ÔÇö simular s├│ o n├¡vel da Form deixa passar justamente a invers├úo que importa.

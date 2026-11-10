@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da e verificada.
+
+## Entrega
+
+`C:\4c\projeto\app\forms\operacionais\FormSigOpLib.prg` (389 linhas, ASCII puro, CRLF, sem BOM)
+
+A tentativa anterior n├úo gerou arquivo nenhum ÔÇö o CLI recebeu o prompt e respondeu "n├úo h├í tarefa". O arquivo n├úo existia.
+
+## Decis├úo estrutural: layout FLAT, sem PageFrame
+
+O prompt da fase pedia "PageFrame com Page1 (Lista) e Page2 (Dados)", mas **o SIGOPLIB legado n├úo tem PageFrame nenhum**: raiz `Class: form` gen├®rico, 12 objetos pendurados direto no form, um ├║nico Container (`cntSombra`) para a faixa do cabe├ºalho. Inventar PageFrame violaria o PILAR 1. O gate da Fase 3 j├í prev├¬ isso ÔÇö validei o ramo FLAT rodando a l├│gica real do `OrquestradorMigracao.ps1`:
+
+```
+raizFormGenerico: True | legadoSemPageFrame: True | temEstruturaFlat: True  ÔåÆ GATE PASSA
+```
+
+## O que foi entregue
+
+| Item | Origem |
+|---|---|
+| `DEFINE CLASS FormSigOpLib AS FormBase` + propriedades visuais | dump: 550x200, DataSession=1, BorderStyle=2, ControlBox=.F., TitleBar=0, WindowType=1 |
+| `Init(par_nTipo, par_cCodigoInicial)` | `_Tipo` do legado (ausente = 0, via `PCOUNT()`); semente de c├│digo l├¬ `xNensi.CodNConfs` com guarda `USED()` |
+| `InicializarForm()` | Caption via `CHR()`, BO instanciado, par├ómetros repassados |
+| `ConfigurarAparenciaBase()` | `Picture` = `gc_4c_CaminhoFramework + "imagens\new_background.jpg"` |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` + `lbl_4c_Sombra`/`lbl_4c_Titulo` completos |
+| `TornarControlesVisiveis()`, `Destroy()` com `DODEFAULT()` final | regra #145 |
+
+Dois pontos do dump **n├úo** foram copiados ao p├® da letra, de prop├│sito: `cntSombra.Width = 800` e os labels com `Width = 769` s├úo mais largos que o pr├│prio form (550) ÔÇö artefato do Form Designer. Usei `THIS.Width`; o literal cortaria o t├¡tulo e o filho seria recortado pelo pai (regra #30).
+
+## Verifica├º├Áes executadas
+
+- **Compila limpo** no VFP9: `.FXP` gerado, nenhum `.err`.
+- **Instancia de verdade** (probe real, n├úo inferido do `.FXP`): `VARTYPE = "O"` sem argumento (caminho do `TestFormWrapper`), com `_Tipo=3` e com os dois par├ómetros. Caption `[Libera├º├úo de Peso]`, `this_cRetorno` com 10 espa├ºos, BO recebendo `this_nTipoFiltro=3`, container 550x80 vis├¡vel, labels com Height 46/40 preservados (`AutoSize=.F.` funcionando), `Picture` apontando para arquivo existente.
+- **Completude** (`Test-CompletudeCodigo` extra├¡da do orquestrador): OK no Form e no BO ÔÇö zero TODO/stub.
+- **CorretorAutomatico** rodado em c├│pia sob `\forms\`: na 2┬¬ passada o diff ├® **vazio**. Na 1┬¬ ele apagava uma linha de coment├írio minha (o pattern `INICIALIZAR_DUPLICADO` ├® comment-blind) e injetava `ShowWindow`/`this_cMensagemErro` ÔÇö reescrevi o coment├írio e declarei as duas, ent├úo o sweep n├úo mexe mais no arquivo. Registrei essa armadilha na mem├│ria.
+
+## Para as pr├│ximas fases
+
+Dois warnings do corretor que **n├úo** se consertam agora:
+- `WARN-168` (falta `fundo_cad_1003.jpg`) ├® falso positivo ÔÇö o legado usa `new_background.jpg`, que est├í setado.
+- `WARN-216` ├® leg├¡timo e **pendente para a Fase 5/6**: o dump declara `get_codigo.InputMask = "!!!!!!!!!!"`, que precisa ser transcrito quando os TextBoxes forem criados (regra #49 ÔÇö `InputMask` muda o que ├® digitado e gravado).

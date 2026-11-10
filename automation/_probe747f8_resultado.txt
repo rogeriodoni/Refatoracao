@@ -1,0 +1,40 @@
+VARTYPE(loForm) = O
+INSTANCIACAO = OK
+--- (2) metodos: existe / protegido ---
+  ChkMarcaKeyPress       existe=.T.  protegido=.F.
+  ChkMarcaMouseUp        existe=.T.  protegido=.F.
+  ChkMarcaMouseDown      existe=.T.  protegido=.F.
+  ChkMarcaClick          existe=.T.  protegido=.F.
+  AjustarBotoesPorModo   existe=.T.  protegido=.F.
+  HabilitarCampos        existe=.T.  protegido=.F.
+  ValidarLoteImpressao   existe=.T.  protegido=.F.
+  CarregarLista          existe=.T.  protegido=.F.
+  FormParaBO             existe=.T.  protegido=.T.
+  BOParaForm             existe=.T.  protegido=.T.
+  (esperado: os 8 primeiros protegido=.F.; FormParaBO/BOParaForm=.T.)
+--- (3) eventos ligados no Check1 = 4 (esperado 4) ---
+  CurrentControl=[CHECK1] Sparse=.F. ControlSource=[cursor_4c_Pgto.Marca]
+--- (6a) ValidarLoteImpressao com grade VAZIA = .F. (esperado .F.) ---
+  dialogo: [06/11/2026 23:27:50] Impressao: Não existem observações a serem auteticadas  
+--- (4) ChkMarcaKeyPress(32): Printed/Marca antes -> depois ---
+  rec 1 Printed=.F. Marca=.T. -> Marca=.T.
+  rec 2 Printed=.F. Marca=.F. -> Marca=.T.
+  rec 3 Printed=.T. Marca=.T. -> Marca=.F.
+  rec 4 Printed=.T. Marca=.F. -> Marca=.T.
+  (esperado: rec1 .T.->.T. | rec2 .F.->.T. | rec3 .T.->.F. | rec4 .F.->.T.)
+  MouseUp em rec3: Marca=.F. -> .T.
+--- (5) estado dos botoes x this_lProcessandoLote ---
+  lote=.T. Boleto=.F. Imprimir=.F. Grade=.F. Sair=.T. Col1.ReadOnly=.T.
+  lote=.F. Boleto=.T. Imprimir=.T. Grade=.T. Sair=.T. Col1.ReadOnly=.F.
+  com lote=.T. ChkMarcaKeyPress: Marca=.T. -> .T. (nao deve mudar)
+--- (6b) ValidarLoteImpressao com 4 linhas = .T. (esperado .T.) ---
+  dialogo: []
+--- (7) BtnImprimirClick (Docus=2: sem dialogo filho) ---
+  voltou sem excecao
+  marcadas depois=0 (esperado 0)  lote=.F. (esperado .F.)
+  rec1 Printed=.T. (esperado .T.)
+  Imprimir.Enabled=.T. (esperado .T.)
+  dialogo: []
+--- (8) KeyPress do form ---
+  F3 (Grade) ok
+RELEASE OK

@@ -1,0 +1,259 @@
+﻿{
+    "taskId":  "task746",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-11-06T16:19:31",
+    "atualizadoEm":  "2026-11-06T20:38:12",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-11-06T16:19:50",
+                                            "fim":  "2026-11-06T16:19:56",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task746\\SigOpIbo.sct",
+                                            "baseName":  "SigOpIbo",
+                                            "scxFile":  "C:\\4c\\tasks\\task746\\SigOpIbo.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-11-06T16:20:03",
+                                          "fim":  "2026-11-06T16:21:00",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigOpIbo",
+                                          "txtFile":  "C:\\4c\\tasks\\task746\\SigOpIbo_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-06T16:21:10",
+                                              "fim":  "2026-11-06T16:22:07",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task746\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-06T16:24:31",
+                                              "fim":  "2026-11-06T16:24:51",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task746\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task746\\meta_prompt.md",
+                                              "boClass":  "SigOpIboBO",
+                                              "formClass":  "FormSigOpIbo",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task746\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-06T16:24:57",
+                                              "fim":  "2026-11-06T16:25:45",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task746\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-06T16:25:51",
+                                               "fim":  "2026-11-06T16:26:42",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task746\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigOpIbo_esqueleto.prg",
+                                                                "SigOpIboBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-06T16:26:55",
+                                       "fim":  "2026-11-06T20:10:50",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigOpIboBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  23.38,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpIbo.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  862
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-11-06T20:10:58",
+                                                  "fim":  "2026-11-06T20:15:18",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigOpIboBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpIbo.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-11-06T20:15:54",
+                                                 "fim":  "2026-11-06T20:16:06",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-06T20:32:16",
+                                       "fim":  "2026-11-06T20:34:22",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-06T20:34:30",
+                                               "fim":  "2026-11-06T20:35:42",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task746\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-11-06T20:36:40",
+                                        "fim":  "2026-11-06T20:37:55",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "ValidarUIFidelity nao gerou relatorio HTML"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-06T20:38:03",
+                                              "fim":  "2026-11-06T20:38:10",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task746_SigOpIbo.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-11-06T16:22:15",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-11-06T16:23:19",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task746\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-11-06T16:23:28",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-06T16:24:24"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-11-06T20:15:27",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-11-06T20:15:45",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigOpIbo_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpIbo.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task746\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-11-06T20:16:15",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-11-06T20:16:26",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-11-06T20:16:36",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-11-06T20:30:41",
+                                          "passes":  2,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_SOMBRA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_SigCdmp\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_Impre\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027OP_ESCOLHA\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: PNVIAS, PNQBOLS, LNI, USUACESS, CIMPS, USUARIOS, GRUPOS, NTPIMPRES, PNTPBOL, LNIMPRES, LNCIMP, LLOBS; [METODO-INEXISTENTE] Metodo \u0027THIS.ResolverBloqueioEncerrar()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CarregarImpressoras()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterBoletosSigCdOpd()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.EntrarDataSessionChamador()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  8
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-11-06T20:30:52",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-11-06T20:32:08",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigOpIboBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigOpIbo.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-11-06T20:35:51",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-06T20:36:30",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  17,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task746\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

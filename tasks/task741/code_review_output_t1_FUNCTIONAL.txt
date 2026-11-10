@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Verifiquei as 15 pend├¬ncias contra o arquivo real e contra padr├Áes de falso positivo j├í catalogados na mem├│ria:
+
+**Aplicado (1 corre├º├úo real):**
+- `[NULL-CURSOR]` em `CriarCursorGrdValores()` (`Formsigopfin.prg:428-441`): adicionado `SET NULL ON` antes do `CREATE CURSOR cursor_4c_GrdValores` e `SET NULL OFF` logo depois, antes do `INDEX ON`. Corre├º├úo de baixo risco por precau├º├úo (o cursor s├│ ├® populado via `INSERT INTO...VALUES` com `TratarNulo()`, nunca NULL de fato).
+
+**N├úo alterado (14 falsos positivos confirmados por grep/leitura direta):**
+- 9├ù `[METODO-INEXISTENTE]` (`ObterDescricaoPorCodigo`, `ListaLocalDisponivel`, `TeclaAbreLookup`, `ObterCampoLookup`, `MostrarPickerListaLocal`, `EmModoEdicao`, `ObterDescricaoOrigem`, `ValidarGradeValores`, `AtualizarConfigFinanceiraOperacao`) ÔÇö todos definidos como `FUNCTION`/`PROTECTED FUNCTION` na pr├│pria classe; o detector s├│ reconhece `PROCEDURE`.
+- `THIS.Width()` ÔÇö zero ocorr├¬ncias no arquivo inteiro.
+- 2├ù `[GRID-WITH]` (`ConfigurarGrid`, `MontaGrade`) ÔÇö seguem a ordem can├┤nica exata da regra #41 dentro do mesmo bloco `WITH`; n├úo existe adiamento de cria├º├úo de Column em VFP9.
+- 2├ù `[GRID-HEADER]` ÔÇö o caption migrado decodifica (via `CHR(231)`/`CHR(227)`) byte a byte igual ├á string "legado encontrados" citada no pr├│prio achado; o detector s├│ comparou o literal truncado antes da concatena├º├úo.
+
+Registrei as reincid├¬ncias nas mem├│rias j├í existentes (`feedback_metodo_inexistente_funcao_nao_reconhecida`, `feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco`, `feedback_gridheader_falso_positivo_sqltrans_runtime`) para manter o hist├│rico consistente com os passes anteriores.

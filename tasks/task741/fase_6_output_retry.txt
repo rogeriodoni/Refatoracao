@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `Formsigopfin.prg` passou de 1621 para 2568 linhas, compila limpo (sem `.err`) e atende aos quatro crit├®rios do gate da Fase 6 para layout FLAT/OPERACIONAL: sem PageFrame, `BINDEVENT` presente, `PROCEDURE AbrirLookup*` implementado e `ControlSource` vinculado.
+
+## O que foi entregue
+
+**Lookups dos 19 campos com `Valid` de busca no dump** (8 Grupo + 8 Conta + CMoes + TitBans + MovTits), ligados em `ConfigurarEventosLookup()`. Cada campo usa **um handler** amarrado aos tr├¬s eventos ÔÇö `LostFocus` (equivalente ao `Valid` legado), `KeyPress` (F4/F5) e `DblClick` ÔÇö; o handler s├│ filtra tecla quando de fato recebeu uma (`PCOUNT()` 2 no KeyPress, 0 nos outros), o que evita o picker abrindo a cada caractere (regra #47). Guarda de reentr├óncia `this_lEmLookup` no funil, com split wrapper/`*Exec` para a flag n├úo travar em sa├¡da antecipada.
+
+**Tabelas confirmadas por c├│digo legado independente, n├úo por palpite:**
+
+| Campo | Tabela | C├│d/Desc | Prova |
+|---|---|---|---|
+| Grupo (8) | `SigCdGcr` | `codigos`/`descrs` | SIGMVCCR: `get_sdgrupo.Value = crSigCdGcr.Descrs` ap├│s `Seek(..., [crSigCdGcr], [Codigos])` |
+| Conta (8) | `SigCdCli` | `iclis`/`rclis` | SIGMVCCR: `get_sdCONTA.Value = crSigCdCli.RClis` |
+| CMoes | `SigCdMoe` | `cmoes`/`dmoes` | mapeamento can├┤nico |
+| MovTits | `SigOpOpe` | `Dopes` (coluna ├║nica) | transcrito literal do `fwBuscaExt` do dump |
+
+O 11┬║ caractere de `grupo*s`/`conta*s char(11)` (o `Tipos` que vinha de `fSigOpFin_Tabs`) ├® **branco** para grupo/conta concreto ÔÇö provado em SIGMVCMV, que compara `SigOpFin.GrupoECs` char(11) direto com `SigMvCcr.grupos` char(10), igualdade que no SQL Server s├│ se sustenta com o 11┬║ em branco. Da├¡ o valor gravado ser `PADR(codigo, 10) + " "`.
+
+**Lookup da c├®lula da grade** (coluna "Origem dos Valores") em classe pr├│pria `TextBoxOrigemSigOpFin_4c` com `Valid`/`When`/`KeyPress`/`DblClick` embutidos, instalada por `InstalarCelulaOrigem()` com `CurrentControl` + `Sparse = .F.` + `ReadOnly` ÔÇö porque BINDEVENT em `Valid` de TextBox de Column n├úo ├® confi├ível e `AfterRowColChange` entrega a coluna de destino (regra #46). Reinstalada em `MontaGrade()`, que reatribui `ColumnCount` e destruiria o controle.
+
+## Dois pontos que voc├¬ precisa saber
+
+1. **`crLstTitBc` e `crTabOpFin` n├úo t├¬m origem no acervo.** Eram montados por `fSigOpFin_Tabs()` (`SigOpFin.prg` legado, ausente). N├úo h├í tabela mestre de T├¡tulo Banco no schema can├┤nico ÔÇö `titbans char(12)` s├│ aparece em `SigMvCcr`, `SigMvCpv` e `sigopfin`, sempre como valor gravado. Escolher uma tabela por semelhan├ºa gravaria c├│digo errado em sil├¬ncio, ent├úo **n├úo inventei nenhuma**: os dois pickers rodam sobre o mesmo cursor que o legado l├¬ (acendem sozinhos quando `fSigOpFin_Tabs` for portada) e, n├úo existindo, reportam a aus├¬ncia nomeando o artefato legado que falta ÔÇö **preservando o que o usu├írio digitou** (regra #50).
+
+2. Durante a revis├úo corrigi um risco que eu mesmo tinha introduzido: o `Valid` da c├®lula chamava `MontaGrade()`, que reatribui `ColumnCount` e destruiria o pr├│prio TextBox em execu├º├úo. Trocado pelo `Grid.Refresh()`, que ├® o que o legado faz (`This.Refresh`).
+
+Auditorias do projeto rodadas e limpas: `VerificarLookupEmKeyPress` (ERRO=0, nenhum aviso neste form), `VerificarFuncoesNaoDefinidas` (nenhuma chamada ├│rf├ú), `VerificarPropriedadesInexistentes` (OK), `VerificarMetodoProtegidoChamadoDeFora` (OK). Balan├ºo estrutural fechado (WITH/TRY/PROCEDURE/FUNCTION/IF), nenhum `RETURN` dentro de `TRY`, nenhum literal acentuado, nenhum m├®todo vazio, nenhum `AddObject` nem m├®todo duplicado. Os 19 handlers de BINDEVENT s├úo todos PUBLIC.
+
+Fica para a Fase 7, conforme o plano do pr├│prio arquivo: Click dos bot├Áes de manuten├º├úo da grade, `AfterRowColChange` e o dirty-tracking `GotFocus`/`LostFocus` que marca `plAlterou`.

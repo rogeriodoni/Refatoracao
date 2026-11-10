@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 done. `FormSigOpLib.prg` is final and complete.
+
+## What Phase 8 delivered
+
+**The two transfer hooks** ÔÇö the real deliverable, now the only path in each direction:
+
+- `FormParaBO()` ÔÇö screen ÔåÆ BO: the opening parameters plus the current state of both fields. Called at the end of `InicializarForm` (replacing three inline property pushes), at the top of the lookup funnel, and before the description closes the retorno. Stores the code as `PADR(ÔÇª, 10)` because the retorno is a **positional** key (rule #42) and the legacy field has a 10-position `InputMask`; stores the description **raw**, since `ALLTRIM` belongs to the comparison, not the model.
+- `BOParaForm()` ÔÇö BO ÔåÆ screen: the legacy tail of `get_codigo.Valid`. The `Fixos <> 2` guard is what keeps this hook from erasing a typed description, and the split the hook rule demands (derived repaints always / editable doesn't) comes free because the criterion is the BO's own property.
+
+**Removed a duplicated business rule:** the form was re-doing the retorno concatenation to serve the picker path, which doesn't go through `ValidarCodigoDigitado`. That became `SigOpLibBO.FecharRetornoDoTipo()` ÔÇö BO computes, form mirrors. `AplicarTipoSelecionado` is now two calls.
+
+**Renamed** `CmdOkClick` ÔåÆ `BtnOkClick` (both prefixes are project convention; `Btn` is dominant). Phase 7 re-measured at `nHandlers = 1`, unchanged.
+
+## A real defect the probe caught
+
+I first declared both hooks as bare `PROCEDURE`, with comments asserting they were public. **They aren't** ÔÇö `FormBase` declares them `PROTECTED`, and VFP9 won't let a subclass widen scope. `PEMSTATUS(...,5)` returned `.T.` while the actual call threw `Property FORMPARABO is not found`. Both now carry explicit `PROTECTED` and the comments say why omitting it lies to the reader. The probe uses a test subclass to reach them.
+
+## The surface this screen doesn't have
+
+The dump has 12 objects: zero grid, zero pageframe, zero `AddCursor`, zero `ControlSource`, and one `CommandButton` (`ok`, `Cancel = .T.`) whose Click is `ThisForm.Release` and nothing else. The abandon-button handler, list load, enable/clear-fields pair and per-mode button adjustment have no referent ÔÇö each is documented with its measurement. The gate routes this to its `CALCULADORA` branch (`legadoCalculadoraF8 = True`), which dispenses exactly those two names and *demands* the two hooks in exchange. I deliberately kept the canonical names out of the comments: the gate matches raw text, so naming them there would have made it pass for the wrong reason.
+
+## Verified, not assumed
+
+| Check | Result |
+|---|---|
+| VFP9 smoke test (gate for any claim) | **passed** ÔÇö `smoke760.txt` written |
+| Compile BO + form (stale `.fxp` deleted) | `BO.FXP=.T. BO.ERR=.F. FORM.FXP=.T. FORM.ERR=.F.` |
+| Runtime probe, 8 steps | all pass; **`DIGITACAO PRESERVADA? .T.`**, retorno `LEN=70` (10+60), `[22202ÔÉúÔÉúÔÉúÔÉúÔÉúLIVRE AQUI]`, error log empty |
+| Phase 8 gate (`case 8` run standalone) | `metodosFaltantes = []` ÔåÆ **PASSA** |
+| Phase 7 gate (regression from rename) | **PASSA** |
+| Completude 05d / SQL-schema 05f | OK / PASSOU |
+| Project-wide audits: undefined functions, nonexistent properties, protected-method calls | clean |
+| CorretorAutomatico on copies | `MUTOU=False` on both |
+| CRLF (counted as bytes, not grepped) | CR == LF on all three files, zero bytes >127 |
+
+Two things worth flagging:
+
+- The corrector was **mangling a comment** in the BO on every sweep ÔÇö it matched the invalid `(alias).campo` syntax inside the comment that documents that rule, and rewrote it. I reworded the rule in prose so the file is sweep-stable.
+- The remaining corrector output on the form is three non-mutating warnings: two `#74` "LostFocus in lookup" (that *is* the correct design per rules #35/#37/#47 ÔÇö the pattern says "nao mutado") and one `#177` false positive ÔÇö `this_cMensagemErro` is declared in `businessbase.prg:16`, which the pattern didn't resolve through inheritance.
+
+One unverifiable item: no SQL Server on this machine (192.168.200.10 unreachable), so the two `SELECT`s were exercised by feeding the BO properties directly ÔÇö the same state `CarregarDoCursor` leaves them in. The queries themselves passed schema validation but were not run against the database.

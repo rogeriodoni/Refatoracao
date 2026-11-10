@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "FOUND", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPINS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "This.Grade.RecordSource          = []\nThis.Grade.Column1.ControlSource = []\nThis.Grade.Column2.ControlSource = []\nUse In LocalObs\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS",
+      "evento": "Init",
+      "linhas": 125,
+      "codigoOriginal": "lParameters pCnx, pLista, pTipo, pCapTion, pEdn\nLOCAL lcLista\npublic pcLista, pcTipo, pcChv, pcEDN\n\nThisForm.Caption = 'Seleção de ' + Iif(Type([pCaption])='C' And Not Empty(pCaption),pCaption,'Finalidades')\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\npcLista  = pLista\t\npcTipo = pTipo\npcChv = []\npcEDN = Iif(Type([pEdn])=[C],pEdn,[])\n\nThis.poDataMgr = pCnx\n\n*** mena 18/02/2015 - cria lista de observações dois ***\nIF VARTYPE(pcL... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FOUND",
+        "metodosFormChamados": "Caption = 'Seleção de ' + Iif,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINS.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS.cntBotoes",
+      "evento": "Click",
+      "linhas": 101,
+      "codigoOriginal": "Thisform.Grade.Refresh\nSelect LocalObs\nGo Top In LocalObs\nThisform.Grade.Refresh\n\n**** monta as observacoes normais ****\nIf Vartype(pcLista) <> 'C'\n\tLocate For Selecao = 1\n\tIf Eof([LocalObs])\n\t\t=Messagebox([Nenhuma Observação Foi Selecionada!], 0+48, [Atenção])\n\t\tGo Top In LocalObs\n\t\tThisform.Grade.Column1.SetFocus\n\t\tReturn .F.\n\tEndif\n\tllPri = .T.\n\tIf Not IsEmpty(TprMvCab.obses)\n\t\tIf (Messagebox([Já Existe Conteúdo Informado No Campo de Observação] + Chr(13) + ;\n\t\t\t\t[Deseja Manter o Conteúdo e A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,Found",
+        "metodosFormChamados": "Value, Chr",
+        "controlesReferenciados": "chkPular",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINS.Grade",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.getObs.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS.Grade.Column1.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Used([LocalBusLin])\n\tSelect LocalBusLin\n\tIf (ThisForm.Grade.Seleciona.Header1.Tag = [X])\n\t\tThisForm.Grade.Seleciona.Header1.Tag = [ ]\n\t\tUpdate LocalObs Set Selecao = 0\n\tElse\n\t\tThisForm.Grade.Seleciona.Header1.Tag = [X]\n\t\tUpdate LocalObs Set Selecao = 1\n\tEndIf\nEndIf \t\nThisForm.Grade.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS.Grade.Column1.fwcheckbox1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPINS.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPINS.Grade.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Column1.fwcheckbox1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPINS.Grade.Column1.Header1.Click",
+      "queryOriginal": "\t\tUpdate LocalObs Set Selecao = 0",
+      "tabelas": "LocalObs",
+      "colunas": "Selecao",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPINS.Grade.Column1.Header1.Click",
+      "queryOriginal": "\t\tUpdate LocalObs Set Selecao = 1",
+      "tabelas": "LocalObs",
+      "colunas": "Selecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalObs"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

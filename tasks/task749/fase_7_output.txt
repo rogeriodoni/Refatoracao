@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 entregue. Resumo do que foi feito e medido:
+
+## O que a Fase 7 entregou
+
+**`projeto\app\forms\operacionais\FormSigOpImp.prg`** (+~600 linhas):
+
+| M├®todo | Origem no legado |
+|---|---|
+| `ConfigurarBotoes()` | `cntBotoes` (CommandGroup, ButtonCount=2) ÔåÆ `obj_4c_CntBotoes`, props transcritas do dump; **├║ltimo** `AddObject` (fica sobre a faixa do cabe├ºalho, regra #11) |
+| `BtnRecalcularClick()` | `btnConfirmar.Click` ÔÇö "\<Recalcular" |
+| `BtnConfirmarClick()` | `btnSair.Click` ÔÇö "\<Voltar" (nome pela **a├º├úo**: ├® o caminho que persiste, grava `AltImpost` e loga `MANIMPOSTO`) |
+| `ChamarRecalculoDoPai()` | `ParentForm.ParentForm.Atuatot()/CalcImposto(.f.,item,,.t.)` |
+| `CarregarDadosDoItem()` | bloco `With ThisForm` do `Init` + as 3 consultas de contexto |
+| `BOParaForm()` / `FormParaBO()` / `TransferirNumero()` / `ValorNumerico()` | mapeamento telaÔåöBO e detec├º├úo de `maniPulou` |
+
+**`projeto\app\classes\SigOpImpBO.prg`**: `CarregarContextoDoProduto()` ÔÇö duas consultas do `Init` legado (ClFiscal do produto via `SigCdPro├ùSigCdClf`; grupo/`servicos` via `SigCdPro├ùSigCdGrp`). A terceira (CFOP) reusa o `BuscarCfop()` da Fase 6.
+
+## Decis├Áes que valem registro
+
+- **Os 4 nomes CRUD do template (`BtnIncluirClick`/ÔÇª) n├úo existem neste legado e n├úo foram criados.** Medido no dump: zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha`, zero nome `btn|cmd<verbo CRUD>`, zero `<Verbo>.Click`. A ├║nica superf├¡cie de bot├úo ├® o `cntBotoes` de 2 bot├Áes. Invent├í-los violaria o PILAR 1.
+- **`Atuatot`/`CalcImposto` n├úo existem no projeto migrado** (a tela de movimento ainda n├úo foi migrada). Em vez de reimplementar a f├│rmula de imposto (regra #17) ou devolver um stub silencioso (regra #27), a chamada ├® por despacho guardado (`PEMSTATUS` + `TRY`) e a **aus├¬ncia ├® avisada ao usu├írio**. Quando a tela de movimento for migrada com esses dois m├®todos p├║blicos, o caminho passa a funcionar sem tocar neste arquivo.
+- `BtnRecalcularClick` chama `BO.AplicarAoCursor()` e **n├úo** `BO.Atualizar()` ÔÇö este ├║ltimo tamb├®m registra auditoria, e o legado loga uma ├║nica vez, no Confirmar; Recalcular pode ser clicado v├írias vezes.
+- Chave do log montada com `PADR` expl├¡cito (3+20+6 = 29, regra #42).
+- `When`/`Valid` dos campos individuais continuam fora: s├úo eventos **auxiliares** (Fase 8) ÔÇö documentado no header.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9** com `.fxp` apagados antes: `FORM.FXP=.T. FORM.ERR=.F. BO.FXP=.T. BO.ERR=.F.` ÔÇö zero `.err`.
+- **`ValidadorSQLSchema`** (gate 05f): 683 tabelas parseadas, 7 statements, **0 colunas inv├ílidas**, exit 0.
+- **`Test-CompletudeCodigo`**: `True` nos dois arquivos (sem TODO/stub/procedure vazia).
+- **Gate da Fase 7 replicado**: `legadoSemCrud = .T.`, `Get-ContagemBotoesLegado = 2` (fun├º├úo real extra├¡da do orquestrador) ÔåÆ piso 2; `nHandlers = 2` (`BtnRecalcularClick`, `BtnConfirmarClick`). **Passa.**
+- **Auditorias do projeto, zero achado nestes arquivos**: `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarLookupEmKeyPress`, `VerificarTableRevertSemBuffering`, `VerificarColunaEmpresaSQL`.
+- `TRY/ENDTRY` balanceados e **0 `RETURN` dentro de `TRY`** nos dois arquivos (medido por contador de profundidade).
+
+Uma ressalva: o `VerificarCamposCursorBO.ps1` (varredura dos 457 BOs) ainda estava rodando quando terminei ÔÇö n├úo ├® bloqueante aqui, porque as 4 colunas que o novo m├®todo l├¬ (`ClFiscals`, `Descricaos`, `cgrus`, `servicos`) foram conferidas uma a uma contra `docs/schema.sql` lido com `Get-Content -Raw`, e o `ValidadorSQLSchema` j├í cobriu os statements. Aviso se ele apontar algo.

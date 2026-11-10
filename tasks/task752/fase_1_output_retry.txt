@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1 conclu├¡da.** `C:\4c\projeto\app\classes\SIGOPinsBO.prg` criado (11,8 KB, 286 linhas, CRLF).
+
+## O que foi extra├¡do do legado
+
+`SIGOPins.SCX` ├® um **di├ílogo modal OPERACIONAL** ("Sele├º├úo de Finalidades") ÔÇö n├úo um CRUD. Tabela principal **`SigCdObs`** (PK `codigos` numeric(3,0)), auxiliares `SigOpFnl`, `SigCdOpe`, `SigCdPro` ÔÇö todas conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14).
+
+**44 propriedades declaradas**, cobrindo:
+- **`SigCdObs` completa** (8 colunas) + `Selecao` (coluna calculada do `Select 0 as Selecao`)
+- **`SigOpFnl`** (`cidchaves`, `codutil`, `empdopnums`, `operacao`) ÔÇö incluindo `empdopnums char(29)`, que ├® a chave posicional da regra #42
+- **`SigCdOpe`** (`dopes`, `obspads`, `obsinis`, `obsfins`) e **`SigCdPro`** (`cgrus`, `cpros`) do fluxo ITN
+- Os 4 `PUBLIC` do legado (`pcLista`/`pcTipo`/`pcChv`/`pcEDN`) viraram propriedades (PILAR 3 ÔÇö sem vari├ível global)
+- Cursores do di├ílogo renomeados (`cursor_4c_*`) **mas** os 4 cursores do form chamador (`crSigOpFnl`, `crTpmMvItn`, `TprMvCab`, `crSigCdGrp`) mantidos com o nome do legado ÔÇö s├úo contrato: quem abre o di├ílogo j├í os tem abertos.
+
+**Init** usa `PCOUNT()` para distinguir argumento ausente de vazio, porque `pcLista = ""` ainda ├® modo FINALIDADES no legado (`Vartype(pcLista) = "C"`); reproduz a faixa 0..999 e `lcObsPads = -1` do ramo de finalidades; e **nunca retorna `.F.`** (Init de BO falso mata a abertura do form) ÔÇö falha vai para `this_cMensagemFalha`.
+
+## Verifica├º├úo
+
+| Check | Resultado |
+|---|---|
+| `Test-CompletudeCodigo` (l├│gica real do 05d, rodada standalone) | **OK** ÔÇö 0 TODO/stub/procedure vazia |
+| `COMPILE` no VFP9 | **FXP presente, ERR ausente** |
+| Controle negativo (`PUBLIC PROCEDURE` colado no fim) | **ERR gerado**, apontando s├│ as 3 linhas acrescentadas |
+| Acentos literais, `this_X .Value`, `PUBLIC` em classe, `ISEMPTY`, `MESSAGEBOX`, `TTOD` | 0 em cada |
+| `RETURN` dentro de `TRY` (contagem de profundidade) | 0 viola├º├Áes |
+
+O controle negativo ├® o que d├í valor ao `.ERR` ausente: ele provou na mesma rodada que o detector dispara, e que as 286 linhas do BO est├úo limpas. Isso prova **compila├º├úo**, n├úo runtime ÔÇö n├úo instanciei o BO (instanciar BO sem conex├úo abre di├ílogo e pendura o VFP headless).
+
+Dois pontos para as fases seguintes:
+
+1. **Fase 2 provavelmente cai na exce├º├úo "BO somente-leitura"** do gate: toda grava├º├úo do legado (`Insert Into crSigOpFnl` / `Replace obses In TprMvCab`) tem por destino **cursor local do form chamador**, n├úo tabela remota ÔÇö n├úo h├í `TABLEUPDATE` nem `AddCursor`. Inventar `Inserir`/`Atualizar` com INSERT remoto violaria a regra #22.
+2. O legado chama `fConfigGeral()` no `Load` e `fUniqueIds()` no Confirmar ÔÇö ambos s├úo fun├º├Áes globais do Fortyus (regra #27). `fUniqueIds` ├® essencial (gera a PK `cidchaves`); vale conferir se o wrapper existe em `utils\` antes da Fase 2 us├í-lo.

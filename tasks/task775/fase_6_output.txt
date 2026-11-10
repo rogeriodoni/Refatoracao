@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH balanced (12/12), methods balanced (16/16), single `ENDDEFINE`. The Fase 6 deliverable is complete.
+
+## Summary
+
+Added the `Get_Obs` EditBox (observation field) to `FormSigOpOco.prg`, completing the last remaining control from the legacy dump:
+
+- **`ConfigurarCampoObservacao()`** ÔÇö creates `obj_4c_Get_Obs` with the geometry/font transcribed from the SCX dump (Arial 8, Top=195/Left=222/Width=195/Height=87). Only data-independent properties go here (rule #41).
+- **`VincularObservacao()`** ÔÇö binds `ControlSource` to `<alias>.obs` only when the caller's alias (`this_cCursorHistorico`) is open, mirroring `VincularGrade()`'s guard ÔÇö avoids "Alias is not found" crashing `InicializarForm` when the harness instantiates the form without a caller.
+- Wired both into `InicializarForm()` (new step 9) and the `CarregarDados()` funnel (step 1b), so the binding re-runs whenever the alias becomes available ÔÇö consistent with rule #21 (single funnel) already used for the grid.
+
+Per the file's own phase plan, the `Valid`/`When`/`LostFocus` handlers for this field (and the Ocorr├¬ncia column lookup, and the exit button's `Click`) remain explicitly deferred to Fases 7-8 ÔÇö nothing stubbed, no empty methods.

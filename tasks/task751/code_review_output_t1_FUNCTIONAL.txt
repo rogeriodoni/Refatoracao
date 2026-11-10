@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All edits are in place and syntactically clean (no `;` line-joins, no visual-property changes, no business-logic alterations).
+
+## Summary
+
+Of the 11 reported issues, **3 were genuine** and are now fixed; **8 were false positives** (verified against the actual file, not just the excerpted trechos):
+
+**Fixed (real issues):**
+- `ContasLostFocus`, `DContaLostFocus`, `CpfsLostFocus` ÔÇö added `this_cUltimoContasLostFocusValidado`/`this_cUltimoDContaLostFocusValidado`/`this_cUltimoCpfsLostFocusValidado` guard properties (declared near the other `this_l*`/`this_c*` state props) and an early-return comparison at the top of each handler, updating the stored value after every branch ÔÇö so `LostFocus` (which fires even without the user changing anything) no longer re-triggers `fAcessoContas`/`BuscarContaEntrega`/`AbrirBuscaContaEntrega` on an unchanged value.
+
+**Skipped as false positives (verified against the real file):**
+- `CodObsLostFocus` already has an equivalent legacy-faithful guard (`Tag = Str(Value,10)` set in `CodObsGotFocus`, compared at `LostFocus`) ÔÇö adding a second guard would be redundant and risk diverging from the transcribed legacy behavior.
+- All 6 "METODO-INEXISTENTE" findings (`ValidarDataMinima`, `VolumesWhen`, `BuscarContaEntrega`, `ValidarContaEntregaEncontrada`, `SolicitarLiberacaoPrazoEntrega`, `AvancarAlemDosFeriados`) ÔÇö confirmed via grep that every one is defined in this same file (lines 1182, 1453, 2065, 2147, 3189, 3388 pre-edit). The reviewer only saw partial trechos and missed the definitions.
+- `btnMultObs` LAYOUT-POSITION ÔÇö `cmd_4c_BtnMultObs` inside `cnt_4c_Observacao` already has `Left = 135`, matching the legacy value cited in the finding. The reviewer compared against the *other* `cmd_4c_BtnMultObs` (same control name, reused inside `cnt_4c_Obs2`, which legitimately has `Left = 3`), so the "diff=132px" was a name-collision artifact, not a real deviation.
+
+No visual properties, business logic, or fields/functionality were touched outside the three guard additions.

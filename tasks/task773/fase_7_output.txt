@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e verificada. `C:\4c\projeto\app\forms\operacionais\FormSigOpOca.prg` (597 ÔåÆ 917 linhas).
+
+## O que entrou
+
+**`ConfigurarBotoes()`** ÔÇö o ├║nico bot├úo do legado: `cmd_grupo` (CommandGroup, `ButtonCount = 1`) ÔåÆ `cmg_4c_Botoes`, com `Buttons(1)` = o `cmd_ok` do dump. Todas as propriedades transcritas do SCX (`Top = -2`, `Left = 411`, 85x85; interno 5,5/75x75, Comic Sans MS 8 bold it├ílico, `ForeColor 90,90,90`, `Caption "\<Confirmar"`, `Picture cadastro_salvar_60.jpg`). Criado **depois** do cabe├ºalho, porque com `Top = -2` ele fica dentro da faixa cinza e s├│ desenha por cima se for o `AddObject` mais recente (regra #11). `ButtonCount` antes de qualquer `Buttons(N)`; `Buttons(1)` por caminho completo, nunca por `WITH` aninhado (regra #33).
+
+**`BtnConfirmarClick()`** ÔÇö transcri├º├úo do `cmd_ok.Click`: l├¬ a observa├º├úo do EditBox (fonte ├║nica ÔÇö o `ALT+C` do `"\<"` aciona o Click sem o campo perder o foco), chama `SigOpOcaBO.Atualizar()` (que decide Auditado/DesAuditado por `this_lTipo` e faz os dois UPDATE), e guarda o resultado. Fecha **fora** do `IF` de sucesso, como no dump.
+
+**`FecharDialogo()`** ÔÇö `Hide()` em vez de `Release()`: o pai precisa ler o resultado depois do `Show()` retornar.
+
+**Tr├¬s propriedades de resultado** (`this_lConfirmado`, `this_dDtAuditsNova`, `this_cAuditorsNovo`) no lugar do `Replace DtAudits/Auditors in CrSigMvCcr` que o legado fazia no cursor compartilhado ÔÇö n├úo h├í sess├úo compartilhada aqui.
+
+**`AplicarOrdemTabulacao()`** ÔÇö com o bot├úo criado a sequ├¬ncia de Tab virou determin├ível: grupo antes da observa├º├úo (ordem efetiva do legado, n├úo o literal 11/34 que sofre clamp) e `TabStop = .F.` nos dois TextBox de exibi├º├úo, reproduzindo o `When() = .F.` do legado (`ReadOnly` bloqueia digita├º├úo, n├úo foco).
+
+## Medido no VFP9 (n├úo s├│ compilado)
+
+| | |
+|---|---|
+| `COMPILE` form + BO | `.fxp` gerado, **zero `.err`** |
+| `CREATEOBJECT("FormSigOpOca")` | `VARTYPE = "O"` |
+| geometria do grupo | `Top=-2 Left=411 85x85`, `ButtonCount=1` ÔÇö o `AutoSize=.T.` n├úo alterou |
+| ├¡cone | `c:\4c\vbmp\cadastro_salvar_60.jpg`, `FILE() = .T.` (regra #25) |
+| `BINDEVENT` | `AEVENTS` ÔåÆ `BTNCONFIRMARCLICK` |
+| escopo dos 3 m├®todos novos | PUBLIC (`PEMSTATUS(...,2) = .F.`) |
+| Click acionado | leu `"TESTE DE OBSERVACAO"` para o BO; sem conex├úo o BO recusou com MsgErro e `this_lConfirmado` ficou `.F.` |
+| p├│s-Click | `VARTYPE = "O"`, `Visible = .F.` ÔåÆ `Hide()` preservou o objeto; `Release()` do chamador ÔåÆ `"X"` |
+
+Gates replicados avulsos (sem dot-source do orquestrador): **Fase 7 PASSA** pelo ramo legado-sem-CRUD (dump tem zero `frmcadastro`/`Grupo_Op`/`pcEscolha`/verbo CRUD; 1 bot├úo no SCX, 1 handler no `.prg`) e **completude OK** nos dois arquivos.
+
+Tamb├®m corrigi `tasks\task773\mapeamento.json`: `cmd_grupo` apontava para `obj_4c_Cmd_grupo` (prefixo gen├®rico que o GeradorMapeamento emite para tipo n├úo reconhecido) ÔåÆ `cmg_4c_Botoes`, o can├┤nico para CommandGroup.
+
+Dois pontos para registro, sem a├º├úo nesta fase: ainda **n├úo existe chamador** deste di├ílogo ÔÇö o `Formsigopind` migrado faz a auditoria inteira inline e nunca o abre, ent├úo as tr├¬s propriedades de resultado s├│ ser├úo consumidas quando o pai for ajustado. E o `Picture` do form usa `gc_4c_CaminhoFramework` (vem da Fase 3), que n├úo verifiquei aqui.

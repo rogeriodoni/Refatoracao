@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö the extra match was just the comment at line 92 referencing legacy "PROCEDURE Load"; all 9 real methods are properly paired with ENDPROC, and the file ends with a single `ENDDEFINE`. The structure is balanced and consistent with the sibling `SigOpClpBO.prg` pattern.
+
+**Fase 2 conclu├¡da.** `SigOpIpBBO.prg` agora tem, al├®m das propriedades/Init da Fase 1:
+- `CursorPronto()` / `ContarImpressoras()` ÔÇö conferem o contrato do cursor recebido do form pai
+- `CarregarDoCursor()` / `CarregarLinhaCorrente()` ÔÇö leem a linha corrente e recalculam o resumo da sele├º├úo
+- `LimparDados()` ÔÇö zera a linha corrente, preservando o contrato do cursor
+- `PrepararSelecaoInicial()` ÔÇö transcri├º├úo do `Init` legado (zera `lSituas` em tudo, marca a primeira linha)
+- `SelecionarImpressora(par_nRecno)` ÔÇö transcri├º├úo do `Check1.Valid` (radio-button na grade)
+- `ObterChavePrimaria()` ÔÇö implementado por padr├úo de interface, mesmo nunca sendo invocado
+
+`Inserir()`, `Atualizar()`, `ExecutarExclusao()` e `RegistrarAuditoria()` permanecem herdados de `BusinessBase`, como j├í justificado no cabe├ºalho pela Fase 1: o dump legado n├úo grava nada no SQL Server, e inventar INSERT/UPDATE aqui violaria a regra #22 (nunca adivinhar colunas).

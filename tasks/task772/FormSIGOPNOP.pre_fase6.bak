@@ -1,0 +1,1278 @@
+*==============================================================================
+* FormSIGOPNOP.prg - Analise de OP/Envelopes
+*==============================================================================
+* Tipo: OPERACIONAL (layout customizado, SEM PageFrame)
+* Migrado de: SIGOPNOP.SCX
+*
+* Pilares:
+*   UX   -> layout e comportamento o mais proximo possivel do legado (800x600)
+*   BD   -> SigCdNei/SigCdNec/SigCdPro/SigOpPic/SigPdMvf (ver SIGOPNOPBO.prg)
+*   CODE -> arquitetura em camadas (FormBase / SIGOPNOPBO)
+*
+* NOTA (paridade com o legado): o SIGOPNOP eh uma tela de CONSULTA em arvore
+* (TreeView ActiveX) de movimentacoes de producao, pesquisadas por numero de
+* Envelope OU numero de O.P. (ver SIGOPNOPBO.PesquisarPorEnvelope/
+* PesquisarPorOP). O legado (raiz Class: form, SEM BaseClass: pageframe -
+* ver tasks\task772\layout.json/SIGOPNOP_form_codigo_fonte.txt) usa layout
+* proprio com os controles direto na Form, sem Page1(Lista)/Page2(Dados) nem
+* os 6 botoes CRUD canonicos (Incluir/Visualizar/Alterar/Excluir/Buscar/
+* Encerrar - o unico botao de saida eh o Command1 ("Encerrar") dentro de
+* Commandgroup1, ButtonCount=1). Inventar PageFrame ou botoes CRUD violaria o
+* PILAR 1 e a regra "NUNCA inventar funcionalidade que o legado nao tem".
+* Referencia direta: FormSIGMVMVT.prg (mesma familia de tela - consulta em
+* arvore via OLEControl ActiveX, guardado em TRY/CATCH e pulado em modo
+* teste - ver feedback_mscomctl_treectrl_trava_em_modal_de_licenca).
+*
+* FASE 3/8 - ESTRUTURA BASE: DEFINE CLASS, propriedades de estado (espelham
+* as propriedades customizadas do form legado - paEmpDopNums, Arqfigura,
+* plDblClick), Init()/InicializarForm()/Destroy() e os DOIS containers de
+* topo do layout legado (cnt_4c_Container1 / cnt_4c_Container2), ainda
+* vazios. O conteudo deles (TreeView, GetOP, GetEnvelope, Label3, Label1,
+* Label2) e os controles soltos na Form (Commandgroup1, Fwbtng1, Fwbtng2,
+* Imagem) entram na Fase 4.
+*
+* FASE 4/8 - CONTROLES: ConfigurarControles() preenche os dois containers
+* da Fase 3 e cria os controles soltos na Form, com geometria/propriedades
+* transcritas LITERALMENTE da SECAO 2 do dump (PILAR 1):
+*   cnt_4c_Container1 -> obj_4c_TreeView (arvore - ctTree.ocx, controle
+*     ActiveX de terceiros sem substituto nativo VFP9, mesma familia de
+*     FormSIGMVMVT: instanciado via OLEControl com o mesmo ProgID do
+*     legado, guardado em TRY/CATCH e pulado em modo teste/validacao de
+*     UI - ver feedback_mscomctl_treectrl_trava_em_modal_de_licenca), mais
+*     lbl_4c_Label3 ("O.P. :"), lbl_4c_Label1 ("Envelope :"), txt_4c_OP
+*     (GetOP) e txt_4c_Envelope (GetEnvelope).
+*   cnt_4c_Container2 -> lbl_4c_Label1 ("AGUARDE!") e lbl_4c_Label2
+*     ("Pesquisando as Movimentacoes") - conteudo do painel flutuante.
+*   Form (sem container, fiel ao SCX) -> cmg_4c_Commandgroup1 (unico
+*     botao "Encerrar" - nome canonico cmg_4c_, NAO o obj_4c_ do
+*     mapeamento.json gerado: ver feedback_commandgroup_obj_4c_reprova_
+*     gate_fase4), cmd_4c_Fwbtng1 ("Expandir"), cmd_4c_Fwbtng2
+*     ("Regredir") e img_4c_Imagem (imagem do produto).
+*
+* Mais o METODO DE CARGA desta tela, que aqui NAO alimenta uma grade e sim
+* a ARVORE (o SCX nao tem Grid nem PageFrame - a superficie de lista eh o
+* TreeView ActiveX, dirigido pela API de nos AddPictureNode/NodeExpanded/
+* NodeFontBold). Medicao que dispensa Grid/CRUD neste legado, feita sobre
+* tasks\task772\SIGOPNOP_form_codigo_fonte.txt: ZERO "BaseClass: grid",
+* ZERO "BaseClass: pageframe", ZERO .AddCursor(/pColuna/RecordSource/
+* ControlSource, UM "BaseClass: olecontrol" e 7 chamadas da API de nos.
+*   CarregarDados()           -> escolhe o criterio (O.P. ou Envelope -
+*     mutuamente exclusivos no legado), chama SIGOPNOPBO.PesquisarPorOP/
+*     PesquisarPorEnvelope e desenha a arvore. Equivale aos dois Valid do
+*     legado (Container1.GetOP.Valid -> MakeTree, Container1.GetEnvelope.
+*     Valid -> MakeTreeEnv).
+*   PopularArvore()           -> transcricao dos PROCEDURE maketree e
+*     maketreeenv (mesmo algoritmo, cinco textos/icones diferentes).
+*   PrepararArvore()          -> os seis AddImage do Init legado (uma unica
+*     vez - os indices 1..6 do AddPictureNode sao fixos) e o bloco
+*     ClearNodes/TipsDisplay/SmallIcons/PicAlign/SelectedStyle/PictureType
+*     que os dois metodos legado repetem no inicio.
+*   ExibirImagemProduto()     -> bloco da figura do produto do GetOP.Valid.
+*   AdicionarNoOrigemDestino()/AdicionarNoMedida() -> os blocos de no que o
+*     legado repete literalmente (2x e 3x por iteracao do Scan).
+*   ArvoreDisponivel()        -> guarda do ActiveX (OCX ausente/modo teste).
+*
+* Nenhum EVENTO de controle esta ligado ainda (Click/Valid/GotFocus/
+* KeyPress/NodeClick ficam para a Fase 7/8) - inclusive os Click de
+* Fwbtng1/Fwbtng2, que leem o this_nNodeExp que PopularArvore ja mantem.
+*
+* Parametros de abertura (Parameters plModal, pcEmps, pcDopes, pcNumes do
+* Init legado): pcEmps/pcDopes/pcNumes sao declarados mas NUNCA referenciados
+* no restante do codigo do form legado (conferido no dump completo em
+* tasks\task772\SIGOPNOP_form_codigo_fonte.txt) - a assinatura eh mantida
+* para fidelidade de chamada, mas nao ha logica do legado para reproduzir a
+* partir deles. plModal tambem eh recebido sem efeito: a unica linha que o
+* usaria no legado esta COMENTADA no proprio SCX ("*ThisForm.WindowType =
+* Iif(plModal,1,0)") - por isso THIS.WindowType NAO eh alterado aqui.
+*
+* CHAMADA:
+*   loForm = CREATEOBJECT("FormSIGOPNOP")
+*   loForm.Show()
+*==============================================================================
+
+DEFINE CLASS FormSIGOPNOP AS FormBase
+
+	*-- Dimensoes e comportamento identicos ao legado (SIGOPNOP.SCX)
+	Height       = 600
+	Width        = 800
+	AutoCenter   = .T.
+	BorderStyle  = 2
+	ShowWindow   = 1
+	WindowType   = 1
+	ControlBox   = .F.
+	MaxButton    = .F.
+	MinButton    = .F.
+	*-- Closable NAO entra: o dump do SCX declara so ControlBox/MaxButton/
+	*-- MinButton, e as cinco propriedades sao INDEPENDENTES (medido no VFP9 -
+	*-- sem barra de titulo os botoes nao DESENHAM, mas Closable continua .T.
+	*-- e o Alt+F4 continua funcionando). Inventar Closable = .F. aqui tiraria
+	*-- a saida por teclado que o legado tinha, sem erro e sem log
+	*-- (feedback_closable_inventado_tira_a_unica_saida). A saida por ESC
+	*-- continua garantida por cmg_4c_Commandgroup1.Buttons(1).Cancel = .T.,
+	*-- transcrito do dump.
+	ClipControls = .F.
+	ShowTips     = .T.
+	Themes       = .F.
+	FontName     = "Verdana"
+	FontSize     = 8
+	DataSession  = 2
+
+	*-- Parametros de abertura (Parameters plModal, pcEmps, pcDopes, pcNumes
+	*-- do Init legado). pcEmps/pcDopes/pcNumes NUNCA sao lidos no resto do
+	*-- form legado (conferido no dump) - guardados so para manter a mesma
+	*-- assinatura de chamada. plModal fica guardado pelo mesmo motivo, mas
+	*-- NAO altera THIS.WindowType (a linha correspondente esta comentada no
+	*-- SCX legado).
+	this_lModalParam = .F.
+	this_cEmpsParam  = ""
+	this_cDopesParam = ""
+	this_nNumesParam = 0
+
+	*-- ThisForm.paEmpDopNums[1] - pilha de EmpDopNums visitados na arvore
+	*-- (TreeView.NodeClick, Fase 7/8).
+	DIMENSION this_aEmpDopNums[1]
+
+	*-- ThisForm.Arqfigura - caminho do .jpg temporario extraido de
+	*-- SigCdPro.FigJpgs (ver SIGOPNOPBO.this_cArquivoImagem/
+	*-- BuscarImagemProduto/ExcluirImagemTemporaria). Apagado ao Encerrar
+	*-- (Commandgroup1.Command1.Click no legado: "Delete File
+	*-- (ThisForm.Arqfigura)").
+	this_cArquivoFigura = ""
+
+	*-- ThisForm.plDblClick - cargo (NodeCargo) do ultimo no clicado na
+	*-- arvore, usado pelo TreeView.NodeClick para distinguir o 1o clique
+	*-- (so seleciona) do 2o clique no MESMO no (drill - dispara MakeTree).
+	*-- Fase 7/8.
+	this_cUltimoNoClicado = ""
+
+	*-- ThisForm.pnNodeExp - nivel corrente de expansao da arvore. Posto em 1
+	*-- no fim de MakeTree/MakeTreeEnv (ver PopularArvore) e incrementado/
+	*-- decrementado pelos botoes Expandir/Regredir do legado (Fwbtng1.Click
+	*-- e Fwbtng2.Click, Fase 7).
+	this_nNodeExp = 0
+
+	*-- Controle interno (NAO tem equivalente no legado): as seis imagens dos
+	*-- nos sao carregadas por AddImage UMA UNICA vez, como no Init legado.
+	*-- AddImage empilha indices novos a cada chamada e os indices 1..6 usados
+	*-- pelo AddPictureNode sao FIXOS - recarregar a cada pesquisa trocaria os
+	*-- icones de todos os nos.
+	this_lImagensArvore = .F.
+
+	*==========================================================================
+	* Init - Recebe os parametros de abertura (Parameters plModal, pcEmps,
+	* pcDopes, pcNumes do legado) e repassa para FormBase.Init() (que chama
+	* InicializarForm() atraves de DODEFAULT()).
+	*==========================================================================
+	PROCEDURE Init(par_lModal, par_cEmps, par_cDopes, par_nNumes)
+		THIS.this_lModalParam = IIF(TYPE("par_lModal") = "L", par_lModal, .F.)
+		THIS.this_cEmpsParam  = IIF(TYPE("par_cEmps")  = "C", ALLTRIM(par_cEmps), "")
+		THIS.this_cDopesParam = IIF(TYPE("par_cDopes") = "C", ALLTRIM(par_cDopes), "")
+		THIS.this_nNumesParam = IIF(TYPE("par_nNumes") = "N", par_nNumes, 0)
+
+		RETURN DODEFAULT()
+	ENDPROC
+
+	*==========================================================================
+	* InicializarForm - Instancia o Business Object, reinicializa o estado de
+	* navegacao da arvore (equivalente ao bloco inicial do Init legado -
+	* Declare ThisForm.paEmpDopNums[1] / ThisForm.Arqfigura recebe espaco) e cria os
+	* containers de topo do layout legado. O conteudo dos containers e os
+	* controles soltos na Form (TreeView/GetOP/GetEnvelope/labels/
+	* Commandgroup1/Fwbtng1/Fwbtng2/Imagem) entram na Fase 4.
+	*==========================================================================
+	PROTECTED PROCEDURE InicializarForm
+		LOCAL loc_lSucesso
+		loc_lSucesso = .F.
+
+		THIS.this_oBusinessObject = CREATEOBJECT("SIGOPNOPBO")
+
+		IF VARTYPE(THIS.this_oBusinessObject) != "O"
+			MsgErro("Falha ao criar SIGOPNOPBO", "Erro")
+		ELSE
+			THIS.Caption = "An" + CHR(225) + "lise de OP/Envelopes"
+
+			*-- Picture = ..\framework\imagens\new_background.jpg no legado -
+			*-- caminho resolvido via gc_4c_CaminhoFramework (regra CLAUDE.md
+			*-- #27/Pattern #170 - NUNCA montar esse caminho a partir de gc_4c_CaminhoBase).
+			IF FILE(gc_4c_CaminhoFramework + "imagens\new_background.jpg")
+				THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
+			ENDIF
+
+			*-- Reinicializa o estado de navegacao da arvore (equivalente ao
+			*-- Declare ThisForm.paEmpDopNums[1] / Arqfigura = ' ' do Init
+			*-- legado - o form nao fecha entre uma pesquisa e outra).
+			DIMENSION THIS.this_aEmpDopNums[1]
+			THIS.this_aEmpDopNums[1] = ""
+
+			THIS.this_cArquivoFigura   = ""
+			THIS.this_cUltimoNoClicado = ""
+
+			*-- Containers de topo do layout legado (filhos diretos da Form -
+			*-- o SCX nao tem PageFrame).
+			THIS.ConfigurarContainers()
+
+			*-- Conteudo dos containers + controles soltos na Form (Fase 4).
+			THIS.ConfigurarControles()
+
+			*-- Ordem de tabulacao EFETIVA do legado - tem de rodar depois de
+			*-- TODOS os AddObject (ver AplicarOrdemTabulacao).
+			THIS.AplicarOrdemTabulacao()
+
+			*-- AddObject cria tudo com Visible=.F. por padrao - torna
+			*-- visivel, preservando cnt_4c_Container2 (painel "AGUARDE!")
+			*-- e img_4c_Imagem invisiveis, fieis ao legado.
+			THIS.TornarControlesVisiveis(THIS)
+
+			*-- Init legado: "ThisForm.Container1.GetOP.SetFocus" (ver nota
+			*-- de SetFocus sem TRY/CATCH em ConfigurarControles).
+			IF THIS.cnt_4c_Container1.txt_4c_OP.Enabled AND THIS.cnt_4c_Container1.txt_4c_OP.Visible
+				THIS.cnt_4c_Container1.txt_4c_OP.SetFocus()
+			ENDIF
+
+			loc_lSucesso = .T.
+		ENDIF
+
+		RETURN loc_lSucesso
+	ENDPROC
+
+	*==========================================================================
+	* ConfigurarContainers - Cria os containers de topo do layout legado
+	* (filhos DIRETOS da Form - o SCX nao tem PageFrame nenhum, ver
+	* SECAO 1 do dump: so "Parent: sigopnop" / BaseClass: container).
+	*
+	* Geometria e propriedades transcritas LITERALMENTE da SECAO 2 do dump
+	* (PILAR 1) - nada inventado:
+	*   Container1: Top=136 Left=23 Height=456 Width=744 BackStyle=0
+	*               BorderWidth=0 TabIndex=1 BackColor=212,208,200
+	*               BorderColor=136,189,188  -> superficie da arvore
+	*   Container2: Top=267 Left=221 Height=65 Width=358 SpecialEffect=0
+	*               TabIndex=3 BackColor=255,255,255 -> painel "AGUARDE!"
+	*
+	* cnt_4c_Container2 nasce INVISIVEL de proposito: o Init legado termina
+	* com "ThisForm.Container2.Visible = .f." e os metodos MakeTree/
+	* MakeTreeEnv o acendem ("ThisForm.Container2.Visible = .t.") enquanto a
+	* pesquisa roda. Por ser container FLUTUANTE, ele TEM de ficar fora do
+	* TornarControlesVisiveis (que entra com os controles na Fase 4) - senao
+	* o painel de aguarde fica aceso na tela desde a abertura.
+	*
+	* Conteudo de cada container (TreeView, GetOP, GetEnvelope, Label3,
+	* Label1, Label2) entra na Fase 4; aqui ficam so as duas cascas.
+	*==========================================================================
+	PROTECTED PROCEDURE ConfigurarContainers
+		LOCAL loc_oCnt
+
+		*-- cnt_4c_Container1 (sigopnop.Container1) - area da arvore
+		THIS.AddObject("cnt_4c_Container1", "Container")
+		loc_oCnt = THIS.cnt_4c_Container1
+		WITH loc_oCnt
+			.Top           = 136
+			.Left          = 23
+			.Height        = 456
+			.Width         = 744
+			.BackStyle     = 0
+			.BorderWidth   = 0
+			.TabIndex      = 1
+			.BackColor     = RGB(212, 208, 200)
+			.BorderColor   = RGB(136, 189, 188)
+			.SpecialEffect = 0
+			.Visible       = .T.
+		ENDWITH
+
+		*-- cnt_4c_Container2 (sigopnop.Container2) - painel "AGUARDE!".
+		*-- Visible = .F. reproduz o fim do Init legado; so MakeTree/
+		*-- MakeTreeEnv o tornam visivel durante a pesquisa.
+		THIS.AddObject("cnt_4c_Container2", "Container")
+		loc_oCnt = THIS.cnt_4c_Container2
+		WITH loc_oCnt
+			.Top           = 267
+			.Left          = 221
+			.Height        = 65
+			.Width         = 358
+			.SpecialEffect = 0
+			.TabIndex      = 3
+			.BackColor     = RGB(255, 255, 255)
+			.Visible       = .F.
+		ENDWITH
+	ENDPROC
+
+	*==========================================================================
+	* ConfigurarControles - Preenche os dois containers criados na Fase 3 e
+	* cria os controles soltos na Form (sem container - fiel ao SCX, que
+	* nao tem PageFrame). Geometria/propriedades transcritas LITERALMENTE
+	* da SECAO 2 do dump (PILAR 1) - nada inventado, exceto onde anotado.
+	*
+	* obj_4c_TreeView eh a arvore hierarquica desta tela (equivalente ao
+	* "grid" das telas CRUD) - controle ActiveX de terceiros ctTree.ocx/DBI
+	* Technologies, sem substituto nativo VFP9 (mesma familia de
+	* FormSIGMVMVT - NAO trocar por MSComctlLib.TreeCtrl, que trava em
+	* dialogo modal de licenca que o TRY/CATCH nao intercepta - ver
+	* feedback_mscomctl_treectrl_trava_em_modal_de_licenca). Instanciado
+	* via OLEControl com o mesmo ProgID do legado, guardado em TRY/CATCH e
+	* pulado em modo teste/validacao de UI.
+	*
+	* As 6 imagens dos nos da arvore (AddImage no Init legado) NAO entram
+	* aqui - ficam em PrepararArvore(), chamada pelo metodo de carga, com o
+	* flag this_lImagensArvore garantindo UMA UNICA carga (AddImage repetido
+	* empilharia indices novos e quebraria os indices fixos 1..6 usados pelo
+	* AddPictureNode do legado). Mesmo padrao de
+	* FormSIGMVMVT.PrepararArvore.
+	*
+	* AutoSize dos Labels: o dump declara AutoSize = .T. nos QUATRO labels,
+	* mas AutoSize eh NO-OP em Label criado por AddObject (regra CLAUDE.md
+	* #23, medida no VFP9) - a Width fica nos 100 do default enquanto o
+	* controle esta invisivel, e com WordWrap ele ainda DESCARTA a Height.
+	* Por isso os quatro saem com AutoSize = .F. e com a Width/Height que o
+	* SCX declara (35x15, 63x15, 114x25, 279x20) - esses numeros JA SAO o
+	* auto-size que o Form Designer calculou, logo fixa-los eh reproducao
+	* fiel, nao desvio do PILAR 1. Sem isso o "AGUARDE!" (114) e o
+	* "Pesquisando as Movimentacoes" (279) sairiam cortados nos 100.
+	*
+	* TabIndex: NAO entra nos blocos WITH abaixo. O SCX grava valores que
+	* NAO cabem na contagem de objetos do instante da criacao e o VFP os
+	* CLAMPA no load (regra medida em feedback_tabindex_do_scx_nao_transcrito)
+	* - transcrever o literal daria ordem fiel ao ARQUIVO e infiel a TELA.
+	* A ordem EFETIVA do legado eh reproduzida em AplicarOrdemTabulacao(),
+	* chamada depois de TODOS os AddObject.
+	*==========================================================================
+	PROTECTED PROCEDURE ConfigurarControles
+		LOCAL loc_oErrOle
+
+		*-- ===== Conteudo de cnt_4c_Container1 (area da arvore) =====
+
+		*-- obj_4c_TreeView (sigopnop.Container1.TreeView) - ctTree.ocx.
+		*-- ATENCAO: o SCX so preserva o caminho do OCX, nao o ProgID/CLSID
+		*-- exato - "cttree.cttreeview" eh o mesmo ProgID usado em
+		*-- FormSIGMVMVT (mesmo controle de terceiros). Se a instanciacao
+		*-- falhar por ProgID incorreto (em vez de OCX ausente), conferir
+		*-- via OLEVIEW/regedit (HKCR\TypeLib) numa maquina com o legado.
+		IF (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI) AND ;
+		   (TYPE("gb_4c_ModoTeste")   != "L" OR !gb_4c_ModoTeste)
+			TRY
+				THIS.cnt_4c_Container1.AddObject("obj_4c_TreeView", "OLEControl", "cttree.cttreeview")
+				WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+					.Top     = 28
+					.Left    = 9
+					.Height  = 421
+					.Width   = 725
+					.Visible = .T.
+				ENDWITH
+			CATCH TO loc_oErrOle
+				MsgErro("Controle de " + CHR(225) + "rvore (ctTree.ocx) indispon" + ;
+						CHR(237) + "vel nesta esta" + CHR(231) + CHR(227) + "o: " + ;
+						loc_oErrOle.Message, "Aviso")
+			ENDTRY
+		ENDIF
+
+		*-- lbl_4c_Label3 ("O.P. :") - AutoSize = .F. + Width/Height do dump
+		*-- (35x15). Ver nota de AutoSize em ConfigurarControles.
+		THIS.cnt_4c_Container1.AddObject("lbl_4c_Label3", "Label")
+		WITH THIS.cnt_4c_Container1.lbl_4c_Label3
+			.AutoSize  = .F.
+			.FontName  = "Verdana"
+			.FontSize  = 8
+			.BackStyle = 0
+			.Caption   = "O.P. :"
+			.Top       = 6
+			.Left      = 12
+			.Width     = 35
+			.Height    = 15
+			.ForeColor = RGB(36, 84, 155)
+			.Visible   = .T.
+		ENDWITH
+
+		*-- lbl_4c_Label1 ("Envelope :") - dump 63x15.
+		THIS.cnt_4c_Container1.AddObject("lbl_4c_Label1", "Label")
+		WITH THIS.cnt_4c_Container1.lbl_4c_Label1
+			.AutoSize  = .F.
+			.FontName  = "Verdana"
+			.FontSize  = 8
+			.BackStyle = 0
+			.Caption   = "Envelope :"
+			.Top       = 7
+			.Left      = 146
+			.Width     = 63
+			.Height    = 15
+			.ForeColor = RGB(36, 84, 155)
+			.Visible   = .T.
+		ENDWITH
+
+		*-- txt_4c_OP (GetOP) - numerico (Value=0), equivalente a
+		*-- SigCdNei.Nops/SigMvCab.Nops. Format/InputMask/MaxLength
+		*-- transcritos do dump (regra CLAUDE.md #49 - os dois valem).
+		THIS.cnt_4c_Container1.AddObject("txt_4c_OP", "TextBox")
+		WITH THIS.cnt_4c_Container1.txt_4c_OP
+			.Alignment         = 3
+			.Value             = 0
+			.Format            = "R"
+			.Height            = 23
+			.InputMask         = "9999999999"
+			.Left              = 49
+			.MaxLength         = 10
+			.SpecialEffect     = 1
+			.Top               = 2
+			.Width             = 86
+			.DisabledBackColor = RGB(255, 255, 255)
+			.DisabledForeColor = RGB(0, 0, 128)
+			.BorderColor       = RGB(36, 84, 155)
+			.Visible           = .T.
+		ENDWITH
+
+		*-- txt_4c_Envelope (GetEnvelope) - numerico (Value=0), equivalente
+		*-- a SigCdNei.Nenvs.
+		THIS.cnt_4c_Container1.AddObject("txt_4c_Envelope", "TextBox")
+		WITH THIS.cnt_4c_Container1.txt_4c_Envelope
+			.Alignment         = 3
+			.Value             = 0
+			.Format            = "R"
+			.Height            = 23
+			.InputMask         = "9999999999"
+			.Left              = 210
+			.MaxLength         = 10
+			.SpecialEffect     = 1
+			.Top               = 3
+			.Width             = 86
+			.DisabledBackColor = RGB(255, 255, 255)
+			.DisabledForeColor = RGB(0, 0, 128)
+			.BorderColor       = RGB(36, 84, 155)
+			.Visible           = .T.
+		ENDWITH
+
+		*-- ===== Conteudo de cnt_4c_Container2 (painel "AGUARDE!" -
+		*-- flutuante, nasce invisivel - ver ConfigurarContainers/Fase 3) =====
+
+		*-- lbl_4c_Label1 ("AGUARDE!") - dump 114x25. Com AutoSize = .T. e sem
+		*-- Width a caixa ficaria nos 100 do default e o texto (Verdana 14
+		*-- bold, Alignment = 2) sairia CORTADO.
+		THIS.cnt_4c_Container2.AddObject("lbl_4c_Label1", "Label")
+		WITH THIS.cnt_4c_Container2.lbl_4c_Label1
+			.AutoSize  = .F.
+			.FontBold  = .T.
+			.FontName  = "Verdana"
+			.FontSize  = 14
+			.Alignment = 2
+			.BackStyle = 0
+			.Caption   = "AGUARDE!"
+			.Top       = 2
+			.Left      = 122
+			.Width     = 114
+			.Height    = 25
+			.ForeColor = RGB(240, 0, 0)
+			.Visible   = .T.
+		ENDWITH
+
+		*-- lbl_4c_Label2 ("Pesquisando as Movimentacoes") - dump 279x20. Eh o
+		*-- caso mais grave do AutoSize: 279 contra os 100 do default, ou seja
+		*-- a frase apareceria pela METADE no painel de aguarde.
+		THIS.cnt_4c_Container2.AddObject("lbl_4c_Label2", "Label")
+		WITH THIS.cnt_4c_Container2.lbl_4c_Label2
+			.AutoSize  = .F.
+			.FontBold  = .T.
+			.FontName  = "Verdana"
+			.FontSize  = 12
+			.Alignment = 2
+			.BackStyle = 0
+			.Caption   = "Pesquisando as Movimenta" + CHR(231) + CHR(245) + "es"
+			.Top       = 31
+			.Left      = 39
+			.Width     = 279
+			.Height    = 20
+			.ForeColor = RGB(36, 84, 155)
+			.Visible   = .T.
+		ENDWITH
+
+		*-- ===== Controles soltos na Form (sem container - fiel ao SCX) =====
+
+		*-- cmg_4c_Commandgroup1 - unico botao de saida (ButtonCount=1,
+		*-- Caption="Encerrar"). Nome canonico cmg_4c_ (NAO o obj_4c_ do
+		*-- mapeamento.json gerado - o AnalisadorObjetos nao reconhece
+		*-- CommandGroup e cai no prefixo generico; ver
+		*-- feedback_commandgroup_obj_4c_reprova_gate_fase4).
+		THIS.AddObject("cmg_4c_Commandgroup1", "CommandGroup")
+		WITH THIS.cmg_4c_Commandgroup1
+			.ButtonCount   = 1
+			.Top           = 7
+			.Left          = 691
+			.Height        = 110
+			.Width         = 90
+			.BackStyle     = 0
+			.SpecialEffect = 1
+			.BorderColor   = RGB(136, 189, 188)
+			.Themes        = .F.
+
+			WITH .Buttons(1)
+				.Top       = 5
+				.Left      = 5
+				.Height    = 100
+				.Width     = 80
+				.FontName  = "Verdana"
+				.FontSize  = 8
+				.WordWrap  = .T.
+				.Picture   = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+				.Cancel    = .T.
+				.Caption   = "Encerrar"
+				.ForeColor = RGB(36, 84, 155)
+				.BackColor = RGB(255, 255, 255)
+				.Themes    = .F.
+			ENDWITH
+
+			.Value   = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- cmd_4c_Fwbtng1 ("Expandir" - seta para baixo). O SCX declara so
+		*-- Top/Left/Picture/Caption/ToolTipText: todo o resto vem da classe
+		*-- "fwbtng" do framework.vcx, lida em docs\FRAMEWORK_class_codigo_fonte.txt
+		*-- (NUNCA chutar propriedade herdada - regra CLAUDE.md #30/#31):
+		*--   Height=100  Width=80  FontBold=.T.  FontItalic=.T.
+		*--   FontName="Comic Sans MS"  FontSize=8  WordWrap=.T.
+		*--   MousePointer=15  ForeColor=90,90,90  BackColor=255,255,255
+		*-- Unico desvio deliberado: Themes = .T. (a classe tem .F.).
+		*-- CommandButton STANDALONE com .Picture exige Themes=.T. +
+		*-- DisabledPicture, senao o icone nao renderiza (Pattern #99) - e
+		*-- como o Caption eh "", sem icone o botao fica um retangulo vazio.
+		THIS.AddObject("cmd_4c_Fwbtng1", "CommandButton")
+		WITH THIS.cmd_4c_Fwbtng1
+			.Top             = 12
+			.Left            = 12
+			.Height          = 100
+			.Width           = 80
+			.Picture         = gc_4c_CaminhoIcones + "geral_seta_bai_60.jpg"
+			.DisabledPicture = gc_4c_CaminhoIcones + "geral_seta_bai_60.jpg"
+			.Caption         = ""
+			.ToolTipText     = "Expandir"
+			.FontName        = "Comic Sans MS"
+			.FontSize        = 8
+			.FontBold        = .T.
+			.FontItalic      = .T.
+			.WordWrap        = .T.
+			.MousePointer    = 15
+			.ForeColor       = RGB(90, 90, 90)
+			.BackColor       = RGB(255, 255, 255)
+			.Themes          = .T.
+			.Visible         = .T.
+		ENDWITH
+
+		*-- cmd_4c_Fwbtng2 ("Regredir" - seta para cima). Mesma heranca da
+		*-- classe fwbtng e mesma observacao de Themes do Fwbtng1 acima.
+		THIS.AddObject("cmd_4c_Fwbtng2", "CommandButton")
+		WITH THIS.cmd_4c_Fwbtng2
+			.Top             = 12
+			.Left            = 96
+			.Height          = 100
+			.Width           = 80
+			.Picture         = gc_4c_CaminhoIcones + "geral_seta_cim_60.jpg"
+			.DisabledPicture = gc_4c_CaminhoIcones + "geral_seta_cim_60.jpg"
+			.Caption         = ""
+			.ToolTipText     = "Regredir"
+			.FontName        = "Comic Sans MS"
+			.FontSize        = 8
+			.FontBold        = .T.
+			.FontItalic      = .T.
+			.WordWrap        = .T.
+			.MousePointer    = 15
+			.ForeColor       = RGB(90, 90, 90)
+			.BackColor       = RGB(255, 255, 255)
+			.Themes          = .T.
+			.Visible         = .T.
+		ENDWITH
+
+		*-- img_4c_Imagem - imagem do produto (Visible=.F. no legado - so
+		*-- acende depois que o Valid do GetOP encontra produto com foto,
+		*-- Fase 7/8).
+		THIS.AddObject("img_4c_Imagem", "Image")
+		WITH THIS.img_4c_Imagem
+			.Stretch     = 1
+			.Enabled     = .T.
+			.Height      = 109
+			.Left        = 474
+			.Top         = 11
+			.Width       = 192
+			.ToolTipText = "Imagem do Produto (Clique Duplo Para Zoom)"
+			.Visible     = .F.
+		ENDWITH
+	ENDPROC
+
+	*==========================================================================
+	* AplicarOrdemTabulacao - Reproduz a ordem de tabulacao EFETIVA do legado.
+	*
+	* TabIndex eh gravavel em runtime e cada atribuicao INSERE o controle na
+	* posicao pedida, empurrando os demais - por isso este metodo roda depois
+	* de TODOS os AddObject e atribui em ordem ASCENDENTE.
+	*
+	* Por que NAO transcrever o literal do dump: o VFP aplica o TabIndex
+	* gravado no instante em que CRIA cada objeto e o limita ao total de
+	* controles existentes NAQUELE instante (clamp medido no VFP9 - ver
+	* feedback_tabindex_do_scx_nao_transcrito / SIGPRTEF). Simulando o load do
+	* SCX com a ordem de criacao da SECAO 1 do dump:
+	*
+	*   Form (cria Commandgroup1, Container1, Container2, Fwbtng1, Fwbtng2,
+	*         Imagem) - literais 2, 1, 3:
+	*     Commandgroup1 = 2 como 1o objeto -> clampa para 1
+	*     Container1    = 1 como 2o objeto -> cabe, empurra o grupo para 2
+	*     Container2    = 3 como 3o objeto -> cabe
+	*     EFETIVO: Container1=1, Commandgroup1=2, Container2=3, e
+	*              Fwbtng1/Fwbtng2/Imagem em 4/5/6 pela ordem de criacao.
+	*
+	*   Container1 (cria TreeView, Label3, Label1, GetEnvelope, GetOP) -
+	*   literais 3, 4, 5, 2, 1:
+	*     TreeView    = 3 como 1o objeto -> clampa para 1
+	*     Label3      = 4 como 2o objeto -> clampa para 2
+	*     Label1      = 5 como 3o objeto -> clampa para 3
+	*     GetEnvelope = 2 como 4o objeto -> cabe, entra em 2
+	*     GetOP       = 1 como 5o objeto -> cabe, entra em 1
+	*     EFETIVO: GetOP=1, TreeView=2, GetEnvelope=3 (Label3/Label1 atras).
+	*
+	* Ou seja: no legado o Tab sai do campo O.P. para a ARVORE e so depois
+	* para o campo Envelope - coerente com a tela (digita a O.P., o Valid
+	* monta a arvore, o Tab cai nela para navegar). Transcrever 3/4/5/2/1 ao
+	* pe da letra produziria O.P. -> Envelope -> arvore, que eh outra ordem.
+	*
+	* Os LABELS ficam de fora: Label tem TabIndex mas NAO tem TabStop (nao
+	* recebe foco), entao numera-los eh inerte e so embaralharia a sequencia
+	* dos controles que de fato param o Tab.
+	*
+	* obj_4c_TreeView pode nao existir (OCX ausente na estacao, ou modo
+	* teste/validacao de UI) - por isso a guarda ArvoreDisponivel(), sem a
+	* qual a atribuicao derrubaria o Init com "Unknown member OBJ_4C_TREEVIEW".
+	*==========================================================================
+	PROTECTED PROCEDURE AplicarOrdemTabulacao()
+		LOCAL loc_oCnt, loc_nSeq
+
+		*-- Nivel da Form: Container1(1) -> Commandgroup1(2) -> Container2(3).
+		*-- Fwbtng1/Fwbtng2/Imagem seguem em 4/5/6 pela ordem de criacao,
+		*-- como no legado.
+		THIS.cnt_4c_Container1.TabIndex    = 1
+		THIS.cmg_4c_Commandgroup1.TabIndex = 2
+		THIS.cnt_4c_Container2.TabIndex    = 3
+
+		*-- Nivel de Container1, so os focalizaveis:
+		*-- txt_4c_OP(1) -> obj_4c_TreeView(2) -> txt_4c_Envelope(3).
+		loc_oCnt = THIS.cnt_4c_Container1
+		loc_oCnt.txt_4c_OP.TabIndex = 1
+
+		loc_nSeq = 1
+		IF THIS.ArvoreDisponivel() AND ;
+		   PEMSTATUS(loc_oCnt.obj_4c_TreeView, "TabIndex", 5)
+			loc_nSeq = loc_nSeq + 1
+			loc_oCnt.obj_4c_TreeView.TabIndex = loc_nSeq
+		ENDIF
+
+		loc_nSeq = loc_nSeq + 1
+		loc_oCnt.txt_4c_Envelope.TabIndex = loc_nSeq
+	ENDPROC
+
+	*==========================================================================
+	* ArvoreDisponivel - O obj_4c_TreeView so existe se o AddObject com o
+	* ActiveX ctTree.ocx tiver dado certo em ConfigurarControles (o OCX pode
+	* nao estar registrado na estacao, e em modo teste/validacao de UI ele nem
+	* eh tentado). Sem esta guarda, TODA chamada a API de nos derrubaria o
+	* metodo com "Unknown member OBJ_4C_TREEVIEW". Mesmo padrao de
+	* FormSIGMVMVT.ArvoreDisponivel.
+	*==========================================================================
+	PROTECTED FUNCTION ArvoreDisponivel()
+		RETURN PEMSTATUS(THIS.cnt_4c_Container1, "obj_4c_TreeView", 5) AND ;
+		       VARTYPE(THIS.cnt_4c_Container1.obj_4c_TreeView) = "O"
+	ENDFUNC
+
+	*==========================================================================
+	* PrepararArvore - Reproduz (a) os seis AddImage do Init legado e (b) o
+	* bloco de inicializacao que MakeTree e MakeTreeEnv repetem identicos no
+	* inicio:
+	*   loTree1.ClearNodes / TipsDisplay = .t. / ExpandOnDClick /
+	*   SmallIcons = .t. / PicAlign = 0 / SelectedStyle = 2 / PictureType = 1
+	*
+	* As imagens entram UMA UNICA vez (this_lImagensArvore), como no Init
+	* legado: AddImage empilha indices novos a cada chamada e os indices
+	* 1..6 usados pelo AddPictureNode sao FIXOS no codigo do legado -
+	* recarregar a cada pesquisa trocaria os icones de todos os nos (mesma
+	* razao do flag em FormSIGMVMVT.PrepararArvore).
+	*
+	* Caminhos transcritos do Init legado, na MESMA ordem (eh a ordem que
+	* define o indice). Cada linha do legado traz, COMENTADA ao lado, a versao
+	* ANTERIOR do mesmo icone - que eh o alternativo usado aqui (ver abaixo):
+	*   1 \imagens\geral_documento_26.jpg  (&&\vbmp\Form4.Ico)     raiz O.P.
+	*   2 \imagens\geral_caixa_16.jpg      (&&\vbmp\depend3.bmp)   movim./material/medida
+	*   3 \imagens\geral_pendencia_26.jpg  (&&\vbmp\OHist.Ico)     (reservado pelo legado)
+	*   4 \imagens\geral_palete_26.jpg     (&&\vbmp\Replace.Ico)   material de SERVICO
+	*   5 \vbmp\EnvMail.Bmp                (sem alternativo)       raiz Envelope
+	*   6 \imagens\geral_subnivel_26.jpg   (&&\vbmp\Server15.Ico)  Origem/Destino
+	* "\imagens\" eh a pasta do Framework legado (gc_4c_CaminhoFramework -
+	* regra CLAUDE.md #27 / Pattern #170) e "\vbmp\" eh gc_4c_CaminhoIcones.
+	*
+	* MEDIDO no VFP9 em 2026-11-09 (automation\medir_loadpicture_jpeg.prg): LOADPICTURE
+	* REJEITA os cinco .jpg com "OLE error code 0x800a01e1" - e os arquivos
+	* EXISTEM (FILE() = .T.); so o .Bmp carrega. Isto eh limitacao do
+	* LOADPICTURE com JPEG, nao arquivo ausente, entao IF FILE() nao protege.
+	* Por isso cada imagem cai no arquivo que o PROPRIO legado nomeia no
+	* comentario da mesma linha (.Ico/.bmp, os seis presentes em vbmp\) -
+	* alvo vindo do DUMP, nunca de palpite (regra #25). Mesma familia de
+	* icones que FormSIGMVMVT usa (Form4.Ico/depend3.bmp/OHist.Ico).
+	*
+	* As DUAS metades ficam em TRY SEPARADOS, reproduzindo a separacao do
+	* legado (as imagens moram no Init, o bloco de propriedades mora no
+	* MakeTree/MakeTreeEnv): num TRY unico, a falha do LOADPICTURE abortava
+	* o metodo ANTES do ClearNodes e os nos da pesquisa anterior PERMANECIAM
+	* na arvore - medido no probe, 15 nos viravam 29 na segunda pesquisa.
+	*
+	* O flag this_lImagensArvore eh ligado DEPOIS da tentativa, com sucesso
+	* ou sem: o que nao pode repetir eh o AddImage, que empilha indice novo e
+	* deslocaria os indices fixos 1..6 do AddPictureNode.
+	*==========================================================================
+	PROTECTED PROCEDURE PrepararArvore()
+		LOCAL loc_oErro
+
+		IF THIS.ArvoreDisponivel()
+			IF !THIS.this_lImagensArvore
+				THIS.CarregarImagemArvore("imagens\geral_documento_26.jpg", "Form4.Ico")
+				THIS.CarregarImagemArvore("imagens\geral_caixa_16.jpg", "depend3.bmp")
+				THIS.CarregarImagemArvore("imagens\geral_pendencia_26.jpg", "OHist.Ico")
+				THIS.CarregarImagemArvore("imagens\geral_palete_26.jpg", "Replace.Ico")
+				THIS.CarregarImagemArvore("", "EnvMail.Bmp")
+				THIS.CarregarImagemArvore("imagens\geral_subnivel_26.jpg", "Server15.Ico")
+
+				THIS.this_lImagensArvore = .T.
+			ENDIF
+
+			TRY
+				WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+					.ClearNodes
+					.TipsDisplay   = .T.
+					.ExpandOnDClick
+					.SmallIcons    = .T.
+					.PicAlign      = 0
+					.SelectedStyle = 2
+					.PictureType   = 1
+				ENDWITH
+			CATCH TO loc_oErro
+				MsgErro("Falha ao preparar a " + CHR(225) + "rvore: " + ;
+						loc_oErro.Message + CHR(13) + ;
+						"Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+						"Procedure: " + loc_oErro.Procedure, "Erro")
+			ENDTRY
+		ENDIF
+	ENDPROC
+
+	*==========================================================================
+	* CarregarImagemArvore - UM AddImage do Init legado. Tenta primeiro o
+	* arquivo da linha ATIVA do legado (par_cRelativoFramework, dentro de
+	* gc_4c_CaminhoFramework) e, falhando, o arquivo que o legado nomeia no
+	* COMENTARIO da mesma linha (par_cAlternativoVbmp, dentro de
+	* gc_4c_CaminhoIcones) - ver a medicao de LOADPICTURE x JPEG no cabecalho
+	* de PrepararArvore.
+	*
+	* par_cRelativoFramework vazio significa que a linha do legado JA aponta
+	* direto para \vbmp\ (caso do EnvMail.Bmp, indice 5).
+	*
+	* TRY por IMAGEM: uma falha nao pode impedir as outras cinco de entrar,
+	* senao os indices 1..6 ficam deslocados. O AddImage eh chamado SEMPRE,
+	* inclusive com a imagem nula, exatamente para o indice nao escorregar -
+	* indice sem figura desenha no sem icone, o que eh degradacao visivel;
+	* indice deslocado poria o icone ERRADO em todos os nos.
+	*
+	* NENHUM CATCH eh silencioso (CLAUDE.md #9): a falha do caminho PRINCIPAL
+	* eh esperada e medida (LOADPICTURE x JPEG), entao ela so acumula a
+	* mensagem; o erro so eh EXIBIDO quando o alternativo tambem falha - isto
+	* eh, quando a imagem realmente nao entrou. Reportar a cada tentativa
+	* produziria cinco dialogos por pesquisa.
+	*==========================================================================
+	PROTECTED PROCEDURE CarregarImagemArvore(par_cRelativoFramework, par_cAlternativoVbmp)
+		LOCAL loc_oImagem, loc_oErro, loc_cPrincipal, loc_cAlternativo, loc_cFalhas
+
+		loc_oImagem      = .NULL.
+		loc_cFalhas      = ""
+		loc_cPrincipal   = IIF(EMPTY(par_cRelativoFramework), "", ;
+							   gc_4c_CaminhoFramework + par_cRelativoFramework)
+		loc_cAlternativo = IIF(EMPTY(par_cAlternativoVbmp), "", ;
+							   gc_4c_CaminhoIcones + par_cAlternativoVbmp)
+
+		IF !EMPTY(loc_cPrincipal)
+			TRY
+				loc_oImagem = LOADPICTURE(loc_cPrincipal)
+			CATCH TO loc_oErro
+				loc_oImagem = .NULL.
+				loc_cFalhas = loc_cFalhas + loc_cPrincipal + ": " + ;
+					loc_oErro.Message + CHR(13)
+			ENDTRY
+		ENDIF
+
+		IF VARTYPE(loc_oImagem) != "O" AND !EMPTY(loc_cAlternativo)
+			TRY
+				loc_oImagem = LOADPICTURE(loc_cAlternativo)
+			CATCH TO loc_oErro
+				loc_oImagem = .NULL.
+				loc_cFalhas = loc_cFalhas + loc_cAlternativo + ": " + ;
+					loc_oErro.Message + CHR(13)
+			ENDTRY
+		ENDIF
+
+		TRY
+			THIS.cnt_4c_Container1.obj_4c_TreeView.AddImage(loc_oImagem)
+		CATCH TO loc_oErro
+			loc_cFalhas = loc_cFalhas + "AddImage: " + loc_oErro.Message + CHR(13)
+		ENDTRY
+
+		*-- Imagem obtida eh o caso normal (o alternativo do legado carrega) -
+		*-- so avisa quando NENHUM dos dois caminhos entregou a figura.
+		IF VARTYPE(loc_oImagem) != "O" AND !EMPTY(loc_cFalhas)
+			MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + "vel carregar um " + ;
+					"dos " + CHR(237) + "cones da " + CHR(225) + "rvore:" + CHR(13) + ;
+					loc_cFalhas, "Erro")
+		ENDIF
+	ENDPROC
+
+	*==========================================================================
+	* CarregarDados - METODO DE CARGA desta tela. Aqui a superficie de lista
+	* NAO eh uma grade: eh a arvore (obj_4c_TreeView). Equivale ao par de
+	* Valid do legado:
+	*   Container1.GetOP.Valid       -> consulta por O.P.   + ThisForm.MakeTree()
+	*   Container1.GetEnvelope.Valid -> consulta por Envel. + ThisForm.MakeTreeEnv()
+	*
+	* Os dois campos sao MUTUAMENTE EXCLUSIVOS no legado (GetOP.GotFocus faz
+	* "GetEnvelope.Value = 0" e GetEnvelope.GotFocus faz "GetOP.Value = 0"),
+	* por isso o criterio eh simplesmente qual dos dois esta preenchido - nao
+	* existe caso de ambos com valor.
+	*
+	* O "If ! Empty(This.Value)" que envolve os DOIS Valid do legado tambem eh
+	* reproduzido: campo vazio nao consulta e nao avisa nada.
+	*
+	* A consulta em si (SELECT + UNION ALL + fallback de SigPdMvf + figura do
+	* produto + agregacao de TotPesos) mora no SIGOPNOPBO (Fase 2); aqui fica
+	* so o que eh de TELA: escolher o criterio, exibir a figura e desenhar a
+	* arvore.
+	*
+	* O TRY cobre a chamada ao BO porque SQLEXEC com handle invalido DISPARA
+	* excecao em vez de devolver -1 - sem ele o usuario veria o "Program Error"
+	* CRU do VFP no lugar do dialogo do sistema. RETURN unico, DEPOIS do
+	* ENDTRY (CLAUDE.md #1).
+	*==========================================================================
+	PROCEDURE CarregarDados()
+		LOCAL loc_lSucesso, loc_nOP, loc_nEnvelope, loc_lPorEnvelope
+		LOCAL loc_lAchou, loc_oErro, loc_cMensagem
+
+		loc_lSucesso = .F.
+
+		IF VARTYPE(THIS.this_oBusinessObject) != "O"
+			MsgErro("Business Object indispon" + CHR(237) + "vel - n" + CHR(227) + ;
+					"o foi poss" + CHR(237) + "vel consultar.", "Erro")
+		ELSE
+			loc_nOP       = THIS.cnt_4c_Container1.txt_4c_OP.Value
+			loc_nEnvelope = THIS.cnt_4c_Container1.txt_4c_Envelope.Value
+
+			loc_nOP       = IIF(VARTYPE(loc_nOP) = "N", loc_nOP, 0)
+			loc_nEnvelope = IIF(VARTYPE(loc_nEnvelope) = "N", loc_nEnvelope, 0)
+
+			*-- "If ! Empty(This.Value)" dos dois Valid legado: campo em
+			*-- branco nao dispara consulta nenhuma (e nao avisa).
+			IF loc_nOP != 0 OR loc_nEnvelope != 0
+				loc_lPorEnvelope = (loc_nOP = 0)
+
+				TRY
+					IF loc_lPorEnvelope
+						loc_lAchou = THIS.this_oBusinessObject.PesquisarPorEnvelope(loc_nEnvelope)
+					ELSE
+						loc_lAchou = THIS.this_oBusinessObject.PesquisarPorOP(loc_nOP)
+					ENDIF
+
+					IF loc_lAchou
+						*-- Bloco da figura do produto do GetOP.Valid legado -
+						*-- so existe no caminho da O.P. (o Valid do
+						*-- GetEnvelope nao toca na Imagem).
+						IF !loc_lPorEnvelope
+							THIS.ExibirImagemProduto()
+						ENDIF
+
+						THIS.PopularArvore(loc_lPorEnvelope)
+						loc_lSucesso = .T.
+					ELSE
+						*-- MessageBox do legado: "Envelope Nao Localizado !!!"
+						*-- e "O.P. Nao Localizada !!!". Mensagem de validacao
+						*-- usa MsgAviso (nao MsgErro).
+						loc_cMensagem = ALLTRIM(THIS.this_oBusinessObject.this_cMensagemErro)
+
+						IF EMPTY(loc_cMensagem)
+							loc_cMensagem = IIF(loc_lPorEnvelope, ;
+								"Envelope N" + CHR(227) + "o Localizado !!!", ;
+								"O.P. N" + CHR(227) + "o Localizada !!!")
+						ENDIF
+
+						MsgAviso(loc_cMensagem, "Aten" + CHR(231) + CHR(227) + "o")
+					ENDIF
+				CATCH TO loc_oErro
+					MsgErro("Falha ao consultar as movimenta" + CHR(231) + CHR(245) + "es: " + ;
+							loc_oErro.Message + CHR(13) + ;
+							"Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+							"Procedure: " + loc_oErro.Procedure, "Erro")
+				ENDTRY
+			ENDIF
+		ENDIF
+
+		RETURN loc_lSucesso
+	ENDPROC
+
+	*==========================================================================
+	* ExibirImagemProduto - Bloco da figura do produto do GetOP.Valid legado:
+	*   Thisform.Arqfigura = lcArquivo
+	*   Clear Resources
+	*   ThisForm.Imagem.Picture = [] / ThisForm.Imagem.Visible = .f.
+	*   If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+	*       If (StrToFile(crTmpPro.FigJpgs, lcArquivo) > 0)
+	*           ThisForm.Imagem.Picture = (lcArquivo) / .Visible = .t.
+	*
+	* O StrToFile (e a consulta a SigCdPro) ja rodaram em
+	* SIGOPNOPBO.BuscarImagemProduto, que deixa o caminho do .jpg temporario
+	* em this_cArquivoImagem APENAS quando a extracao deu certo - por isso o
+	* teste aqui equivale ao "StrToFile(...) > 0" do legado.
+	*
+	* CLEAR RESOURCES eh transcricao literal, nao defesa inventada: sem ele o
+	* VFP9 mantem o .jpg ANTERIOR em cache e a tela continua exibindo a figura
+	* do produto da pesquisa passada.
+	*==========================================================================
+	PROTECTED PROCEDURE ExibirImagemProduto()
+		LOCAL loc_cArquivo
+
+		loc_cArquivo = ALLTRIM(THIS.this_oBusinessObject.this_cArquivoImagem)
+
+		*-- ThisForm.Arqfigura = lcArquivo - apagado ao Encerrar ("Delete File
+		*-- (ThisForm.Arqfigura)" no Click do Commandgroup1, Fase 7).
+		THIS.this_cArquivoFigura = loc_cArquivo
+
+		CLEAR RESOURCES
+
+		THIS.img_4c_Imagem.Picture = ""
+		THIS.img_4c_Imagem.Visible = .F.
+
+		IF !EMPTY(loc_cArquivo) AND FILE(loc_cArquivo)
+			THIS.img_4c_Imagem.Picture = loc_cArquivo
+			THIS.img_4c_Imagem.Visible = .T.
+		ENDIF
+	ENDPROC
+
+	*==========================================================================
+	* PopularArvore - Desenha os nos a partir do cursor que o BO acabou de
+	* montar (this_cCursorArvore = o CrSigCdNei do legado). Transcricao dos
+	* PROCEDURE maketree (par_lPorEnvelope = .F.) e maketreeenv
+	* (par_lPorEnvelope = .T.), que sao o MESMO algoritmo com cinco textos/
+	* icones diferentes - cada diferenca esta anotada abaixo e foi transcrita
+	* LITERALMENTE, nao reescrita (CLAUDE.md #17).
+	*
+	* Hierarquia (nivel, icone):
+	*   1 raiz             O.P. (icone 1) | Envelope (icone 5)
+	*   2 movimentacao     icone 2 no maketree | icone 1 no maketreeenv
+	*   3 Origem/Destino   icone 6 nos dois
+	*   4 material         icone 4 se servico, 2 se material (nos dois)
+	*   5 qtde / peso2 / peso   icone 2 nos tres
+	*
+	* Separado de CarregarDados para que a CONSULTA continue valendo quando o
+	* ActiveX da arvore nao esta disponivel na estacao (mesma divisao de
+	* FormSIGMVMVT.CarregarDados/PopularArvore).
+	*
+	* "Set Decimals To 3" do legado eh reproduzido em volta do laco (os
+	* Transform de 3 decimais dependem dele) e restaurado DEPOIS do ENDTRY,
+	* para valer tambem quando o CATCH dispara. SET("Decimals") devolve
+	* NUMERICO - NUNCA envolver com VAL() (Pattern #152).
+	*==========================================================================
+	PROTECTED PROCEDURE PopularArvore(par_lPorEnvelope)
+		LOCAL loc_lPorEnvelope, loc_cCursor, loc_oErro, loc_nDecimais
+		LOCAL loc_nNo, loc_cTexto, loc_nIcone, loc_lServicos
+		LOCAL loc_cChave, loc_cEmpDnPsAnt, loc_cOriDes, loc_cOriDesAnt
+
+		loc_lPorEnvelope = IIF(VARTYPE(par_lPorEnvelope) = "L", par_lPorEnvelope, .F.)
+		loc_cCursor      = THIS.this_oBusinessObject.this_cCursorArvore
+
+		IF !USED(loc_cCursor) OR !THIS.ArvoreDisponivel()
+			RETURN
+		ENDIF
+
+		*-- "ThisForm.Container2.Visible = .t." - primeira linha dos dois
+		*-- metodos legado: acende o painel "AGUARDE! / Pesquisando as
+		*-- Movimentacoes" enquanto a arvore eh desenhada.
+		THIS.cnt_4c_Container2.Visible = .T.
+
+		THIS.PrepararArvore()
+
+		loc_nDecimais = SET("Decimals")
+		SET DECIMALS TO 3
+
+		TRY
+			SELECT (loc_cCursor)
+			GO TOP
+
+			*-- ===== Nivel 1 - no raiz =====
+			*-- maketree:    [O.P. : ] + Str(nEnvs) + [ - ] + Cpros +
+			*--              Iif(nOpMaes > 0, [ - O.P. Mae: ] + Str(nOpMaes), [ ])
+			*-- maketreeenv: [Envelope : ] + Str(nEnvs)
+			IF loc_lPorEnvelope
+				loc_cTexto = "Envelope : " + ALLTRIM(STR(TratarNulo(Nenvs, 0)))
+				loc_nIcone = 5
+			ELSE
+				loc_cTexto = "O.P. : " + ALLTRIM(STR(TratarNulo(Nenvs, 0))) + " - " + ;
+					TratarNulo(Cpros, "") + ;
+					IIF(TratarNulo(NopMaes, 0) > 0, ;
+						" - O.P. M" + CHR(227) + "e: " + ALLTRIM(STR(TratarNulo(NopMaes, 0))), ;
+						" ")
+				loc_nIcone = 1
+			ENDIF
+
+			WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+				loc_nNo = .AddPictureNode(loc_cTexto, 0, 1, loc_nIcone, 0, 0)
+				.NodeHeader(loc_nNo)     = .T.
+				.NodeExpanded(loc_nNo)   = .T.
+				.NodeShowChecks(loc_nNo) = .F.
+				.NodeFontBold(loc_nNo)   = 2
+			ENDWITH
+
+			loc_cEmpDnPsAnt = ""
+			loc_cOriDesAnt  = ""
+
+			SCAN
+				*-- Servicos eh coluna bit no SQL Server e o SELECT do BO a
+				*-- traz como CAST(... AS INT): chega NUMERICA ao cursor,
+				*-- entao a comparacao tem de ser explicita (IIF exige logico
+				*-- no 1o argumento - numerico estoura erro 11).
+				loc_lServicos = (TratarNulo(Servicos, 0) = 1)
+
+				*-- EmpDnPs eh char(33) POSICIONAL = Emps(3) + Dopps(20) +
+				*-- Str(Numps, 10). O PADR repoe as 33 posicoes antes de
+				*-- fatiar - o legado fatia o campo do cursor direto, que ja
+				*-- vem preenchido (CLAUDE.md #42: o padding FAZ PARTE da chave).
+				loc_cChave = PADR(TratarNulo(EmpDnPs, ""), 33)
+
+				loc_cOriDes = TratarNulo(Grupoos, "") + TratarNulo(Contaos, "") + ;
+					TratarNulo(Grupods, "") + TratarNulo(Contads, "")
+
+				*-- ===== Nivel 2 - movimentacao (quebra por EmpDnPs) =====
+				*-- "Movimentacao : " + Left(EmpDnPs,3) + [/] +
+				*--   Alltrim(Substr(EmpDnPs,4,20)) + [/] +
+				*--   Alltrim(Right(EmpDnPs,6)) + [ - ] + Dtoc(Datas) + [ - ] +
+				*--   Transform(TotPesos,"@Z 999,999.999") + [ Gr]
+				*-- O Right(...,6) eh do legado e NAO se "corrige" para 10: o
+				*-- Str(Numps,10) eh alinhado a direita, entao os 6 ultimos
+				*-- caracteres sao o numero (CLAUDE.md #17 - transcrever).
+				*-- Icone: 2 no maketree, 1 no maketreeenv.
+				IF !(loc_cEmpDnPsAnt == loc_cChave)
+					loc_cTexto = "Movimenta" + CHR(231) + CHR(227) + "o : " + ;
+						LEFT(loc_cChave, 3) + "/" + ;
+						ALLTRIM(SUBSTR(loc_cChave, 4, 20)) + "/" + ;
+						ALLTRIM(RIGHT(loc_cChave, 6)) + " - " + ;
+						DTOC(ConverterParaData(Datas)) + " - " + ;
+						TRANSFORM(TratarNulo(TotPesos, 0), "@Z 999,999.999") + " Gr"
+
+					WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+						loc_nNo = .AddPictureNode(loc_cTexto, 0, 2, ;
+							IIF(loc_lPorEnvelope, 1, 2), 0, 0)
+						.NodeHeader(loc_nNo)     = .F.
+						.NodeExpanded(loc_nNo)   = .F.
+						.NodeShowChecks(loc_nNo) = .F.
+						.NodeFontBold(loc_nNo)   = 1
+					ENDWITH
+
+					loc_cEmpDnPsAnt = loc_cChave
+
+					*-- Origem/Destino logo abaixo da movimentacao nova
+					THIS.AdicionarNoOrigemDestino()
+					loc_cOriDesAnt = loc_cOriDes
+
+					IF USED(loc_cCursor)
+						SELECT (loc_cCursor)
+					ENDIF
+				ENDIF
+
+				*-- ===== Nivel 3 - Origem/Destino (quebra DENTRO da mesma
+				*-- movimentacao). O legado repete o IF, nao usa ELSE. =====
+				IF !(loc_cOriDesAnt == loc_cOriDes)
+					THIS.AdicionarNoOrigemDestino()
+					loc_cOriDesAnt = loc_cOriDes
+
+					IF USED(loc_cCursor)
+						SELECT (loc_cCursor)
+					ENDIF
+				ENDIF
+
+				*-- ===== Nivel 4 - material =====
+				*-- maketree:    Alltrim(cMats) + [ - ] + Alltrim(dPros)
+				*-- maketreeenv: Iif(nOps = 0, [], Alltrim(Str(nOps)) + [ - ]) +
+				*--              Alltrim(cMats) + [ - ] + Alltrim(dPros)
+				loc_cTexto = IIF(loc_lPorEnvelope, ;
+						IIF(TratarNulo(Nops, 0) = 0, "", ;
+							ALLTRIM(STR(TratarNulo(Nops, 0))) + " - "), ;
+						"") + ;
+					ALLTRIM(TratarNulo(Cmats, "")) + " - " + ;
+					ALLTRIM(TratarNulo(Dpros, ""))
+
+				WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+					loc_nNo = .AddPictureNode(loc_cTexto, 0, 4, ;
+						IIF(loc_lServicos, 4, 2), 0, 0)
+					.NodeHeader(loc_nNo)     = .F.
+					.NodeExpanded(loc_nNo)   = .F.
+					.NodeShowChecks(loc_nNo) = .F.
+					.NodeFontBold(loc_nNo)   = IIF(loc_lServicos, 2, 1)
+				ENDWITH
+
+				*-- ===== Nivel 5 - quantidade =====
+				*-- maketree:    Alltrim(Transform(Qtds,[999,999.999])) + [ ] +
+				*--              Iif(qtds = 0, [], cUnis)
+				*-- maketreeenv: Alltrim(Transform(Qtds,[999,999.999])) + [ ] + cUnis
+				loc_cTexto = ALLTRIM(TRANSFORM(TratarNulo(Qtds, 0), "999,999.999")) + " " + ;
+					IIF(loc_lPorEnvelope, ;
+						TratarNulo(Cunis, ""), ;
+						IIF(TratarNulo(Qtds, 0) = 0, "", TratarNulo(Cunis, "")))
+
+				THIS.AdicionarNoMedida(loc_cTexto)
+
+				*-- ===== Nivel 5 - peso 2 (identico nos dois metodos) =====
+				*-- Iif(Servicos, [], Iif(Peso2s = 0, [],
+				*--   Alltrim(Transform(Peso2s,[999,999.999])) + [ ] + cUnips))
+				loc_cTexto = IIF(loc_lServicos, "", ;
+					IIF(TratarNulo(Peso2s, 0) = 0, "", ;
+						ALLTRIM(TRANSFORM(TratarNulo(Peso2s, 0), "999,999.999")) + " " + ;
+						TratarNulo(Cunips, "")))
+
+				THIS.AdicionarNoMedida(loc_cTexto)
+
+				*-- ===== Nivel 5 - peso =====
+				*-- maketree:    Iif(Servicos, [], Alltrim(Transform(Pesos,[999,999.999])) +
+				*--                Iif(pesos = 0, [], [ GR]))
+				*-- maketreeenv: Iif(Servicos, [], Iif(Pesos = 0, [],
+				*--                Alltrim(Transform(Pesos,[999,999.999])) + [ GR]))
+				*-- A diferenca eh REAL e nao se uniformiza: com Pesos = 0 em
+				*-- linha de material (nao servico) o maketree AINDA desenha o
+				*-- no (texto so com o numero) e o maketreeenv nao desenha nada.
+				IF loc_lPorEnvelope
+					loc_cTexto = IIF(loc_lServicos, "", ;
+						IIF(TratarNulo(Pesos, 0) = 0, "", ;
+							ALLTRIM(TRANSFORM(TratarNulo(Pesos, 0), "999,999.999")) + " GR"))
+				ELSE
+					loc_cTexto = IIF(loc_lServicos, "", ;
+						ALLTRIM(TRANSFORM(TratarNulo(Pesos, 0), "999,999.999")) + ;
+						IIF(TratarNulo(Pesos, 0) = 0, "", " GR"))
+				ENDIF
+
+				THIS.AdicionarNoMedida(loc_cTexto)
+			ENDSCAN
+
+			*-- "loTree1.ReDraw(.t.) / loTree1.Refresh" do fim dos dois metodos
+			WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+				.ReDraw(.T.)
+				.Refresh()
+			ENDWITH
+
+			*-- "ThisForm.pnNodeExp = 1" - nivel corrente de expansao, lido
+			*-- pelos botoes Expandir/Regredir (Fwbtng1/Fwbtng2, Fase 7).
+			THIS.this_nNodeExp = 1
+		CATCH TO loc_oErro
+			MsgErro("Falha ao montar a " + CHR(225) + "rvore: " + ;
+					loc_oErro.Message + CHR(13) + ;
+					"Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+					"Procedure: " + loc_oErro.Procedure, "Erro")
+		ENDTRY
+
+		*-- Restauracao dos decimais e apagamento do painel ficam FORA do TRY,
+		*-- para valerem tambem quando o CATCH dispara.
+		SET DECIMALS TO loc_nDecimais
+
+		*-- "ThisForm.Container2.Visible = .F." do fim dos dois metodos
+		THIS.cnt_4c_Container2.Visible = .F.
+	ENDPROC
+
+	*==========================================================================
+	* AdicionarNoOrigemDestino - No de nivel 3, icone 6. O legado repete este
+	* bloco IDENTICO em dois pontos de cada metodo (quebra de movimentacao e
+	* quebra de Origem/Destino dentro da mesma movimentacao), e identico entre
+	* maketree e maketreeenv:
+	*   [Origem : ] + Alltrim(GrupoOS) + [/] + Alltrim(ContaOS) + [ - ] +
+	*   [Destino : ] + Alltrim(GrupoDS) + [/] + Alltrim(ContaDS)
+	*
+	* Le o registro CORRENTE do cursor da arvore, como o legado faz dentro do
+	* Scan. Campo alcancado por NOME -> EVALUATE para LEITURA (CLAUDE.md #15).
+	*==========================================================================
+	PROTECTED PROCEDURE AdicionarNoOrigemDestino()
+		LOCAL loc_cTexto, loc_nNo, loc_cCursor
+
+		loc_cCursor = THIS.this_oBusinessObject.this_cCursorArvore
+
+		IF !USED(loc_cCursor) OR !THIS.ArvoreDisponivel()
+			RETURN
+		ENDIF
+
+		loc_cTexto = "Origem : " + ;
+			ALLTRIM(TratarNulo(EVALUATE(loc_cCursor + ".Grupoos"), "")) + "/" + ;
+			ALLTRIM(TratarNulo(EVALUATE(loc_cCursor + ".Contaos"), "")) + " - " + ;
+			"Destino : " + ;
+			ALLTRIM(TratarNulo(EVALUATE(loc_cCursor + ".Grupods"), "")) + "/" + ;
+			ALLTRIM(TratarNulo(EVALUATE(loc_cCursor + ".Contads"), ""))
+
+		WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+			loc_nNo = .AddPictureNode(loc_cTexto, 0, 3, 6, 0, 0)
+			.NodeHeader(loc_nNo)     = .F.
+			.NodeExpanded(loc_nNo)   = .F.
+			.NodeShowChecks(loc_nNo) = .F.
+			.NodeFontBold(loc_nNo)   = 1
+		ENDWITH
+	ENDPROC
+
+	*==========================================================================
+	* AdicionarNoMedida - No de nivel 5, icone 2, com a guarda
+	* "If ! Empty(lcDados)" que o legado repete nos TRES nos de medida
+	* (quantidade, peso 2 e peso). O texto chega montado pelo chamador porque
+	* cada um dos tres tem expressao propria - e duas delas diferem entre
+	* maketree e maketreeenv.
+	*==========================================================================
+	PROTECTED PROCEDURE AdicionarNoMedida(par_cTexto)
+		LOCAL loc_nNo
+
+		IF EMPTY(par_cTexto) OR !THIS.ArvoreDisponivel()
+			RETURN
+		ENDIF
+
+		WITH THIS.cnt_4c_Container1.obj_4c_TreeView
+			loc_nNo = .AddPictureNode(par_cTexto, 0, 5, 2, 0, 0)
+			.NodeHeader(loc_nNo)     = .F.
+			.NodeExpanded(loc_nNo)   = .F.
+			.NodeShowChecks(loc_nNo) = .F.
+			.NodeFontBold(loc_nNo)   = 1
+		ENDWITH
+	ENDPROC
+
+	*==========================================================================
+	* TornarControlesVisiveis - Torna os controles filhos visiveis apos o
+	* AddObject (que os cria Visible=.F. por padrao), preservando as DUAS
+	* excecoes fieis ao legado: cnt_4c_Container2 (painel "AGUARDE!" -
+	* flutuante, Visible=.F. - ver ConfigurarContainers) e img_4c_Imagem
+	* (sem produto pesquisado ainda, Visible=.F. no SCX). O container
+	* flutuante tem os FILHOS tornados visiveis mesmo assim - pular com
+	* LOOP sem recursar deixaria o painel aparecer vazio quando algum
+	* metodo o acender mais adiante (Fase 7/8).
+	*==========================================================================
+	PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+		LOCAL loc_nI, loc_oObjeto
+
+		FOR loc_nI = 1 TO par_oContainer.ControlCount
+			loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+			IF VARTYPE(loc_oObjeto) = "O"
+				IF INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CONTAINER2", "IMG_4C_IMAGEM")
+					IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+						THIS.TornarControlesVisiveis(loc_oObjeto)
+					ENDIF
+					LOOP
+				ENDIF
+
+				IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+					loc_oObjeto.Visible = .T.
+				ENDIF
+
+				IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+					THIS.TornarControlesVisiveis(loc_oObjeto)
+				ENDIF
+			ENDIF
+		ENDFOR
+	ENDPROC
+
+	*==========================================================================
+	* Destroy
+	*==========================================================================
+	PROCEDURE Destroy
+		DODEFAULT()
+	ENDPROC
+
+ENDDEFINE

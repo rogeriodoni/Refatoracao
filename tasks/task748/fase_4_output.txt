@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files to delete. Phase 4 is complete.
+
+## Summary
+
+Updated `FormSigOpImg.prg` and `SigOpImgBO.prg` to add the grid and action buttons for this OPERACIONAL form (no Page1/Page2 ÔÇö the form is FLAT, as already established in Phase 3):
+
+**Form (`FormSigOpImg.prg`)**
+- `ConfigurarCursorProdutos()` ÔÇö creates `cursor_4c_Produtos` (equivalent of legacy `csProdutos`) with the 6 indexes from the legacy `Load` event, called before the BO/grid exist.
+- `ConfigurarGrid()` ÔÇö creates `grd_4c_Produtos` (6 columns: C├│digo/Descri├º├úo/Fornecedor/Refer├¬ncia/Grupo/Linha), bound to the cursor in the canonical order (ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption), with the legacy's `DynamicForeColor` (red when no image) and per-column fonts.
+- `ConfigurarImagem()` ÔÇö adds the image frame (`shp_4c_Imagem`) and picture box (`img_4c_Imagem`) that preview the product photo.
+- Header-click sort handlers (`HeaderCodigoClick` ÔÇª `HeaderLinhaClick`) reorder the cursor by tag and highlight the active column, mirroring the 6 legacy `Header1.Click` handlers.
+- `GradeAfterRowColChange` + `CarregarImagemProduto` reproduce the legacy `CarregaImagem` (base64 decode ÔåÆ temp file ÔåÆ `Picture` ÔåÆ delete temp file), fixing the known "double STRCONV decode" pitfall by decoding only once.
+- `cmd_4c_Processar` (validates the date range, then calls `Processar()`) and `cmg_4c_Limpar` ("Limpar Sel." / "Encerrar") were added to `cnt_4c_Botoes`, replicating `cmdSelecionar.Click` and `cmdBtnForm.Click`.
+- `Processar()` populates a temp cursor via the BO, then reloads `cursor_4c_Produtos` with ZAP + APPEND FROM DBF (never SQLEXEC directly on the grid's alias).
+
+**BO (`SigOpImgBO.prg`)**
+- Added `Processar(par_cCursorDestino)`, which builds the same filtered query as the legacy `Processamento` method (date range with 23:59:59 upper bound, image-presence filter, optional produto/grupo/linha filters) using the filter properties already declared in Phase 1.
+
+Next phase would wire up the actual filter fields (dates, grupo/produto/linha lookups, `optImagem`) and the `cmdgFigura` image-action buttons that Phase 3 reserved a container for.

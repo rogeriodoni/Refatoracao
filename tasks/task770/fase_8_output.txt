@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 8/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpNch.prg` (1528 linhas, 73 KB).
+
+## O que entrou
+
+O pendente registrado no cabe├ºalho era a **valida├º├úo da c├®lula do pr├│ximo cheque** (`SIGOPNCH.Grade.Column5.Text1.Valid + When`) ÔÇö que ├® quem marca a linha e, portanto, quem decide o que o Confirmar grava. Sem ela, nada escrevia `Marcas`, o `Scan For Marcas` do BO n├úo achava linha e o Confirmar encerrava sem gravar.
+
+| M├®todo | Origem no legado |
+|---|---|
+| `TextBoxChequeSigOpNch_4c` | subclasse de TextBox com When/Valid **embutidos** (regra #46 ÔÇö BINDEVENT em TextBox de Column n├úo dispara) |
+| `InstalarCelulaCheque` | `AddObject` + `CurrentControl` + `Sparse = .F.` na Column5 (regra #18), idempotente, chamado em `CarregarGrade` **depois** do RecordSource |
+| `CelulaChequeWhen` | `Thisform.nAntChqVal = This.Value` |
+| `CelulaChequeValid` | recusa negativo (restaura + `Return 0`), marca a linha quando o n├║mero mudou |
+| `FormParaBO` / `BOParaForm` | linha corrente da grade + valor digitado Ôåö BO |
+| `BtnCancelarClick` | 2┬║ nome de entrada do `btnCancelar.Click`, funil ├║nico para `BtnEncerrarClick` |
+
+Corre├º├úo de rota durante o trabalho: eu ia declarar `FormParaBO`/`BOParaForm` como PUBLIC, mas `FormBase` os declara **PROTECTED** e o VFP9 n├úo alarga escopo no override (regra #51) ÔÇö ficaram `PROTECTED PROCEDURE`, com o coment├írio dizendo a verdade.
+
+## Medido, n├úo lido
+
+`automation\ProbeNch770Fase8.prg` ÔåÆ **PROBE_OK** (8/8), com a datasession privada do form (`DataSession = 2`) alcan├ºada via `SET DATASESSION TO`:
+
+- form instancia; escopos corretos (os 4 chamados de fora PUBLIC, os 2 hooks PROTECTED)
+- c├®lula instalada: `Class=Textboxchequesigopnch_4c`, `CurrentControl=TXT_4C_CELULA`, `Sparse=.F.`, `InputMask=999999` ÔÇö e **sobrevive ao rebind** da grade
+- Valid com `-5` ÔåÆ devolve **0 num├®rico** (prende o foco), restaura 100, `Marcas=.F.`
+- Valid com 100ÔåÆ150 ÔåÆ `Marcas=.T.`, `this_cValor` com **25 chars** (chave posicional, regra #42), `ContarChequesAlterados=1`
+- Valid sem mudan├ºa ÔåÆ **n├úo** marca
+
+Compila├º├úo limpa no VFP9, provada n├úo-vazia: uma c├│pia adulterada (`PUBLIC PROCEDURE` dentro de `DEFINE CLASS`) produziu os 3 erros esperados; o arquivo real n├úo gera `.err`. Tamb├®m verificado: zero caracteres n├úo-ASCII, zero `RETURN` dentro de `TRY`, blocos `PROCEDURE/WITH/TRY` balanceados, sem TODO/stub.
+
+## O que deliberadamente **n├úo** foi criado
+
+`HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `BtnBuscarClick`, `BtnSalvarClick` ÔÇö citados no prompt da fase, mas o SCX n├úo tem a superf├¡cie: a tela n├úo tem modo, o ├║nico campo edit├ível est├í sempre habilitado e os dois CommandButton s├úo Confirmar e Encerrar. Cri├í-los seria inventar (PILAR 1) ou escrever m├®todo vazio (regra de completude). Est├í documentado no cabe├ºalho, na se├º├úo "Deliberadamente AUSENTES".

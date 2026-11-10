@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, everything is clean and consistent. The fix is complete.
+
+## Summary
+
+The error `Error with CHK_4C_SELEC - Value : Data type mismatch` was recurring even after a prior attempt had guarded the checkbox binding behind `RECCOUNT("CrSigMvCcr") > 0`. Looking at the git history showed that guard was never actually proven ÔÇö the same error reappeared with the grid at zero rows. Cross-referencing a documented, *proven* fix for the identical symptom (`CHK_4C_INATIVO`) in `FormProduto.prg` (Erro182) and the working reference pattern in `Formgpd.prg` (`Check1`/`pesoprods`) pointed to the real mechanism:
+
+1. **Root cause**: `CrSigMvCcr`'s placeholder cursor was built inside a `SET NULL ON` block. Even with `Seleciona N(1) NOT NULL` declared, `CREATE CURSOR` doesn't reliably override the session-level nullability the way `CREATE TABLE` does ÔÇö so `Column11.Sparse=.F.` + `CurrentControl` could still see the field as nullable when binding, independent of row count.
+2. **Secondary risk**: every time `RecordSource` is reassigned (on reload in `ExecutarConsultaSaldo`/`CmbConciliaHistChange`), VFP auto-rebinds any column lacking an explicit `ControlSource` to the field at that same ordinal position ÔÇö if `Column11.CurrentControl` was still the checkbox from a prior pass, it would get paired with the wrong (character) field, which is exactly the `Erro182` mechanism.
+
+**Fix applied to `Formsigopind.prg`:**
+- Removed the `SET NULL ON`/`SET NULL OFF` wrapper around the `CrSigMvCcr` placeholder `CREATE CURSOR` (it's always empty and gets fully replaced before real data flows in), and added `DEFAULT 0` to `Seleciona` for extra safety.
+- `RestaurarColunaSelecao` now binds `ControlSource`/`Sparse`/`CurrentControl` unconditionally (matching the proven `Formgpd` pattern), instead of the failed `RECCOUNT`-conditional approach.
+- Added a "disarm" step (`CurrentControl = "Text1"`, `ControlSource = ""`) before all three places that reassign `grd_4c_Lancamento.RecordSource = "CrSigMvCcr"`, mirroring the proven `FormProduto` fix for the exact same error signature.
+
+No business logic, fields, or lookups were touched ÔÇö only the grid/cursor binding mechanics.

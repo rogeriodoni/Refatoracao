@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "File", "Filetostr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIBO",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIBO",
+      "evento": "Init",
+      "linhas": 217,
+      "codigoOriginal": "LParameters poForm, pnTpBol, pcTitEnvelope, pcEmp, pcDope, pnNum, pnDev, pnVias, pnQBols, pCursor\n\nLocal llFechaCImp, lnPrinters, lnImpres, lnBottom1, lnBottom2, lcFiltro, lcErro, llSair, lcCursor\n\nSet DataSession to poForm.DataSessionId\n\nIf poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0\n\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\treturn(.f.)\nEndIf\n\nlcErro = ''\nllSair = .F.\nWith Thisform\n\t.vcTitEnvelope = Iif(Typ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Visible =,Visible =!,Visible = !,vnTpBol = 3 ) And",
+        "controlesReferenciados": "chkObss,chkCarne,chkAgrupa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIBO.btnReport",
+      "evento": "Click",
+      "linhas": 49,
+      "codigoOriginal": "Local lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcCursor, llAgrupa\n\nWith Thisform\n\tlnTpBols  = .vnTpBol\n\tlcTitEnv  = .vcTitEnvelope\n\tlcEmps    = .vcEmp\n\tlcDopes   = .vcDope\n\tlnNumes   = .vnNum\n\tlnValDevs = .vnDev\n\tlnTpVias  = .vnVias\n\tlnQtdBols = .vnQBols\n\t*** mena - 05/03/2015 - pega o nome da impressora que está no combobox *** \n\tlnImpres  = RECNO('crImpreV')\n\tlcImp     = crImpreV.IDupla\t&& impres\n*!*\t\tlnImpres  = .Opt_Impressora.Value\n*!*\t\tlcImp     = .Opt_... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File,Filetostr",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "chkCarne,chkObss,chkagrupa,Cmd_Sair",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIBO.btnReport",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIBO.getQtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIBO.getQtde",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If (ThisForm.getQtde.Value > 0)\n\tThisForm.vnQBols = ThisForm.getQtde.Value\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPIBO.Init",
+      "queryOriginal": "If poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0",
+      "tabelas": "SigCdmp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

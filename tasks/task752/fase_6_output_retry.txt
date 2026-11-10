@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGOPins.prg` (56.767 bytes, CRLF preservado, 24 m├®todos).
+
+## Por que a fase anterior reprovou
+
+N├úo foi falta de c├│digo ÔÇö o form j├í estava completo. Reprovou no **gate de conte├║do da Fase 6** (`OrquestradorMigracao.ps1:9832`). `SIGOPINS` ├® um di├ílogo modal FLAT (sem PageFrame, zero lookup), ent├úo o ├║nico ramo que o alcan├ºa ├® o **layout flat**, que exige `BINDEVENT` + `.ControlSource =` + **`PROCEDURE Validar\w+`**. Os tr├¬s primeiros existiam; o `Validar*` n├úo.
+
+## O que foi acrescentado
+
+**`ValidarSelecao()`** ÔÇö n├úo ├® m├®todo inventado para casar com regex: ├® a guarda de tela que o legado tem dentro do `btnConfirmar.Click` e que a migra├º├úo havia dissolvido no BO:
+
+```foxpro
+If Vartype(pcLista) <> 'C'
+    Locate For Selecao = 1
+    If Eof([LocalObs])
+        =Messagebox([Nenhuma Observa├º├úo Foi Selecionada!], 0+48, [Aten├º├úo])
+        Go Top In LocalObs
+        Thisform.Grade.Column1.SetFocus
+        Return .F.
+```
+
+Mora no form porque o que ela faz ao recusar ├® de tela (reposicionar o cursor, devolver o foco, **n├úo** fechar o di├ílogo). Preservei a condi├º├úo que a cerca (regra #21b): o legado s├│ exige linha marcada no fluxo de **opera├º├úo** (`pLista` ausente); no fluxo de **finalidades** (GRP/ITN/SIGOPINF) zero marca├º├úo significa "remover todas as associa├º├Áes" ÔÇö validar ali bloquearia grava├º├úo leg├¡tima. `BtnConfirmarClick` chama a guarda **fora do TRY** (regra #1); o guard equivalente do BO fica como defesa para quem chamar o BO sem passar pela tela.
+
+## Um defeito real encontrado na linha que eu j├í estava editando
+
+`BtnConfirmarClick` repassava `THIS.chk_4c_Pular.Value` **cru** para `this_lPularLinhas`, que ├® L├ôGICO no BO e ├® consumido por `IIF(THIS.this_lPularLinhas, CHR(13), "")`. Hoje funciona por coincid├¬ncia (o CheckBox nasce `.Value = .T.`, transcrito do dump, e CheckBox criado por `AddObject` assume o tipo do que lhe ├® atribu├¡do). Se esse `.T.` virar `0`/`1` ÔÇö o que a conven├º├úo can├┤nica do projeto manda, e o CorretorAutomatico pode aplicar ÔÇö o `IIF` passa a receber num├®rico e estoura erro 11 ao confirmar. Troquei por teste de `VARTYPE` antes do repasse, sem mexer na configura├º├úo do CheckBox (que est├í fiel ao dump).
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| **Compila├º├úo VFP9** (`vfp9.exe -T`) | `.FXP` de 16 KB gerado, **nenhum `.err`** ÔåÆ sem erro de sintaxe |
+| Gate Fase 6 (ramo flat, simulado) | **PASSA** ÔÇö `semPageFrame`/`temBindEvent`/`legadoSemLookup`/`temCamposFlat` todos `True` |
+| Gate 05d completude | **PASSA** ÔÇö 0 TODO/stub/procedure vazia |
+| `RETURN` dentro de TRY/CATCH | nenhum |
+| Blocos balanceados | PROCEDURE/ENDPROC 23┬À23, WITH/ENDWITH 14┬À14, IF/ENDIF 49┬À49, TRY/ENDTRY 3┬À3 |
+| Bytes acentuados literais | nenhum (s├│ `CHR()`) |
+| `ISEMPTY(` / `.Self` / `Controls("nome")` | 0 ocorr├¬ncias |
+
+Uma ressalva honesta: **`vfp9.exe` n├úo executa nesta sess├úo** ÔÇö compila, gera o `.FXP` e sai sem rodar o corpo (comportamento j├í medido e registrado; desktop n├úo-interativo). Ent├úo provei a **compila├º├úo**, n├úo a instancia├º├úo. O `Init` deste form s├│ se prova abrindo a tela, e isso continua pendente de verifica├º├úo em ambiente interativo.
+
+Fora do escopo desta fase, mas registro: o CheckBox da coluna da grade depende do *toggle* nativo do VFP. O legado aqui tamb├®m depende (ao contr├írio do `SIGCDACG`, que suprime com `NODEFAULT`), e o cursor ├® `CREATE CURSOR` + `APPEND FROM DBF` ÔÇö portanto READWRITE, que ├® o pr├®-requisito. Se na abertura o clique no checkbox n├úo alternar, o conserto ├® o conjunto dos 4 handlers `Click`/`MouseDown`/`MouseUp`/`KeyPress` com `NODEFAULT` (regra #185) ÔÇö territ├│rio da Fase 7.

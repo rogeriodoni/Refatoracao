@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and passing. Here's what happened and what I changed.
+
+## Diagnosis
+
+The previous Phase 8 run failed because it answered the gate with **prose instead of code**. It wrote a long header argument that all four canonical names (`BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`) had no referent in this legacy ÔÇö but the gate judges the `.prg` by its code, and no exception ramp fired, so it reprovou on all four.
+
+I built `automation/VerificarGateFase8Task773.ps1` (same pattern as the 40+ existing per-task verifiers) to run the orchestrator's real `case 8` block without triggering a migration. It showed this form's ramp is **LEITOR-BAIXA**, and that **all six legacy-side proofs already passed** ÔÇö it was blocked solely by the two missing hooks on the migrated side.
+
+The earlier prose was also wrong on the merits: the ramp's own documentation says these two hooks *are* real whenever an editable field feeds the operation ÔÇö "o bloco ja esta no legado, so sem esse nome."
+
+## What I implemented
+
+`SigOpOca.SCX` is a modal child dialog (Auditoria de Lan├ºamentos) with one editable field, two read-only fields, and a single Confirmar button that persists and closes. The two hooks have genuine referents:
+
+- **`BOParaForm()`** ÔÇö transcribes the three closing load lines of the legacy `Init` (`Get_DtAudits ÔåÉ CrSigCqOch.Datas`, `get_valor ÔåÉ CrSigMvCcr.Valors`, `Memo_Obs ÔåÉ ' '`). The blank observation is deliberate in the legacy, so I preserved it and kept the BO realignment.
+- **`FormParaBO()`** ÔÇö transcribes the first line of `cmd_ok.Click` (`Replace ObsAudts With Memo_Obs.Value`). Returns logical so `BtnConfirmarClick` aborts rather than updating with stale text.
+
+This also removed real duplication: the same read-with-type-guard was copy-pasted in `ValidarObservacao` and `BtnConfirmarClick`; both now delegate to `FormParaBO()`, which reads the *control* (needed because the legacy `\<Confirmar` ALT+C shortcut fires the click without the EditBox losing focus). Field seeds in `ConfigurarCamposDados` became type-only, with the real transfer in `BOParaForm()`.
+
+I did **not** create `CarregarLista` or a Cancelar handler ÔÇö this legacy has no grid and exactly one button, so inventing them would violate PILAR 1 and writing them empty is a disguised stub. The LEITOR-BAIXA ramp dispenses both (`SaidaEhOBotaoDeAcao = True` confirms the only button that closes *is* the action button). I rewrote the misleading header section to state what was delivered and why.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| Phase 8 gate (real `case 8` block) | **PASSA** ÔÇö `metodosFaltantes = []` via `legadoLeitorBaixaF8 = True` |
+| Completeness validator (`Test-CompletudeCodigo`) | **True** ÔÇö no TODO/stub/empty procedure |
+| VFP9 compilation (pipeline's `ValidarCompilacao.prg`) | **sucesso: true** ÔÇö form and BO both compile, no `.err` |
+| Block balance / no `RETURN` in TRY / no `PUBLIC` in `DEFINE CLASS` / ASCII-only | all clean |
+
+One thing worth flagging: `-c` with a nonexistent `.fpw` hung VFP9 on a modal dialog and I had to kill it ÔÇö the pipeline's `-T` flag is what suppresses those. That's the unattended-execution hazard CLAUDE.md #6 warns about, and it's why I switched to the project's own invocation.

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormSigOpImp.prg compiled cleanly with no syntax errors.
+
+**Fase 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpImp.prg` com a estrutura base:
+
+- **DEFINE CLASS FormSigOpImp AS FormBase** ÔÇö dialogo filho FLAT (sem PageFrame real, pois o layout.json n├úo mostra Page1/Page2 ÔÇö este ├® um painel de edi├º├úo de impostos de um item, n├úo um CRUD). `DataSession = 1` deliberadamente (n├úo 2), porque o BO j├í criado nas Fases 1-2 (`SigOpImpBO.CarregarDoCursor`/`AplicarAoCursor`) depende de `crTpmMvItn` estar vis├¡vel na data session ativa, reproduzindo o `Set DataSession to pnDatSes` permanente do legado.
+- **Init()** ÔÇö recebe `par_oParentForm, par_nDataSessionPai, par_oConexaoPai` (equivalente a `pForm, pnDatSes, pConexao`), troca a data session, posiciona relativo ao pai (`Top = pai.Top + 346`) e desabilita o form pai (simulando modalidade, j├í que `WindowType = 0`).
+- **InicializarForm()** ÔåÆ **ConfigurarPageFrame()** (orquestrador ├║nico) ÔåÆ **ConfigurarCabecalho()** criando `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, com dimens├Áes transcritas do `layout.json`.
+- **TornarControlesVisiveis()** e **Destroy()** ÔÇö este ├║ltimo reabilita o form pai incondicionalmente (rede de seguran├ºa contra "form pai nunca liberado").
+
+Deixado explicitamente para as pr├│ximas fases (documentado no cabe├ºalho do arquivo): grid/CommandGroup de bot├Áes, os ~19 TextBoxes de impostos, os lookups de Classifica├º├úo Fiscal/CFOP, e `CarregarDoCursor`/`BOParaForm`.
+
+Validei a sintaxe compilando com `vfp9.exe -t` ÔÇö compilou sem erros (`.fxp` gerado e depois removido para n├úo deixar bytecode obsoleto).

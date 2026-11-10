@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormSigOpMet.prg` (594 ÔåÆ 785 linhas), compila limpo no VFP9 (sem `.err`, `.fxp` gerado e removido depois).
+
+## O que foi adicionado em `ConfigurarPaginaDados()`
+
+Primeira metade dos campos, pela ordem de `TabIndex` do SCX (1 a 4), cada par label+campo transcrito do dump:
+
+| TabIndex | Legado | Migrado | Left/Top SCX | Top +29 | Propriedades do dump |
+|---|---|---|---|---|---|
+| 1 | `Say7` / `getcodigo` | `lbl_4c_Label7` / `txt_4c_Codigo` | 445/154 ┬À 492/149 | 183 / 178 | `InputMask "!!!!!!!!!!"`, W=80 H=24 |
+| 2 | `Say1` / `getEmps` | `lbl_4c_Label1` / `txt_4c_Emps` | 437/181 ┬À 492/176 | 210 / 205 | sem InputMask, W=33 H=24 |
+| 3 | `Say5` / `getDtini` | `lbl_4c_Label5` / `txt_4c_Dtini` | 425/208 ┬À 492/203 | 237 / 232 | `Alignment=3`, W=80 H=24 |
+| 4 | `Say6` / `GetDtfin` | `lbl_4c_Label6` / `txt_4c_Dtfin` | 430/235 ┬À 492/230 | 264 / 259 | `Alignment=3`, W=80 H=24 |
+
+Regras aplicadas: compensa├º├úo `+29` (PageFrame.Top=-29); labels da classe `say` com `Alignment=0` + `AutoSize=.F.` + `Width` expl├¡cita terminando rente ao campo em 492 (#23); `ForeColor RGB(90,90,90)` nas labels (#12); `MaxLength` da largura da **coluna** (10 e 3), n├úo do `Width` (#19); `Format`/`InputMask` vazios de `getDtini`/`GetDtfin` s├úo override vazio do Form Designer e **n├úo** foram transcritos (#49); acentos via `CHR(243)` (#4). Nenhum controle abaixo de Top 178, livre da faixa do cabe├ºalho que termina em 111 (#11). Nomes conferem 1-a-1 com `mapeamento.json`.
+
+## Diverg├¬ncia herdada do legado ÔÇö precisa da sua decis├úo antes da Fase 6
+
+N├úo ├® erro de migra├º├úo, e documentei no cabe├ºalho do m├®todo. Os controles da p├ígina Dados do `SIGOPMET.SCX` apontam `ControlSource` para **`CrSigCdDes`** ÔÇö cursor da tabela **`SigCdDes`**, que o `Init` do legado **nunca cria** (ele s├│ faz `AddCursor('SigOpMet','codigo','crSigOpMet',...)` para a grade da Lista). Conferido em `docs/schema.sql`:
+
+- `codigo` char(10) e `emps` char(3) existem nas **duas** tabelas ÔåÆ casam com `this_cCodigo` / `this_cEmps` do `SigOpMetBO`;
+- `dtini`, `dtfin`, `valcota`, `valdes` existem **s├│ em `SigCdDes`** ÔåÆ **n├úo t├¬m coluna em `SigOpMet`**;
+- `getpdes` ("Cota Desconto %") tem `ControlSource = ""` ÔÇö n├úo tem coluna em tabela nenhuma.
+
+Ou seja: a p├ígina Dados foi copiada do form de descontos (SIGCDDES) e nunca religada. Pior, o `Init` do legado faz `pagina.lista.grupo_Op.Visible = .f.` **e** `.enabled = .f.` ÔÇö esconde e desabilita os 5 bot├Áes CRUD ÔÇö e deixa vis├¡vel s├│ o `btncarregar` ("Carrega Metas" ÔåÆ `ImportaPlan`, importa├º├úo de planilha Excel). Na pr├ítica o usu├írio **nunca chega** ├á p├ígina Dados nesse form.
+
+Reproduzi os controles por fidelidade visual (PILAR 1) e registrei no coment├írio que as Fases 6-8 **n├úo devem inventar** property no BO nem coluna no INSERT/UPDATE para `dtini`/`dtfin`/`valcota`/`valdes`/`pdes` ÔÇö isso violaria o PILAR 2. O que fica em aberto para voc├¬ decidir: se `FormParaBO`/`BOParaForm` (Fase 6) devem mapear **apenas** C├│digo e Empresa, deixando os outros 6 campos como superf├¡cie visual inerte igual ao legado, ou se o comportamento do `grupo_Op` oculto/desabilitado deve ser reproduzido tamb├®m (o que tornaria a p├ígina Dados inalcan├º├ível, como ├® hoje em produ├º├úo).

@@ -1,0 +1,572 @@
+{
+  "resumo": {
+    "totalMetodos": 34,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 21,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCarregaGrade", "File", "fDtoSQL", "FigJpgs m", "fConfigGeral", "fwBuscaExt", "fTamanhoImagem", "FigJpgs With FileToStr", "For DPros = Alltrim", "For IFors = Alltrim", "For Reffs = Alltrim", "For CPros = Alltrim"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Procedure",
+      "linhas": 47,
+      "codigoOriginal": "LParameters llEna\n\nThisForm.LockScreen = .t.\n\nWith ThisForm\n\t.getDtIni.Enabled \t   \t\t  = llEna\n\t.getDtFin.Enabled \t   \t\t  = llEna\n\t.getGrupo.Enabled \t   \t\t  = llEna\n\t.getDGrupo.Enabled \t   \t\t  = llEna\n\t.getCProsF.Enabled \t   \t\t  = llEna\n\t.getDProsF.Enabled \t   \t\t  = llEna\n\t.getLin.Enabled \t   \t\t  = llEna\n\t.getDLin.Enabled \t   \t\t  = llEna\n\t.optImagem.Option1.Enabled\t  = llEna\n\t.optImagem.Option2.Enabled\t  = llEna\n\t.optImagem.Option3.Enabled\t  = llEna\n\t.cmdSelecionar.Enabled \t\t  = llEna\n\n\t.getCPro... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem,Option1,Option2,Option3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "LParameters pPro\n\nlcArquivo = Sys(2023) + '\\SigCpImg.Jpg'\n\nWith ThisForm\n\tIf Not Empty(pPro) And (csProdutos.CPros = pPro)\n\t\tClear Resources\n\t\t.ImgFigJpg.Visible = .f.\n\t\t.ImgFigJpg.Picture = ''\n\n\t\t* Figura no Campo Memo\n\t\tIf Not Empty(csProdutos.FigJpgs) And Not IsNull(csProdutos.FigJpgs)\n\t\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(csProdutos.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t\t\tIf (StrToFile(lcFoto, lcArquivo) > 0)\n\t\t\t\t.ImgFigJpg.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Private pDtI, pDtF, pImg\n\npDtI = fDtoSQL(ThisForm.getDtIni.Value)\npDtF = fDtoSQL(ThisForm.getDtFin.Value, '23:59:59')\npImg = ThisForm.optImagem.Value\npGru = ThisForm.getGrupo.Value\npPro = ThisForm.getCProsF.Value\npLin = ThisForm.getLin.Value\n\nlcQuery = [Select DtFilms, DtIncs, Datas, CPros, DPros, IFors, Reffs, CGrus, Linhas, FigJpgs ] + ;\n\t\t\t[From SigCdPro ] + ;\n\t\t   [Where DtIncs BetWeen ?pDtI And ?pDtF ] + ;\n\t\t   \t\t  Iif(pImg=1, [And FigJpgs Is Null ], ;\n\t\t   \t\t  Iif(pImg=2, [And Not FigJpgs ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,CarregaImagem,AcertaForm",
+        "controlesReferenciados": "optImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=DoDefault()\n\nCreate Cursor csProdutos (DtFilms d(8) Null, DtIncs d(8) Null, Datas d(8) Null, CPros c(14), ;\n\t\t\t\t\t\t  DPros c(40), IFors c(10), Reffs c(40), CGrus c(3), Linhas c(10), ;\n\t\t\t\t\t\t  FigJpgs m(4) Null)\nIndex On CPros Tag CPros\nIndex On DPros + CPros Tag DPros\nIndex On IFors + CPros Tag IFors\nIndex On Reffs + CPros Tag Reffs\nIndex On CGrus + CPros Tag CGrus\nIndex On Linhas + CPros Tag Linhas\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FigJpgs m",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG",
+      "evento": "Init",
+      "linhas": 57,
+      "codigoOriginal": "Private pPro\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n=fConfigGeral()\n\n=DoDefault()\n\nThisForm.CorPadrao = ThisForm.grdProdutos.Column1.Header1.BackColor\n\npPro = Replicate(Chr(255), 10)\n\nlcQryPro = 'Select * From SigCdPro Where CPros = ?pPro'\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\t\n\n\tWith .poDataMgr\n\t\t.AddCursor('SigCdPro', 'CPros', 'crSigCdPro', '', '', lcQryPro)\n\tEndWith\nEndWith\n\nWith This... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "Value = Date,AcertaForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDProsF",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCProsF.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDProsF",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCProsF.Value = crListaRemota.CPros\n\tThisForm.getDProsF.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCProsF.Value = ''\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getCProsF",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCProsF.Value = crListaRemota.CPros\n\tThisForm.getDProsF.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCProsF.Value = ''\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.GetDLin",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getLin.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.GetDLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value  = ''\n\tThisForm.getDL... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.GetLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', Padr(This.Value, 10), 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value  = ''\n\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDtFin",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Processamento",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.CarregaImagem(csProdutos.CPros)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CarregaImagem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column1.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To CPros In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.Header1.BackColor = ThisForm.CorPadrao\n\t.Column6.Header1.BackColor = ThisForm.CorPadrao\n\t.Column1.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim **************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column2.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To DPros In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.Header1.BackColor = RGB(220,255,220)\n\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.Header1.BackColor = ThisForm.CorPadrao\n\t.Column6.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim **************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column3.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To IFors In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.Header1.BackColor = RGB(220,255,220)\n\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.Header1.BackColor = ThisForm.CorPadrao\n\t.Column6.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim **************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column4.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To Reffs In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.Header1.BackColor = RGB(220,255,220)\n\t.Column5.Header1.BackColor = ThisForm.CorPadrao\n\t.Column6.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim **************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column5.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To CGrus In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.Header1.BackColor = RGB(220,255,220)\n\t.Column6.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim **************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.grdProdutos.Column6.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "lnRec = Recno('csProdutos')\nSet Order To Linhas In csProdutos\nWith ThisForm.grdProdutos\n\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t.Column5.Header1.BackColor = ThisForm.CorPadrao\n\t.Column6.Header1.BackColor = RGB(220,255,220)\n\t.Column6.SetFocus\n\t.Refresh\nEndWith\nGo lnRec In csProdutos\nThisForm.grdProdutos.Refresh\n* Fim *************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaRemota\nElse\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'DGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaRemota\nElse\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdgFigura",
+      "evento": "Valid",
+      "linhas": 93,
+      "codigoOriginal": "Private pPro\n\nLocal lcArquivo, lcProduto, lcAntPath, lcFiguras\n\nlcArquivo = Sys(2023) + '\\SigCpImg.JPG'\nlcProduto = csProdutos.CPros\nSet Step On \nlcAntPath = Sys(5) + Sys(2003)\nIf Directory(goSistema.DirImagens)\n\tSet Default To &goSistema.DirImagens.\nEndIf\n\nlcFiguras = Alltrim(GetPict('Formato Jpeg:JPG;Formato Bitmap:BMP', 'Nome do Arquivo:', 'Selecionar'))\n\nSet Default To &lcAntPath.\n\nIf Not Empty(lcFiguras) And File(lcFiguras)\n\tIf Not fTamanhoImagem(lcFiguras, ThisForm.poDataMgr, .t.)\n\t\tReturn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fTamanhoImagem,FigJpgs With FileToStr",
+        "metodosFormChamados": "Requery,SqlExecute,Update,Commit,CarregaImagem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdgFigura",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "Private pPro, lcFiguras\n\nlcFiguras = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase())) + 'BrJpg.JPG'\t\n\nIf ADir(laDir, lcFiguras) = 0\n\t=MessageBox('O Arquivo ' + Upper(lcFiguras) + ' Não Foi Encontrado!!!', 0+48, 'Figura em Branco Não Encontrada...')\n\tReturn 0\nEndIf\n\nWait Window 'Aguarde!!! Transferindo a Imagem...' NoWait\n\npPro = csProdutos.CPros\n\nThisForm.poDataMgr.Requery('crSigCdPro')\nGo Top In crSigCdPro\n\nReplace FigJpgs With FileToStr(lcFiguras), ;\n\t\tDtFilms With Datetime(), ;\n\t\tDatas   Wit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FigJpgs With FileToStr",
+        "metodosFormChamados": "GetDatabase,Requery,Update,Commit,CarregaImagem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdgFigura",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(csProdutos.FigJpgs)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdgFigura",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "Local lcArquivo\n\nlcArquivo = Sys(2023) + '\\' + Sys(2015) + '.Jpg'\n\nSelect csProdutos\nWith ThisForm\n\t* Figura no Campo Memo\n\tIf Not Empty(csProdutos.FigJpgs) And Not IsNull(csProdutos.FigJpgs)\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(csProdutos.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t\t=StrToFile(lcFoto, lcArquivo)\n\tEndIf\n\n\tIf File(lcArquivo)\n\t\tDo Form SigOpZom With lcArquivo, ;\n\t\t\t\t\t\t\t'Produto : ' + csProdutos.CPros + ' - ' + csProduto... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdSelecionar",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Local ldDtI, ldDtF\n\nldDtI = ThisForm.getDtIni.Value\nldDtF = ThisForm.getDtFin.Value\n\nIf IsEmpty(ldDtI)\n\t=Messagebox('Data Inicial Inválida!!!', 0+48, '')\n\tThisForm.getDtIni.SetFocus\n\tReturn 0\nEndif\n\nIf IsEmpty(ldDtF)\n\t=Messagebox('Data Final Inválida!!!', 0+48, '')\n\tThisForm.getDtFin.SetFocus\n\tReturn 0\nEndif\n\nIf (ldDtF < ldDtI)\n\t=Messagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')\n\tThisForm.getDtFin.SetFocus\n\tReturn 0\nEndif\n\nThisForm.Processamento\n* Fim *********************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If (This.Value = 1)\n\tZap In csProdutos\n\tThisForm.CarregaImagem('')\n\tThisForm.AcertaForm(.t.)\nElse\n\tThisForm.Release\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CarregaImagem,AcertaForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getDPros",
+      "evento": "LostFocus",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect csProdutos\n\tSet Order To DPros\n\tSet Near On\n\tLocate For DPros = Alltrim(This.Value)\n\tSet Near Off\n\tThis.Value = ''\n\n\tWith ThisForm.grdProdutos\n\t\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column2.Header1.BackColor = RGB(220,255,220)\n\t\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column2.SetFocus\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim **************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For DPros = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getIFors",
+      "evento": "LostFocus",
+      "linhas": 18,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect csProdutos\n\tSet Order To IFors\n\tSet Near On\n\tLocate For IFors = Alltrim(This.Value)\n\tSet Near Off\n\tThis.Value = Space(10)\n\n\tWith ThisForm.grdProdutos\n\t\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column3.Header1.BackColor = RGB(220,255,220)\n\t\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column3.SetFocus\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim *******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For IFors = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getReffs",
+      "evento": "LostFocus",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect csProdutos\n\tSet Order To Reffs\n\tSet Near On\n\tLocate For Reffs = Alltrim(This.Value)\n\tSet Near Off\n\tThis.Value = Space(20)\n\n\tWith ThisForm.grdProdutos\n\t\t.Column1.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column4.Header1.BackColor = RGB(220,255,220)\n\t\t.Column4.SetFocus\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim *******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Reffs = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPIMG.getCPros",
+      "evento": "LostFocus",
+      "linhas": 18,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect csProdutos\n\tSet Order To CPros\n\tSet Near On\n\tLocate For CPros = Alltrim(This.Value)\n\tSet Near Off\n\tThis.Value = Space(14)\n\n\tWith ThisForm.grdProdutos\n\t\t.Column1.Header1.BackColor = RGB(220,255,220)\n\t\t.Column2.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column3.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column4.Header1.BackColor = ThisForm.CorPadrao\n\t\t.Column1.SetFocus\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim *******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For CPros = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPIMG.Init",
+      "queryOriginal": "lcQryPro = 'Select * From SigCdPro Where CPros = ?pPro'",
+      "tabelas": "SigCdPro",
+      "colunas": "CPros",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

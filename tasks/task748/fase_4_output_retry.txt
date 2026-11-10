@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and verified.
+
+## Why the retry had failed
+
+The gate for phase 4 (`case 4`, `OrquestradorMigracao.ps1:8891`) has three branches. For this `OPERACIONAL` form the FLAT branch applies, and it needs three tokens. I measured them against the file left by the previous attempt:
+
+| predicate | before | after |
+|---|---|---|
+| `temGrade` (`AddObject("grd_4c_`) | True | True |
+| `temBotoes` (`AddObject("cmd_4c_/cmg_4c_`) | True | True |
+| `temCarga` (`CarregarLista\|CarregarDados\|MontaGrade`) | **False** | True |
+
+The grid and buttons were there; the data-load routine was just named `Processar()`. Renaming it `CarregarDados()` is the honest fix ÔÇö it *is* the grid load routine (legacy `Processamento`), not a token planted to satisfy a regex.
+
+## Real defects found while auditing, and fixed
+
+While checking whether the gate was even satisfiable, four genuine bugs surfaced ÔÇö none of which any gate would have caught:
+
+1. **`ZAP` would freeze the form.** `SET SAFETY` is scoped per data session and this form is `DataSession = 2`, so `main.prg`'s `SET SAFETY OFF` never reaches it. I measured `SET("SAFETY") = ON` inside the private session: both `ZAP` sites would have opened a modal *"Zap ÔÇª Are you sure?"* with no visible window. Both now go through a guarded `EsvaziarCursorProdutos()`.
+2. **Sorting sent the grid to EOF.** `ReordenarGrade` restored the row with a partial `SEEK` on the active tag, but five of the six tags are composite (`dpros+cpros`, ÔÇª) and `config.prg` sets `SET EXACT ON` ÔÇö the seek would fail *every time*, silently. Now transcribes the legacy `Recno()` / `Go lnRec` pair, with the `GO` placed **after** the first `Refresh` as the legacy does (the grid re-syncs the pointer when it repaints, so the original order lost the record).
+3. **`SetFocus` during `Init`.** `ConfigurarGrid` called the header handler, which focused a column while `THIS.Visible` was still `.F.` ÔÇö the `TRY` would have swallowed it into an error dialog. Focus is now conditional on `THIS.Visible`.
+4. **`CarregarDados` was PROTECTED.** `TesteAutomatico.prg:876` calls it from outside by macro, and the `PEMSTATUS(ÔÇª,5)` it guards with returns `.T.` for protected methods too ÔÇö the harness would enter the branch and die with *"Property CARREGARDADOS is not found"* (rule #3). Now PUBLIC.
+
+Also: `img_4c_Imagem.Visible` no longer contradicts `TornarControlesVisiveis`, `ConfigurarImagem` moved earlier to match the SCX z-order (`Shape3` is the first object in the legacy tree), the SQL-failure message now uses the legacy wording, and the BO's `Processar` got its missing `loc_oErro` declaration.
+
+## Verification
+
+The VFP9 smoke test passed, so these are measured results, not inference:
+
+- **Compilation**: `.FXP` present / `.ERR` absent on both files, with a negative control (a copy with `IF .T.` appended) producing `.ERR` pointing at exactly the two injected lines ÔÇö proving the detector works and the 837 real lines are clean.
+- **Runtime**: `CREATEOBJECT` returns an object, `1000x600`, 6 controls, grid bound with `ColumnCount=6`, column widths `129/366/50` and header captions matching the SCX dump.
+- **Sort regression**: with 3 rows and the pointer on `P002`, switching to composite tags `DPROS` then `CGRUS` left `RECNO=2 / cpros=P002 / EOF=.F.`, and the green highlight tracked the active column.
+- **`ZAP` under the hazardous condition**: forcing `SAFETY ON` in session 2, `CmgLimparClick()` emptied the cursor (3ÔåÆ0) and restored `SAFETY=ON` without freezing.
+- **Visibility**: `PEMSTATUS(ÔÇª,2) = .F.` for all five externally-called methods.
+- Auditors `VerificarPropriedadesInexistentes`, `VerificarTabelasInexistentes` and `VerificarColunaEmpresaSQL` report nothing for these two files.
+
+Scratch probes and the `.FXP`/`.ERR` artifacts were removed.
+
+One thing worth flagging for the next phase: the filter controls (`getDtIni`/`getDtFin`/`getGrupo`/`getCProsF`/`getLin`/`optImagem`) are not created yet, so the legacy `AcertaForm`'s `Enabled` toggles can only be wired once they exist. The `cmdgFigura` group (Imagem/Branco/Zoom) has its container in place but no buttons yet ÔÇö those are phase 7's image actions, and the `TabIndex` pass should wait for the phase that adds the last `AddObject`, since `TabIndex` outside `1..N` is discarded silently.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Class name matches (`sigopfisBO`). Phase 3 is complete.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\Formsigopfis.prg` with the structural skeleton for this phase:
+
+- **`DEFINE CLASS Formsigopfis AS FormBase`** with visual properties copied exactly from the SCX dump (Width=1000, Height=600, DataSession=2, WindowType=1, etc.) plus state properties mirroring the legacy form's custom properties (`this_cCidchaves`, `this_oFormPai`, `this_lFiltraCfo`, `this_lIpiBaseIcm`, `this_lIcmsTtNf`, `this_lEditaFrete`, `this_nNfServicos`, `this_lEmLookup`).
+- **`Init()`** replicating the legacy `Lparameters loForm, loDatses` contract as `par_cCidchaves, par_oFormPai`, with the test-harness bypass pattern (`gb_4c_ModoTeste`/`gb_4c_ValidandoUI`) so `06_testForm` doesn't always fail ÔÇö this form is a modal child normally opened by a parent movement form, same family as the sibling `Formsigopfin.prg` (task741) I used as the reference pattern.
+- **`Destroy()`** re-enabling the parent form, chained to `DODEFAULT()`.
+- **`InicializarForm()` / `ConfigurarPageFrame()`** orchestrating `ConfigurarCabecalho()` (cnt_4c_Sombra + the two title labels + the decorative Shape2) and `ConfigurarPgfPaginas()` ÔÇö a **real tabbed PageFrame** (`pgf_4c_1`) with Page1 "Nota Fiscal" and Page2 "Servi├ºos", matching the actual legacy layout (not the generic Lista/Dados CRUD template, since `analise.json` confirms this is an OPERACIONAL embedded panel).
+- **`TornarControlesVisiveis()`** recursive helper, standard pattern.
+
+All TRY/ENDTRY, WITH/ENDWITH, PROCEDURE/ENDPROC blocks verified balanced, no RETURN inside TRY blocks (CLAUDE.md rule #1), and the BO class name (`sigopfisBO`) matches what's instantiated.
+
+Next phase (4) will add the direct form-level fields (Get_nota, Get_S├®rie, Get_ClFiscal, etc.) and the `ok` button ÔÇö the form has no grid in this legacy source, so Phase 4 will differ from the generic "Grid + CRUD buttons" template.

@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e **provada**. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigOpOco.prg` foi modificado (8 hunks, +181/ÔêÆ58 linhas).
+
+## Por que a tentativa anterior reprovou
+
+O gate do `case 4` (ramo FLAT, ├║nico aplic├ível a este form) exige **tr├¬s** predicados. Medidos contra o HEAD:
+
+| predicado | antes | depois |
+|---|---|---|
+| `AddObject("grd_4c_` | True | True |
+| `AddObject("(cmg_4c_\|cmd_4c_)` | True | True |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **False** ÔåÉ falhava | **True** |
+
+Faltava o **m├®todo de carga**. E isso n├úo era exig├¬ncia vazia do gate: o `Init` legado (linhas 437/439 do dump) termina com `ThisForm.Refresh` + `ThisForm.Grade.Refresh`, e **esse par estava faltando no migrado** ÔÇö defeito real, n├úo detalhe. O `Set Key To` *filtra* a vis├úo do alias, e trocar ordem/chave **n├úo repinta** a grade ligada a ele (regra #21): sem o Refresh a grade seguia desenhando o conte├║do de antes do filtro, sem erro e sem log.
+
+## O que entreguei
+
+- **`ConfigurarGrade()`** ÔÇö s├│ o que n├úo depende de dado (regra #41). Acrescentei tr├¬s propriedades do dump que vinham faltando: `AllowHeaderSizing`/`AllowRowSizing = .F.` e `FontSize = 8`.
+- **`VincularGrade()`** (novo) ÔÇö `RecordSource` + 4 `ControlSource` condicionados a `USED(alias)`, e **depois** deles as larguras e os `Header1.Caption` (o bind reseta os dois).
+- **`CarregarDados()`** (novo, **PUBLIC**) ÔÇö o funil: vincular ÔåÆ posicionar ÔåÆ `THIS.Refresh()` + `grd.Refresh()`. PUBLIC porque o `TesteAutomatico.prg` o encontra por `PEMSTATUS` e o chama de **fora** da classe; com PROTECTED estouraria `Property CARREGARDADOS is not found` (regra #3).
+- `InicializarForm` passou a chamar o funil no lugar da chamada nua a `PosicionarHistorico`.
+
+N├úo inventei PageFrame, lista nem bot├úo CRUD ÔÇö o cabe├ºalho agora registra a **medi├º├úo** que dispensa o ramo paginado (zero `BaseClass: pageframe`, raiz `form` gen├®rico, 19 objetos).
+
+## Verifica├º├úo
+
+Rodei o smoke test do VFP9 primeiro (`vfp9.exe` pode compilar e sair sem executar) ÔÇö passou, ent├úo as provas abaixo s├úo reais:
+
+- **Compila├º├úo**: `.fxp` gerado e **zero `.err`** no form e no BO.
+- **Sem cursor** (harness): `VARTYPE=O`, 665x323, `RecordSource=[]` (bind pulado, sem *Alias is not found*), larguras `108/75/75/70` e headers corretos mesmo assim, `PEMSTATUS(...,2)=.F.`, `CarregarDados()` de fora devolveu `.F.` **sem estourar**.
+- **Com `cursor_4c_Historico`** (3 linhas, 2 da chave): bind OK, larguras/headers **preservados ap├│s o bind**, `ORDER=CBARS`, `SET("KEY")` ativo, `RECCOUNT=3` mas **`COUNT` vis├¡vel = 2** ÔÇö prova que o filtro pegou e a grade o reflete. 2┬¬ chamada idempotente. Cursor do chamador **sobreviveu** ao `Release`.
+- `Top/Left = 122/490` = `(100+22)/(100+390)` ÔÇö confirma que a anomalia do legado (`lnTop` nas duas coordenadas) segue transcrita, n├úo "corrigida".
+- `Test-CompletudeCodigo`: nenhum TODO/stub/procedure vazia. Auditorias de propriedade inexistente e de m├®todo PROTECTED chamado de fora: limpas. CRLF preservado (1027/1027).
+
+Dois pontos para seu conhecimento, que **n├úo se consertam neste arquivo**:
+
+1. **Lacuna de contrato** (j├í registrada no cabe├ºalho): o `SELECT` do `FormBAL.prg:3409` n├úo traz `ocors` nem `obs`, e renomeia `pesreals` para `Qtds2`. As `Column3`/`Column4` ficaram fi├®is ao legado, mas s├│ exibir├úo dado real quando essas colunas entrarem no `SELECT` do FormBAL.
+2. **Efeito colateral fiel ao legado**: `SET KEY`/`SET ORDER` agem na work area compartilhada com o pai (`DataSession = 1`) e o legado n├úo os desfaz ao sair ÔÇö a grade do pai continua filtrada depois que o di├ílogo fecha. Mantive o comportamento atual (PILAR 1), mas vale confirmar com quem conhece o fluxo de contagem.

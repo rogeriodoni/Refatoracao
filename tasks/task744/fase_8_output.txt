@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpGvt.prg` final: 539 linhas, 22,9 KB.
+
+## Os m├®todos que a fase pede n├úo existem ÔÇö e isso foi medido, n├úo presumido
+
+Os hooks de transfer├¬ncia de campo, o popular da grade, o Cancelar da Page2 e os Habilitar/Limpar n├úo t├¬m referente neste legado: o SCX tem **zero** campo de entrada, **zero** grade, **zero** PageFrame e **zero** superf├¡cie CRUD. A ├írvore inteira s├úo 9 objetos ÔÇö dataenvironment, form, container, 3 labels, shape, image e **um** CommandButton.
+
+Rodei o gate real (`automation\VerificarGateFase8Task744.ps1`, que extrai e executa o pr├│prio `case 8` do orquestrador em vez de reimplement├í-lo): **PASSA pelo ramo DESPACHANTE**, com os quatro nomes contando **0** no arquivo ÔÇö ou seja, pelo caminho honesto, exercitando o carve-out. Os outros 16 ramos deram `False`.
+
+## O defeito real que a fase encontrou
+
+A fase 7 declarou explicitamente que **n├úo provou runtime**. Provei ÔÇö e a instancia├º├úo revelou um defeito que nenhuma checagem est├ítica pegaria:
+
+**A imagem da gaveta renderizava 72x72 em vez dos 76x77 do dump.** `Image` com `Stretch = 0` (o *default*) **descarta** a `Width`/`Height` declaradas e assume o tamanho natural do arquivo, quando o `.Picture` ├® atribu├¡do **depois** delas. Medido (`MedirImageStretch744.prg`):
+
+| ordem no `WITH` | resultado |
+|---|---|
+| W/H ÔåÆ Picture, `Stretch = 0` | **72x72** ÔÇö 76x77 descartado |
+| Picture ÔåÆ W/H, `Stretch = 0` | 76x77 |
+| W/H ÔåÆ Picture, `Stretch = 1` ou `2` | 76x77 |
+
+O `gaveta.jpg` ├®, na verdade, um **PNG de 72x72**. O dump do SCX lista `Picture` *antes* de `Height`/`Width`, ent├úo o legado desenha os 76x77 com a imagem clipada ÔÇö era desvio silencioso do PILAR 1, sem erro e sem log. Corrigido invertendo a ordem (n├úo com `Stretch`, que deformaria a imagem) e documentado no m├®todo. P├│s-corre├º├úo o probe l├¬ `W=76 H=77`.
+
+Varri o projeto: dos 52 `AddObject` de `Image`, s├│ 3 t├¬m W/H antes do `Picture` sem `Stretch`, e **1** desvia de fato ÔÇö `FormRPT.img_4c_Orientacao` (130x116 declarado, 130x115 efetivo, 1px). Os 2 do `Formsigmvitn` declaram exatamente o natural. N├úo mexi neles: ├® outro form, fora do escopo desta task.
+
+## O que ficou provado
+
+Smoke test verde, ent├úo compila├º├úo **e** runtime s├úo afirm├íveis:
+
+- `COMPILE` sem `.ERR` nos dois arquivos. **Controle negativo** feito na mesma rodada (c├│pia com `IF .T.` / `? "x"` no fim): o `.ERR` acusou **s├│** as linhas 540/541 ÔÇö as duas acrescentadas, contra 539 do form real.
+- `CREATEOBJECT` com **3 argumentos** (como o `sigmvcab`) e com **2** (porta omitida, como `sigmvitn`/`sigmvits`): objeto nos dois casos, `PortaSerial` num├®rico 0 na forma omitida.
+- Os 5 controles com a geometria do dump, todos `Visible = .T.`; as duas labels da faixa recebendo `THIS.Caption`; os 3 `.Picture` resolvendo para arquivo existente (regra #25); o bot├úo cabendo exato em 999/78.
+- `CmdOkClick` exercitado: cai no `CATCH`, `MsgConfirma` suprimido devolve `.F.`, o di├ílogo **permanece aberto** e a mensagem volta a "Gaveta Aberta... Feche" ÔÇö o `_dialogs.txt` registra `File 'fchecarserial.prg' does not exist`, que ├® a aus├¬ncia deliberada da regra #27.
+- Impressora fora da lista: `VerificarStatusGaveta()` devolve `.T.` sem tocar hardware, igual ao `DO CASE` do legado.
+- Auditorias est├íticas: 0 acentos literais, 0 `MESSAGEBOX`, 0 `RETURN` dentro de `TRY`, 0 `PUBLIC` em `DEFINE CLASS`, 0 `.Self`, 0 TODO/stub; `CmdOkClick` e `VerificarStatusGaveta` PUBLIC (regras #3/#51).
+
+## Integra├º├úo
+
+Regerei o `indice_classes.txt` ÔÇö a classe e seu fecho (`formbase` + `SigOpGvtBO`) agora est├úo l├í, e `GarantirClasseNoMenu -Verificar` passa.
+
+**N├úo adicionei item de menu**, de prop├│sito: ├® di├ílogo FILHO que exige 3 par├ómetros do chamador. No legado ele ├® aberto por `Do Form SigOpGvt With ...` em `sigmvcab`/`sigmvitn`/`sigmvits`, nunca por menu. Os quatro irm├úos migrados (`FormSigOpCrp`, `FormSigOpCtd`, `FormSigOpCop`, `FormSigMvMen`) est├úo todos **no ├¡ndice e fora do menu** ÔÇö a mesma conven├º├úo.
+
+## Duas pend├¬ncias que n├úo s├úo desta task
+
+1. **Nenhum call site.** Os tr├¬s chamadores migrados (`Formsigmvcab`, `Formsigmvitn`, `Formsigmvits`) n├úo migraram o bloco da gaveta ÔÇö zero men├º├úo a `StatGaveta`/`SigOpGvt` neles. Ent├úo o di├ílogo, embora correto, ├® hoje **inalcan├º├ível**. ├ë a classe de defeito que a mem├│ria `DO FORM nunca abre o di├ílogo filho` j├í registra, mas aqui o bloco inteiro ficou de fora, n├úo s├│ o idioma do `DO FORM`. Conserto pertence ├á migra├º├úo daqueles forms.
+2. **`RotStatus`/`StatGaveta`/`fChecarSerial` ausentes por desenho** (regra #27). Enquanto n├úo forem portadas, toda impressora suportada cai no `CATCH`. O `MsgConfirma` que a fase 7 introduziu evita a tela intrav├ível, mas ├® diverg├¬ncia deliberada do legado ÔÇö se o time preferir fidelidade estrita, a decis├úo ├® de voc├¬s.
+
+Salvei o comportamento do `Image` na mem├│ria. Quer que eu propague a li├º├úo pelo pipeline (CLAUDE.md, skill, CorretorAutomatico) e corrija o `FormRPT` de 1px?

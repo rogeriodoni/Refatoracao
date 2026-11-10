@@ -1,0 +1,642 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpLim.SCX
+* Data/Hora: 08/11/2026 13:51:01
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPLIM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Frase
+  Parent: SIGOPLIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPLIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: usuario
+  Parent: SIGOPLIM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPLIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: senha
+  Parent: SIGOPLIM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPLIM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Motivo
+  Parent: SIGOPLIM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGOPLIM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPLIM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPLIM.cntSombra
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 250
+  Width = 400
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Limite de Descontos"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  checkbin = .F.
+  checktbd = .F.
+  pemps = .F.
+  Name = "SIGOPLIM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.Frase
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Liberação de Descontos"
+  Left = 19
+  Top = 91
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Frase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Usuário : "
+  Left = 112
+  Top = 170
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.usuario
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BackStyle = 1
+  Height = 33
+  InputMask = "!!!!!!!!!!"
+  Left = 168
+  TabIndex = 2
+  Top = 162
+  Width = 119
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Senha : "
+  Left = 120
+  Top = 212
+  Visible = .F.
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.senha
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 1
+  Height = 33
+  InputMask = "!!!!!!!!!!"
+  Left = 168
+  TabIndex = 3
+  Top = 203
+  Visible = .F.
+  Width = 119
+  PasswordChar = "*"
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "senha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Motivo : "
+  Left = 116
+  Top = 131
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.get_Motivo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BackStyle = 1
+  Height = 33
+  Left = 168
+  TabIndex = 1
+  Top = 123
+  Width = 119
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "get_Motivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPLIM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPLIM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE gerasenha
+------------------------------------------------------------
+PROCEDURE gerasenha
+Lparameter _data
+pridig = 0
+segdig = 0
+_var = substr(dtoc(_data),1,2)+substr(dtoc(_data),4,2)+substr(dtoc(_data),7,2)
+_var = _var + _var
+_var1 = transf(_var + "00" ,"@R 99999999/9999-99")
+ret = fValidarCNPJ(_var1)
+_senha = str(pridig,1) + str(segdig,1)
+pridig = 0
+segdig = 0
+_var1 = padl(alltrim(str(val(_var) + val(_senha),12)),12,"0")
+_var1 = transf(_var1 + "00" ,"@R 99999999/9999-99")
+_senha = _senha + str(pridig,1) + str(segdig,1)
+Return _senha
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return ThisForm.zsenha
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameter totite,valor,pvalor,tipo,poform,Pcx,pMotivo,pClaConta,plCheckBin,plCheckTabD,pcEmpresa
+
+Thisform.totite=totite
+Thisform.valdesc=valor
+Thisform.pdescs=pvalor
+ThisForm.Parentform = poform
+Thisform.PodataMgr = Pcx
+ThisForm.Claconta = Iif(Type('pClaConta')='C',pClaConta,' ')
+ThisForm.CheckBin = plCheckBin
+ThisForm.CheckTbd = PlCheckTabD
+ThisForm.pEmps    = Iif(Type('pcempresa') = [C],pcempresa,_Empr)
+ThisForm.Motivo = pMotivo
+ThisForm.Tipo = Iif(Type([TIPO])<>[C], [D], Tipo)
+ThisForm.Somotivo = ( totite+valor+pvalor = 0 ) And (ThisForm.Tipo <> [X])
+ThisForm.Caption = "Limite Ultrapassado..."
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+If Thisform.Tipo = 'L' && 20/04/2016 - DVIE - Senha livre - Alteração para ignorar o cargo do usuário e checar senhas pre cadastradas
+	ThisForm.Say1.Visible = .f.
+	ThisForm.Get_Motivo.Visible = .f.
+	ThisForm.say2.Visible = .f.
+	ThisForm.UsUARIO.Visible = .f.
+	thisform.say3.visible=.t.
+	thisform.senha.visible=.t.	
+Else
+	If ThisForm.somotivo
+		ThisForm.Frase.Caption = "Informe Motivo para liberação :"	
+		ThisForm.say2.Visible = .f.
+		ThisForm.UsUARIO.Visible = .f.
+	Else
+		If Thisform.Motivo
+			ThisForm.Frase.Caption = "Informe usuario c/ acesso a liberação e Motivo:"
+		Else
+			ThisForm.Frase.Caption = "Informe usuario c/ acesso a liberação :"
+			ThisForm.Say1.Visible = .f.
+			ThisForm.Get_Motivo.Visible = .f.
+		EndIf
+	EndIf
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIM.usuario
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,totite
+
+If !IsEmpty(This.Value)
+	usual=''
+	totite=thisform.totite
+	valdesc=thisform.valdesc
+	tipo=thisform.tipo
+	pdesc=thisform.pdescs
+	sd = .t.
+	
+	Do Case
+		Case (ThisForm.Tipo = [D])
+			lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b Where Not a.cAtivos='N' And ]+;
+					[(b.Limdescs = 0 or b.limdescs >= ]+Str(ValDesc,12,2)+[) And ]+;
+					[(b.descpors = 0 or b.descpors >= ]+Str(pdesc,6,2)+[) And ]+;
+					[(b.limdescs <> 0 Or b.descpors <> 0 ) And a.ccargs = b.ccargs and ]+;
+					[b.nivels = "S" and not Senhas = '  ' ]
+
+		Case (ThisForm.Tipo = [X])
+			lcQuery = [Select a.* ] + ;
+						[From SigCdUsu a, SigCdCrg b ] + ;
+					   [Where Not a.cAtivos = 'N' And ]+;
+					  		 [a.ccargs = b.ccargs And ]+;
+					  		 [b.Limites = 'S' And ] + ;
+					  		 [Not Senhas = '  ']
+		Other
+			lcQuery = [Select a.* From SigCdUsu a, SigCdCrg b Where Not a.cAtivos='N' And ]+;
+					[(b.Limacres = 0 or b.limacres >= ]+Str(ValDesc,12,2)+[) And ]+;
+					[(b.acrepors = 0 or b.acrepors >= ]+Str(pdesc,6,2)+[) And ]+;
+					[(b.limacres <> 0 Or b.acrepors <> 0 ) And a.ccargs = b.ccargs and ]+;
+					[b.nivels = "S" and not Senhas = '  ' ]
+	EndCase
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpUsu') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpUsu)')
+		Return 0
+	EndIf
+	Select TmpUsu
+	Index on usuarios Tag usuarios
+
+	If !IsEmpty( This.Value ) And !Seek( This.Value, 'TmpUsu', 'Usuarios' )
+		loBrowse = CreateObject( 'fwBuscaSel', 'TmpUsu', 'Usuarios', This.Value, 'Cadastro de Usuários' )
+		loBrowse.AddColuna( 'Usuarios', '', 'Código', .t., 'Usuarios' )
+		loBrowse.AddColuna( 'CCargs', '', 'Cargo' )
+		loBrowse.Show
+		This.Value = TmpUsu.Usuarios
+	Endif
+
+	Usual = This.Value
+	If IsEmpty(usual) Or Lastkey() = 27
+		ThisForm.Zsenha=.F.
+		thisform.release
+	EndIf
+	
+	Select TmpUsu
+	If limdescs = "S" And (ThisForm.Tipo <> [X])
+		zsen = padr(ThisForm.GeraSenha(date()),06)
+		zsen1 = fCriptografar(senhas)
+	else
+		zsen = fCriptografar(senhas)
+	endif
+	thisform.say3.visible=.t.
+	thisform.senha.visible=.t.
+Else
+	ThisForm.zSenha = .f.
+	ThisForm.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIM.senha
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (!Empty(ThisForm.Usuario.Value) Or Thisform.Tipo = 'L') && 20/04/2016 - Senha livre
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local senha,resp
+
+If Thisform.Tipo = 'L' && 20/04/2016 - Senha livre - Checa se a senha digita é válida e já foi utilizada 
+	lcQuery = [Select EmpDopNums, CidChaves From SigPrSnd Where SenhaDs = '] + Alltrim(This.Value) + [']
+	Thisform.podatamgr.SqlExecute(lcQuery,[TmpPrSnd])
+	If Eof([TmpPrSnd])
+		=Messagebox([Senha inválida.],48,[Senha livre])
+		ThisForm.Zsenha=.F.
+		thisform.release()
+		Return .f.
+	Else
+		If !Empty(TmpPrSnd.EmpDopNums)
+			=Messagebox([Senha já utilizada.],48,[Senha livre])
+			ThisForm.Zsenha=.F.
+			thisform.release()
+			Return .f.				
+		Endif
+	Endif
+	lcEDN = TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes,6)
+	lcQuery = [Update SigPrSnd Set EmpDopNums = '] + lcEDN + [' Where CidChaves = '] + TmpPrSnd.CidChaves + [']
+	Thisform.podatamgr.SqlExecute(lcQuery,[])
+	ThisForm.Zsenha = Usuar
+	thisform.release()		
+Else
+	select TmpUsu
+	Senha=fCriptografar(TmpUsu.senhas)
+	If Padr(this.value,10)<>Padr(senha,10)
+		resp=messagebox('Senha Conflitante. Deseja Continuar?',4+256,'Aviso')
+		if resp=7
+			ThisForm.Zsenha=.F.
+			thisform.release
+		else
+			return 0
+		endif
+	Else
+		If (ThisForm.Tipo = [X])
+			ThisForm.Zsenha = ThisForm.Usuario.Value 
+		Else
+			ThisForm.Zsenha = TmpUsu.Usuarios + ThisForm.Get_motivo.Value
+		EndIf
+		
+		Thisform.release
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPLIM.get_Motivo
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( ThisForm.Motivo )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,totite
+
+If Not IsEmpty(This.Value)
+	lcQuery = [Select a.*, b.Emps ] + ;
+				[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ;
+			   [Where a.Tipos = '] + ThisForm.Tipo + [' ] + ;
+					  Iif(ThisForm.Checkbin, [And a.ChkBins  <> 1 ],[ ]) + ;
+					  Iif(ThisForm.Checktbd, [And a.BlqTabDs <> 1 ],[ ]) + ;
+			   [Order By a.Codigos]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMdsc1]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMdsc1)])
+		Return 0
+	EndIf
+	Select Distinct Codigos, Descrs From LocalMdsc1 Where Nvl(Emps,Thisform.pemps) = ThisForm.pEmps Into Cursor LocalMdsc ReadWrite
+	Select * From LocalMdsc Into Cursor TmpMdsc ReadWrite
+
+	If Not Empty(ThisForm.ClaConta)
+		lcSql = [Select b.* From SigCdClc a, SigCdCmt b Where a.Codigos = ']+ThisForm.ClaConta+[' ]+;
+				[And a.Cidchaves = b.fkChaves ]
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'TmpClaMt') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpClaMt)')
+			Return 0
+		EndIf
+		Select TmpClaMt
+		Locate For Tipos = 1
+		If Not Eof()
+			Select a.* From LocalMdsc a, TmpClaMt b Where a.Codigos = b.codigos And b.Tipos = 1 ;
+			Into Cursor TmpMdsc ReadWrite
+		Else
+			Select TmpClaMt
+			Locate For Tipos = 2
+			If Not Eof()
+				Select * From LocalMdsc Where Codigos Not in (Select Codigos From TmpClaMt Where Tipos = 2 ) ;
+				Into Cursor TmpMdsc ReadWrite
+			EndIf
+		EndIf
+	Endif
+
+	Select TmpMdsc
+	Index on Codigos Tag Codigos
+
+	If !Seek( This.Value, 'TmpMdsc', 'Codigos' )
+		loBrowse = CreateObject( 'fwBuscaSel', 'TmpMdsc', 'codigos', This.Value, 'Cadastro de Motivos' )
+		loBrowse.AddColuna( 'Codigos', '', 'Código', .t., 'Codigos' )
+		loBrowse.AddColuna( 'Descrs', '', 'Descricao' )
+		loBrowse.Show
+		This.Value = TmpMdsc.Codigos
+	Endif
+
+	If Lastkey() = 27
+		ThisForm.Zsenha=.F.
+		Thisform.release
+	Else
+		If ThisForm.somotivo 
+			ThisForm.Zsenha = Space(10) + This.Value
+			ThisForm.Release
+		Endif
+	EndIf
+
+Else
+
+	Resp=Messagebox('Motivo não Informado!, Deseja Continuar ? (S/N)',4+256,'')
+	If Resp = 7
+		ThisForm.Zsenha=.F.
+		Thisform.release
+	Else
+		return 0
+	EndIf
+
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPLIM
+RESERVED3 (ClassInfo): checkbin
+checktbd
+claconta
+motivo
+parentform
+pdescs
+pemps
+podatamgr
+somotivo
+tipo
+totite
+valdesc
+zsenha
+*gerasenha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================
