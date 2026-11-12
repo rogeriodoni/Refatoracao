@@ -1,0 +1,12 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+USE "C:\4c\projeto\app\reports\SigReEq2.frx" EXCLUSIVE ALIAS f2
+SELECT f2
+*-- celula da Quantidade: 39479..47291 (linhas verticais da tabela)
+LOCATE FOR OBJTYPE = 8 AND ALLTRIM(EXPR) == "tQtds"
+IF !EOF()
+    REPLACE HPOS WITH 39520, WIDTH WITH 7700
+ENDIF
+USE IN f2
+QUIT

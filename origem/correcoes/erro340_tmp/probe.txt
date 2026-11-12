@@ -1,0 +1,45 @@
+conn=1
+
+=== 1. FORM abre? ===
+form        = O
+caption     = [Posição de Etiquetas por Empresa]
+
+=== 2. ESTADO DO BO NO INIT (causa da mensagem) ===
+this_cEmpresa    = [001]
+this_cDesEmpresa = [MARCELLA BAHIA]
+this_cGrupo      = [11210]
+this_cConta      = [1121017307]
+this_cTabela     = []   <<< vazio = mensagem do Erro340
+ValidarFiltros() = .F.  msg=[Empresa com Tabela de Desconto Padrão Não Informada !!!]
+
+=== 3. POR QUE this_cTabela ESTA VAZIO (consulta do legado) ===
+SQLEXEC=1  linhas=0
+SigOpTde p/ empresa 001         : 0
+SigOpTde com Padraos=1 (qualquer): 2
+SigOpTdz (tabelas de desconto)   : 1
+
+=== 4. SIMULACAO: com a tabela de desconto preenchida (em memoria) ===
+    override this_cTabela = 'FEITIO VD' (unica linha de SigOpTdz)
+ValidarFiltros() = .T.  msg=[Empresa com Tabela de Desconto Padrão Não Informada !!!]
+PrepararDados()  = .F.  msg=[Nenhum registro encontrado com os filtros informados.]
+CsRelatorio      = 0 linhas
+
+=== 5. SIMULACAO: sem o filtro grupo/conta do SigCdPam ===
+    SigCdPam.ContaEsts=[1121017307] x SigOpEtq.Contas reais
+    SigOpEtq: Grupos=[          ] Contas=[          ]
+    SigOpEtq: Grupos=[11210     ] Contas=[1121001   ]
+PrepararDados()  = .T.  msg=[Nenhum registro encontrado com os filtros informados.]
+CsRelatorio      = 279 linhas
+    [      10137122] [Brinco Ouro Branco                      ] 22490 ST=00 Aliq=0
+    [      10137130] [Brinco  3581                            ] 11900 ST=00 Aliq=0
+    [      10137149] [Brinco  3517                            ] 1290 ST=00 Aliq=0
+    [      10137157] [Pingente coração de ouro                ] 4890 ST=00 Aliq=0
+    [      10137165] [Brinco  2994                            ] 7139 ST=00 Aliq=0
+
+=== 6. FRX: arquivo existe e renderiza? ===
+gc_4c_CaminhoReports = [C:\4C\PROJETO\APP\START\..\reports\]
+SigReEqe.frx existe  = .T.
+SigReEqe.frt existe  = .T.
+render.txt gerado    = .T.
+
+FIM

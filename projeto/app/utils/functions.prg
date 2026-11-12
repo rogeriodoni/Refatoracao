@@ -1969,6 +1969,16 @@ ENDFUNC
 *------------------------------------------------------------------------------
 FUNCTION fBuscarCotacao(par_cMoeda, par_dData, par_xConn)
     LOCAL loc_nTaxa, loc_cSQL, loc_nResult, loc_cMoeda, loc_cFiltroData
+    LOCAL loc_nAreaAnt
+
+    *-- A area de trabalho corrente eh do CHAMADOR: o SQLEXEC abaixo SELECIONA
+    *   o cursor de resultado e o USE IN no fim o FECHA, deixando a area
+    *   corrente VAZIA. Como esta funcao eh usada dentro de expressoes
+    *   (ex.: "REPLACE TempMoe.cotacao WITH fBuscarCotacao(...)"), o comando
+    *   que a envolve rodava sem tabela na area corrente e estourava
+    *   "No table is open in the current work area" (Erro350).
+    *   Chamada de 38 arquivos - guardar e repor a area eh contrato da funcao.
+    loc_nAreaAnt = SELECT()
 
     loc_nTaxa  = 1.0
     loc_cMoeda = ALLTRIM(NVL(par_cMoeda, ""))
@@ -1998,6 +2008,11 @@ FUNCTION fBuscarCotacao(par_cMoeda, par_dData, par_xConn)
 
     IF USED("cursor_4c_fBusCot")
         USE IN cursor_4c_fBusCot
+    ENDIF
+
+    *-- Repoe a area do chamador (o USE IN acima a deixou vazia)
+    IF loc_nAreaAnt > 0 AND !EMPTY(ALIAS(loc_nAreaAnt))
+        SELECT (loc_nAreaAnt)
     ENDIF
 
     RETURN loc_nTaxa

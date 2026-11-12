@@ -1,0 +1,787 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpPcu.SCX
+* Data/Hora: 11/11/2026 19:21:13
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPCU
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Cnt_Planilha
+  Parent: SIGOPPCU
+  Class: container
+  BaseClass: container
+
+Objeto: cntSombra
+  Parent: SIGOPPCU.Cnt_Planilha
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPCU.Cnt_Planilha.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPCU.Cnt_Planilha.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdGrade
+  Parent: SIGOPPCU.Cnt_Planilha
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPCU.Cnt_Planilha.grdGrade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPPCU.Cnt_Planilha
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Adicional
+  Parent: SIGOPPCU.Cnt_Planilha
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGOPPCU.Cnt_Planilha
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Planilha de Custo"
+  ControlBox = .F.
+  Movable = .T.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPPCU"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 999
+  Height = 600
+  Picture = ..\framework\imagens\new_background.jpg
+  SpecialEffect = 0
+  Name = "Cnt_Planilha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1008
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .T.
+  AllowRowSizing = .T.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 442
+  Left = 5
+  ReadOnly = .F.
+  RecordSource = "csGrade"
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 18
+  Top = 130
+  Width = 989
+  GridLineColor = 238,238,238
+  ZOrderSet = 20
+  Name = "grdGrade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 120
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 280
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 90
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.InputMask = "999,999.999"
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 73
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.InputMask = "999.9999"
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 90
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.InputMask = "999,999.999"
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 90
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .F.
+  Column6.InputMask = "999,999.999"
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.Width = 100
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.InputMask = "99,999,999.999"
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total (a)"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Coef. / (%)"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999.9999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor (b)"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total (a+b)"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Acumulado"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.grdGrade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "99,999,999.999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Planilha de Custo"
+  Height = 21
+  Left = 67
+  Top = 96
+  Width = 864
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.Get_Adicional
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = "9999,999.999"
+  Left = 588
+  ReadOnly = .T.
+  SpecialEffect = 1
+  Top = 576
+  Width = 92
+  ForeColor = 0,0,0
+  BackColor = 251,254,226
+  DisabledBackColor = 251,254,226
+  DisabledForeColor = 90,90,90
+  Name = "Get_Adicional"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPCU.Cnt_Planilha.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 924
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPPCU
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pTipo
+PUBLIC pcTipo
+pcTipo = pTipo
+
+ThisForm.Cnt_Planilha.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.Cnt_Planilha.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.ParentForm.Enabled  = .T.
+
+ThisForm.Caption = CrSigCdPro.Cpros + ' - ' + CrSigCdPro.Dpros
+ThisForm.Cnt_Planilha.label1.Caption = 'Planilha de Custo ('+Iif(ptipo=[C],'Fator','Venda')+')'
+
+Select CsGrade
+Set Key To pTipo
+Sum Valos to _TTA
+Goto Top
+With Thisform.Cnt_Planilha.GrdGrade
+	.RecordSource          = 'CsGrade'
+	.Column1.ControlSource = 'CsGrade.Cpros'
+	.Column2.ControlSource = 'CsGrade.Dpros'
+	.Column3.ControlSource = 'CsGrade.Totas'
+	.Column4.ControlSource = 'CsGrade.Coefs'
+	.Column5.ControlSource = 'CsGrade.Valos'
+	.Column6.ControlSource = 'CsGrade.totalG'
+	.Column7.ControlSource = 'CsGrade.Acumulas'
+	.Refresh
+ENDWITH
+ThisForm.Cnt_Planilha.grdGrade.SetAll('DynamicForeColor', 'Iif(csGrade.AltCoef=1, RGB(255,0,0), RGB(0,0,0))', 'Column')
+
+ThisForm.Cnt_Planilha.Get_Adicional.Value = _tta
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return fChecaAcesso([SIGCDFTI]) And (pcTipo = [V])
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL nReg, lnVr
+
+IF this.Value <> lnCoef
+	replace altcoef with 1 in csGrade
+	replace cidChaves with fUniqueIds() in csGrade
+ENDIF
+
+reg = RECNO()
+replace valos with Round((( totas * coefs ) - totas ),3) in csGrade
+replace totalg with totas + valos in csGrade
+
+GO top
+lnVr = 0
+SCAN
+	replace acumulas with lnVr + valos + totas in csGrade
+	lnVr = acumulas
+ENDSCAN
+
+Sum Valos to lnVr
+thisform.cnt_Planilha.get_Adicional.Value = lnVr
+GO reg
+
+thisform.cnt_Planilha.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+PUBLIC lnCoef
+lnCoef = this.Value
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.grdGrade.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPCU.Cnt_Planilha.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT * from csGrade where altcoef = 1 into cursor crPrFtp READWRITE
+
+Select CsGrade
+Set Key To
+If (Type([ThisForm.ParentForm])=[O]) 	
+	Thisform.ParentForm.Enabled = .T.
+EndIf
+
+Release lnCoef, pcTipo
+
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPCU
+RESERVED3 (ClassInfo): parentform
+pcescolha
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

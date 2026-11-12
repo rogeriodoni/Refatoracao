@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 2 complete. I've added the CRUD methods to `sigoppedBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö loads item data (produto, descri├º├úo, cor, tamanho, peso, cItens) from the current record of the passed cursor alias (`crTpmMvItn`, owned by the parent form), mirroring the legacy `Init`'s reads of `lcCod`/`lcCor`/`lcTam`/`Pesos`.
+- **`ObterChavePrimaria()`** ÔÇö returns `this_cItens`.
+- **`RegistrarAuditoria()`** ÔÇö overridden (base class logs `this_cTabela`, which is intentionally empty here per the Fase 1 decision); logs `"crTpmMvItn"` instead so the audit trail identifies the affected cursor.
+- **`Inserir()` / `Atualizar()`** ÔÇö both delegate to a shared `GravarAbreviacaoNosItens()`, since the legacy `btnGravar.Click` never distinguishes insert vs. update ÔÇö it always stamps pending items (matching product/color/size, empty `Abrevis`) with the order abbreviation, weight, and new size via `REPLACE ... FOR`, cascading to the parent item (`cItem2 = 0`) and the order's operator (`CsTmpPed.Opers`) when present.
+
+One deliberate deviation from the legacy code, documented inline: instead of relying on the record pointer VFP happens to leave on `crTpmMvItn` after the prior `SELECT`, I added an explicit `LOCATE FOR cItens = loc_nItem` before checking `cItem2 = 0` ÔÇö same intent, but not dependent on undefined pointer behavior.
+
+Followed the TRY/CATCH rule (no `RETURN` inside the block, flag variable + single `RETURN` after `ENDTRY`) and used `TratarNulo(col, "")`/`TratarNulo(col, 0)` with real default values rather than type-code strings.
+
+Next phase (3/8) will create `Formsigopped.prg`.

@@ -1,0 +1,220 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPPCU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPCU",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pTipo\nPUBLIC pcTipo\npcTipo = pTipo\n\nThisForm.Cnt_Planilha.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.Cnt_Planilha.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.ParentForm.Enabled  = .T.\n\nThisForm.Caption = CrSigCdPro.Cpros + ' - ' + CrSigCdPro.Dpros\nThisForm.Cnt_Planilha.label1.Caption = 'Planilha de Custo ('+Iif(ptipo=[C],'Fator','Venda')+')'\n\nSelect CsGrade\nSet Key To pTipo\nSum Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "Get_Adicional",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column1.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "RETURN .F.\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return fChecaAcesso([SIGCDFTI]) And (pcTipo = [V])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "LOCAL nReg, lnVr\n\nIF this.Value <> lnCoef\n\treplace altcoef with 1 in csGrade\n\treplace cidChaves with fUniqueIds() in csGrade\nENDIF\n\nreg = RECNO()\nreplace valos with Round((( totas * coefs ) - totas ),3) in csGrade\nreplace totalg with totas + valos in csGrade\n\nGO top\nlnVr = 0\nSCAN\n\treplace acumulas with lnVr + valos + totas in csGrade\n\tlnVr = acumulas\nENDSCAN\n\nSum Valos to lnVr\nthisform.cnt_Planilha.get_Adicional.Value = lnVr\nGO reg\n\nthisform.cnt_Planilha.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Adicional",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "PUBLIC lnCoef\nlnCoef = this.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column6.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.grdGrade.Column7.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPCU.Cnt_Planilha.cmdSair",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "SELECT * from csGrade where altcoef = 1 into cursor crPrFtp READWRITE\n\nSelect CsGrade\nSet Key To\nIf (Type([ThisForm.ParentForm])=[O]) \t\n\tThisform.ParentForm.Enabled = .T.\nEndIf\n\nRelease lnCoef, pcTipo\n\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPPCU.Cnt_Planilha.cmdSair.Click",
+      "queryOriginal": "SELECT * from csGrade where altcoef = 1 into cursor crPrFtp READWRITE",
+      "tabelas": "csGrade",
+      "colunas": "altcoef,crPrFtp,READWRITE",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csGrade"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

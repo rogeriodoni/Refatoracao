@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada.
+
+## O que foi entregue
+
+**`projeto/app/forms/operacionais/FormSigOpOpe.prg`** (260 ÔåÆ 928 linhas)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CriarCursorVinculos()` | `Select * From xCcOpe Into Cursor TmpCcOpe ReadWrite` ÔÇö cursor criado **vazio antes** da grade (ControlSource de alias inexistente derruba o `Init`) |
+| `ConfigurarGrade()` | `GradeSubN`: 4 colunas (C.Custo / Descri├º├úo / Grupo Cadastro / "C"), geometria, fontes, larguras e `GridLineColor` transcritos do dump; Column4 com CheckBox (`AddObject` + `CurrentControl` + `Sparse = .F.`) |
+| `ConfigurarBotoes()` | `Shape1` + `cmdInserir`/`cmdExcluir`/`cmdSair` (Left 474/549/624, 75├ù75 da classe `fwbtng`) + `Say2` ("C = Somente Contas do Grupo") |
+| `AplicarPermissoesBotoes()` | bloco `fChecaAcesso('SIGCCCPE',ÔÇª) And InList(pcEscolha,ÔÇª)` do `Init` ÔÇö roda **depois** de `TornarControlesVisiveis`, que sen├úo apagaria o `Visible = .F.` |
+| `CarregarLista()` / `AtualizarGrade()` | funil de carga + `Goto Top` + `Refresh` (grade populada n├úo repinta sozinha) |
+| `CmdInserirClick` / `CmdExcluirClick` / `CmdSairClick` | os tr├¬s `Click` do dump, incluindo o guard de duplicidade (`Group by ÔÇª having sum(1) > 1`), que **n├úo** fecha o di├ílogo |
+| `ReabilitarFormPai()` | `ParentForm.Enabled = .T.` + `mCtrlBotoes(.T.)`, chamado pelo Encerrar **e** pelo `Destroy` |
+
+**`projeto/app/classes/SigOpOpeBO.prg`** ÔÇö adicionei `CarregarVinculos()` (o `Select a.*, b.Descrs` do `Init`, via cursor tempor├írio + ZAP/APPEND, para n├úo zerar o `ColumnCount` da grade) e `SalvarVinculos()` (o `Delete From SigCcCpe` + regrava├º├úo, em transa├º├úo pela conex├úo). Sem eles os tr├¬s bot├Áes ficariam ligados a m├®todos inexistentes ÔÇö `BINDEVENT` a delegate ausente estoura no bind.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.fxp` recriados, nenhum `.err` (smoke test confirmou que o VFP9 de fato executou ÔÇö `exit=0` n├úo prova nada aqui).
+- **Instancia├º├úo**: `CREATEOBJECT` devolve objeto; 7 controles; grade com `ColumnCount=4`, os 4 `ControlSource` certos, larguras 80/180/80/20 e headers preservados, `CurrentControl=CHK_4C_CTFILS`, `Sparse=.F.`; os 3 `Picture` existem em `vbmp\`; `CmdInserirClick` inseriu a linha (`reccount=1`) e `CmdExcluirClick` marcou a flag.
+- **Auditorias** `VerificarFuncoesNaoDefinidas` / `VerificarPropriedadesInexistentes` / `VerificarMetodoProtegidoChamadoDeFora`: zero achados nestes dois arquivos.
+
+Um defeito real apareceu no probe e foi corrigido: o `Grid` auto-binda na ├írea corrente ao receber `ColumnCount`, e a Column4 ca├¡a em `grucads` (char) ÔÇö o `AddObject` do CheckBox estourava *"Data type mismatch"* e a tela n├úo abria. O `ControlSource` da Column4 passou a vir **antes** do `AddObject`.
+
+## Dois desvios do roteiro da fase, deliberados
+
+1. **N├úo criei `ConfigurarPaginaLista()`/`AlternarPagina()`**: o legado ├® flat (sem PageFrame) e o gate da Fase 4 valida layout FLAT por `grd_4c_*` + `cmd_4c_*` + `CarregarLista` ÔÇö os tr├¬s presentes. Inventar um PageFrame violaria o PILAR 1 e m├®todos vazios s├úo proibidos.
+2. **Os `Click` dos bot├Áes vieram j├í nesta fase** (normalmente Fase 7), porque o `BINDEVENT` dos bot├Áes exige o handler existente no momento do bind. Fica para as fases seguintes o que ├® de fato das **c├®lulas** da grade: `When`/`Valid`/`LostFocus` da Column1 e Column3 (lookup de conta cont├íbil via `fAcessoContab`) e o `Click` do CheckBox da Column4.
+
+Um ponto que transcrevi fielmente mas vale sinalizar: quando `SalvarVinculos` falha, o legado exibe o erro e **fecha** o di├ílogo assim mesmo, perdendo as altera├º├Áes. Mantive esse comportamento; se preferir que a tela permane├ºa aberta ap├│s falha de grava├º├úo, ├® uma linha a mudar em `CmdSairClick`.

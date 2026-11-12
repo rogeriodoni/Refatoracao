@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da: `C:\4c\projeto\app\classes\sigoppeiBO.prg` criado (8.403 bytes, 153 linhas).
+
+**O que foi entregue**
+
+`DEFINE CLASS sigoppeiBO AS BusinessBase` com **todas** as propriedades e `Init()` completo:
+
+| Grupo | Propriedades |
+|---|---|
+| Item corrente (7 colunas da grade) | `this_cCpros`, `this_cDpros`, `this_nQtds`, `this_nQtBaixas`, `this_cCodTams`, `this_cCodCors`, `this_nPendente`, `this_nQtProds` |
+| Totais do rodap├® | `this_nTotItens`, `this_nTotBaixa`, `this_nTotDisp` |
+| Estado da carga | `this_nTotalRegistros`, `this_lDadosCarregados` |
+| Cursores / tabela | `this_cCursorItens`, `this_cCursorTemp`, `this_cCursorBaixa`, `this_cCursorBaixa2`, `this_cTabelaProduto` |
+| Larguras do cursor | `this_nTamCpros`=14, `this_nTamDpros`=40, `this_nTamCodTams`=4, `this_nTamCodCors`=4 |
+
+`Init()`: `DODEFAULT()` ÔåÆ `this_cTabela = ""` + `this_cCampoChave = "CPros"`, zera estado/totais, flag de erro limpa; flag `loc_lResultado` com `RETURN` **fora** do TRY/CATCH e `MsgErro` no CATCH.
+
+**Fatos levantados do legado (documentados no cabe├ºalho para as fases 2-8)**
+
+- N├úo h├í tabela pr├│pria: o SIGOPPEI n├úo executa `Insert/Update/Delete` em lugar nenhum ÔÇö s├│ um `Select Dpros from SigCdPro` de leitura. Da├¡ `this_cTabela` vazio (mesmo crit├®rio do `sigoppedBO` irm├úo), e o comportamento herdado de `BusinessBase` para Salvar/Excluir j├í ├® o correto.
+- Estruturas **exatas** dos cursores do form pai, localizadas em `tasks/task560/sigmvcab_form_codigo_fonte.txt:24405,24411`: `xBaixa ( CPros c(14), Qtds n(12,3), QtBaixas n(12,3), QtProds n(12,3), pVens n(15,6), Moevs c(3) )` e `xBaixa2 ( CPros c(14), CodCors c(4), CodTams c(4), Qtds/QtBaixas/QtProds n(12,3) )`. Os nomes `xBaixa`/`xBaixa2` s├úo contrato com o pai e ficam preservados; os cursores criados aqui seguem `cursor_4c_*`.
+- O `Space(3) as CodCors` **repetido** no 2┬║ SELECT do `UNION ALL` legado ├® inofensivo: em UNION os nomes v├¬m do 1┬║ SELECT, ent├úo por posi├º├úo a coluna 2 ├® `CodCors` e a 3 ├® `CodTams` (ordem de `xBaixa2`). Registrei que a transcri├º├úo ├® **por posi├º├úo**, n├úo pelo alias duplicado ÔÇö ├® a armadilha ├│bvia da fase 2.
+- `Dpros` fica com 40 (`Space(40)` do legado) embora `SigCdPro.dpros` seja `char(65)` no schema can├┤nico (lido com `Get-Content -Raw`, 682 tabelas ÔÇö encoding UTF-16 conferido).
+
+**Verifica├º├Áes executadas**
+
+- Compila├º├úo VFP9 real via `automation\vfp_helpers\ValidarCompilacao.prg`: `sucesso: true`, sem `.err`.
+- Instancia├º├úo real no VFP9: `VARTYPE=O`, `CampoChave=[CPros]`, todas as propriedades presentes com os defaults esperados (`Tams=14/40/4/4`).
+- Gates est├íticos do `Test-CompletudeCodigo` (os 4 regexes reais do orquestrador): TODO=0, LATER=0, STUB=0, nenhuma procedure vazia; zero caracteres n├úo-ASCII.
+
+Tempor├írios de teste e `.FXP` removidos. Escopo mantido na fase 1 ÔÇö `CarregarDoCursor`/`Inserir`/`Atualizar` ficam para a fase 2, como o prompt determina.

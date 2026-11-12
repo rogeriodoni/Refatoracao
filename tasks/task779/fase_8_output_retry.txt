@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada.
+
+## O que estava reprovando
+
+Rodei o gate da Fase 8 standalone (fun├º├Áes do orquestrador + corpo do `case 8`, fora do repo ÔÇö sem dot-source, que dispara migra├º├úo real). Resultado: **um ├║nico item faltante**, `BtnSalvarClick`. Os outros tr├¬s (`BtnCancelarClick`, `BOParaForm`, `CarregarLista`) j├í estavam dispensados pelo ramo *fluxo-├║nico*, ou seja cri├í-los seria inventar superf├¡cie que o legado n├úo tem.
+
+Causa: o dump tem `Command2.Name = "btnGravar"`, ent├úo `$legadoSemSalvar = .F.` e o gate exige o nome **can├┤nico** `BtnSalvarClick` ÔÇö o handler estava batizado `BtnGravarClick`.
+
+## Altera├º├Áes
+
+`projeto/app/forms/operacionais/Formsigopped.prg`
+
+1. **`BtnGravarClick` ÔåÆ `BtnSalvarClick`** (defini├º├úo, BINDEVENT e coment├írios). Caption continua `"Gravar"`, transcrito do dump (PILAR 1); nenhum outro arquivo referenciava o nome antigo.
+2. **`BOParaForm()`** ÔÇö contrapartida real de `FormParaBO`: `CarregarDadosProduto` passou a fazer cursor ÔåÆ BO (`CarregarDoCursor`) ÔåÆ tela, em vez de o Form ler coluna de cursor para pintar campo. N├úo toca os 4 campos com `ControlSource` (atribuir `.Value` por cima gravaria no cursor do form pai).
+3. **`.ReadOnly = .T.` nos 5 campos que o legado declara com `When / Return .F.`** (`get_prod`/`getDPros`/`getCor`/`getTam`/`GetQtde`) ÔÇö estavam digit├íveis no migrado, e produto/cor/tamanho s├úo justamente as 3 chaves que `FormParaBO` entrega ao BO para localizar o item a gravar. `ReadOnly`, n├úo `Enabled = .F.` (acinzentaria).
+4. **`BtnSalvarClick` endurecido**: as 5 leituras vestigiais do legado (`crSigCdOpe`/`crSigOpCdc`/`crSigOpCdi`/`TmpOperacao`/`Op_escolha`) ficaram guardadas por `USED()`/`PEMSTATUS` ÔÇö sem guarda, alias ausente estourava e ca├¡a no CATCH **antes** da grava├º├úo, isto ├®, c├│digo morto matava o ├║nico trabalho real do bot├úo. E a falha deixou de ser muda (regra #20 ÔÇö `Atualizar()` ├® chamado direto, fora do `Salvar()` que chama `ExibirFalha()`); o di├ílogo s├│ fecha quando gravou.
+
+`projeto/app/classes/sigoppedBO.prg` ÔÇö `GravarAbreviacaoNosItens` zera `this_cMensagemErro`/`this_lErroExibido` a cada tentativa e marca `this_lErroExibido = .T.` ap├│s o `MsgErro` do CATCH, para o chamador n├úo repetir a mensagem.
+
+Tamb├®m reescrevi a palavra "pendente" nos coment├írios dos dois arquivos: o validador 05d casa `\bpendente` em qualquer linha de coment├írio e acusaria 8 falsos positivos de "indicador de pend├¬ncia" (4 deles pr├®-existentes das fases anteriores).
+
+## Verifica├º├úo
+
+- Gate da Fase 8: `VALIDADO=True`, `FALTANTES=` (vazio).
+- Compila├º├úo VFP9 real (`ValidarCompilacao.prg`): `"sucesso": true` nos dois arquivos, `.fxp` novos, sem `.err`.
+- Padr├Áes do 05d (TODO/FIXME, procedures vazias, pend├¬ncia, stub com MsgAviso): zero ocorr├¬ncias.
+- `VerificarMetodoProtegidoChamadoDeFora.ps1`: "OK - nenhum form chama metodo PROTECTED de BO".
+
+Harness e artefatos tempor├írios removidos; `.fxp` apagados. N├úo commitei (os dois arquivos seguem untracked, como a pipeline os deixa).

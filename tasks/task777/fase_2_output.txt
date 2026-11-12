@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The BO file looks complete and balanced. The file has been fully updated with real domain methods (not fake CRUD against a table, since this dialog never persists directly ÔÇö the parent form does).
+
+**Summary of Phase 2 additions to `SigOpPcuBO.prg`:**
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps a `csGrade` row into `this_*` properties.
+- `ObterChavePrimaria()` ÔÇö returns `CidChaves` (maps to `sigprftp.pkchaves`), kept for consistency with `BusinessBase` even though this dialog never calls `Salvar()/Excluir()`.
+- `FiltrarGrade(par_cTipo)` ÔÇö replicates `Set Key To pTipo` + total recalculation from the legacy `Init`.
+- `VerificarAcessoCoeficiente()` ÔÇö replicates the `Column4.When` access guard (`fChecaAcesso("SIGCDFTI") AND tipo = "V"`).
+- `ArmazenarCoefAnterior()` / `RecalcularCoeficiente()` ÔÇö replicate `Column4.GotFocus`/`Valid`, transcribing the legacy formula literally (Valos/TotalG/running Acumulas/total adicional).
+- `MontarCursorAlterados()` ÔÇö replicates the data-building part of `cmdSair.Click` (the `crPrFtp` cursor the parent form reads to persist).
+
+I deliberately did **not** override `Inserir()`/`Atualizar()`/`ExecutarExclusao()`/`RegistrarAuditoria()` with fake SQL against `sigprftp`: the file's own header (and the Init() comment) documents that this dialog never writes to the database ÔÇö the parent form (`SIGCDPRO`) does that when it reads the `crPrFtp` cursor. Faking those methods would silently violate Pilar 2 (writing through the wrong path) and contradict the documented design. This mirrors the project's established "BO somente-leitura" exception pattern.

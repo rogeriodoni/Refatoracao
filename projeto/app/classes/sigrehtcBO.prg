@@ -448,7 +448,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
     ENDPROC
 
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_oErro, loc_cFrx
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
@@ -457,14 +457,10 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
 
                 IF !EOF()
 
-                    IF !FILE(loc_cFrx)
-                        THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + ;
-                            "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
-                        MsgAviso(THIS.this_cMensagemErro, "Aviso")
-                    ELSE
-                        THIS.ExecutarReportForm("SigReHtc", "PRINTER_PROMPT")
-                        loc_lSucesso = .T.
-                    ENDIF
+                    *-- O guard de existencia do FRX (com FULLPATH e mensagem
+                    *-- descritiva) esta DENTRO de ExecutarReportForm, que
+                    *-- devolve .F. quando o arquivo nao existe.
+                    loc_lSucesso = THIS.ExecutarReportForm("SigReHtc", "PRINTER_PROMPT")
                 ELSE
                     loc_lSucesso = .T.
                 ENDIF
@@ -482,7 +478,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
     * Visualizar - Prepara dados e exibe preview do relatorio na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_oErro, loc_cFrx
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
@@ -491,14 +487,10 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
 
                 IF !EOF()
 
-                    IF !FILE(loc_cFrx)
-                        THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + ;
-                            "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
-                        MsgAviso(THIS.this_cMensagemErro, "Aviso")
-                    ELSE
-                        THIS.ExecutarReportForm("SigReHtc", "PREVIEW")
-                        loc_lSucesso = .T.
-                    ENDIF
+                    *-- O guard de existencia do FRX (com FULLPATH e mensagem
+                    *-- descritiva) esta DENTRO de ExecutarReportForm, que
+                    *-- devolve .F. quando o arquivo nao existe.
+                    loc_lSucesso = THIS.ExecutarReportForm("SigReHtc", "PREVIEW")
                 ELSE
                     loc_lSucesso = .T.
                 ENDIF

@@ -32,6 +32,12 @@ DEFINE CLASS FormSigReEsp AS FormBase
     this_oRelatorio    = .NULL.
     this_cMensagemErro = ""
 
+    *-- Guarda de reentrancia dos lookups (regra #37/#47): FormBuscaAuxiliar eh
+    *   MODAL - ao abrir, o foco sai do campo e o proprio LostFocus redispara,
+    *   empilhando um segundo dialogo. Tambem protege o irmao de F4/F5, que
+    *   chama o MESMO funil.
+    this_lEmLookup     = .F.
+
     *==========================================================================
     * INIT - Delegado ao FormBase, que chama THIS.InicializarForm()
     *==========================================================================
@@ -1415,6 +1421,20 @@ DEFINE CLASS FormSigReEsp AS FormBase
         BINDEVENT(loc_oPagina.txt_4c_Estado,     "KeyPress",          THIS, "EstadoLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_CdMoeda,    "KeyPress",          THIS, "CdMoedaLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_DsMoeda,    "KeyPress",          THIS, "DsMoedaLookupKeyPress")
+        *-- LostFocus: o legado valida TODOS estes campos no Valid (ao SAIR do
+        *   campo). Sem isto so o F4/F5 abria o browse e a descricao nunca era
+        *   resolvida (Erro346). BINDEVENT em "Valid" de TextBox nao dispara de
+        *   forma confiavel - por isso LostFocus (regra #47).
+        BINDEVENT(loc_oPagina.txt_4c_CdTpOpe,    "LostFocus",         THIS, "CdTpOpeLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DsTpOpe,    "LostFocus",         THIS, "DsTpOpeLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_CdEstoque,  "LostFocus",         THIS, "CdEstoqueLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DsEstoque,  "LostFocus",         THIS, "DsEstoqueLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_CdVendedor, "LostFocus",         THIS, "CdVendedorLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DsVendedor, "LostFocus",         THIS, "DsVendedorLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Estado,     "LostFocus",         THIS, "EstadoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_CdMoeda,    "LostFocus",         THIS, "CdMoedaLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DsMoeda,    "LostFocus",         THIS, "DsMoedaLostFocus")
+
         BINDEVENT(loc_oPagina.obj_4c_OptFiltro,  "InteractiveChange", THIS, "OptFiltroInteractiveChange")
         BINDEVENT(loc_oPagina.chk_4c_ChkTpope,   "InteractiveChange", THIS, "ChkTpopeInteractiveChange")
     ENDPROC
@@ -1659,56 +1679,251 @@ DEFINE CLASS FormSigReEsp AS FormBase
     *==========================================================================
     PROCEDURE CdTpOpeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupTpOpePorCodigo()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE DsTpOpeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupTpOpePorDescricao()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE CdEstoqueLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupEstoquePorCodigo()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE DsEstoqueLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupEstoquePorDescricao()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE CdVendedorLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupVendedorPorCodigo()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE DsVendedorLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupVendedorPorDescricao()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE EstadoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupEstado()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE CdMoedaLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupMoedaPorCodigo()
+            THIS.this_lEmLookup = .F.
         ENDIF
     ENDPROC
 
     PROCEDURE DsMoedaLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
+            IF THIS.this_lEmLookup
+                RETURN
+            ENDIF
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupMoedaPorDescricao()
+            THIS.this_lEmLookup = .F.
         ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * LOSTFOCUS DOS LOOKUPS
+    *
+    * O legado valida TODOS esses campos no Valid, ou seja AO SAIR do campo:
+    * digitar o codigo e dar Tab resolve a descricao, e nao achando abre o
+    * browse. O migrado so tinha BINDEVENT de KeyPress para F4/F5, entao o
+    * campo "nao listava e nao preenchia a descricao" (Erro346) - a nao ser
+    * que o usuario adivinhasse a tecla de funcao.
+    *
+    * Padrao da regra #47: o corpo vive em <X>Exec() e o wrapper fino libera a
+    * flag DEPOIS, para que um RETURN antecipado nao deixe a guarda travada e
+    * mate o lookup pelo resto da vida do form.
+    *==========================================================================
+    PROCEDURE CdTpOpeLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CdTpOpeLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CdTpOpeLostFocusExec()
+        LOCAL loc_oPag
+        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        *-- Legado getCdTpOpe.Valid: codigo vazio nao abre browse, so repoe o
+        *   rotulo TODOS na descricao.
+        IF EMPTY(loc_oPag.txt_4c_CdTpOpe.Value)
+            loc_oPag.txt_4c_DsTpOpe.Value = "TODOS"
+            RETURN
+        ENDIF
+        THIS.AbrirLookupTpOpePorCodigo()
+        *-- Legado: "If Empty(This.Value) / getDsTpOpe.Value = 'TODOS'" no fim
+        IF EMPTY(loc_oPag.txt_4c_CdTpOpe.Value)
+            loc_oPag.txt_4c_DsTpOpe.Value = "TODOS"
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DsTpOpeLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DsTpOpeLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsTpOpeLostFocusExec()
+        LOCAL loc_oPag
+        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        *-- Legado getDsTpOpe.Valid: vazio OU 'TODOS' zera o codigo e nao abre
+        IF EMPTY(loc_oPag.txt_4c_DsTpOpe.Value) OR ;
+                UPPER(ALLTRIM(loc_oPag.txt_4c_DsTpOpe.Value)) == "TODOS"
+            loc_oPag.txt_4c_DsTpOpe.Value = "TODOS"
+            loc_oPag.txt_4c_CdTpOpe.Value = 0
+            RETURN
+        ENDIF
+        THIS.AbrirLookupTpOpePorDescricao()
+        IF EMPTY(loc_oPag.txt_4c_DsTpOpe.Value)
+            loc_oPag.txt_4c_DsTpOpe.Value = "TODOS"
+            loc_oPag.txt_4c_CdTpOpe.Value = 0
+        ENDIF
+    ENDPROC
+
+    *-- Conta / Estoque, Vendedor, UF e Moeda: o legado tambem valida no Valid.
+    *   Aqui o criterio de vazio eh LIMPAR o irmao (nao ha rotulo default).
+    PROCEDURE CdEstoqueLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_CdEstoque", "txt_4c_DsEstoque", "AbrirLookupEstoquePorCodigo")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsEstoqueLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_DsEstoque", "txt_4c_CdEstoque", "AbrirLookupEstoquePorDescricao")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CdVendedorLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_CdVendedor", "txt_4c_DsVendedor", "AbrirLookupVendedorPorCodigo")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsVendedorLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_DsVendedor", "txt_4c_CdVendedor", "AbrirLookupVendedorPorDescricao")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CdMoedaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_CdMoeda", "txt_4c_DsMoeda", "AbrirLookupMoedaPorCodigo")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsMoedaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.LookupParLostFocus("txt_4c_DsMoeda", "txt_4c_CdMoeda", "AbrirLookupMoedaPorDescricao")
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE EstadoLostFocus()
+        LOCAL loc_oPag
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        IF !EMPTY(loc_oPag.txt_4c_Estado.Value)
+            THIS.AbrirLookupEstado()
+        ENDIF
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *-- Funil dos pares codigo/descricao: campo vazio LIMPA o irmao e nao abre
+    *   o browse; preenchido delega para o AbrirLookup* ja existente.
+    *   Membro por NOME exige EVALUATE/STORE (regras #15 e #34) - Controls()
+    *   eh indexado por numero e nao aceita o nome.
+    PROCEDURE LookupParLostFocus(par_cCampo, par_cIrmao, par_cMetodo)
+        LOCAL loc_cBase, loc_uValor
+        loc_cBase  = "THIS.pgf_4c_Paginas.Page1."
+        loc_uValor = EVALUATE(loc_cBase + par_cCampo + ".Value")
+        IF EMPTY(loc_uValor)
+            *-- Todos os irmaos deste funil sao character (SPACE(n)); o unico
+            *   par numerico (CdTpOpe) tem handler proprio.
+            STORE "" TO (loc_cBase + par_cIrmao + ".Value")
+            RETURN
+        ENDIF
+        =EVALUATE("THIS." + par_cMetodo + "()")
     ENDPROC
 
     *==========================================================================

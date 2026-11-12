@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSigOpPec.prg` com a estrutura base do form OPERACIONAL.
+
+O que entrou nesta fase:
+- `DEFINE CLASS FormSigOpPec AS FormBase` com as propriedades visuais transcritas do dump do SCX (Height=675, Width=1000, DataSession=1, WindowType=0 modeless, ControlBox/Closable=.F., TitleBar=0, etc.)
+- `this_oFormPai` e `this_lAuto`, espelhando as properties customizadas do legado `poObjForm`/`plauto`
+- `Init(par_oObjForm, par_lAuto)` replicando `Parameters oObjForm, plAuto`, com os dois par├ómetros opcionais (harness/ValidarUIFidelity instanciam sem argumento)
+- `InicializarForm()` criando o BO (`SigOpPecBO`, j├í existente das fases 1-2) e repassando o modo autom├ítico
+- `ConfigurarPageFrame()` como orquestrador (sem PageFrame real ÔÇö forma n├úo-CRUD) chamando `ConfigurarCabecalho()`
+- `ConfigurarCabecalho()` com a faixa cinza (`cnt_4c_Sombra` + `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`), valores exatos do dump (`cntSombra.Width=1008`, fonts, cores)
+- `TornarControlesVisiveis()` e `Destroy()` padr├úo
+
+Os 15 containers de imagem, `Cnt_Pag`, `BOTOES_CONSULTA` e os bot├Áes de a├º├úo ficam para as pr├│ximas fases, como instru├¡do.
+
+Validei a sintaxe compilando o arquivo isolado no VFP9 real (`vfp9.exe ... -t`) ÔÇö gerou `.fxp` sem `.err`, ou seja, compila limpo. Removi os artefatos tempor├írios de compila├º├úo depois do teste.

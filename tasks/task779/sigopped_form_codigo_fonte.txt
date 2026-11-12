@@ -1,0 +1,996 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopped.SCX
+* Data/Hora: 11/11/2026 22:38:43
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPED
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPPED
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPED.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPED.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPPED
+  Class: shape
+  BaseClass: shape
+
+Objeto: OK
+  Parent: SIGOPPED
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getDPros
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_prod
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCor
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTam
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetPedido
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetQtde
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRepetir
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Peso
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPPED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTamanho
+  Parent: SIGOPPED
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 211
+  Width = 773
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Informar Pedido"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .T.
+  Visible = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGOPPED"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Shape1
+------------------------------------------------------------
+  Top = 89
+  Left = 5
+  Height = 110
+  Width = 585
+  BackStyle = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.OK
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 616
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 18
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "OK"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\relatorio_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Retornar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 4
+  Command1.ToolTipText = "[Esc] Voltar Para a Tela Principal da Operação"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "Gravar"
+  Command2.MousePointer = 15
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnGravar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.getDPros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crTpmMvItn.DPros"
+  Format = "K!"
+  Height = 23
+  Left = 137
+  SpecialEffect = 1
+  TabIndex = 3
+  ToolTipText = "Descrição do Produto"
+  Top = 107
+  Width = 288
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "getDPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say10
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto"
+  Height = 15
+  Left = 11
+  Top = 92
+  Width = 40
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.get_prod
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  ControlSource = "crTpmMvItn.cPros"
+  Height = 23
+  InputMask = ""
+  Left = 11
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 107
+  Width = 123
+  DisabledBackColor = 255,255,255
+  Name = "get_prod"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cor"
+  Height = 15
+  Left = 428
+  Top = 92
+  Width = 19
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.getCor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  ControlSource = "crTpmMvItn.CodCors"
+  Height = 23
+  InputMask = ""
+  Left = 428
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 107
+  Width = 45
+  DisabledBackColor = 255,255,255
+  Name = "getCor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tam."
+  Height = 15
+  Left = 476
+  Top = 92
+  Width = 26
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.getTam
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  ControlSource = "crTpmMvItn.CodTams"
+  Height = 23
+  InputMask = ""
+  Left = 476
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 107
+  Width = 45
+  DisabledBackColor = 255,255,255
+  Name = "getTam"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Pedido"
+  Height = 15
+  Left = 11
+  Top = 136
+  Width = 34
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.GetPedido
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 11
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 150
+  Width = 49
+  DisabledBackColor = 255,255,255
+  Name = "GetPedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Qtde"
+  Height = 15
+  Left = 524
+  Top = 92
+  Width = 26
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.GetQtde
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Height = 23
+  InputMask = ""
+  Left = 524
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 107
+  Width = 45
+  DisabledBackColor = 255,255,255
+  Name = "GetQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Qtde"
+  Height = 15
+  Left = 63
+  Top = 136
+  Width = 26
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.getRepetir
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = ""
+  Left = 63
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 150
+  Width = 45
+  DisabledBackColor = 255,255,255
+  Name = "getRepetir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Peso"
+  Height = 15
+  Left = 110
+  Top = 136
+  Width = 25
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Get_Peso
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = "999999.999"
+  Left = 110
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 150
+  Width = 118
+  DisabledBackColor = 255,255,255
+  Name = "Get_Peso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tam."
+  Height = 15
+  Left = 231
+  Top = 136
+  Width = 26
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPED.getTamanho
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Height = 23
+  Left = 231
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 17
+  Top = 150
+  Width = 45
+  DisabledBackColor = 255,255,255
+  Name = "getTamanho"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPPED
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pform,datses
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set Datasession To DatSes
+Thisform.parentform = pform
+ThisForm.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+lcSql = [Select a.cDopes, a.cnivels, a.nCors, a.padraos, a.Mercs, a.opers, b.abrevs, b.CadProds, b.Desmembs from SigCdMop a, SigCdOpe b, SigOpCdc c, SigOpCdi d ]+;
+	[Where a.cDopes = ']+TprMvCab.Dopes+[' And a.cnivels = b.dopes And b.Abrevs <> ' ' And ]+;
+	[b.Dopes = c.Dopes And b.Dopes = d.Dopes And c.OpeInatvs <> 1 ]
+If Thisform.PodataMgr.SqlExecute(lcSql,'CsTmpPed') < 1
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CsTmpPed)')
+	Return 0
+Endif
+Select CsTmpPed
+Index On nCors  Tag nCors
+Index On Abrevs Tag Abrevs
+
+Select crTpmMvItn
+lcCod = crTpmMvItn.Cpros
+lcCor = crTpmMvItn.CodCors
+lcTam = crTpmMvItn.CodTams
+
+Select * from crTpmMvItn Where Cpros = lcCod And CodCors = lcCor And CodTams = lcTam And Empty(Abrevis) Into Cursor csItemAbr ReadWrite
+
+Select csItemAbr
+Go Top
+Count For Not Empty(Cpros) to lnQtde
+
+ThisForm.getQtde.Value = lnQtde
+ThisForm.getQtde.Refresh
+
+ThisForm.get_Peso.Value = crTpmMvItn.Pesos
+ThisForm.get_Peso.Refresh
+
+lnOldSel = Select()
+
+ThisForm.Say7.Visible = .F.
+ThisForm.getTamanho.Visible = .F.
+ThisForm.getTamanho.Value = lcTam
+
+If (Thisform.PodataMgr.SqlExecute([Select a.* From SigCdUni a join sigcdpro b on a.Cunis = b.Cunis Where b.Cpros = '] + lcCod + [' ], 'crTmpUni') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpUni)')
+	Return 0
+Endif
+
+If (Thisform.PodataMgr.SqlExecute([Select a.* From SigCdGrp a Join SigCdPro b on a.CGrus = b.CGrus Where b.Cpros = '] + lcCod + [' ], 'crTmpGru') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+	Return 0
+Endif
+
+If Empty(lcTam)
+	Select crTmpGru	
+	If Inlist(crTmpGru.TipoEstos,3,4)
+		ThisForm.Say7.Visible = .T.
+		ThisForm.getTamanho.Visible = .T.
+	Endif
+EndIf 
+Select(lnOldSel)
+
+
+ThisForm.Refresh
+
+*!*	* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+ =fConfigGeral()
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.OK
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.ParentForm.Enabled = .t.
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnGravar.Click
+------------------------------------------------------------
+PROCEDURE btnGravar.Click
+Local lcPro, lcTam, lcCor, lcAbr, lnQtd, lnRep, lnRecc
+
+lcPro = ThisForm.get_prod.Value
+lcTam = ThisForm.getTam.Value
+lcCor = ThisForm.getCor.Value
+lcAbr = ThisForm.GetPedido.Value
+lnQtd = ThisForm.GetQtde.Value
+lnRep = ThisForm.getRepetir.Value
+lnPes = ThisForm.Get_Peso.Value
+
+lcTamanho = ThisForm.getTamanho.Value
+
+lnRecc = 0
+
+_CarregaItens = Inlist( crSigCdOpe.ItAutos,1,3,4,5 ) And Thisform.parentform.Op_escolha = 'INSERIR'
+_ChecaQtde    = Inlist( crSigCdOpe.ChkQtdss,1,3,4 )
+_ChecaOper    = ( Empty(crSigOpCdc.ChkOpers) Or crTpmMvItn.Opers = crSigOpCdc.ChkOpers )
+_ValidaGrade  = Thisform.parentform.Op_escolha = 'INSERIR' And crSigOpCdi.ValQtdSup = 1
+
+Select TmpOperacao
+_SubNiv = .F.
+Scan For !IsEmpty( Codigos )
+	_SubNiv = .T.
+EndScan
+
+Select csItemAbr
+lnRecc = Reccount([csItemAbr])
+
+If lnRecc > 0
+
+	For I=1 To lnRep
+		Select crTpmMvItn
+		Select cItens from crTpmMvItn Where Cpros = lcPro And CodCors = lcCor And CodTams = lcTam And Empty(Abrevis) Into Cursor csItemAbr ReadWrite
+		If Reccount([csItemAbr]) > 0
+		
+			lnItem = csItemAbr.cItens
+			
+			Select crTpmMvItn
+			Update crTpmMvItn Set Abrevis = lcAbr, Pesos = lnPes, CodTams = lcTamanho Where cItens = lnItem 
+			
+			Select crTpmMvItn
+			Select * from crTpmMvItn Where cItens = lnItem And cItem2 = 0 Into Cursor csTmpItn ReadWrite 
+			
+			Select crTpmMvItn
+			
+			If Used([CsTmpPed]) And !Empty(CsTmpPed.Opers)	
+				Update crTpmMvItn Set opers = CsTmpPed.opers Where citem2=lnItem 
+			Endif
+			
+			If crTpmMvItn.citem2=0 And Reccount('crTpmMvItn')>0
+				Select crTpmMvItn
+				Update crTpmMvItn Set AbrevIs = lcAbr Where citem2 = lnItem
+			EndIf 
+			
+*!*				If !Empty(lcTamanho)
+*!*					Select csTmpItn
+*!*					If  ( csTmpItn.Qtds > 1 ) And ( crTmpUni.Desmembs = 'S' ) And ( CsTmpPed.Desmembs = 1 )
+*!*						For i=1 To csTmpItn.Qtds
+*!*							Insert Into crTpmMvIts ( CItens, CPros, Emps, Dopes, Numes, Qtds, QtdEmbs, Pesos, CodTams, CodBarras ) ;
+*!*								Values ( csTmpItn.CItens, csTmpItn.CPros, csTmpItn.Emps, csTmpItn.Dopes, csTmpItn.Numes, 1, 1, csTmpItn.Pesos, csTmpItn.CodTams, csTmpItn.codbarras )
+*!*						Endfor
+*!*					Else
+*!*						Insert Into crTpmMvIts ( CItens, CPros, Emps, Dopes, Numes, Qtds, QtdEmbs, Pesos, CodTams, CodBarras ) ;
+*!*							Values ( csTmpItn.CItens, csTmpItn.CPros, csTmpItn.Emps, csTmpItn.Dopes, csTmpItn.Numes, csTmpItn.Qtds, 1, csTmpItn.Pesos, csTmpItn.CodTams, csTmpItn.codbarras )
+*!*					Endif
+*!*				EndIf
+			
+		EndIf 
+	EndFor 
+EndIf 
+ThisForm.ParentForm.Enabled = .t.
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.getDPros
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Inlist(Lastkey(), 9, 13)
+	Return .f.
+EndIf
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If ThisForm.fwGrade.Visible 
+	ThisForm.fwGrade.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.get_prod
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.getCor
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.getTam
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.GetPedido
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select CsTmpPed
+	If Not Seek( This.Value, 'CsTmpPed', 'Abrevs' )
+		loBrowse = CreateObject( 'fwbuscasel', 'CsTmpPed', 'Abrevs', This.Value, 'Seleção')
+		loBrowse.AddColuna( 'Abrevs', '', 'Abrev' )
+		loBrowse.AddColuna( 'cNivels', '', 'Operação' )
+		loBrowse.Show
+		This.Value = CsTmpPed.Abrevs
+	EndIf
+	Select crTpmMvItn
+	This.Refresh
+	If Type('This.Value') <> Type('ThisForm.AntValu') Or This.Value <> ThisForm.AntValu
+		Replace UsuLibSal With ' ' in crTpmMvItn
+	EndIf
+	If Not ThisForm.parentform.ValidaEstoque(CsPedidos.cNivels)
+		This.Value = ''
+		This.Refresh
+		Return .f.
+	EndIf
+	Replace ChkAbrevs With .f. in crTpmMvItn
+Else
+	ThisForm.parentform.Calc_valite()
+EndIf
+This.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.GetQtde
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.getRepetir
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Empty(ThisForm.GetQtde.Value)
+	If This.Value > ThisForm.GetQtde.Value
+		MessageBox([Quantidade Maior que a Quantidade de Itens.],0+64,[Atenção],5000)
+		This.Value = ThisForm.GetQtde.Value
+		Return .F.
+	EndIf 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPED.getTamanho
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+If Not Empty(this.Value)
+	loLista = CreateObject('fwbuscaext', Thisform.PodataMgr.pnIdConn, 'SigCdTam', ;
+						   'crListaRemota', 'Cods', Padr(this.Value,4), 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods', '', 'Código',.t.,'Cods')
+		loLista.mAddColuna('Descs', '', 'Descrição',.t.,'Descs')
+		loLista.Show()
+		This.Value = CrListaRemota.Cods
+	EndIf
+Else
+	This.Value = ''
+EndIf 	
+
+This.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPED
+RESERVED3 (ClassInfo): antvalue
+parentform
+podatamgr
+*calctotais 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

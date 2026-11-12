@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed public property. The implementation is complete and consistent. Let me summarize what was done.
+
+## Summary
+
+The task's auto-generated phase prompt asked for CRUD-style `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö but **FormSigOpPec is not a CRUD cadastro**, it's an OPERACIONAL image-selection/pagination screen ("Sele├º├úo de Pe├ºas") with no Incluir/Alterar/Visualizar/Excluir concept anywhere in the legacy source. Fabricating those methods would have violated the project's "no invented functionality" rule. Instead, I implemented the form's **real** missing "eventos principais dos bot├Áes" ÔÇö exactly what the file's own prior-phase comments had deferred:
+
+- **7 top action buttons**: GeraArquivo (opens the already-migrated `Formsigopgar`), Desmarcar/Selecionar Tela, Exportar Imagens, Imprimir Produtos (relpecas), Desmarcar/Selecionar Todos
+- **4 BOTOES_CONSULTA navigation buttons**: Pr├│xima P├ígina, P├ígina Anterior, Encerrar, Selecionar P├ígina
+- Supporting methods transcribed from the legacy dump: `PagInicial`, `MostFig`, `MontarSQLImagens`, `RedesenharPaginaAtual`, `FinalizarPaginacao`, `ReiniciarPaginacao`, `ReposicionarTmpImagens`, `AtualizarCaptionPagina`, `ObterFiltroPromocao`
+- All wired via `BINDEVENT` in `VincularEventosCampos`
+
+While implementing this, I found and fixed a real gap: `CrImagens` (created by the legacy `Load()` event) was referenced everywhere but never actually created in the migrated code, so the whole "mark for export" feature would silently no-op. Added `CriarCursorImagens()` (faithful transcription of `Load()`), called from `InicializarForm`, and closed properly in `Destroy()`.
+
+Also caught and fixed a rule-#1 violation I introduced (a bare `RETURN` inside a `CATCH` block in `CmdRelPecasClick`) before finishing ÔÇö replaced with a flag guard.
+
+Structural check passed (balanced PROCEDURE/ENDPROC, TRY/ENDTRY, IF/ENDIF, etc.). `SigRePca` (used by "Imprimir Produtos") isn't migrated yet ÔÇö the call is wrapped in the project's standard `CREATEOBJECT`-inside-`TRY` pattern, so it fails gracefully with `MsgErro` until that sibling form is migrated, rather than being stubbed out.

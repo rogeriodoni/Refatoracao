@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. A medi├º├úo mostrou que **este legado n├úo tem superf├¡cie CRUD alguma**, ent├úo a fase n├úo tinha os quatro `Btn<Verbo>Click` para portar ÔÇö e invent├í-los violaria o PILAR 1.
+
+## O que foi medido (n├úo presumido)
+
+`automation\VerificarGateFase7Task780.ps1` (novo ÔÇö recorta o pr├│prio `case 7` do orquestrador por AST/texto, sem dot-source, que dispararia migra├º├úo real):
+
+```
+nBotoesLegado ......................... 1   (btnCancelar, ├║nico commandbutton)
+pcEscolha viva ........................ 0
+frmcadastro / frmrelatorio / Grupo_Op . 0
+btn|cmd(Incluir|Alterar|Visualizar|Excluir) .. 0
+<Verbo>.Click ......................... 0
+VEREDITO = PASSA  (carve-out "legado sem CRUD", piso 1, nHandlers 1)
+```
+
+Os 13 m├®todos da SECAO 3 do dump j├í estavam todos cobertos pelas Fases 1-6, exceto dois que **n├úo devem** ser portados, agora documentados com prova:
+
+- **`Load` = `=fConfigGeral()`** ÔÇö inicializa├º├úo global Fortyus; o wrapper `utils\fconfiggeral.prg` existe s├│ para p-code de VCX e pro├¡be chamada em c├│digo nosso.
+- **`getDProd.LostFocus`** ÔÇö c├│digo morto copiado do form pai: `ThisForm.fwGrade` **n├úo existe** em SIGOPPEI (a grade chama-se `Grade`; `fwgrade` no dump ├® s├│ o nome da classe), e quem tem grade `fwGrade` ├® o chamador `sigoppro.SCT` (337 cita├º├Áes, faz `Thisform.fwgrade.Produto.Setfocus()` logo ap├│s abrir este di├ílogo). Al├®m disso nunca roda: `When ÔåÆ .f.` + `Visible = .f.` nos dois caminhos do `If`.
+
+## Altera├º├Áes no `Formsigoppei.prg`
+
+1. **Corre├º├úo real**: `txt_4c_DProd` tinha s├│ `.TabStop = .F.` para reproduzir `getDProd.When ÔåÆ .f.`. TabStop n├úo impede clique de mouse nem digita├º├úo ÔÇö adicionado `.ReadOnly = .T.`, o par can├┤nico que o pr├│prio arquivo usa em `txt_4c_CProd` e nos tr├¬s totalizadores.
+2. **Invent├írio medido** dos 13 eventos no cabe├ºalho, mapeando cada um ao destino.
+
+Um detalhe importante: a primeira vers├úo do coment├írio citava os quatro nomes por extenso e **fez o gate passar pelo caminho errado** (`presente=True` nos quatro, pois o gate casa texto cru do `.prg`). Reescrito para forma gen├®rica ÔÇö agora os quatro d├úo `presente=False` e a aprova├º├úo vem do carve-out real, como deve.
+
+## Verifica├º├Áes
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 7 | PASSA pelo carve-out (faltantes=4, `legadoSemCrud`, piso 1) |
+| `Test-CompletudeCodigo` Form / BO | True / True |
+| Compila├º├úo VFP9 (`.fxp` apagados antes) | `Formsigoppei.fxp` + `sigoppeiBO.fxp` frescos, **zero `.err`** |
+| VerificarFuncoesNaoDefinidas / PropriedadesInexistentes / MetodoProtegidoChamadoDeFora / LookupEmKeyPress | 0 achados neste form/BO |
+
+Arquivos novos: `automation\VerificarGateFase7Task780.ps1`, `automation\CompilarF7SigOpPei780.prg`.

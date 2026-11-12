@@ -357,71 +357,55 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag, loc_oGrd
         loc_oPag = THIS.pgf_4c_Paginas.Page1
 
-        *-- Sec 1: Referencia de Estoque + Data Saldo
-        loc_oPag.AddObject("lbl_4c_RefEstoque", "Label")
-        WITH loc_oPag.lbl_4c_RefEstoque
-            .Top       = 62
-            .Left      = 82
-            .Width     = 110
-            .Height    = 18
-            .Caption   = "Refer. Estoque :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(90, 90, 90)
-            .BackStyle = 0
-            .Visible   = .T.
-        ENDWITH
-
+        *-- Sec 1: Referencia de Estoque (optRfestoque) + Data Saldo
+        *   O legado NAO tem label "Refer. Estoque :" nem "Data Saldo:": as
+        *   proprias legendas dos OptionButton rotulam a linha, e a 2a
+        *   ("Estoque em :") eh o rotulo do campo de data a sua direita.
+        *   Os dois labels eram invencao da migracao (Erro342).
+        *   Top = 147 do SCX - 85 (offset da pagina) = 62. O valor CRU 147
+        *   jogava o grupo 85px abaixo, em cima de "Grupo Produto" e "Moeda".
         loc_oPag.AddObject("obj_4c_OptRfestoque", "OptionGroup")
         WITH loc_oPag.obj_4c_OptRfestoque
-            .Top         = 147
+            .Top         = 62
             .Left        = 195
-            .Width       = 147
+            .Width       = 142
             .Height      = 52
             .ButtonCount = 2
             .BackStyle   = 0
             .BorderStyle = 0
+            .SpecialEffect = 0
             .Themes      = .F.
             .Value       = 1
             .Visible     = .T.
         ENDWITH
+        *-- Width explicita: AutoSize eh no-op em controle criado por AddObject
+        *   (regra #23). 85 = 67px do texto + 18 de glifo/padding, a mesma
+        *   folga que o SCX usa em "Total" (42 = 24 + 18) - medido no VFP9.
         WITH loc_oPag.obj_4c_OptRfestoque.Buttons(1)
-            .Top       = 2
+            .Top       = 5
             .Left      = 5
-            .Width     = 132
-            .Height    = 22
-            .Caption   = "Atual"
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
+            .Width     = 85
+            .Height    = 15
+            .AutoSize  = .F.
+            .Caption   = "Estoque \<Atual"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
             .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
         ENDWITH
         WITH loc_oPag.obj_4c_OptRfestoque.Buttons(2)
-            .Top       = 28
+            .Top       = 24
             .Left      = 5
-            .Width     = 132
-            .Height    = 22
-            .Caption   = "Retroativo"
+            .Width     = 84
+            .Height    = 15
+            .AutoSize  = .F.
+            .Caption   = "Estoque  \<em :"
             .BackStyle = 0
-            .FontName  = "Comic Sans MS"
+            .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
         ENDWITH
         BINDEVENT(loc_oPag.obj_4c_OptRfestoque, "Click", THIS, "OptRfestoqueClick")
-
-        loc_oPag.AddObject("lbl_4c_DataSaldo", "Label")
-        WITH loc_oPag.lbl_4c_DataSaldo
-            .Top       = 86
-            .Left      = 220
-            .Width     = 78
-            .Height    = 18
-            .Caption   = "Data Saldo:"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(90, 90, 90)
-            .BackStyle = 0
-            .Visible   = .T.
-        ENDWITH
 
         loc_oPag.AddObject("txt_4c_DataSaldo", "TextBox")
         WITH loc_oPag.txt_4c_DataSaldo
@@ -638,24 +622,32 @@ DEFINE CLASS FormSIGREEQR AS FormBase
             .Themes      = .F.
             .Value       = 1
             .Visible     = .T.
+            *-- Legendas e geometria transcritas do SCX. O caption do 2o botao
+            *   eh "Grupo" (nao "Por Grupo"): com 9 caracteres o texto precisa
+            *   de 75px e so havia 53, por isso saia cortado como "Por Gru"
+            *   (Erro342). 47 = 29px do texto + 18 de glifo/padding.
             WITH .Buttons(1)
-                .Top       = 2
-                .Left      = 0
-                .Width     = 53
-                .Height    = 21
+                .Top       = 5
+                .Left      = 5
+                .Width     = 42
+                .Height    = 15
+                .AutoSize  = .F.
                 .Caption   = "Total"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
             WITH .Buttons(2)
-                .Top       = 2
-                .Left      = 55
-                .Width     = 53
-                .Height    = 21
-                .Caption   = "Por Grupo"
-                .FontName  = "Comic Sans MS"
+                .Top       = 5
+                .Left      = 56
+                .Width     = 47
+                .Height    = 15
+                .AutoSize  = .F.
+                .Caption   = "Grupo"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
+                .BackStyle = 0
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
         ENDWITH
@@ -683,6 +675,11 @@ DEFINE CLASS FormSIGREEQR AS FormBase
             .RecordMark         = .F.
             .RowHeight          = 16
             .ScrollBars         = 2
+            *-- Grid.ReadOnly propaga para as colunas, entao vem ANTES delas
+            *   (regra #18/#46). O SCX declara .F. explicitamente.
+            .ReadOnly           = .F.
+            .AllowAddNew        = .F.
+            .AllowHeaderSizing  = .F.
             .Visible            = .T.
         ENDWITH
 
@@ -695,21 +692,30 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         loc_oGrd.Column1.AddObject("Check1", "CheckBox")
         THIS.BindToggleTgGrade1(THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Column1.Check1)
         loc_oGrd.Column1.Check1.Caption  = ""
+        loc_oGrd.Column1.Check1.BackStyle = 0
         loc_oGrd.Column1.CurrentControl  = "Check1"
         loc_oGrd.Column1.ControlSource   = "Selecao.marcas"
-        loc_oGrd.Column1.Width           = 30
+        *-- Sparse = .F. eh OBRIGATORIO (regra #18) e o SCX declara: sem ele o
+        *   CheckBox so aparece na celula ATIVA e a coluna de marcacao fica
+        *   visualmente VAZIA - o usuario nao tem onde clicar (Erro343).
+        loc_oGrd.Column1.Sparse          = .F.
+        loc_oGrd.Column1.ReadOnly        = .F.
+        loc_oGrd.Column1.Movable         = .F.
+        loc_oGrd.Column1.Width           = 15
         loc_oGrd.Column1.Header1.Caption = ""
 
         *-- Column2: Grupo (somente leitura)
         loc_oGrd.Column2.ControlSource   = "Selecao.grupos"
-        loc_oGrd.Column2.Width           = 107
+        loc_oGrd.Column2.Width           = 100
+        loc_oGrd.Column2.Movable         = .F.
         loc_oGrd.Column2.ReadOnly        = .T.
         loc_oGrd.Column2.Header1.Caption = "Grupo"
 
-        *-- Column3: Conta (somente leitura)
+        *-- Column3: Conta (ReadOnly = .F. no SCX)
         loc_oGrd.Column3.ControlSource   = "Selecao.contas"
-        loc_oGrd.Column3.Width           = 107
-        loc_oGrd.Column3.ReadOnly        = .T.
+        loc_oGrd.Column3.Width           = 96
+        loc_oGrd.Column3.Movable         = .F.
+        loc_oGrd.Column3.ReadOnly        = .F.
         loc_oGrd.Column3.Header1.Caption = "Conta"
 
         *-- RecordSource apenas se cursor Selecao foi populado
@@ -725,44 +731,48 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         ENDTRY
 
         *-- Sec 8: Botoes de selecao da grade (ao lado direito da grade)
+        *-- Top = 374 do SCX - 85 (offset da pagina) = 289. O valor CRU 374
+        *   descia os dois botoes para baixo da grade (Erro342).
+        *   Botoes de ICONE: o SCX tem Caption = "" + Picture; "Todos"/"Limpar"
+        *   eram texto inventado pela migracao (regra #25).
         loc_oPag.AddObject("cmd_4c_SelTudo", "CommandButton")
         WITH loc_oPag.cmd_4c_SelTudo
-            .Top           = 374
+            .Top           = 289
             .Left          = 549
             .Width         = 45
             .Height        = 45
-            .Caption       = "Todos"
-            .FontName      = "Tahoma"
-            .FontSize      = 7
-            .FontBold      = .T.
-            .ForeColor     = RGB(90, 90, 90)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "A_SAVE1.BMP"
+            .FontName      = "Verdana"
+            .FontSize      = 8
+            .ForeColor     = RGB(36, 84, 155)
             .BackColor     = RGB(255, 255, 255)
             .SpecialEffect = 0
             .MousePointer  = 15
-            .ToolTipText   = "Selecionar Todos"
+            .ToolTipText   = "Selecionar"
             .Themes        = .F.
-            .WordWrap      = .T.
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPag.cmd_4c_SelTudo, "Click", THIS, "CmdSelTudoClick")
 
         loc_oPag.AddObject("cmd_4c_Apaga", "CommandButton")
         WITH loc_oPag.cmd_4c_Apaga
-            .Top           = 419
+            .Top           = 334
             .Left          = 549
             .Width         = 45
             .Height        = 45
-            .Caption       = "Limpar"
-            .FontName      = "Tahoma"
-            .FontSize      = 7
-            .FontBold      = .T.
-            .ForeColor     = RGB(90, 90, 90)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "cancelab.bmp"
+            .FontName      = "Verdana"
+            .FontSize      = 8
+            .FontBold      = .F.
+            .FontItalic    = .F.
+            .ForeColor     = RGB(36, 84, 155)
             .BackColor     = RGB(255, 255, 255)
             .SpecialEffect = 0
             .MousePointer  = 15
-            .ToolTipText   = "Desmarcar Todos"
+            .ToolTipText   = "Desmarcar"
             .Themes        = .F.
-            .WordWrap      = .T.
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPag.cmd_4c_Apaga, "Click", THIS, "CmdApagaClick")
@@ -874,9 +884,34 @@ DEFINE CLASS FormSIGREEQR AS FormBase
     *   (fidelidade ao original que chamava SetFocus no campo problematico)
     *--------------------------------------------------------------------------
     PROCEDURE CmgVisualizarClick()
-        LOCAL loc_oPag
+        LOCAL loc_oPag, loc_oVisu, loc_oErro
         THIS.FormParaRelatorio()
-        IF !THIS.this_oRelatorio.Atualizar()
+        IF THIS.this_oRelatorio.Atualizar()
+            *-- Legado: "PROCEDURE visualizacao / Do Form SigReEqT With ThisForm".
+            *   Sem isto o botao processava os dados e nao abria NADA, sem
+            *   mensagem nenhuma (Erro344).
+            *   O visualizador recebe o FORM (nao o BO): ele faz
+            *   par_oFormPai.Enabled = .F. e SET DATASESSION TO
+            *   par_oFormPai.DataSessionId para enxergar csTempoGr/CsTempoCp.
+            *   FormSigReEqT eh MODAL (WindowType = 1): o Show() BLOQUEIA e toda
+            *   a vida da tela filha roda dentro dele, por isso o TRY cobre so a
+            *   CRIACAO - com o Show() dentro, um erro la dentro saltaria para o
+            *   CATCH, derrubaria a referencia LOCAL e a tela fecharia sozinha
+            *   (regra #29).
+            loc_oVisu = .NULL.
+            TRY
+                loc_oVisu = CREATEOBJECT("FormSigReEqT", THIS)
+            CATCH TO loc_oErro
+                loc_oVisu = .NULL.
+                THIS.Enabled = .T.
+                MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, "Visualizar")
+            ENDTRY
+            IF VARTYPE(loc_oVisu) = "O"
+                loc_oVisu.Show()
+            ENDIF
+        ELSE
             IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Visualizar")
@@ -1021,28 +1056,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
     *   CommandGroup superior do form).
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oPag
-        THIS.FormParaRelatorio()
-        IF !THIS.this_oRelatorio.Atualizar()
-            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
-                "Erro ao Visualizar")
-            ENDIF
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
-                loc_oPag.txt_4c_CdEmpresa.SetFocus()
-            ELSE
-                IF loc_oPag.obj_4c_OptCalcusto.Value = 2 AND ;
-                   EMPTY(ALLTRIM(loc_oPag.txt_4c_CdGrupoCalc.Value))
-                loc_oPag.txt_4c_CdGrupoCalc.SetFocus()
-            ELSE
-                IF loc_oPag.obj_4c_OptRfestoque.Value = 2 AND ;
-                   EMPTY(loc_oPag.txt_4c_DataSaldo.Value)
-                loc_oPag.txt_4c_DataSaldo.SetFocus()
-                ENDIF
-                ENDIF
-            ENDIF
-        ENDIF
+        *-- Alias: o BINDEVENT do botao aponta para CmgVisualizarClick, entao a
+        *   implementacao mora LA. Antes este metodo tinha uma COPIA da logica e
+        *   ninguem o chamava - mexer aqui nao mudava nada na tela (Erro344).
+        THIS.CmgVisualizarClick()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1746,6 +1763,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         ELSE
             REPLACE Selecao.marcas WITH IIF(Selecao.marcas = 0, 1, 0)
         ENDIF
+        *-- Cascata do legado (fwcheckbox1.Click) - roda DEPOIS do toggle.
+        *   Este eh o funil unico: MouseUp delega para ca, e os dois caminhos
+        *   dao NODEFAULT, entao o Click nativo nao dispara sozinho.
+        THIS.TgGrade1Click()
         THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Refresh()
     ENDPROC
 
@@ -1758,7 +1779,21 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         NODEFAULT
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * TgGrade1Click - cascata do CheckBox da grade.
+    *   Transcrito de SIGREEQR.Grade.column1.fwcheckbox1.Click: marcar a linha
+    *   PAI (grupo sem conta) marca TODAS as contas daquele grupo e em seguida
+    *   DESMARCA a propria linha pai. Era um stub com NODEFAULT, entao marcar o
+    *   grupo nunca propagava para as contas (Erro343).
+    *   Chamado pelo funil de toggle (TgGrade1KeyPress), que cobre mouse e
+    *   teclado - os dois caminhos dao NODEFAULT no evento nativo.
+    *   Idempotente: apos a cascata a linha pai fica com marcas = 0, entao uma
+    *   segunda chamada nao entra no IF.
+    *--------------------------------------------------------------------------
     PROCEDURE TgGrade1Click()
         NODEFAULT
+        *-- A cascata ja esta implementada em ChkGradeClick (tambem ligado ao
+        *   Click do mesmo CheckBox). Delegar evita DUAS copias da mesma regra.
+        THIS.ChkGradeClick()
     ENDPROC
 ENDDEFINE

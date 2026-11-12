@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All IF/ENDIF pairs balance correctly (9 of each). The Phase 4 implementation is complete and structurally sound.
+
+## Summary
+
+Implemented Phase 4/8 for `Formsigopped.prg` ÔÇö the `obj_4c_OK` CommandGroup (the only action-button block this OPERACIONAL dialog has; it has no CRUD grid/Lista page, since the task's generic template didn't match this form type):
+
+- **`ConfigurarBotaoAcao()`**: creates `obj_4c_OK` with `Buttons(1)` = "Retornar" (icon `relatorio_sair_60.jpg`, `Cancel=.T.`) and `Buttons(2)` = "Gravar" (icon `cadastro_salvar_60.jpg`), positions/colors transcribed exactly from the SCX dump, wired via `BINDEVENT` to two new **PUBLIC** handlers (required per CLAUDE.md rule #3).
+- **`BtnSairClick()`**: re-enables the parent form and releases the dialog ÔÇö matches legacy `btnSair.Click`.
+- **`BtnGravarClick()`**: full transcription of legacy `btnGravar.Click` ÔÇö reads the 8 `txt_4c_*` fields (forward references resolved when Phase 5 adds them), loops `loc_nRep` times updating the parent's shared `crTpmMvItn` cursor (abbreviation/weight/size), wrapped in TRY/CATCH with `MsgErro`. Kept the legacy's unused dead-flag calculations for fidelity, and deliberately skipped the `*!*`-commented (disabled) block per legacy behavior.
+
+Updated the file header to reflect Phase 4 as done. Verified PROCEDURE/ENDPROC, IF/ENDIF, WITH/ENDWITH, TRY/ENDTRY all balance.

@@ -326,7 +326,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- Empresa ---
         loc_oPg1.AddObject("lbl_4c_Lbl_empresa", "Label")
         WITH loc_oPg1.lbl_4c_Lbl_empresa
-            .Top       = 108
+            .Top       = 23
             .Left      = 200
             .Width     = 52
             .Height    = 18
@@ -371,7 +371,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- Periodo ---
         loc_oPg1.AddObject("lbl_4c_Lbl_periodo", "Label")
         WITH loc_oPg1.lbl_4c_Lbl_periodo
-            .Top       = 133
+            .Top       = 48
             .Left      = 205
             .Width     = 52
             .Height    = 18
@@ -399,7 +399,7 @@ DEFINE CLASS Formsigrefec AS FormBase
 
         loc_oPg1.AddObject("lbl_4c_Lbl_periodo_a", "Label")
         WITH loc_oPg1.lbl_4c_Lbl_periodo_a
-            .Top       = 133
+            .Top       = 48
             .Left      = 340
             .Width     = 10
             .Height    = 18
@@ -512,7 +512,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Detalhado Por Operacao ---
         loc_oPg1.AddObject("chk_4c_ChkDetOpe", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkDetOpe
-            .Top      = 236
+            .Top      = 151
             .Left     = 176
             .Width    = 136
             .Height   = 15
@@ -526,7 +526,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Imprime Vendedor (habilitado apenas com chkDetOpe) ---
         loc_oPg1.AddObject("chk_4c_ChkVends", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkVends
-            .Top      = 236
+            .Top      = 151
             .Left     = 400
             .Width    = 105
             .Height   = 15
@@ -557,7 +557,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Resumo Por Vendedor ---
         loc_oPg1.AddObject("chk_4c_ChkVendRes", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkVendRes
-            .Top      = 253
+            .Top      = 168
             .Left     = 176
             .Width    = 124
             .Height   = 15
@@ -571,7 +571,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Resumo Por Formas de Pagamento (default ativo) ---
         loc_oPg1.AddObject("chk_4c_ChkResFpg", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkResFpg
-            .Top      = 271
+            .Top      = 186
             .Left     = 176
             .Width    = 185
             .Height   = 15
@@ -585,7 +585,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Operacoes X Pagamentos (default ativo) ---
         loc_oPg1.AddObject("chk_4c_ChkOpePag", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkOpePag
-            .Top      = 289
+            .Top      = 204
             .Left     = 176
             .Width    = 141
             .Height   = 15
@@ -599,7 +599,7 @@ DEFINE CLASS Formsigrefec AS FormBase
         * --- CheckBox: Analitico Por Pagamentos ---
         loc_oPg1.AddObject("chk_4c_ChkAnaPag", "CheckBox")
         WITH loc_oPg1.chk_4c_ChkAnaPag
-            .Top      = 307
+            .Top      = 222
             .Left     = 176
             .Width    = 142
             .Height   = 15

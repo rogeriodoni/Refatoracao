@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Resumo do que foi feito e **medido** (n├úo deduzido).
+
+## O que a Fase 8 encontrou
+
+O form j├í vinha completo das fases 1ÔÇô7 (os 12 m├®todos do dump est├úo portados). A Fase 8 revelou **dois defeitos reais**, os dois silenciosos:
+
+**1. A grade abria VAZIA (cr├¡tico).** `FiltrarGrade` transcrevia literalmente o `Set Key To pTipo` do legado, sobre o TAG **composto** `Tipos + Str(Ordem,3) + Cpros` (18 chars). Medido no VFP9 (`automation\MedirSetKeyRange777.prg`):
+
+```
+EXACT ON  + SET KEY TO "V"                                    -> 0 LINHAS
+EXACT OFF + SET KEY TO "V"                                    -> 3 linhas
+EXACT ON  + SET KEY TO RANGE "V","V"+REPLICATE(CHR(255),250)  -> 3 linhas
+```
+
+`config.prg:242` liga `SET EXACT ON` globalmente ÔÇö ao contr├írio do ambiente Fortyus. Corrigido com `SET KEY TO RANGE`, que ├® imune ao `SET EXACT`. Escolhi RANGE em vez do `SET FILTER` que a li├º├úo existente recomendava porque **o SQL `SELECT` ignora SET KEY mas honra SET FILTER** (medido): o `SELECT * from csGrade where altcoef = 1` do Encerrar precisa ver os dois tipos, como no legado ÔÇö SET FILTER reduziria o entreg├ível em sil├¬ncio.
+
+**2. Sa├¡da fora do funil.** O dump declara `TitleBar = 0` / `ControlBox = .F.` / `BorderStyle = 2` / `ClipControls = .F.`; nenhuma estava transcrita. Fechar pelo "X" pulava `FecharDialogo()`, o `crPrFtp` nunca era montado e o form pai recebia a planilha como se nada tivesse mudado. Transcritas ÔÇö a ├║nica sa├¡da volta a ser o Encerrar (com `Cancel = .T.`, ent├úo o ESC tamb├®m).
+
+## Prova (probe real, n├úo leitura de c├│digo)
+
+`automation\Probe777F8.prg` instancia a tela com um `csGrade` montado na estrutura exata do dump do pai:
+
+```
+[1] CREATEOBJECT -> VARTYPE=O        [2] TitleBar=0 ControlBox=.F.
+[3] 7 colunas ligadas, Width e Header sobrevivendo ao RecordSource
+[4] 3 linhas visiveis (esperado 3)   rodape = 250
+[7] Valos=100 = ROUND((100*2)-100,3)  AltCoef=1  CidChaves preenchido
+[8] crPrFtp = 1 linha  |  filtro desfeito (5 visiveis)  |  pai.Enabled=.T.
+[9] todos os metodos chamados de fora PUBLIC
+```
+
+Compila├º├úo limpa (`.FXP` sim, `.ERR` n├úo), `Test-CompletudeCodigo` OK nos dois arquivos, auditorias est├íticas sem achado.
+
+## Gate da Fase 8
+
+Era **insatisfaz├¡vel** sem violar o PILAR 1: o legado tem 1 bot├úo s├│ ("Encerrar"), e nenhum dos 17 ramos de exce├º├úo alcan├ºava ÔÇö cada um falha por um motivo diferente, todos medidos. Em vez de inventar um `BtnSalvarClick`, adicionei um ramo fail-closed **ENTREGA-AO-PAI** ao orquestrador (6 provas somadas). Medido nos **776 dumps de `tasks\`: dispara em exatamente 1** (task777). Diff: 4 hunks, 240 inser├º├Áes, 0 remo├º├Áes, BOM e CRLF preservados.
+
+Tamb├®m evitei a armadilha inversa: os nomes CRUD citados no cabe├ºalho do form est├úo escritos como `Btn<Cancelar>Click` etc., para que a documenta├º├úo n├úo satisfa├ºa o `-match` solto do gate e transforme a dispensa leg├¡tima (ramo FLUXO-├ÜNICO) num no-op.
+
+## O que ficou de fora ÔÇö e por qu├¬
+
+- **O form n├úo est├í ligado ao chamador.** O legado `SIGCDPRO` abre esta tela em 2 pontos (`chkPlanCus` ÔåÆ `[C]`, `chkPlanVen` ÔåÆ `[V]`, linhas 28866 e 28898 do dump da task003). O `FormProduto.prg` migrado n├úo tem esses CheckBoxes nem a chamada. Isso ├® uma lacuna da **task003**, n├úo desta; mexer num form de 10k linhas de outra task estaria fora do escopo. Sem esse gancho, a tela est├í correta mas inalcan├º├ível pelo usu├írio.
+- **N├úo rodei o gate ponta a ponta** ÔÇö invocar o orquestrador dispara uma migra├º├úo. Validei cada predicado de entrada dele isoladamente, com as fun├º├Áes reais extra├¡das do arquivo j├í corrigido.
+
+Backup do orquestrador em `/tmp/Orq.bak.ps1`. A li├º├úo do `SET KEY TO RANGE` foi anexada ├á mem├│ria existente sobre ├¡ndice composto (n├úo dupliquei).

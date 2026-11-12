@@ -1,0 +1,25 @@
+form = O
+
+=== estado inicial ===
+CdTpOpe=[0]  DsTpOpe=[TODOS]
+
+=== CASO 1: usuario digita 7 no Tipo e sai do campo ===
+CdTpOpe=[7]  DsTpOpe=[COMPRAS]
+
+=== CASO 2: usuario digita 4 ===
+CdTpOpe=[4]  DsTpOpe=[VENDAS]
+
+=== CASO 3: usuario apaga o codigo (volta ao default) ===
+CdTpOpe=[0]  DsTpOpe=[TODOS]
+
+=== CASO 4: usuario digita a DESCRICAO 'VENDAS' e sai ===
+CdTpOpe=[4]  DsTpOpe=[VENDAS]
+
+=== CASO 5: descricao 'TODOS' zera o codigo (nao abre browse) ===
+CdTpOpe=[0]  DsTpOpe=[TODOS]
+
+=== CASO 6: guarda de reentrancia nao fica travada ===
+this_lEmLookup apos tudo = .F.  (tem de ser .F.)
+
+erros: []
+FIM

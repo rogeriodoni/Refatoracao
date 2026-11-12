@@ -1,0 +1,227 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 6,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fAcessoContab", "fUniqueIds", "From Dbf"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPOPE",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.cmdMultiSubN.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = 'C.Custo Padrao da Operação ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( TmpCcOpe.Grupos ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty( This.Value )\n\t= fAcessoContab(Usuar,'C',This.Value,This,ThisForm.GradeSubN.Column2.Text1)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nEndIf\nReturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.GradeSubN.Column4.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.lHouveIns = .T.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.cmdExcluir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select TmpCcOpe\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.cmdSair",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\t\n\t\tSelect TmpCcOpe\n\t\tDelete For Grupos = '  '\n\t\tReplace all dopes     With CrSigCdOpe.Dopes,;\n\t\t\t\t    CidChaves With fUniqueIds()\n\n\t\tSelect Grupos, sum(1) From TmpccOpe Group by 1 having sum(1) > 1 Into Cursor SecondKey\n\t\tSelect SecondKey\n\t\tIf Reccount() > 0\n\t\t\tMessageBox('Existem Grupos em Duplicidade. Favor Acertar!!!',0+16,'Atenção')\n\t\t\tReturn .f.\n\t\tEndIf\n\t\t\n\t\tSelect CrSigCcCpe\n\t\tZ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,From Dbf",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPOPE.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect TmpCcOpe\nLocate for Grupos = ' '\nIf Eof()\n\tInsert Into TmpCcOpe (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\n\nSelect TmpCcOpe\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPOPE.cmdSair.Click",
+      "queryOriginal": "\t\tSelect Grupos, sum(1) From TmpccOpe Group by 1 having sum(1) > 1 Into Cursor SecondKey",
+      "tabelas": "TmpccOpe",
+      "colunas": "Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPOPE.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into TmpCcOpe (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "TmpCcOpe",
+      "colunas": "Dopes,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpccOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

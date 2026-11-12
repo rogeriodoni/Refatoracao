@@ -440,6 +440,10 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .HighlightForeColor = RGB(15, 41, 104)
                 .HighlightStyle     = 2
                 .DeleteMark         = .F.
+                *-- legado: HeaderHeight = 0 (grades sem linha de cabecalho)
+                .HeaderHeight       = 0
+                .AllowHeaderSizing  = .F.
+                .AllowRowSizing     = .F.
                 .RecordMark         = .F.
                 .RowHeight          = 16
                 .ScrollBars         = 2
@@ -451,9 +455,14 @@ DEFINE CLASS Formsigreffi AS FormBase
                 *-- REGRA: AddObject("Check1") ANTES de ControlSource (evita Error 1767)
                 .Column1.AddObject("Check1", "CheckBox")
                 .Column1.Check1.Caption   = ""
-                .Column1.Check1.Value     = 0
+                *-- NAO atribuir .Value: medido no VFP9 - com o Grid ja ligado ao
+                *-- RecordSource, definir o CheckBox como CurrentControl com Value
+                *-- proprio GRAVA esse valor na linha corrente do cursor.
                 .Column1.Check1.Visible   = .T.
                 .Column1.CurrentControl   = "Check1"
+                *-- Sem Sparse = .F. o CheckBox so desenha na celula ativa (regra #18);
+                *-- o SCX legado declara Column1.Sparse = .F. nas tres grades.
+                .Column1.Sparse           = .F.
                 *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
                 THIS.BindToggleEmpresas1(THIS.pgf_4c_Paginas.Page1.grd_4c_Empresas.Column1.Check1)
                 .Column1.Resizable        = .F.
@@ -480,7 +489,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 720
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -500,7 +511,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 720
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -564,6 +577,10 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .HighlightForeColor = RGB(15, 41, 104)
                 .HighlightStyle     = 2
                 .DeleteMark         = .F.
+                *-- legado: HeaderHeight = 0 (grades sem linha de cabecalho)
+                .HeaderHeight       = 0
+                .AllowHeaderSizing  = .F.
+                .AllowRowSizing     = .F.
                 .RecordMark         = .F.
                 .RowHeight          = 16
                 .ScrollBars         = 2
@@ -574,9 +591,14 @@ DEFINE CLASS Formsigreffi AS FormBase
 
                 .Column1.AddObject("Check1", "CheckBox")
                 .Column1.Check1.Caption   = ""
-                .Column1.Check1.Value     = 0
+                *-- NAO atribuir .Value: medido no VFP9 - com o Grid ja ligado ao
+                *-- RecordSource, definir o CheckBox como CurrentControl com Value
+                *-- proprio GRAVA esse valor na linha corrente do cursor.
                 .Column1.Check1.Visible   = .T.
                 .Column1.CurrentControl   = "Check1"
+                *-- Sem Sparse = .F. o CheckBox so desenha na celula ativa (regra #18);
+                *-- o SCX legado declara Column1.Sparse = .F. nas tres grades.
+                .Column1.Sparse           = .F.
                 *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
                 THIS.BindToggleDisps1(THIS.pgf_4c_Paginas.Page1.grd_4c_Disps.Column1.Check1)
                 .Column1.Resizable        = .F.
@@ -601,7 +623,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 256
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -621,7 +645,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 256
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -685,6 +711,10 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .HighlightForeColor = RGB(15, 41, 104)
                 .HighlightStyle     = 2
                 .DeleteMark         = .F.
+                *-- legado: HeaderHeight = 0 (grades sem linha de cabecalho)
+                .HeaderHeight       = 0
+                .AllowHeaderSizing  = .F.
+                .AllowRowSizing     = .F.
                 .RecordMark         = .F.
                 .RowHeight          = 16
                 .ScrollBars         = 2
@@ -695,9 +725,14 @@ DEFINE CLASS Formsigreffi AS FormBase
 
                 .Column1.AddObject("Check1", "CheckBox")
                 .Column1.Check1.Caption   = ""
-                .Column1.Check1.Value     = 0
+                *-- NAO atribuir .Value: medido no VFP9 - com o Grid ja ligado ao
+                *-- RecordSource, definir o CheckBox como CurrentControl com Value
+                *-- proprio GRAVA esse valor na linha corrente do cursor.
                 .Column1.Check1.Visible   = .T.
                 .Column1.CurrentControl   = "Check1"
+                *-- Sem Sparse = .F. o CheckBox so desenha na celula ativa (regra #18);
+                *-- o SCX legado declara Column1.Sparse = .F. nas tres grades.
+                .Column1.Sparse           = .F.
                 .Column1.Resizable        = .F.
                 .Column2.ReadOnly         = .T.
                 .Column3.ReadOnly         = .T.
@@ -720,7 +755,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 659
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -740,7 +777,9 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Left          = 659
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.

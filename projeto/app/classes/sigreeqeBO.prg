@@ -278,6 +278,8 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
 
         loc_lSucesso = .F.
         TRY
+            loc_lSucesso = .T.
+
             *-- Empresa obrigatoria
             IF EMPTY(ALLTRIM(THIS.this_cEmpresa))
                 THIS.this_cMensagemErro = "Empresa Inv" + CHR(225) + "lida"
@@ -285,13 +287,11 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
             ENDIF
 
             *-- Tabela de desconto obrigatoria
-            IF EMPTY(ALLTRIM(THIS.this_cTabela))
+            IF loc_lSucesso AND EMPTY(ALLTRIM(THIS.this_cTabela))
                 THIS.this_cMensagemErro = "Empresa com Tabela de Desconto Padr" + ;
                     CHR(227) + "o N" + CHR(227) + "o Informada !!!"
                 loc_lSucesso = .F.
             ENDIF
-
-            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -332,8 +332,10 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
                 USE IN CsCabecalho
             ENDIF
 
+            *-- Estrutura identica ao legado (inclui titulo2, que o FRX nao usa
+            *   mas o legado declara)
             CREATE CURSOR CsCabecalho ;
-                (nomeempresa C(80), titulo1 C(80), Barra L)
+                (nomeempresa C(80), titulo1 C(80), titulo2 C(150), Barra L)
 
             INSERT INTO CsCabecalho (nomeempresa, titulo1, Barra) ;
                 VALUES (loc_cNomeEmpresa, loc_cTitulo1, loc_lBarra)
@@ -537,7 +539,11 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
 
                 *-- Situacao tributaria e codigo de barras (string)
                 m.SitTribs = IIF(EMPTY(m.SitTricms), "00", m.SitTricms)
-                loc_cCBars = m.CBars
+                *-- CBars eh numeric(14,0) em SigOpEtq e SigCdPro; CsRelatorio.CBars
+                *   eh C(14). O legado converte com Str(m.Cbars,14) antes de gravar
+                *   (e antes do Seek na tag char). Sem o Str(), o INSERT numerico em
+                *   coluna character e o SEEK numerico na tag CBars estouram.
+                loc_cCBars = STR(m.CBars, 14)
 
                 *-- Inserir no cursor de resultado
                 IF loc_nAgrupa = 2
@@ -600,7 +606,7 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
             ELSE
                 loc_cRelPath = IIF(TYPE("gc_4c_CaminhoReports") = "C", ;
                     gc_4c_CaminhoReports, "") + "SigReEqe"
-                REPORT FORM &loc_cRelPath PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(loc_cRelPath, "PREVIEW")
                 IF USED("CsCabecalho")
                     USE IN CsCabecalho
                 ENDIF
@@ -627,7 +633,7 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
             ELSE
                 loc_cRelPath = IIF(TYPE("gc_4c_CaminhoReports") = "C", ;
                     gc_4c_CaminhoReports, "") + "SigReEqe"
-                REPORT FORM &loc_cRelPath TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(loc_cRelPath, "PRINTER_PROMPT")
                 IF USED("CsCabecalho")
                     USE IN CsCabecalho
                 ENDIF
@@ -654,7 +660,7 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
             ELSE
                 loc_cRelPath = IIF(TYPE("gc_4c_CaminhoReports") = "C", ;
                     gc_4c_CaminhoReports, "") + "SigReEqe"
-                REPORT FORM &loc_cRelPath TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(loc_cRelPath, "PRINTER")
                 IF USED("CsCabecalho")
                     USE IN CsCabecalho
                 ENDIF
@@ -727,7 +733,10 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
                 SELECT cursor_4c_SigCdCot
                 SET ORDER TO CMoeData
                 SET NEAR ON
-                SEEK loc_cMoeda + DTOS(loc_dData)
+                *-- Chave POSICIONAL: a tag eh CMoes + DTOS(Datas) e CMoes eh
+                *   char(3). ALLTRIM na parte encurta a chave e o SEEK erra
+                *   (regra #42) - padding explicito na largura da coluna.
+                SEEK PADR(loc_cMoeda, 3) + DTOS(loc_dData)
                 SET NEAR OFF
                 IF !EOF() AND ALLTRIM(cursor_4c_SigCdCot.CMoes) = loc_cMoeda
                     loc_nCotacao = cursor_4c_SigCdCot.Valos

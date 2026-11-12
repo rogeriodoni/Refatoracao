@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH balanced (21/21), AddObject count matches expectations. The method is wired into `ConfigurarPageFrame`.
+
+## Summary
+
+Fase 5/8 for `FormSigOpPec` added the first 4 of the 7 standalone top action buttons (this OPERACIONAL form has no Page2/campos de dados ÔÇö `analise.json` confirms `campos: []` ÔÇö so "metade dos campos" was interpreted as the first half of the remaining top-bar buttons left pending since Fase 3/4's comments):
+
+- New `ConfigurarBotoesAcao()` method in `FormSigOpPec.prg`, wired into `ConfigurarPageFrame()` between the image grid and the navigation button group (matching SCX dump z-order).
+- Added `cmd_4c_GeraArquivo`, `cmd_4c_Command2`, `cmd_4c_Command1`, `cmd_4c_Exporta` ÔÇö all properties (Top/Left/Width/Height, fonts, Picture, Caption, ToolTipText, colors, Themes) transcribed verbatim from the SCX dump; verified all 4 icon files exist in `vbmp\`.
+- Updated the file header comment to reflect progress.
+
+Deferred to the next phase (per the plan, consistent with how Click/behavior logic has been deferred since Fase 3): the remaining 3 buttons (`relpecas`/`Command3`/`Command4`), the Click handlers for all 7, and the `fChecaAcesso`-based visibility toggle from the legacy `Init` (lines 1997-2010 of the source dump) ÔÇö that's behavior, not structure, so it belongs with the logic phases.

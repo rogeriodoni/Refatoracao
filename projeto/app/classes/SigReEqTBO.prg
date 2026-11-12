@@ -15,8 +15,13 @@ DEFINE CLASS SigReEqTBO AS RelatorioBase
     this_nOpcao             = 2
 
     *-- Nomes dos cursors de dados (preenchidos pelo form pai via Set DataSession)
-    this_cCursorGrupos      = "cursor_4c_TempoGr"
-    this_cCursorProdutos    = "cursor_4c_TempoCp"
+    *   Os nomes sao os do LEGADO (csTempoGr / CsTempoCp): quem cria esses
+    *   cursores eh o SIGREEQRBO.PrepararDados, e o SigReEqT.Init legado faz
+    *   "Select csTempoGr" + "Grid1.RecordSource = 'csTempoGr'". Os nomes
+    *   cursor_4c_* eram invencao da migracao e nenhum cursor com esse nome
+    *   chega a existir - o viewer abria vazio (Erro342).
+    this_cCursorGrupos      = "csTempoGr"
+    this_cCursorProdutos    = "CsTempoCp"
 
     *-- Nomes dos arquivos FRX (sem extensao e sem caminho)
     *-- SigReEq1 = Analitico (csTempoCp, com ordem Imprimir)
@@ -100,12 +105,12 @@ DEFINE CLASS SigReEqTBO AS RelatorioBase
                 SET ORDER TO Imprimir
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxAnalitico + ".frx"
-                REPORT FORM (loc_cPathFrx) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PRINTER")
             ELSE
                 SELECT (THIS.this_cCursorGrupos)
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxSintetico + ".frx"
-                REPORT FORM (loc_cPathFrx) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PRINTER")
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -127,12 +132,12 @@ DEFINE CLASS SigReEqTBO AS RelatorioBase
                 SET ORDER TO Imprimir
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxAnalitico + ".frx"
-                REPORT FORM (loc_cPathFrx) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PRINTER_PROMPT")
             ELSE
                 SELECT (THIS.this_cCursorGrupos)
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxSintetico + ".frx"
-                REPORT FORM (loc_cPathFrx) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PRINTER_PROMPT")
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -154,12 +159,12 @@ DEFINE CLASS SigReEqTBO AS RelatorioBase
                 SET ORDER TO Imprimir
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxAnalitico + ".frx"
-                REPORT FORM (loc_cPathFrx) PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PREVIEW")
             ELSE
                 SELECT (THIS.this_cCursorGrupos)
                 GO TOP
                 loc_cPathFrx = gc_4c_CaminhoReports + THIS.this_cFrxSintetico + ".frx"
-                REPORT FORM (loc_cPathFrx) PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(loc_cPathFrx, "PREVIEW")
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro

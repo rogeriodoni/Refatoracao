@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, matches the expected usage pattern exactly. The BO file is syntactically sound and complete for this phase.
+
+**Summary of Phase 2 changes to `C:\4c\projeto\app\classes\SigOpPecBO.prg`:**
+
+Since this BO's header (from Phase 1) already documents that the legacy `SigOpPec` screen never does SQL Server INSERT/UPDATE/DELETE (it only manipulates a local selection cursor, `CrImagens`), I followed the project rule for read-only/no-persistence BOs and did **not** fabricate fake `Inserir()`/`Atualizar()`/`ExecutarExclusao()` overrides ÔÇö the inherited `BusinessBase` behavior (refuse with a message) is already correct here. Instead I added the methods that reflect what the legacy code actually does:
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps all 31 `CrImagens`/`Tmp_Imagens` columns to `this_*` properties (correctly using `TratarNulo(col, <default value>)`, not the widespread `TratarNulo(col, "C")` type-code bug documented in memory).
+- `ExisteNoCursorSelecao` / `RemoverDoCursorSelecao` ÔÇö mirror the legacy `Locate ... Found() / Delete`.
+- `ObterDescricaoFornecedor` ÔÇö the real SQL Server read (`SELECT Rclis FROM SigCdCli WHERE Iclis = ...`).
+- `AdicionarAoCursorSelecao` ÔÇö mirrors the legacy `Insert Into CrImagens(...)`, reusing the already-ported `fAltBar2de5` helper for the barcode.
+- `ObterChavePrimaria` kept as-is; a comment documents why `Inserir`/`Atualizar`/`ExecutarExclusao`/`RegistrarAuditoria` aren't overridden.
+
+No file-ending TODOs, stubs, or placeholders were introduced.

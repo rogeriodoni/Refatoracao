@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpOpe.prg` est├í COMPLETO (1468 linhas, 28 m├®todos).
+
+## O que a Fase 8 encontrou e fechou
+
+Conferi os **onze blocos de c├│digo da SE├ç├âO 3 do dump** m├®todo a m├®todo. Dez j├í estavam entregues nas Fases 3ÔÇô7. Sobraram dois, ambos fechados:
+
+**1. Posicionamento do di├ílogo (porte que faltava ÔÇö PILAR 1).** O `Init` legado **n├úo** deixa o VFP escolher onde a janela nasce: ancora o di├ílogo ao lado da linha selecionada na grade do form chamador. A classe estava com `AutoCenter = .T.`, que centraliza **na tela** ÔÇö comportamento que o SCX n├úo tem (o dump traz `Top = 0`/`Left = 0` e n├úo declara `AutoCenter`). Agora `AutoCenter = .F.` e a f├│rmula est├í transcrita em `PosicionarJuntoAoFormPai()` + `LocalizarGradeDoFormPai()`.
+
+Detalhe concreto que exigiu cuidado: a f├│rmula legado soma `Columns(1).Width + Columns(3).Width`, mas a grade do **`FormOPE` migrado tem `ColumnCount = 2`** ÔÇö `Columns(3)` ali **n├úo existe** e ler sem conferir estouraria dentro do `Init` (a tela n├úo abriria). O somat├│rio ├® guardado por `ColumnCount`.
+
+**2. O `Load` legado (`=fConfigGeral()`) n├úo ├® portado** ÔÇö agora dito por escrito em vez de omiss├úo silenciosa. O `utils\fconfiggeral.prg` existe apenas como wrapper no-op para o p-code dos VCX bin├írios, e o cabe├ºalho dele determina: "em c├│digo NOSSO nunca se chama fConfigGeral".
+
+## Verifica├º├Áes (todas executadas, n├úo presumidas)
+
+Rodei primeiro o **smoke test** de 4 linhas do VFP9 ÔÇö ele executou (`VIVO 11/11/2026 18:58:18`), ent├úo as provas abaixo valem; sem isso o `.FXP` e o `exit=0` n├úo provariam nada.
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Compila├º├úo (Form + BO) | `FXP=SIM ERR=NAO` nos dois |
+| Instancia├º├úo, 4 cen├írios | **todos `VARTYPE=O`**, nenhum erro/di├ílogo capturado |
+| Gate real da Fase 8 (`case 8` extra├¡do do orquestrador) | `VALIDADO = True`, `metodosFaltantes = []` |
+| `Test-CompletudeCodigo` | Form = True, BO = True (nenhum TODO/stub) |
+| `ValidadorSQLSchema` (inclui `Validate-InsertNotNull`) | 683 tabelas, 9 statements, **PASSOU** |
+| 4 auditorias (fun├º├Áes n├úo definidas, props inexistentes, m├®todo protegido, lookup em KeyPress) | zero achado neste form |
+
+Os quatro cen├írios de posicionamento bateram com o esperado: pai com 2 colunas ÔåÆ `Top=306 Left=321`; com 3 colunas ÔåÆ `Top=306 Left=371`; pai sem grade ÔåÆ centraliza sobre o pai (`212/350`); sem pai ÔåÆ `0/0` sem estourar. O `Caption` saiu com acento correto (`C.Custo Padr├úo da Opera├º├úo Venda`), o pai ficou `Enabled=.F.` e a `Column4` manteve `CurrentControl=CHK_4C_CTFILS`.
+
+## Dois pontos que voc├¬ precisa saber
+
+**1. Quirk do legado que transcrevi em vez de "consertar".** No legado, `lHouveIns` s├│ ├® marcado por `cmdInserir.Click` e pelo `Click` do CheckBox. A `Column3` (Grupo Cadastro) **n├úo tem `When`**, ent├úo ├® edit├ível em qualquer linha ÔÇö mas edit├í-la numa linha j├í gravada **n├úo** marca a flag, e o `cmdSair` s├│ grava se alguma flag estiver ligada. Resultado no legado: quem s├│ altera o Grupo Cadastro e clica Encerrar **perde a edi├º├úo em sil├¬ncio**. O migrado reproduz isso fielmente. Se quiser que o migrado divirja (marcar a flag na edi├º├úo da c├®lula), ├® uma linha ÔÇö mas ├® mudan├ºa deliberada de comportamento e preferi n├úo tom├í-la por voc├¬.
+
+**2. Falta a fia├º├úo do chamador.** Nenhum form instancia `FormSigOpOpe` ainda ÔÇö o `FormOPE` (Cadastro de Movimenta├º├Áes de Estoque, o SIGCDOPE) n├úo tem o bot├úo que abre este di├ílogo. N├úo ├® escopo da Fase 8 (que entrega o arquivo do form), mas sem isso a tela n├úo ├® alcan├º├ível pelo usu├írio.
+
+Criei dois scripts de medi├º├úo reus├íveis: `automation\VerificarGateFase8Task776.ps1` e `automation\ValidarCompletude776F8.ps1`.

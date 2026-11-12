@@ -7485,6 +7485,175 @@ function Test-LegadoSaidaEhOBotaoDeAcao {
 
 <#
 .SYNOPSIS
+    Nome do cursor de RESULTADO que o unico botao do legado monta para o form
+    PAI antes de fechar - ou $null quando a tela nao tem esse formato.
+.DESCRIPTION
+    Irmao ESTREITO de Test-LegadoBotaoUnicoSoFecha, para o caso em que aquele
+    helper responde "nao" pelo motivo errado. Aquele exige que TODA linha do
+    Click passe por Test-LinhaDeFechamentoLegado; aqui o Click faz UMA coisa a
+    mais, e essa coisa eh justamente o ENTREGAVEL da tela.
+
+    Caso de origem: SIGOPPCU -> FormSigOpPcu (task777, "Planilha de Custo").
+    Dialogo FILHO do cadastro de produtos (SIGCDPRO), aberto com
+    "Init(poForm, pnDataSes, pTipo)": entra na data session do chamador, liga
+    a grade ao cursor csGrade DELE, deixa o usuario digitar a coluna do
+    coeficiente e, no unico botao do SCX (cmdSair, Caption "Encerrar"), faz
+
+        SELECT * from csGrade where altcoef = 1 into cursor crPrFtp READWRITE
+        Select CsGrade
+        Set Key To
+        If (Type([ThisForm.ParentForm])=[O])
+            Thisform.ParentForm.Enabled = .T.
+        EndIf
+        Release lnCoef, pcTipo
+        ThisForm.Release
+
+    Isto e': o botao que fecha tambem MONTA o cursor que o form PAI vai ler
+    para gravar em sigprftp. Nao ha - nem poderia haver - um botao de gravar
+    nesta tela: ela nao escreve em tabela nenhuma, as unicas escritas do dump
+    sao REPLACE no cursor do CHAMADOR.
+
+    Sem esta prova a Fase 8 exige Btn(Salvar|Confirmar|Gravar|Processa|
+    Aplicar|Executar|OK)Click de um legado que nao tem o botao, e as duas
+    unicas saidas seriam INVENTAR o botao (viola o PILAR 1 e "NUNCA inventar")
+    ou criar um handler vazio (proibido pela regra de completude) - o mesmo
+    impasse que os outros ramos de excecao da Fase 8 ja resolveram. Renomear
+    BtnEncerrarClick para um verbo canonico tambem nao serve: o nome passaria
+    a MENTIR sobre o que o metodo faz (mesma leitura de
+    Test-LegadoSaidaEhOBotaoDeAcao).
+
+    Por que nenhum ramo existente alcanca:
+      CALCULADORA        Test-LegadoBotaoUnicoSoFecha = $false - o "Select ...
+                         Into Cursor" e o "Set Key To" nao sao linha de
+                         fechamento, e nem deveriam ser: fazem trabalho;
+      VISUALIZADOR       Test-LegadoSomenteLeitura = $false - a coluna do
+                         coeficiente eh digitavel (o When dela nao eh
+                         "Return .f.", eh "fChecaAcesso([SIGCDFTI]) And
+                         (pcTipo = [V])");
+      SAIDA-EH-ACAO      Test-LegadoSaidaEhOBotaoDeAcao = $false - a PROVA 4
+                         dele exige persistencia (Replace/Insert/Update/
+                         TableUpdate/fGravarLog), e aqui o Click so monta
+                         cursor. Alargar aquele predicado para aceitar
+                         "Into Cursor" seria errado: ele existe para o caso em
+                         que a saida GRAVA;
+      LEITOR-BAIXA       exige persistencia em tabela do banco;
+      ENTRADA-SEM-BOTAO  exige ZERO botao, e aqui ha um;
+      FLUXO-UNICO        ALCANCA, e eh o que dispensa os quatro nomes CRUD -
+                         mas, por construcao, ele NAO substitui a exigencia de
+                         botao de acao (ver o comentario na definicao dele).
+
+    FAIL-CLOSED em quatro provas somadas; qualquer duvida devolve $null:
+      1. o dump declara EXATAMENTE 1 botao, com nome proprio de CommandButton
+         (Get-ContagemBotoesLegado + Get-NomesBotoesLegado) - zero eh o ramo
+         ENTRADA-SEM-BOTAO e mais de um pode ter botao de acao;
+      2. esse botao tem corpo de Click legivel - ausencia de prova nao eh
+         prova de ausencia;
+      3. esse Click FECHA a tela (mesmos tokens de Test-LinhaDeFechamentoLegado);
+      4. esse Click monta um cursor com "Into Cursor <nome>".
+    Devolve o NOME do cursor para que o chamador possa cobrar, do lado do
+    migrado, que o entregavel exista - prova derivada do DUMP, nunca uma lista
+    de nomes fixa (CLAUDE.md #44, item 6).
+.OUTPUTS
+    [string] nome do cursor de resultado, ou $null.
+#>
+function Get-CursorEntregueAoPaiLegado {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $null }
+
+    if ((Get-ContagemBotoesLegado -TextoDump $TextoDump) -ne 1) { return $null }
+
+    $nomesBotao = @(Get-NomesBotoesLegado -TextoDump $TextoDump)
+    if ($nomesBotao.Count -ne 1) { return $null }
+
+    $corpoClick = Get-CorpoClickDoObjetoLegado -TextoDump $TextoDump -NomeObjeto $nomesBotao[0]
+    if ([string]::IsNullOrWhiteSpace($corpoClick)) { return $null }
+
+    $padraoFecha = '(?im)^\s*(=\s*)?(This)?Form\.Release(\s*\(\s*\))?\s*$' +
+                   '|^\s*Release\s+Thisform\s*$' +
+                   '|^\s*Release\s+Windows\b' +
+                   '|^\s*(This)?Form\.Hide\s*$'
+    if ($corpoClick -notmatch $padraoFecha) { return $null }
+
+    $mCursor = [regex]::Match($corpoClick, '(?i)\bInto\s+Cursor\s+([A-Za-z_]\w*)')
+    if (-not $mCursor.Success) { return $null }
+
+    return $mCursor.Groups[1].Value
+}
+
+<#
+.SYNOPSIS
+    O legado eh dialogo FILHO que edita cursor do chamador e ENTREGA o
+    resultado a ele num cursor, sem persistir nada em tabela?
+.DESCRIPTION
+    Predicado completo do ramo ENTREGA-AO-PAI da Fase 8 (ver o caso de origem
+    em Get-CursorEntregueAoPaiLegado). Soma, as quatro provas daquele helper,
+    duas que caracterizam o DIALOGO FILHO e a ausencia de persistencia:
+
+      5. o Init recebe o form pai E a data session por PARAMETRO, entra nessa
+         data session ("Set DataSession to <param>") e guarda o chamador em
+         ThisForm.ParentForm. As duas coisas juntas sao o que prova que a tela
+         trabalha sobre dado de OUTRO form - sem elas, um form qualquer que
+         monte um cursor antes de fechar passaria.
+         Nao se usa Test-DialogoFilhoDoChamador aqui: aquele exige a forma
+         "Set DataSession to <param>.DataSessionId" e este legado passa o
+         NUMERO da sessao ja resolvido ("Set DataSession to pnDataSes").
+         Alargar aquele helper mexeria nos ramos que o consomem - mesma
+         decisao de PROTOCOLO, FILTRO-DESPACHO e GRAFICO, que preferiram
+         predicado proprio;
+      6. NADA eh persistido em tabela do banco: Test-LegadoEscritaSoEmCursorLocal
+         prova que todo Insert/Update/Delete tem como alvo cursor que o proprio
+         dump cria, e a varredura seguinte descarta TableUpdate/SqlExecute/
+         Append Blank/Gather em qualquer ponto do dump. Legado que persiste
+         TEM botao de acao e continua exigindo o nome canonico.
+
+    Medido em 2026-11-11 nos 776 dumps de tasks\: o predicado dispara em
+    EXATAMENTE 1 - SigOpPcu (task777). Blast radius real: UM form.
+.OUTPUTS
+    [bool] $true quando o unico botao do legado entrega o resultado ao pai e fecha.
+#>
+function Test-LegadoEntregaCursorAoPai {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # PROVA 5 - dialogo FILHO: recebe pai + data session por parametro do Init,
+    # entra na sessao e guarda o chamador.
+    $params = New-Object System.Collections.Generic.List[string]
+    foreach ($mPar in [regex]::Matches($TextoDump, '(?im)^[ \t]*(?:LParameters|Parameters)\b([^\r\n]*)')) {
+        foreach ($p in ($mPar.Groups[1].Value -split ',')) {
+            $p = $p.Trim()
+            if ($p -match '^\w+$') { [void]$params.Add($p) }
+        }
+    }
+    if ($params.Count -lt 2) { return $false }
+
+    $entrouNaSessao = $false
+    $guardouPai     = $false
+    foreach ($p in $params) {
+        $pe = [regex]::Escape($p)
+        if ($TextoDump -match "(?im)^[ \t]*Set[ \t]+DataSession[ \t]+to[ \t]+$pe[ \t]*\r?$") { $entrouNaSessao = $true }
+        if ($TextoDump -match "(?im)^[ \t]*(?:This)?Form\.ParentForm[ \t]*=[ \t]*$pe[ \t]*\r?$") { $guardouPai = $true }
+    }
+    if (-not $entrouNaSessao) { return $false }
+    if (-not $guardouPai)     { return $false }
+
+    # PROVAS 1 a 4 - um botao, Click que fecha montando o cursor de resultado.
+    if (-not (Get-CursorEntregueAoPaiLegado -TextoDump $TextoDump)) { return $false }
+
+    # PROVA 6 - nada persiste em tabela do banco.
+    if (-not (Test-LegadoEscritaSoEmCursorLocal -TextoDump $TextoDump)) { return $false }
+    if ($TextoDump -match '(?i)\bTableUpdate\b|\bSqlExecute\b|\bAppend[ \t]+Blank\b|\bGather\b') { return $false }
+
+    return $true
+}
+
+<#
+.SYNOPSIS
     O legado nao tem botao ALGUM?
 .DESCRIPTION
     Irmao de Get-ContagemBotoesLegado/Test-LegadoCliqueSoFecha, para o ramo
@@ -11358,6 +11527,8 @@ function Invoke-MigracaoFase {
                 $legadoEscolhaAoPaiF8  = $false
                 $legadoImpressaoFilhoF8 = $false
                 $legadoComplementoFilhoF8 = $false
+                $legadoEntregaAoPaiF8     = $false
+                $cursorAoPaiF8            = $null
                 # Definido AQUI, e nao mais abaixo junto do seu proprio bloco,
                 # porque o ramo LEITOR-BAIXA (dentro do if de OPERACIONAL, que
                 # roda antes) tambem precisa dele para provar que o migrado
@@ -13676,6 +13847,67 @@ function Invoke-MigracaoFase {
                             $botaoUnicoSoFechaF8 = Test-LegadoBotaoUnicoSoFecha -TextoDump $txtLegadoF8
                             $legadoSemAcao       = $botaoUnicoSoFechaF8
                         }
+
+                        # Dialogo FILHO que ENTREGA o resultado ao pai num
+                        # CURSOR (SIGOPPCU -> FormSigOpPcu, task777,
+                        # "Planilha de Custo"): o UNICO botao do SCX monta
+                        # "Select ... Into Cursor crPrFtp" com as linhas
+                        # alteradas, desfaz o "Set Key To", reabilita o pai
+                        # e fecha. A persistencia em sigprftp eh do form PAI,
+                        # que le esse cursor DEPOIS - esta tela nao escreve em
+                        # tabela nenhuma (as unicas escritas do dump sao
+                        # REPLACE no cursor csGrade, que eh do CHAMADOR).
+                        #
+                        # Nenhuma das saidas anteriores alcanca, e cada uma
+                        # falha por um motivo DIFERENTE (medido - ver o
+                        # cabecalho de Get-CursorEntregueAoPaiLegado):
+                        # cliqueSoFecha/botaoUnicoSoFecha = $false (o Click
+                        # faz trabalho), legadoVisualizador = $false (a coluna
+                        # do coeficiente eh digitavel) e acaoTemHandler =
+                        # $false (o verbo do unico botao eh "Encerrar",
+                        # descartado como botao de saida - corretamente).
+                        # Restava exigir Btn(Salvar|Confirmar|Gravar|Processa)
+                        # Click de uma tela que nao grava NADA: insatisfazivel
+                        # sem INVENTAR o botao (viola o PILAR 1 e "NUNCA
+                        # inventar") ou criar handler vazio (proibido pela
+                        # regra de completude). Renomear o handler existente
+                        # tambem nao serve - o nome passaria a MENTIR sobre o
+                        # que o metodo faz.
+                        #
+                        # Em predicado PROPRIO e estreito (as SEIS provas
+                        # estao em Test-LegadoEntregaCursorAoPai), sem alargar
+                        # Test-LegadoSaidaEhOBotaoDeAcao nem
+                        # Test-LinhaDeFechamentoLegado - os dois sao lidos por
+                        # varios ramos, e "Into Cursor" nao eh linha de
+                        # fechamento nem persistencia. Mesma decisao de
+                        # PROTOCOLO, FILTRO-DESPACHO e GRAFICO.
+                        #
+                        # A excecao NAO vira atalho para form vazio: em troca,
+                        # o migrado tem de entregar o handler do botao que o
+                        # legado TEM (ancorado em inicio de linha, para a
+                        # tabela "o que nao se aplica" do cabecalho do form
+                        # nao satisfazer um -match solto) E o cursor de
+                        # resultado COLHIDO DO DUMP, no form ou no BO - prova
+                        # derivada, nunca lista de nomes fixa (CLAUDE.md #44,
+                        # item 6).
+                        #
+                        # Medido em 2026-11-11 nos 776 dumps de tasks\: o
+                        # predicado dispara em EXATAMENTE 1 (SigOpPcu).
+                        if (-not $legadoSemAcao) {
+                            if (Test-LegadoEntregaCursorAoPai -TextoDump $txtLegadoF8) {
+                                $cursorAoPaiF8 = Get-CursorEntregueAoPaiLegado -TextoDump $txtLegadoF8
+                                $conteudoBOF8  = ""
+                                if ($boFile -and (Test-Path $boFile)) {
+                                    $conteudoBOF8 = Get-Content $boFile -Raw -ErrorAction SilentlyContinue
+                                }
+                                $cursorEscapadoF8 = [regex]::Escape($cursorAoPaiF8)
+                                $legadoEntregaAoPaiF8 =
+                                    ($conteudo -match '(?im)^\s*PROCEDURE\s+Btn\w*Click') -and
+                                    (($conteudo -match $cursorEscapadoF8) -or
+                                     ($conteudoBOF8 -and ($conteudoBOF8 -match $cursorEscapadoF8)))
+                                $legadoSemAcao = $legadoEntregaAoPaiF8
+                            }
+                        }
                     }
 
                     if ($legadoSemAcao) {
@@ -13762,6 +13994,14 @@ function Invoke-MigracaoFase {
                             # erro que a mensagem unica cometia antes do ramo
                             # visualizador.
                             Write-Host "  [i] Fase 8: legado eh dialogo de EXIBICAO cujo UNICO botao do SCX so reabilita o form pai e fecha - quem faz trabalho eh outro controle clicavel (CheckBox/OptionGroup) que recarrega a tela -, e o dump nao persiste nada em tabela (o unico Insert Into tem como alvo cursor LOCAL do proprio form) - exigencia de botao de GRAVAR nao se aplica" -ForegroundColor Cyan
+                        } elseif ($legadoEntregaAoPaiF8) {
+                            # Mensagem propria: aqui NAO se pode dizer "Click
+                            # so fecha" (ele monta o cursor de resultado) nem
+                            # "somente-leitura" (a coluna do coeficiente eh
+                            # digitavel) - as duas frases seriam factualmente
+                            # erradas, o mesmo erro que a mensagem unica
+                            # cometia antes do ramo visualizador.
+                            Write-Host "  [i] Fase 8: legado eh dialogo FILHO que edita, na data session do chamador, um cursor DELE e cujo UNICO botao monta o cursor de resultado ($cursorAoPaiF8) e fecha - quem persiste eh o form PAI, esta tela nao escreve em tabela nenhuma - exigencia de botao de GRAVAR nao se aplica; validado pelo handler do botao do legado e pelo cursor de resultado entregue no migrado" -ForegroundColor Cyan
                         } else {
                             Write-Host "  [i] Fase 8: legado visualizador (sem CRUD, sem botao de gravar e TODO campo somente-leitura) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
                         }

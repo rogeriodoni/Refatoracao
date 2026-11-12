@@ -1,0 +1,52 @@
+=== A) com csGrade + CrSigCdPro, tipo C ===
+VARTYPE=O
+Form.Caption=[PRD001 - CAMISA POLO AZUL]
+Cnt.Picture=[c:\4c\framework\imagens\new_background.jpg] FILE=SIM BackStyle=1
+Faixa.lblTitulo.Caption=[Planilha de Custo] ToolTip=[Título do Relatório]
+lbl_4c_Label1 existe=SIM
+  Caption=[Planilha de Custo (Fator)]
+  Top=96 Left=67 W=864 H=21
+  Align=2 BackStyle=0 AutoSize=.F. Font=Tahoma/12/B.T. ForeColor=5921370 Visible=.T.
+txt_4c_Adicional existe=SIM
+  Value=90 VARTYPE=N BO.TotalAdic=90
+  Top=576 Left=588 W=92 H=23
+  InputMask=[9999,999.999] Align=3 ReadOnly=.T. SpecialEffect=1 Back=14876411 DisBack=14876411 DisFore=5921370 TabStop=.T. Visible=.T.
+TabIndex: Cnt=1 Sombra=1 Grade=2 Label1=3 Adicional=4 Encerrar=5
+PROTECTED? AtualizarTitulos=.F. AtualizarTotalAdicional=.F.
+apos chamada externa: Value=90 Label1=[Planilha de Custo (Fator)]
+
+=== B) tipo V ===
+VARTYPE=O
+Form.Caption=[PRD001 - CAMISA POLO AZUL]
+Cnt.Picture=[c:\4c\framework\imagens\new_background.jpg] FILE=SIM BackStyle=1
+Faixa.lblTitulo.Caption=[Planilha de Custo] ToolTip=[Título do Relatório]
+lbl_4c_Label1 existe=SIM
+  Caption=[Planilha de Custo (Venda)]
+  Top=96 Left=67 W=864 H=21
+  Align=2 BackStyle=0 AutoSize=.F. Font=Tahoma/12/B.T. ForeColor=5921370 Visible=.T.
+txt_4c_Adicional existe=SIM
+  Value=300 VARTYPE=N BO.TotalAdic=300
+  Top=576 Left=588 W=92 H=23
+  InputMask=[9999,999.999] Align=3 ReadOnly=.T. SpecialEffect=1 Back=14876411 DisBack=14876411 DisFore=5921370 TabStop=.T. Visible=.T.
+TabIndex: Cnt=1 Sombra=1 Grade=2 Label1=3 Adicional=4 Encerrar=5
+PROTECTED? AtualizarTitulos=.F. AtualizarTotalAdicional=.F.
+apos chamada externa: Value=300 Label1=[Planilha de Custo (Venda)]
+
+=== C) SEM cursor do chamador (harness) ===
+VARTYPE=O
+Form.Caption=[Planilha de Custo]
+Cnt.Picture=[c:\4c\framework\imagens\new_background.jpg] FILE=SIM BackStyle=1
+Faixa.lblTitulo.Caption=[Planilha de Custo] ToolTip=[Título do Relatório]
+lbl_4c_Label1 existe=SIM
+  Caption=[Planilha de Custo (Fator)]
+  Top=96 Left=67 W=864 H=21
+  Align=2 BackStyle=0 AutoSize=.F. Font=Tahoma/12/B.T. ForeColor=5921370 Visible=.T.
+txt_4c_Adicional existe=SIM
+  Value=0 VARTYPE=N BO.TotalAdic=0
+  Top=576 Left=588 W=92 H=23
+  InputMask=[9999,999.999] Align=3 ReadOnly=.T. SpecialEffect=1 Back=14876411 DisBack=14876411 DisFore=5921370 TabStop=.T. Visible=.T.
+TabIndex: Cnt=1 Sombra=1 Grade=2 Label1=3 Adicional=4 Encerrar=5
+PROTECTED? AtualizarTitulos=.F. AtualizarTotalAdicional=.F.
+apos chamada externa: Value=0 Label1=[Planilha de Custo (Fator)]
+
+FIM

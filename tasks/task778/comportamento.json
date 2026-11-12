@@ -1,0 +1,632 @@
+{
+  "resumo": {
+    "totalMetodos": 36,
+    "metodosComSQL": 15,
+    "metodosComValidacao": 11,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Found", "fAltBar2de5", "fChecaAcesso", "Ordena"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 47,
+      "codigoOriginal": "LParameters Imag, nShape\n\nSelect Tmp_Imagens\nIf ThisForm.Primeira <= RecCount()\n\tGo ThisForm.Primeira\nElse\n\tGo Bottom\n\tIf Not Eof()\n\t\tSkip\n\tEndIf\nEndIf\nItem = ThisForm.Item - nShape\nItem = Item + 1\nSkip -Item\n\nImp = IIf(Tmp_Imagens.flag = 0,1,0)\nReplace Tmp_Imagens.flag With Imp\nImag.Check1.Value = Imp\n\nIf Imp = 0\n\tSelect CrImagens\n\tLocate for CrImagens.cpros = Tmp_Imagens.cpros\n\tIf Found()\n\t\tDelete\n\tEndIf\nElse\n\tlcBarra = fAltBar2de5(TransForm(Tmp_Imagens.cBars,'@L 99999999'))\n\n\tInsert Into CrIm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found,fAltBar2de5",
+        "metodosFormChamados": "Primeira <= RecCount",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "LParameters nShape\n\nSelect Tmp_Imagens\nItem = ThisForm.Item - nShape\nItem = Item + 1\nSkip -Item In Tmp_Imagens\nSkip Item In Tmp_Imagens",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "Parameters pNum\n\nlcImg = Alltrim(Sys(2015))\n\nxMac = AllTrim(Str(pNum,2))\nxMc1 = AllTrim(Str(pNum*6-5,2))\nxMc2 = AllTrim(Str(pNum*6-4,2))\nxMc3 = AllTrim(Str(pNum*6-3,2))\nxMc4 = AllTrim(Str(pNum*6-2,2))\nxMc5 = AllTrim(Str(pNum*6-1,2))\nxMc6 = AllTrim(Str(pNum*4-0,3))\nIf Not Eof()\n\tThisForm.Item = ThisForm.Item + 1\n\tlcArquivo1 = Sys(2023) + '\\' + lcImg + xMac + '.jpg'\n\t\n\tIf Not IsNull(Tmp_Imagens.figjpgs) And Not Empty(Tmp_Imagens.FigJpgs)\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(Tmp_Imagens.FigJpgs... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Picture =,caption = AllTrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Parameters pNum\n\nlcImg = Alltrim(Sys(2015))\n\nxMac = AllTrim(Str(pNum,2))\nxMc1 = AllTrim(Str(pNum*6-5,2))\nxMc2 = AllTrim(Str(pNum*6-4,2))\nxMc3 = AllTrim(Str(pNum*6-3,2))\nxMc4 = AllTrim(Str(pNum*6-2,2))\nxMc5 = AllTrim(Str(pNum*6-1,2))\nxMc6 = AllTrim(Str(pNum*4-0,3))\nIf Not Eof()\n\tThisForm.Item = ThisForm.Item + 1\n\tlcArquivo1 = Sys(2023) + '\\' + lcImg + xMac + '.jpg'\n\t\n\tIf Not IsNull(Tmp_Imagens.figjpgs) And Not Empty(Tmp_Imagens.FigJpgs)\n\t\tClear Resources\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(T... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Picture =,caption = AllTrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Local llPromo\n\nIf thisform.plAuto\n\tlcPromo = []\n\tllPromo = .f.\nElse\n\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n\tllPromo = !Empty(lcPromo)\nEndif\n\nlcWhereImg = '('\nFor lnCntReg = 1 to 15\n\tSelect CrProdutos\n\tIf !Eof()\n\t\tlcWhereImg = lcWhereImg + [a.cpros = ']+CrProdutos.cpros+[' Or ]\n\t\tSkip In CrProdutos\n\tEndIf\nEndFor\nlcWhereImg = Substr(lcWhereImg,1,Len(lcWhereImg)-3) + ')'\nIf Used('Tmp_Imagens')\n\tUse In Tmp_Imagens\nEndIf\n\nlStrQuery = [Select a.cpros,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Promo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Init",
+      "linhas": 90,
+      "codigoOriginal": "Parameters oObjForm, plAuto\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal Lin,Col,LinPP,ColP,ContF,cNome,lcPromo,llPromo\n\nThisForm.poObjForm = oObjForm\nThisform.plauto = plAuto\n\nIf thisform.plAuto\n\tlcPromo = []\n\tllPromo = .f.\nElse\n\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n\tllPromo = !Empty(lcPromo)\nEndif\n\nIf fChecaAcesso('SigOpPec','EXPORTA')\n\tThisForm.Exporta.Visible = .T.\nE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,Ordena",
+        "metodosFormChamados": "PagInicial,Click,MostFig,Primeira = Recno,Pag1 =,Caption = 'Página : '+Transf",
+        "controlesReferenciados": "Get_Promo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Create Cursor CrImagens (cpros c(14),dpros c(40),linhas c(10),colecoes c(10),pvens n(12,2),moevs c(3),;\n\t\t\t\t\t\tpesoms n(9,2),moepvs c(3),fvendas n(8,3),pcuss n(12,2),moecs c(3),reffs c(40),;\n\t\t\t\t\t\tifors c(10),datas d,cgrus c(3),cunis c(3),figjpgs m Null,flag n(1),tconvs n(12,2),;\n\t\t\t\t\t\tmconvs c(3),imppreco n(1),custofs n(12,2),moecusfs c(3),impcusto n(1),impcompo n(1),;\n\t\t\t\t\t\timpreffor n(1),tpconvs n(12,2),mpconvs c(3), ImpFor n(1), dFors c(40), cBars c(10))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If Type('ThisForm.poObjForm.Enabled')=='L' And Not ThisForm.poObjForm.Enabled\n\tThisForm.poObjForm.Enabled = .t.\nEndIf \n= DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Cnt_Pag.Text1",
+      "evento": "LostFocus",
+      "linhas": 47,
+      "codigoOriginal": "If This.Value <= 0\n\tThisForm.Cnt_Pag.Visible = .F.\n\tThisForm.BOTOES_CONSULTA.Visible = .T.\n\tThisForm.BOTOES_CONSULTA.Command1.SetFocus\n\tReturn\nEndif\t\n\nSelect CrProdutos\nIf (This.Value - 1) * 15 > Reccount()\n\tMessageBox([Numero de Pagina Superior a Ultima !!!], 16, [])\n\tThisForm.Cnt_Pag.Visible = .F.\n\tThisForm.BOTOES_CONSULTA.Visible = .T.\n\tThisForm.BOTOES_CONSULTA.Command1.SetFocus\n\tReturn\nEndif\n\nIf This.Value = 1\n\tIf Reccount() >= 16\n\t\tGo 16\n\t\tThisForm.TotReg = 30\n\tElse\n\t\tGo Bott\n\t\tThisForm.Tot... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TotReg = Reccount",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Cnt_Pag.Command4",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.Cnt_Pag.Visible = .F.\nThisForm.BOTOES_CONSULTA.Visible = .T.\nThisForm.BOTOES_CONSULTA.Command1.SetFocus\nReturn\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem2.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem3.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,3)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem4.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,4)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem5.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,5)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem6.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,6)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem7.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,7)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem8.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,8)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem9.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,9)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem10.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem11.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,11)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem12.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,12)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem13.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,13)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem14.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,14)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Imagem15.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ChkImp (This.Parent,15)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkImp",
+        "controlesReferenciados": "ChkImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.GeraArquivo",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Local _rec\n\nDo Form SigOpGar With ThisForm\n\nSelect Tmp_Imagens\nIf ThisForm.Primeira <= RecCount()\n\tGo ThisForm.Primeira\nElse\n\tGo Bottom\n\tIf Not Eof()\n\t\tSkip\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Primeira <= RecCount",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Command2",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "Select Tmp_Imagens\nGo Top\nScan\n\tReplace Tmp_Imagens.flag With 0\n\tSelect CrImagens\n\tGo Top\n\tLocate For CrImagens.cpros = Tmp_Imagens.cpros\n\tIf Found()\n\t\tDelete\n\tEndIf\n\tSelect Tmp_Imagens\nEndScan\nGo Top\nThisForm.Pag1 = .F.\nThisForm.Pag2 = .F.\nThisForm.Item = 0\nFor Cnt = 1 TO 15\n\txMac = AllTrim(Str(Cnt,2))\t\t\t\t&& Macro à ser usada\n\txLin = ((Int((Cnt+4.5)/5)-1)*124)+14\t&& Posicao da linha\n\txCol = (((Cnt-1)%5)*124)+13\t\t\t\t&& Posicao da Coluna\n    ThisForm.MostFig(Cnt)\nEndFor\nSelect Tmp_Imagens",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "MostFig",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Command1",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Select Tmp_Imagens\nGo Top\nScan\n\tReplace Tmp_Imagens.flag With 1\n\tSelect CrImagens\n\tGo Top\n\tLocate For CrImagens.cpros = Tmp_Imagens.cpros\n\tIf !Found()\n\t\tlcSql = [Select Rclis From SigCdCli Where Iclis = ']+Tmp_Imagens.Ifors+[']\n\t\t=Thisform.Podatamgr.Sqlexecute(lcsql,'TmpCli')\n\t\t\n\t\tlcBarra = fAltBar2de5(TransForm(Tmp_Imagens.cBars,'@L 99999999'))\n\t\t\n\t\tInsert Into CrImagens(cpros,dpros,linhas,colecoes,pvens,moevs,pesoms,moepvs,fvendas,pcuss,moecs,reffs,ifors,;\n\t\t\t\t\t\t\tdatas,cgrus,cunis,figjpgs,flag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "Sqlexecute,MostFig",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Exporta",
+      "evento": "Click",
+      "linhas": 39,
+      "codigoOriginal": "lnConfirma = MessageBox('Confirma Exportação das Imagens Selecionadas ?',32+4,'')\nIf lnConfirma <> 6\n\tReturn(.F.)\nEndIf\n\ngcDirImage = GetDir()\n\nWait Window 'Aguarde Exportando Imagens !' Nowait\n\nSelect CrImagens\nGo Top\nScan\n\tlcCodigo = Strtran(Strtran(CrImagens.Cpros,'/',''),' ','')\n\tlcFigJpg = gcDirImage + Alltrim(lcCodigo) + '.JPG'\n\tIf Not Directory(gcDirImage)\n\t\t=MessageBox('O Diretório de Imagens [' + Alltrim(gcDirImage) + ']' + Chr(13) + ;\n\t\t\t\t\t'Não Foi Encontrado ou o Acesso Foi Negado!!! ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Primeira <= RecCount",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.relpecas",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "Local _rec\n\n\nIf Thisform.plauto\n\tlcOpe = []\n\tlnNum = 0\n\tlcEmp = []\nElse\n\tWith ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal\n\t\tlcOpe = .Get_Operação.Value\n\t\tlnNum = .Get_OperaçãoI.Value\n\t\tlcEmp = .getEmps.Value\n\tEndWith\nEndif\n\nSelect crImagens\nScan\n\tIf Empty(crImagens.DFors)\n\t\tlcSql = [Select Rclis From SigCdCli Where Iclis = '] + crImagens.IFors + [']\n\t\tThisform.Podatamgr.Sqlexecute(lcsql, [TmpCli])\n\t\t\n\t\tReplace DFors With TmpCli.RClis In crImagens\n\tEndIf\nEndScan\nSelect crImagen... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Primeira <= RecCount",
+        "controlesReferenciados": "Get_Operação,Get_OperaçãoI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Command3",
+      "evento": "Click",
+      "linhas": 69,
+      "codigoOriginal": "Local llPromo,lcPromo\n\nUpdate Tmp_Imagens Set Flag = 0\nUpdate crImagens   Set Flag = 0\n\n*!*\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n*!*\tllPromo = !Empty(lcPromo)\n\n*!*\tlcWhereImg = '('\n\n*!*\tSelect CrProdutos\n*!*\tScan\n*!*\t\tlcCodImg = crProdutos.Cpros\n\n*!*\t\tlStrQuery = [Select a.cpros,a.dpros,a.linhas,a.colecoes,a.pvens,a.moevs,a.pesoms,a.moepvs,a.fvendas,a.pcuss,]+;\n*!*\t\t\t\t\t\t[a.moecs,a.reffs,a.ifors,a.datas,a.cgrus,a.cunis,a.figjpgs,a.custofs,a.moec... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "PagInicial,Click,MostFig,Primeira = Recno,Pag1 =,Caption = 'Página : '+Transf",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.Command4",
+      "evento": "Click",
+      "linhas": 80,
+      "codigoOriginal": "Local llPromo,lcPromo\n\nIf thisform.plAuto\n\tlcPromo = []\n\tllPromo = .f.\nElse\n\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n\tllPromo = !Empty(lcPromo)\nEndif\n\nlcWhereImg = '('\n\nSelect CrProdutos\nScan\n\tlcCodImg = crProdutos.Cpros\n\n\tlStrQuery = [Select a.cpros,a.dpros,a.linhas,a.colecoes,a.pvens,a.moevs,a.pesoms,a.moepvs,a.fvendas,a.pcuss,]+;\n\t\t\t\t\t[a.moecs,a.reffs,a.ifors,a.datas,a.cgrus,a.cunis,a.figjpgs,a.custofs,a.moecusfs,a.reffs,a.cbars,0 as flag,]+;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found,fAltBar2de5",
+        "metodosFormChamados": "SqlExecute,PagInicial,Click,MostFig,Primeira = Recno,Pag1 =,Caption = 'Página : '+Transf",
+        "controlesReferenciados": "Get_Promo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.BOTOES_CONSULTA",
+      "evento": "Click",
+      "linhas": 76,
+      "codigoOriginal": "Local llPromo,lcPromo\n\nIf thisform.plAuto\n\tlcPromo = []\n\tllPromo = .f.\nElse\n\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n\tllPromo = !Empty(lcPromo)\nEndif\n\nThisForm.TotReg = IIf((ThisForm.TotReg / 15) = ThisForm.TotPag,ThisForm.TotReg,(ThisForm.TotReg + 15))\nSelect Tmp_Imagens\nlcCodAtu = Tmp_Imagens.cpros\nGo Bottom\nlcCodIni = Tmp_Imagens.cpros\nlcWhereImg = '('\nSelect CrProdutos\nGo Top\nLocate For CrProdutos.cpros = lcCodIni\nIf Found()\n\tSkip\n\tIf !Eof()\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "TotReg = IIf,SqlExecute,MostFig,Primeira = Recno,Pag1 =,NumPag =,Caption = 'Página : '+Transf",
+        "controlesReferenciados": "Get_Promo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.BOTOES_CONSULTA",
+      "evento": "Click",
+      "linhas": 76,
+      "codigoOriginal": "Local llPromo,lcPromo\n\nSelect Tmp_Imagens\nGo Top\nlcCodAtu = Tmp_Imagens.cpros\nSelect CrProdutos\nGo Top\nIf CrProdutos.cpros = lcCodAtu\n\tReturn(.T.)\nEndIf\n\nIf thisform.plAuto\n\tlcPromo = []\n\tllPromo = .f.\nElse\n\tlcPromo = ThisForm.poObjForm.Fld_Principal.Pag_Consulta.Filtro.Principal.Get_Promo.Value\n\tllPromo = !Empty(lcPromo)\nEndif\n\nThisForm.TotReg = IIf((ThisForm.TotReg - 15) < 0,ThisForm.TotReg,(ThisForm.TotReg - 15))\nlcWhereImg = '('\nSelect CrProdutos\nLocate For CrProdutos.cpros = lcCodAtu\nIf Fou... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "TotReg = IIf,SqlExecute,MostFig,Primeira = Recno,Pag1 =,NumPag =,Caption = 'Página : '+Transf",
+        "controlesReferenciados": "Get_Promo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.BOTOES_CONSULTA",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CrProdutos\nSet Order To Cpros\n\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPEC.BOTOES_CONSULTA",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.BOTOES_CONSULTA.Visible = .F.\nThisForm.Cnt_Pag.Visible = .T.\nThisForm.Cnt_Pag.Text1.Value = 0\nThisForm.Cnt_Pag.Text1.SetFocus()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPPEC.Command1.Click",
+      "queryOriginal": "\t\tlcSql = [Select Rclis From SigCdCli Where Iclis = ']+Tmp_Imagens.Ifors+['] \t\t=Thisform.Podatamgr.Sqlexecute(lcsql,'TmpCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,Iclis,Ifors+[],Sqlexecutelcsql,TmpCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPEC.Command1.Click",
+      "queryOriginal": "\t\tInsert Into CrImagens(cpros,dpros,linhas,colecoes,pvens,moevs,pesoms,moepvs,fvendas,pcuss,moecs,reffs,ifors,; \t\t\t\t\t\t\tdatas,cgrus,cunis,figjpgs,flag... [TRUNCADO]",
+      "tabelas": "CrImagens",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPEC.relpecas.Click",
+      "queryOriginal": "\t\tlcSql = [Select Rclis From SigCdCli Where Iclis = '] + crImagens.IFors + [']",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,Iclis,IFors",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPEC.Command3.Click",
+      "queryOriginal": "Update Tmp_Imagens Set Flag = 0",
+      "tabelas": "Tmp_Imagens",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPEC.Command3.Click",
+      "queryOriginal": "Update crImagens   Set Flag = 0",
+      "tabelas": "crImagens",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli", "CrImagens", "Tmp_Imagens"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

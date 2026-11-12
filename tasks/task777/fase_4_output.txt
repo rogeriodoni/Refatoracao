@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue em `projeto\app\forms\operacionais\FormSigOpPcu.prg` (219 ÔåÆ 827 linhas).
+
+## O que foi acrescentado
+
+| m├®todo | conte├║do |
+|---|---|
+| `ConfigurarGrade()` | `grd_4c_Dados` (filha de `cnt_4c__Planilha`, como no legado): geometria `Top=130 Left=5 989x442`, `ColumnCount=7`, `HeaderHeight/RowHeight=16`, `ScrollBars=2`, `GridLineColor`, e as 7 colunas com `Movable/Resizable=.F.`, fontes e os 5 `InputMask` do dump (nos dois n├¡veis ÔÇö `Column` **e** `Text1`) |
+| `VincularGrade()` | o bind do `Init` legado, condicionado a `USED("csGrade")`: `RecordSource` + 7 `ControlSource` + o `SetAll("DynamicForeColor", ...)` que pinta de **vermelho** a linha com `AltCoef=1`; depois `Width` e `Header1.Caption`, nessa ordem (regra #41) |
+| `AplicarTravasDeColuna()` | o `When` de cada coluna: `RETURN .F.` nas seis de exibi├º├úo, e na Column4 `fChecaAcesso("SIGCDFTI") And pcTipo="V"` via `BO.VerificarAcessoCoeficiente()` |
+| `CarregarDados()` | **PUBLIC** ÔÇö funil ├║nico: vincular ÔåÆ `BO.FiltrarGrade(tipo)` (`Set Key To` + `Sum Valos`) ÔåÆ `Refresh()` do form **e** da grade (regra #21) |
+| `ConfigurarBotaoEncerrar()` + `BtnEncerrarClick()` + `FecharDialogo()` | `cmd_4c_Encerrar` (legado `cmdSair`) com o Click real: `BO.MontarCursorAlterados()` (monta `crPrFtp` e desfaz o `Set Key`), reabilita o pai, `Hide()` |
+
+`ConfigurarPageFrame()` passou a chamar os tr├¬s `Configurar*` na ordem do SCX ÔÇö `cmd_4c_Encerrar` tem `Top=3`, dentro da faixa do cabe├ºalho, e s├│ desenha por cima dela se criado depois.
+
+## Decis├Áes que divergem do dump (documentadas no arquivo)
+
+- **`ZOrderSet=20`, `TabIndex=18`, `Column3.ColumnOrder=3` n├úo transcritos**: o primeiro n├úo existe em runtime (regra #33); `TabIndex` fora da faixa `1..N` ├® descartado em sil├¬ncio, ent├úo a tabula├º├úo s├│ pode ser numerada depois do ├║ltimo `AddObject` da tela; o terceiro ├® inerte.
+- **Bot├úo 75x75 em vez dos 80x100 da classe `fwbtng`**: no `Left=924` do SCX, 80 de largura terminaria em 1004 e o container (999) recortaria 5px. 75 ├® o can├┤nico do projeto para `cmd_4c_Encerrar` (un├ónime no acervo) e fecha exatamente em 999, mantendo o `Left` do legado.
+- **`Hide()` em vez do `ThisForm.Release` legado**: `Release()` mata a refer├¬ncia do chamador; o resultado da tela ├® lido por ele depois (mesmo desenho do `FormBuscaAuxiliar`).
+- **`mapeamento.json`**: `cmdSair` remapeado de `cmd_4c_CmdSair` para `cmd_4c_Encerrar`, para o `ValidarUIFidelity` resolver o nome real.
+- Label1 e `Get_Adicional` (o campo do total) ficaram para a Fase 5 ÔÇö o valor que eles exibem j├í ├® calculado por `FiltrarGrade` e fica em `this_nTotalAdicional`.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa, **com prova de execu├º├úo** (o `.FXP` sozinho n├úo prova nada): o script gravou `FXP=SIM ERR=NAO` ap├│s apagar e regerar o `.FXP`. Auditorias `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora` e `VerificarFuncoesNaoDefinidas`: todas OK. Gate da Fase 4 (ramo FLAT) mede `grade=True botoes=True carga=True`.
+
+Instancia├º├úo medida no VFP9 nos tr├¬s cen├írios:
+
+| cen├írio | resultado |
+|---|---|
+| **sem `csGrade`** (harness) | `VARTYPE=O`, `RecordSource=[]` (bind pulado, sem *Alias is not found*), larguras `120/280/73/100` e headers corretos **mesmo assim**, `CarregarDados()` de fora devolveu `.F.` sem estourar, `PEMSTATUS(...,2)=.F.` nos dois m├®todos p├║blicos |
+| **com `csGrade`, tipo "C"** | bind OK, `DynamicForeColor` instalado, larguras/headers **preservados depois** do bind, `RECCOUNT=3` mas **COUNT vis├¡vel = 2** (o `SET KEY` pegou), `TotalAdicional=90` (= 50+40, s├│ as linhas "C"), 2┬¬ chamada idempotente |
+| **tipo "V"** | `Column4.ReadOnly=.F.` e as outras seis `.T.` ÔÇö o `When` do legado reproduzido; `COUNT vis├¡vel=1`, `TotalAdicional=300` |
+
+Encerrar: `crPrFtp` criado com **1 linha** (a de `AltCoef=1`), `SET("KEY")` vazio depois e contagem vis├¡vel de volta a 3 (o cursor volta ao pai sem filtro), form ainda objeto com `Visible=.F.`, e `csGrade` sobreviveu ao fechamento **e** ao `Release` ÔÇö o `Destroy` n├úo fecha o cursor do chamador.

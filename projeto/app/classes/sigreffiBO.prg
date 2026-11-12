@@ -74,7 +74,16 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
     this_cCursorRec       = "cursor_4c_Rec"       && Grupos de recebimento (crSigCdRec no legado)
     this_cCursorCabecalho = "csCabecalho"         && Cabecalho do relatorio (nome exigido pelo FRX)
     this_cCursorRelatorio = "csRelatorio"         && Dados principais (nome exigido pelo FRX)
-    this_cCursorDados     = "csRelatorio"         && Alias padrao exigido por RelatorioBase
+    this_cCursorDados     = "csRelatorio"
+
+    *-- Chave da execucao corrente em SigTempR (legado: pKey = fUniqueIds()).
+    *-- SigTempR eh tabela de rascunho COMPARTILHADA: sem este filtro uma
+    *-- execucao enxergaria as operacoes marcadas por outra.
+    this_cChaveTemp       = ""
+    *-- Legado: llPrevs. Fica .T. quando alguma operacao marcada tem
+    *-- RealPrevs = 2 e, no legado, habilita um segundo ramo sobre SigMvCpv
+    *-- (previsoes) que NAO foi migrado - ver observacao em PrepararDados.
+    this_lTemPrevisao     = .F.         && Alias padrao exigido por RelatorioBase
 
     *--------------------------------------------------------------------------
     * Propriedades auxiliares de processamento
@@ -153,7 +162,7 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                     SELECT (loc_cCursorEmp)
                     SCAN
                         IF ALLTRIM(Cemps) == loc_cEmpAtual
-                            REPLACE ImpEmps WITH 1
+                            REPLACE ImpEmps WITH .T.
                         ENDIF
                     ENDSCAN
 
@@ -286,11 +295,106 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
+    * PopularOperacoesTemp - Grava em SigTempR as operacoes marcadas na grade
+    *
+    * Transcrito do legado (SIGREFFI, PROCEDURE processamento):
+    *     pKey = fUniqueIds()
+    *     Scan crSigOpOpe / If crSigOpOpe.SeleOp
+    *         Insert Into SigTempR (Dopes, ValPres, cIdQuerys, cIdChaves)
+    *                       Values (?pDop, ?pRea, ?pKey, ?pIds)
+    * As consultas de Atrasos e Periodo fazem INNER JOIN nessa tabela; sem este
+    * passo o JOIN nao casa nada e o relatorio sai SEMPRE vazio.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE PopularOperacoesTemp()
+        LOCAL loc_lSucesso, loc_oErro, loc_cCursorOper
+        LOCAL loc_cSql, loc_nResult, loc_nMarcadas
+
+        loc_lSucesso    = .F.
+        loc_nMarcadas   = 0
+        loc_cCursorOper = THIS.this_cCursorOper
+
+        THIS.this_cChaveTemp   = ""
+        THIS.this_lTemPrevisao = .F.
+
+        TRY
+            IF !USED(loc_cCursorOper)
+                THIS.this_cMensagemErro = "Cursor de opera" + CHR(231) + CHR(245) + ;
+                    "es de t" + CHR(237) + "tulos n" + CHR(227) + "o carregado."
+            ELSE
+                THIS.this_cChaveTemp = fUniqueIds()
+
+                SELECT (loc_cCursorOper)
+                GO TOP
+                SCAN
+                    *-- SeleOp vem de CAST(0 AS BIT): o driver entrega LOGICO
+                    IF !SeleOp
+                        LOOP
+                    ENDIF
+
+                    *-- RealPrevs = 2 aciona, no legado, o ramo de previsoes
+                    IF RealPrevs = 2
+                        THIS.this_lTemPrevisao = .T.
+                    ENDIF
+
+                    loc_cSql = "INSERT INTO SigTempR (Dopes, ValPres, cIdQuerys, cIdChaves) " + ;
+                               "VALUES (" + ;
+                               EscaparSQL(ALLTRIM(Dopes))        + ", " + ;
+                               FormatarNumeroSQL(RealPrevs, 0)   + ", " + ;
+                               EscaparSQL(THIS.this_cChaveTemp)  + ", " + ;
+                               EscaparSQL(fUniqueIds())          + ")"
+
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSql)
+                    IF loc_nResult < 0
+                        THIS.this_cMensagemErro = "Falha ao gravar opera" + CHR(231) + CHR(227) + ;
+                            "o em SigTempR: " + CapturarErroSQL()
+                        EXIT
+                    ENDIF
+
+                    loc_nMarcadas = loc_nMarcadas + 1
+                ENDSCAN
+
+                IF loc_nMarcadas = 0 AND EMPTY(THIS.this_cMensagemErro)
+                    THIS.this_cMensagemErro = "Selecione ao menos uma opera" + CHR(231) + CHR(227) + ;
+                        "o de t" + CHR(237) + "tulos."
+                ENDIF
+
+                loc_lSucesso = (loc_nMarcadas > 0)
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "sigreffiBO.PopularOperacoesTemp")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparOperacoesTemp - Apaga as linhas desta execucao em SigTempR
+    * Legado: ThisForm.poDataMgr.fSqlApagarTmp('SigTempR', pKey)
+    * Tem de rodar em TODO caminho de saida, inclusive no de erro: SigTempR eh
+    * compartilhada e linhas orfas entram na proxima execucao de outro relatorio.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparOperacoesTemp()
+        LOCAL loc_oErro
+
+        TRY
+            IF !EMPTY(THIS.this_cChaveTemp)
+                SQLEXEC(gnConnHandle, "DELETE FROM SigTempR WHERE cIdQuerys = " + ;
+                    EscaparSQL(THIS.this_cChaveTemp))
+                THIS.this_cChaveTemp = ""
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "sigreffiBO.LimparOperacoesTemp")
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+    *--------------------------------------------------------------------------
     * PrepararDados - Processa dados para o relatorio de fluxo financeiro
     * Monta cursor_4c_Relatorio e cursor_4c_Cabecalho para o FRX
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
-        LOCAL loc_lSucesso, loc_oErro
+        LOCAL loc_lSucesso, loc_oErro, loc_lTempOk
         LOCAL loc_dDtInicial, loc_dDtFinal
         LOCAL loc_cCdMoeda, loc_cDsMoeda, loc_cMoeConv
         LOCAL loc_nNrTipo, loc_nNrPrev, loc_nNrSitua, loc_nOrdImp
@@ -381,6 +485,21 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                  Fase N(1), Saldos N(12,2), vl_Convertido N(12,2), ;
                  flPrevs C(2), Opers C(1))
 
+            *-- Gravar em SigTempR as operacoes marcadas (legado: pKey + Insert).
+            *-- As consultas de Atrasos e Periodo fazem INNER JOIN nessa tabela.
+            loc_lTempOk = THIS.PopularOperacoesTemp()
+            IF !loc_lTempOk
+                MsgAviso(THIS.this_cMensagemErro, "Fluxo Financeiro")
+                THIS.LimparOperacoesTemp()
+            ENDIF
+
+            IF loc_lTempOk
+
+            *-- Nota de migracao: o legado, quando alguma operacao marcada tem
+            *-- RealPrevs = 2 (this_lTemPrevisao), roda um segundo ramo sobre
+            *-- SigMvCpv (previsoes) que NAO foi migrado. Com RealPrevs <> 2 o
+            *-- resultado eh identico ao legado.
+
             *-- Processar saldos de disponibilidades (Fase=1)
             IF !THIS.ProcessarSaldosDisponibilidades(loc_cCdMoeda, loc_dDtInicial, ;
                    loc_nSaldos, loc_nOpcoes, loc_nVlCotacao)
@@ -403,11 +522,48 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                 MsgErro(THIS.this_cMensagemErro, "PrepararDados - Periodo")
             ENDIF
 
+            *-- Passe de quebra: numera os grupos e monta o rotulo de sub-total que
+            *-- o FRX SigReFfi usa para agrupar. Transcrito do legado (SIGREFFI,
+            *-- PROCEDURE processamento): Quebras incrementa a cada troca de chave,
+            *-- que eh a DATA quando a ordem eh 1 e GRUPO+CONTA quando eh 2.
+            LOCAL loc_cQuebra, loc_nQuebras, loc_nSubQuebras, loc_cSTotals, loc_cChave
+            loc_cQuebra     = ""
+            loc_nQuebras    = 0
+            loc_nSubQuebras = 0
+            loc_cSTotals    = ""
+            SELECT (THIS.this_cCursorRelatorio)
+            GO TOP
+            SCAN
+                loc_cChave = IIF(loc_nOrdImp = 1, DTOS(Vencs), Grupos + Contas)
+                IF !(loc_cChave == loc_cQuebra)
+                    loc_cQuebra     = loc_cChave
+                    loc_nQuebras    = loc_nQuebras + 1
+                    loc_nSubQuebras = 1
+                    loc_cSTotals    = "Sub-Total " + ;
+                        IIF(loc_nOrdImp = 1, ;
+                            "do Dia " + DTOC(Vencs) + ":", ;
+                            "Grupo " + ALLTRIM(Grupos) + " Conta " + ALLTRIM(Contas) + ":")
+                ENDIF
+                loc_nSubQuebras = loc_nSubQuebras + 1
+                REPLACE Quebras    WITH loc_nQuebras, ;
+                        SubQuebras WITH loc_nSubQuebras, ;
+                        CsTotals   WITH loc_cSTotals
+            ENDSCAN
+            GO TOP IN (THIS.this_cCursorCabecalho)
+            GO TOP IN (THIS.this_cCursorRelatorio)
+            SELECT (THIS.this_cCursorRelatorio)
+
+            *-- legado: fSqlApagarTmp('SigTempR', pKey)
+            THIS.LimparOperacoesTemp()
+
             loc_lSucesso = .T.
+            ENDIF
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigreffiBO.PrepararDados")
             THIS.this_cMensagemErro = loc_oErro.Message
+            *-- SigTempR eh compartilhada: nao deixar linha orfa nem no erro
+            THIS.LimparOperacoesTemp()
         ENDTRY
 
         RETURN loc_lSucesso
@@ -451,15 +607,17 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                 THIS.this_cMensagemErro = "Erro ao buscar movimenta" + CHR(231) + CHR(227) + "o de saldo"
             ELSE
                 *-- Percorrer disponibilidades selecionadas
-                LOCAL loc_cGrDisp, loc_cCtDisp, loc_nImpDisp
+                LOCAL loc_cGrDisp, loc_cCtDisp, loc_lImpDisp
                 SELECT (loc_cCursorDisp)
                 GO TOP
                 SCAN
                     loc_cGrDisp  = ALLTRIM(Grupos)
                     loc_cCtDisp  = ALLTRIM(Contas)
-                    loc_nImpDisp = ImpDisps
+                    *-- ImpDisps vem de CAST(1 AS BIT): o driver entrega LOGICO.
+                    *-- Comparar com 1 estoura "Operator/operand type mismatch".
+                    loc_lImpDisp = ImpDisps
 
-                    IF loc_nImpDisp <> 1
+                    IF !loc_lImpDisp
                         LOOP
                     ENDIF
 
@@ -495,7 +653,15 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                         *-- Buscar ultimo saldo no SigMvCcr ate a data base
                         LOCAL loc_cGruConMoes, loc_cFiltroMoeInner, loc_cSqlSaldo
                         LOCAL loc_nSaldo, loc_nResSaldo
-                        loc_cGruConMoes     = loc_cGrMvSlc + loc_cCtMvSlc + loc_cMoesMvSlc
+                        *-- GruConMoes eh char(23) POSICIONAL = Grupos(10)+Contas(10)+Moedas(3).
+                        *-- As variaveis acima vem com ALLTRIM (certo para as comparacoes),
+                        *-- mas concatena-las sem repor o padding produz uma chave de 16
+                        *-- caracteres que nunca casa - o WHERE devolve zero EM SILENCIO e a
+                        *-- Fase 1 (saldos iniciais) some do relatorio. O legado concatena as
+                        *-- COLUNAS (a.Grupos + a.Contas + a.Moedas), que ja vem preenchidas.
+                        loc_cGruConMoes     = PADR(loc_cGrMvSlc, 10) + ;
+                                              PADR(loc_cCtMvSlc, 10) + ;
+                                              PADR(loc_cMoesMvSlc, 3)
                         loc_cFiltroMoeInner = ""
                         IF !EMPTY(par_cCdMoeda)
                             loc_cFiltroMoeInner = " AND Moedas = " + EscaparSQL(par_cCdMoeda)
@@ -619,6 +785,7 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                        "a.CIdChaves, a.EmpDopNums, a.EmpDopNcs " + ;
                        "FROM SigMvCcr a " + ;
                        "INNER JOIN SigTempR b ON a.DopCs = b.Dopes " + ;
+                       "  AND b.cIdQuerys = " + EscaparSQL(THIS.this_cChaveTemp) + " " + ;
                        "WHERE a.Vencs < " + FormatarDataSQL(par_dDtInicial) + ;
                        " AND a.TitCancs <> 1 " + ;
                        loc_cFiltroMoeda + loc_cFiltroNF + loc_cFiltroPrev + ;
@@ -628,7 +795,7 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
             IF loc_nResult < 0
                 THIS.this_cMensagemErro = "Erro ao buscar atrasos"
             ELSE
-                LOCAL loc_cEmpAtr, loc_nImpEmpAtr, loc_lEmpSel
+                LOCAL loc_cEmpAtr, loc_lImpEmpAtr, loc_lEmpSel
                 LOCAL loc_nValors, loc_nValPags, loc_nSaldoAtr
                 LOCAL loc_cFlPagos, loc_cHistAtr, loc_cEDN
                 LOCAL loc_cMoesAtr, loc_cDsMoesAtr, loc_cOpersAtr
@@ -646,8 +813,9 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                         GO TOP
                         SCAN
                             IF ALLTRIM(Cemps) == loc_cEmpAtr
-                                loc_nImpEmpAtr = ImpEmps
-                                IF loc_nImpEmpAtr = 1
+                                *-- ImpEmps vem de CAST(0 AS BIT): o driver entrega LOGICO
+                                loc_lImpEmpAtr = ImpEmps
+                                IF loc_lImpEmpAtr
                                     loc_lEmpSel = .T.
                                 ENDIF
                                 EXIT
@@ -792,6 +960,7 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                        "0 AS nPrevs, a.EmpDopNums, a.EmpDopNcs " + ;
                        "FROM SigMvCcr a " + ;
                        "INNER JOIN SigTempR b ON a.DopCs = b.Dopes " + ;
+                       "  AND b.cIdQuerys = " + EscaparSQL(THIS.this_cChaveTemp) + " " + ;
                        "WHERE " + loc_cCampData + " >= " + FormatarDataSQL(par_dDtInicial) + ;
                        " AND " + loc_cCampData + " <= " + FormatarDataSQL(par_dDtFinal) + ;
                        " AND a.TitCancs <> 1 " + ;
@@ -802,7 +971,7 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
             IF loc_nResult < 0
                 THIS.this_cMensagemErro = "Erro ao buscar fluxo do per" + CHR(237) + "odo"
             ELSE
-                LOCAL loc_cEmpPer, loc_nImpEmpPer, loc_lEmpSelPer
+                LOCAL loc_cEmpPer, loc_lImpEmpPer, loc_lEmpSelPer
                 LOCAL loc_nValPer, loc_nPagPer, loc_nSaldoPer
                 LOCAL loc_cFlPagosPer, loc_cHistPer, loc_cEDNPer
                 LOCAL loc_cMoesPer, loc_cDsMoesPer, loc_cOpersPer
@@ -820,8 +989,9 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                         GO TOP
                         SCAN
                             IF ALLTRIM(Cemps) == loc_cEmpPer
-                                loc_nImpEmpPer = ImpEmps
-                                IF loc_nImpEmpPer = 1
+                                *-- ImpEmps vem de CAST(0 AS BIT): o driver entrega LOGICO
+                                loc_lImpEmpPer = ImpEmps
+                                IF loc_lImpEmpPer
                                     loc_lEmpSelPer = .T.
                                 ENDIF
                                 EXIT
@@ -837,7 +1007,6 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
 
                     loc_nValPer   = cursor_4c_Periodo.Valors
                     loc_nPagPer   = cursor_4c_Periodo.ValPags
-                    loc_nSaldoPer = loc_nValPer - loc_nPagPer
 
                     IF par_nNrSitua = 1
                         IF loc_nPagPer < loc_nValPer
@@ -852,6 +1021,17 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                     ENDIF
 
                     loc_cFlPagosPer = IIF(loc_nPagPer >= loc_nValPer, "*", "")
+
+                    *-- Valor impresso: o legado escolhe por SITUACAO (SIGREFFI, PROCEDURE
+                    *-- processamento):
+                    *--   m.Valors = Iif(lnNrSitua==1, m.ValPags,
+                    *--              Iif(lnNrSitua==2, (m.Valors-m.ValPags), m.Valors))
+                    *-- O migrado aplicava "Valors - ValPags" nos TRES casos, ou seja a
+                    *-- formula de Pendentes sempre: em Baixados o valor saia 0,00 e em
+                    *-- Todos saia o saldo em aberto no lugar do valor cheio.
+                    loc_nSaldoPer = IIF(par_nNrSitua = 1, loc_nPagPer, ;
+                                    IIF(par_nNrSitua = 2, loc_nValPer - loc_nPagPer, ;
+                                        loc_nValPer))
                     loc_cHistPer    = ALLTRIM(cursor_4c_Periodo.Hists)
                     loc_cMoesPer    = ALLTRIM(cursor_4c_Periodo.Moedas)
                     loc_cOpersPer   = ALLTRIM(cursor_4c_Periodo.Opers)
@@ -926,11 +1106,24 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorRelatorio)
+                *-- Guard de cursor vazio (Erro30): medido no VFP9, REPORT FORM
+                *-- PREVIEW sobre cursor sem linhas retorna sem erro e nao abre
+                *-- janela alguma - o usuario clica em Visualizar e nada acontece.
+                IF USED(THIS.this_cCursorRelatorio) AND ;
+                   RECCOUNT(THIS.this_cCursorRelatorio) = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os " + ;
+                        "filtros informados."
+                    MsgAviso(THIS.this_cMensagemErro, "Fluxo Financeiro")
+                ENDIF
+
+                IF USED(THIS.this_cCursorRelatorio) AND ;
+                   RECCOUNT(THIS.this_cCursorRelatorio) > 0
                     SELECT (THIS.this_cCursorRelatorio)
                     GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cFRX) ;
-                        TO PRINTER PROMPT NOCONSOLE
+                    *-- Helper canonico (Pattern #117/#123): checa o FRX e ISOLA
+                    *-- SET POINT/SEPARATOR/REPORTBEHAVIOR (Erro359 - ver Visualizar).
+                    THIS.ExecutarReportForm(THIS.this_cFRX, "PRINTER_PROMPT", ;
+                        THIS.this_cCursorRelatorio)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF
@@ -950,10 +1143,27 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorRelatorio)
+                *-- Guard de cursor vazio (Erro30): medido no VFP9, REPORT FORM
+                *-- PREVIEW sobre cursor sem linhas retorna sem erro e nao abre
+                *-- janela alguma - o usuario clica em Visualizar e nada acontece.
+                IF USED(THIS.this_cCursorRelatorio) AND ;
+                   RECCOUNT(THIS.this_cCursorRelatorio) = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os " + ;
+                        "filtros informados."
+                    MsgAviso(THIS.this_cMensagemErro, "Fluxo Financeiro")
+                ENDIF
+
+                IF USED(THIS.this_cCursorRelatorio) AND ;
+                   RECCOUNT(THIS.this_cCursorRelatorio) > 0
                     SELECT (THIS.this_cCursorRelatorio)
                     GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cFRX) PREVIEW NOCONSOLE
+                    *-- Helper canonico (Pattern #117/#123): checa o FRX e ISOLA
+                    *-- SET POINT/SEPARATOR/REPORTBEHAVIOR. REPORT FORM cru herda o
+                    *-- REPORTBEHAVIOR 90 do config.prg e os campos numericos da banda
+                    *-- de DETALHE saem como ************ (Erro359) - medido no VFP9:
+                    *-- com 80 os mesmos 1.500,00 / 2.340,75 / 880,00 imprimem certo.
+                    THIS.ExecutarReportForm(THIS.this_cFRX, "PREVIEW", ;
+                        THIS.this_cCursorRelatorio)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF
@@ -1192,10 +1402,69 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
 
 
     *--------------------------------------------------------------------------
+    * ExecutarReportForm - Emissao canonica do REPORT FORM (Pattern #117/#123)
+    *   Confere o FRX, confere o cursor e isola SET POINT/SEPARATOR/
+    *   REPORTBEHAVIOR durante a emissao.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX, loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
     *--------------------------------------------------------------------------
     PROCEDURE GerarExcel()
-        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro, loc_nBehaviorOrig
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
@@ -1204,8 +1473,13 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "sigreffi_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                    *-- A clausula ASCII exige REPORTBEHAVIOR 80 (sob 90 o VFP9 a
+                    *-- ignora). Isolar e restaurar, como faz ExecutarReportForm.
+                    loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+                    SET REPORTBEHAVIOR 80
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cFRX + ".frx") ;
                         TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    SET REPORTBEHAVIOR (loc_nBehaviorOrig)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

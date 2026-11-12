@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 conclu├¡da. `ConfigurarPaginaDados()` adicionado ao `Formsigoppei.prg`, compilando limpo e **verificado instanciando o form**.
+
+## O que foi entregue
+
+O SIGOPPEI ├® OPERACIONAL **plano** (zero `pageframe` no dump), ent├úo n├úo existe Page2 ÔÇö os campos s├úo filhos diretos do form, e o nome do m├®todo foi mantido como ponto de entrada do pipeline (mesma decis├úo j├í documentada no `ConfigurarPageFrame` da Fase 3).
+
+O legado tem **7 objetos de campo fora da grade**. Esta fase entregou os **4 do bloco de produto** (registros 26ÔÇô29 do SCX), na ordem de registro; a Fase 6 fica com os 3 totais do rodap├® (Top=567), cujas properties j├í existem no BO:
+
+| SCX | migrado | Top/Left/W/H | Visible |
+|---|---|---|---|
+| getDProd | `txt_4c_DProd` | 102/119/288/23 | **.F.** |
+| Say2 | `lbl_4c_Label2` | 87/119/80/15 | .T. |
+| Say5 | `lbl_4c_Label5` | 87/8/60/15 | .T. |
+| getCProd | `txt_4c_CProd` | 102/8/108/23 | **.F.** |
+
+Mais `VincularCamposProduto()` (funil do `ControlSource`, chamado tamb├®m de `VincularGrade` antes do `Refresh`) e a lista de exce├º├úo em `TornarControlesVisiveis`.
+
+## Decis├Áes que fogem da transcri├º├úo literal ÔÇö e por qu├¬
+
+- **As duas caixas nascem e ficam invis├¡veis.** O Init legado as p├Áe em `.f.` antes do `If` e **outra vez dentro dele**, sem nunca mostrar ÔÇö s├úo campos aposentados com r├│tulos ├│rf├úos (os r├│tulos o Init n├úo esconde). Sem a exce├º├úo, `TornarControlesVisiveis` apagaria esse `Visible = .F.` e a tela exibiria dois campos que o legado n├úo mostra em caminho nenhum.
+- **`.Value = ""` e n├úo o `Value = 0` do dump**: o `ControlSource` aponta para colunas CHARACTER (`CPros c(14)`, `Dpros c(40)`). O probe confirmou `VARTYPE(Value)=C`.
+- **`InputMask = ""` de getCProd n├úo transcrito** (override vazio do Form Designer); **`Format = "K!"` de getDProd sim** ÔÇö o `!` muda o dado.
+- **`MaxLength` 14/40 vindos da largura da coluna**, nunca dos 108/288 em pixels.
+- **R├│tulos com `AutoSize = .F.` + Width/Height expl├¡citos**, `Alignment = 0`. `Height = 15` faz 87+15=102 encostar exatamente no topo das caixas.
+
+## Um defeito que eu introduzi e corrigi
+
+Transcrevi o `TabIndex` do dump (3/4/15/16). O probe mostrou valores diferentes dos atribu├¡dos, e medi a causa no VFP9:
+
+- `TabIndex` maior que o n┬║ de controles do container ├® **clampado em sil├¬ncio** (form com 2 controles, atribu├¡ 16, leu 2) ÔÇö os 15/16 do dump s├úo inalcan├º├íveis;
+- **Label n├úo recebe foco mas ocupa slot**: `lbl_4c_Label2.TabIndex = 3` empurrou `grd_4c_Dados` de 3 para **4**, contra o `Grade.TabIndex = 2` do dump.
+
+Removi as 4 atribui├º├Áes (ficaram s├│ como coment├írio, com a medi├º├úo). Reconfirmado: grade de volta em `TabIndex=3`, os 4 novos objetos em 4..7 sem deslocar nada.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (Form + BO, sem `.err`); instancia├º├úo real com `CREATEOBJECT` ÔåÆ objeto, 8 controles, **nenhum di├ílogo suprimido**; geometria e propriedades conferidas uma a uma; `ControlSource` sobrevive a um ciclo de `CarregarLista`. Auditorias do projeto: propriedades inexistentes (#33), fun├º├Áes ├│rf├ús (#13) e m├®todo PROTECTED chamado de fora (#51) ÔÇö todas OK. Zero bytes acentuados (acentos via `CHR()`), nenhum `RETURN` dentro de `TRY`, nenhum TODO/stub.
+
+Gate da Fase 5 passa pelos dois ramos (`temPaginaDados` e FLAT: `semPageFrame` + `temCampos`).
+
+N├úo rodei o `ValidarUIFidelity`: a entrega ├® parcial por desenho, e ele acusaria os 3 totais da Fase 6 como ausentes. Probes ficaram em `automation\_probe780f5.prg` e `_probe780f5b.prg`; restaurei o `tmp_compila.FXP` rastreado que meu script de compila├º├úo havia sobrescrito.

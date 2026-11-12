@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 4/8 conclu├¡da** ÔÇö `Formsigoppei.prg` 468 ÔåÆ 1108 linhas.
+
+## Por que n├úo h├í bot├Áes CRUD
+
+O gate da Fase 4 tem tr├¬s ramos; medi qual se aplica:
+
+| teste | resultado |
+|---|---|
+| `FormType` | `OPERACIONAL` |
+| `AddObject("grd_4c_` | 1 |
+| `AddObject("cmd_4c_` | 1 |
+| `CarregarLista` | presente |
+
+ÔåÆ ramo **FLAT**, satisfeito de verdade. O SIGOPPEI legado n├úo tem Incluir/Alterar/Excluir/Buscar nem Confirmar/Cancelar ÔÇö ├® tela de **consulta** com um ├║nico bot├úo, "Retornar". Inventar os seis bot├Áes do template gen├®rico violaria o PILAR 1.
+
+## Entregue
+
+`shp_4c_Shape1` ÔåÆ `cmd_4c_BtnCancelar` ÔåÆ `grd_4c_Dados`, nessa ordem (a dos registros do SCX), mais `BtnCancelarClick`, `GarantirCursorGrade`, `VincularGrade` e `CarregarLista`, chamada no `InicializarForm`.
+
+**Tr├¬s decis├Áes que n├úo s├úo transcri├º├úo literal, e por qu├¬:**
+
+1. **Bot├úo 75x75 em vez dos 80x100 da classe `fwbtng`** ÔÇö `923+80 = 1003` vaza 3px da janela e `3+100 = 103` vaza 23px abaixo da faixa de 80px. Com 75x75 fica em `923..998 / 3..78`, dentro das duas. Mesmo precedente de `FormSIGOPGRC`/`FormSigOpGco`.
+2. **Colunas criadas na ordem VISUAL** ÔÇö o SCX **renomeia** tr├¬s colunas (├¡ndice 1 = `Name "Column3"`, ├¡ndice 3 = `Name "Column1"`), e ├® por isso que o `Init` legado escreve `Grade.Column1.ControlSource = Cpros` falando do ├¡ndice 3. Criando na ordem do `ColumnOrder`, ├¡ndice = ordem visual e nenhum `.Name` precisa ser atribu├¡do (proibido em `Column`). Resultado em tela id├¬ntico.
+3. **`Column4.ReadOnly = .T.`** onde o dump tem `.F.` ÔÇö o `Text1` dela tem `When ÔåÆ Return .f.` no legado, ou seja a c├®lula nunca aceita o cursor; o `.F.` do dump ├® inerte. Documentado no c├│digo para ningu├®m "consertar" depois.
+
+## Dois defeitos achados e corrigidos fora do escopo nominal
+
+- **Colis├úo de cursor.** O BO nomeava os cursores `cursor_4c_Dados` e `cursor_4c_Temp`. Este di├ílogo entra na *data session do pai*, e `cursor_4c_Dados` ├® usado por **491 forms** ÔÇö se j├í estivesse aberto na sess├úo, `USED()` daria `.T.`, o placeholder n├úo seria criado e a grade exibiria os dados do pai, sem erro e sem log. Renomeados para `cursor_4c_ItePen` / `cursor_4c_ProDesc` (zero outros arquivos os citam).
+- **`ControlSource` antes do cursor existir** (regra #41) mataria o `Init` em qualquer abertura sem pai. `GarantirCursorGrade` cria o alias vazio com a estrutura do cursor real.
+
+Toda a configura├º├úo de coluna mora em **`VincularGrade`**, chamado na montagem *e* em `CarregarLista`: atribuir `ColumnCount` recria as `Column` e o BO fecha/recria o alias ÔÇö configurar coluna uma ├║nica vez seria apagado na primeira carga (grade com "Header1"/"Header1" e 90px).
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `.FXP` gerado, `.err` ausente nos dois arquivos. O `.err` do pr├│prio probe (erro real de `AEVENTS`) serviu de controle negativo ÔÇö o check detecta falha.
+- **Probe em dois cen├írios** (`automation\ProbeSigOpPeiF4.prg`): sem pai ÔåÆ abre, grade vinculada ao cursor vazio, `CarregarLista` devolve `.F.` em sil├¬ncio; **com pai falso em `DataSessionId=1` e `xBaixa`/`xBaixa2` populados** ÔåÆ `CarregarLista` `.T.`, **`RECCOUNT = 2`** (n├úo s├│ o `.T.`), totais 35/9/26 batendo com o `Sum` do legado, `RECNO()=1` ap├│s o `GO TOP`, e as linhas corretas (`CodCors=[AZ]`, `CodTams=[M]`, saldo 6 e 20 ÔÇö confirma a decis├úo posicional do `UNION ALL`).
+- **7 colunas ap├│s o rebind**: larguras 108/290/80/80/60/60/80 (soma 758 em 984), headers do dump, `InputMask` nos dois n├¡veis em "Qtde", `Grid.ReadOnly=.F.` com todas as colunas `.T.`.
+- `BtnCancelarClick` ÔåÆ `VARTYPE` do form vira `X` e `USED(cursor)` `.F.` (o `Destroy` fechou no tempo certo). `BINDEVENT` ligado a `BTNCANCELARCLICK`; os dois m├®todos chamados de fora s├úo PUBLIC.
+- **Medi** que `Form.DataSessionId` ├® atribu├¡vel em runtime e que depois da troca o form v├¬ os cursores do chamador ÔÇö o `Init` da Fase 3 funciona.
+- Auditorias: props inexistentes OK, m├®todo PROTECTED OK, `Format/InputMask` **ALTA=0**. Completude: 0 marcadores, 0 procedures vazias. 0 bytes n├úo-ASCII, blocos balanceados, nenhum `RETURN` em TRY/CATCH, CRLF.
+
+## Tr├¬s pontos para as fases seguintes
+
+1. **O `Else / Return .f.` do Init legado n├úo foi reproduzido.** `CarregarLista` j├í devolve o l├│gico que decide, mas a recusa de abrir depende dos controles do rodap├® (que ainda n├úo existem) e, posta agora, reprovaria o harness ÔÇö que abre o di├ílogo sem pai. ├ë o ├║nico trecho do Init legado que falta.
+2. Os 4 `Format = "K!"` que a auditoria ainda acusa s├úo dos totais e do `getDProd` ÔÇö controles das Fases 5/6.
+3. **`mapeamento.json` est├í corrompido para a grade**: as 7 `Column` mapeiam todas para `Page_4c_1`, os 7 `Header1` para o mesmo `obj_4c_Header1` e os 7 `Text1` para `txt_4c_Text1`. ├ë o defeito conhecido do gerador de mapeamento (tipo `Unknown` colidindo o target) ÔÇö `ValidarUIFidelity` vai dar lixo na grade independentemente do c├│digo.

@@ -920,7 +920,6 @@ DEFINE CLASS FormSigReEvd AS FormBase
     ENDPROC
 
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cFrx
         IF !THIS.ValidarFiltros()
             RETURN
         ENDIF
@@ -935,12 +934,9 @@ DEFINE CLASS FormSigReEvd AS FormBase
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZACAO")
         ENDIF
-        IF FILE(loc_cFrx)
-            THIS.ExecutarReportForm("SigReEvd", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
-        ELSE
-            MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
-                "o encontrado: " + loc_cFrx, "Relat" + CHR(243) + "rio")
-        ENDIF
+        *-- O guard de existencia do FRX (com FULLPATH e mensagem descritiva)
+        *-- esta DENTRO de ExecutarReportForm - nao duplicar aqui.
+        THIS.ExecutarReportForm("SigReEvd", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -949,7 +945,6 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *   Report Form SigReEvd to PRINTER Prompt Noconsole
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        LOCAL loc_cFrx
         IF !THIS.ValidarFiltros()
             RETURN
         ENDIF
@@ -964,12 +959,9 @@ DEFINE CLASS FormSigReEvd AS FormBase
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("IMPRESSAO")
         ENDIF
-        IF FILE(loc_cFrx)
-            THIS.ExecutarReportForm("SigReEvd", "PRINTER_PROMPT")
-        ELSE
-            MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
-                "o encontrado: " + loc_cFrx, "Relat" + CHR(243) + "rio")
-        ENDIF
+        *-- O guard de existencia do FRX (com FULLPATH e mensagem descritiva)
+        *-- esta DENTRO de ExecutarReportForm - nao duplicar aqui.
+        THIS.ExecutarReportForm("SigReEvd", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
     ENDPROC
 
     *--------------------------------------------------------------------------

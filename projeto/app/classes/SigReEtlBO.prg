@@ -509,7 +509,11 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         OTHERWISE
             loc_cFRX = "SigReEt1"
         ENDCASE
-        RETURN loc_cFRX
+        *-- Caminho COMPLETO: a pasta reports\ nao esta no SET PATH do
+        *   config.prg, entao "REPORT FORM SigReEt1" nao acha o arquivo e o
+        *   usuario recebe "File does not exist" (Erro349).
+        RETURN IIF(TYPE("gc_4c_CaminhoReports") = "C", gc_4c_CaminhoReports, "") + ;
+               loc_cFRX + ".frx"
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -521,7 +525,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 loc_cFRX = THIS.SelecionarFRX()
-                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(loc_cFRX, "PRINTER_PROMPT")
                 THIS.RegistrarAuditoria("IMPRIMIR")
                 loc_lSucesso = .T.
             ENDIF
@@ -541,7 +545,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 loc_cFRX = THIS.SelecionarFRX()
-                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+                THIS.ReportFormIsolado(loc_cFRX, "PREVIEW")
                 THIS.RegistrarAuditoria("VISUALIZAR")
                 loc_lSucesso = .T.
             ENDIF
@@ -561,7 +565,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 loc_cFRX = THIS.SelecionarFRX()
-                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(loc_cFRX, "PRINTER")
                 THIS.RegistrarAuditoria("DOCUMENTO")
                 loc_lSucesso = .T.
             ENDIF
@@ -653,8 +657,54 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
     * ReverterXML - Processa hierarquia de localizacao a partir de dados XML.
     * Reproduz logica do procedimento reverterxml do form original SIGREETL.
     *--------------------------------------------------------------------------
+    *-- MarcaComoNumero / ComoTexto: absorvem a variacao de TIPO que vem do
+    *   XML sem schema (ver ReverterXML abaixo e utils\fxmltocursor.prg).
+    *   Mesma implementacao do SigOpLclBO - duplicada porque la sao PROTECTED
+    *   e as duas classes nao compartilham ancestral com elas.
+    PROTECTED PROCEDURE MarcaComoNumero(par_uValor)
+        LOCAL loc_nMarca, loc_cTipo
+        loc_nMarca = 0
+        loc_cTipo  = VARTYPE(par_uValor)
+        DO CASE
+            CASE ISNULL(par_uValor)
+                loc_nMarca = 0
+            CASE loc_cTipo = "N"
+                loc_nMarca = IIF(par_uValor <> 0, 1, 0)
+            CASE loc_cTipo = "L"
+                loc_nMarca = IIF(par_uValor, 1, 0)
+            CASE loc_cTipo = "C"
+                *-- "1"/"S"/"T" contam como marcado
+                loc_nMarca = IIF(INLIST(UPPER(LEFT(ALLTRIM(par_uValor) + " ", 1)), "1", "S", "T"), 1, 0)
+            OTHERWISE
+                loc_nMarca = 0
+        ENDCASE
+        RETURN loc_nMarca
+    ENDPROC
+
+    PROTECTED PROCEDURE ComoTexto(par_uValor)
+        LOCAL loc_cTexto, loc_cTipo
+        loc_cTexto = ""
+        loc_cTipo  = VARTYPE(par_uValor)
+        DO CASE
+            CASE ISNULL(par_uValor)
+                loc_cTexto = ""
+            CASE loc_cTipo = "C"
+                loc_cTexto = par_uValor
+            CASE loc_cTipo = "N"
+                loc_cTexto = ALLTRIM(TRANSFORM(par_uValor))
+            CASE loc_cTipo = "L"
+                loc_cTexto = IIF(par_uValor, "1", "0")
+            OTHERWISE
+                loc_cTexto = ""
+        ENDCASE
+        RETURN loc_cTexto
+    ENDPROC
+
     PROTECTED PROCEDURE ReverterXML(par_cCursor, par_cNivAnt, par_cCurDest)
         LOCAL loc_nOldSel, loc_cXML, loc_oErro
+        LOCAL loc_cCodAux, loc_cChaveAux
+        loc_cCodAux   = ""
+        loc_cChaveAux = ""
         loc_nOldSel = SELECT()
         TRY
             IF USED("cursor_4c_Aux")
@@ -675,16 +725,30 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
                 ZAP IN cursor_4c_Aux
                 IF !EMPTY(loc_cXML)
                     = fXmlToCursor(loc_cXML, "cursor_4c_Aux", .F.)
-                    SELECT cursor_4c_Aux
-                    SCAN FOR cursor_4c_Aux.Marcas <> 0
-                        SELECT (par_cCurDest)
-                        APPEND BLANK
-                        REPLACE Cods      WITH cursor_4c_Aux.Cods, ;
-                                Descs     WITH &par_cCursor..Descs, ;
-                                CidChaves WITH cursor_4c_Aux.CidChaves, ;
-                                Codigo    WITH &par_cCursor..Cods
+                    IF USED("cursor_4c_Aux")
                         SELECT cursor_4c_Aux
-                    ENDSCAN
+                        *-- Legado: "Scan For CrAux.Marcas <> 0".
+                        *   O XML gravado na coluna <nivel> NEM SEMPRE traz o
+                        *   schema XSD; sem ele o VFP tipa pelo conteudo e
+                        *   Marcas chega como LOGICO (e Cods como NUMERICO).
+                        *   Comparar Logico com 0 estoura "Operator/operand
+                        *   type mismatch" e abortava a expansao INTEIRA, antes
+                        *   mesmo da tela abrir (Erro348). Medido em 2026-11-08
+                        *   e ja absorvido assim no SigOpLclBO.ReverterXML.
+                        SCAN
+                            IF THIS.MarcaComoNumero(cursor_4c_Aux.Marcas) <> 0
+                                loc_cCodAux   = THIS.ComoTexto(cursor_4c_Aux.Cods)
+                                loc_cChaveAux = THIS.ComoTexto(cursor_4c_Aux.CidChaves)
+                                SELECT (par_cCurDest)
+                                APPEND BLANK
+                                REPLACE Cods      WITH loc_cCodAux, ;
+                                        Descs     WITH &par_cCursor..Descs, ;
+                                        CidChaves WITH loc_cChaveAux, ;
+                                        Codigo    WITH &par_cCursor..Cods
+                                SELECT cursor_4c_Aux
+                            ENDIF
+                        ENDSCAN
+                    ENDIF
                 ENDIF
             ENDSCAN
 

@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All counts balance (6 PROCEDURE/ENDPROC, 3 WITH/ENDWITH, 2 FOR/ENDFOR, 1 TRY/ENDTRY, 7 IF/ENDIF, 1 DEFINE CLASS/ENDDEFINE). The Phase 3 skeleton is syntactically sound.
+
+**Summary of what was created:** `C:\4c\projeto\app\forms\operacionais\Formsigopped.prg` ÔÇö the base structure for this modal dialog form (no PageFrame, since the legacy `SIGOPPED.SCX` is a flat modal with no Page1/Page2):
+
+- Visual class properties transcribed from the dump (`Height=211`, `Width=773`, `DataSession=2`, `WindowType=1`, `ControlBox=.F.`, `TitleBar=0`, `AlwaysOnTop=.T.`, etc.)
+- `this_oFormPai` / `this_cAntValu` ÔÇö equivalents of the legacy custom properties `parentform`/`AntValu`
+- `Init(par_oFormPai, par_nDataSessionPai)` ÔÇö replicates `LParameters pform, datses` + the `Set Datasession To DatSes` rebind that lets this dialog see the parent's `crTpmMvItn`/`CsTmpPed` cursors, then `DODEFAULT()`
+- `InicializarForm()` ÔÇö creates `sigoppedBO`, sets background picture, calls `ConfigurarPageFrame()` ÔåÆ `ConfigurarCabecalho()` (the `cntSombra`/`lblSombra`/`lblTitulo` header, transcribed from the dump)
+- `TornarControlesVisiveis()` and `Destroy()` per project convention
+
+Deferred to later phases (documented in the header comment): the `OK` CommandGroup (Gravar/Retornar), `Shape1`, and the 9 data fields ÔÇö none of those exist as generic CRUD "empty containers" in this legacy form, so inventing `cnt_4c_Botoes`/`cnt_4c_BotoesAcao` would violate PILAR 1.

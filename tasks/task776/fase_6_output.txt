@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All false positives (word "todos"/"todo" in Portuguese meaning "all", not literal TODO markers). No stub patterns found. The implementation is complete.
+
+## Summary
+
+Phase 6/8 for `FormSigOpOpe` implemented the grid-cell events the generic "campos restantes e lookups" phase targets ÔÇö this form has no Page1/Page2 structure, so the real remaining work was the **grid cell** `When`/`Valid`/`LostFocus` events from the legacy dump:
+
+1. **`SigOpOpeBO.prg`** ÔÇö added `ObterGrupoContasAcessivel()`, a scoped reimplementation of the legacy `fAcessoContab` (Framework\sigacess.PRG) restricted to the exact path this form's call sites use (no `pCta`/`pDat`, so the account-link and date-block branches never fire here): super-user `4CONTROL` sees all `SigCdGcr` groups; other users see only groups linked via `SigSyAgc`/`SigCdAcG`, falling back to the full table when no restriction rows exist at all.
+
+2. **`textboxgridlookup.PRG`** ÔÇö added two new grid-cell TextBox subclasses (`TextBoxGrupoCcOpe_4c`, `TextBoxGruCadOperacao_4c`), following the project's established pattern (BINDEVENT on `Valid`/`When` of a grid-column TextBox is unreliable ÔÇö events must be embedded in the class itself).
+
+3. **`FormSigOpOpe.prg`**:
+   - Column1 (Grupos) now uses `TextBoxGrupoCcOpe_4c`: cell locks once a group is set, `Valid` looks up/validates against the accessible-groups universe and fills the description column, `LostFocus` on empty moves focus to Encerrar, F4/F5 opens the picker.
+   - Column3 (GruCads) uses `TextBoxGruCadOperacao_4c` with the same validation, no companion description.
+   - Column4's checkbox (`ctfils`, numeric) got the 4-handler manual toggle (`KeyPress`/`MouseUp`/`MouseDown`/`Click`) since numeric-backed grid checkboxes don't toggle via native binding in VFP9.
+   - `Destroy()` now also closes the two new lookup cursors as a safety net.
+
+No stubs, TODOs, or reduced-scope placeholders were introduced. Next step would be Phase 7/8 per the pipeline.

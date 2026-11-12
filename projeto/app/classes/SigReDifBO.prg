@@ -249,7 +249,7 @@ DEFINE CLASS SigReDifBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF FILE(loc_cCaminhoFrx)
-                THIS.ExecutarReportForm("RelSigReDif", "PREVIEW", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReDif", "PREVIEW", THIS.this_cCursorDados)
             ELSE
                 MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                          "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")
@@ -270,7 +270,7 @@ DEFINE CLASS SigReDifBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF FILE(loc_cCaminhoFrx)
-                THIS.ExecutarReportForm("RelSigReDif", "PRINTER_PROMPT", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReDif", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ELSE
                 MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                          "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")
@@ -291,7 +291,7 @@ DEFINE CLASS SigReDifBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF FILE(loc_cCaminhoFrx)
-                THIS.ExecutarReportForm("RelSigReDif", "PRINTER", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReDif", "PRINTER", THIS.this_cCursorDados)
             ELSE
                 MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                          "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")

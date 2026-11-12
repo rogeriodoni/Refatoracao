@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpOpe.prg` atualizado.
+
+## O que a fase entregou
+
+O SIGOPOPE legado **n├úo tem a barra CRUD do `frmcadastro`**: os ├║nicos bot├Áes do SCX s├úo `cmdInserir`, `cmdExcluir` e `cmdSair`, e Inserir/Excluir operam a **linha da grade**, n├úo um registro. Criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` violaria o PILAR 1 e a regra de completude. O gate da Fase 7 confirma isso pelo carve-out real (`legado sem bot├úo CRUD algum ÔÇö validado pelos 3 handlers`), **VEREDITO=PASSA**.
+
+Ent├úo a fase consolidou os tr├¬s handlers reais e fechou **tr├¬s defeitos** que eles carregavam:
+
+1. **`SET DELETED ON` no `InicializarForm`.** Medido no VFP9 hoje (`automation/MedirDeletedSafetyDS2.prg`, sa├¡da persistida):
+   ```
+   SESSAO1      deleted=ON  safety=OFF
+   SESSAO_FORM  deleted=OFF safety=ON  exact=OFF
+   apos DELETE: RECCOUNT=2 SCAN_visitou=2
+   ```
+   Com `DataSession = 2` o `DELETE` do `CmdExcluirClick` **n├úo tirava a linha da grade** e o `SCAN` do `SalvarVinculos` a **regravava** ÔÇö o usu├írio exclu├¡a e a linha voltava, sem erro e sem log. `SET EXACT` ficou como est├í (OFF) de prop├│sito.
+
+2. **`CmdSairClick` n├úo fica mais preso no CATCH.** O di├ílogo tem `TitleBar = 0`, `ControlBox = .F.` e `WindowType = 1`: o `cmdSair` ├® a ├║nica sa├¡da (ESC inclusive, por `.Cancel = .T.`). Bloquear o fechamento em erro de grava├º├úo travava a aplica├º├úo inteira. O legado s├│ ret├®m no caso de grupos em duplicidade (`Return .f.`) ÔÇö fidelidade preservada.
+
+3. **Guarda de `VARTYPE` no BO antes de gravar**, com mensagem expl├¡cita, para o usu├írio n├úo sair achando que gravou.
+
+**B├┤nus no BO** (mesma causa raiz, fora do bot├úo mas no caminho de abertura): `SigOpOpeBO.CarregarVinculos` fazia `ZAP` sem guarda de `SAFETY`. Como `SAFETY` nasce **ON** na datasession privada (medido acima), o `ZAP` abriria o di├ílogo modal *"Are you sure?"* e **congelaria a tela ao abrir o form**. Agora tem save/restore inline + rede de seguran├ºa ap├│s o `ENDTRY`.
+
+## Verifica├º├Áes
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| `COMPILE` VFP9 (form + BO) | `FXP=.T. ERR=.F.` nos dois (script executou ÔÇö `.txt` de sa├¡da exigido) |
+| Gate Fase 7 (bloco `case 7` real, recortado do orquestrador) | **PASSA** pelo carve-out, com os 4 tokens CRUD `presente=False` |
+| `Test-CompletudeCodigo` | OK nos dois ÔÇö zero TODO/stub/procedure vazia |
+| `VerificarFuncoesNaoDefinidas` | zero chamada ├│rf├ú (1200 .prg) |
+| `VerificarMetodoProtegidoChamadoDeFora` | OK |
+| `VerificarLookupEmKeyPress` | ERRO=0; os 36 avisos s├úo de outros forms, pr├®-existentes |
+| `RETURN` dentro de TRY | nenhum |
+
+Duas ressalvas honestas: **instancia├º├úo n├úo foi provada** ÔÇö `AplicarPermissoesBotoes` chama `fChecaAcesso`, que resolve para `Framework\sigacess.PRG` (n├úo para o stub de `functions.prg`) e **pendura** nesta m├íquina porque o SQL Server 192.168.200.10 est├í inalcan├º├ível; ├® condi├º├úo pr├®-existente do ambiente, n├úo deste form. E ao escrever o coment├írio da fase eu inicialmente soletrei os quatro nomes `Btn*Click`, o que fez o gate "passar" por casamento de texto; reescrevi para o veredito voltar a ser conquistado pelo crit├®rio real.

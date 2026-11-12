@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: `C:\4c\projeto\app\classes\SigOpPcuBO.prg` criado (9,2 KB, 176 linhas).
+
+**Por que a tentativa anterior falhou**: o Claude CLI respondeu pedindo confirma├º├úo (*"Pronto para ajudar. Qual ├® a tarefaÔÇª"*) em vez de gerar o arquivo ÔÇö o output tinha s├│ 2 KB de avisos de permiss├úo. Nenhum problema no c├│digo.
+
+**O que foi entregue**
+
+24 propriedades declaradas, todas transcritas do legado (`SigOpPcu.SCX` + o `Load`/`totalplan` do pai `SIGCDPRO`, task569):
+
+| Bloco | Propriedades |
+|---|---|
+| Par├ómetros de abertura (`LParameters poForm, pnDataSes, pTipo`) | `this_cTipo`, `this_nDataSessionPai` |
+| Cursores do pai (contrato) | `this_cCursorGrade`="csGrade", `this_cCursorProduto`="CrSigCdPro", `this_cCursorAlterados`="crPrFtp", `this_cTagOrdem` |
+| Linha da planilha (13 colunas de `csGrade`) | `this_cTipos` c(1), `this_nOrdem` n(3), `this_cCpros` c(14), `this_cDpros` c(30), `this_nTotas`/`this_nValos`/`this_nTotalG`/`this_nAcumulas` n(12,3), `this_nCoefs` n(8,4), `this_cCgrus` c(3), `this_cCods` c(2), `this_cCidChaves` c(20), `this_nAltCoef` n(1,0) |
+| Cabe├ºalho | `this_cCodigoProduto`, `this_cDescricaoProduto` |
+| Estado de c├ílculo | `this_nTotalAdicional` (`_TTA`), `this_nCoefAnterior` (`lnCoef` do GotFocus) |
+| Acesso | `this_lAcessoFeitio` (`fChecaAcesso([SIGCDFTI])` do `When` da Column4) |
+
+`Init()` sem par├ómetro obrigat├│rio (o harness instancia com `CREATEOBJECT` puro), `DODEFAULT()` + `this_cTabela = "sigprftp"` / `this_cCampoChave = "pkchaves"` ÔÇö nomes exatos do schema, que ├® onde o coeficiente editado termina gravado pelo pai. TRY/CATCH com `RETURN` fora do bloco.
+
+**Achado documentado no cabe├ºalho** (relevante para as Fases 2-8): este di├ílogo **n├úo grava em tabela nenhuma**. Ele edita o cursor `csGrade`, que vive na DataSession do form pai (`Set DataSession to pnDataSes`), e marca `AltCoef = 1` + `CidChaves`; quem persiste ├® o `Salvar` do `SIGCDPRO` (`Insert Into CrSigPrFtp ÔÇª Where altcoef = 1`). Logo o comportamento herdado de `BusinessBase` para `Inserir`/`Atualizar`/`ExecutarExclusao` j├í ├® o correto ÔÇö a exce├º├úo fail-closed de BO somente-leitura do gate da Fase 2 se aplica (dump sem `TABLEUPDATE`, sem `.AddCursor(`, ├║nico alvo de escrita ├® o cursor local `crPrFtp`).
+
+**Verificado**
+- `COMPILE` no VFP9: `.fxp` gerado, **nenhum `.err`**
+- Instancia├º├úo headless: `VARTYPE=O`, `Tabela=[sigprftp]`, `CampoChave=[pkchaves]`, `CursorGrade=[csGrade]`, `AcessoFeitio=.T.` ÔÇö `Init()` retorna `.T.`
+- Zero bytes n├úo-ASCII (acentos s├│ via `CHR()`), zero TODO/stub, nenhum `RETURN` dentro de TRY
+
+Scripts auxiliares em `automation\`: `CompilarF1SigOpPcu777.prg` e `ProbeF1SigOpPcu777.prg` (ambos com `SET SAFETY OFF`/`SET RESOURCE OFF`).

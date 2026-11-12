@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Dos 4 achados do pass FUNCTIONAL em `Formsigopped.prg`, 2 eram falsos positivos (confirmados contra mem├│ria j├í documentada de dezenas de reincid├¬ncias id├¬nticas) e 2 eram reais, corrigidos:
+
+- **[CONTAINER-VISIVEL] CNT_4C_SOMBRA** ÔÇö falso positivo: o container j├í declara `.Visible = .T.` explicitamente em `ConfigurarCabecalho`; nada no arquivo o oculta. N├úo alterado (regra CLAUDE.md #11 pro├¡be detectar cabe├ºalho pelo nome).
+- **[BUSCA-CURSOR] AbrirBuscaPedido** ÔÇö falso positivo: usa o Pattern A can├┤nico (`DefinirCursor()` + `Mostrar()`), e `DefinirCursor()` j├í seta `this_cCursorDestino` internamente. N├úo alterado.
+- **[LOSTFOCUS-SEM-GUARDIA] ValidarPedido** ÔÇö real: adicionada propriedade `this_cUltimoValidarPedidoValidado` e guarda de valor-n├úo-mudou antes do `TRY` (RETURN fora do TRY, por causa da regra #1).
+- **[LOSTFOCUS-SEM-GUARDIA] ValidarTamanho** ÔÇö real: mesmo padr├úo com `this_cUltimoValidarTamanhoValidado`.
+
+Tamb├®m registrei as duas reincid├¬ncias de falso positivo nas mem├│rias `feedback_container_visivel_cabecalho_falso_positivo.md` e `feedback_buscacursor_definircursor_falso_positivo.md`.

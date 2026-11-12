@@ -518,16 +518,19 @@ DEFINE CLASS SIGREEQRBO AS RelatorioBase
         RETURN .T.
     ENDPROC
 
+    *-- NAO existe SigReEqr.frx: o legado NAO imprime aqui. O "Visualizar"
+    *   (btnReport.Visualiza, ToolTipText "Processar") so processa os dados e
+    *   abre o VISUALIZADOR: "PROCEDURE visualizacao / Do Form SigReEqT With
+    *   ThisForm". Quem abre o FormSigReEqT eh o FORM pai (precisa passar a si
+    *   mesmo: o filho faz par_oFormPai.Enabled = .F. e SET DATASESSION TO
+    *   par_oFormPai.DataSessionId). Aqui so preparamos csTempoGr/CsTempoCp.
+    *   Antes isto chamava ExecutarReportForm("SigReEqr", ...) e o usuario
+    *   recebia "Arquivo de relatorio nao encontrado" (Erro342).
     PROCEDURE Visualizar()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-            ELSE
-                THIS.ExecutarReportForm("SigReEqr", "PREVIEW", THIS.this_cCursorDados)
-                loc_lSucesso = .T.
-            ENDIF
+            loc_lSucesso = THIS.PrepararDados()
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Visualizar")

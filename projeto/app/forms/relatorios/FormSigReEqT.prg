@@ -474,7 +474,12 @@ DEFINE CLASS FormSigReEqT AS FormBase
                 .GridLineColor     = RGB(238, 238, 238)
                 .RowHeight         = 17
                 .ScrollBars        = 2
-                .SplitBar          = .F.
+                *-- O dump do SCX traz "SplitBar = .F.", mas Grid.SplitBar eh
+                *-- READ-ONLY em runtime ("Property SPLITBAR is read-only"):
+                *-- atribuir ABORTA o resto deste metodo dentro do TRY, e todas
+                *-- as colunas abaixo ficavam sem largura/header/ControlSource -
+                *-- a tela de resultado abria inutilizavel (Erro344). O default
+                *-- ja eh sem split, entao omitir eh fiel ao legado.
 
                 WITH .Column1
                     .Width     = 80
@@ -743,7 +748,12 @@ DEFINE CLASS FormSigReEqT AS FormBase
                 .GridLineColor     = RGB(238, 238, 238)
                 .RowHeight         = 17
                 .ScrollBars        = 2
-                .SplitBar          = .F.
+                *-- O dump do SCX traz "SplitBar = .F.", mas Grid.SplitBar eh
+                *-- READ-ONLY em runtime ("Property SPLITBAR is read-only"):
+                *-- atribuir ABORTA o resto deste metodo dentro do TRY, e todas
+                *-- as colunas abaixo ficavam sem largura/header/ControlSource -
+                *-- a tela de resultado abria inutilizavel (Erro344). O default
+                *-- ja eh sem split, entao omitir eh fiel ao legado.
 
                 WITH .Column1
                     .Width     = 80
@@ -1172,11 +1182,12 @@ DEFINE CLASS FormSigReEqT AS FormBase
                 IF VARTYPE(THIS.opt_4c_Opcao) = "O"
                     THIS.this_oRelatorio.DefinirOpcao(THIS.opt_4c_Opcao.Value)
                 ENDIF
-                IF USED("cursor_4c_TempoGr")
-                    THIS.this_oRelatorio.this_cCursorGrupos = "cursor_4c_TempoGr"
+                *-- Nomes do LEGADO, criados por SIGREEQRBO.PrepararDados
+                IF USED("csTempoGr")
+                    THIS.this_oRelatorio.this_cCursorGrupos = "csTempoGr"
                 ENDIF
-                IF USED("cursor_4c_TempoCp")
-                    THIS.this_oRelatorio.this_cCursorProdutos = "cursor_4c_TempoCp"
+                IF USED("CsTempoCp")
+                    THIS.this_oRelatorio.this_cCursorProdutos = "CsTempoCp"
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

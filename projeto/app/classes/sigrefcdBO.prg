@@ -33,8 +33,10 @@ DEFINE CLASS sigrefcdBO AS RelatorioBase
     this_cArquivoFRX      = ""
     this_cMensagemErro    = ""
 
-    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
-    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+    *-- Cursor que o FRX SigReFcD percorre (campos crMovimento.Datas e .Valor).
+    *-- Resolve o FIXME do Pattern #142: com "" o USED() de GerarExcel dava .F.
+    *-- e o botao Documento sempre dizia "Nenhum registro encontrado".
+    this_cCursorDados = "crMovimento"
 
     *--------------------------------------------------------------------------
     * Init - Configura titulo, FRX e carrega cursores auxiliares do legado
@@ -461,7 +463,7 @@ DEFINE CLASS sigrefcdBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReFcD", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReFcD", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -479,7 +481,7 @@ DEFINE CLASS sigrefcdBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReFcD", "PREVIEW")
+                THIS.ExecutarReportForm("SigReFcD", "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -540,7 +542,7 @@ DEFINE CLASS sigrefcdBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "sigrefcd_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX + ".frx") ;
                         TO FILE (loc_cArquivo) NOCONSOLE ASCII
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")

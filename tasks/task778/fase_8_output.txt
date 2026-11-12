@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpPec.prg` (2.171 ÔåÆ 2.549 linhas).
+
+## O que entrou
+
+**Orquestra├º├úo de abertura (o `Init` legado inteiro, que a Fase 7 deixou para esta fase)** ÔÇö dentro de `InicializarForm`, atr├ís do guard can├┤nico `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` (nesta m├íquina n├úo h├í SQL, e `fChecaAcesso` consulta `SigCdAcu`): `Ordena = 1`, permiss├Áes, modo autom├ítico, carga da 1┬¬ p├ígina, `Command1.Click()` (a tela abre com a p├ígina toda marcada, como no legado), o ramo "Produtos N├úo Encontrados" abortando a abertura, e `cnt_Pag.Visible = .F.`.
+
+**M├®todos novos**
+
+| M├®todo | Origem no legado |
+|---|---|
+| `AjustarBotoesPorAcesso` | os tr├¬s `If fChecaAcesso('SigOpPec', 'EXPORTA'/'GERACAO'/'IMPRIMIR')` ÔåÆ `Exporta`/`GeraArquivo`/`RelPecas.Visible` |
+| `PrepararProdutosModoAutomatico` | `If plAuto / Select * From crCatalogo Into Cursor crProdutos ReadWrite / Index On Cpros Tag Cpros` |
+| `CarregarLista` (PUBLIC) | `Select CrProdutos / Go Top / If !Eof() / PagInicial()` + o bloco `If !TelaInic`; funil ├║nico de carga **e** repintura |
+| `FormParaBO` / `BOParaForm` (PROTECTED expl├¡cito) | sincronizam pagina├º├úo e filtro de promo├º├úo com as properties que o BO j├í declarava para isso; o caption "P├ígina : NNN/NNN" passou a sair do BO (fonte ├║nica) |
+| `BtnCancelarClick` | Click de `Cnt_Pag.Command4` (`Cancel = .T.`), que abandona a sele├º├úo de p├ígina; delega ao funil `FecharPainelPaginacao` |
+
+`FinalizarPaginacao` agora fecha com `FormParaBO()` + `BOParaForm()`, ent├úo todo caminho de pagina├º├úo (Init/PROXPAG/ANTPAG/Desmarcar Todos/Selecionar Todos) mant├®m o BO em sincronia ÔÇö a chamada mora no funil, n├úo no bot├úo.
+
+**N├úo inventei** `BtnBuscarClick`/`BtnSalvarClick`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo`: o dump n├úo tem bot├úo de busca, de grava├º├úo nem modo de edi├º├úo ÔÇö o cabe├ºalho registra isso e aponta os equivalentes reais (permiss├úo em vez de modo; Exportar/Gerar/Imprimir em vez de gravar). Tamb├®m documentei por que o `AddCursor('SigOpGcp',...)` do `Init` n├úo foi transcrito (o cursor n├úo ├® lido em ponto nenhum do dump).
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- **Gate da Fase 8**: `PASSA`, `metodosFaltantes` vazio ÔÇö via `automation\VerificarGateFase8Task778.ps1` (novo; extrai os helpers por AST e recorta o bloco `case 8`, sem executar o orquestrador).
+- **Compila├º├úo VFP9**: `.fxp` gerado, **sem `.err`**, para form e BO (smoke test confirmou que o VFP executa nesta sess├úo antes de confiar no resultado).
+- **Probe headless**: form instancia (`VARTYPE=O`), `Ordena=1`, `CrImagens` criado, painel oculto; `CarregarLista` sem `CrProdutos` = `.F.`; modo autom├ítico montou `CrProdutos` com `TAG CPROS`; `ReiniciarPaginacao` pintou caption `P├ígina :   1/1`, `TotPro=2/TotPag=1/Item=2/Primeira=3`, slot 1 com `PROD001`, slot 2 marcado, slot 3 oculto, BO sincronizado; abrir painel ÔåÆ `BtnCancelarClick` fecha e devolve a barra de navega├º├úo.
+- **Completude** (`Test-CompletudeCodigo`): OK nos dois arquivos ÔÇö a 1┬¬ rodada acusou a frase "deixou pendente" num coment├írio (falso positivo do regex de pend├¬ncia) e a prosa foi reescrita.
+- **Auditorias**: `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora` e `VerificarPropriedadesInexistentes` ÔåÆ todas limpas. CRLF restaurado nos dois `.prg` e o ├║nico caractere acentuado de coment├írio removido.
+
+Uma ressalva: o caminho de sucesso de `CarregarLista` com SQL real **n├úo** foi exercitado ÔÇö o SQL Server 192.168.200.10 ├® inalcan├º├ível nesta m├íquina, e o probe registrou exatamente isso (`Connection handle is invalid` em `paginicial`, capturado pelo CATCH como previsto). S├│ um teste com conex├úo prova a consulta das imagens em si.

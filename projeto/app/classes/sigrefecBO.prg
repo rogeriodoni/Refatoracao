@@ -30,7 +30,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
     this_lAnaPag     = .F.   && Analitico Por Pagamentos
     this_lVendRes    = .F.   && Resumo Por Vendedor
 
-    *-- Cursor principal binding com RelSigReFec.frx (Pattern #117 guard)
+    *-- Cursor principal binding com SigReFec.frx (Pattern #117 guard)
     this_cCursorDados = "crImpressao"
 
     *--------------------------------------------------------------------------
@@ -67,8 +67,9 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
         TRY
             loc_lSucesso = THIS.PrepararDadosInterno()
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "sigrefecBO.PrepararDados")
+            THIS.this_cMensagemErro = loc_oErro.Message + " (linha " + ;
+                TRANSFORM(loc_oErro.LineNo) + " em " + loc_oErro.Procedure + ")"
+            MsgErro(THIS.this_cMensagemErro, "sigrefecBO.PrepararDados")
         ENDTRY
 
         RETURN loc_lSucesso
@@ -162,7 +163,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
                            "CASE WHEN c.trocos=1 THEN -b.valos ELSE b.valos END AS valos, " + ;
                            "b.MoeFpgs, b.Vencs, b.Outros, c.DetFecCxs " + ;
                            "FROM SigMvPec a, SigMvPar b, SigOpFp c " + ;
-                           "WHERE a.Codigos = " + LTRIM(crDados.Codigos) + ;
+                           "WHERE a.Codigos = " + LTRIM(STR(crDados.Codigos, 10)) + ;
                            " AND a.EmpDopNums = b.EmpDopNums AND b.FPags = c.FPags"
 
                 IF !EMPTY(loc_cFPags)
@@ -219,7 +220,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
                 loc_cSQL = "SELECT p.EmpDopNums " + ;
                            "FROM SigMvPec p " + ;
-                           "WHERE p.Codigos = " + LTRIM(crDetalhe.Codigos) + ;
+                           "WHERE p.Codigos = " + LTRIM(STR(crDetalhe.Codigos, 10)) + ;
                            " ORDER BY p.EmpDopNums"
 
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crVista1")
@@ -435,6 +436,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
                        Vencs, Bancos, Agencias, Contas, Numeros, RelFechas ;
                     FROM crDetalhe ;
                     WHERE Dopes = TmpOpeIndivs.Dopes ;
+                      AND Numes = TmpOpeIndivs.Numes ;
                     ORDER BY Parcs ;
                     INTO CURSOR TmpOpePags
 
@@ -816,7 +818,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("RelSigReFec", "PRINTER_PROMPT", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReFec", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -836,7 +838,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("RelSigReFec", "PREVIEW", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigReFec", "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

@@ -89,9 +89,16 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
         SELECT TempMoe
         SET ORDER TO cmoes
         IF !SEEK(par_cMoeda, "TempMoe", "cmoes")
+            LOCAL loc_nCotacao
             APPEND BLANK
-            REPLACE TempMoe.cmoes   WITH par_cMoeda
-            REPLACE TempMoe.cotacao WITH fBuscarCotacao(ALLTRIM(par_cMoeda), par_dData)
+            REPLACE TempMoe.cmoes WITH par_cMoeda
+            *-- Calcular ANTES do REPLACE: fBuscarCotacao faz SQLEXEC + USE IN
+            *   e, embutida na expressao, trocava a area corrente debaixo do
+            *   comando ("No table is open in the current work area" - Erro350).
+            *   A funcao ja repoe a area, mas o IN explicito torna este ponto
+            *   independente disso.
+            loc_nCotacao = fBuscarCotacao(ALLTRIM(par_cMoeda), par_dData)
+            REPLACE cotacao WITH loc_nCotacao IN TempMoe
         ENDIF
     ENDPROC
 

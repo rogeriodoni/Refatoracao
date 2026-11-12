@@ -1,0 +1,16 @@
+[1] inicio
+[2] config.prg OK
+[3] dependencias OK
+[4] VARTYPE loForm = O
+    BaseClass        = [Form]
+    Caption          = [Operação para Atualização]
+    txt MaxLength    = 20
+    btn Picture FILE = .T.
+    form Picture FILE= .T.
+    BtnOkClick protegido?= .F.
+    Publicar... protegido?= .F.
+[5] CASO1 existe: Confirmado=.T. Sel=[INVENTARIO] crOpera.Dopes=[INVENTARIO] crOpera.Estoqs=1
+[6] CASO2 fora   : Confirmado=.F. Sel=[]
+[7] CASO3 vazio  : Confirmado=.F. Sel=[]
+[8] CASO4 sem cur: Confirmado=.T. Sel=[QUALQUER]
+[9] FIM

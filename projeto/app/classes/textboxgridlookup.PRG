@@ -1616,3 +1616,106 @@ DEFINE CLASS TextBoxEmpresaMop_4c AS TextBox
         RETURN .T.
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxGrupoCcOpe_4c - celula "C.Custo" (Column1) da grade de vinculos
+* Grupo de Contas x Operacao do FormSigOpOpe (SIGOPOPE.GradeSubN.Column1.Text1).
+*
+* Legado:
+*   When      -> Return(IsEmpty(TmpCcOpe.Grupos)) - a celula so entra em
+*                edicao enquanto a linha AINDA NAO tem grupo vinculado;
+*                depois de gravado, trava.
+*   Valid     -> If Not Empty(This.Value) / fAcessoContab(Usuar,'C',
+*                This.Value,This,ThisForm.GradeSubN.Column2.Text1) - valida
+*                o codigo em SigCdGcr (restrito ao que o usuario pode ver) e
+*                preenche a Descricao (Column2) junto
+*   LostFocus -> If IsEmpty(This.Value) / Thisform.cmdSair.SetFocus - linha
+*                ficou sem grupo, foca o botao de saida em vez de deixar o
+*                foco preso na grade
+*
+* Instalada com Column.AddObject + CurrentControl + Sparse = .F. (regra #18);
+* os tres eventos delegam para o form (regra #46 - BINDEVENT em Valid/When de
+* TextBox de Column nao eh confiavel) porque dependem do BusinessObject e da
+* Column2 (descricao) da mesma grade.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxGrupoCcOpe_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 10
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GrupoOperacaoEditavel", 5)
+            RETURN THISFORM.GrupoOperacaoEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarGrupoOperacaoGridExec", 5)
+            RETURN THISFORM.ValidarGrupoOperacaoGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF EMPTY(ALLTRIM(NVL(THIS.Value, ""))) AND PEMSTATUS(THISFORM, "cmd_4c_CmdSair", 5)
+            THISFORM.cmd_4c_CmdSair.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *-- F4/F5 abrem o picker direto (afordancia do sistema novo, igual aos
+    *-- demais lookups de grade) - guard de tecla obrigatorio (regra #47),
+    *-- senao o picker subiria a cada tecla digitada.
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupGrupoOperacaoGrade", 5)
+                THISFORM.AbrirLookupGrupoOperacaoGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxGruCadOperacao_4c - celula "Grupo Cadastro" (Column3) da grade de
+* vinculos do FormSigOpOpe (SIGOPOPE.GradeSubN.Column3.Text1).
+*
+* Legado:
+*   Valid -> If Not IsEmpty(This.value) / fAcessoContab(Usuar,'C',
+*            This.value,This) - valida o codigo em SigCdGcr (mesmo universo
+*            acessivel da Column1), SEM descricao companheira (pDsc nao eh
+*            passado nesta chamada).
+*
+* Instalada com Column.AddObject + CurrentControl + Sparse = .F. (regra #18).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxGruCadOperacao_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 10
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarGruCadOperacaoGridExec", 5)
+            RETURN THISFORM.ValidarGruCadOperacaoGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupGruCadOperacaoGrade", 5)
+                THISFORM.AbrirLookupGruCadOperacaoGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+ENDDEFINE

@@ -17,7 +17,7 @@ DEFINE CLASS SigReIpcBO AS RelatorioBase
     *-- N?mero de opera??es a imprimir (par?metro recebido pelo form)
     this_nQbols = 0
 
-    *-- Cursor principal binding com RelSigReIpc.frx (Pattern #117 guard)
+    *-- Cursor principal binding com SigCdPgr.frx (Pattern #117 guard)
     this_cCursorDados = "TMPLANCA"
 
     *--------------------------------------------------------------------------
@@ -153,7 +153,7 @@ DEFINE CLASS SigReIpcBO AS RelatorioBase
                 SELECT TMPLANCA
                 GO TOP
 
-                THIS.ExecutarReportForm("RelSigReIpc", "PREVIEW", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigCdPgr", "PREVIEW", THIS.this_cCursorDados)
             ENDFOR
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -195,7 +195,7 @@ DEFINE CLASS SigReIpcBO AS RelatorioBase
                 SELECT TMPLANCA
                 GO TOP
 
-                THIS.ExecutarReportForm("RelSigReIpc", "PRINTER_PROMPT", THIS.this_cCursorDados)
+                THIS.ExecutarReportForm("SigCdPgr", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ENDFOR
             loc_lSucesso = .T.
         CATCH TO loc_oErro

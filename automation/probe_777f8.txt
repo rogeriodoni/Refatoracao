@@ -1,0 +1,33 @@
+=== PROBE Fase 8 - FormSigOpPcu (task777) ===
+csGrade montado: 5 linhas
+[1] CREATEOBJECT -> VARTYPE=O
+[2] BorderStyle=2  TitleBar=0  ControlBox=.F.  ClipControls=.F.  WindowType=1
+[3] ColumnCount=7  RecordSource=[csGrade]
+    Col1 CS=[csGrade.Cpros] W=120 Hdr=[Código] RO=.T.
+    Col2 CS=[csGrade.Dpros] W=280 Hdr=[Descrição] RO=.T.
+    Col3 CS=[csGrade.Totas] W=90 Hdr=[Total (a)] RO=.T.
+    Col4 CS=[csGrade.Coefs] W=73 Hdr=[Coef. / (%)] RO=.F.
+    Col5 CS=[csGrade.Valos] W=90 Hdr=[Valor (b)] RO=.T.
+    Col6 CS=[csGrade.totalG] W=90 Hdr=[Total (a+b)] RO=.T.
+    Col7 CS=[csGrade.Acumulas] W=100 Hdr=[Acumulado] RO=.T.
+[4] linhas VISIVEIS apos Set Key To 'V' = 3 (esperado 3)  soma Valos = 250  rodape txt_4c_Adicional = 250
+[6] Form.Caption=[PROD-PAI - CAMISA SOCIAL BRANCA]
+    faixa lblTitulo=[Planilha de Custo]
+    subtitulo Label1=[Planilha de Custo (Venda)]
+[7] linha 1 -> Coefs=2  Valos=100 (esperado 100)  TotalG=200  Acumulas=200  AltCoef=1  CidChaves vazio=.F.
+    total adicional apos recalculo = 300
+[8] crPrFtp existe=.T.  linhas=1 (esperado 1 - so a linha com AltCoef=1)
+    csGrade visiveis apos FecharDialogo = 5 (esperado 5 - filtro desfeito)  pai.Enabled=.T.
+[9] escopos (Protected=.T. seria DEFEITO nos chamados de fora):
+    CarregarDados          existe=.T.  Protected=.F.
+    AtualizarTitulos       existe=.T.  Protected=.F.
+    AtualizarTotalAdicional existe=.T.  Protected=.F.
+    BtnEncerrarClick       existe=.T.  Protected=.F.
+    FecharDialogo          existe=.T.  Protected=.F.
+    GridCoefGotFocus       existe=.T.  Protected=.F.
+    GridCoefLostFocus      existe=.T.  Protected=.F.
+    BO.RecalcularCoeficiente Protected=.F.
+    BO.MontarCursorAlterados Protected=.F.
+    BO.FiltrarGrade          Protected=.F.
+    BO.ArmazenarCoefAnterior Protected=.F.
+=== FIM DO PROBE ===

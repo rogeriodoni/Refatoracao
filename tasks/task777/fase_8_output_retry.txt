@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8 ÔÇö conclu├¡da
+
+**A Fase 8 n├úo falhou por defeito no artefato.** Diagnostiquei a causa real antes de tocar no form, e ela ├® conhecida do projeto (8┬¬ recorr├¬ncia):
+
+- Gate da Fase 8 rodando com o orquestrador **do HEAD**: `REPROVA`, com **um ├║nico** item ÔÇö `BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)`.
+- Gate rodando com o orquestrador **em disco**: `PASSA`, `metodosFaltantes=[]`.
+
+O `.ps1` foi gravado 20:30:20 e a task come├ºou 19:21 ÔåÆ o processo vivo j├í havia parseado a vers├úo antiga. A corre├º├úo s├│ vale a partir da pr├│xima invoca├º├úo. **N├úo inventei o bot├úo**: o legado tem exatamente um (`cmdSair`/"Encerrar") e n├úo escreve em tabela nenhuma; satisfazer o regex por coment├írio seria passe falso.
+
+Verifiquei o ramo novo (`ENTREGA-AO-PAI`) em vez de aceitar o relat├│rio anterior: rodei o predicado nos **776 dumps** de `tasks\` ÔÇö dispara em **1** (o pr├│prio task777). Diff ├® aditivo (240 inser├º├Áes, 0 remo├º├Áes).
+
+### Entreg├ível provado por medi├º├úo, n├úo por leitura
+- **Compila├º├úo limpa** (`.fxp` apagado antes; `.err` ausente confirmado por arquivo de sa├¡da, n├úo por exit code).
+- **Probe real em VFP9**: form instancia; 7 colunas ligadas com `Width`/`Header` sobrevivendo ao `RecordSource`; filtro do tipo deixa 3 de 5 linhas e o rodap├® bate (250); f├│rmula do `Valid` legado confere valor a valor; `crPrFtp` sai com exatamente a linha alterada; filtro desfeito; pai reabilitado; todos os m├®todos chamados de fora s├úo PUBLIC.
+- `Test-CompletudeCodigo` OK nos dois arquivos; auditorias est├íticas sem achado.
+
+### Dois erros do relat├│rio anterior, corrigidos
+1. **"o SELECT honra SET FILTER"** ÔÇö medi: o `SELECT` do VFP9 **ignora os dois**, `SET KEY` e `SET FILTER`. A escolha de `SET KEY TO RANGE` continua certa (├® imune ao `SET EXACT ON`, que o `config.prg` liga), mas pela raz├úo certa. A afirma├º├úo errada estava s├│ no relat├│rio, n├úo no c├│digo.
+2. **"o FormProduto n├úo tem esses CheckBoxes"** ÔÇö tem (`chk_4c_ChkPlanCus`, `chk_4c_ChkPlanVen`). Corrigi tamb├®m a documenta├º├úo de contrato nos dois arquivos: a persist├¬ncia em `sigprftp` sai do `SCAN` do pr├│prio `csGrade` por `AltCoef = 1`; `crPrFtp` ├® lido quando o pai remonta a composi├º├úo.
+
+### O que ficou de fora, e por qu├¬
+**`FormSigOpPcu` est├í completo mas inalcan├º├ível.** Faltam duas pontas, ambas no `FormProduto` (task003): os handlers dos dois CheckBox **e**, antes deles, o pipeline do cursor `csGrade` ÔÇö que n├úo existe em arquivo nenhum de `projeto/app`. Ligar s├│ os CheckBox abriria a grade vazia, o que pareceria defeito desta tela. Deixei registrado em mem├│ria com os n├║meros de linha do dump e a ordem correta de execu├º├úo.
+
+### Para destravar o gate
+Basta a pr├│xima invoca├º├úo do orquestrador (`RunLoop.ps1` usa `&` sobre o `.ps1`, que rel├¬ o arquivo a cada chamada). Enquanto o processo atual estiver vivo, qualquer retry desta fase vai reprovar pelo mesmo item, sem nada errado no artefato.

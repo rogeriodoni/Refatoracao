@@ -1282,7 +1282,7 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
     ENDPROC
 
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_cFrx
+        LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
@@ -1292,15 +1292,9 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
 
             THIS.AtualizarCabecalhoRelatorio()
 
-            IF FILE(loc_cFrx)
-                THIS.ExecutarReportForm("SigReIv1", "PREVIEW", THIS.this_cCursorDados)
-            ELSE
-                MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
-                         "o encontrado: " + loc_cFrx, "Relat" + CHR(243) + "rio")
-                loc_lSucesso = .F.
-            ENDIF
-
-            loc_lSucesso = .T.
+            *-- O guard de existencia do FRX (com FULLPATH e mensagem descritiva)
+            *-- esta DENTRO de ExecutarReportForm, que devolve .F. quando falta.
+            loc_lSucesso = THIS.ExecutarReportForm("SigReIv1", "PREVIEW", THIS.this_cCursorDados)
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
