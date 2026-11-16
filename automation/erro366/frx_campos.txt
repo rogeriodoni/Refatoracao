@@ -1,0 +1,156 @@
+===== sigrehc1
+8 'Custo Médio F.' | 
+8 'Custo Médio Total' | 
+8 'Produto : ' + Alltrim(CPros) + ' - ' + Alltrim(DPros) | 
+8 'Data' | 
+8 'Empresa : ' + Emps | 
+8 'Operação' | 
+8 'Código' | 
+8 'Qtde.' | 
+8 'Saldo' | 
+8 'O' | 
+8 'Unidade : ' + Alltrim(CUnis) | 
+8 'Valor' | 
+8 Datas | 
+8 Dopes | 
+8 Transform(Numes, '999999') | 
+8 Qtds | 
+8 Sqtds | 
+8 Opers | 
+8 Units | 
+8 UnitMFis | 
+8 Moedas | 
+8 MoedMeds | 
+8 lnQtdeE | 
+8 'E' | 
+8 lnQtdeS | 
+8 'S' | 
+8 Round(UnitMeds * Sqtds, 6) | 
+8 MoedMeds | 
+8 'ICMS' | 
+8 AliqIcms | 
+8 'IPI' | 
+8 Aliqs | 
+8 'Custo Médio' | 
+8 UnitMeds | 
+8 MoedMeds | 
+8 crCabecalho.Titulo | 
+8 TIME() | 
+8 DATE() | 
+8 crCabecalho.SubTit | 
+8 TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999') | 
+8 gcCabRel | 
+8 gosistema.nomesistema | 
+8 this.name | 
+8 [Página] | 
+18 Iif(Opers = 'E', Qtds, 0) | 
+18 Iif(Opers = 'S', Qtds, 0) | 
+===== SigRehc2
+8 MoedMeds | 
+8 'Custo Médio Total' | 
+8 'Custo Médio F' | 
+8 [Produto : ] + Alltrim(CPros) + [ - ] + Alltrim(DPros) | 
+8 'Data' | 
+8 'Operação' | 
+8 'Código' | 
+8 'Qtde.' | 
+8 'Saldo' | 
+8 'O' | 
+8 'Unidade : ' + Alltrim(CUnis) | 
+8 'Valor' | 
+8 Datas | 
+8 Dopes | 
+8 Transform(Numes, '999999') | 
+8 Qtds | 
+8 Sqtds | 
+8 Opers | 
+8 Units | 
+8 UnitMFis | 
+8 Moedas | 
+8 lnQtdeE | 
+8 'E' | 
+8 lnQtdeS | 
+8 'S' | 
+8 Round(UnitMeds * Sqtds, 6) | 
+8 MoedMeds | 
+8 'ICMS' | 
+8 AliqIcms | 
+8 'IPI' | 
+8 Aliqs | 
+8 'Emp' | 
+8 Emps | 
+8 'Custo Médio' | 
+8 UnitMeds | 
+8 MoedMeds | 
+8 crCabecalho.Titulo | 
+8 TIME() | 
+8 DATE() | 
+8 crCabecalho.SubTit | 
+8 TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999') | 
+8 gcCabRel | 
+8 gosistema.nomesistema | 
+8 this.name | 
+8 [Página] | 
+8 MoedMeds | 
+8 'Custo Médio Total F' | 
+8 Round(UnitMFis * Sqtds, 6) | 
+18 Iif(Opers = 'E', Qtds, 0) | 
+18 Iif(Opers = 'S', Qtds, 0) | 
+===== SigRehc3
+8 [PRODUTO : ] + Alltrim(DPros) + [  (] + Alltrim(CPros)  + [)] | 
+8 'Unidade : ' + Alltrim(CUnis) | 
+8 crCabecalho.Titulo | 
+8 TIME() | 
+8 DATE() | 
+8 crCabecalho.SubTit | 
+8 Transform(_PageNo,[@L 9999])  + [ de ] + Transform(_PageTotal,[@L 9999]) | 
+8 gcCabRel | 
+8 [Página] | 
+8 [Espécie] | 
+8 [Série] | 
+8 [Número] | 
+8 [Data] | 
+8 [RE/RS] | 
+8 [Folha] | 
+8 [Registros Fiscais] | 
+8 [Número] | 
+8 [Contábil] | 
+8 [Codificação] | 
+8 [Fiscal] | 
+8 [Própria] | 
+8 [Produção - Qtde] | 
+8 [Terceiros] | 
+8 [Própria] | 
+8 [Produção - Qtde] | 
+8 [Terceiros] | 
+8 [DOCUMENTO] | 
+8 [LANÇAMENTO] | 
+8 [ENTRADAS] | 
+8 [SAÍDAS] | 
+8 [Valor] | 
+8 [IPI] | 
+8 [VALORES] | 
+8 [Estoque] | 
+8 [Custo Médio Unitário] | 
+8 [OBSERVAÇÕES] | 
+8 EspecieNfs | 
+8 Series | 
+8 NFis | 
+8 Iif(Empty(Emis), Datas, Emis) | 
+8 [] | 
+8 [] | 
+8 [] | 
+8 ClFiscals | 
+8 ClFiscals | 
+8 Iif(Empty(Qtds) Or Opers = [S], [], Transform(Round(Qtds, 2), [99,999,999.99])) | 
+8 [] | 
+8 Iif(Empty(Qtds) Or Opers = [E], [], Transform(Round(Qtds, 2), [99,999,999.99])) | "@Z"
+8 [] | 
+8 Iif(Empty(Units), [], Transform(Round(Units, 2), [99,999,999.99])) | 
+8 iif(Empty(ValIpis), [], Transform(Round(ValIpis, 2), [999,999.99])) | 
+8 Transform(Round(Iif(Empty(SQtds), 0, SQtds), 2), [99,999,999.99]) | 
+8 Iif(Empty(UnitMFis), [], Transform(Round(UnitMFis, 4), [999,999.9999])) | 
+8 [Custo Médio Total] | 
+8 Transform(Round(Iif(Empty(UnitMFis * SQtds), 0, UnitMFis * SQtds), 2), [999,999.99]) | 
+18 Iif(Opers = 'E', Qtds, 0) | 
+18 Iif(Opers = 'S', Qtds, 0) | 

@@ -56,11 +56,28 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
         LOCAL loc_cObsd, loc_cHists, loc_cOpersFiltro
 
         loc_lSucesso = .F.
+
+        *-- Erro374: este relatorio so existe para UM titulo - o legado eh aberto
+        *-- pela tela de Titulos (iDoc) com Empresa/Operacao/Titulo/Numero. Aberto
+        *-- pelo menu, sem esses parametros, o legado simplesmente nao imprimia
+        *-- (Seek em LocalOpe falha e Return .f.). Avisa em vez de falhar no SQL.
+        IF EMPTY(THIS.this_cEmps) OR EMPTY(THIS.this_cDopes) OR EMPTY(THIS.this_cNumes)
+            MsgAviso("Nenhum t" + CHR(237) + "tulo informado." + CHR(13) + ;
+                "Este documento deve ser impresso a partir da tela de T" + CHR(237) + ;
+                "tulos Gerados (bot" + CHR(227) + "o de impress" + CHR(227) + "o do t" + CHR(237) + "tulo).", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.this_cMensagemErro = ""
+            RETURN .F.
+        ENDIF
+
         TRY
             *-- 1. Carregar dados da empresa
+            *-- Erro374: a coluna eh Cemps (legado: CursorQuery('SigCdEmp',
+            *-- 'LocalEmp','Cemps',...)). "Emps" nao existe em SigCdEmp - o SQL
+            *-- falhava e a tela mostrava "Falha ao carregar empresa".
             loc_cSQL = "SELECT RazSocs, Cgcs, Ies, Tel1s, Tel2s " + ;
                        "FROM SigCdEmp " + ;
-                       "WHERE Emps = " + EscaparSQL(PADR(ALLTRIM(THIS.this_cEmps), 3))
+                       "WHERE Cemps = " + EscaparSQL(PADR(ALLTRIM(THIS.this_cEmps), 3))
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEmp")
             IF loc_nResult < 0
                 THIS.this_cMensagemErro = "Falha ao carregar empresa"
@@ -234,11 +251,13 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
                 ENDIF
 
                 *-- Filtrar registros relacionados (excluindo o registro principal)
+                *-- Erro374: legado = a.Opers = Iif(b.Opers='CR','C','D') - o sinal
+                *-- vem da operacao de CADA recorrencia (b), nao do titulo impresso.
                 loc_cOpersFiltro = loc_cSinalOper
                 SELECT a.* ;
                     FROM cursor_4c_LocalMccr a, cursor_4c_LocalOpe b ;
                     WHERE a.Dopcs = b.dopes ;
-                    AND a.Opers = m.loc_cOpersFiltro ;
+                    AND a.Opers = IIF(ALLTRIM(b.Opers) == "CR", "C", "D") ;
                     AND a.EmpdopNcs <> m.loc_cEDNE ;
                     INTO CURSOR cursor_4c_LocalMccr1 ;
                     ORDER BY a.vencs
@@ -247,7 +266,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
                     SELECT a.* ;
                         FROM cursor_4c_LocalMccr a, cursor_4c_LocalOpe b ;
                         WHERE a.Dopcs = b.dopes ;
-                        AND a.Opers = m.loc_cOpersFiltro ;
+                        AND a.Opers = IIF(ALLTRIM(b.Opers) == "CR", "C", "D") ;
                         AND a.Tipos = " " ;
                         AND a.EmpdopNcs <> m.loc_cEDNE ;
                         INTO CURSOR cursor_4c_LocalMccr1 ;
@@ -429,7 +448,7 @@ DEFINE CLASS SigReIdtBO AS RelatorioBase
                 SELECT a.* ;
                     FROM cursor_4c_LocalMccr a, cursor_4c_LocalOpe b ;
                     WHERE a.Dopcs = b.dopes ;
-                    AND a.Opers = m.loc_cOpersFiltro ;
+                    AND a.Opers = IIF(ALLTRIM(b.Opers) == "CR", "C", "D") ;
                     AND a.Tipos = " " ;
                     AND a.EmpdopNcs <> m.loc_cEDNE ;
                     INTO CURSOR cursor_4c_LocalMccr1 ;

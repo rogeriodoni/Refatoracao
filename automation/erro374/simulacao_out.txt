@@ -1,0 +1,33 @@
+A) menu sem parametros: form=O caption=[Impressão de Documento de Título] W=800 H=180
+   LBL_4C_LABEL1            L=253 T=105 W=97 H=15 [Tipo de Impressão :]
+   OBJ_4C_OPTTIPO           L=346 T=102 W=203 H=25 | Título@6 | Autorização de Gasto@60 val=2
+   LBL_4C_AGRUPA            L=243 T=132 W=110 H=15 [Imprimir Recorrência : ]
+   OBJ_4C_OPTAGRUPA         L=346 T=129 W=211 H=25 | Sim@6 | Agrupada@60 | Nenhum@143 val=3
+   visualizar: (nao renderizou) msgErro=[]
+   aviso=[(sem leitura)]
+titulo: caption=[Impressão de Documento de Título (CONTAS A PAGAR/T374/01)]
+B) Autorizacao de Gasto / Nenhum (padrao da imagem): frx=SigReIag alias=CRDBIMP regs=3 ContaTran=[TRANS PAG ]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=TRANSITO/TRANS PAG [TRANSITO PAGAMENTO] Valor=3600 Valorc=1800 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=3600 Valorc=1200 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=3600 Valorc=600 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     paginas=1
+C) Titulo / Nenhum: frx=SigReIdt alias=CRDBIMP regs=2 ContaTran=[TRANS PAG ]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=1800 Valorc=1200 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=1800 Valorc=600 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     paginas=1
+D) Titulo / Agrupada: frx=SigReIdA alias=CRDBIMP regs=2 ContaTran=[TRANS PAG ]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=1800 Valorc=1200 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+       recors=001  05/11/2026   10/12/2026  T374/02         1,800.00    CONTAS A PAGAR || 001  05/11/2026   10/01/2027  T374/03         1,800.00    CONTAS A PAGAR || 
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=1800 Valorc=600 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+       recors=001  05/11/2026   10/12/2026  T374/02         1,800.00    CONTAS A PAGAR || 001  05/11/2026   10/01/2027  T374/03         1,800.00    CONTAS A PAGAR || 
+     paginas=1
+E) Titulo / Recorrencia Sim: frx=SigReIdt alias=CRDBIMP regs=8 ContaTran=[TRANS PAG ]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=1800 Valorc=1200 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     T374/01 venc=10/11/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=1800 Valorc=600 obsd=[Contrato de locacao 2026 - teste Erro374] hist=[Aluguel mensal da loja 001]
+     T374/02 venc=10/12/2026 port=21101/F000000029 [FORNECEDOR] cc=TRANSITO/TRANS PAG [TRANSITO PAGAMENTO] Valor=3600 Valorc=1800 obsd=[] hist=[]
+     T374/02 venc=10/12/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=3600 Valorc=1200 obsd=[] hist=[]
+     T374/02 venc=10/12/2026 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=3600 Valorc=600 obsd=[] hist=[]
+     T374/03 venc=10/01/2027 port=21101/F000000029 [FORNECEDOR] cc=TRANSITO/TRANS PAG [TRANSITO PAGAMENTO] Valor=3600 Valorc=1800 obsd=[] hist=[]
+     T374/03 venc=10/01/2027 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231005 [SALARIOS E ORDENADOS] Valor=3600 Valorc=1200 obsd=[] hist=[]
+     T374/03 venc=10/01/2027 port=21101/F000000029 [FORNECEDOR] cc=31102/3110231007 [FERIAS] Valor=3600 Valorc=600 obsd=[] hist=[]
+     paginas=3

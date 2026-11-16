@@ -17,6 +17,7 @@ DEFINE CLASS Formsigregnf AS FormBase
     this_lNotasAnt       = .F.
     this_cSerieAnterior  = ""    && Valor anterior da serie (GotFocus)
     this_cUsuarsAnterior = ""    && Valor anterior do usuario (GotFocus)
+    this_lEmLookup       = .F.   && guarda de reentrancia dos lookups (picker modal redispara LostFocus)
 
     *--------------------------------------------------------------------------
     * Init - Delega ao FormBase que chama InicializarForm()
@@ -358,7 +359,7 @@ DEFINE CLASS Formsigregnf AS FormBase
             .Width           = 75
             .Height          = 75
             .Caption         = "P\<rocessar"
-            .FontName        = "Tahoma"
+            .FontName        = "Comic Sans MS"
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
@@ -391,7 +392,8 @@ DEFINE CLASS Formsigregnf AS FormBase
             .BackColor     = RGB(255,255,255)
             .Themes        = .F.
             .MousePointer  = 15
-            .ToolTipText   = "Selecionar Tudo"
+            .ToolTipText   = "Selecionar"
+            .Picture       = gc_4c_CaminhoIcones + "a_save1.bmp"
             .Visible       = .T.
         ENDWITH
 
@@ -410,7 +412,8 @@ DEFINE CLASS Formsigregnf AS FormBase
             .BackColor     = RGB(255,255,255)
             .Themes        = .F.
             .MousePointer  = 15
-            .ToolTipText   = "Desmarcar Tudo"
+            .ToolTipText   = "Desmarcar"
+            .Picture       = gc_4c_CaminhoIcones + "cancelab.bmp"
             .Visible       = .T.
         ENDWITH
 
@@ -434,7 +437,7 @@ DEFINE CLASS Formsigregnf AS FormBase
             .ColumnCount        = 9
             .RecordSource       = "cursor_4c_TmpNFis"
             .DeleteMark         = .F.
-            .RecordMark         = .F.
+            .Panel              = 1
             .FontName           = "Tahoma"
             .FontSize           = 8
             .AllowHeaderSizing  = .F.
@@ -451,7 +454,7 @@ DEFINE CLASS Formsigregnf AS FormBase
 
             WITH .Column1
                 .Width             = 15
-                .HeaderHeight       = 0
+                *-- HeaderHeight eh do GRID, nao da Column (regra #33) - removido
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .F.
@@ -605,8 +608,10 @@ DEFINE CLASS Formsigregnf AS FormBase
     PROTECTED PROCEDURE VincularEventos()
         BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Serie, "GotFocus", THIS, "SerieGotFocus")
         BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Serie, "KeyPress", THIS, "TeclaSerieKeyPress")
+        BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Serie, "LostFocus", THIS, "SerieLostFocus")
         BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Usuars, "GotFocus", THIS, "UsuarsGotFocus")
         BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Usuars, "KeyPress", THIS, "TeclaUsuarsKeyPress")
+        BINDEVENT(THIS.cnt_4c_Corpo.txt_4c_Usuars, "LostFocus", THIS, "UsuarsLostFocus")
         BINDEVENT(THIS.cnt_4c_Corpo.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
         BINDEVENT(THIS.cmd_4c_SelTudo, "Click", THIS, "BtnSelTudoClick")
         BINDEVENT(THIS.cmd_4c_Apaga, "Click", THIS, "BtnApagaClick")
@@ -624,24 +629,40 @@ DEFINE CLASS Formsigregnf AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TeclaSerieKeyPress - F4(115)=lookup direto, ENTER(13)/TAB(9)=validar
+    * TeclaSerieKeyPress - so F4 (115) abre a busca. A validacao do legado
+    *   (Get_Serie.Valid) roda ao SAIR do campo - ver SerieLostFocus (regra #47:
+    *   lookup em KeyPress sem filtrar tecla abria picker com campo vazio e,
+    *   somado ao ValidarSerie, abria DOIS dialogos).
     *--------------------------------------------------------------------------
     PROCEDURE TeclaSerieKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        LOCAL loc_lAnterior
+        IF par_nKeyCode = 115
+            loc_lAnterior = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupSerie()
-        ENDIF
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            LOCAL loc_cSerie
-            loc_cSerie = PADR(ALLTRIM(THIS.cnt_4c_Corpo.txt_4c_Serie.Value), 3)
-            IF !EMPTY(ALLTRIM(loc_cSerie))
-                THIS.ValidarSerie(loc_cSerie)
-            ENDIF
-            IF PADR(THIS.this_cSerieAnterior, 3) # PADR(THIS.cnt_4c_Corpo.txt_4c_Serie.Value, 3)
-                THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
-            ENDIF
+            THIS.this_lEmLookup = loc_lAnterior
         ENDIF
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * SerieLostFocus - Get_Serie.Valid do legado: se preenchido, fwBuscaExt
+    *   (match exato resolve sem dialogo); se a serie mudou desde o GotFocus,
+    *   habilita o Processar. Guarda de reentrancia: o picker eh modal e
+    *   redispara o LostFocus.
+    *--------------------------------------------------------------------------
+    PROCEDURE SerieLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        IF !EMPTY(ALLTRIM(THIS.cnt_4c_Corpo.txt_4c_Serie.Value))
+            THIS.AbrirLookupSerie()
+        ENDIF
+        IF PADR(THIS.this_cSerieAnterior, 3) # PADR(THIS.cnt_4c_Corpo.txt_4c_Serie.Value, 3)
+            THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
+        ENDIF
+        THIS.this_lEmLookup = .F.
+    ENDPROC
     *--------------------------------------------------------------------------
     * AbrirLookupSerie - Abre FormBuscaAuxiliar para selecao de serie (SigCnFNf)
     *--------------------------------------------------------------------------
@@ -659,7 +680,7 @@ DEFINE CLASS Formsigregnf AS FormBase
             IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_BuscaSerie")
                 SELECT cursor_4c_BuscaSerie
                 IF !EOF()
-                    THIS.cnt_4c_Corpo.txt_4c_Serie.Value = PADR(ALLTRIM(Series), 3)
+                    THIS.cnt_4c_Corpo.txt_4c_Serie.Value = PADR(ALLTRIM(cursor_4c_BuscaSerie.Series), 3)
                     THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
                 ENDIF
                 USE IN cursor_4c_BuscaSerie
@@ -700,24 +721,34 @@ DEFINE CLASS Formsigregnf AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TeclaUsuarsKeyPress - F4(115)=lookup direto, ENTER(13)/TAB(9)=validar
+    * TeclaUsuarsKeyPress - so F4 (115) abre a busca (ver UsuarsLostFocus)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaUsuarsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        LOCAL loc_lAnterior
+        IF par_nKeyCode = 115
+            loc_lAnterior = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupUsuars()
-        ENDIF
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            LOCAL loc_cUsuars
-            loc_cUsuars = PADR(ALLTRIM(THIS.cnt_4c_Corpo.txt_4c_Usuars.Value), 10)
-            IF !EMPTY(ALLTRIM(loc_cUsuars))
-                THIS.ValidarUsuars(loc_cUsuars)
-            ENDIF
-            IF PADR(THIS.this_cUsuarsAnterior, 10) # PADR(THIS.cnt_4c_Corpo.txt_4c_Usuars.Value, 10)
-                THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
-            ENDIF
+            THIS.this_lEmLookup = loc_lAnterior
         ENDIF
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * UsuarsLostFocus - getUsuars.Valid do legado (SigCdUsu.Usuarios)
+    *--------------------------------------------------------------------------
+    PROCEDURE UsuarsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        IF !EMPTY(ALLTRIM(THIS.cnt_4c_Corpo.txt_4c_Usuars.Value))
+            THIS.AbrirLookupUsuars()
+        ENDIF
+        IF PADR(THIS.this_cUsuarsAnterior, 10) # PADR(THIS.cnt_4c_Corpo.txt_4c_Usuars.Value, 10)
+            THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
+        ENDIF
+        THIS.this_lEmLookup = .F.
+    ENDPROC
     *--------------------------------------------------------------------------
     * AbrirLookupUsuars - Abre FormBuscaAuxiliar para selecao de usuario (SigCdUsu)
     *--------------------------------------------------------------------------
@@ -725,17 +756,17 @@ DEFINE CLASS Formsigregnf AS FormBase
         LOCAL loc_oLookup, loc_cUsuars
         loc_cUsuars = ALLTRIM(THIS.cnt_4c_Corpo.txt_4c_Usuars.Value)
         loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                      "SigCdUsu", "cursor_4c_BuscaUsuars", "Usuars", loc_cUsuars, ;
+                      "SigCdUsu", "cursor_4c_BuscaUsuars", "Usuarios", loc_cUsuars, ;
                       "Sele" + CHR(231) + CHR(227) + "o")
         IF VARTYPE(loc_oLookup) = "O"
-            loc_oLookup.mAddColuna("Usuars", "", "Usu" + CHR(225) + "rio")
+            loc_oLookup.mAddColuna("Usuarios", "", "Usu" + CHR(225) + "rio")
             IF !loc_oLookup.this_lSelecionou
                 loc_oLookup.Show()
             ENDIF
             IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_BuscaUsuars")
                 SELECT cursor_4c_BuscaUsuars
                 IF !EOF()
-                    THIS.cnt_4c_Corpo.txt_4c_Usuars.Value = PADR(ALLTRIM(Usuars), 10)
+                    THIS.cnt_4c_Corpo.txt_4c_Usuars.Value = PADR(ALLTRIM(cursor_4c_BuscaUsuars.Usuarios), 10)
                     THIS.cnt_4c_Corpo.cmd_4c_Processar.Enabled = .T.
                 ENDIF
                 USE IN cursor_4c_BuscaUsuars
@@ -754,7 +785,7 @@ DEFINE CLASS Formsigregnf AS FormBase
             USE IN cursor_4c_UsuarsVal
         ENDIF
         loc_nResult = SQLEXEC(gnConnHandle, ;
-            "SELECT TOP 1 Usuars FROM SigCdUsu WHERE Usuars = " + EscaparSQL(par_cUsuars), ;
+            "SELECT TOP 1 Usuarios FROM SigCdUsu WHERE Usuarios = " + EscaparSQL(par_cUsuars), ;
             "cursor_4c_UsuarsVal")
         IF loc_nResult > 0 AND USED("cursor_4c_UsuarsVal")
             SELECT cursor_4c_UsuarsVal
@@ -812,7 +843,9 @@ DEFINE CLASS Formsigregnf AS FormBase
         IF VARTYPE(THIS.this_oBusinessObject) # "O"
             RETURN
         ENDIF
-        IF !USED("cursor_4c_TmpNFis") OR EOF("cursor_4c_TmpNFis")
+        *-- Visualizacao percorre TODAS as marcadas (Erro365): basta haver registro,
+        *   a posicao do ponteiro nao importa mais
+        IF !USED("cursor_4c_TmpNFis") OR RECCOUNT("cursor_4c_TmpNFis") = 0
             MsgAviso("Nenhuma nota fiscal dispon" + CHR(237) + "vel para visualizar.", ;
                      "Visualizar")
             RETURN
@@ -1085,7 +1118,8 @@ DEFINE CLASS Formsigregnf AS FormBase
             REPLACE cursor_4c_TmpNFis.Flag WITH !cursor_4c_TmpNFis.Flag
         ELSE
             REPLACE cursor_4c_TmpNFis.Flag WITH IIF(cursor_4c_TmpNFis.Flag = 0, 1, 0)
-        ENDIF        THIS.cnt_4c_Corpo.grd_4c_Dados.Refresh()
+        ENDIF
+        THIS.cnt_4c_Corpo.grd_4c_Dados.Refresh()
     ENDPROC
 
     PROCEDURE TgDados1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)

@@ -84,8 +84,9 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
             CREATE CURSOR Relatorio (Codigos N(6), Tubos N(2), bCeras N(12,2), Bases N(12,2), ;
                                       Ceras N(12,2), Metals N(12,2), CodCors C(4), ;
                                       Obss M, Datas D, ObsG M, Qtdos N(10,3), MetalNvs N(12,3))
-            INDEX ON Codigos + STR(Tubos, 2) TAG Tubos
-            INDEX ON Codigos + CodCors + STR(Tubos, 2) TAG Impressao
+            *-- Codigos eh N(6): STR(Codigos, 6) como no legado (Codigos + STR() = type mismatch)
+            INDEX ON STR(Codigos, 6) + STR(Tubos, 2) TAG Tubos
+            INDEX ON STR(Codigos, 6) + CodCors + STR(Tubos, 2) TAG Impressao
 
             *-- Query principal: SigCdFun x SigCdFud x SigCdCor
             loc_cSQL = "SELECT b.*, a.Obss AS ObsG, a.Datas, c.Pesos " + ;
@@ -148,7 +149,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
                     *-- Preencher QtdOs das OS nos registros correspondentes
                     SELECT crTubos
                     SCAN
-                        IF SEEK(crTubos.Codigos + STR(crTubos.Tubos, 2), "Relatorio", "Tubos")
+                        IF SEEK(STR(crTubos.Codigos, 6) + STR(crTubos.Tubos, 2), "Relatorio", "Tubos")
                             REPLACE Relatorio.QtdOs WITH crTubos.QtdOs IN Relatorio
                         ENDIF
                     ENDSCAN
@@ -189,7 +190,8 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cNomeRelatorio) PREVIEW NOCONSOLE
+                *-- ReportFormIsolado: FRX legado exige POINT "." + REPORTBEHAVIOR 80 (senao "*****")
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + "sigrefun.frx", "PREVIEW")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -207,7 +209,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + "sigrefun.frx", "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -225,7 +227,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(gc_4c_CaminhoReports + "sigrefun.frx", "PRINTER")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -285,8 +287,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SIGREFUN_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + "sigrefun.frx", "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

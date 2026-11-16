@@ -423,11 +423,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Marcar Empresas (original: top=239, left=669)
             par_oPag.AddObject("cmd_4c_MarcarEmp", "CommandButton")
             WITH par_oPag.cmd_4c_MarcarEmp
-                .Top           = 239
+                .Top           = 154
                 .Left          = 669
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -443,11 +445,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Desmarcar Empresas (original: top=279, left=669)
             par_oPag.AddObject("cmd_4c_DesmarcarEmp", "CommandButton")
             WITH par_oPag.cmd_4c_DesmarcarEmp
-                .Top           = 279
+                .Top           = 194
                 .Left          = 669
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -553,11 +557,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Marcar Disponibilidades (original: top=448, left=275)
             par_oPag.AddObject("cmd_4c_MarcarDisp", "CommandButton")
             WITH par_oPag.cmd_4c_MarcarDisp
-                .Top           = 446
+                .Top           = 363
                 .Left          = 275
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -573,11 +579,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Desmarcar Disponibilidades (original: top=489, left=275)
             par_oPag.AddObject("cmd_4c_DesmarcarDisp", "CommandButton")
             WITH par_oPag.cmd_4c_DesmarcarDisp
-                .Top           = 448
+                .Top           = 404
                 .Left          = 275
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -676,11 +684,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Marcar Operacoes (original: top=446, left=642)
             par_oPag.AddObject("cmd_4c_MarcarOpe", "CommandButton")
             WITH par_oPag.cmd_4c_MarcarOpe
-                .Top           = 446
+                .Top           = 361
                 .Left          = 642
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Sel"
+                *-- Caption vazio + Picture, como no SCX legado (a_misc1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_misc1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -696,11 +706,13 @@ DEFINE CLASS Formsigreffn AS FormBase
             *-- Botao Desmarcar Operacoes (original: top=487, left=642)
             par_oPag.AddObject("cmd_4c_DesmarcarOpe", "CommandButton")
             WITH par_oPag.cmd_4c_DesmarcarOpe
-                .Top           = 446
+                .Top           = 402
                 .Left          = 642
                 .Width         = 40
                 .Height        = 40
-                .Caption       = "Des"
+                *-- Caption vazio + Picture, como no SCX legado (a_exit1.bmp)
+                .Caption       = ""
+                .Picture       = gc_4c_CaminhoIcones + "a_exit1.bmp"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .FontBold      = .T.
@@ -940,7 +952,7 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("chk_4c_Conciliado", "CheckBox")
             WITH par_oPag.chk_4c_Conciliado
-                .Top       = 271
+                .Top       = 186
                 .Left      = 183
                 .Width     = 66
                 .Height    = 15
@@ -973,9 +985,9 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("obj_4c_Opt_opcao", "OptionGroup")
             WITH par_oPag.obj_4c_Opt_opcao
-                .Top           = 285
+                .Top           = 200
                 .Left          = 105
-                .Width         = 177
+                .Width         = 172
                 .Height        = 25
                 .ButtonCount   = 3
                 .BackStyle     = 0
@@ -991,7 +1003,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 34
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1003,7 +1015,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 37
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1016,7 +1028,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 50
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1040,7 +1052,7 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("obj_4c_Opt_tipo", "OptionGroup")
             WITH par_oPag.obj_4c_Opt_tipo
-                .Top           = 307
+                .Top           = 222
                 .Left          = 105
                 .Width         = 166
                 .Height        = 35
@@ -1058,7 +1070,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 45
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1070,7 +1082,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 58
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1083,7 +1095,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 75
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1095,7 +1107,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 61
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1118,9 +1130,9 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("obj_4c_Opt_lista_atra", "OptionGroup")
             WITH par_oPag.obj_4c_Opt_lista_atra
-                .Top           = 337
+                .Top           = 252
                 .Left          = 174
-                .Width         = 109
+                .Width         = 104
                 .Height        = 25
                 .ButtonCount   = 2
                 .BackStyle     = 0
@@ -1136,7 +1148,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 34
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1148,7 +1160,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 37
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1173,9 +1185,9 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("obj_4c_Opt_consid_atra", "OptionGroup")
             WITH par_oPag.obj_4c_Opt_consid_atra
-                .Top           = 357
+                .Top           = 272
                 .Left          = 174
-                .Width         = 109
+                .Width         = 104
                 .Height        = 25
                 .ButtonCount   = 2
                 .BackStyle     = 0
@@ -1191,7 +1203,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 34
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1203,7 +1215,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 37
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1229,7 +1241,7 @@ DEFINE CLASS Formsigreffn AS FormBase
             WITH par_oPag.obj_4c_Opt_prev
                 .Top           = 291
                 .Left          = 112
-                .Width         = 172
+                .Width         = 167
                 .Height        = 27
                 .ButtonCount   = 3
                 .BackStyle     = 0
@@ -1245,7 +1257,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 57
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1256,7 +1268,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 49
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1268,7 +1280,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 55
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1291,9 +1303,9 @@ DEFINE CLASS Formsigreffn AS FormBase
 
             par_oPag.AddObject("obj_4c_Opt_situa", "OptionGroup")
             WITH par_oPag.obj_4c_Opt_situa
-                .Top           = 374
+                .Top           = 289
                 .Left          = 361
-                .Width         = 225
+                .Width         = 220
                 .Height        = 27
                 .ButtonCount   = 3
                 .BackStyle     = 0
@@ -1309,7 +1321,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 61
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1321,7 +1333,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 67
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1334,7 +1346,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 53
                 .Height    = 17
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
@@ -1359,7 +1371,7 @@ DEFINE CLASS Formsigreffn AS FormBase
             WITH par_oPag.obj_4c_Opt_saldo
                 .Top           = 449
                 .Left          = 122
-                .Width         = 142
+                .Width         = 137
                 .Height        = 25
                 .ButtonCount   = 2
                 .BackStyle     = 0
@@ -1375,7 +1387,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 57
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.
@@ -1387,7 +1399,7 @@ DEFINE CLASS Formsigreffn AS FormBase
                 .Width     = 57
                 .Height    = 15
                 .BackStyle = 0
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .AutoSize  = .T.

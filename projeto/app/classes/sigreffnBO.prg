@@ -402,7 +402,8 @@ DEFINE CLASS sigreffnBO AS RelatorioBase
             ENDIF
 
             *-- Cursor tempor?rio: contas filtradas pelas disponibilidades selecionadas
-            SELECT a.Grupos, a.Contas, 0.00 AS Saldos, a.Moedas, 1 AS Fase, cContabs, ;
+            *-- 000000000.00 (legado): a largura do literal define a coluna; 0.00 = N(4,2) estoura
+            SELECT a.Grupos, a.Contas, 000000000.00 AS Saldos, a.Moedas, 1 AS Fase, cContabs, ;
                    a.Grupos + a.Contas + a.Moedas AS GruConMoes ;
               FROM crSigMvSlc a, cDisp b ;
              WHERE b.Grupos + b.Contas = a.Grupos + a.Contas ;

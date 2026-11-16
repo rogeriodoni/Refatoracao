@@ -286,7 +286,7 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         WITH THIS.cmg_4c_Botoes
             .Top           = 0
-            .Left          = 727
+            .Left          = 526   && Erro378: legado btnReport.Left = 526 (727 jogava 3 botoes para fora do form)
             .Width         = 273
             .Height        = 80
             .ButtonCount   = 4
@@ -398,10 +398,11 @@ DEFINE CLASS Formsigreimp AS FormBase
         loc_oPgf = THIS.pgf_4c_Paginas
 
         loc_oPgf.PageCount = 1
-        loc_oPgf.Top       = 80
+        *-- Erro378: Top=0 -> coordenadas da pagina = coordenadas do SCX
+        loc_oPgf.Top       = 0
         loc_oPgf.Left      = -1
         loc_oPgf.Width     = THIS.Width + 2
-        loc_oPgf.Height    = THIS.Height - 80
+        loc_oPgf.Height    = THIS.Height
         loc_oPgf.Tabs      = .F.
 
         loc_oPgf.Page1.Caption   = "Filtros"
@@ -413,6 +414,8 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         loc_oPgf.Visible    = .T.
         loc_oPgf.ActivePage = 1
+        *-- Atras do cabecalho e dos botoes do topo (padrao FormSigReIfp)
+        loc_oPgf.ZOrder(1)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -439,13 +442,20 @@ DEFINE CLASS Formsigreimp AS FormBase
     * ConfigurarFiltrosData - Adiciona campos de periodo e checkbox SubTotDat
     * Linha superior do formulario: DtInicial a DtFinal [Totalizar Por Datas]
     *--------------------------------------------------------------------------
+    *-- Erro378: TODA a geometria abaixo transcrita do dump do SCX legado
+    *-- (task123). O PageFrame fica em Top=0, entao coordenada da pagina =
+    *-- coordenada do form. A migracao tinha inventado um layout para ~1000px
+    *-- de largura: o form de 800 cortava a grade de Saidas, os botoes do topo
+    *-- e os botoes Marcar/Desmarcar, e o OptionGroup Detalhado/Resumido caia
+    *-- fora da area visivel (com um label "Tipo :" que o legado nao tem).
     PROTECTED PROCEDURE ConfigurarFiltrosData(par_oPagina)
         par_oPagina.AddObject("lbl_4c_Periodo", "Label")
         WITH par_oPagina.lbl_4c_Periodo
-            .Top       = 23
-            .Left      = 30
-            .Width     = 68
-            .Height    = 18
+            .Top       = 111
+            .Left      = 49
+            .Width     = 46
+            .Height    = 15
+            .Alignment = 0
             .Caption   = "Per" + CHR(237) + "odo :"
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -456,26 +466,27 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         par_oPagina.AddObject("txt_4c_DtInicial", "TextBox")
         WITH par_oPagina.txt_4c_DtInicial
-            .Top       = 18
-            .Left      = 102
-            .Width     = 90
+            .Top       = 107
+            .Left      = 99
+            .Width     = 80
             .Height    = 25
             .Format    = "D"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = {}
             .Visible   = .T.
         ENDWITH
 
         par_oPagina.AddObject("lbl_4c_A", "Label")
         WITH par_oPagina.lbl_4c_A
-            .Top       = 23
-            .Left      = 196
-            .Width     = 16
-            .Height    = 18
-            .Caption   = "a"
+            .Top       = 111
+            .Left      = 187
+            .Width     = 10
+            .Height    = 15
+            .Alignment = 0
+            .Caption   = CHR(224)
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
@@ -485,15 +496,15 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         par_oPagina.AddObject("txt_4c_DtFinal", "TextBox")
         WITH par_oPagina.txt_4c_DtFinal
-            .Top       = 18
-            .Left      = 216
-            .Width     = 90
+            .Top       = 107
+            .Left      = 202
+            .Width     = 80
             .Height    = 25
             .Format    = "D"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = {}
             .Visible   = .T.
         ENDWITH
@@ -501,9 +512,10 @@ DEFINE CLASS Formsigreimp AS FormBase
         par_oPagina.AddObject("chk_4c_ChkSubTotDat", "CheckBox")
         WITH par_oPagina.chk_4c_ChkSubTotDat
             .Top       = 111
-            .Left      = 320
-            .Width     = 185
-            .Height    = 25
+            .Left      = 295
+            .Width     = 115
+            .Height    = 15
+            .Alignment = 0
             .Caption   = "Totalizar Por Datas"
             .Value     = 0
             .FontName  = "Tahoma"
@@ -522,10 +534,11 @@ DEFINE CLASS Formsigreimp AS FormBase
     PROTECTED PROCEDURE ConfigurarFiltroEmpresa(par_oPagina)
         par_oPagina.AddObject("lbl_4c_LblEmpresa", "Label")
         WITH par_oPagina.lbl_4c_LblEmpresa
-            .Top       = 55
-            .Left      = 30
-            .Width     = 68
-            .Height    = 18
+            .Top       = 137
+            .Left      = 44
+            .Width     = 50
+            .Height    = 15
+            .Alignment = 0
             .Caption   = "Empresa :"
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -536,30 +549,34 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         par_oPagina.AddObject("txt_4c_Empresa", "TextBox")
         WITH par_oPagina.txt_4c_Empresa
-            .Top       = 50
-            .Left      = 102
-            .Width     = 42
+            .Top       = 132
+            .Left      = 99
+            .Width     = 31
             .Height    = 25
             .FontName  = "Tahoma"
-            .FontSize  = 8
+            .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format    = "K"
+            .InputMask = "XXX"
             .Visible   = .T.
-            .MaxLength   = 3
+            .MaxLength = 3
         ENDWITH
 
         par_oPagina.AddObject("txt_4c_DEmpresa", "TextBox")
         WITH par_oPagina.txt_4c_DEmpresa
-            .Top       = 50
-            .Left      = 148
-            .Width     = 363
+            .Top       = 132
+            .Left      = 132
+            .Width     = 290
             .Height    = 25
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format    = "K"
+            .MaxLength = 40
             .Visible   = .T.
         ENDWITH
     ENDPROC
@@ -572,10 +589,11 @@ DEFINE CLASS Formsigreimp AS FormBase
     PROTECTED PROCEDURE ConfigurarFiltroConta(par_oPagina)
         par_oPagina.AddObject("lbl_4c_LblConta", "Label")
         WITH par_oPagina.lbl_4c_LblConta
-            .Top       = 87
-            .Left      = 30
-            .Width     = 68
-            .Height    = 18
+            .Top       = 164
+            .Left      = 56
+            .Width     = 38
+            .Height    = 15
+            .Alignment = 0
             .Caption   = "Conta :"
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -586,28 +604,28 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         par_oPagina.AddObject("txt_4c_Conta", "TextBox")
         WITH par_oPagina.txt_4c_Conta
-            .Top       = 82
-            .Left      = 102
-            .Width     = 100
+            .Top       = 159
+            .Left      = 99
+            .Width     = 80
             .Height    = 25
             .FontName  = "Tahoma"
-            .FontSize  = 8
+            .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = ""
             .Visible   = .T.
         ENDWITH
 
         par_oPagina.AddObject("txt_4c_DConta", "TextBox")
         WITH par_oPagina.txt_4c_DConta
-            .Top       = 82
-            .Left      = 206
-            .Width     = 363
+            .Top       = 159
+            .Left      = 181
+            .Width     = 290
             .Height    = 25
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
-            .ForeColor = RGB(90, 90, 90)
+            .ForeColor = RGB(0, 0, 0)
             .Value     = ""
             .Visible   = .T.
         ENDWITH
@@ -617,28 +635,15 @@ DEFINE CLASS Formsigreimp AS FormBase
     * ConfigurarOpcoes - Adiciona OptionGroup Detalhado/Resumido
     * Original: optTipos (fwoption) - Value=1 Detalhado, Value=2 Resumido
     * chkSubTotDat.When = Return (optTipos.Value = 1) - gerenciado via handler
+    * O legado NAO tem label para este grupo.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarOpcoes(par_oPagina)
-        par_oPagina.AddObject("lbl_4c_LblTipo", "Label")
-        WITH par_oPagina.lbl_4c_LblTipo
-            .Top       = 120
-            .Left      = 30
-            .Width     = 68
-            .Height    = 18
-            .Caption   = "Tipo :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(90, 90, 90)
-            .BackStyle = 0
-            .Visible   = .T.
-        ENDWITH
-
         par_oPagina.AddObject("opt_4c_OptTipos", "OptionGroup")
         WITH par_oPagina.opt_4c_OptTipos
             .Top         = 188
             .Left        = 92
-            .Width       = 200
-            .Height      = 28
+            .Width       = 156
+            .Height      = 25
             .ButtonCount = 2
             .BackStyle   = 0
             .BorderStyle = 0
@@ -648,12 +653,12 @@ DEFINE CLASS Formsigreimp AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "Detalhado"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
-                .Top       = 3
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Top       = 5
                 .Left      = 5
-                .Width     = 90
-                .Height    = 20
+                .Width     = 70
+                .Height    = 15
                 .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Visible   = .T.
@@ -661,11 +666,11 @@ DEFINE CLASS Formsigreimp AS FormBase
 
             WITH .Buttons(2)
                 .Caption   = "Resumido"
-                .Top       = 3
-                .Left      = 100
-                .Width     = 90
-                .Height    = 20
-                .FontName  = "Comic Sans MS"
+                .Top       = 5
+                .Left      = 87
+                .Width     = 64
+                .Height    = 15
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
@@ -680,10 +685,10 @@ DEFINE CLASS Formsigreimp AS FormBase
     PROTECTED PROCEDURE ConfigurarLabelsGrades(par_oPagina)
         par_oPagina.AddObject("lbl_4c_LblEntradas", "Label")
         WITH par_oPagina.lbl_4c_LblEntradas
-            .Top       = 152
-            .Left      = 30
-            .Width     = 460
-            .Height    = 18
+            .Top       = 233
+            .Left      = 52
+            .Width     = 182
+            .Height    = 15
             .Caption   = "Tipos de Opera" + CHR(231) + CHR(245) + "es de Entradas"
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -695,10 +700,10 @@ DEFINE CLASS Formsigreimp AS FormBase
 
         par_oPagina.AddObject("lbl_4c_LblSaidas", "Label")
         WITH par_oPagina.lbl_4c_LblSaidas
-            .Top       = 152
-            .Left      = 510
-            .Width     = 460
-            .Height    = 18
+            .Top       = 233
+            .Left      = 433
+            .Width     = 169
+            .Height    = 15
             .Caption   = "Tipos de Opera" + CHR(231) + CHR(245) + "es de Sa" + CHR(237) + "das"
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -725,10 +730,10 @@ DEFINE CLASS Formsigreimp AS FormBase
         par_oPagina.AddObject("grd_4c_OperacoesE", "Grid")
 
         WITH par_oPagina.grd_4c_OperacoesE
-            .Top                = 173
-            .Left               = 30
-            .Width              = 460
-            .Height             = 220
+            .Top                = 251
+            .Left               = 52
+            .Width              = 339
+            .Height             = 183
             .ColumnCount        = 3
             .FontName           = "Tahoma"
             .FontSize           = 8
@@ -748,7 +753,7 @@ DEFINE CLASS Formsigreimp AS FormBase
 
             *-- Column 1: CheckBox para selecao
             *-- Sparse=.F. garante checkbox visivel em TODAS as linhas (nao apenas na corrente)
-            .Column1.Width = 30
+            .Column1.Width = 15
             .Column1.AddObject("Check1", "CheckBox")
             WITH .Column1.Check1
                 .Caption = ""
@@ -765,11 +770,11 @@ DEFINE CLASS Formsigreimp AS FormBase
             .Column1.Sparse         = .F.
 
             *-- Column 2: Codigo (somente leitura)
-            .Column2.Width    = 55
+            .Column2.Width    = 20
             .Column2.ReadOnly = .T.
 
             *-- Column 3: Descricao (somente leitura)
-            .Column3.Width    = 360
+            .Column3.Width    = 280
             .Column3.ReadOnly = .T.
 
             *-- RecordSource apos CurrentControl (pode resetar ControlSources)
@@ -783,13 +788,17 @@ DEFINE CLASS Formsigreimp AS FormBase
                 .Column2.ControlSource = loc_oCursor + ".Codigos"
                 .Column3.ControlSource = loc_oCursor + ".Descrs"
             ENDIF
+            *-- Erro378: RecordSource volta as larguras para 90 - reaplicar (regra #41)
+            .Column1.Width = 15
+            .Column2.Width = 20
+            .Column3.Width = 280
 
             *-- Headers (ocultos por HeaderHeight=0, mantidos para referencia)
             .Column1.Header1.Caption = ""
             .Column2.Header1.Caption = ""
             .Column3.Header1.Caption = "C" + CHR(243) + "digos"
 
-            .FontName = "Verdana"
+            .FontName = "Tahoma"
             .FontSize = 8
 
             .Visible = .T.
@@ -807,10 +816,10 @@ DEFINE CLASS Formsigreimp AS FormBase
         par_oPagina.AddObject("grd_4c_OperacoesS", "Grid")
 
         WITH par_oPagina.grd_4c_OperacoesS
-            .Top                = 173
-            .Left               = 510
-            .Width              = 460
-            .Height             = 220
+            .Top                = 251
+            .Left               = 433
+            .Width              = 339
+            .Height             = 183
             .ColumnCount        = 3
             .FontName           = "Tahoma"
             .FontSize           = 8
@@ -829,7 +838,7 @@ DEFINE CLASS Formsigreimp AS FormBase
             .RowHeight          = 18
 
             *-- Sparse=.F. garante checkbox visivel em TODAS as linhas
-            .Column1.Width = 30
+            .Column1.Width = 15
             .Column1.AddObject("Check1", "CheckBox")
             WITH .Column1.Check1
                 .Caption = ""
@@ -845,10 +854,10 @@ DEFINE CLASS Formsigreimp AS FormBase
             THIS.BindToggleOperacoesS1(THIS.pgf_4c_Paginas.Page1.grd_4c_OperacoesS.Column1.Check1)
             .Column1.Sparse         = .F.
 
-            .Column2.Width    = 55
+            .Column2.Width    = 20
             .Column2.ReadOnly = .T.
 
-            .Column3.Width    = 360
+            .Column3.Width    = 280
             .Column3.ReadOnly = .T.
 
             IF USED(loc_oCursor)
@@ -860,13 +869,17 @@ DEFINE CLASS Formsigreimp AS FormBase
                 .Column2.ControlSource = loc_oCursor + ".Codigos"
                 .Column3.ControlSource = loc_oCursor + ".Descrs"
             ENDIF
+            *-- Erro378: RecordSource volta as larguras para 90 - reaplicar (regra #41)
+            .Column1.Width = 15
+            .Column2.Width = 20
+            .Column3.Width = 280
 
             *-- Headers (ocultos por HeaderHeight=0, mantidos para referencia)
             .Column1.Header1.Caption = ""
             .Column2.Header1.Caption = ""
             .Column3.Header1.Caption = "C" + CHR(243) + "digos"
 
-            .FontName = "Verdana"
+            .FontName = "Tahoma"
             .FontSize = 8
 
             .Visible = .T.
@@ -882,10 +895,11 @@ DEFINE CLASS Formsigreimp AS FormBase
         par_oPagina.AddObject("cmg_4c_BtnGradeE", "CommandGroup")
 
         WITH par_oPagina.cmg_4c_BtnGradeE
-            .Top         = 400
-            .Left        = 167
-            .Width       = 185
-            .Height      = 42
+            *-- Erro378: geometria/icones do SCX (cmdBtnGradeE)
+            .Top         = 436
+            .Left        = 305
+            .Width       = 91
+            .Height      = 50
             .ButtonCount = 2
             .BackStyle   = 0
             .BorderStyle = 0
@@ -893,29 +907,33 @@ DEFINE CLASS Formsigreimp AS FormBase
             .Visible     = .T.
 
             WITH .Buttons(1)
-                .Top        = 2
-                .Left       = 2
-                .Width      = 88
-                .Height     = 34
-                .Caption    = "Marcar Todos"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
+                .Top        = 5
+                .Left       = 5
+                .Width      = 40
+                .Height     = 40
+                .Caption    = ""
+                .Picture    = gc_4c_CaminhoIcones + "A_MISC1.BMP"
+                .ToolTipText = "Selecionar Tudo"
+                .FontName   = "Verdana"
+                .FontSize   = 8
                 .BackColor  = RGB(255, 255, 255)
-                .ForeColor  = RGB(90, 90, 90)
+                .ForeColor  = RGB(36, 84, 155)
                 .Themes     = .F.
                 .Visible    = .T.
             ENDWITH
 
             WITH .Buttons(2)
-                .Top        = 2
-                .Left       = 94
-                .Width      = 88
-                .Height     = 34
-                .Caption    = "Desmarcar Todos"
-                .FontName   = "Comic Sans MS"
+                .Top        = 5
+                .Left       = 46
+                .Width      = 40
+                .Height     = 40
+                .Caption    = ""
+                .Picture    = gc_4c_CaminhoIcones + "A_MISC6.bmp"
+                .ToolTipText = "Deselecionar Tudo"
+                .FontName   = "Verdana"
                 .FontSize   = 8
                 .BackColor  = RGB(255, 255, 255)
-                .ForeColor  = RGB(90, 90, 90)
+                .ForeColor  = RGB(36, 84, 155)
                 .Themes     = .F.
                 .Visible    = .T.
             ENDWITH
@@ -931,10 +949,11 @@ DEFINE CLASS Formsigreimp AS FormBase
         par_oPagina.AddObject("cmg_4c_BtnGradeS", "CommandGroup")
 
         WITH par_oPagina.cmg_4c_BtnGradeS
-            .Top         = 400
-            .Left        = 647
-            .Width       = 185
-            .Height      = 42
+            *-- Erro378: geometria/icones do SCX (cmdBtnGradeS)
+            .Top         = 436
+            .Left        = 685
+            .Width       = 91
+            .Height      = 50
             .ButtonCount = 2
             .BackStyle   = 0
             .BorderStyle = 0
@@ -942,29 +961,33 @@ DEFINE CLASS Formsigreimp AS FormBase
             .Visible     = .T.
 
             WITH .Buttons(1)
-                .Top        = 2
-                .Left       = 2
-                .Width      = 88
-                .Height     = 34
-                .Caption    = "Marcar Todos"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
+                .Top        = 5
+                .Left       = 5
+                .Width      = 40
+                .Height     = 40
+                .Caption    = ""
+                .Picture    = gc_4c_CaminhoIcones + "A_MISC1.BMP"
+                .ToolTipText = "Selecionar Tudo"
+                .FontName   = "Verdana"
+                .FontSize   = 8
                 .BackColor  = RGB(255, 255, 255)
-                .ForeColor  = RGB(90, 90, 90)
+                .ForeColor  = RGB(36, 84, 155)
                 .Themes     = .F.
                 .Visible    = .T.
             ENDWITH
 
             WITH .Buttons(2)
-                .Top        = 2
-                .Left       = 94
-                .Width      = 88
-                .Height     = 34
-                .Caption    = "Desmarcar Todos"
-                .FontName   = "Comic Sans MS"
+                .Top        = 5
+                .Left       = 46
+                .Width      = 40
+                .Height     = 40
+                .Caption    = ""
+                .Picture    = gc_4c_CaminhoIcones + "A_MISC6.bmp"
+                .ToolTipText = "Deselecionar Tudo"
+                .FontName   = "Verdana"
                 .FontSize   = 8
                 .BackColor  = RGB(255, 255, 255)
-                .ForeColor  = RGB(90, 90, 90)
+                .ForeColor  = RGB(36, 84, 155)
                 .Themes     = .F.
                 .Visible    = .T.
             ENDWITH

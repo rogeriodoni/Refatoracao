@@ -198,14 +198,31 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
+        *-- Erro376: o documento vem da tela que chama (Emp/Dop/Num). Aberto
+        *-- pelo menu sem documento, o legado nem chegava aqui (SelecionaDados
+        *-- falhava no LocalEest e dava Return .f.); avisar em vez de seguir.
+        IF EMPTY(THIS.this_cDopes) OR EMPTY(THIS.this_nNumes)
+            MsgAviso("Nenhum documento informado." + CHR(13) + ;
+                "A impress" + CHR(227) + "o deve ser feita a partir da movimenta" + ;
+                CHR(231) + CHR(227) + "o (bot" + CHR(227) + "o de impress" + CHR(227) + "o do documento).", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.this_cMensagemErro = ""
+            RETURN .F.
+        ENDIF
+
         TRY
-            IF !THIS.SelecionarDados()
-                loc_lSucesso = .F.
+            *-- Erro376: cada etapa so roda se a anterior passou (antes o .T.
+            *-- final ignorava as duas falhas e o REPORT rodava sem dados)
+            IF THIS.SelecionarDados()
+                IF EOF("LocalEest")
+                    MsgAviso("Documento n" + CHR(227) + "o encontrado: " + ;
+                        ALLTRIM(THIS.this_cDopes) + " / " + TRANSFORM(THIS.this_nNumes), ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.this_cMensagemErro = ""
+                ELSE
+                    loc_lSucesso = THIS.ProcessarRelatorio()
+                ENDIF
             ENDIF
-            IF !THIS.ProcessarRelatorio()
-                loc_lSucesso = .F.
-            ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro em PrepararDados")
@@ -224,6 +241,12 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
         loc_cEdn = PADR(THIS.this_cEmps, 3) + PADR(THIS.this_cDopes, 20) + STR(THIS.this_nNumes, 6)
 
         TRY
+            *-- Erro376: o flag comeca .T. e cada falha o derruba para .F. de
+            *-- vez. Antes um "loc_lSucesso = .T." incondicional no FIM apagava
+            *-- todas as falhas (residuo do Erro159: os "Return .f." do legado
+            *-- viraram flag sem bloqueio) e o relatorio seguia com cursor vazio.
+            loc_lSucesso = .T.
+
             *-- SigCdOpe -> LocalOpe
             loc_nResult = SQLEXEC(gnConnHandle, ;
                 "SELECT Opers, NDopes, Docus, Casas, CMoes, TipoNfs, Dcpns, NCPesos, cupfis, Habservs " + ;
@@ -319,10 +342,11 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                 "ValTrans, NEmps, Notas, TabDs, usuars, Nops, PStatus, EmpDs " + ;
                 "FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdn), ;
                 "LocalEest")
-            IF loc_nResult < 1 OR EOF('LocalEest')
+            IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!! (LocalEest)"
                 loc_lSucesso = .F.
             ENDIF
+            *-- Documento inexistente: tratado em PrepararDados com aviso proprio
             GO TOP IN LocalEest
 
             *-- SigMvItn + SigCdPro -> LocalEestI (itens principais)
@@ -489,8 +513,12 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
+            *-- Erro376: transcrito do legado - "Qtds, Units * Iif(QtdEmbs > 0,
+            *-- QtdEmbs, 1) as Units". A migracao tinha fundido as duas colunas em
+            *-- "Qtds * IIF(...) AS Units": perdia Qtds ("Variable 'QTDS' is not
+            *-- found" em documento com grade) e trocava o unitario pela quantidade.
             SELECT CItens, CPros, Reffs, DPros, DPro2s, CUnis, ;
-                Qtds * IIF(QtdEmbs > 0, QtdEmbs, 1) AS Units, Unitorigs, ;
+                Qtds, Units * IIF(QtdEmbs > 0, QtdEmbs, 1) AS Units, Unitorigs, ;
                 Moedas, MoeVals, ;
                 (Qtds * Units) * IIF(QtdEmbs > 0, QtdEmbs, 1) AS Totas, ;
                 Aliqs, IFors, Obs, valdescs, pdescs, valrats, icmss, bcicmss, ;
@@ -599,9 +627,8 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                     loc_lSucesso = .F.
                 ENDIF
             ENDIF
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
+            loc_lSucesso = .F.
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro em SelecionarDados")
         ENDTRY
@@ -1803,26 +1830,30 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
             APPEND MEMO Branco FROM (THIS.this_cImgBranco) OVERWRITE
 
             *-- Logotipo da empresa
-            IF !EMPTY(LocalEmp.LogoRels) OR !ISNULL(LocalEmp.LogoRels)
+            *-- Erro376: legado = "Not IsEmpty(x) or Not IsNull(x)". O IsEmpty do
+            *-- Fortyus trata NULL como vazio (regra #27), entao a condicao do
+            *-- legado equivale a "x nao eh NULL". O migrado usava !EMPTY(x), que
+            *-- da .T. com NULL (EMPTY(.NULL.) = .F.) e caia no COPY MEMO de memo
+            *-- NULL -> "Field must be a Memo field." (SigCdEmp 001 tem LogoRels e
+            *-- Logos NULL, entao TODO documento estourava ao Visualizar).
+            *-- ISNULL em IF proprio: VFP nao faz short-circuit em AND/OR.
+            DO CASE
+            CASE !ISNULL(LocalEmp.LogoRels)
                 CLEAR RESOURCES
                 COPY MEMO LocalEmp.LogoRels TO (THIS.this_cImgLogotipo)
-            ELSE
-                IF !EMPTY(LocalEmp.Logos) OR !ISNULL(LocalEmp.Logos)
+            CASE !ISNULL(LocalEmp.Logos)
                 CLEAR RESOURCES
                 COPY MEMO LocalEmp.Logos TO (THIS.this_cImgLogotipo)
-            ELSE
-                IF !EMPTY(LocalParam.Logos)
+            CASE THIS.MemoPreenchido("LocalParam.Logos")
                 CLEAR RESOURCES
                 COPY MEMO LocalParam.Logos TO (THIS.this_cImgLogotipo)
-            ELSE
+            OTHERWISE
                 CLEAR RESOURCES
                 COPY MEMO csBranco.Branco TO (THIS.this_cImgLogotipo)
-                ENDIF
-                ENDIF
-            ENDIF
+            ENDCASE
 
-            *-- Imagem tecnica do produto
-            IF !EMPTY(LocalDcOpe.ImgTecs)
+            *-- Imagem tecnica do produto (legado: Not IsEmpty(LocalDcOpe.ImgTecs))
+            IF THIS.MemoPreenchido("LocalDcOpe.ImgTecs")
                 CLEAR RESOURCES
                 COPY MEMO LocalDcOpe.ImgTecs TO (THIS.this_cImgTecnicas)
             ELSE
@@ -1924,6 +1955,63 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                 REPLACE TotItens WITH loc_lcQtI, DesItens WITH loc_lcDIt IN crCabecalho
             ENDIF
 
+            *-- Erro376: os tres blocos abaixo fecham o Processamento do legado e a
+            *-- migracao os tinha perdido. Sem o "Select crDados" final o REPORT
+            *-- FORM rodava sobre o ultimo alias tocado (csBranco, do logotipo) e
+            *-- estourava "Variable 'PAGINA' is not found" em todo documento.
+
+            *-- Imprime tres vias (Docus 10) - legado "mena - 08/11/2016"
+            IF LocalOpe.Docus = 10
+                LOCAL loc_lcObs3, loc_nVia3
+                loc_lcObs3 = ''
+                SELECT crTmpFnl
+                GO TOP
+                SCAN
+                    SELECT TmpObs
+                    LOCATE FOR Codigos = crTmpFnl.Codigos
+                    IF !EOF()
+                        loc_lcObs3 = loc_lcObs3 + ALLTRIM(TmpObs.Descrs) + '//'
+                    ENDIF
+                    SELECT crTmpFnl
+                ENDSCAN
+                REPLACE Obses WITH STRTRAN(STRTRAN(crCabecalho.Obses, CHR(10), '/'), CHR(13), '/') IN crCabecalho
+
+                SELECT * FROM crDados WHERE !EMPTY(Pagina) AND !EMPTY(CItens) INTO CURSOR crAux
+                SELECT crDados
+                ZAP
+                FOR loc_nVia3 = 1 TO LocalDcOpe.QtdDocs
+                    SELECT crAux
+                    GO TOP
+                    SCAN
+                        SCATTER MEMVAR MEMO
+                        m.Linhas = ALLTRIM(STR(loc_nVia3))
+                        m.Obs    = m.Obs + loc_lcObs3
+                        SELECT crDados
+                        APPEND BLANK
+                        GATHER MEMVAR MEMO
+                        SELECT crAux
+                    ENDSCAN
+                ENDFOR
+            ENDIF
+
+            *-- Documento resumido (ConfigGers pos. 211) - legado "Tiago - 06/08/2015"
+            IF INT(VAL(SUBSTR(LocalOpe2.ConfigGers, 211, 01))) = 1
+                SELECT * FROM crDados WHERE PADR(CPros, 10) = Colecoes ;
+                    INTO CURSOR crDados2 ORDER BY Colecoes, Fators, Pagina, CItens READWRITE
+                SELECT crDados2
+                GO TOP
+                REPLACE ALL CItens WITH 1
+                REPLACE ALL Units WITH Pesos
+                REPLACE ALL Pesos WITH Qtds
+            ENDIF
+
+            SELECT LocalEmp
+            GO TOP
+            SELECT crCabecalho
+            GO TOP
+            SELECT crDados
+            GO TOP
+
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -1986,9 +2074,9 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
         *-- Executar relatorio principal
         IF !EMPTY(loc_cFrx)
             IF par_lPreview
-                REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
+                REPORT FORM (gc_4c_CaminhoReports + loc_cFrx) PREVIEW NOCONSOLE
             ELSE
-                REPORT FORM (loc_cFrx) NOCONSOLE
+                REPORT FORM (gc_4c_CaminhoReports + loc_cFrx) TO PRINTER NOCONSOLE
             ENDIF
         ENDIF
 
@@ -2001,7 +2089,7 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
             IF par_lPreview
                 THIS.ExecutarReportForm("SigRevfc", "PREVIEW")
             ELSE
-                REPORT FORM SigRevfc NOCONSOLE
+                REPORT FORM (gc_4c_CaminhoReports + "SigRevfc") TO PRINTER NOCONSOLE
             ENDIF
         ENDIF
 
@@ -2022,7 +2110,7 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                 IF par_lPreview
                     THIS.ExecutarReportForm("SigReIft", "PREVIEW")
                 ELSE
-                    REPORT FORM SigReIft NOCONSOLE
+                    REPORT FORM (gc_4c_CaminhoReports + "SigReIft") TO PRINTER NOCONSOLE
                 ENDIF
             ENDFOR
         ENDIF
@@ -2059,7 +2147,7 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
                 IF par_lPreview
                     THIS.ExecutarReportForm("SigReDpc", "PREVIEW")
                 ELSE
-                    REPORT FORM SigReDpc NOCONSOLE
+                    REPORT FORM (gc_4c_CaminhoReports + "SigReDpc") TO PRINTER NOCONSOLE
                 ENDIF
             ENDIF
         ENDIF
@@ -2069,6 +2157,23 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
     * CarregarSGrus - Carrega descricao do sub-grupo para nota de debito
     * Equivalente ao metodo carregasgrus() do form legado
     *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * MemoPreenchido - equivale ao "Not IsEmpty(campo)" do legado: NULL e vazio
+    *   contam como NAO preenchido (IsEmpty do Fortyus, regra #27). IFs separados
+    *   porque VFP nao faz short-circuit em OR.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE MemoPreenchido(par_cCampo)
+        LOCAL loc_lPreenchido, loc_uValor
+        loc_lPreenchido = .F.
+        loc_uValor = EVALUATE(par_cCampo)
+        IF !ISNULL(loc_uValor)
+            IF !EMPTY(loc_uValor)
+                loc_lPreenchido = .T.
+            ENDIF
+        ENDIF
+        RETURN loc_lPreenchido
+    ENDPROC
+
     PROTECTED PROCEDURE CarregarSGrus(par_cPro)
         LOCAL loc_nResult
         loc_nResult = SQLEXEC(gnConnHandle, ;

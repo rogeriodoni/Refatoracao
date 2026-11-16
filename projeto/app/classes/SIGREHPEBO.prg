@@ -36,7 +36,8 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
             THIS.this_cTabela       = "SigChe"
             THIS.this_cCampoChave   = "Umovs"
             THIS.this_cTitulo       = "Resumo de Cheques Pendentes"
-            THIS.this_cArquivoFRX   = gc_4c_CaminhoReports + "RelSIGREHPE.frx"
+            *-- Legado: Report Form SigReHpe (RelSIGREHPE.frx nao existe - Erro368)
+            THIS.this_cArquivoFRX   = gc_4c_CaminhoReports + "SigReHpe.frx"
             loc_lSucesso            = DODEFAULT()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "SIGREHPEBO.Init")
@@ -110,7 +111,8 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
         loc_lSucesso     = .F.
         loc_cNomeEmpresa = ""
         TRY
-            loc_cSqlEmp = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp"
+            *-- Legado: CursorQuery('SigCdEmp',...,'cEmps',_empr) = empresa LOGADA, nao a 1a da tabela
+            loc_cSqlEmp = "SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSqlEmp, "cursor_4c_Emp")
             IF loc_nResult > 0
                 SELECT cursor_4c_Emp
@@ -165,7 +167,8 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
             IF THIS.PrepararDados()
                 IF THIS.MontarCabecalho()
                     SELECT CsRelatorio
-                    REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                    GO TOP
+                    THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER_PROMPT")
                     THIS.LimparCursores()
                     loc_lSucesso = .T.
                 ELSE
@@ -198,7 +201,9 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
             IF THIS.PrepararDados()
                 IF THIS.MontarCabecalho()
                     SELECT CsRelatorio
-                    REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                    GO TOP
+                    *-- ReportFormIsolado: FRX legado exige POINT "." + REPORTBEHAVIOR 80
+                    THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PREVIEW")
                     THIS.LimparCursores()
                     loc_lSucesso = .T.
                 ELSE
@@ -317,8 +322,10 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SIGREHPE_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.MontarCabecalho()
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

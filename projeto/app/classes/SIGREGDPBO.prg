@@ -130,10 +130,14 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
             THIS.this_lProcessado = .F.
 
             *-- Consultar SigMvNfi JOIN SigMvPar com filtros informados
+            *-- RClis: legado faz CursorQuery('SigCdCli',...,'IClis',crSigMvNfi.CliFors,'RClis')
+            *   por linha e grava Conta = CliFors + ' ' + RClis. LEFT JOIN = mesmo resultado.
             loc_cSQL = "SELECT a.nfis, a.clifors, a.totnotas, a.emps, a.dopes, a.numes, " + ;
-                       "b.fpags, b.parcs, b.valos, b.datas, b.vencs, b.obs " + ;
+                       "b.fpags, b.parcs, b.valos, b.datas, b.vencs, b.obs, " + ;
+                       "ISNULL(c.rclis, '') AS rclis " + ;
                        "FROM SigMvNfi a " + ;
                        "INNER JOIN SigMvPar b ON a.empdopnums = b.empdopnums " + ;
+                       "LEFT JOIN SigCdCli c ON c.iclis = a.clifors " + ;
                        "WHERE a.nfis BETWEEN " + EscaparSQL(THIS.this_cNFIni) + ;
                        " AND " + EscaparSQL(THIS.this_cNFFim) + ;
                        " AND a.series = " + EscaparSQL(THIS.this_cSerieNf) + ;
@@ -151,7 +155,8 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                 SCAN
                     *-- Capturar todos os valores necessarios antes de trocar de area
                     loc_cFPags   = ALLTRIM(cursor_4c_NfiFiltro.fpags)
-                    loc_cCliFors = ALLTRIM(cursor_4c_NfiFiltro.clifors)
+                    *-- SEM ALLTRIM: legado concatena CliFors char(20) + ' ' + RClis em Conta c(40)
+                    loc_cCliFors = cursor_4c_NfiFiltro.clifors + " " + cursor_4c_NfiFiltro.rclis
                     loc_cNfis    = ALLTRIM(cursor_4c_NfiFiltro.nfis)
                     loc_nValos   = cursor_4c_NfiFiltro.valos
                     loc_dDatas   = TTOD(NVL(cursor_4c_NfiFiltro.datas, CTOT("")))
@@ -187,7 +192,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                     *-- Numero da parcela (digito)
                     loc_nConta = loc_nParcs
 
-                    loc_cConta = loc_cCliFors
+                    loc_cConta = loc_cCliFors   && clifors + ' ' + rclis (truncado em Conta c(40))
 
                     *-- Calcular campo Vecto: data de vencimento ou forma de pagamento
                     IF loc_nImpNot = 1
@@ -250,7 +255,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
     * Equivalente ao procedure "impressao" do legado
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_nQt, loc_cChave
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_nQt, loc_cChave, loc_oFormBol
         loc_lSucesso = .F.
 
         TRY
@@ -286,7 +291,13 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
 
                         IF loc_nQt = 0
                             *-- Sem boleto bancario configurado: imprimir simples
-                            DO FORM SigPrIbl WITH "", .NULL.
+                            *   Legado: Do Form SigPrIbl With '', ThisForm. O SCX nao existe no
+                            *   projeto - a tela foi migrada como classe FormSIGPRIBL (modal).
+                            loc_oFormBol = CREATEOBJECT("FormSIGPRIBL", "", .NULL.)
+                            IF VARTYPE(loc_oFormBol) = "O"
+                                loc_oFormBol.Show()
+                            ENDIF
+                            loc_oFormBol = .NULL.
                         ELSE
                             *-- Com boleto bancario: imprimir por NF individualmente
                             SELECT TprMvCab
@@ -294,7 +305,12 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                                 loc_cChave = TprMvCab.emps + ;
                                              TprMvCab.dopes + ;
                                              STR(TprMvCab.numes, 6)
-                                DO FORM SigPrIbb WITH loc_cChave, .NULL.
+                                *-- Legado: Do Form SigPrIbb With <chave>, ThisForm -> classe FormSigPrIbb
+                                loc_oFormBol = CREATEOBJECT("FormSigPrIbb", loc_cChave, .NULL.)
+                                IF VARTYPE(loc_oFormBol) = "O"
+                                    loc_oFormBol.Show()
+                                ENDIF
+                                loc_oFormBol = .NULL.
                             ENDSCAN
                         ENDIF
 
@@ -414,8 +430,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SIGREGDP_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

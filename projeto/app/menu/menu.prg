@@ -1681,12 +1681,19 @@ ENDPROC
 * Nota: este form normalmente recebe parametros (empresa/operacao/numero/serie)
 * quando chamado de telas operacionais. Sem parametros, abre em estado vazio.
 *------------------------------------------------------------------------------
-PROCEDURE AbrirFormSigReInf()
+PROCEDURE AbrirFormSigReInf(par_cEmps, par_cDopes, par_nNumes, par_cSerie)
     LOCAL loForm, loException
 
     TRY
         GarantirClasse("FormSigReInf")
-        loForm = CREATEOBJECT("FormSigReInf")
+        *-- Erro379: NF opcional (pelo menu continua vazio, como antes);
+        *-- permite abrir a NF direto: AbrirFormSigReInf("001", "VENDA", 9364, "1")
+        IF VARTYPE(par_cDopes) = "C" AND !EMPTY(par_cDopes)
+            loForm = CREATEOBJECT("FormSigReInf", par_cEmps, par_cDopes, par_nNumes, ;
+                IIF(VARTYPE(par_cSerie) = "C", par_cSerie, ""))
+        ELSE
+            loForm = CREATEOBJECT("FormSigReInf")
+        ENDIF
 
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Nota Fiscal" + CHR(13) + ;
@@ -4747,13 +4754,18 @@ ENDPROC
 *   NOTA: Normalmente chamado por formularios de movimento (SigMvCab) com
 *   parametros do documento. Abertura via menu usa empresa corrente sem doc.
 *------------------------------------------------------------------------------
-PROCEDURE AbrirFormsigreifx()
-    LOCAL loForm, loException
+PROCEDURE AbrirFormsigreifx(par_cDop, par_nNum)
+    LOCAL loForm, loException, loc_cDop, loc_nNum
+
+    *-- Erro376: Operacao/Numero opcionais (pelo menu ficam vazios, como antes);
+    *-- permitem abrir o documento direto: AbrirFormsigreifx("VENDA", 19)
+    loc_cDop = IIF(VARTYPE(par_cDop) = "C", par_cDop, "")
+    loc_nNum = IIF(VARTYPE(par_nNum) = "N", par_nNum, 0)
 
     TRY
         GarantirClasse("Formsigreifx")
         loForm = CREATEOBJECT("Formsigreifx", ;
-            go_4c_Sistema.cCodEmpresa, "", 0, 0, .F.)
+            go_4c_Sistema.cCodEmpresa, loc_cDop, loc_nNum, 0, .F.)
 
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Impress" + CHR(227) + "o de Documentos Comerciais" + CHR(13) + ;

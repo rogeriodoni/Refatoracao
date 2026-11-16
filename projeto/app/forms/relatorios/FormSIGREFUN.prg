@@ -358,16 +358,16 @@ DEFINE CLASS FormSIGREFUN AS FormBase
 
     *--------------------------------------------------------------------------
     * ConfigurarCamposFiltro - Adiciona controles de filtro na Page1
-    *   Layout original: Label2 top=147, GetFundi/f top=144, ImpObs top=172
+    *   Layout original (form): Label2 top=147, GetFundi/f top=144, ImpObs top=172 - na Page1 (PageFrame.Top=85) subtrai 85
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarCamposFiltro()
         LOCAL loc_oPag1
         loc_oPag1 = THIS.pgf_4c_Paginas.Page1
 
-        *-- Label "N? Fundi??o : " (Label2: top=147, left=264, width=78)
+        *-- Label "N? Fundi??o : " (Label2: top=147->62, left=264, width=78)
         loc_oPag1.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPag1.lbl_4c_Label2
-            .Top       = 147
+            .Top       = 62
             .Left      = 264
             .Width     = 78
             .Height    = 17
@@ -394,10 +394,10 @@ DEFINE CLASS FormSIGREFUN AS FormBase
             .Visible       = .T.
         ENDWITH
 
-        *-- Label "?" separador de range (Label1: top=148, left=404, width=9)
+        *-- Label "?" separador de range (Label1: top=148->63, left=404, width=9)
         loc_oPag1.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPag1.lbl_4c_Label1
-            .Top       = 148
+            .Top       = 63
             .Left      = 404
             .Width     = 9
             .Height    = 17
@@ -424,10 +424,10 @@ DEFINE CLASS FormSIGREFUN AS FormBase
             .Visible       = .T.
         ENDWITH
 
-        *-- CheckBox "Imprimir observa??o do item" (ImpObs: top=172, left=343)
+        *-- CheckBox "Imprimir observa??o do item" (ImpObs: top=172->87, left=343)
         loc_oPag1.AddObject("chk_4c_ImpObs", "CheckBox")
         WITH loc_oPag1.chk_4c_ImpObs
-            .Top       = 172
+            .Top       = 87
             .Left      = 343
             .Width     = 153
             .Height    = 15

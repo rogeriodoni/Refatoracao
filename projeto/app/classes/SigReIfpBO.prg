@@ -612,22 +612,37 @@ DEFINE CLASS SigReIfpBO AS RelatorioBase
     * Imprimir - Prepara dados e imprime com dialogo de impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_cFrx
-        loc_lSucesso = .F.
+        RETURN THIS.GerarSaida("PRINTER_PROMPT")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GerarSaida - Prepara os dados e roda o REPORT FORM do NivImprs.
+    *   Erro375: a varredura do Erro159 trocou os RETURN de dentro do TRY por
+    *   "loc_lSucesso = .F." sem bloquear o resto - o REPORT FORM rodava mesmo
+    *   com PrepararDados falhando ou com Tipo de Relatorio 0 (spinner aceita 0)
+    *   -> REPORT FORM ("") / preview de dado velho. Agora cada etapa so roda
+    *   se a anterior passou.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE GerarSaida(par_cModo)
+        LOCAL loc_lSucesso, loc_lProsseguir, loc_cFrx, loc_oErro
+        loc_lSucesso    = .F.
+        loc_lProsseguir = .T.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-            ENDIF
             loc_cFrx = THIS.ObterRelatorioFrx()
             IF EMPTY(loc_cFrx)
-                THIS.this_cMensagemErro = "N" + CHR(237) + "vel de relat" + CHR(243) + ;
-                    "rio inv" + CHR(225) + "lido"
+                *-- Legado: Do Case sem Otherwise - nivel 0 nao imprime nada
                 MsgAviso("N" + CHR(237) + "vel de relat" + CHR(243) + "rio inv" + CHR(225) + ;
                          "lido (0 ou > 7).", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_lSucesso = .F.
+                THIS.this_cMensagemErro = ""
+                loc_lProsseguir = .F.
             ENDIF
-            REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
-            loc_lSucesso = .T.
+            IF loc_lProsseguir AND !THIS.PrepararDados()
+                loc_lProsseguir = .F.
+            ENDIF
+            IF loc_lProsseguir
+                THIS.ExecutarReport(loc_cFrx, par_cModo)
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
@@ -636,30 +651,23 @@ DEFINE CLASS SigReIfpBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
+    * ExecutarReport - REPORT FORM com TmpRelat selecionado
+    *--------------------------------------------------------------------------
+    PROCEDURE ExecutarReport(par_cFrx, par_cModo)
+        SELECT TmpRelat
+        GO TOP
+        IF par_cModo == "PREVIEW"
+            REPORT FORM (par_cFrx) PREVIEW NOCONSOLE
+        ELSE
+            REPORT FORM (par_cFrx) TO PRINTER PROMPT NOCONSOLE
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * Visualizar - Prepara dados e exibe o relatorio em preview
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_cFrx
-        loc_lSucesso = .F.
-        TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-            ENDIF
-            loc_cFrx = THIS.ObterRelatorioFrx()
-            IF EMPTY(loc_cFrx)
-                THIS.this_cMensagemErro = "N" + CHR(237) + "vel de relat" + CHR(243) + ;
-                    "rio inv" + CHR(225) + "lido"
-                MsgAviso("N" + CHR(237) + "vel de relat" + CHR(243) + "rio inv" + CHR(225) + ;
-                         "lido (0 ou > 7).", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_lSucesso = .F.
-            ENDIF
-            REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
+        RETURN THIS.GerarSaida("PREVIEW")
     ENDPROC
 
     *--------------------------------------------------------------------------

@@ -12,9 +12,10 @@
 
 DEFINE CLASS FormSIGREHPE AS FormBase
 
-    *-- Dimensoes: Width=1000 padrao sistema, Height=300 do original
+    *-- Dimensoes EXATAS do SCX legado: Width=600, Height=300 (o 1000 deixava uma
+    *   faixa vazia enorme - Erro368)
     Height      = 300
-    Width       = 1000
+    Width       = 600
     DataSession = 2
     ShowWindow  = 1
     WindowType  = 1
@@ -66,6 +67,7 @@ DEFINE CLASS FormSIGREHPE AS FormBase
                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
                 THIS.ConfigurarBotoes()
+                THIS.AjustarTituloCabecalho()
                 THIS.LimparCampos()
                 THIS.AlternarPagina(1)
                 THIS.Visible = .T.
@@ -82,7 +84,7 @@ DEFINE CLASS FormSIGREHPE AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
         THIS.Caption     = "Resumo de Cheques Pendentes"
-        THIS.Picture     = gc_4c_CaminhoIcones + "new_background.jpg"
+        THIS.Picture     = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"   && fundo padrao dos relatorios
         THIS.Icon        = gc_4c_CaminhoIcones + "4c.ico"
         THIS.AutoCenter  = .T.
         THIS.BorderStyle = 2
@@ -144,8 +146,36 @@ DEFINE CLASS FormSIGREHPE AS FormBase
     ENDPROC
 
     *==========================================================================
+    * AJUSTARTITULOCABECALHO - Titulo termina ANTES dos botoes (mesma solucao do
+    *   Erro362/FormSIGREFXV). Em Tahoma 16 negrito o texto mede ~324px e o form
+    *   tem 600: com Width = THIS.Width as ultimas letras ficavam embaixo do
+    *   Visualizar (Left = 327). Se nao couber em 1 linha, quebra em 2 (WordWrap
+    *   do lblTitulo do frmrelatorio) centralizadas na faixa de 80px.
+    *==========================================================================
+    PROTECTED PROCEDURE AjustarTituloCabecalho()
+        LOCAL loc_nLargura, loc_nTexto, loc_nAltLinha, loc_nLinhas, loc_nTop
+        loc_nLargura  = THIS.cmg_4c_Botoes.Left - THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Left - 5
+        loc_nTexto    = TXTWIDTH(THIS.Caption, "Tahoma", 16, "B") * FONTMETRIC(6, "Tahoma", 16, "B")
+        loc_nAltLinha = FONTMETRIC(1, "Tahoma", 16, "B")
+        loc_nLinhas   = IIF(loc_nTexto > loc_nLargura, 2, 1)
+        loc_nTop      = IIF(loc_nLinhas = 1, 18, INT((80 - loc_nLinhas * loc_nAltLinha) / 2))
+
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .WordWrap = .T.
+            .Width    = loc_nLargura
+            .Height   = loc_nLinhas * loc_nAltLinha + 4
+            .Top      = loc_nTop
+        ENDWITH
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .WordWrap = .T.
+            .Width    = loc_nLargura
+            .Height   = loc_nLinhas * loc_nAltLinha + 4
+            .Top      = loc_nTop - 3
+        ENDWITH
+    ENDPROC
+    *==========================================================================
     * CONFIGURARBOTOES - CommandGroup 4 botoes (padrao frmrelatorio framework.vcx)
-    * Left=727: posicao flush-direita em form 1000px (1000-273=727)
+    * Left=327: SCX legado btnReport.Left=327 (= 600 - 273, flush a direita)
     * Top=3: original btnReport.Top=3
     * Geometria: Width=273, Height=80, ButtonCount=4, BackStyle=0
     * Lefts internos: 5, 71, 137, 203 (incrementos de 66)
@@ -157,7 +187,7 @@ DEFINE CLASS FormSIGREHPE AS FormBase
         THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
         WITH THIS.cmg_4c_Botoes
             .Top           = 3
-            .Left          = 727
+            .Left          = 327
             .Width         = 273
             .Height        = 80
             .ButtonCount   = 4

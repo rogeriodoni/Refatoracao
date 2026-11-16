@@ -377,8 +377,10 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .MaxLength = 3
+            .Alignment = 3
             .Value     = ""
             .ForeColor = RGB(0, 0, 0)
+            .DisabledBackColor = RGB(255, 255, 255)
             .TabIndex  = 2
             .Visible   = .T.
         ENDWITH
@@ -412,6 +414,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .Alignment = 3
             .Value     = ""
             .ForeColor = RGB(0, 0, 0)
+            .DisabledBackColor = RGB(255, 255, 255)
             .TabIndex  = 4
             .Visible   = .T.
         ENDWITH
@@ -476,6 +479,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .Alignment = 3
             .Value     = ""
             .ForeColor = RGB(0, 0, 0)
+            .DisabledBackColor = RGB(255, 255, 255)
             .TabIndex  = 6
             .Visible   = .T.
         ENDWITH
@@ -498,8 +502,8 @@ DEFINE CLASS FormSIGREGDP AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "Duplicatas"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
+                .FontName  = "Tahoma"
+                .FontSize  = 8
                 .Top       = 5
                 .Left      = 5
                 .Height    = 15
@@ -518,7 +522,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
                 .Height    = 15
                 .Width     = 118
                 .FontBold  = .T.
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .BackStyle = 0
                 .AutoSize  = .T.
@@ -527,19 +531,21 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             ENDWITH
         ENDWITH
 
-        *-- Botao Processar (Top=92, Left=668, W=75, H=75)
+        *-- Botao Processar (SCX: Top=92 no FORM -> 92-85 = 7 na Page1, Left=668, W=75, H=75)
+        *   Com Top=92 cru ele ficava ATRAS da grade (Top=107): sem Processar o
+        *   usuario nunca carregava as notas.
         loc_oPagina.AddObject("cmd_4c_Processar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Processar
-            .Top             = 92
+            .Top             = 7
             .Left            = 668
             .Width           = 75
             .Height          = 75
             .FontBold        = .T.
             .FontItalic      = .T.
-            .FontName        = "Tahoma"
+            .FontName        = "Comic Sans MS"
             .FontSize        = 8
             .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .Caption         = "Processar"
+            .Caption         = "P\<rocessar"
             .ForeColor       = RGB(90, 90, 90)
             .BackColor       = RGB(255, 255, 255)
             .Themes          = .F.
@@ -586,7 +592,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .AllowHeaderSizing  = .F.
             .AllowRowSizing     = .F.
             .DeleteMark         = .F.
-            .RecordMark         = .F.
+            .Panel              = 1
             .ScrollBars         = 2
             .GridLineColor      = RGB(238, 238, 238)
             .HighlightBackColor = RGB(255, 255, 255)
@@ -771,10 +777,10 @@ DEFINE CLASS FormSIGREGDP AS FormBase
         LOCAL loc_oPagina
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
-        *-- Botao SelTudo (Top=529, Left=71, W=45, H=45)
+        *-- Botao SelTudo (SCX: Top=529 no FORM -> 444 na Page1, Left=71, W=45, H=45)
         loc_oPagina.AddObject("cmd_4c_SelTudo", "CommandButton")
         WITH loc_oPagina.cmd_4c_SelTudo
-            .Top           = 529
+            .Top           = 444
             .Left          = 71
             .Width         = 45
             .Height        = 45
@@ -782,7 +788,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .FontSize      = 8
             .Picture       = gc_4c_CaminhoIcones + "a_save1.bmp"
             .Caption       = ""
-            .ToolTipText   = "Selecionar Todos"
+            .ToolTipText   = "Selecionar"
             .ForeColor     = RGB(36, 84, 155)
             .BackColor     = RGB(255, 255, 255)
             .Themes        = .F.
@@ -792,10 +798,10 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .Visible       = .T.
         ENDWITH
 
-        *-- Botao Desmarcar/apaga (Top=529, Left=117, W=45, H=45)
+        *-- Botao Desmarcar/apaga (SCX: Top=529 no FORM -> 444 na Page1, Left=117, W=45, H=45)
         loc_oPagina.AddObject("cmd_4c_Desmarcar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Desmarcar
-            .Top           = 529
+            .Top           = 444
             .Left          = 117
             .Width         = 45
             .Height        = 45
@@ -805,7 +811,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .FontSize      = 8
             .Picture       = gc_4c_CaminhoIcones + "cancelab.bmp"
             .Caption       = ""
-            .ToolTipText   = "Desmarcar Todos"
+            .ToolTipText   = "Desmarcar"
             .ForeColor     = RGB(36, 84, 155)
             .BackColor     = RGB(255, 255, 255)
             .Themes        = .F.
@@ -1192,31 +1198,31 @@ DEFINE CLASS FormSIGREGDP AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme processamento
-    *   Botoes Visualizar/Imprimir/DocExcel e SelTudo/Desmarcar ficam ativos
-    *   somente apos PrepararDados() executado com sucesso.
+    * AjustarBotoesPorModo - Estado dos botoes IGUAL ao legado
+    *   O SIGREGDP legado nunca desabilita nada: Imprime/DocExcel/Sair e
+    *   SelTudo/apaga ficam sempre ativos (Imprimir sem processar avisa no BO;
+    *   SelTudo/apaga sobre cursor vazio nao fazem nada). O Visualiza eh
+    *   ESCONDIDO no SCX (btnReport.Visualiza.Visible = .F.) - nao ha preview
+    *   de duplicata/boleto. Desabilitar ate o Processar - que ainda ficava
+    *   atras da grade - deixava a tela inteira morta (Erro363).
     *--------------------------------------------------------------------------
     PROCEDURE AjustarBotoesPorModo()
-        LOCAL loc_lProcessado, loc_oPagina
-        loc_lProcessado = .F.
-
-        IF VARTYPE(THIS.this_oRelatorio) = "O"
-            loc_lProcessado = THIS.this_oRelatorio.this_lProcessado
-        ENDIF
+        LOCAL loc_oPagina
 
         IF VARTYPE(THIS.cmg_4c_Botoes) = "O"
-            THIS.cmg_4c_Botoes.Buttons(1).Enabled = loc_lProcessado
-            THIS.cmg_4c_Botoes.Buttons(2).Enabled = loc_lProcessado
-            THIS.cmg_4c_Botoes.Buttons(3).Enabled = loc_lProcessado
+            THIS.cmg_4c_Botoes.Buttons(1).Visible = .F.
+            THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
+            THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
+            THIS.cmg_4c_Botoes.Buttons(4).Enabled = .T.
         ENDIF
 
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
         IF VARTYPE(loc_oPagina) = "O"
             IF VARTYPE(loc_oPagina.cmd_4c_SelTudo) = "O"
-                loc_oPagina.cmd_4c_SelTudo.Enabled   = loc_lProcessado
+                loc_oPagina.cmd_4c_SelTudo.Enabled   = .T.
             ENDIF
             IF VARTYPE(loc_oPagina.cmd_4c_Desmarcar) = "O"
-                loc_oPagina.cmd_4c_Desmarcar.Enabled = loc_lProcessado
+                loc_oPagina.cmd_4c_Desmarcar.Enabled = .T.
             ENDIF
         ENDIF
     ENDPROC
@@ -1260,7 +1266,8 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             REPLACE flag WITH !flag
         ELSE
             REPLACE flag WITH IIF(flag = 0, 1, 0)
-        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
+        ENDIF
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
     ENDPROC
 
     PROCEDURE TgDados1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)

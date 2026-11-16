@@ -101,6 +101,19 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
         LOCAL loc_cEmpsFmt, loc_cSeriesFmt, loc_cNFisDeF, loc_cNFisAteFmt
         LOCAL loc_nVia, loc_nCopias
         loc_lSucesso = .F.
+
+        *-- Erro377: a carta de correcao eh de UMA empresa/serie, recebidas da
+        *-- tela Carta de Correcao (legado: Do Form SigreImc With pcEmps,
+        *-- pcSeries,...). Aberto pelo menu sem elas, a consulta nunca casa -
+        *-- avisar em vez de "Nenhum registro encontrado".
+        IF EMPTY(THIS.this_cEmp) OR EMPTY(THIS.this_cSerie)
+            MsgAviso("Empresa/S" + CHR(233) + "rie n" + CHR(227) + "o informadas." + CHR(13) + ;
+                "A impress" + CHR(227) + "o da carta deve ser feita a partir da tela " + ;
+                "Carta de Corre" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.this_cMensagemErro = ""
+            RETURN .F.
+        ENDIF
+
         TRY
             *-- Valores dos filtros
             loc_dEmisDe  = THIS.this_dEmisDe
@@ -140,13 +153,14 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                 " AND f.cnfis BETWEEN " + loc_cNFisDeF + ;
                 " AND " + loc_cNFisAteFmt + ;
                 " AND n.emis BETWEEN " + FormatarDataSQL(loc_dEmisDe) + ;
-                " AND " + FormatarDataSQL(loc_dEmisAte) + ;
+                " AND '" + DTOS(loc_dEmisAte) + " 23:59:59'" + ;
                 " ORDER BY cemps, cseries, cnfis, noccors"
+            *-- Erro377: legado pEmisAte = data final + '235959'
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NfCorBase")
             IF loc_nResult < 1
-                THIS.this_cMensagemErro = "Erro ao buscar notas fiscais"
-                loc_lSucesso = .F.
+                *-- Erro377: sem o cursor o SCAN abaixo estouraria; parar aqui
+                THROW "Erro ao buscar notas fiscais"
             ENDIF
 
             *-- Cria cursor de saida com estrutura identica ao XCorNf do legado
@@ -184,6 +198,21 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
 
             USE IN cursor_4c_NfCorBase
 
+            *-- Erro377: o SigReImc.frx le os dados da empresa do cursor
+            *-- CrSigCdEmp, que o legado abre no Init (lcQryEmp = "Select * From
+            *-- SigCdEmp Where cemps = ?pcEmps") e o processamento reposiciona.
+            *-- A migracao nunca o criava: REPORT FORM estourava "Alias
+            *-- 'CRSIGCDEMP' is not found" assim que havia carta para imprimir.
+            IF USED("CrSigCdEmp")
+                USE IN CrSigCdEmp
+            ENDIF
+            IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdEmp WHERE cemps = " + ;
+                    loc_cEmpsFmt, "CrSigCdEmp") < 1
+                THROW "Erro ao buscar dados da empresa"
+            ENDIF
+            SELECT CrSigCdEmp
+            GO TOP
+
             *-- Ordena cursor de saida por empresa/serie/nota/via
             SELECT XCorNf
             INDEX ON cemps + cseries + cnfis + STR(numvias, 8) TAG XCorNfIdx
@@ -198,7 +227,10 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "PrepararDados")
+            *-- THROW "texto" chega com Message = "User Thrown Error"; o texto
+            *-- de verdade fica em UserValue
+            MsgErro(IIF(VARTYPE(loc_oErro.UserValue) = "C" AND !EMPTY(loc_oErro.UserValue), ;
+                loc_oErro.UserValue, loc_oErro.Message), "PrepararDados")
         ENDTRY
         RETURN loc_lSucesso
     ENDPROC
@@ -278,12 +310,12 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            *-- Erro377: so imprime se PrepararDados passou (antes seguia direto)
+            IF THIS.PrepararDados()
+                SELECT XCorNf
+                GO TOP
+                loc_lSucesso = THIS.ExecutarReportForm("SigReImc", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ENDIF
-            SELECT XCorNf
-            THIS.ExecutarReportForm("SigReImc", "PRINTER_PROMPT", THIS.this_cCursorDados)
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Imprimir")
         ENDTRY
@@ -297,12 +329,12 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            *-- Erro377: so visualiza se PrepararDados passou (antes seguia direto)
+            IF THIS.PrepararDados()
+                SELECT XCorNf
+                GO TOP
+                loc_lSucesso = THIS.ExecutarReportForm("SigReImc", "PREVIEW", THIS.this_cCursorDados)
             ENDIF
-            SELECT XCorNf
-            THIS.ExecutarReportForm("SigReImc", "PREVIEW", THIS.this_cCursorDados)
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Visualizar")
         ENDTRY

@@ -118,50 +118,48 @@ DEFINE CLASS SigReInfBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Visualizar - Executa preview da NF na tela
-    * Equivalente ao metodo 'visualizacao' do form original (modo "V")
+    * Visualizar / Imprimir - legado: "do SigPrNfs With ThisForm.Podatamgr,"V"|"I",
+    *   pcemps, pcdopes, pcnumes" (o processamento do legado so monta TmpFiscal,
+    *   que o SigPrNfs nem le).
+    * Erro379:
+    *   - Aberto pelo menu (sem NF) o SigPrNfs rodava com empresa/operacao vazias.
+    *     No legado o form so era aberto pela movimentacao, com a NF.
+    *   - SigPrNfs monta a chave POSICIONAL pcEmps + pcDopes + Str(pnNumes,6)
+    *     (EmpDopNums char 29): emps/dopes TEM de ir com PADR 3/20 (regra #42) -
+    *     operacao sem o padding nunca acha o SigMvCab.
+    *   - "DO SigPrNfs" descartava o retorno (.F. em toda falha) e a tela fechava
+    *     como se tivesse impresso.
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-
-        TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-            ENDIF
-
-            DO SigPrNfs WITH gnConnHandle, "V", THIS.this_cEmps, THIS.this_cDopes, THIS.this_nNumes
-            loc_lSucesso = .T.
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
+        RETURN THIS.ExecutarSigPrNfs("V")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Imprimir - Executa impressao direta da NF
-    * Equivalente ao metodo 'impressao' do form original (modo "I")
-    *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso
+        RETURN THIS.ExecutarSigPrNfs("I")
+    ENDPROC
+
+    PROTECTED PROCEDURE ExecutarSigPrNfs(par_cTipo)
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
+
+        IF EMPTY(THIS.this_cEmps) OR EMPTY(THIS.this_cDopes) OR EMPTY(THIS.this_nNumes)
+            MsgAviso("Nenhuma nota fiscal informada." + CHR(13) + ;
+                "A impress" + CHR(227) + "o da NF deve ser feita a partir da movimenta" + ;
+                CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN .F.
+        ENDIF
 
         TRY
-            IF !THIS.PrepararDados()
+            loc_lSucesso = SigPrNfs(gnConnHandle, par_cTipo, ;
+                PADR(THIS.this_cEmps, 3), PADR(THIS.this_cDopes, 20), THIS.this_nNumes)
+            IF VARTYPE(loc_lSucesso) <> "L"
                 loc_lSucesso = .F.
             ENDIF
-
-            DO SigPrNfs WITH gnConnHandle, "I", THIS.this_cEmps, THIS.this_cDopes, THIS.this_nNumes
-            loc_lSucesso = .T.
-
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-
         RETURN loc_lSucesso
     ENDPROC
 

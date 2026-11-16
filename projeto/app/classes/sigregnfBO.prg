@@ -17,7 +17,7 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
     this_lNotasAnt          = .F.   && .T. se existem notas anteriores nao impressas desta serie
 
     *-- Dados auxiliares carregados no Init
-    this_cMascNums          = ""    && Mascara de numeracao de SigCdPam.MascNums
+    this_nMascNums          = 0     && SigCdPam.MascNums - NUMERIC(1,0) no banco (nao eh texto)
 
     *-- Nomes dos cursors de trabalho persistentes
     this_cCursorNFis        = "cursor_4c_TmpNFis"     && Dados das NFs selecionadas (usado no grid)
@@ -77,7 +77,9 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
                 IF loc_nResult > 0 AND USED("cursor_4c_SigCdPam")
                     SELECT cursor_4c_SigCdPam
                     IF !EOF()
-                        THIS.this_cMascNums = ALLTRIM(NVL(MascNums, ""))
+                        *-- MascNums eh NUMERICO: ALLTRIM() nele estourava "Function argument value,
+                        *   type, or count is invalid" no Init e a tela nao abria (Erro364)
+                        THIS.this_nMascNums = NVL(MascNums, 0)
                     ENDIF
                     USE IN cursor_4c_SigCdPam
                 ENDIF
@@ -297,7 +299,7 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
                                 loc_nTotNotas, ;
                                 loc_cCliFors + " " + loc_lcCli, ;
                                 loc_cEmps + ALLTRIM(loc_cDopes) + ;
-                                    " " + ALLTRIM(fGerMascara(loc_nNumes)), ;
+                                    " " + ALLTRIM(THIS.MascararNumero(loc_nNumes)), ;
                                 loc_cEmps, ;
                                 loc_cDopes, ;
                                 loc_nNumes)
@@ -321,6 +323,30 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
         RETURN loc_lSucesso
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * MascararNumero - transcricao de fGerMascara do legado (SIGFUNCS.PRG:5970)
+    *   STR(numero, 6); se SigCdPam.MascNums = 1 cada digito vira letra
+    *   (1=A ... 9=I, zero = X, zeros a esquerda = espaco).
+    *   NAO usar o fGerMascara de utils\functions.prg: la o mesmo nome eh outra
+    *   funcao (chave de 10 digitos com zeros) - a coluna Operacao saia
+    *   "001VENDA 0000000032" em vez de "001VENDA 32".
+    *--------------------------------------------------------------------------
+    PROCEDURE MascararNumero(par_nNumero)
+        LOCAL loc_cPar, loc_cRet, loc_nVez, loc_nDig, loc_cStr
+        loc_cPar = IIF(VARTYPE(par_nNumero) = "N", STR(par_nNumero, 6), par_nNumero)
+        loc_cRet = loc_cPar
+        IF THIS.this_nMascNums = 1
+            loc_cRet = ""
+            IF !EMPTY(loc_cPar)
+                FOR loc_nVez = 1 TO 6
+                    loc_nDig = VAL(SUBSTR(loc_cPar, loc_nVez, 1))
+                    loc_cStr = IIF(EMPTY(loc_nDig), IIF(EMPTY(loc_cRet), " ", "X"), CHR(64 + loc_nDig))
+                    loc_cRet = loc_cRet + loc_cStr
+                ENDFOR
+            ENDIF
+        ENDIF
+        RETURN loc_cRet
+    ENDPROC
     *--------------------------------------------------------------------------
     * VerificarNf - Verifica se existem NFs anteriores nao impressas da serie
     * Retorna .T. se pode prosseguir, .F. se ha bloqueio por nota anterior
@@ -424,8 +450,13 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
         LOCAL loc_lSucesso, loc_nResult, loc_cSQL, loc_cSeries, loc_cEmps
         loc_lSucesso = .F.
 
-        IF !USED(THIS.this_cCursorNFis) OR EOF(THIS.this_cCursorNFis)
+        IF !USED(THIS.this_cCursorNFis) OR RECCOUNT(THIS.this_cCursorNFis) = 0
             RETURN .F.
+        ENDIF
+        *-- Ponteiro em EOF (ex.: grade rolada ate o fim) fazia o botao parar calado;
+        *   o legado le a serie do registro corrente e termina com Go Top
+        IF EOF(THIS.this_cCursorNFis)
+            GO TOP IN (THIS.this_cCursorNFis)
         ENDIF
 
         TRY
@@ -547,11 +578,19 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
                     IF !loc_lAbortado
                         GO TOP IN cursor_4c_SigMvNfi
 
-                        *-- Imprime usando rotina legada SigPrNfs.prg
-                        DO SigPrNfs WITH "I", loc_cEmps, loc_cDopes, loc_nNumes
-
+                        *-- Imprime usando rotina legada SigPrNfs (utils\sigprnfs.prg), com o
+                        *   contrato do legado: Pcnx, pTipo, Emps, Dopes, Numes. Um trabalho de
+                        *   impressao POR NF, como o Scan do impressao legado.
+                        *   So tira a NF da grade se a impressao aconteceu. NF que falhar (ex.:
+                        *   cliente sem endereco) mostra a propria mensagem e o laco SEGUE para a
+                        *   proxima marcada - o legado tambem seguia; parar aqui (Erro364) fazia
+                        *   so a 1a NF sair quando a 2a tinha problema (Erro365).
+                        IF SigPrNfs(.NULL., "I", loc_cEmps, loc_cDopes, loc_nNumes)
+                            SELECT (THIS.this_cCursorNFis)
+                            DELETE
+                        ENDIF
+                        *-- SigPrNfs troca o alias selecionado: volta para a grade antes do ENDSCAN
                         SELECT (THIS.this_cCursorNFis)
-                        DELETE
                     ENDIF
                 ENDIF
             ENDSCAN
@@ -576,93 +615,63 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Visualizacao - Visualiza a NF do registro corrente do cursor
-    * Cursor cursor_4c_TmpNFis deve estar posicionado no registro desejado
+    * Visualizacao - Preview de TODAS as NFs marcadas (Flag = .T.), na ordem da grade
+    *   DIVERGE DO LEGADO DE PROPOSITO (decisao do usuario no Erro365): o
+    *   SIGREGNF.visualizacao legado chamava SigPrNfs uma unica vez, para o
+    *   registro corrente - que o processamento sempre deixa no topo (Go Top) -,
+    *   entao mostrava so a 1a NF da grade mesmo com todas marcadas.
+    *   Agora percorre as marcadas como o Impressao(), mas com pTipo "V": nao grava
+    *   SigMvNfi.Impress e nao tira a NF da grade. NF que falhar (ex.: cliente
+    *   sem endereco) mostra a propria mensagem e o laco segue para a proxima.
     *--------------------------------------------------------------------------
     PROCEDURE Visualizacao()
-        LOCAL loc_lSucesso, loc_nResult, loc_nResult2, loc_cSQL, loc_cEdn, loc_lAbortado
+        LOCAL loc_lSucesso, loc_nRecno, loc_nQtd, loc_oErro
         LOCAL loc_cEmps, loc_cDopes, loc_nNumes
         loc_lSucesso = .F.
+        loc_nQtd     = 0
+        THIS.this_cMensagemErro = ""
 
         IF THIS.this_lNotasAnt
             RETURN .F.
         ENDIF
-
-        SELECT (THIS.this_cCursorNFis)
-        IF EOF() OR BOF() OR !Flag
+        IF !USED(THIS.this_cCursorNFis)
             RETURN .F.
         ENDIF
 
         TRY
-            loc_cEmps  = EVALUATE(THIS.this_cCursorNFis + ".Emps")
-            loc_cDopes = EVALUATE(THIS.this_cCursorNFis + ".Dopes")
-            loc_nNumes = EVALUATE(THIS.this_cCursorNFis + ".Numes")
+            SELECT (THIS.this_cCursorNFis)
+            loc_nRecno   = IIF(EOF() OR BOF(), 0, RECNO())
+            loc_lSucesso = .T.
+            SCAN FOR Flag
+                loc_cEmps  = EVALUATE(THIS.this_cCursorNFis + ".Emps")
+                loc_cDopes = EVALUATE(THIS.this_cCursorNFis + ".Dopes")
+                loc_nNumes = EVALUATE(THIS.this_cCursorNFis + ".Numes")
+                loc_nQtd   = loc_nQtd + 1
 
-            IF USED("cursor_4c_TprMvCab")
-                USE IN cursor_4c_TprMvCab
-            ENDIF
-            SET NULL ON
-            CREATE CURSOR cursor_4c_TprMvCab ;
-                (Emps c(3), Dopes c(20), Numes n(6), ContaOs c(10), ContaDs c(10), ;
-                 TpFats c(3), Obses m NULL, ValVars n(12,2))
-            SET NULL OFF
-
-            loc_cEdn = loc_cEmps + loc_cDopes + STR(loc_nNumes, 6)
-            loc_lAbortado = .F.
-
-            *-- Busca cabecalho em SigMvCab
-            loc_cSQL = "SELECT Emps, Dopes, Numes, ContaOs, ContaDs, " + ;
-                       "TpFats, Obses, ValVars FROM SigMvCab " + ;
-                       "WHERE EmpDopNums = " + EscaparSQL(loc_cEdn)
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigMvCab")
-            IF loc_nResult < 1
-                MsgErro("Favor Reinicializar o Processo!!!", ;
-                        "Falha na Conex" + CHR(227) + "o (SigMvCab)")
-                loc_lAbortado = .T.
-            ENDIF
-
-            IF !loc_lAbortado
-                GO TOP IN cursor_4c_SigMvCab
-
-                INSERT INTO cursor_4c_TprMvCab ;
-                    (Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars) ;
-                    VALUES (cursor_4c_SigMvCab.Emps, cursor_4c_SigMvCab.Dopes, ;
-                            cursor_4c_SigMvCab.Numes, cursor_4c_SigMvCab.ContaOs, ;
-                            cursor_4c_SigMvCab.ContaDs, cursor_4c_SigMvCab.TpFats, ;
-                            cursor_4c_SigMvCab.Obses, cursor_4c_SigMvCab.ValVars)
-
-                *-- Busca itens em SigMvNfi
-                loc_cSQL = "SELECT * FROM SigMvNfi " + ;
-                           "WHERE EmpDopNums = " + EscaparSQL(loc_cEdn)
-
-                loc_nResult2 = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigMvNfi")
-                IF loc_nResult2 < 1
-                    MsgErro("Favor Reinicializar o Processo!!!", ;
-                            "Falha na Conex" + CHR(227) + "o (SigMvNfi)")
-                    loc_lAbortado = .T.
+                *-- Rotina legada SigPrNfs (utils\sigprnfs.prg) - contrato do legado
+                *   Falha numa NF (ex.: cliente sem endereco) mostra a mensagem dela e
+                *   SEGUE para a proxima - como o Scan do impressao legado.
+                IF !SigPrNfs(.NULL., "V", loc_cEmps, loc_cDopes, loc_nNumes)
+                    loc_lSucesso = .F.
                 ENDIF
-            ENDIF
-
-            IF !loc_lAbortado
-                GO TOP IN cursor_4c_SigMvNfi
-
-                *-- Visualiza usando rotina legada SigPrNfs.prg
-                DO SigPrNfs WITH "V", loc_cEmps, loc_cDopes, loc_nNumes
-
-                IF USED("cursor_4c_SigMvCab")
-                    USE IN cursor_4c_SigMvCab
-                ENDIF
-                IF USED("cursor_4c_SigMvNfi")
-                    USE IN cursor_4c_SigMvNfi
-                ENDIF
-
                 SELECT (THIS.this_cCursorNFis)
-                loc_lSucesso = .T.
+            ENDSCAN
+
+            SELECT (THIS.this_cCursorNFis)
+            IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT()
+                GO loc_nRecno
+            ELSE
+                GO TOP
+            ENDIF
+
+            IF loc_nQtd = 0
+                THIS.this_cMensagemErro = "Nenhuma nota fiscal marcada para visualizar."
+                loc_lSucesso = .F.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message
+            loc_lSucesso = .F.
         ENDTRY
         RETURN loc_lSucesso
     ENDPROC

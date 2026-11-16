@@ -180,6 +180,8 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
                         SCATTER MEMVAR
 
                         *-- Montar SQL de movimentos (Atual ou Retroativo)
+                        *   Legado: b.CGrus = c.CGrus (grupo do PRODUTO -> SigCdGrp.Mercs) e filtro
+                        *   opcional b.Cgrus = lcGrupo. a.Grupos eh o grupo de ESTOQUE (conta 11210).
                         IF THIS.this_nNrPeriodo = 1
                             loc_cSQL = "SELECT a.Cpros, 'E' AS Opers, " + ;
                                        "SUM(a.Sqtds) AS Sqtds, SUM(a.sPesos) AS sPesos, " + ;
@@ -189,7 +191,8 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
                                        IIF(EMPTY(m.Emps), "", ;
                                            " AND a.Emps = " + EscaparSQL(m.Emps)) + ;
                                        " AND a.Cpros = b.Cpros" + ;
-                                       " AND a.Grupos = c.CGrus" + ;
+                                       IIF(EMPTY(loc_cGrupo), "", " AND b.Cgrus = " + EscaparSQL(loc_cGrupo)) + ;
+                                       " AND b.CGrus = c.CGrus" + ;
                                        " AND c.Mercs = " + EscaparSQL(loc_cGde) + ;
                                        " GROUP BY a.Cpros, b.cUnis, b.pVens, " + ;
                                        "b.Moevs, b.Cgrus, b.cUniPs"
@@ -203,7 +206,8 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
                                        IIF(EMPTY(m.Emps), "", ;
                                            " AND a.Emps = " + EscaparSQL(m.Emps)) + ;
                                        " AND a.Cpros = b.Cpros" + ;
-                                       " AND a.Grupos = c.CGrus" + ;
+                                       IIF(EMPTY(loc_cGrupo), "", " AND b.Cgrus = " + EscaparSQL(loc_cGrupo)) + ;
+                                       " AND b.CGrus = c.CGrus" + ;
                                        " AND c.Mercs = " + EscaparSQL(loc_cGde) + ;
                                        " GROUP BY a.Cpros, a.Opers, b.cUnis, b.pVens, " + ;
                                        "b.Moevs, b.Cgrus, b.cUniPs"
@@ -446,7 +450,8 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                *-- ReportFormIsolado: FRX legado exige POINT "." + REPORTBEHAVIOR 80 (Erro28/328/361)
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PREVIEW")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -463,7 +468,7 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -480,7 +485,7 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
+                THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "PRINTER")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -530,8 +535,7 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SIGREFXV_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(THIS.this_cArquivoFRX, "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

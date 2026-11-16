@@ -99,6 +99,15 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
 
         loc_lSucesso = .F.
 
+        *-- Erro369: SigRehp1/SigRehp2 leem CrSigCdPam.tipoestos (linha Cor/Tamanho).
+        *-- O legado abre este cursor no Init do form; sem ele o REPORT FORM
+        *-- estoura "Alias 'CRSIGCDPAM' is not found". (LimparCursors nao o fecha.)
+        IF SQLEXEC(gnConnHandle, "SELECT tipoestos FROM SigCdPam", "CrSigCdPam") < 1
+            MsgErro("Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o")
+            THIS.this_cMensagemErro = ""
+            RETURN .F.
+        ENDIF
+
         TRY
             THIS.this_cMensagemErro = ""
             THIS.LimparCursors()
@@ -420,7 +429,13 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
         SELECT CrSigCdPro
         GO TOP
         IF EOF()
-            THIS.this_cMensagemErro = "Produto n" + CHR(227) + "o encontrado: " + ALLTRIM(par_cCdCodigo)
+            *-- Erro369: o legado nao valida aqui - com Codigo vazio/inexistente a
+            *-- query do SigMvHst volta vazia e a visualizacao simplesmente nao abre.
+            *-- "Produto nao encontrado:" (com codigo em branco) era invencao da migracao;
+            *-- avisa como o guard de relatorio vazio do projeto e sai sem MsgErro.
+            MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.this_cMensagemErro = ""
             RETURN .F.
         ENDIF
         loc_cUnidade = "Unid: " + ALLTRIM(CrSigCdPro.cunis)
@@ -847,77 +862,39 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
     ENDPROC
 
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-        TRY
-            IF THIS.PrepararDados()
-                *-- Posicionar cursor de dados correto no inicio
-                IF THIS.this_nOptTipo = 3
-                    IF USED("CsRelatorio")
-                        SELECT CsRelatorio
-                        GO TOP
-                    ENDIF
-                ELSE
-                    IF USED("CrSigMvHst")
-                        SELECT CrSigMvHst
-                        GO TOP
-                    ENDIF
-                ENDIF
-
-                *-- Escolher relatorio: SigRehp1 (sem coluna peso) ou SigRehp2 (com peso)
-                IF USED("CsCabecalho")
-                    SELECT CsCabecalho
-                    GO TOP
-                    IF !EOF()
-                        IF !CsCabecalho.ImpPeso
-                            THIS.ExecutarReportForm("SigRehp1", "PREVIEW", THIS.this_cCursorDados)
-                        ELSE
-                            THIS.ExecutarReportForm("SigRehp2", "PREVIEW", THIS.this_cCursorDados)
-                        ENDIF
-                    ENDIF
-                    USE IN CsCabecalho
-                ENDIF
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
+        RETURN THIS.GerarSaida("PREVIEW")
     ENDPROC
 
     *--------------------------------------------------------------------------
     * Imprimir - Envia relatorio para impressora com dialogo de selecao
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso
+        RETURN THIS.GerarSaida("PRINTER_PROMPT")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GerarSaida - transcreve visualizacao/impressao do legado:
+    *   If Not CsCabecalho.ImpPeso And Not Eof() -> SigRehp1, senao SigRehp2
+    * O REPORT FORM roda com o cursor de DADOS selecionado (CsRelatorio no modo 3,
+    * CrSigMvHst nos modos 1/2), como no legado - CsCabecalho eh lido por alias.
+    * Erro369: antes selecionava CsCabecalho antes do REPORT (o relatorio varreria
+    * o cabecalho) e o guard de vazio olhava CsRelatorio tambem nos modos 1/2,
+    * onde ele nem existe.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE GerarSaida(par_cModo)
+        LOCAL loc_lSucesso, loc_cCursor, loc_cFrx, loc_oErro
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                IF THIS.this_nOptTipo = 3
-                    IF USED("CsRelatorio")
-                        SELECT CsRelatorio
-                        GO TOP
-                    ENDIF
-                ELSE
-                    IF USED("CrSigMvHst")
-                        SELECT CrSigMvHst
-                        GO TOP
-                    ENDIF
-                ENDIF
-
-                IF USED("CsCabecalho")
-                    SELECT CsCabecalho
+                loc_cCursor = IIF(THIS.this_nOptTipo = 3, "CsRelatorio", "CrSigMvHst")
+                IF USED("CsCabecalho") AND USED(loc_cCursor)
+                    GO TOP IN CsCabecalho
+                    loc_cFrx = IIF(CsCabecalho.ImpPeso, "SigRehp2", "SigRehp1")
+                    SELECT (loc_cCursor)
                     GO TOP
-                    IF !EOF()
-                        IF !CsCabecalho.ImpPeso
-                            REPORT FORM (gc_4c_CaminhoReports + "SigRehp1") ;
-                                TO PRINTER PROMPT NOCONSOLE
-                        ELSE
-                            REPORT FORM (gc_4c_CaminhoReports + "SigRehp2") ;
-                                TO PRINTER PROMPT NOCONSOLE
-                        ENDIF
-                    ENDIF
+                    THIS.ExecutarReportForm(loc_cFrx, par_cModo, loc_cCursor)
+                ENDIF
+                IF USED("CsCabecalho")
                     USE IN CsCabecalho
                 ENDIF
                 loc_lSucesso = .T.

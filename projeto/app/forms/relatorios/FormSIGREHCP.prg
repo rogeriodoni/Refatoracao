@@ -317,7 +317,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
         *-- EMPRESA (original: lblEmpresa.Top=123; getCEmps.Top=120 -> 35)
         loc_oPg.AddObject("lbl_4c_LblEmpresa", "Label")
         WITH loc_oPg.lbl_4c_LblEmpresa
-            .Top       = 123
+            .Top       = 38
             .Left      = 199
             .Width     = 50
             .Height    = 15
@@ -389,7 +389,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             .Width         = 80
             .Height        = 23
             .Value         = {}
-            .Format        = "D"
+            .Alignment     = 3       && fweditdata (Framework): Alignment 3, sem Format
             .FontName      = "Tahoma"
             .FontSize      = 8
             .BackColor     = RGB(255, 255, 255)
@@ -421,7 +421,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             .Width         = 80
             .Height        = 23
             .Value         = {}
-            .Format        = "D"
+            .Alignment     = 3       && fweditdata (Framework): Alignment 3, sem Format
             .FontName      = "Tahoma"
             .FontSize      = 8
             .BackColor     = RGB(255, 255, 255)
@@ -514,9 +514,10 @@ DEFINE CLASS FormSIGREHCP AS FormBase
         loc_oPg.AddObject("opt_4c_OptTipImps", "OptionGroup")
         loc_oPg.opt_4c_OptTipImps.ButtonCount = 2
         WITH loc_oPg.opt_4c_OptTipImps
-            .Top         = 196
+            .Top         = 111
             .Left        = 248
-            .Width       = 222
+            .Width       = 212
+            .SpecialEffect = 0
             .Height      = 27
             .BackStyle   = 0
             .BorderStyle = 0
@@ -529,7 +530,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             .Top         = 6
             .Width       = 108
             .Height      = 15
-            .FontName    = "Comic Sans MS"
+            .FontName    = "Tahoma"
             .FontSize    = 8
             .BackStyle   = 0
             .AutoSize    = .F.
@@ -542,7 +543,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             .Top         = 6
             .Width       = 83
             .Height      = 17
-            .FontName    = "Comic Sans MS"
+            .FontName    = "Tahoma"
             .FontSize    = 8
             .BackStyle   = 0
             .AutoSize    = .F.
@@ -752,7 +753,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
                 ENDIF
             ENDIF
             IF loc_lProsseguir
-                loc_cCursor = "cursor_4c_Rehcp"
+                loc_cCursor = "crImpressao"
                 IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
                     MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
                     loc_lProsseguir = .F.

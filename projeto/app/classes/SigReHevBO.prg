@@ -18,6 +18,10 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
     *-- Flag de acesso (fChecaAcesso RESUMIDO)
     this_lAcesso            = .F.
 
+    *-- .T. quando a tela foi aberta COM o envelope por parametro (legado:
+    *   ThisForm.Envelope > 0). Pelo menu fica .F. -> llAcesso = .F. no legado.
+    this_lModoEnvelope      = .F.
+
     *-- Parametro lido de SigCdPam (DopEnvels)
     this_cDopEnvels         = ""
 
@@ -95,9 +99,15 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
             ENDIF
             loc_cDopeE = THIS.this_cDopEnvels
 
-            *-- Acesso completo (equivalente a fChecaAcesso com Envelope > 0)
-            THIS.this_lAcesso = .T.
-            loc_cAcesso = "1"
+            *-- Legado: llAcesso = ThisForm.Envelope > 0 And fChecaAcesso('SigReHev','RESUMIDO',...)
+            *   Envelope > 0 so quando a tela eh chamada com parametro; pelo menu = .F.
+            *   A coluna Acesso tem de ser LOGICA: o FRX usa 'Print When: ! Acesso'
+            *   (o '1 AS Acesso' numerico estourava 'Operator/operand type mismatch').
+            THIS.this_lAcesso = THIS.this_lModoEnvelope
+            IF THIS.this_lAcesso
+                THIS.this_lAcesso = fChecaAcesso("SigReHev", "RESUMIDO")
+            ENDIF
+            loc_cAcesso = IIF(THIS.this_lAcesso, "CAST(1 AS bit)", "CAST(0 AS bit)")
 
             *-- Busca tipos de envelope em SigCdOpe
             IF USED(THIS.this_cCursorOpe)
@@ -179,9 +189,8 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
                     loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(m.ContaOs)
                     IF SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorCli) > 0
                         SELECT (THIS.this_cCursorCli)
-                        IF !EOF()
-                            m.Dopes = ALLTRIM(Rclis)
-                        ENDIF
+                        *-- legado: m.Dopes = CrTmpCli.Rclis (em branco se a conta nao existir)
+                        m.Dopes = IIF(EOF(), "", ALLTRIM(Rclis))
                     ENDIF
 
                     *-- Busca nome do cliente destino (ContaDs -> EmpDnPs)
@@ -191,9 +200,7 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
                     loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(m.ContaDs)
                     IF SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorCli) > 0
                         SELECT (THIS.this_cCursorCli)
-                        IF !EOF()
-                            m.empDnPs = ALLTRIM(Rclis)
-                        ENDIF
+                        m.empDnPs = IIF(EOF(), "", ALLTRIM(Rclis))
                     ENDIF
 
                     *-- Adiciona registro ao cursor de resultado
@@ -280,7 +287,8 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    REPORT FORM (THIS.this_cArquivoRelatorio) PREVIEW NOCONSOLE
+                    *-- caminho completo + ReportFormIsolado (FRX legado: POINT "." + REPORTBEHAVIOR 80)
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio + ".frx", "PREVIEW")
                     loc_lSucesso = .T.
                 ELSE
                     MsgAviso("O Envelope N" + CHR(227) + "o Foi Encontrado!!!", "Aviso")
@@ -302,7 +310,7 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    REPORT FORM (THIS.this_cArquivoRelatorio) TO PRINTER PROMPT NOCONSOLE
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio + ".frx", "PRINTER_PROMPT")
                     loc_lSucesso = .T.
                 ELSE
                     MsgAviso("O Envelope N" + CHR(227) + "o Foi Encontrado!!!", "Aviso")
@@ -324,7 +332,7 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    REPORT FORM (THIS.this_cArquivoRelatorio) TO PRINTER NOCONSOLE
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio + ".frx", "PRINTER")
                     loc_lSucesso = .T.
                 ELSE
                     MsgAviso("O Envelope N" + CHR(227) + "o Foi Encontrado!!!", "Aviso")
@@ -358,8 +366,7 @@ DEFINE CLASS SigReHevBO AS RelatorioBase
                     GO TOP
                     loc_cArquivo = SYS(5) + CURDIR() + "SigReHev_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
+                    THIS.ReportFormIsolado(gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio + ".frx", "ASCII", loc_cArquivo)
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

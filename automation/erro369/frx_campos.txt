@@ -1,0 +1,61 @@
+==== SigRehp1
+8 Cpros + ' - ' + Dpros | pic= | prt=
+8 Datas | pic= | prt=
+8 Numes | pic="@Z 999999" | prt=
+8 Dopes | pic= | prt=
+8 Cunis | pic= | prt=
+8 Qtds | pic="999,999.999" | prt=
+8 Opers | pic= | prt=
+8 SQtds | pic="9999,999.999" | prt=
+8 UnitMeds | pic="999,999.99" | prt=csCabecalho.ImpMedio
+8 UnitMeds * SQtds | pic="9,999,999.99" | prt=csCabecalho.ImpMedio
+8 MoedMeds | pic= | prt=csCabecalho.ImpMedio
+8 Iif( Inlist( CrSigCdPam.tipoestos,2,4), 'Cor : ' + CodCors, '' ) + Iif( CrSigCdPam.tipoestos = 4, ' / ', '' ) + Iif( Inlist( CrSigCdPam.tipoestos,3,4), 'Tamanho : ' + Codtams, '' ) | pic= | prt=
+8 Iif(cscabecalho.opcao#2,Iif( Opers = 'E' , Grupoos, Grupods ),Iif( Opers = 'S' , Grupoos, Grupods )) | pic= | prt=
+8 Iif(cscabecalho.opcao#2,Iif( Opers = 'E', Contaos, Contads ),Iif( Opers = 'S', Contaos, Contads )) | pic= | prt=
+8 Alltrim( Trans( CodBarras, '@Z 99999999' ) ) | pic="@ 99999999" | prt=
+8 Obs | pic= | prt=csCabecalho.Obs
+8 Iif(Opers='E',Qtds, 0 ) | pic="99999,999.99" | prt=
+8 Iif(Opers='S',Qtds, 0 ) | pic="99999,999.99" | prt=
+8 CsCabecalho.Titulo1 | pic= | prt=
+8 TIME() | pic= | prt=
+8 DATE() | pic= | prt=
+8 CsCabecalho.Periodo | pic= | prt=
+8 TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999') | pic= | prt=
+8 gcCabRel | pic= | prt=
+8 gosistema.nomesistema | pic= | prt=
+8 this.name | pic= | prt=
+8 [Página] | pic= | prt=
+8 CsCabecalho.Titulo2 | pic= | prt=
+==== SigRehp2
+8 Cpros + ' - ' + Dpros | pic= | prt=
+8 Datas | pic= | prt=
+8 Numes | pic="@Z 999999" | prt=
+8 Dopes | pic= | prt=
+8 'Unidade:'+Cunis | pic= | prt=
+8 Qtds | pic="999,999.999" | prt=
+8 Opers | pic= | prt=
+8 SQtds | pic="9999,999.999" | prt=
+8 UnitMeds | pic="999,999.99" | prt=csCabecalho.ImpMedio
+8 UnitMeds * SQtds | pic="9,999,999.99" | prt=csCabecalho.ImpMedio
+8 MoedMeds | pic= | prt=csCabecalho.ImpMedio
+8 Iif( Inlist( CrSigCdPam.tipoestos,2,4), 'Cor : ' + CodCors, '' ) + Iif( CrSigCdPam.tipoestos = 4, ' / ', '' ) + Iif( Inlist( CrSigCdPam.tipoestos,3,4), 'Tamanho : ' + Codtams, '' ) | pic= | prt=
+8 Iif(cscabecalho.opcao#2,Iif( Opers = 'E' , Grupoos, Grupods ),Iif( Opers = 'S' , Grupoos, Grupods )) | pic= | prt=
+8 Iif(cscabecalho.opcao#2,Iif( Opers = 'E', Contaos, Contads ),Iif( Opers = 'S', Contaos, Contads )) | pic= | prt=
+8 Alltrim( Trans( CodBarras, '@Z 99999999' ) ) | pic="@ 99999999" | prt=
+8 Obs | pic= | prt=csCabecalho.Obs
+8 Iif(Opers='E',Qtds, 0 ) | pic="99999,999.99" | prt=
+8 Iif(Opers='S',Qtds, 0 ) | pic="99999,999.99" | prt=
+8 PESOS | pic="@Z 999,999.999" | prt=
+8 SPESOS | pic="@Z 9999,999.999" | prt=
+8 'Unidade de Peso:'+Cunips | pic= | prt=
+8 CsCabecalho.Titulo1 | pic= | prt=
+8 TIME() | pic= | prt=
+8 DATE() | pic= | prt=
+8 CsCabecalho.Periodo | pic= | prt=
+8 TRANSF(_PAGENO,'@L 999')  + " de " + TRANSF(_PAGETOTAL,'@L 999') | pic= | prt=
+8 gcCabRel | pic= | prt=
+8 gosistema.nomesistema | pic= | prt=
+8 this.name | pic= | prt=
+8 [Página] | pic= | prt=
+8 CsCabecalho.Titulo2 | pic= | prt=

@@ -119,6 +119,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
 
                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+                THIS.AjustarTituloCabecalho()
 
                 THIS.Visible = .T.
                 loc_lSucesso = .T.
@@ -182,6 +183,36 @@ DEFINE CLASS FormSIGREFXV AS FormBase
                 .BackStyle = 0
                 .Visible   = .T.
             ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarTituloCabecalho - Limita o titulo ao espaco ANTES dos botoes
+    *   Com Width = THIS.Width (761) o titulo longo passava por baixo do
+    *   cmg_4c_Botoes (Left = 483) e saia cortado. O lblTitulo do frmrelatorio
+    *   legado tem WordWrap = .T. e altura de 2 linhas: aqui o rotulo termina
+    *   5px antes dos botoes e, se o texto nao couber em 1 linha, quebra em 2
+    *   centralizadas na faixa de 80px. Titulo curto fica como estava.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AjustarTituloCabecalho()
+        LOCAL loc_nLargura, loc_nTexto, loc_nAltLinha, loc_nLinhas, loc_nTop
+        loc_nLargura  = THIS.cmg_4c_Botoes.Left - THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Left - 5
+        loc_nTexto    = TXTWIDTH(THIS.Caption, "Tahoma", 14, "B") * FONTMETRIC(6, "Tahoma", 14, "B")
+        loc_nAltLinha = FONTMETRIC(1, "Tahoma", 14, "B")
+        loc_nLinhas   = IIF(loc_nTexto > loc_nLargura, 2, 1)
+        loc_nTop      = IIF(loc_nLinhas = 1, 20, INT((80 - loc_nLinhas * loc_nAltLinha) / 2))
+
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .WordWrap = .T.
+            .Width    = loc_nLargura
+            .Height   = loc_nLinhas * loc_nAltLinha + 4
+            .Top      = loc_nTop
+        ENDWITH
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .WordWrap = .T.
+            .Width    = loc_nLargura
+            .Height   = loc_nLinhas * loc_nAltLinha + 4
+            .Top      = loc_nTop + 2
         ENDWITH
     ENDPROC
 
@@ -388,35 +419,33 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width       = 143
             .Height      = 25
             .ButtonCount = 2
-            .BackStyle   = 0
-            .BorderStyle = 0
-            .Value       = 1
-            .Themes      = .F.
-            .Visible     = .T.
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 0
+            .Value         = 1
+            .Visible       = .T.
+            *-- Botoes transcritos do SCX (Option1/Option2): transparentes,
+            *-- Top=4, Left=1/66, AutoSize
             WITH .Buttons(1)
-                .Caption   = "Atual"
-                .FontName        = "Comic Sans MS"
-                .FontSize        = 8
-                .Top       = 0
-                .Left      = 0
-                .Width     = 60
-                .Height    = 25
+                .Caption   = "\<Atual"
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Top       = 4
+                .Left      = 1
+                .AutoSize  = .T.
                 .ForeColor = RGB(90, 90, 90)
-                .BackColor = RGB(255, 255, 255)
-                .Themes    = .F.
                 .Visible   = .T.
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "Retroativa"
-                .Top       = 0
-                .Left      = 63
-                .Width     = 80
-                .Height    = 25
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
+                .BackStyle = 0
+                .Top       = 4
+                .Left      = 66
+                .AutoSize  = .T.
                 .ForeColor = RGB(90, 90, 90)
-                .BackColor = RGB(255, 255, 255)
-                .Themes    = .F.
                 .Visible   = .T.
             ENDWITH
         ENDWITH
@@ -445,9 +474,10 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 79
             .Height   = 25
             .Value    = {}
-            .FontName = "Tahoma"
-            .FontSize = 8
+            .FontName = "Courier New"
+            .FontSize = 9
             .Visible  = .F.
+            .MaxLength = 10
         ENDWITH
 
         *-- Label "Moeda :"
@@ -477,6 +507,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .MaxLength = 3
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c__cd_moeda, "KeyPress", THIS, "TeclaCdMoeda")
 
@@ -492,6 +523,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .MaxLength = 15
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c__ds_moeda, "KeyPress", THIS, "TeclaDsMoeda")
 
@@ -523,6 +555,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .MaxLength = 20
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c_FichaT, "KeyPress", THIS, "TeclaFichaT")
 
@@ -550,9 +583,10 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Height   = 25
             .Value    = ""
             .Format = "K!"
-            .FontName = "Tahoma"
-            .FontSize = 8
+            .FontName = "Courier New"
+            .FontSize = 9
             .Visible  = .T.
+            .MaxLength = 3
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c_GGrus, "KeyPress", THIS, "TeclaGGrus")
 
@@ -565,9 +599,10 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Height   = 25
             .Value    = ""
             .Format = "K!"
-            .FontName = "Tahoma"
-            .FontSize = 8
+            .FontName = "Courier New"
+            .FontSize = 9
             .Visible  = .T.
+            .MaxLength = 40
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c_DGRus, "KeyPress", THIS, "TeclaDGRus")
 
@@ -595,9 +630,10 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Height   = 25
             .Value    = ""
             .Format = "K!"
-            .FontName = "Tahoma"
-            .FontSize = 8
+            .FontName = "Courier New"
+            .FontSize = 9
             .Visible  = .T.
+            .MaxLength = 3
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c__cd_grupo, "KeyPress", THIS, "TeclaCdGrupo")
 
@@ -610,9 +646,10 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Height   = 25
             .Value    = ""
             .Format = "K!"
-            .FontName = "Tahoma"
-            .FontSize = 8
+            .FontName = "Courier New"
+            .FontSize = 9
             .Visible  = .T.
+            .MaxLength = 20
         ENDWITH
         BINDEVENT(loc_oPg.txt_4c__ds_grupo, "KeyPress", THIS, "TeclaDsGrupo")
 
@@ -626,6 +663,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Caption   = "Estoques"
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .T.
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
@@ -651,29 +689,51 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Height            = 224
             .ColumnCount       = 2
             .RecordSource      = "CsEstoque"
-            .RecordMark        = .F.
+            *-- grdEstoque legado: so DeleteMark = .F. (RecordMark fica no default)
             .DeleteMark        = .F.
             .ScrollBars        = 2
+            .Panel             = 1
+            .RowHeight         = 17
             .FontName          = "Tahoma"
             .FontSize          = 8
-            .GridLineColor     = RGB(238, 238, 238)
-            .HighlightBackColor = RGB(255, 255, 255)
-            .HighlightForeColor = RGB(15, 41, 104)
-            .HighlightStyle    = 2
+            .GridLineColor     = RGB(128, 128, 128)
             .Visible           = .T.
 
+            *-- HeaderHeight eh propriedade do GRID, nao da Column (regra #33):
+            *-- dentro do WITH .Column1 derrubava o Init ("Property HEADERHEIGHT
+            *-- is not found"). O legado nao altera HeaderHeight -> default.
             WITH .Column1
                 .ControlSource    = "CsEstoque.Emps"
-                .Width            = 80
-                .HeaderHeight       = 0
+                .FontSize         = 8
+                .Movable          = .F.
+                .Resizable        = .F.
                 .Header1.Caption  = "Empresa"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Text1.BorderStyle = 0
+                .Text1.Margin     = 0
+                .Text1.ForeColor  = RGB(0, 0, 0)
+                .Text1.BackColor  = RGB(255, 255, 255)
             ENDWITH
 
             WITH .Column2
                 .ControlSource    = "CsEstoque.Grupos"
-                .Width            = 100
+                .FontSize         = 8
+                .Movable          = .F.
+                .Resizable        = .F.
+                .Format           = "!K"
                 .Header1.Caption  = "Grupo Estoque"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Text1.BorderStyle = 0
+                .Text1.Margin     = 0
+                .Text1.ForeColor  = RGB(0, 0, 0)
+                .Text1.BackColor  = RGB(255, 255, 255)
             ENDWITH
+
+            *-- Larguras por ULTIMO (RecordSource/ControlSource resetam para 90)
+            .Column1.Width = 50
+            .Column2.Width = 100
         ENDWITH
         BINDEVENT(par_oPg.grd_4c_Dados, "AfterRowColChange", THIS, ;
             "GrdEstoquesAfterRowColChange")
@@ -1375,15 +1435,15 @@ DEFINE CLASS FormSIGREFXV AS FormBase
 
         IF !loc_oForm.this_lAchouRegistro
             loc_oForm.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
-            loc_oForm.mAddColuna("Demps", "", "Nome")
+            loc_oForm.mAddColuna("Razas", "", "Nome")
             loc_oForm.Show()
         ENDIF
 
         IF loc_oForm.this_lSelecionou AND USED("cursor_4c_Emp")
             SELECT cursor_4c_Emp
             IF !EOF() AND USED("CsEstoque")
-                SELECT CsEstoque
-                REPLACE Emps WITH ALLTRIM(Cemps)
+                *-- valor do PICKER (com CsEstoque selecionado, Cemps nao existe)
+                REPLACE Emps WITH ALLTRIM(cursor_4c_Emp.Cemps) IN CsEstoque
                 loc_oGrd.Refresh()
             ENDIF
         ENDIF
@@ -1395,9 +1455,9 @@ DEFINE CLASS FormSIGREFXV AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ValidarGrupoEstoqueGrid - Lookup de grupo de estoque para coluna Grupos
+    * ValidarGrupoEstoqueGrid - Lookup de grupo de estoque (grupo de CONTA) para coluna Grupos
     *   Replica fAcessoContab(Usuar, 'C', This.Value, This, '') do legado.
-    *   Valida CGrus em SigCdGrp; se nao encontrado, abre FormBuscaAuxiliar.
+    *   fAcessoContab valida em SigCdGcr (Codigos) - SigMvEst.Grupos eh grupo de conta (11210), NAO SigCdGrp.
     *   Ao selecionar, atualiza o registro corrente do CsEstoque.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ValidarGrupoEstoqueGrid()
@@ -1409,7 +1469,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             RETURN
         ENDIF
 
-        loc_cSQL = "SELECT CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + EscaparSQL(loc_cValor)
+        loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr WHERE Codigos = " + EscaparSQL(loc_cValor)
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrpVal")
 
         IF loc_nResult > 0
@@ -1417,21 +1477,20 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             IF EOF()
                 *-- Codigo nao encontrado - abrir busca visual
                 loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGrp", "cursor_4c_GrpSel", "CGrus", loc_cValor, ;
+                    "SigCdGcr", "cursor_4c_GrpSel", "Codigos", loc_cValor, ;
                     "Sele" + CHR(231) + CHR(227) + "o de Grupo de Estoque")
 
                 IF !ISNULL(loc_oForm)
                     IF !loc_oForm.this_lAchouRegistro
-                        loc_oForm.mAddColuna("CGrus", "XXXXXX", "C" + CHR(243) + "digo")
-                        loc_oForm.mAddColuna("DGrus", "",       "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oForm.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oForm.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                         loc_oForm.Show()
                     ENDIF
 
                     IF loc_oForm.this_lSelecionou AND USED("cursor_4c_GrpSel")
                         SELECT cursor_4c_GrpSel
                         IF !EOF() AND USED("CsEstoque")
-                            SELECT CsEstoque
-                            REPLACE Grupos WITH ALLTRIM(CGrus)
+                            REPLACE Grupos WITH ALLTRIM(cursor_4c_GrpSel.Codigos) IN CsEstoque
                             loc_oGrd.Refresh()
                         ENDIF
                     ENDIF

@@ -63,6 +63,7 @@ DEFINE CLASS FormSigReHev AS FormBase
         IF loc_lSucesso AND TYPE("pEnvelope") = "N" AND pEnvelope > 0
             THIS.Envelope = pEnvelope
             THIS.this_oRelatorio.this_nEnvelope = pEnvelope
+            THIS.this_oRelatorio.this_lModoEnvelope = .T.   && legado: ThisForm.Envelope > 0
             THIS.pgf_4c_Paginas.Page1.txt_4c_Op.Value = pEnvelope
             IF !THIS.this_oRelatorio.Visualizar()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())

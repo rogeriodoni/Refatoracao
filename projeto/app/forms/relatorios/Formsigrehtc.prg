@@ -828,8 +828,11 @@ DEFINE CLASS Formsigrehtc AS FormBase
     ENDPROC
 
     *==========================================================================
-    * VALIDARCDGRESTOQUE - Valida codigo do grupo contra SigCdGrp
-    * cgrus=code(3), dgrus=desc(20)
+    * VALIDARCDGRESTOQUE - Valida codigo do GRUPO CONTABIL contra SigCdGcr
+    * Erro372: legado = fAcessoContab(Usuar,'C',...) -> SigCdGcr.Codigos/Descrs
+    * (o grupo do cheque eh SigCqChi.Grupos, grupo contabil). A migracao
+    * consultava SigCdGrp (grupo de ESTOQUE). Nao achando, abre o browse
+    * como o legado (sem aviso e sem apagar o digitado - regra #50).
     *==========================================================================
     PROCEDURE ValidarCdGrEstoque()
         LOCAL loc_cCodigo, loc_cSQL, loc_nResult
@@ -841,7 +844,8 @@ DEFINE CLASS Formsigrehtc AS FormBase
             RETURN
         ENDIF
 
-        loc_cSQL = "SELECT cgrus, dgrus FROM SigCdGrp"
+        loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr WHERE Codigos = " + ;
+            EscaparSQL(loc_cCodigo)
 
         IF USED("cursor_4c_GrpVal")
             USE IN cursor_4c_GrpVal
@@ -851,9 +855,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
 
         IF loc_nResult > 0
             SELECT cursor_4c_GrpVal
-            LOCATE FOR ALLTRIM(cgrus) = ALLTRIM(loc_cCodigo)
-            IF FOUND()
-                THIS.txt_4c_DsGrEstoque.Value   = ALLTRIM(dgrus)
+            GO TOP
+            IF !EOF()
+                THIS.txt_4c_DsGrEstoque.Value   = ALLTRIM(cursor_4c_GrpVal.Descrs)
                 THIS.txt_4c_DsGrEstoque.Enabled = .F.
                 USE IN cursor_4c_GrpVal
                 RETURN
@@ -861,10 +865,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
             USE IN cursor_4c_GrpVal
         ENDIF
 
-        MsgAviso("Grupo de estoque n" + CHR(227) + "o encontrado: " + loc_cCodigo, "Aviso")
         THIS.txt_4c_DsGrEstoque.Value   = ""
         THIS.txt_4c_DsGrEstoque.Enabled = .T.
-        THIS.txt_4c_CdGrEstoque.SetFocus()
+        THIS.AbrirLookupGrEstoque()
     ENDPROC
 
     *==========================================================================
@@ -884,7 +887,10 @@ DEFINE CLASS Formsigrehtc AS FormBase
             RETURN
         ENDIF
 
-        loc_cSQL = "SELECT cgrus, dgrus FROM SigCdGrp"
+        *-- Erro372: fAcessoContab(Usuar,'D',...) -> SigCdGcr por descricao
+        loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr" + ;
+            " WHERE UPPER(RTRIM(Descrs)) LIKE " + EscaparSQL(UPPER(loc_cDesc) + "%") + ;
+            " ORDER BY Descrs"
 
         IF USED("cursor_4c_GrpDsVal")
             USE IN cursor_4c_GrpDsVal
@@ -894,10 +900,10 @@ DEFINE CLASS Formsigrehtc AS FormBase
 
         IF loc_nResult > 0
             SELECT cursor_4c_GrpDsVal
-            LOCATE FOR UPPER(ALLTRIM(dgrus)) = UPPER(loc_cDesc)
-            IF FOUND()
-                THIS.txt_4c_CdGrEstoque.Value   = ALLTRIM(cgrus)
-                THIS.txt_4c_DsGrEstoque.Value   = ALLTRIM(dgrus)
+            GO TOP
+            IF RECCOUNT("cursor_4c_GrpDsVal") = 1
+                THIS.txt_4c_CdGrEstoque.Value   = ALLTRIM(cursor_4c_GrpDsVal.Codigos)
+                THIS.txt_4c_DsGrEstoque.Value   = ALLTRIM(cursor_4c_GrpDsVal.Descrs)
                 THIS.txt_4c_DsGrEstoque.Enabled = .F.
                 USE IN cursor_4c_GrpDsVal
                 RETURN
@@ -905,22 +911,21 @@ DEFINE CLASS Formsigrehtc AS FormBase
             USE IN cursor_4c_GrpDsVal
         ENDIF
 
-        MsgAviso("Grupo de estoque n" + CHR(227) + "o encontrado.", "Aviso")
-        THIS.txt_4c_DsGrEstoque.Enabled = .T.
-        THIS.txt_4c_DsGrEstoque.SetFocus()
+        THIS.AbrirLookupGrEstoque()
     ENDPROC
 
     *==========================================================================
     * TECLACDGRESTOQUE - KeyPress: ENTER(13)/TAB(9) valida codigo do grupo
     *==========================================================================
     PROCEDURE TeclaCdGrEstoque(par_nKeyCode, par_nShift)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        *-- Erro372: o 1o IF incluia 13/9 e abria o picker a cada Enter/Tab,
+        *-- mesmo com codigo valido; o ELSE (validar) era inalcancavel.
+        DO CASE
+        CASE par_nKeyCode = 115
             THIS.AbrirLookupGrEstoque()
-        ELSE
-            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+        CASE par_nKeyCode = 13 OR par_nKeyCode = 9
             THIS.ValidarCdGrEstoque()
-            ENDIF
-        ENDIF
+        ENDCASE
     ENDPROC
 
     *==========================================================================
@@ -928,13 +933,12 @@ DEFINE CLASS Formsigrehtc AS FormBase
     *                              F4(115) abre lookup direto
     *==========================================================================
     PROCEDURE TeclaDsGrEstoque(par_nKeyCode, par_nShift)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        DO CASE
+        CASE par_nKeyCode = 115
             THIS.AbrirLookupGrEstoque()
-        ELSE
-            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+        CASE par_nKeyCode = 13 OR par_nKeyCode = 9
             THIS.ValidarDsGrEstoque()
-            ENDIF
-        ENDIF
+        ENDCASE
     ENDPROC
 
     *==========================================================================
@@ -944,21 +948,27 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE AbrirLookupGrEstoque()
         LOCAL loc_oBusca, loc_cCodigo, loc_cDescricao
 
+        *-- Erro372: grupo CONTABIL (SigCdGcr), nao grupo de estoque (SigCdGrp)
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdGrp", ;
+            "SigCdGcr", ;
             "cursor_4c_BuscaGrp", ;
-            "cgrus", ;
+            "Codigos", ;
             ALLTRIM(THIS.txt_4c_CdGrEstoque.Value), ;
-            "Buscar Grupo de Estoque")
+            "Buscar Grupo")
+        IF VARTYPE(loc_oBusca) != "O"
+            RETURN
+        ENDIF
 
-        loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
-        loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
-        loc_oBusca.Show()
+        IF !loc_oBusca.this_lAchouRegistro
+            loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oBusca.Show()
+        ENDIF
 
         IF loc_oBusca.this_lSelecionou
             IF USED("cursor_4c_BuscaGrp")
-                loc_cCodigo    = ALLTRIM(cursor_4c_BuscaGrp.cgrus)
-                loc_cDescricao = ALLTRIM(cursor_4c_BuscaGrp.dgrus)
+                loc_cCodigo    = ALLTRIM(cursor_4c_BuscaGrp.Codigos)
+                loc_cDescricao = ALLTRIM(cursor_4c_BuscaGrp.Descrs)
                 THIS.txt_4c_CdGrEstoque.Value   = loc_cCodigo
                 THIS.txt_4c_DsGrEstoque.Value   = loc_cDescricao
                 THIS.txt_4c_DsGrEstoque.Enabled = .F.
@@ -976,13 +986,12 @@ DEFINE CLASS Formsigrehtc AS FormBase
     *                           F4(115) abre lookup direto
     *==========================================================================
     PROCEDURE TeclaCdContas(par_nKeyCode, par_nShift)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        DO CASE
+        CASE par_nKeyCode = 115
             THIS.AbrirLookupContas()
-        ELSE
-            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+        CASE par_nKeyCode = 13 OR par_nKeyCode = 9
             THIS.ValidarCdContas()
-            ENDIF
-        ENDIF
+        ENDCASE
     ENDPROC
 
     *==========================================================================
@@ -991,13 +1000,12 @@ DEFINE CLASS Formsigrehtc AS FormBase
     * Somente ativo quando CdContas estiver vazio (comportamento When original)
     *==========================================================================
     PROCEDURE TeclaDsContas(par_nKeyCode, par_nShift)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        DO CASE
+        CASE par_nKeyCode = 115
             THIS.AbrirLookupContas()
-        ELSE
-            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+        CASE par_nKeyCode = 13 OR par_nKeyCode = 9
             THIS.ValidarDsContas()
-            ENDIF
-        ENDIF
+        ENDCASE
     ENDPROC
 
     *==========================================================================
@@ -1080,10 +1088,15 @@ DEFINE CLASS Formsigrehtc AS FormBase
             "Iclis", ;
             ALLTRIM(THIS.txt_4c_CdContas.Value), ;
             "Buscar Conta Corrente")
+        IF VARTYPE(loc_oBusca) != "O"
+            RETURN
+        ENDIF
 
-        loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
-        loc_oBusca.mAddColuna("Rclis", "", "Nome / Raz" + CHR(227) + "o Social")
-        loc_oBusca.Show()
+        IF !loc_oBusca.this_lAchouRegistro
+            loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("Rclis", "", "Nome / Raz" + CHR(227) + "o Social")
+            loc_oBusca.Show()
+        ENDIF
 
         IF loc_oBusca.this_lSelecionou
             IF USED("cursor_4c_BuscaContas")

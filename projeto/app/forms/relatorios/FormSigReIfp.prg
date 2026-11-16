@@ -386,7 +386,7 @@ DEFINE CLASS FormSigReIfp AS FormBase
             .Top       = 104
             .Left      = 284
             .Width     = 8
-            .Caption   = "a"
+            .Caption   = CHR(224)    && Erro375: legado lbl_periodo_a.Caption = "à"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)

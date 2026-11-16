@@ -104,7 +104,10 @@ DEFINE CLASS SIGREIDCBO AS RelatorioBase
         TRY
             *-- Razao social da empresa
             loc_cEmpresas = ""
-            loc_cSQL = "SELECT TOP 1 Razas FROM SigCdEmp"
+            *-- Erro373: legado = CursorQuery('SigCdEmp',...,'cEmps',_Empr) - a
+            *-- empresa LOGADA; "TOP 1" sem WHERE trazia qualquer empresa.
+            loc_cSQL = "SELECT TOP 1 Razas FROM SigCdEmp WHERE cEmps = " + ;
+                EscaparSQL(go_4c_Sistema.cCodEmpresa)
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpIdc")
             IF loc_nResult > 0
                 SELECT cursor_4c_EmpIdc
@@ -166,6 +169,9 @@ DEFINE CLASS SIGREIDCBO AS RelatorioBase
                 gFotos    G(4) NULL, ;
                 cArqJpgs  C(254), ;
                 lBrancos  L(1))
+            *-- Erro373: legado indexa cIde por cContas e roda o REPORT nessa
+            *-- ordem (linhas em branco, com cContas vazio, ficam no inicio)
+            INDEX ON cContas TAG cContas
 
             *-- Calcular offset de linhas em branco: ((Linha-1)+(Coluna-1))*5
             loc_nNregi = ((loc_nLinha - 1) + (loc_nColuna - 1)) * 5
@@ -188,17 +194,26 @@ DEFINE CLASS SIGREIDCBO AS RelatorioBase
                 loc_cArqJpg = ""
 
                 *-- Logo da empresa: copiar memo para JPG temporario
+                *-- Erro373: legado testa IsEmpty(Logos) - NULL conta como vazio
+                *-- (EMPTY(.NULL.) = .F.; regra #27). ISNULL em IF separado: VFP
+                *-- nao faz short-circuit e COPY MEMO de memo NULL estoura
+                *-- "Field must be a Memo field".
                 IF THIS.this_lImprimirLogo
                     SELECT cursor_4c_Pam
-                    IF !EOF() AND !ISNULL(cursor_4c_Pam.Logos) AND ;
-                       !EMPTY(cursor_4c_Pam.Logos)
-                        loc_cArqJpg = loc_cDirTemp + SYS(3) + ".Jpg"
-                        COPY MEMO cursor_4c_Pam.Logos TO (loc_cArqJpg)
+                    IF !EOF() AND !ISNULL(cursor_4c_Pam.Logos)
+                        IF !EMPTY(cursor_4c_Pam.Logos)
+                            loc_cArqJpg = loc_cDirTemp + SYS(3) + ".Jpg"
+                            COPY MEMO cursor_4c_Pam.Logos TO (loc_cArqJpg)
+                        ENDIF
                     ENDIF
                     SELECT cursor_4c_ContasIdc
                 ENDIF
 
                 *-- Inserir linha de dados no cursor cIde
+                *-- Erro373: cArqJpgs eh a FOTO da conta (FRX: imagem
+                *-- NVL(cIde.cArqJpgs,"") e gFotos so quando cArqJpgs vazio).
+                *-- O legado grava o logo SO em gLogos; gravar o logo tambem em
+                *-- cArqJpgs punha o logotipo no lugar da foto.
                 INSERT INTO cIde ;
                     (cEmpresas, cTitulo1s, cGrupos, cContas, cDcontas, ;
                      gLogos, cArqJpgs, lBrancos) ;
@@ -209,24 +224,26 @@ DEFINE CLASS SIGREIDCBO AS RelatorioBase
                         ALLTRIM(cursor_4c_ContasIdc.Iclis), ;
                         ALLTRIM(cursor_4c_ContasIdc.Rclis), ;
                         loc_cArqJpg, ;
-                        loc_cArqJpg, ;
+                        "", ;
                         .F.)
 
                 *-- Foto do cliente: Figuras (blob) tem prioridade sobre FigJpgs (memo)
                 IF !ISNULL(cursor_4c_ContasIdc.Figuras)
                     SELECT cIde
-                    GO BOTTOM
                     REPLACE gFotos WITH cursor_4c_ContasIdc.Figuras
                     SELECT cursor_4c_ContasIdc
                 ELSE
-                    IF !EMPTY(cursor_4c_ContasIdc.FigJpgs)
-                        LOCAL loc_cArqFoto
-                        loc_cArqFoto = loc_cDirTemp + SYS(3) + ".Jpg"
-                        COPY MEMO cursor_4c_ContasIdc.FigJpgs TO (loc_cArqFoto)
-                        SELECT cIde
-                        GO BOTTOM
-                        REPLACE cArqJpgs WITH loc_cArqFoto
-                        SELECT cursor_4c_ContasIdc
+                    *-- Erro373: FigJpgs NULL (todas as contas hoje) passava pelo
+                    *-- !EMPTY e o COPY MEMO estourava ao Visualizar.
+                    IF !ISNULL(cursor_4c_ContasIdc.FigJpgs)
+                        IF !EMPTY(cursor_4c_ContasIdc.FigJpgs)
+                            LOCAL loc_cArqFoto
+                            loc_cArqFoto = loc_cDirTemp + SYS(3) + ".Jpg"
+                            COPY MEMO cursor_4c_ContasIdc.FigJpgs TO (loc_cArqFoto)
+                            SELECT cIde
+                            REPLACE cArqJpgs WITH loc_cArqFoto
+                            SELECT cursor_4c_ContasIdc
+                        ENDIF
                     ENDIF
                 ENDIF
 

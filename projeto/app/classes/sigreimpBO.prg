@@ -530,99 +530,33 @@ DEFINE CLASS sigreimpBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Visualizar - Gera relatorio em preview na tela
-    *--------------------------------------------------------------------------
-    FUNCTION Visualizar()
-        LOCAL loc_lSucesso, loc_cRelatorio
-        loc_lSucesso = .F.
-
-        TRY
-            IF THIS.PrepararDados()
-                IF THIS.this_nTipos = 1
-                    loc_cRelatorio = gc_4c_CaminhoReports + "SigReIp1.frx"
-                ELSE
-                ENDIF
-                THIS.ExecutarReportForm("SigReIp2", "PREVIEW", THIS.this_cCursorDados)
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * Imprimir - Envia relatorio para impressora com dialogo de selecao
-    *--------------------------------------------------------------------------
-    FUNCTION Imprimir()
-        LOCAL loc_lSucesso, loc_cRelatorio
-        loc_lSucesso = .F.
-
-        TRY
-            IF THIS.PrepararDados()
-                IF THIS.this_nTipos = 1
-                    loc_cRelatorio = gc_4c_CaminhoReports + "SigReIp1.frx"
-                ELSE
-                ENDIF
-                THIS.ExecutarReportForm("SigReIp2", "PRINTER_PROMPT", THIS.this_cCursorDados)
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-
-    *--------------------------------------------------------------------------
-    * Visualizar - Exibe relatorio em preview na tela (Pattern #167 auto)
+    * Visualizar / Imprimir - legado: optTipos = 1 (Detalhado) -> SigReIp1,
+    * senao (Resumido) -> SigReIp2.
+    * Erro378: havia DUAS definicoes de cada (FUNCTION + PROCEDURE). A primeira
+    * escolhia SigReIp1 mas chamava sempre SigReIp2; a segunda (a que valia)
+    * usava this_cArquivoRelatorio, que este BO nunca preenche. Unificadas aqui.
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    SELECT (THIS.this_cCursorDados)
-                    GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        PREVIEW NOCONSOLE
-                    loc_lSucesso = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Visualizar")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-        RETURN loc_lSucesso
+        RETURN THIS.GerarSaida("PREVIEW")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Imprimir - Imprime relatorio com dialogo de impressora (Pattern #167 auto)
-    *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
+        RETURN THIS.GerarSaida("PRINTER_PROMPT")
+    ENDPROC
+
+    PROTECTED PROCEDURE GerarSaida(par_cModo)
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
-                    SELECT (THIS.this_cCursorDados)
-                    GO TOP
-                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO PRINTER PROMPT NOCONSOLE
-                    loc_lSucesso = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                ENDIF
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+                loc_lSucesso = THIS.ExecutarReportForm( ;
+                    IIF(THIS.this_nTipos = 1, "SigReIp1", "SigReIp2"), ;
+                    par_cModo, THIS.this_cCursorDados)
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Imprimir")
+            MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
         RETURN loc_lSucesso
