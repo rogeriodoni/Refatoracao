@@ -1,0 +1,13 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I also checked the other VISUAL-pass rules against the actual code (no changes needed there either):
+
+- **Alinhamento**: only one button (`cmd_4c_Fwbtng1`) ÔÇö no group to misalign.
+- **Titulo-nao-propagado**: `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` already use `.Caption = THIS.Caption` (lines 360, 381) ÔÇö already propagated.
+- **Checkbox-tipo**: no checkboxes in this form.
+- **FontName-errado**: `cmd_4c_Fwbtng1` does use `"Comic Sans MS"` (line 621), but the comment there documents this as the project's canonical framework-button font (per `framework_frmcadastro_layout.md`), not a migration slip ÔÇö and it wasn't flagged in the problem list anyway.
+
+No changes made to `FormSIGOPRES.prg` or `SIGOPRESBO.prg` ÔÇö both flagged issues verified as detector false positives.

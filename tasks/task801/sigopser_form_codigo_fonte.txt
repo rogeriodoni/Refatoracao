@@ -1,0 +1,1893 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopser.SCX
+* Data/Hora: 17/11/2026 07:06:59
+* Total de registros: 37
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPSER
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: shpBtnGs
+  Parent: SIGOPSER
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGOPSER
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPSER.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPSER.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: fwGrade
+  Parent: SIGOPSER
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.PRODUTO
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.PRODUTO
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.QTD
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.QTD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.VALOR
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.VALOR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.MOEDA
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.MOEDA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.TOTAL
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.TOTAL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.item
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.item
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSER.fwGrade.Descricao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSER.fwGrade.Descricao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPSER
+  Class: label
+  BaseClass: label
+
+Objeto: btnAltImps
+  Parent: SIGOPSER
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnCotacao
+  Parent: SIGOPSER
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnTotItens
+  Parent: SIGOPSER
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Produto
+  Parent: SIGOPSER
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Descrição
+  Parent: SIGOPSER
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntOK
+  Parent: SIGOPSER
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Get_Mercs
+  Parent: SIGOPSER
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntTamanho
+  Parent: SIGOPSER
+  Class: container
+  BaseClass: container
+
+Objeto: getTamDe
+  Parent: SIGOPSER.cntTamanho
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say43
+  Parent: SIGOPSER.cntTamanho
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTamPara
+  Parent: SIGOPSER.cntTamanho
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPSER.cntTamanho
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGOPSER.cntTamanho
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1050
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Serviços"
+  ControlBox = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowState = 2
+  AlwaysOnTop = .T.
+  parentform = thisform.parentformthisform.parentform
+  plgarantia = .F.
+  plvlrzerogarantia = .F.
+  Name = "SIGOPSER"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.shpBtnGs
+------------------------------------------------------------
+  Top = 66
+  Left = 12
+  Height = 15
+  Width = 258
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 36,84,155
+  ZOrderSet = 0
+  Name = "shpBtnGs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1052
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Verdana"
+  FontSize = 8
+  AllowAddNew = .F.
+  AllowHeaderSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  HeaderHeight = 20
+  Height = 408
+  Left = 12
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 5
+  ToolTipText = "Grade de Itens"
+  Top = 172
+  Visible = .T.
+  Width = 986
+  Name = "fwGrade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Width = 120
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.InputMask = "!!!!!!!!!!"
+  Column1.Name = "PRODUTO"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 4
+  Column2.ControlSource = ""
+  Column2.Width = 120
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Visible = .T.
+  Column2.DynamicForeColor = "iif(crTpmMvItn.iconfs=.t.,rgb(0,0,255),rgb(0,0,0))"
+  Column2.InputMask = "99999.999"
+  Column2.Name = "QTD"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Bound = .T.
+  Column3.ColumnOrder = 5
+  Column3.ControlSource = ""
+  Column3.Width = 120
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Visible = .T.
+  Column3.InputMask = "9999,999.99"
+  Column3.Name = "VALOR"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Bound = .T.
+  Column4.ColumnOrder = 6
+  Column4.ControlSource = ""
+  Column4.Width = 33
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Visible = .T.
+  Column4.Name = "MOEDA"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 7
+  Column5.ControlSource = ""
+  Column5.Width = 120
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Visible = .T.
+  Column5.InputMask = "999999,999.99"
+  Column5.Name = "TOTAL"
+  Column6.FontName = "Verdana"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 1
+  Column6.ControlSource = ""
+  Column6.Width = 31
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Visible = .T.
+  Column6.InputMask = "999"
+  Column6.Name = "item"
+  Column7.FontName = "Verdana"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 3
+  Column7.ControlSource = ""
+  Column7.Width = 404
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Visible = .T.
+  Column7.Name = "Descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.PRODUTO.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Serviço"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.PRODUTO.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Format = "K!"
+  InputMask = "!!!!!!!!!!"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.QTD.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.QTD.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "99999.999"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.VALOR.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.VALOR.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "9999,999.99"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.MOEDA.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.MOEDA.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.TOTAL.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.TOTAL.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = 0
+  InputMask = "999,999,999.99"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.item.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.item.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "crTpmMvItn.citens"
+  InputMask = "999"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.Descricao.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do Serviço"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.fwGrade.Descricao.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto"
+  Height = 15
+  Left = 20
+  Top = 128
+  Width = 40
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.btnAltImps
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 87
+  Left = 258
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Caption = "Alterar \<Valores"
+  MousePointer = 15
+  TabIndex = 4
+  ToolTipText = "Alterar Valores de Serviços"
+  Visible = .F.
+  PicturePosition = 1
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btnAltImps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.btnCotacao
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 87
+  Left = 138
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "E\<xcluir Serviços"
+  MousePointer = 15
+  TabIndex = 3
+  ToolTipText = "Excluir Serviços da Grade"
+  Visible = .F.
+  PicturePosition = 1
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btnCotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.btnTotItens
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 87
+  Left = 18
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_calculadora_60.jpg
+  Caption = "\<Total de Serviços"
+  MousePointer = 15
+  TabIndex = 2
+  ToolTipText = "Total dos Serviços"
+  Visible = .F.
+  PicturePosition = 1
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btnTotItens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.Get_Produto
+------------------------------------------------------------
+  FontName = "Courier New"
+  Enabled = .T.
+  Height = 23
+  Left = 20
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = "Código do Produto"
+  Top = 143
+  Width = 112
+  ForeColor = 90,90,90
+  BackColor = 253,250,185
+  DisabledBackColor = 255,255,220
+  BorderColor = 90,90,90
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.Get_Descrição
+------------------------------------------------------------
+  FontName = "Courier New"
+  Enabled = .T.
+  Height = 23
+  Left = 134
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 8
+  ToolTipText = "Descrição do Produto"
+  Top = 143
+  Width = 459
+  ForeColor = 90,90,90
+  BackColor = 253,250,185
+  DisabledBackColor = 255,255,220
+  BorderColor = 90,90,90
+  Name = "Get_Descrição"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntOK
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 968
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 1
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntOK"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Retornar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 4
+  Command1.ToolTipText = "[Esc] Voltar Para a Tela Principal da Operação"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 0,0,0
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.Get_Mercs
+------------------------------------------------------------
+  FontName = "Courier New"
+  Enabled = .T.
+  Height = 23
+  Left = 595
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 8
+  ToolTipText = "Descrição do Produto"
+  Top = 143
+  Width = 50
+  ForeColor = 90,90,90
+  BackColor = 253,250,185
+  DisabledBackColor = 255,255,220
+  BorderColor = 90,90,90
+  Name = "Get_Mercs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho
+------------------------------------------------------------
+  Top = 120
+  Left = 643
+  Width = 160
+  Height = 52
+  BackStyle = 0
+  BorderWidth = 0
+  Name = "cntTamanho"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho.getTamDe
+------------------------------------------------------------
+  Height = 23
+  Left = 35
+  SpecialEffect = 1
+  TabIndex = 46
+  Top = 23
+  Width = 38
+  Name = "getTamDe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho.Say43
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "De:"
+  Left = 13
+  Top = 27
+  TabIndex = 45
+  ForeColor = 90,90,90
+  Name = "Say43"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho.getTamPara
+------------------------------------------------------------
+  Height = 23
+  Left = 116
+  SpecialEffect = 1
+  TabIndex = 46
+  Top = 23
+  Width = 38
+  Name = "getTamPara"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Para:"
+  Left = 84
+  Top = 27
+  TabIndex = 45
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSER.cntTamanho.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Tamanho"
+  Height = 21
+  Left = 8
+  Top = 3
+  Width = 78
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPSER
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE apaite
+------------------------------------------------------------
+PROCEDURE apaite
+Select crTpmMvItn3
+
+Replace DPros     With [], ;
+		Obs       With [], ;
+		CodBarras With 00, ;
+		Utilizas  With 00, ;
+		TamDe	  With [], ;
+		TamPara	  With [], ;
+		iConfs	  With .F., ;
+		Notas     With [] In crTpmMvItn3
+
+With Thisform
+	With .fwGrade
+		.Produto.Text1.Value  = []
+		.Qtd.Text1.Value      = 0
+		.Valor.Text1.Value    = 0
+		.Moeda.Text1.Value    = ''
+		.Total.Text1.Value    = 0
+		.Produto.Text1.Refresh
+		.Qtd.Text1.Refresh
+		.Valor.Text1.Refresh
+		.Moeda.Text1.Refresh
+		.Total.Text1.Refresh
+		.Refresh
+	EndWith
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE calc_valite
+------------------------------------------------------------
+PROCEDURE calc_valite
+ThisForm.ParentForm.Calc_ValIte([crTpmMvItn3])
+
+ThisForm.fwGrade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE minserelinha
+------------------------------------------------------------
+PROCEDURE minserelinha
+Select crTpmMvItn3
+Locate For cpros = Space(14)
+If Eof()
+	Insert Into crTpmMvItn3(Emps, Dopes, Numes, Citens) ;
+				Values (TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, ThisForm.Citem)
+
+	Insert Into csTmpDesc (nControle, nLInhas) Values (RecNo([crTpmMvItn3]), ThisForm.nCItem2)
+
+	ThisForm.nCItem2 = ThisForm.nCItem2 + 1
+EndIf
+
+Select crTpmMvItn3 
+Set Order To CItens
+Set Key To ThisForm.Citem
+
+Select crTpmMvItn3
+Set Relation To Str(Recno([crTpmMvItn3]),8) Into csTmpDesc
+
+Select crTpmMvItn3
+If Not ThisForm.lAutPreco
+	Keyboard [{DNARROW}]	
+EndIf
+
+Keyboard [{DNARROW}]
+
+ThisForm.OldCodBarras = []
+ThisForm.AntCPro = Space(10)
+ThisForm.AntValu = Space(3)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+ =fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDatSes, pGarantia, pVlrZeroGarantia
+
+Private pDat
+pDat = Datetime()
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.plGarantia    = pGarantia
+ThisForm.plVlrZeroGarantia = pVlrZeroGarantia
+
+Local lnLeft
+
+Set Datasession to pnDatSes
+With Thisform
+	.Poform     = PoForm
+	.ParentForm = poForm.parentform
+	.Op_Escolha = Iif(ThisForm.Parentform.EdServicos,'ALTERAR',poForm.op_Escolha)
+	.ValidOk = .f.
+EndWith	
+
+Thisform.WindowType = 1
+
+Create Cursor csTmpDesc ( nLinhas N(4), nControle N(8), cDescTams C(20), cDescCors C(40), cDescEmbs C(20) )
+Index On Str(nControle,8) Tag iControle
+
+=ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)
+
+Thisform.CItem = crTpmMvItn.CItens
+
+If InList(Thisform.Op_Escolha,'INSERIR','ALTERAR')
+	Select * From crTpmMvItn3 Where CItens = crTpmMvItn.CItens And IsEmpty(Qtds) Into Cursor csTemp
+	If _Tally = 0
+		Insert Into crTpmMvItn3 (Emps, Dopes, Numes, CItens  ) ;
+				Values ( crTpmMvItn.Emps, crTpmMvItn.Dopes, crTpmMvItn.Numes, crTpmMvItn.CItens )
+	Endif
+EndIf
+
+poForm.Enabled = .f.
+
+Select crTpmMvItn3
+Set Order To Citens
+Set Key to ThisForm.CItem
+Goto Bott
+
+Thisform.nCItem2 = 1
+
+Select crTpmMvItn3 
+Set Order to CItens
+Set Key to crTpmMvItn.citens
+Scan
+	Insert Into csTmpDesc ( nControle, nLinhas ) Values ;
+		( RecNo('crTpmMvItn3'), Thisform.nCItem2 )
+	Thisform.nCItem2 = Thisform.nCItem2 + 1
+EndScan
+Goto Top
+
+Select crTpmMvItn3
+Set Relation To Str(Recno('crTpmMvItn3'),8) Into csTmpDesc
+
+Select crTpmMvItn3
+If InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' )
+	Goto Bottom
+Else
+	Goto Top
+EndIf
+
+Select crTpmMvItn3 
+Go Top
+Scan
+	If Not Empty(TamDe) and Not Empty(TamPara)
+		replace iconfs With .T. In crTpmMvItn3 
+	EndIf 
+	Select crTpmMvItn3 
+EndScan 
+
+ThisForm.cntTamanho.getTamDe.Value = crTpmMvItn3.TamDe
+ThisForm.cntTamanho.getTamPara.Value = crTpmMvItn3.TamPara
+
+This.LockScreen = .t.
+
+With Thisform.fwgrade
+	.Recordsource             = 'crTpmMvItn3'
+	.Item.ControlSource       = "csTmpDesc.nLinhas"
+	.Produto.Controlsource    = 'crTpmMvItn3.cpros'
+	.Qtd.Controlsource        = 'crTpmMvItn3.qtds'
+	.Valor.Controlsource      = 'crTpmMvItn3.units'
+	lcMask                    = '99999999.' + Repl( '9', iif(CrSigCdOpe.Casas < 2, 2, CrSigCdOpe.Casas) )
+	lcMask                    = Right( lcMask, 11 )
+	.Valor.Inputmask          = lcMask
+	.Valor.Text1.Inputmask    = lcMask
+	.Moeda.Controlsource      = 'crTpmMvItn3.moedas'
+	.Total.Controlsource      = 'crTpmMvItn3.totas'
+	.Descricao.Controlsource  = 'crTpmMvItn3.Dpros'
+	.Refresh
+EndWith
+
+=ThisForm.Parentform.Podatamgr.Cursorquery('SigCdPro','CrTmpPro','Cpros',crTpmMvItn.Cpros,[dpros, Mercs])
+
+ThisForm.Get_Produto.Value = crTpmMvItn.Cpros
+ThisForm.Get_Descrição.Value = CrTmpPro.Dpros
+ThisForm.Get_Mercs.Value = CrTmpPro.Mercs
+
+Thisform.fwgrade.produto.setfocus
+
+Wait Window [Aguarde Processando Códigos de Serviços...] Nowait
+
+If (crSigCdOpe.HabServs = 1)
+	lcQuery = [Select a.Cpros, a.Dpros, a.IdeCPros From SigCdPro a, SigCdGrp b ]+;
+		[Where a.Cgrus = b.Cgrus And b.Servicos = 1 ]+;
+		Iif(crSigCdOpe.ItSituas=1,[ And (Not a.Situas = 2 Or (a.Situas = 2 And (Not a.DtSituas Is Null And a.DtSituas < ?pDat)))], ;
+		Iif(crSigCdOpe.ItSituas=2,[ And a.Situas = 2 ],[]))
+
+	If Thisform.ParentForm.PodataMgr.SqlExecute(lcQuery,'CsSigCdPro') < 1
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csSigCdPro)')
+		Return 0
+	Endif
+Else
+	lcQuery = [Select a.Cpros, a.Dpros, a.IdeCPros From SigCdPro a Where 0=1 ]
+	If Thisform.ParentForm.PodataMgr.SqlExecute(lcQuery,'CsSigCdPro') < 1
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csSigCdPro)')
+		Return 0
+	Endif
+Endif
+Select csSigCdPro
+Index On DPros Tag DPros
+Index On Cpros Tag Cpros
+Index On Cpros + IdeCPros Tag IdeCPros
+Index On DPros + IdeCPros Tag IdeDPros
+Wait Clear
+
+lcMercs = []
+lcMercs = Iif(Not InList(CrTmpPro.Mercs,[JOI],[REL]),[JOI],CrTmpPro.Mercs)
+
+Select csSigCdPro
+Select * From csSigCdPro Where IdeCpros = lcMercs Into Cursor csSigCdPro ReadWrite 
+
+Select csSigCdPro 
+Index On DPros Tag DPros
+Index On Cpros Tag Cpros
+Index On Cpros + IdeCPros Tag IdeCPros
+Index On DPros + IdeCPros Tag IdeDPros
+Go Top 
+*Keyboard '{TAB}' 
+*Keyboard '{TAB}'
+
+This.LockScreen = .F.
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade
+* Classe: fwgrade (Base: grid)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Select crTpmMvItn3
+If crTpmMvItn3.iconfs
+	ThisForm.cntTamanho.Visible = .T.
+Else
+	ThisForm.cntTamanho.Visible = .F.	
+EndIf 
+ThisForm.cntTamanho.getTamDe.Value = crTpmMvItn3.TamDe
+ThisForm.cntTamanho.getTamPara.Value = crTpmMvItn3.TamPara
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.PRODUTO.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Select crTpmMvItn3
+ThisForm.AntCPro = This.Value
+ThisForm.AntValu = crTpmMvItn.Units
+
+Return Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe, lcMoeVs, lnUniVals 
+Local fcusto,fvenda,llProducao, lnAQtds, llTransfEtiq, lcEmpos, _Msg, _Caption, llVerEst2
+
+Select crTpmMvItn3
+
+ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)
+
+precop     = CrSigCdOpe.precops
+cpro       = ''
+dpro       = ''
+peso       = 0
+lcMoeVs    = ''
+
+If (Padr(This.Value,10) # Padr(Thisform.AntCPro,10)) And !IsEmpty( Thisform.AntCPro )
+	Replace Units With 0 In crTpmMvItn3
+	Qtd = 0
+Else
+	Qtd = iif(crTpmMvItn3.Qtds = 0 And CrSigCdOpe.ZerQtds # 1 , 1, crTpmMvItn3.Qtds)
+Endif
+
+SNumero = .T.
+
+
+If !Empty( This.Value )
+
+	Select csSigCdPro 
+	Set Order to CPros
+	If !Seek(This.Value,[csSigCdPro],[IdeCPros])
+		loBrowse = CreateObject( 'fwbuscasel', 'csSigCdPro', 'Cpros', This.Value, 'Cadastro de Produtos' )
+		loBrowse.AddColuna( 'CPros', '', 'Código', .t., 'CPros' )
+		loBrowse.AddColuna( 'DPros', '', 'Descrição', .T., 'DPros' )
+		loBrowse.Show
+		This.Value = CsSigCdPro.Cpros
+	Endif
+
+	lcQuerPro = [Cpros, Cgrus, Reffs, Situas, Cunis, Dpros, Pesoms, fvendas, fcustos, moepvs, moepcs, moevs, ]+;
+				[pvens, moecs, pcuss, moedas, valors, linhas, colecoes, mUltComps, vUltComps, custofs, obrtamser ]
+	=ThisForm.Parentform.PoDataMgr.CursorQuery('SigCdPro','CrTmpPro','Cpros',This.Value,lcQuerPro )
+
+	Replace crTpmMvItn3.cpros with CrTmpPro.CPROS in crTpmMvItn3
+	cpro = Evaluate('CrTmpPro.CPros')
+	dpro = Evaluate('crtmpPro.DPros')
+	cuni = Evaluate('crtmpPro.CUnis')
+	
+	If Padr(This.value,14)<>Padr(Thisform.antcpro,14)
+
+		Replace crTpmMvItn3.cpros with cpro in crTpmMvItn3
+		This.Refresh
+		select crTpmMvItn3
+		
+		Replace crTpmMvItn3.moefats with Iif( CrSigCdOpe.Precops = 1, crtmpPro.Moepvs, Iif( CrSigCdOpe.Precops = 2, crtmpPro.Moepcs, CrSigCdOpe.CMoes ) ) in crTpmMvItn3
+
+		Thisform.fwgrade.Qtd.Text1.Value = Qtd
+
+		Select crTpmMvItn3
+		If InList(CrSigCdOpe.PrecoAuts,1,3)
+			lcwhere = [Select * From SigCdLpi Where Cpros = ']+CrTmpPro.Cpros+[' And LPrecos = ']+TprMvCab.lPrecos+[']
+			lnErro = ThisForm.parentform.podatamgr.SqlExecute(lcWhere,'CrSigCdLpi')
+			If lnErro < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return 0
+			EndIf
+			Select CrSigCdLpi
+			Go Top			
+			If Reccount() > 0 And (IsEmpty(crSigCdLpi.VencFs) Or BetWeen(TprMvCab.Datas,crSigCdLpi.VencIs, crSigCdLpi.VencFs))
+				lcMoeVs   = crSigCdLpi.MoeVs
+				lnUniVals = crSigCdLpi.PVens
+				
+				If ThisForm.plGarantia And ThisForm.plVlrZeroGarantia
+					lnUniVals = 0
+				EndIf 
+				
+				Replace crTpmMvItn3.univals with lnUniVals, ;
+						crTpmMvItn3.MoeFats With lcMoeVs
+			Else
+				If INLIST(CrSigCdOpe.PrecoPs,1,3,6)	&& mena 30/11/2016 mesmo configurado para ser 0 carrega preco de venda
+					lcMoeVs   = CrtmpPro.MoeVs
+					lnUniVals = crtmpPro.PVens	
+				Else
+					If CrSigCdOpe.PrecoPs = 2
+						lcMoeVs   = crtmpPro.MoeCs
+						lnUniVals = crtmpPro.PCuss
+						If ThisForm.Parentform.podatamgr.cursorquery('SigCdMoe','CrTmpMoe','Cmoes',lcmoeVs)
+							If Not IsEmpty(crtmpMoe.Moeqs)
+								lcMoeVs   = CrTmpMoe.Moeqs
+								lnUniVals = lnUniVals * Iif( crtmpMoe.Qtdeqs = 0, 1, crtmpMoe.QtdEqs )
+							Endif
+						EndIf
+					Else
+						If CrSigCdOpe.PrecoPs = 5
+							lcMoeVs   = CrtmpPro.Moedas
+							lnUniVals = crtmpPro.Valors
+						Else
+							If CrSigCdOpe.PrecoPs = 7
+								lcMoeVs   = CrTmpPro.mUltComps
+								lnUniVals = CrTmpPro.vUltComps
+							Else
+								If CrSigCdOpe.PrecoPs = 8
+									=fCustoMedio(TprMvCab.Emps,CrTmpPro.Cpros,TprMvCab.Datas,ThisForm.parentform.Podatamgr)
+									lcMoeVs   = TmpCusMed.Moedas
+									lnUniVals = TmpCusMed.Valors
+								Else
+									lnUniVals = 0
+									lcMoeVs   = crSigCdOpe.CMoes
+								EndIf
+							Endif
+						Endif
+					EndIf
+				EndIf
+				If CrSigCdOpe.PrecoPs = 11
+					lcMoeVs   = crtmpPro.MoeCs
+					lnUniVals = crtmpPro.custofs
+				EndIf
+				If ThisForm.plGarantia And ThisForm.plVlrZeroGarantia
+					lnUniVals = 0				
+				EndIf 
+				Select crTpmMvItn3
+				Replace crTpmMvItn3.UniVals With lnUniVals
+			Endif
+		Else
+			lcMoeVs = CrSigCdOpe.CMoes
+		Endif
+
+		Select crTpmMvItn3
+		Replace crTpmMvItn3.dpros  With crtmppro.dpros, ;
+				crTpmMvItn3.cunis  With crtmppro.cunis, ;
+				crTpmMvItn3.MoeVs  With lcMoeVs, ;
+				crTpmMvItn3.iconfs With (crtmppro.obrtamser=1)
+
+	EndIf
+
+	Thisform.Calc_ValIte()
+
+Endif
+
+Thisform.fwgrade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.AntCpro = Space(10)
+
+If Empty(This.Value) And (Lastkey() = 13)
+	ThisForm.cntOK.btnSair.SetFocus
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.QTD.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(crTpmMvItn3.CPros) And Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local rec,ord,totite,cotacao,cotcv,valau, _SubNiv, llNovaLinha
+
+=ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)
+
+If Inlist( Thisform.Op_escolha, 'INSERIR', 'ALTERAR' ) 
+
+	If Lastkey()=13 
+		llNovaLinha = .t.
+		Select crTpmMvItn3
+		Thisform.Foco = 'fwgrade.Produto'
+		Thisform.mInsereLinha()
+	Endif
+
+EndIf
+
+Thisform.Calc_ValIte()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.VALOR.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.OldPreco = This.Value
+
+Return InList(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Not Empty(crTpmMvItn3.CPros) And ThisForm.lAutPreco
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lnCasas, Rec
+
+lnCasas = CrSigCdOpe.Casas
+
+Thisform.Foco = ''
+This.Value = Round( This.Value, lnCasas )
+
+If This.Value < 0 
+	MessageBox('Preço Inválido',0+48,'')
+	This.value = Thisform.OldPreco
+	Return 0	
+EndIf
+
+If Not ThisForm.plVlrZeroGarantia And This.Value = 0
+	MessageBox('Preço Não Pode Ser Zerado.',0+48,'')
+	Return .F.
+EndIf 
+
+This.Refresh
+Thisform.lAutPreco = .F.
+
+If Empty(This.Value)
+	Thisform.Calc_valite()
+EndIf 	
+
+If LastKey()=13
+	If Inlist( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' )
+		Thisform.Foco = 'fwgrade.Produto'
+		Thisform.mInsereLinha()
+		Thisform.fwgrade.Refresh
+	EndIf 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local lcFoco
+
+Thisform.lAutPreco = .F.
+Select crTpmMvItn3
+If Not IsEmpty(Thisform.Foco)
+	lcFoco = AllTrim(Thisform.Foco)
+	Thisform.Foco = ''
+	Thisform.&lcFoco..Refresh
+	Thisform.&lcFoco..SetFocus
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.MOEDA.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.TOTAL.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.item.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.fwGrade.Descricao.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Select crTpmMvItn3
+ThisForm.AntCPro = This.Value
+ThisForm.AntValu = crTpmMvItn.Units
+
+Return (Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Empty(crTpmMvItn3.Cpros))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe, lcMoeVs, lnUniVals 
+Local fcusto,fvenda,llProducao, lnAQtds, llTransfEtiq, lcEmpos, _Msg, _Caption, llVerEst2
+
+Select crTpmMvItn3
+
+ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)
+
+precop     = CrSigCdOpe.precops
+cpro       = ''
+dpro       = ''
+peso       = 0
+lcMoeVs    = ''
+
+If (Padr(This.Value,40) # Padr(Thisform.AntCPro,40)) And !IsEmpty( Thisform.AntCPro )
+	Replace Units With 0 In crTpmMvItn3
+	Qtd = 0
+Else
+	Qtd = iif(crTpmMvItn3.Qtds = 0 And CrSigCdOpe.ZerQtds # 1 , 1, crTpmMvItn3.Qtds)
+Endif
+
+SNumero = .T.
+
+If !Empty( This.Value )
+
+	Select csSigCdPro 
+	Go Top In csSigCdPro
+	Locate For DPros = This.Value
+	
+	If Eof([csSigCdPro])
+		loBrowse = CreateObject( 'fwbuscasel', 'csSigCdPro', 'DPros', This.Value, 'Cadastro de Produtos' )
+		loBrowse.AddColuna( 'DPros', '', 'Descrição', .T., 'DPros' )
+		loBrowse.AddColuna( 'CPros', '', 'Código', .t., 'CPros' )
+		loBrowse.Show
+		This.Value = CsSigCdPro.DPros
+	Endif
+
+	lcQuerPro = [Cpros, Cgrus, Reffs, Situas, Cunis, Dpros, Pesoms, fvendas, fcustos, moepvs, moepcs, moevs, ]+;
+				[pvens, moecs, pcuss, moedas, valors, linhas, colecoes, mUltComps, vUltComps, custofs, obrtamser ]
+	=ThisForm.Parentform.PoDataMgr.CursorQuery('SigCdPro','CrTmpPro','DPros',This.Value,lcQuerPro )
+
+	Replace crTpmMvItn3.cpros with CrTmpPro.CPROS in crTpmMvItn3
+	cpro = Evaluate('CrTmpPro.CPros')
+	dpro = Evaluate('crtmpPro.DPros')
+	cuni = Evaluate('crtmpPro.CUnis')
+	
+	If Padr(This.value,40)<>Padr(Thisform.antcpro,40)
+
+		Replace crTpmMvItn3.cpros with cpro in crTpmMvItn3
+		This.Refresh
+		select crTpmMvItn3
+		
+		Replace crTpmMvItn3.moefats with Iif( CrSigCdOpe.Precops = 1, crtmpPro.Moepvs, Iif( CrSigCdOpe.Precops = 2, crtmpPro.Moepcs, CrSigCdOpe.CMoes ) ) in crTpmMvItn3
+
+		Thisform.fwgrade.Qtd.Text1.Value = Qtd
+
+		Select crTpmMvItn3
+
+		If InList(CrSigCdOpe.PrecoAuts,1,3)
+			lcwhere = [Select * From SigCdLpi Where Cpros = ']+CrTmpPro.Cpros+[' And LPrecos = ']+TprMvCab.lPrecos+[']
+			lnErro = ThisForm.parentform.podatamgr.SqlExecute(lcWhere,'CrSigCdLpi')
+			If lnErro < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return 0
+			EndIf
+			Select CrSigCdLpi
+			Go Top
+			If Reccount() > 0 And (IsEmpty(crSigCdLpi.VencFs) Or BetWeen(TprMvCab.Datas,crSigCdLpi.VencIs, crSigCdLpi.VencFs))
+				lcMoeVs = crSigCdLpi.MoeVs
+				Replace crTpmMvItn3.univals with crSigCdLpi.PVens, ;
+						crTpmMvItn3.MoeFats With crSigCdLpi.MoeVs
+			Else
+				If INLIST(CrSigCdOpe.PrecoPs,1,3,6)	&& mena 30/11/2016 mesmo configurado para ser 0 carrega preco de venda
+					lcMoeVs   = CrtmpPro.MoeVs
+					lnUniVals = crtmpPro.PVens
+				Else
+					If CrSigCdOpe.PrecoPs = 2
+						lcMoeVs   = crtmpPro.MoeCs
+						lnUniVals = crtmpPro.PCuss
+						If ThisForm.Parentform.podatamgr.cursorquery('SigCdMoe','CrTmpMoe','Cmoes',lcmoeVs)
+							If Not IsEmpty(crtmpMoe.Moeqs)
+								lcMoeVs   = CrTmpMoe.Moeqs
+								lnUniVals = lnUniVals * Iif( crtmpMoe.Qtdeqs = 0, 1, crtmpMoe.QtdEqs )
+							Endif
+						Endif
+					Else
+						If CrSigCdOpe.PrecoPs = 5
+							lcMoeVs   = CrtmpPro.Moedas
+							lnUniVals = crtmpPro.Valors
+						Else
+							If CrSigCdOpe.PrecoPs = 7
+								lcMoeVs   = CrTmpPro.mUltComps
+								lnUniVals = CrTmpPro.vUltComps
+							Else
+								If CrSigCdOpe.PrecoPs = 8
+									=fCustoMedio(TprMvCab.Emps,CrTmpPro.Cpros,TprMvCab.Datas,ThisForm.parentform.Podatamgr)
+									lcMoeVs   = TmpCusMed.Moedas
+									lnUniVals = TmpCusMed.Valors
+								Else
+									lnUniVals = 0
+									lcMoeVs   = crSigCdOpe.CMoes
+								EndIf
+							Endif
+						Endif
+					Endif
+				EndIf
+				If CrSigCdOpe.PrecoPs = 11
+					lcMoeVs   = crtmpPro.MoeCs
+					lnUniVals = crtmpPro.custofs
+				EndIf
+				Select crTpmMvItn3
+				Replace crTpmMvItn3.UniVals With lnUniVals
+			Endif
+		Else
+			lcMoeVs = CrSigCdOpe.CMoes
+		Endif
+
+		Select crTpmMvItn3
+		Replace crTpmMvItn3.dpros  With crtmppro.dpros, ;
+				crTpmMvItn3.cunis  With crtmppro.cunis, ;
+				crTpmMvItn3.MoeVs  With lcMoeVs, ;
+				crTpmMvItn3.iconfs With (crtmppro.obrtamser=1)
+
+	EndIf
+
+	Thisform.Calc_ValIte()
+
+Endif
+
+Thisform.fwgrade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.AntCpro = Space(40)
+
+If Empty(This.Value) And (Lastkey() = 13)
+	ThisForm.cntOK.btnSair.SetFocus
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.btnAltImps
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Not Eof([crTpmMvItn3])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Not Empty(crTpmMvItn3.CPros)
+	_Retorno = [*] + Usuar
+	ThisForm.lAutPreco = (Left(_Retorno, 1) = [*])
+	If ThisForm.lAutPreco
+		ThisForm.fwgrade.SetFocus
+		ThisForm.fwgrade.Valor.SetFocus
+	EndIf
+Else
+	=MessageBox([Selecione um Produto Para Ter o Preço Alterado], 48, [Atenção!!!])
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.btnCotacao
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(Thisform.Op_Escolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Form SigOpCot With ThisForm.ParentForm, TprMvCab.Datas
+
+Select crTpmMvItn
+Set Order To 
+Scan
+	If Not ThisForm.ParentForm.PodataMgr.CursorQuery([SigCdPro], [crTmpPro], [CPros], crTpmMvItn.CPros)
+		Loop
+	EndIf
+
+	Replace AltImpost With .f. In crTpmMvItn
+
+	ThisForm.Calc_Valite()
+EndScan
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.btnTotItens
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Enabled = .f.
+
+Do Form SigOpTot With ThisForm, ThisForm.DataSessionId
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.Get_Produto
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.Get_Descrição
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.cntOK
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+If InList(Thisform.op_escolha,[INSERIR],[ALTERAR])
+	lnOldSel=Select()
+	If Used([csValConfs])
+		Use in csValConfs
+	EndIf 
+	Select crTpmMvItn3
+	Select Count(1) as Qtd From crTpmMvItn3 Where iConfs = .T. and (Empty(TamDe) or Empty(TamPara)) Into Cursor csValConfs ReadWrite
+
+	Select csValConfs
+	If Reccount([csValConfs])>0
+		If csValConfs.Qtd > 0
+			MessageBox([Existe Serviços sem Informar os campos :] + Chr(13) + [TAMANHO DE ou o TAMANHO PARA.]+Chr(13)+[Favor Verificar!!!],0+48,[Aviso])
+			Select(lnOldSel)
+			Return .F.
+		EndIf 
+	EndIf 
+	Select(lnOldSel)
+EndIf 
+ThisForm.poForm.Enabled = .t.
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.Get_Mercs
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.cntTamanho.getTamDe
+* Classe: fwget (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdTam','CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		This.Value = CrListaRemota.Cods
+	Else
+		This.Value = []
+	EndIf
+	
+	Use In CrListaRemota
+Else
+	This.Value = ''
+EndIf
+
+Select crTpmMvItn3
+Replace TamDe With This.Value In crTpmMvItn3
+
+This.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSER.cntTamanho.getTamPara
+* Classe: fwget (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdTam','CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	If (Lastkey() <> 27)
+		This.Value = CrListaRemota.Cods
+	Else
+		This.Value = []
+	EndIf
+	Use In CrListaRemota
+Else
+	This.Value = ''
+EndIf
+Select crTpmMvItn3
+Replace TamPara With This.Value In crTpmMvItn3
+This.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPSER
+RESERVED3 (ClassInfo): antcpro
+antqtd
+antvalu
+citem
+cpro
+foco
+lautpreco
+ncitem2
+ntpopers
+oldcodbarras
+oldpreco
+op_escolha
+parentform
+poform
+validok
+plgarantia
+plvlrzerogarantia
+*apaite 
+*calc_valite 
+*minserelinha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 31
+================================================================================

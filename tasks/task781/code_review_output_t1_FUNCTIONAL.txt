@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The fix is correctly in place, no `RETURN` inside `TRY`/`CATCH` (regra #1 respected).
+
+## Summary
+
+Of the 9 reported findings, I fixed the 1 real bug and verified the other 8 are false positives from well-documented, recurring detector bugs in this pipeline (matching dozens of prior logged reincidences for this exact project):
+
+**Fixed:**
+- **[LOSTFOCUS-SEM-GUARDIA]** `TxtNovoGrupoLostFocus` ÔÇö added property `this_cUltimoTxtNovoGrupoLostFocusValidado` and a guard comparing the current field value against it, returning early (outside `TRY`, per regra #1) when unchanged. Updated after the lookup/validation completes, covering the found/picker/empty paths.
+
+**Verified as false positives (no change applied, per memory on this exact detector family):**
+- **4├ù [BUSCA-CURSOR]** ÔÇö `AbrirBuscaProdutoItem`/`AbrirBuscaUnidade`/`AbrirBuscaAcabamento`/`AbrirBuscaNovoGrupo` all use the canonical Pattern A (`CREATEOBJECT("FormBuscaAuxiliar")` sem params + `.DefinirCursor(...)` + `.Mostrar()`). Confirmed in `formbuscaauxiliar.prg:412-413` that `DefinirCursor()` already sets `this_cCursorDestino` internally ÔÇö detector doesn't track that.
+- **2├ù [GRID-WITH]** ÔÇö `VincularGradeItens`/`VincularGradeParcelas` follow the exact canonical order from regra #41/#44 (`ColumnCount` set earlier ÔåÆ `RecordSource` ÔåÆ `.ColumnN.ControlSource` ÔåÆ `Width`/`Header1.Caption`, all inside the same bloco). `WITH` is pure syntax in VFP9 and never defers `Column` creation ÔÇö this detector pattern has been a 100% false positive across 20+ prior forms in this project.
+- **[METODO-INEXISTENTE] `THIS.NumeroDoCampo()`** ÔÇö defined as `PROTECTED FUNCTION NumeroDoCampo(par_uValor)` at line 4756, called correctly via `THIS.` in 7 sites. Detector only recognizes `PROCEDURE`, not `FUNCTION`.
+- **[METODO-INEXISTENTE] `THIS.PEAntValue()`** ÔÇö never called in actual code; the name only appears inside a comment (line 2086) documenting the legacy `fwget` class property, matching the "coment├írio quotando legado" false-positive family.
+
+No business logic, visual properties, or other functionality were altered.

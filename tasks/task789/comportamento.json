@@ -1,0 +1,257 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPPRM",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csEmpresas (ImpEmps l(1), CPros c(14), Pecas c(10), Promos c(25), Datas t Null, cIdChaves c(20))\nIndex On CPros + Promos Tag CPros\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "LParameters pAnt\n\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nPrivate pPro\n\n=DoDefault()\n\nThisForm.ParentForm = pAnt\n\nSelect crSigPrPmi\nScan\n\tInsert Into csEmpresas (ImpEmps, CPros, Pecas, Promos, Datas, cIdChaves) ;\n\t\t\t\t\tValues (.f., crSigPrPmi.CPros, crSigPrPmi.Pecas, crSigPrPmi.Promos, ;\n\t\t\t\t\t\t\tNvl(crSigPrPmi.Datas, Ctod('')), crSigPrPmi.cIdChaves)\nEndScan\nSelect csEmpresas\n\n* Colocar as Empresas Que Possuem Transporte na Gr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ******************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace ImpEmps With Not ImpEmps In csEmpresas\n\nThisForm.GridEmps.Refresh\n\nNoDefault\n* Fim ******************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 10,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tReplace ImpEmps With Not ImpEmps In csEmpresas\n\n\tThisForm.GridEmps.Refresh\n\n\tNoDefault\nEndif\n* Fim ******************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.GridEmps.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.btnSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.btnRetirar",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "Private pChv\n\nIf fChecaAcesso('SigCdPrm', 'EXCLUIR') Or fChecaAcesso('SigCdPrm', 'ALTERAR')\n\tSelect cIdChaves ;\n\t  From csEmpresas ;\n\t Where ImpEmps ;\n\t  Into Cursor csApagar\n\n\tIf (RecCount('csApagar') < 1)\n\t\t=MessageBox('Não Existem Promoções Selecionadas Para Retirar o Produto!!!', 0+48, '')\n\t\tThisForm.GridEmps.Column1.SetFocus\n\t\tReturn 0\n\tElse\n\t\tIf (MessageBox('Confirma a Retirada do Produto das Promoções Selecionadas ?', 4+32+256, '') = 6)\n\t\t\tSelect csApagar\n\t\t\tScan\n\t\t\t\tpChv = csApagar.cIdCh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.MarcarEmp",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update csEmpresas Set ImpEmps = .t.\nThisForm.GridEmps.Refresh\n* Fim ******************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRM.DesmarcarEmp",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update csEmpresas Set ImpEmps = .f.\nThisForm.GridEmps.Refresh\n* Fim ******************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPPRM.Init",
+      "queryOriginal": "\tInsert Into csEmpresas (ImpEmps, CPros, Pecas, Promos, Datas, cIdChaves) ; \t\t\t\t\tValues (.f., crSigPrPmi.CPros, crSigPrPmi.Pecas, crSigPrPmi.Promos, ; \t\t\t\t\t\t\tNvl(crSigPrPmi.Datas, Ctod('')), crSigPrPmi.cIdChaves)",
+      "tabelas": "csEmpresas",
+      "colunas": "ImpEmps,CPros,Pecas,Promos,Datas,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPRM.btnRetirar.Click",
+      "queryOriginal": "\tSelect cIdChaves ; \t  From csEmpresas ; \t Where ImpEmps ; \t  Into Cursor csApagar",
+      "tabelas": "csEmpresas",
+      "colunas": "ImpEmps,csApagar",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPRM.MarcarEmp.Click",
+      "queryOriginal": "Update csEmpresas Set ImpEmps = .t.",
+      "tabelas": "csEmpresas",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPRM.DesmarcarEmp.Click",
+      "queryOriginal": "Update csEmpresas Set ImpEmps = .f.",
+      "tabelas": "csEmpresas",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csEmpresas"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

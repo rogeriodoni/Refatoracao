@@ -1,0 +1,70 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPRES",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRES",
+      "evento": "Init",
+      "linhas": 166,
+      "codigoOriginal": "Lparameters ocnx, __saldo\n\n*!*\tthisform.parentform = oform\n\nlcAlias = Upper(Alias())\n*!*\tlcArqCb = [TprMvCab]\nlcproduto = &lcAlias..CPros\ndtini = Dtot(Date()) &&TprMvCab.datas\ndtfin = Iif(IsNull(TprMvCab.prazoents) or Empty(TprMvCab.prazoents),TprMvCab.datas,TprMvCab.prazoents)\ndtfin = fDtoSQL(dtfin,'23:59:59')\n\n*** Seleciona as operações que tem movimentação do determinado produto no período da venda e entrega, e que não foi usada subnível\nlcoper = TprMvCab.dopes\nlcquery = [select b.empdopnums,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chksubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRES.Fwbtng1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "__saldo = thisform.nsaldo\nthisform.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

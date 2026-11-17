@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No duplicates. All objects have unique names. Fase 4 is complete.
+
+## Summary
+
+Implemented `ConfigurarPaginaLista()` and `CarregarLinhas()` in `Formsigopsep.prg`:
+
+- **`cnt_4c_Filtro`** container (CrtFiltro legado), with 7 labels, 8 filter fields (Grupo Venda/Produto + descri├º├Áes read-only, Moeda Venda + descri├º├úo, Acr├®scimo/Desconto, Arredondamento com os InputMasks `"9999"`/`"9.9"` do dump), e `obj_4c_Situacao` (OptionGroup com Value = ├¡ndice do bot├úo, transcrito do dump ÔÇö regra #45/#188).
+- **`grd_4c_Linhas`** (GradeLinhas): estrutura completa (3 colunas, fontes, larguras, headers, `HeaderHeight = 0` fiel ao dump).
+- **`cmd_4c_Marcar`/`cmd_4c_Desmarcar`**: bot├Áes estruturais com os ├¡cones exatos do legado (`to-do-list_checked2.ico`/`onebit_33.ico`, confirmados em `vbmp\`).
+- **`CarregarLinhas()`**: chama `BO.BuscarLinhas()` e s├│ ent├úo liga `RecordSource`/`ControlSource` da grade (regra #41 ÔÇö o cursor n├úo existe antes disso), reaplicando Width/Header.Caption depois do bind (Problema 48).
+
+Nenhuma funcionalidade CRUD gen├®rica (Incluir/Alterar/Excluir) foi inventada ÔÇö o form original ├® um di├ílogo OPERACIONAL sem esses bot├Áes; isso seguiria o template gen├®rico da fase mas violaria o PILAR 1. Os eventos de clique (Marcar/Desmarcar, Processar, lookups) ficam para as fases seguintes, como j├í documentado no cabe├ºalho do arquivo desde a fase 3.
+
+Arquivo validado: WITH/ENDWITH (28/28), PROCEDURE/ENDPROC (13/13) balanceados, sem nomes de objeto duplicados.

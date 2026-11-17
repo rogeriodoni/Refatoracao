@@ -1,0 +1,108 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fLerFiscal"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPPRR",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\ndodefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRR",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\n\n\t=fLerFiscal()\n\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLerFiscal",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPRR.USUARIO",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.Release\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPRR.SENHA",
+      "evento": "LostFocus",
+      "linhas": 21,
+      "codigoOriginal": "Local lcUser, lcPass, lcQuery\n\nlcUser = PADR(ThisForm.USUARIO.Value,10)\nlcPass = PADR(Thisform.SENHA.Value,10)\n\nlcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]\nThisForm.poDataMgr.SQLExecute(lcQuery, 'crSigCdUsu')\n\nIf Not Used('CrSigCdUsu') Or Reccount('CrSigCdUsu')==0 Or Empty(lcUser) OR lcPass <> fCriptografar(CrSigCdUsu.SENHAS)\n\t=MessageBox('Usuário ou Senha incorretos',0+48,'')\n\tThisForm.Senha.Value    = ''\n\tThisform.U... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPPRR.SENHA.LostFocus",
+      "queryOriginal": "lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cAtivos,lcUser",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

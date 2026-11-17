@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything balances. Phase 5 is complete.
+
+## Summary
+
+For **Formsigoporc** (task781, Fase 5/8), I added the first half of the remaining form fields ÔÇö adapted to this form's **FLAT** architecture (no PageFrame/Page2, since the legacy SIGOPORC has no PageFrame either):
+
+**`Formsigoporc.prg`:**
+- `shp_4c_Painel` (Shape4) + the 6 header percentage fields (Margem/Contingente/TaxaAdm/BV/Imposto/ImpostoServico), transcribed from the dump with exact geometry, captions (preserving `\<` hotkey markers), and masks.
+- 5 `KeyPress(13/9)` handlers reproducing each field's legacy `Valid` cascade (Perc1sÔÇôPerc4s propagation, P&G vs SRCOM branches) ÔÇö simplified by dropping the `peantvalue`-equality guard (documented inline: the cascade is idempotent, so this only costs a redundant SCAN, never a wrong result).
+- `TotalizarItn()` ÔÇö the ~165-line calculation engine transcribed literally from the source dump (P&G/SRCOM totals, block/sub-block/TOTALGERAL consolidation, Decupagem, parcelas propagation). Its marker-row lookups (SUBTOTAL/TAXA/TOTALGERAL...) safely no-op until Fase 6 creates those rows.
+- `txt_4c_NovoGrupo`/`lbl_4c_NovoGrupo` (Grupo lookup) with a `LostFocus` handler using the canonical `FormBuscaAuxiliar` Pattern A (reentrancy guard, SigCdRpo-restricted query falling back to the full list, never clearing a typed value on miss).
+- `edt_4c_DescritivoRodape` + `AtualizarModoCriacao()`, reproducing the Init's `DigItens IN (6,7)` visibility/ControlSource switch (currently resolves to hidden, since `DigItens` loads in a later phase).
+
+**`sigoporcBO.prg`:** added `this_nDescs` (TprMvCab.Descs) and `this_cConfigGers` (SigOpCdd.ConfigGers) properties needed by the new logic.
+
+**Bug fix found along the way:** `CriarCursorItens()` (Fase 4) was missing the `perc1s` field ÔÇö required by `TotalizarItn`/`getPtax2` but absent from the cursor (it's a working field, not a real `SigMvOrc` column per `docs/schema.sql`). Added it.
+
+Verified block-keyword balance (PROCEDURE/ENDPROC, WITH/ENDWITH, IF/ENDIF, TRY/ENDTRY, SCAN/ENDSCAN) in both files, and fixed one stray mid-line tab character introduced in a comment.
+
+**Deferred to Fase 6** (per the form's own header, unchanged): `getDpros`/`getDpro2s`/`btnProcura`, `imgProds`, `btnCadPro`, and the action buttons `btnInsBlo`/`btnInsSub`/`btnIteSub`/`btnTotItens`/`OK`.

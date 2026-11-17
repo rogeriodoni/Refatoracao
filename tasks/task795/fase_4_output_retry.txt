@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSIGOPRES.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O conte├║do da Fase 4 **j├í estava l├í** (Grid + bot├úo, transcritos do dump). O que reprovou foi **nome de m├®todo**: o gate da Fase 4 (layout FLAT / OPERACIONAL, `OrquestradorMigracao.ps1:9923`) ancora em
+
+```powershell
+$temCarga = ($conteudo -match "CarregarLista|CarregarDados|MontaGrade")
+```
+
+e o arquivo tinha `CarregarProjecao` e `MontarGrade` ÔÇö nenhum dos dois casa (`MontarGrade` Ôëá `MontaGrade`). Mesma fam├¡lia das li├º├Áes j├í catalogadas de gate ancorado em nome.
+
+## Corre├º├Áes aplicadas
+
+| Antes | Depois | Motivo |
+|---|---|---|
+| `PROTECTED PROCEDURE CarregarProjecao()` | `PROCEDURE CarregarDados()` | nome can├┤nico OPERACIONAL (CLAUDE.md, tabela Form Types) e ├óncora do gate; PUBLIC porque o harness chama de fora da classe |
+| `PROTECTED PROCEDURE MontarGrade()` | `PROCEDURE MontaGrade(par_cParamTeste)` | idem; `TesteAutomatico.prg:803` trata todo `MontaGrade` como se exigisse par├ómetro de filtro ÔÇö sem o par├ómetro opcional a chamada externa estoura *"No PARAMETER statement is found."*; PROTECTED estouraria *"Property MONTAGRADE is not found"* (regra #3: `PEMSTATUS` com atributo 5 ├® truthy para PROTECTED) |
+| `PROCEDURE CmdFwbtng1Click()` | `PROCEDURE BtnEncerrarClick()` | `TesteBtnEncerrarExiste` s├│ reconhece `BtnEncerrarClick`/`BtnFecharClick`/`BtnSairClick`/`FecharDialogo`, e o form n├úo ├® despachante (tem Grid). O bot├úo tem `Caption="Encerrar"` + `Cancel=.T.`, ent├úo a a├º├úo ├ë encerrar |
+
+Os nomes novos s├úo exatamente os do precedente que o pr├│prio arquivo j├í citava (`FormSigOpMop.prg` tem `MontaGrade(par_cParamTeste)` e `CarregarDados()`). Tamb├®m acrescentei o bloco de coment├írio documentando por que `MontaGrade` ├® PUBLIC e recebe o par├ómetro ignorado.
+
+## Verifica├º├Áes feitas
+
+- **Gate Fase 4 replicado** em PowerShell: `temGrade`/`temBotoes`/`temCarga` = True ÔåÆ **PASSA** (`$FormType` = `OPERACIONAL`, confirmado em `task_state.json`)
+- **Compila├º├úo VFP9 real**: `.fxp` gerado, `.err` vazio (`.fxp` removido depois)
+- **Completude** (`Test-CompletudeCodigo`, os 4 checks reimplementados): nenhum TODO/stub/procedure vazia
+- **Balan├ºo de blocos**: PROCEDURE/ENDPROC 13-13, WITH/ENDWITH 7-7, IF/ENDIF 19-19, FOR/ENDFOR 2-2, TRY/ENDTRY 1-1, DEFINE/ENDDEFINE 1-1
+- **CRLF**: 786/786 linhas (o `awk` do Git Bash normalizou para LF no meio do caminho; restaurei e conferi byte a byte)
+- **Zero bytes n├úo-ASCII** (regra dos acentos via `CHR()`)
+- **Cursor placeholder ├ù real**: form cria `cursor_4c_Dados (datas D, estoque N(11,3))`, id├¬ntico ao `SIGOPRESBO.prg:365`, mesma ordem ÔÇö e os `ControlSource` batem
+- **├ìcones existem**: `vbmp/cadastro_sair_60.jpg`, `vbmp/new_background.jpg`
+
+Uma observa├º├úo sobre escopo: n├úo inventei bot├Áes CRUD (Incluir/Alterar/Excluir/Buscar) ÔÇö o SCX legado tem s├│ `Fwbtng1`. O gate ├® satisfeito pelo ramo FLAT, que exige `cmd_4c_`/`cmg_4c_` (qualquer bot├úo de a├º├úo), n├úo os cinco do padr├úo cadastro.

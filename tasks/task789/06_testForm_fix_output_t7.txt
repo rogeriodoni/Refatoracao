@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® um bug de c├│digo ÔÇö ├® a mesma falha de infraestrutura j├í documentada
+
+O log mostra o erro na **ETAPA 1B** (pr├®-flight gen├®rico de conex├úo SQL do `TestFormWrapper`), **antes de qualquer `CREATEOBJECT`** de `FormSIGOPPRM`/`SIGOPPRMBO`:
+
+```
+ERRO - Falha na conexao SQL: Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® exatamente o padr├úo j├í registrado em mem├│ria (`SQL20010inalcan`): o SQL Server 192.168.200.10:1433 est├í intermitentemente inalcan├º├ível desta m├íquina do pipeline desde 2026-11-05, afetando ~17 forms diferentes em dezenas de tentativas ÔÇö nenhuma delas por defeito de c├│digo.
+
+Fiz a **7┬¬ revis├úo independente** destes dois arquivos (conte├║do id├¬ntico byte-a-byte ├ás tentativas 1-6, j├í revisadas 6 vezes sem achado):
+- RETURN sempre fora de TRY/CATCH
+- Os 8 handlers BINDEVENT (`BtnSairClick`, `BtnRetirarClick`, `BtnMarcarTodasClick`, `BtnDesmarcarTodasClick`, `ChkImpEmpsClick/MouseDown/MouseUp/KeyPress`) s├úo PUBLIC
+- `ObterChavePrimaria` (PROTECTED no BO) nunca ├® chamado pelo form
+- `EscaparSQL` usado sem aspas extras
+- Guard de `gnConnHandle` antes dos SQLEXEC
+- Ordem correta `RecordSource ÔåÆ ControlSource ÔåÆ GarantirCheckBoxImpEmps ÔåÆ Width ÔåÆ Header1.Caption` (regra #41)
+- `Grid.ReadOnly = .F.` antes de `Column1.ReadOnly` (regra #46)
+
+**Nenhum defeito encontrado.** Tamb├®m confirmei: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` n├úo respondeu dentro do timeout ÔÇö mesma assinatura de n├úo-resposta de todas as ocorr├¬ncias desde 2026-11-05.
+
+**N├úo editei os arquivos** ÔÇö fazer isso "para satisfazer o gate" seria dano, n├úo corre├º├úo (conforme j├í registrado na mem├│ria do projeto). Restam 3 das 10 tentativas na task789.
+
+**Recomenda├º├úo**: dar exce├º├úo ao gate `06_testForm` para erro 1526/conectividade nesta task, ou pausar o retry autom├ítico at├® a rota de rede para 192.168.200.10:1433 voltar ÔÇö o retry n├úo vai convergir sozinho contra uma falha de rede.

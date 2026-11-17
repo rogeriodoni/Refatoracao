@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 3 CONCLU├ìDA** ÔÇö `C:\4c\projeto\app\forms\operacionais\Formsigopprr.prg` criado (14,4 KB, CRLF, ASCII puro).
+
+## Decis├úo de layout: FLAT, sem PageFrame
+
+O gate da Fase 3 tem tr├¬s ramos. Medi o dump legado e o aplic├ível ├® o **FLAT**:
+
+| teste do gate | resultado |
+|---|---|
+| raiz `form` gen├®rica (n├úo frmcadastro/frmrelatorio) | Ô£à |
+| sem `BaseClass: pageframe` na ├írvore | Ô£à |
+| sem `BaseClass: container` | ÔØî (tem `cntSombra`) ÔåÆ n├úo ├® o sub-ramo "flat sem container" |
+
+Por isso **n├úo** criei `pgf_4c_Paginas` com Page1=Lista/Page2=Dados: o SIGOPPRR ├® um di├ílogo modal 436x200 de autentica├º├úo, sem grade, sem bot├Áes CRUD e sem p├íginas ÔÇö invent├í-los violaria o PILAR 1 e a regra "NUNCA inventar". Pelo mesmo motivo n├úo h├í `ConfigurarPaginaLista/Dados/AlternarPagina` (seriam m├®todos sem conte├║do real). Refer├¬ncia do mesmo padr├úo j├í validado: `FormSIGPRSTF`.
+
+## O que foi entregue
+
+`DEFINE CLASS Formsigopprr AS FormBase` + propriedades visuais transcritas do dump (436x200, `DataSession=2`, `BorderStyle=2`, `ControlBox=.F.`, `TitleBar=0`, `WindowType=1`), `Init()` s├│ com `DODEFAULT()`, `InicializarForm()` (instancia `sigopprrBO`, monta apar├¬ncia e cabe├ºalho), `ConfigurarAparencia()`, `ConfigurarCabecalho()` (`cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, nomes do `mapeamento.json`), `TornarControlesVisiveis()` e `Destroy()` com `DODEFAULT()` na ├║ltima linha.
+
+Tr├¬s diverg├¬ncias deliberadas do literal do dump, todas comentadas no arquivo:
+- **`cntSombra.Width=800` e labels `Width=769`** contra form de 436 ÔÇö artefato do Form Designer; copiar recortaria o t├¡tulo. Usei `THIS.Width` / `THIS.Width - 20`.
+- **Caption dos labels** ÔÇö o dump diz `"Cadastro de Testes"` (sobra do template, id├¬ntica ├á do SCX do FormSIGPRSTF). Como `TitleBar=0`, a faixa ├® o ├║nico lugar onde o nome da tela aparece; uso `THIS.Caption` (regra #11).
+- **`Closable`/`MaxButton`/`MinButton`/`Movable` n├úo declarados** ÔÇö o dump n├úo os declara, e invent├í-los muda comportamento.
+
+## Verifica├º├úo executada (n├úo apenas gates de regex)
+
+Smoke test do VFP9 passou primeiro (ele nem sempre executa o corpo do `.prg` nesta m├íquina), e ent├úo:
+
+```
+COMPILE fxp=.T. err=.F.
+CREATEOBJECT=O  Caption=[C├│digo do Operador]  ControlCount=1  BO=O
+W=436 H=200 WindowType=1 TitleBar=0 ControlBox=.F. BorderStyle=2 Closable=.T.
+Picture FILE=.T. [c:\4c\vbmp\new_background.jpg]
+cnt_4c_Sombra: 0,0 436x80 BackColor=6579300 (=RGB 100,100,100) Vis=.T.
+lblSombra W=416 H=40 Top=18 Fore=0        lblTitulo W=416 H=46 Top=17 Fore=16777215
+Release OK
+```
+
+Gate da Fase 3 reconferido na vers├úo final: **ramo flat = True**. `Test-CompletudeCodigo` (TODO/stubs/procedures vazias/pend├¬ncias): **0 problemas**. `.fxp`/`.err` e tempor├írios removidos.
+
+Duas observa├º├Áes para as fases seguintes: a superf├¡cie que a Fase 4 cobra no ramo "captura" (`InicializarForm` + `AddObject`) j├í est├í satisfeita; e o registro em `menu.prg`/`GarantirClasse` ficou de fora de prop├│sito ÔÇö expor pelo menu um di├ílogo ainda sem os campos USUARIO/SENHA (Fases 5-6) e sem os handlers de valida├º├úo (7-8) seria publicar tela pela metade.

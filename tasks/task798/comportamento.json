@@ -1,0 +1,99 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "FILETOSTR", "fGravarLog", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSAT",
+      "evento": "Procedure",
+      "linhas": 77,
+      "codigoOriginal": "Local lcDir, lcDirReq, lcDirResp, laDir, lnDir\nLOCAL lnFab, lcArqResp, lcArqReq, lcTexto, lcCmd, lcsessao, lcCodAti, lcChave, lcXml\n\nlcDir = Alltrim(crsigcdpac.dirresta)\nlcDir = Iif(Right(lcDir, 1)=[\\], lcDir, lcDir + [\\])\n\nlcDirReq= lcDir+[Req\\]\nlcDirResp=lcDir+[Resp\\]\n\n*** Declara as dlls  ***\nDeclare String AtivarSAT             IN \"SAT.dll\" Integer numeroSessao, String subComando, String codigoDeAtivacao, String CNPJ, Integer cUF\nDeclare String EnviarDadosVenda      IN \"SAT.dll\" Integer nume... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,FILETOSTR,fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSAT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\n\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSAT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSAT",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "ThisForm.poDataMgr = CreateObject([fSqlConector])\n\n=DoDefault()\n\nlcQuery = [Select * From sigcdemp where cemps = ']+_empr+[']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crCdEmp]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crsigcdpac)])\n\tReturn .f.\nEndIf\n\nlcQuery = [Select dirresta From sigcdpac]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crsigcdpac]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crsigcdpac)])\n\tReturn .f.\nEndI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute,lerarquivos,Release",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSAT.Init",
+      "queryOriginal": "lcQuery = [Select * From sigcdemp where cemps = ']+_empr+['] ",
+      "tabelas": "sigcdemp",
+      "colunas": "cemps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSAT.Init",
+      "queryOriginal": "lcQuery = [Select dirresta From sigcdpac]",
+      "tabelas": "sigcdpac",
+      "colunas": "dirresta",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["sigcdemp", "sigcdpac"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

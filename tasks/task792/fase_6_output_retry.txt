@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da e verificada em `projeto\app\forms\operacionais\FormSigOpQtE.prg`.
+
+## O que a fase encontrou
+
+**Campos restantes: nenhum.** A ├írvore do legado (`SigOpQtE.SCX`) tem exatamente um r├│tulo (`Label1`) e um campo (`Text1`), ambos j├í criados integralmente na Fase 5/8.
+
+**Lookups: nenhum.** Medido contra os 5 padr├Áes que o pr├│prio gate usa ÔÇö `fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`: **0 ocorr├¬ncias** no dump. Inventar picker violaria o PILAR 1.
+
+## O defeito real que estava escondido atr├ís disso
+
+`FormParaBO()` existia desde a Fase 5 e **nunca era chamado por ningu├®m**. O `ControlSource = "_QtEtiq"` mantinha a PUBLIC legada em dia, mas o BO ÔÇö que o pr├│prio arquivo documenta como fonte ├║nica ÔÇö ficava parado no valor copiado no `Init`. Compila, abre, e devolve o n├║mero velho; sem erro e sem log.
+
+Fechado com dois handlers ligados por `BINDEVENT` a `txt_4c_Text1`:
+
+| handler | evento | papel |
+|---|---|---|
+| `QuantidadeInteractiveChange` | `InteractiveChange` | controle ÔåÆ BO a cada tecla, mesma granularidade do `ControlSource` legado |
+| `ValidarQuantidade` | `LostFocus` | normaliza para 0..9999 (a faixa que o `InputMask "9999"` do SCX j├í imp├Áe, guardada em `this_nMaxQtEtiq`) e fecha o fio at├® a PUBLIC |
+
+Ambos PUBLIC (regra #3 ÔÇö `BINDEVENT` ignora PROTECTED em sil├¬ncio); valida├º├úo em `LostFocus`, n├úo `KeyPress` (regra #47); sem `MsgAviso` porque o legado n├úo tem nenhum (regra #50); os dois `IF` do write-back s├úo aninhados porque VFP9 n├úo faz short-circuit em `OR`.
+
+## Verifica├º├úo executada
+
+- **Compila├º├úo**: `FXP=SIM / ERR=NAO` (smoke test do VFP9 passou antes, ent├úo a execu├º├úo est├í provada, n├úo presumida).
+- **Instancia├º├úo real**: `CREATEOBJECT` ÔåÆ `VARTYPE=O`, Caption `[Etiquetas Para : TESTE000001]`, `ControlSource=[_QtEtiq]`.
+- **Comportamento**: `250` ÔåÆ BO=250 **e** PUBLIC=250; `123456` ÔåÆ clampa para 9999; `-5` ÔåÆ 0; `InteractiveChange(7)` ÔåÆ BO=7.
+- **Binds instalados**: `AEVENTS` no TextBox devolve 2, delegates `QUANTIDADEINTERACTIVECHANGE` e `VALIDARQUANTIDADE`.
+- **Gate da Fase 6** (ramo FLAT, replicado em PowerShell): `semPageFrame=True`, `temBindEvent=True`, `legadoSemLookup=True`, `temCamposFlat=True` ÔåÆ **`temLayoutFlat = True`**.
+- **Auditoria** `VerificarLookupEmKeyPress`: `ERRO=0`, form n├úo listado.
+- CRLF preservado (CR=871=LF), ASCII puro, 12 `PROCEDURE/FUNCTION` Ôåö 12 `ENDPROC/ENDFUNC`, 11 `TRY` Ôåö 11 `ENDTRY`, zero `RETURN` dentro de TRY.
+
+Os 2 matches de `\bTODO\b` s├úo a palavra portuguesa "todo" em coment├írios da Fase 3 ("cria **todo** controle com `Visible = .F.`") ÔÇö pr├®-existentes, n├úo marcadores de stub.
+
+Pendente para a Fase 7/8, como j├í previsto: `obj_4c_OK` / `btnSair` com o `Click` real (`ThisForm.Release`).

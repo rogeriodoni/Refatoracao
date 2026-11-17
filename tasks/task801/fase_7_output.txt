@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\Formsigopser.prg` (3.062 ÔåÆ 3.728 linhas, 156 KB).
+
+## Por que n├úo h├í `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`
+
+O SIGOPSER **n├úo ├® CRUD**: herda de `form` puro (n├úo `frmcadastro`), o dump n├úo tem `Grupo_Op` nem `pcEscolha` pr├│prios, e seus **quatro** bot├Áes s├úo `btnTotItens` / `btnCotacao` / `btnAltImps` / `cntOK.btnSair`. Criar os quatro nomes CRUD exigiria inventar bot├Áes (viola PILAR 1) ou gerar m├®todos vazios (proibido pela regra de completude). O modo de opera├º├úo ├® **herdado do chamador** em `ResolverModoOperacao`. O gate da Fase 7 cobre esse caso e valida pelos handlers dos bot├Áes que o legado realmente tem ÔÇö s├úo 4, m├¡nimo 2.
+
+## Handlers portados (transcritos do dump)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `BtnTotItensClick` | `btnTotItens.Click` ÔÇö `Enabled=.f.` + abre SigOpTot |
+| `BtnCotacaoClick` | `btnCotacao.Click` ÔÇö abre SigOpCot e, na volta, zera `AltImpost` e retotaliza cada item |
+| `BtnAltImpsClick` | `btnAltImps.Click` ÔÇö libera `lAutPreco` e foca a coluna Valor |
+| `BtnRetornarClick` | `cntOK.btnSair.Click` ÔÇö valida tamanhos, reabilita chamador, `Release` |
+| `GradeAfterRowColChange` | `fwGrade.AfterRowColChange` ÔÇö painel "Tamanho" conforme `iconfs` |
+| `TotalizarLinha` | `calc_valite` ÔÇö delega ao `Calc_ValIte` do form pai |
+| `ValidarTamanhosInformados` | o bloco `csValConfs` do `btnSair.Click` |
+| `AtualizarEstadoBotoesServico` | os `When` dos tr├¬s bot├Áes |
+| `AplicarGatesDeEdicao` | `When ÔåÆ Return .f.` de Get_Produto/Descri├º├úo/Mercs |
+
+Mais `VincularEventosPrincipais` (BINDEVENTs), `CarregarValoresTamanhoDaLinha` e `ProdutoExisteNoCadastro` (o `CursorQuery` do legado), com as tr├¬s chamadas novas ligadas no `InicializarForm`.
+
+## Decis├Áes que valem registro
+
+- **Os tr├¬s bot├Áes de servi├ºo continuam `Visible = .F.`** ÔÇö ├® o que o SCX declara e **nada** no legado os mostra (o SCX veio de c├│pia da tela de Produtos). Portei o `Click` e o `When` (como `Enabled`), mas n├úo os exibo: mostr├í-los seria inventar interface.
+- **`SigOpTot` ainda n├úo foi migrado.** Escrevi a chamada no padr├úo do projeto (`CREATEOBJECT` + `Show`, igual ao form irm├úo `Formsigoppro`), sem guard que esconda a falta ÔÇö a aus├¬ncia aparece na mensagem de erro (regra #27). **`SigOpCot` existe** e ├® chamado de verdade.
+- **Um desvio deliberado do legado**: `BtnTotItensClick` devolve `THIS.Enabled = .T.` ap├│s o `Show()`. O legado conta com o `btnSair` do filho para isso; como o filho n├úo existe hoje, sem essa restaura├º├úo a tela de Servi├ºos ficaria morta. Est├í documentado no c├│digo.
+- **`iconfs` e `AltImpost` v├úo por `VARTYPE`/`TYPE`**: colunas `bit` chegam ora L├│gicas ora Num├®ricas conforme o driver (regra #13).
+- **`Calc_ValIte` n├úo foi reescrito** ÔÇö a f├│rmula ├® regra de neg├│cio do form pai; aqui s├│ se delega (regra #17).
+- `BtnCotacaoClick` mant├®m o `Caption` enganoso do legado ("Excluir Servi├ºos") porque o Click **n├úo exclui nada** ÔÇö abre C├ómbio e retotaliza. Transcrevi o comportamento, n├úo o nome.
+
+## Verifica├º├úo
+
+Compila├º├úo VFP9 limpa (`Formsigopser.prg` e `sigopserBO.prg`: FXP=T, ERR=F), com **controle negativo** confirmando que o `COMPILE` de fato rodou (o .prg com erro proposital gerou .ERR). Arquivo 100% ASCII (acentos via `CHR()`), CRLF preservado, `DEFINE CLASS`/`ENDDEFINE` e `TRY`/`ENDTRY` balanceados, nenhum `RETURN` dentro de TRY/CATCH, e o diff contra o backup mostra **s├│ inser├º├Áes** ÔÇö nada do que as Fases 1ÔÇô6 entregaram foi alterado.
+
+N├úo executei a tela: isso ├® a etapa 06 do pipeline, e os cursores v├¬m do form chamador.

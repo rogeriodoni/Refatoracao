@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\sigopprrBO.prg` (586 linhas, compila limpo no VFP9, sem `.err`).
+
+## O que foi entregue
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | mapeia **todas** as colunas escalares de `SigCdUsu`, com guard de `EOF` e `TYPE()` por coluna |
+| `CarregarPorCodigo(par_cUsuario)` | `SELECT` pela PK mantendo o filtro `NOT cativos = 'N'` do legado |
+| `ValidarLogin(par_cUsuario, par_cSenha)` | transcri├º├úo de `SIGOPPRR.SENHA.LostFocus` ÔÇö as 4 condi├º├Áes de recusa, `PADR` sem `ALLTRIM`, mensagem id├¬ntica |
+| `DefinirOperadorLogado()` | `goSistema.Operador = Transform(Val(...),'@L 999')` |
+| `ValidarDados()`, `LimparDados()`, `ObterChavePrimaria()`, `Destroy()` | contrato do `BusinessBase` |
+| `NormalizarTexto()`, `FecharCursorUsuario()` (PROTECTED) | helpers internos |
+
+## Decis├Áes que valem destaque
+
+**`Inserir()`/`Atualizar()`/`ExecutarExclusao()` N├âO foram sobrescritos.** O dump legado n├úo tem um ├║nico `Insert Into`/`Update`/`Delete From`/`TABLEUPDATE`/`.AddCursor` ÔÇö a tela s├│ l├¬ `SigCdUsu` para conferir credenciais. Escrev├¬-los seria inventar SQL (regra #22), e o gate da Fase 2 tem exce├º├úo fail-closed exatamente para esse caso (confirmei que as 4 provas passam). O comportamento herdado de `BusinessBase` j├í ├® o correto.
+
+**Duas fun├º├Áes do Fortyus ausentes, tratadas de forma diferente e documentada no cabe├ºalho:**
+- `fCriptografar()` ÔÇö chamada **literal** dentro do `TRY`; faltando, o `CATCH` devolve a mensagem via `this_cMensagemErro`. N├úo criei stub: hash inventado autenticaria quem n├úo deve entrar, em sil├¬ncio (regra #27, mesmo tratamento de `SigOpAlCBO`/`SigOpLimBO`).
+- `ProgOper(oper, oModem)` ÔÇö **diverg├¬ncia consciente**: n├úo ├® nem express├ível (o `ThisForm.oModem` n├úo existe nem no SCX legado), ent├úo `DefinirOperadorLogado()` publica o operador sem o passo de dispositivo. Est├í escrito no cabe├ºalho.
+
+**Uma extens├úo sobre o legado:** o `SELECT` lista as demais colunas escalares da linha (o legado pede s├│ `usuarios`+`senhas`) para preencher as properties de estado que a Fase 1 declarou. O crit├®rio de autentica├º├úo n├úo muda. As duas colunas `text` (`mbiodigs`, `figjpgsuser`) ficaram fora de prop├│sito ÔÇö blobs que o legado nunca l├¬.
+
+Confer├¬ncias executadas: zero literais acentuados, zero `RETURN` dentro de `TRY`, zero marcador de pend├¬ncia que o validador 05d rejeita, `PADR`/`TratarNulo`/`EscaparSQL`/`ConverterParaData`/`CapturarErroSQL` todos existentes, guard de `Buffering` antes do `TABLEREVERT` (regra #52), e `obrigsenhas numeric(1,0)` mapeado como num├®rico (n├úo achatado para l├│gico).

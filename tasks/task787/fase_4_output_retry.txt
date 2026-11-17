@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e o gate passa. Resumo do que estava errado e do que fiz:
+
+## Causa da reprova├º├úo
+
+A Fase 4 anterior **entregou o trabalho correto** (grade de 11 colunas, cursor, `CarregarLista`, CommandGroup de marca├º├úo) ÔÇö reprovou s├│ pelo **nome de um objeto**. O gate do ramo FLAT (`OrquestradorMigracao.ps1:9783-9786`) mede tr├¬s predicados conjuntivos e n├úo diz qual falhou. Medidos no arquivo como estava:
+
+```
+temGrade  = True
+temBotoes = False   <-- ├║nico reprovado
+temCarga  = True
+```
+
+`$temBotoes` s├│ aceita `AddObject("cmg_4c_` ou `AddObject("cmd_4c_`. O form tinha `AddObject("obj_4c_CmdBtnGrade", "CommandGroup")` ÔÇö e esse `obj_4c_` **n├úo foi inven├º├úo do migrador**: ├® o que o `mapeamento.json` manda, porque o `AnalisadorObjetos` n├úo reconhece `CommandGroup` e cai no prefixo gen├®rico.
+
+## Corre├º├Áes
+
+1. **`obj_4c_CmdBtnGrade` ÔåÆ `cmg_4c_CmdBtnGrade`** (medido no acervo: `cmg_4c_` ├® maioria para CommandGroup, 177 ├ù 118, e ├® o prefixo que o gate aceita).
+2. **Novo `ConfigurarCmdBtnForm()`** ÔÇö o `cnt_4c_Botoes` criado na Fase 3 estava vazio ("populado em fase posterior"). Agora hospeda `cmg_4c_CmdBtnForm` com os **3 bot├Áes reais do dump** (`btnLimpar`/`btnCopiar`/`btnSair`, 75├ù75, Comic Sans MS 8 bold italic, Picture/cores transcritos). **N├úo inventei os 6 bot├Áes CRUD** que o texto da fase sugere ÔÇö este OPERACIONAL n├úo os tem, e cri├í-los violaria o PILAR 1. Os `Click` ficam para a Fase 7/8, como o pr├│prio template divide.
+3. **`mapeamento.json` corrigido** nas duas entradas (`cmdBtnGrade`/`cmdBtnForm`), para a raiz n├úo reaparecer.
+
+## Verifica├º├Áes
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 4 (3 predicados) | `temGrade/temBotoes/temCarga` = **True/True/True** ÔåÆ `temLayoutFlat = True` |
+| Compila├º├úo VFP9 | **`.FXP` 14324 bytes gerado, sem `.err`** (apaguei os stale antes ÔÇö regra do p-code velho) |
+| Balanceamento | PROCEDURE/ENDPROC 10/10, WITH/ENDWITH 15/15, TRY/ENDTRY 7/7, IF/ENDIF 5/5 |
+| Completude (05d) | 0 TODO/stub, 0 "n├úo implement", 0 MESSAGEBOX |
+| `.Picture` existe em `vbmp\` | 6 de 6 (regra #25 ÔÇö falha em sil├¬ncio) |
+| `AddObject` duplicado | nenhum (os dois `Check1` do regex: um ├® texto de coment├írio) |
+| Acentos em linha de c├│digo | nenhum |
+
+Duas ressalvas honestas:
+
+- **N├úo consegui provar execu├º├úo, s├│ compila├º├úo.** O `vfp9.exe` nesta sess├úo compila mas **n├úo executa** o corpo do `.prg` ÔÇö rodei o smoke test de 4 linhas em tr├¬s variantes de invoca├º├úo e o `STRTOFILE` nunca gravou. Ent├úo n├úo h├í prova de instancia├º├úo do form; a compila├º├úo limpa est├í provada pelo `.FXP` rec├®m-gerado sem `.err`.
+- **`obj_4c_OptProcessados` (OptionGroup, Fase 5) ficou como est├í** ÔÇö medi o acervo e a├¡ `obj_4c_` ├® que ├® maioria (520 ├ù 256), e esse prefixo n├úo entra em nenhum gate. Mexer seria escopo de outra fase.

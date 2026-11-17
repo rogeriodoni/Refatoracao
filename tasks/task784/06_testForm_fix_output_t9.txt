@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í bug de c├│digo aqui ÔÇö o erro ├® de infraestrutura, n├úo dos `.prg`.
+
+**Diagn├│stico:** o log mostra a falha de conex├úo (`Codigo: 1526 - DBNETLIB SQL Server inexistente ou acesso negado`) na **ETAPA 1B**, isto ├®, no pre-flight gen├®rico do `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT` de `FormSigOpPdt`/`SigOpPdtBO` sequer rodar. Isso ├® um teste de conectividade de rede que ocorre independentemente do conte├║do do form.
+
+**Esta ├® a 9┬¬ vez consecutiva** que essa mesma assinatura aparece nesta mesma task784/FormSigOpPdt (tentativas 1/10 a 8/10 j├í confirmadas, agora 9/10). Em todas elas o `FormSigOpPdt.prg`/`SigOpPdtBO.prg` foram recebidos e revisados integralmente ÔÇö conte├║do id├¬ntico ao j├í auditado nas tentativas anteriores, sem nenhum defeito:
+- `RETURN` sempre fora do `TRY/CATCH`
+- Handlers `PUBLIC` para todos os `BINDEVENT`
+- Form nunca chama m├®todo `PROTECTED` do BO
+- `CATCH` sempre com `MsgErro`
+- `EscaparSQL`/`FormatarDataSQL` sem aspas extras
+- `EVALUATE` s├│ para leitura
+
+Testei `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` agora e ele n├úo respondeu dentro do timeout ÔÇö a mesma assinatura de inacessibilidade j├í registrada nas 8 tentativas anteriores desta task (e em dezenas de outras tasks desde 2026-11-09).
+
+**N├úo editei os arquivos** ÔÇö editar c├│digo correto s├│ para "satisfazer" o gate seria dano, n├úo corre├º├úo.
+
+**A├º├úo recomendada com urg├¬ncia m├íxima:** s├│ resta **1 tentativa (10/10)** antes do esgotamento do retry autom├ítico. Recomendo pausar o retry desta task784 ou dar exce├º├úo ao gate `06_testForm` para o erro 1526/conectividade, j├í que nenhuma edi├º├úo de `.prg` vai resolver um problema de rede da m├íquina do pipeline at├® o servidor SQL (192.168.200.10:1433) voltar a ficar acess├¡vel.

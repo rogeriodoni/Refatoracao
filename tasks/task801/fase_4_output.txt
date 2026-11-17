@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. `Formsigopser.prg` modificado (779 ÔåÆ 2004 linhas).
+
+## O que entrou
+
+**Grade (`ConfigurarGrade`)** ÔÇö `grd_4c_Dados`, transcri├º├úo literal de `SIGOPSER.fwGrade`: 172/12/986x408, Verdana 8, `ColumnCount=7`, `HeaderHeight=20`, `RowHeight=16`, `ScrollBars=2` + o que vem da classe `fwgrade` (`AllowRowSizing=.F.`, `GridLineColor`, `HighlightBackColor`). As 7 colunas com `Width`/`ColumnOrder`/`Format`/`InputMask`/`Bound` do dump e os nomes nativos `Column1..7` (renomear Column quebra as refer├¬ncias).
+
+**Bot├Áes** ÔÇö `cmd_4c_BtnTotItens` / `cmd_4c_BtnCotacao` / `cmd_4c_BtnAltImps` (Top=87, Lefts 18/138/258, `Visible=.F.` como no SCX) e `cmg_4c_CntOK` (CommandGroup 85x85 em ÔêÆ2/968, bot├úo "Retornar" `Cancel=.T.`).
+
+**Carga (`CarregarLista`, PUBLIC)** ÔÇö transcreve a metade final do `Init` legado em 7 passos: configura├º├úo da opera├º├úo, `csTmpDesc` + ├¡ndice, linha em branco em INSERIR/ALTERAR, numera├º├úo + `SET RELATION`, `iconfs`, binding das 7 colunas com a m├íscara calculada, posicionamento + `Refresh`.
+
+## Bug s├®rio que a medi├º├úo revelou
+
+`AddObject("grd","Grid")` com um alias selecionado nasce **j├í ligado a ele** (medido: `RecordSource=[Crsigcdope]`, `ColumnCount=8`). As atribui├º├Áes `Column5/6.Text1.Value = 0` que o dump pede passavam **atrav├®s desse v├¡nculo e gravavam no cursor** ÔÇö medido: 5┬║ campo ÔåÆ `0`, 6┬║ ÔåÆ `"0"`. Como o di├ílogo roda na data session do form de movimento, abrir a tela corromperia dois campos do registro corrente do chamador, sem erro nem log. Corrigido desfazendo o v├¡nculo (`RecordSource=""` + `ControlSource` de todas as colunas) logo ap├│s o `ColumnCount`, antes de qualquer `Text1`.
+
+Tamb├®m corrigi, ao escrever: `SET FILTER`/`SET RELATION` guardam a express├úo e a reavaliam depois do m├®todo terminar (um `THIS` ali nunca resolveria) ÔåÆ macro com o valor/alias literal embutido; e o `FROM` do `SELECT` do VFP n├úo aceita nome entre par├¬nteses ÔåÆ macro.
+
+## Verifica├º├úo
+
+- Compila sem `.err`, `.fxp` gerado.
+- Instancia: 7 colunas com larguras/ordens/headers certos, grupo 85x85, 3 bot├Áes ocultos, `csTmpDesc` criado.
+- Carga completa com cursores do chamador, nos **dois** caminhos (com tag `CItens` e sem, via `SET FILTER`): escopo do item = 3 linhas de 4, rela├º├úo viva (linha1ÔåÆ1, linha2ÔåÆ2), `iconfs` s├│ na linha com De/Para, m├íscara `999999.9999` com `casas=4`, 2┬¬ carga idempotente, chamador desabilitado/reabilitado.
+- Gate Fase 4 (ramo FLAT): grade/bot├Áes/carga = `True`, `FormType=OPERACIONAL`.
+- Completude (regexes reais do 05d): 0 marcadores, 0 pend├¬ncias, 0 procedures vazias. Auditorias de propriedade inexistente / helper n├úo definido / m├®todo protegido: limpas. ├ìcones: 5/5 existem em `vbmp\`.
+
+## Dois pontos para voc├¬ decidir
+
+1. **`mapeamento.json` alterado**: `cntOK` estava como `obj_4c_CntOK` (o gerador n├úo reconhece `CommandGroup`), o que reprovaria o gate; passou a `cmg_4c_CntOK`, e mapeei as 7 colunas (estavam todas colidindo em `Page_4c_1`/`txt_4c_Text1`).
+2. **`sigopserBO` tem duas propriedades para uma coluna s├│**: `this_nPrecoPs` e `this_nPrecops`. No schema existe apenas `precops numeric(2,0)` ÔÇö o legado escreve as duas grafias e o VFP n├úo distingue caixa. Preenchi ambas com o valor real e documentei; consolidar numa s├│ ├® mexida no BO (Fase 1/2), fora do escopo desta fase.

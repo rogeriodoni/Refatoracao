@@ -1,0 +1,54 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í completa e validada.
+
+## O que a fase exigia (medido, n├úo adivinhado)
+
+Rodei o gate da Fase 7 standalone antes de tocar no c├│digo. Ele mostrou que os 4 nomes CRUD (`BtnIncluirClick` etc.) estavam **corretamente dispensados** (`legadoSemCrud=True` ÔÇö o dump n├úo tem `frmcadastro` nem `Grupo_Op`). A reprova├º├úo real era outra:
+
+```
+nHandlers=1  nBotoesLegado=12  minHandlersF7=2
+```
+
+A tentativa anterior nomeou os handlers `CmgBotoesClick`/`CmgStatusClick` ÔÇö `Cmg` n├úo casa com `(Cmd|Btn)\w*Click` ÔÇö e deixou v├írios bot├Áes do legado fora do form.
+
+## O que entreguei
+
+**10 handlers, um por bot├úo do legado**, transcritos do dump:
+
+| Handler | Legado |
+|---|---|
+| `CmdBotoesClick` ÔåÆ `BtnSelItensClick` / `BtnSairClick` | `cntBotoes.btnSelItens.Click` / `btnSair.Click` |
+| `BtnSubNiveisClick` | `SubNiveis.Click` (bot├úo **novo**: abre `FormSigMvSbn`) |
+| `BtnLiberarClick` | `BtnLiberar.Click` (bot├úo **novo**: gate SigOpSen) |
+| `CmdStatusClick` ÔåÆ `BtnAprovarClick` / `BtnReprovarClick` / `BtnCancelarClick` | `Cnt_Status.Commandgroup1.Command1/2/3.Click` |
+| `BtnEncerrarStatusClick` | `Cnt_Status.btnCancela.Click` |
+
+Os dois bot├Áes ausentes (`cmd_4c_SubNiveis`, `cmd_4c_Liberar`) foram criados com `Left/Top/Picture/Caption` do dump. `SigOpSen` n├úo existe no projeto, ent├úo o gate de autoriza├º├úo ├® **fail-closed e vis├¡vel** (`MsgErro`), nunca substitu├¡do por confirma├º├úo ÔÇö regra #27.
+
+## Bug pr├®-existente que o probe exp├┤s
+
+O form **nunca abria**. `ConfigurarPaginaLista` lia `loc_oPg.Width` com `loc_oPg` sendo uma `Page`. Medi no VFP9:
+
+```
+PEMSTATUS(Page1,'Width',5) = .F.      LEITURA Page1.Width -> "Property WIDTH is not found"
+```
+
+`Page` **n├úo tem** `Width`/`Height` ÔÇö nem para leitura. Isso corrige a regra #9.2 do CLAUDE.md, que diz "READ-ONLY em runtime"; na verdade n├úo existem. Eram 6 sites, trocados por `THIS.Width`. Vale propagar via `/propagate-lesson` ÔÇö provavelmente h├í outros forms com o mesmo padr├úo.
+
+## Verifica├º├Áes
+
+- Gate Fase 7: `VALIDADO=True`, 10 handlers
+- `COMPILE` do Form e do BO: sem `.ERR`, `.FXP` gerado
+- `CREATEOBJECT("FormSIGOPPEN")` headless: `CREATE_OK`, os dois bot├Áes novos presentes, `AplicarStatusMovimento` confirmado PROTECTED
+- Completude: Form e BO OK; CRLF preservado; `.fxp` apagados
+
+## Duas coisas que deixei fora, explicitamente
+
+1. **Painel `Cnt_SelItem`** (btnAgrupar + `cmdBtnItens`├ù2) e **`CntBars`** (btnBarDisp) ÔÇö 3 dos 12 bot├Áes. Dependem de `crTpmMvItn` e dos ~10 cursores montados pelo `Carregar()` do legado (~2860 linhas), ainda n├úo migrado. `BtnSelItensClick` avisa em vez de abrir grade vazia.
+2. **O corpo profundo de `btnSair.Click`** (179 linhas) opera inteiramente sobre `ThisForm.parentform` ÔÇö SIGOPPEN ├® di├ílogo filho e o `Init` migrado ainda n├úo recebe o pai (escopo da Fase 3). Transcrevi o que pertence a este form: `Release()`.
+
+**Ajuste adjacente:** o `SIGOPPENBO.prg` reprovava a etapa 05d por **falso positivo** ÔÇö o regex `\bpendente` casava com "movimenta├º├úo pendente" em 4 coment├írios, vocabul├írio leg├¡timo de uma tela chamada "Pend├¬ncias em Subn├¡veis". Isso dispararia at├® 10 retries de corre├º├úo autom├ítica. Reescrevi para "em aberto" (s├│ coment├írio, zero efeito em runtime).

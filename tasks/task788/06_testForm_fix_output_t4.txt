@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Same non-response signature already documented for every occurrence since 2026-11-05 ÔÇö consistent with the SQL Server at 192.168.200.10:1433 being unreachable from this pipeline machine, not a code issue.
+
+I independently re-reviewed `FormSigOpPrL.prg` and `SigOpPrLBO.prg` against the CLAUDE.md checklist (this is the 4th occurrence of this exact failure on this exact task ÔÇö see memory `project_sqlserver_200_10_inalcancavel_maquina_pipeline`, which documents the same error across 15+ forms since 2026-11-05 with zero real defects found):
+
+- RETURN always outside TRY/CATCH in every method (`Init`, `InicializarForm`, `BuscarLinha`, BO `Init`)
+- All BINDEVENT handlers (`HeaderSelecaoClick`, `FocarCheckboxSelecao`, `ChkSelecaoClick/MouseDown/MouseUp/KeyPress`, `CmdBotoesClick`) are PUBLIC
+- Form only calls PUBLIC BO methods (`BuscarLinha`); `ObterChavePrimaria` stays PROTECTED and is never called externally
+- Every CATCH calls `MsgErro`
+- `EscaparSQL` used without extra quotes
+- `ControlSource`/`USE IN` properly guarded by `USED()` (rule #41), checkbox created only after `ControlSource` is set (rule #18)
+- `go_4c_Sistema.Sys2015Tmp` (used for the temp image file) ÔÇö I verified it actually exists via `ADDPROPERTY` in `config.prg:156`, so no missing-property crash there
+
+No defect found. The error log confirms the failure happens in the generic pre-flight `SQLSTRINGCONNECT` of `TestFormWrapper` (ETAPA 1B), **before** `FormSigOpPrL` is ever instantiated ÔÇö the form/BO code never runs. This matches the error code 1526 (`DBNETLIB... SQL Server inexistente ou acesso negado`) pattern already logged as environment/network, not `.prg`.
+
+Per the memory's explicit guidance and the project rule against editing correct code just to "satisfy" a gate, I have **not** modified either file. This is attempt 4/10 ÔÇö recommend giving the `06_testForm` gate an exception for error 1526/connectivity, or pausing retries until SQL Server connectivity to 192.168.200.10:1433 is restored, since retrying against a network outage won't converge.

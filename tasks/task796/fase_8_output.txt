@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSigOpRob.prg` est├í completo e verificado.
+
+## O que a fase entregou
+
+Medi o legado antes de escrever qualquer coisa: 7 objetos na ├írvore, **2** m├®todos com c├│digo (`Init` e o `Click` do Encerrar), **1** bot├úo, **1** campo ÔÇö e esse campo ├® `ReadOnly = .T.`. Dos dez m├®todos que o template da fase pede, apenas **dois** t├¬m referente real:
+
+- **`BOParaForm()`** (novo) ÔÇö as quatro linhas de interface do `Init` legado (Caption do Form + Caption dos dois r├│tulos da faixa + Value do EditBox). Elas j├í rodavam, mas espalhadas por tr├¬s m├®todos, **com o t├¡tulo escrito em tr├¬s lugares**. Agora moram no hook can├┤nico da `FormBase`, em ponto ├║nico; os m├®todos `Configurar*` ficaram s├│ com geometria, fonte e cor. ├ë `PROTECTED` porque a `FormBase` declara o hook assim.
+- **`CmdSairClick`** ÔÇö j├í entregue na Fase 4, mantido com o nome do objeto do SCX.
+
+O diff de **c├│digo** s├úo 7 linhas removidas e 1 m├®todo novo; o resto s├úo os coment├írios de medi├º├úo.
+
+## O que deliberadamente n├úo criei
+
+Hook inverso (telaÔåÆBO), carregador de lista, habilitador de campos, ajustador por modo, limpador de campos e os handlers de buscar/gravar/cancelar ÔÇö nenhum tem referente. N├úo h├í campo edit├ível, grade, cursor nem modo de opera├º├úo no legado. Cri├í-los seria stub disfar├ºado ou UI inventada. Grafei os nomes can├┤nicos ausentes **elididos** nos coment├írios (`Form...ParaBO`, `Carregar...Lista`), porque o gate casa substring no arquivo inteiro e cit├í-los por extenso o faria aprovar a fase pelo coment├írio, n├úo pelo c├│digo.
+
+## Verifica├º├Áes (medidas, n├úo presumidas)
+
+- **Gate da Fase 8** standalone: `VEREDITO=PASSA`, `FALTANTES` vazio, ramo EXIBI├ç├âO ÔÇö antes e depois. `BOParaForm` saiu da lista de dispensados porque agora existe de fato.
+- **Compila limpo** (form e BO), com a prova vindo do arquivo de sa├¡da do script VFP, ap├│s smoke test confirmar que o `vfp9.exe` desta sess├úo executa o corpo do `.prg`.
+- **Probe de conte├║do**: os tr├¬s destinos do t├¡tulo concordam, `Edit1.Value` ├¡ntegro, ambos os call sites do legado funcionam, e instanciar sem argumentos n├úo estoura.
+- **Regress├úo da Fase 7**: os tr├¬s caminhos de sa├¡da (Encerrar, ESC, Alt+F4) continuam devolvendo pai reabilitado + objeto vivo + `Release()` do chamador limpo.
+- Auditorias do projeto e `Test-CompletudeCodigo`: sem achado. CRLF preservado (CR=LF=1114), zero acentos literais, blocos balanceados.
+- ├ìndice de carga sob demanda regerado: o fecho de `FormSigOpRob` resolve `SigOpRobBO` corretamente; as 34 entradas novas (├¡ndice estava velho de tasks anteriores) apontam todas para arquivos existentes.
+
+**Uma hip├│tese minha caiu na medi├º├úo** ÔÇö vale registrar: suspeitei que o di├ílogo abrisse vazio, porque o ├║nico chamador passa colunas **MEMO** (`TmpConta.Obsd`/`HistPgs`) e o BO guarda sob `VARTYPE = "C"`. Medido: `VARTYPE` de campo memo devolve **`"C"`**, n├úo `"M"` ÔÇö texto chega ├¡ntegro. N├úo mexi em nada por causa dela, e deixei o resultado negativo no cabe├ºalho e em mem├│ria, para ningu├®m "consertar" o que est├í correto.
+
+## O que ficou de fora, e por qu├¬
+
+**O di├ílogo continua inalcan├º├ível pelo sistema novo.** No legado ele abre dos quatro `Do Form SigOpRob With ...` do SIGCDPGR; o form migrado desse SCX (`projeto/app/forms/cadastros/Formpgr.prg`, task499) criou os dois campos de origem (`txt_4c_HistTit`, `txt_4c_DadosPg`) mas **n├úo migrou os eventos que abriam o di├ílogo** ÔÇö medi: zero `BINDEVENT` de DblClick/Click nesses controles e zero refer├¬ncia a esta classe em todo o projeto. Falta tamb├®m o `GarantirClasse("FormSigOpRob")` no ponto de abertura.
+
+N├úo fiz isso de prop├│sito: ├® c├│digo de outro form, de outra task, com gates e verifica├º├úo pr├│prios ÔÇö mexer em ~3.000 linhas n├úo auditadas a partir desta fase estaria fora do escopo. Est├í registrado no cabe├ºalho do arquivo para quem fechar a task499. **Enquanto esses dois handlers n├úo existirem, este arquivo ├® c├│digo morto, por mais completo que esteja.**
+
+Artefatos reexecut├íveis que deixei: `automation/VerificarGateFase8Task796.ps1`, `automation/ProbeF8MemoTask796.prg` e `automation/RodarProbeF8Task796.ps1`. Scratch apagado.

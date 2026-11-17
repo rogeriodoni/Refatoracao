@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH balanceados (26/26). O arquivo est├í sintaticamente consistente.
+
+## Resumo da Fase 6/8 ÔÇö FormSigOpRef.prg
+
+Completei o di├ílogo `FormSigOpRef` (Replica├º├úo de Produto), que ├® um form PLANO sem Lista/Dados (confirmado pelas fases anteriores), adicionando:
+
+1. **`ConfigurarCamposRestantes()`** ÔÇö segunda metade dos campos do dump: Descri├º├úo Origem/Destino (`Say7`/`getolddpro`, `Say6`/`getnewdpro` ÔÇö transcrevi literalmente a peculiaridade do legado onde os captions de Say6/Say7 duplicam "C├│digo de Destino :"/"C├│digo de Origem :" de Say5/Say1, um bug do SCX original que o PILAR 1 exige preservar), Quantidade (`Say4`/`Get_Qtd`), Situa├º├úo (`Say19`/`Opc_situacao` ÔÇö OptionGroup com ControlSource num├®rico direto, Value=1/2 sem +1/-1), e os dois labels de status `lblOk`/`lblNotOk`.
+
+2. **Exce├º├úo em `TornarControlesVisiveis`** ÔÇö `lblOk`/`lblNotOk` nunca recebem `.Visible = .T.` em nenhum m├®todo do SCX legado (confirmei varrendo o dump inteiro); s├úo dead code herdado, ent├úo adicionei uma exclus├úo para n├úo for├º├í-los vis├¡veis.
+
+3. **`BOParaForm()`/`FormParaBO()`** ÔÇö binding completo entre os controles e as properties do `SigOpRefBO` (j├í criadas nas Fases 1/2), incluindo a trava de `Opc_situacao.Enabled = .F.` quando a Situa├º├úo foi fixada por par├ómetro.
+
+Deixei explicitamente documentado no cabe├ºalho que a gera├º├úo autom├ítica do c├│digo de destino (`getNewCGrus.Valid` ÔÇö o ├║nico "lookup" real deste di├ílogo, via SQL direto, sem `FormBuscaAuxiliar`) e os handlers de Click (`btnConfirmar`/`btnSair`) ficam para a Fase 7, seguindo a divis├úo de escopo que as Fases 3-5 j├í haviam estabelecido nos coment├írios do pr├│prio arquivo.

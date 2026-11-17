@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete. I added the remaining ~50% of Page2 fields and fully implemented the lookups:
+
+**Fields added** (previously missing from `ConfigurarPaginaDados`):
+- `txt_4c_Busca` + label (grid search-by-number), `cmd_4c_BtnRestaurar`, `cmd_4c_BtnProduto`, `obj_4c_CmdOperacao` (Movimento), `cmd_4c_SubNiveis` ÔÇö inside the results page
+- `obj_4c_CmgRetornar`, `cmd_4c_BtnVisualizar`, `cmd_4c_BtnExcel`, `cmd_4c_BtnImprimir` ÔÇö at the Page2 level
+
+**Lookups fully implemented** (no TODOs/stubs):
+- Empresa (`txt_4c_EmpOs`/`txt_4c_DEmpOs`) ÔÇö replaces the non-ported `fAcessoEmpresa`, via `FormBuscaAuxiliar` on `SigCdEmp` (exact match auto-fills; no match opens the picker without clearing what the user typed, per the project's lookup rules)
+- Opera├º├úo (`txt_4c_Operacao`) ÔÇö replaces `fAcessoMovmto`, via `FormBuscaAuxiliar` on `SigCdOpe` (single-column: Dopes is both code and description)
+- Both wired with `LostFocus` validation + `KeyPress` F4, with reentrancy guards since the picker is modal
+
+**Real handlers implemented** (verified against legacy source + schema, cross-form navigation to already-migrated forms `FormProduto`/`FormSigMvExp`/`FormSigMvPdt`/`FormSigMvSbn`):
+- Grid row detail refresh (`AfterRowColChange` ÔåÆ obs text + embedded image decode)
+- Restaurar Grade, Cadastro do Produto, Movimento (checks `SigCdOpe`/`SigCdOpd`), Subn├¡veis, Retornar, Visualizar/Imprimir (guarded against the not-yet-ported `SigOpPck.frx`), Exporta XLS (real `COPY TO ... TYPE XL5`)
+
+Verified via VFP9 `COMPILE` that both `FormSigOpPck.prg` and `SigOpPckBO.prg` compile with zero errors; compile artifacts were cleaned up afterward.

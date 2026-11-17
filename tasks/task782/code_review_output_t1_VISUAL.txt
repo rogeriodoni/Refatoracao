@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `Formsigoppag` has no `pgf_4c_Paginas`/`cnt_4c_Sombra` ÔÇö it's an OPERACIONAL form, not a CRUD form with the Page1/Page2 pattern the review template assumes. Its header is `cnt_4c_Cabecalho` directly on `THIS` (`ConfigurarLayout`, lines 363-406), and the Caption propagation already exists there:
+
+- Line 387: `.Caption = THIS.Caption` (inside `lbl_4c_Sombra`)
+- Line 403: `.Caption = THIS.Caption` (inside `lbl_4c_Titulo`)
+
+`THIS.Caption` is the static class property `"Recebimento"` (line 191), never reassigned elsewhere, and `ConfigurarLayout()` runs from `InicializarForm()` at creation time ÔÇö so both labels already get the real title before the form is shown.
+
+The [TITULO-NAO-PROPAGADO] finding is a false positive here: it matches the generic CRUD-form template (`pgf_4c_Paginas.Page1.cnt_4c_Sombra...`) which doesn't exist in this file, and applying that literal fix would break compilation (reference to nonexistent objects). The actual propagation this form needs is already present and correct.
+
+No code change needed ÔÇö the title propagation already works as required.

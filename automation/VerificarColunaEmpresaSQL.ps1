@@ -70,12 +70,40 @@ foreach ($arq in $arquivos) {
         if ($sql -notmatch '(?i)\b(FROM|JOIN)\s+') { continue }
 
         # alias -> tabela, dentro deste bloco
-        $alias = @{}
+        #
+        # DOIS casos em que o alias NAO se resolve e por isso tem de ficar
+        # AMBIGUO (pulado) em vez de ser chutado - regra #48 ("corrigido
+        # marcando o alias como ambiguo em vez de chutar"):
+        #
+        #   1. alias de SUBCONSULTA / tabela derivada - ") B ON ..." ou
+        #      ") AS B". O alias nomeia o RESULTADO da subconsulta, cujas
+        #      colunas sao as da lista de SELECT dela, nao as de uma tabela
+        #      base. Como a subconsulta costuma reusar a MESMA letra de um
+        #      FROM interno (em sigoprbtBO.ConsultarVendasRebate o "B" eh ao
+        #      mesmo tempo "SIGCDPRO B", "SIGCDOPE B" e o derivado ") B"), o
+        #      mapa por ultima-ocorrencia escolhia a tabela errada e acusava
+        #      B.EMPS - que esta CERTO, porque a coluna vem de SIGMVCAB.emps
+        #      pela lista de SELECT do derivado;
+        #   2. alias amarrado a MAIS DE UMA tabela no mesmo statement - dois
+        #      ramos de um IF reusando a letra, ou subconsulta aninhada. Nao
+        #      ha como decidir qual vale sem analisar o escopo.
+        #
+        # Os dois recortes so RETIRAM falso positivo: o que sobra continua
+        # sendo alias com UMA tabela base, que eh o caso que o Erro196 pegou.
+        $derivados = @{}
+        foreach ($m in [regex]::Matches($sql, '(?i)\)\s*(?:AS\s+)?([A-Za-z][A-Za-z0-9_]*)\b')) {
+            $derivados[$m.Groups[1].Value.ToLower()] = $true
+        }
+
+        $alias     = @{}
+        $ambiguos  = @{}
         foreach ($m in [regex]::Matches($sql, '(?i)\b(?:FROM|JOIN)\s+([A-Za-z0-9_]+)\s+(?:AS\s+)?([A-Za-z][A-Za-z0-9_]*)\b')) {
             $t = $m.Groups[1].Value.ToLower()
             $a = $m.Groups[2].Value.ToLower()
             if ($a -in @('on','where','inner','left','right','join','outer','group','order','set','as')) { continue }
-            if ($tabelas.ContainsKey($t)) { $alias[$a] = $t }
+            if (-not $tabelas.ContainsKey($t)) { continue }
+            if ($alias.ContainsKey($a) -and $alias[$a] -ne $t) { $ambiguos[$a] = $true }
+            $alias[$a] = $t
         }
         if ($alias.Count -eq 0) { continue }
 
@@ -83,6 +111,8 @@ foreach ($arq in $arquivos) {
             $a   = $m.Groups[1].Value.ToLower()
             $col = $m.Groups[2].Value.ToLower()
             if (-not $alias.ContainsKey($a)) { $nSkip++; continue }
+            if ($derivados.ContainsKey($a)) { $nSkip++; continue }
+            if ($ambiguos.ContainsKey($a))  { $nSkip++; continue }
             $t = $alias[$a]
             if ($tabelas[$t].ContainsKey($col)) { continue }
 

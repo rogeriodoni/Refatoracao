@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balanced, no `RETURN` inside `TRY`. **Fase 8/8 conclu├¡da.**
+
+## O que foi entregue
+
+`projeto/app/forms/operacionais/Formsigopprr.prg` (1090 linhas, 51 KB) ÔÇö arquivo final completo.
+
+**1. Guarda de conex├úo do `Init` legado ÔÇö era o ├║nico trecho do SCX ainda sem contrapartida.** O legado recusa abrir a tela quando o conector n├úo sobe (`If .poDataMgr.pnIdconn > 0 ... Else Messagebox + Return .f.`). Sem ela o di├ílogo abria com o banco fora do ar e s├│ falhava ao sair do campo Senha, com mensagem e momento diferentes dos do legado. Reproduzida em `ValidarParametros()` (PUBLIC, chamado antes do `TRY`, `RETURN` fora dele ÔÇö regra #1), com o bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` que o harness exige.
+
+**2. Fonte ├║nica para `this_cOperador`** ÔÇö vinha recalculado do TextBox em paralelo ao que o BO j├í derivara para `go_4c_Sistema.Operador`; agora os dois saem do mesmo `this_cUsuarios`.
+
+**3. Documenta├º├úo de consolida├º├úo**: mapa dos 5 m├®todos do SCX (nenhum sobra sem destino), as 2 chamadas globais que n├úo se transcrevem (`fConfigGeral` ÔÇö o pr├│prio wrapper pro├¡be uso em c├│digo nosso; `fLerFiscal` ÔÇö n├úo portada, regra #27) e os 8 nomes can├┤nicos de CRUD com a evid├¬ncia medida de por que n├úo se aplicam.
+
+## Verifica├º├Áes (todas executadas, n├úo presumidas)
+
+Rodei o smoke test do VFP9 primeiro, como a li├º├úo do projeto manda ÔÇö ele executou, ent├úo os resultados abaixo s├úo reais:
+
+- **Compila├º├úo**: form e BO com `.fxp` gerado e **zero `.err`**.
+- **Instancia├º├úo headless** com `gnConnHandle = 0`: `VARTYPE=O`. Essa era a regress├úo de risco da guarda nova ÔÇö medida, n├úo deduzida.
+- `ValidarParametros` ├® PUBLIC (`PROTECTED=.F.`), devolve `.T.` no bypass e `.T.` com handle v├ílido sem bypass; nenhuma `MsgErro` disparada.
+- Os 5 objetos do dump presentes; handlers de BINDEVENT PUBLIC; `ValidarOperador` `.F.`/`.T.` conforme o campo; `FecharDialogo()` ÔåÆ `Visible=.F.`, `Release()` ÔåÆ objeto destru├¡do.
+- **Gate da Fase 8 standalone**: `VALIDADO=True`, `FALTANTES=[]` ÔÇö e reconheceu o legado pelo ramo **entrada-sem-bot├úo**, ou seja o pr├│prio gate dispensa os bot├Áes, confirmando que invent├í-los teria sido o erro.
+- Auditorias: completude (form e BO), fun├º├Áes n├úo definidas, m├®todo PROTECTED chamado de fora, propriedades inexistentes e Format/InputMask ÔÇö todas limpas.
+
+Dois trope├ºos no caminho, ambos do meu harness e n├úo do c├│digo: um `.fxp` velho rodou script antigo, e `AEVENTS` com 3 argumentos ├® "Too many arguments" ÔÇö o di├ílogo de erro ├® que pendurava a probe. Por isso a liga├º├úo dos dois `BINDEVENT` ficou verificada por leitura do c├│digo e pelos handlers serem PUBLIC, n├úo por `AEVENTS`.
+
+N├úo commitei nada ÔÇö os dois arquivos seguem como untracked, ├á sua decis├úo.

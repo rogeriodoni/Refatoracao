@@ -1,0 +1,259 @@
+﻿{
+    "taskId":  "task782",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-11-12T20:58:00",
+    "atualizadoEm":  "2026-11-12T23:15:50",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-11-12T20:58:00",
+                                            "fim":  "2026-11-12T20:58:00",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task782\\sigoppag.sct",
+                                            "baseName":  "sigoppag",
+                                            "scxFile":  "C:\\4c\\tasks\\task782\\sigoppag.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-11-12T20:58:00",
+                                          "fim":  "2026-11-12T20:58:01",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigoppag",
+                                          "txtFile":  "C:\\4c\\tasks\\task782\\sigoppag_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-12T20:58:01",
+                                              "fim":  "2026-11-12T20:58:01",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task782\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-12T20:58:02",
+                                              "fim":  "2026-11-12T20:58:02",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task782\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task782\\meta_prompt.md",
+                                              "boClass":  "sigoppagBO",
+                                              "formClass":  "Formsigoppag",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task782\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-12T20:58:02",
+                                              "fim":  "2026-11-12T20:58:03",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task782\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-12T20:58:03",
+                                               "fim":  "2026-11-12T20:58:03",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task782\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigoppag_esqueleto.prg",
+                                                                "sigoppagBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-12T20:58:03",
+                                       "fim":  "2026-11-12T22:51:07",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigoppagBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  282.56,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppag.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  9865
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-11-12T22:51:07",
+                                                  "fim":  "2026-11-12T22:52:43",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigoppagBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppag.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-11-12T22:52:45",
+                                                 "fim":  "2026-11-12T22:52:47",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-12T23:10:02",
+                                       "fim":  "2026-11-12T23:10:35",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-12T23:10:35",
+                                               "fim":  "2026-11-12T23:10:37",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task782\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-11-12T23:10:45",
+                                        "fim":  "2026-11-12T23:15:50",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-12T23:15:50",
+                                              "fim":  "2026-11-12T23:15:50",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task782_sigoppag.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-11-12T20:58:01",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-11-12T20:58:02",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task782\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-11-12T20:58:02",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-12T20:58:02"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-11-12T22:52:43",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-11-12T22:52:45",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigoppag_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppag.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task782\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-11-12T22:52:47",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-11-12T22:52:47",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-11-12T22:52:47",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-11-12T23:09:58",
+                                          "passes":  3,
+                                          "problemas":  "[BUSCA-CURSOR] CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027) sem parametros mas NAO define this_cCursorDestino. No Modo 2 (sem params), DEVE definir this_cCursorDestino com o cursor local pre-existente ANTES de chamar Show().; [GRID-WITH] Bloco WITH loc_oGrid define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: loc_oGrid.RecordSource).; [MADDCOLUNA-PARAMS] Chamada mAddColuna com 4 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 4 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: VALDESCS, VARPADS, IMPS, SISTEF, CNNSUS, CHEADERS, LCTIPO, FPAGS, DOPES, IF, MODPAGTO, FORMAS, ADQUIRENTE, BANDEIRA, FPARCS, PGTOINATIV, GRUPOEMP, MOEFPGS, SITUAS, EMPS, CAIXAS, TABDS, TPDESC, CDESC, OBRIGS, I, TROCOS, VLRFPGS, OPCRS, IMPBOLS, VALOS, EMPDOPNUMS, EMPDOPNCS, NUMS, FSIGOPFIN_ORP, _RECANT, CEMPS, TIPOS, LNVARS, PARAUTOS, VALSERVS, TIPOCADS, TPLECHQS, CCUPOMNVS, NUMOLDS, TPCHEQUES, LNCHQOPERS, EMPOS, NCARTS, OP_ESCOLHA, CNIDTEFS, CHKBLQBON, NPARCS, EMICHQS, VALUE, LNVALP, DESCS, PARCDES, GRUCONMOES, VALMAXS, LNTPAR, LNPARCS, INFOS, CARAUTS, OBS, AUTORIZA, NSU, LNFPAGOBRIGS, PESOVTS, VALITENS, ALTCOTS, CUPFIS, VARS, _VARIA, PVARIAS, TOTAL, LDOLDVCT, BLQVCTOPAR, FPAGSS, VALDEVS, VALENCS, USUALS, CONTABS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NUMES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: VALDESCS, VARPADS, IMPS, SISTEF, CNNSUS, CHEADERS, LCTIPO, FPAGS, DOPES, IF, MODPAGTO, FORMAS, ADQUIRENTE, BANDEIRA, FPARCS, PGTOINATIV, GRUPOEMP, MOEFPGS, SITUAS, EMPS, CAIXAS, TABDS, TPDESC, CDESC, OBRIGS, I, TROCOS, VLRFPGS, OPCRS, IMPBOLS, VALOS, EMPDOPNUMS, EMPDOPNCS, NUMS, FSIGOPFIN_ORP, _RECANT, CEMPS, TIPOS, LNVARS, PARAUTOS, VALSERVS, TIPOCADS, TPLECHQS, CCUPOMNVS, NUMOLDS, TPCHEQUES, LNCHQOPERS, EMPOS, NCARTS, OP_ESCOLHA, CNIDTEFS, CHKBLQBON, NPARCS, EMICHQS, VALUE, LNVALP, DESCS, PARCDES, GRUCONMOES, VALMAXS, LNTPAR, LNPARCS, INFOS, CARAUTS, OBS, AUTORIZA, NSU, LNFPAGOBRIGS, PESOVTS, VALITENS, ALTCOTS, CUPFIS, VARS, _VARIA, PVARIAS, TOTAL, LDOLDVCT, BLQVCTOPAR, FPAGSS, VALDEVS, VALENCS, USUALS, CONTABS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ICLIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: VALDESCS, VARPADS, IMPS, SISTEF, CNNSUS, CHEADERS, LCTIPO, FPAGS, DOPES, IF, MODPAGTO, FORMAS, ADQUIRENTE, BANDEIRA, FPARCS, PGTOINATIV, GRUPOEMP, MOEFPGS, SITUAS, EMPS, CAIXAS, TABDS, TPDESC, CDESC, OBRIGS, I, TROCOS, VLRFPGS, OPCRS, IMPBOLS, VALOS, EMPDOPNUMS, EMPDOPNCS, NUMS, FSIGOPFIN_ORP, _RECANT, CEMPS, TIPOS, LNVARS, PARAUTOS, VALSERVS, TIPOCADS, TPLECHQS, CCUPOMNVS, NUMOLDS, TPCHEQUES, LNCHQOPERS, EMPOS, NCARTS, OP_ESCOLHA, CNIDTEFS, CHKBLQBON, NPARCS, EMICHQS, VALUE, LNVALP, DESCS, PARCDES, GRUCONMOES, VALMAXS, LNTPAR, LNPARCS, INFOS, CARAUTS, OBS, AUTORIZA, NSU, LNFPAGOBRIGS, PESOVTS, VALITENS, ALTCOTS, CUPFIS, VARS, _VARIA, PVARIAS, TOTAL, LDOLDVCT, BLQVCTOPAR, FPAGSS, VALDEVS, VALENCS, USUALS, CONTABS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NTOTAL\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: VALDESCS, VARPADS, IMPS, SISTEF, CNNSUS, CHEADERS, LCTIPO, FPAGS, DOPES, IF, MODPAGTO, FORMAS, ADQUIRENTE, BANDEIRA, FPARCS, PGTOINATIV, GRUPOEMP, MOEFPGS, SITUAS, EMPS, CAIXAS, TABDS, TPDESC, CDESC, OBRIGS, I, TROCOS, VLRFPGS, OPCRS, IMPBOLS, VALOS, EMPDOPNUMS, EMPDOPNCS, NUMS, FSIGOPFIN_ORP, _RECANT, CEMPS, TIPOS, LNVARS, PARAUTOS, VALSERVS, TIPOCADS, TPLECHQS, CCUPOMNVS, NUMOLDS, TPCHEQUES, LNCHQOPERS, EMPOS, NCARTS, OP_ESCOLHA, CNIDTEFS, CHKBLQBON, NPARCS, EMICHQS, VALUE, LNVALP, DESCS, PARCDES, GRUCONMOES, VALMAXS, LNTPAR, LNPARCS, INFOS, CARAUTS, OBS, AUTORIZA, NSU, LNFPAGOBRIGS, PESOVTS, VALITENS, ALTCOTS, CUPFIS, VARS, _VARIA, PVARIAS, TOTAL, LDOLDVCT, BLQVCTOPAR, FPAGSS, VALDEVS, VALENCS, USUALS, CONTABS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CODIGOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: VALDESCS, VARPADS, IMPS, SISTEF, CNNSUS, CHEADERS, LCTIPO, FPAGS, DOPES, IF, MODPAGTO, FORMAS, ADQUIRENTE, BANDEIRA, FPARCS, PGTOINATIV, GRUPOEMP, MOEFPGS, SITUAS, EMPS, CAIXAS, TABDS, TPDESC, CDESC, OBRIGS, I, TROCOS, VLRFPGS, OPCRS, IMPBOLS, VALOS, EMPDOPNUMS, EMPDOPNCS, NUMS, FSIGOPFIN_ORP, _RECANT, CEMPS, TIPOS, LNVARS, PARAUTOS, VALSERVS, TIPOCADS, TPLECHQS, CCUPOMNVS, NUMOLDS, TPCHEQUES, LNCHQOPERS, EMPOS, NCARTS, OP_ESCOLHA, CNIDTEFS, CHKBLQBON, NPARCS, EMICHQS, VALUE, LNVALP, DESCS, PARCDES, GRUCONMOES, VALMAXS, LNTPAR, LNPARCS, INFOS, CARAUTS, OBS, AUTORIZA, NSU, LNFPAGOBRIGS, PESOVTS, VALITENS, ALTCOTS, CUPFIS, VARS, _VARIA, PVARIAS, TOTAL, LDOLDVCT, BLQVCTOPAR, FPAGSS, VALDEVS, VALENCS, USUALS, CONTABS; [TITULO-NAO-PROPAGADO] Form define Caption mas NAO propaga para lbl_4c_Sombra/lbl_4c_Titulo. O titulo na tela ficara incorreto (ex: \u0027Cadastro de Testes\u0027 ao inves do titulo real). CORRIGIR: No InicializarForm, APOS ConfigurarPageFrame, adicionar: THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption (e idem para lbl_4c_Titulo); [METODO-INEXISTENTE] Metodo \u0027THIS.this_cOpEscolha()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027btnRetCash\u0027 (parent: SIGOPPAG): Left original=672 vs migrado \u0027cmd_4c_BtnRetCash\u0027 Left=12 (diff=660px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Apaga\u0027 (parent: SIGOPPAG): Left original=748 vs migrado \u0027cmd_4c_Apaga\u0027 Left=88 (diff=660px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Ok\u0027 (parent: SIGOPPAG): Left original=898 vs migrado \u0027cmd_4c_Ok\u0027 Left=238 (diff=660px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027TotForma\u0027 (parent: SIGOPPAG): Top original=420 vs migrado \u0027txt_4c_TotForma\u0027 Top=459 (diff=39px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027TotForma\u0027 (parent: SIGOPPAG): Left original=445 vs migrado \u0027txt_4c_TotForma\u0027 Left=182 (diff=263px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGOPPAG): Left original=973 vs migrado \u0027cmd_4c_Cancela\u0027 Left=313 (diff=660px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Desconto\u0027 (parent: SIGOPPAG): Top original=88 vs migrado \u0027lbl_4c_DescontoPercent\u0027 Top=514 (diff=426px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027totite\u0027 (parent: SIGOPPAG): Left original=823 vs migrado \u0027cmd_4c_Totite\u0027 Left=163 (diff=660px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  19
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-11-12T23:09:58",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-11-12T23:10:01",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigoppagBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppag.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-11-12T23:10:38",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-12T23:10:45",
+                                             "thresholdPx":  5,
+                                             "unmatched":  100,
+                                             "errors":  100,
+                                             "matched":  65,
+                                             "warnings":  142,
+                                             "reportFile":  "C:\\4c\\tasks\\task782\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

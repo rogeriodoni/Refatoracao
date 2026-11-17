@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced, and no `RETURN` leaks inside any `TRY` block.
+
+**Phase 2 complete.** `sigopsepBO.prg` now has, beyond the Phase 1 Init:
+
+- `BuscarLinhas()` / `MarcarTodasLinhas()` ÔÇö the `SigCdLin` line-filter grid (converts SQLEXEC's read-only cursor to `READWRITE` since the grid checkbox needs to `REPLACE`)
+- `CriarCursorProdutos()` / `BuscarProdutos()` ÔÇö replicates `Processar.Click`'s dynamic `WHERE` (group/colecao/moeda filters + marked lines) and price calc (`pliqs` from acrescimo/desconto + arredondamento)
+- `MarcarTodosProdutos()` ÔÇö `cmdMarcaProd`/`cmdDesmarcaProd`
+- `ObterProdutosParaCopia()` ÔÇö replicates `CopiaLista.Click`'s selection scan (situacao filter + re-check against the parent cursor), stopping short of the actual insert into the parent form's `CrSigCdLpi`/`CrSigCdLpc`, since those cursors belong to a different form outside this BO's scope
+- `LimparCursores()` / `Destroy()`
+
+I deliberately did **not** override `Inserir()`/`Atualizar()`/`ExecutarExclusao()`/`RegistrarAuditoria()`/`CarregarDoCursor()`/`ObterChavePrimaria()`: the legacy SIGOPSEP never writes to `SigCdPro` ÔÇö it only queries it and stages selected rows for the *parent* form's own price-list BO to persist. Faking a `SigCdPro` INSERT/UPDATE here would fabricate behavior the legacy doesn't have. This follows the exact precedent already established in `SigOpCtsBO.prg`/`SigPrSlpBO.prg` for operational dialogs without their own master table. I also kept `fArredondamento()` absent (not stubbed with `ROUND`), per the documented lesson that it's an unported legacy function whose silent substitution would corrupt prices.
+
+Next step would be Phase 3 (Form base) whenever you want me to continue.

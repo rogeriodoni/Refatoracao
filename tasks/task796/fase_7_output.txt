@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da.
+
+## O que a fase entregou
+
+O template da Fase 7 pede os quatro handlers de clique dos bot├Áes de cadastro. **Este legado n├úo tem nenhum** ÔÇö medido no dump: 7 objetos na ├írvore, raiz `form` gen├®rico (sem a classe-m├úe de cadastro nem a barra CRUD do framework), **1 bot├úo** (`Commandgroup1`, `ButtonCount = 1`) e **2 m├®todos com c├│digo** (o `Init` e o `CmdSair.Click`). Inventar quatro bot├Áes violaria o PILAR 1; declar├í-los vazios ├® stub disfar├ºado.
+
+Ent├úo auditei o que "eventos principais" significa numa tela cuja ├║nica a├º├úo ├® fechar ÔÇö os **caminhos de sa├¡da** ÔÇö e isso **exp├┤s um defeito real** que nenhuma fase anterior cobria.
+
+## O defeito (medido, com controle negativo)
+
+`Closable` segue `.T.` mesmo com `TitleBar = 0` e `ControlBox = .F.` ÔÇö n├úo h├í X, mas **Alt+F4 fecha**. Sem `QueryUnload` tratado, esse caminho segue o default do VFP e **destr├│i o form**:
+
+| | depois do Alt+F4 | `Release()` do chamador |
+|---|---|---|
+| antes (classe real, sem `QueryUnload`) | `VARTYPE=X`, `ISNULL=.T.` | **estourou `LOC_ODLG is not an object`** |
+| depois | `VARTYPE=O`, `Visible=.F.` | roda limpo |
+
+O erro apareceria **dentro do form que abriu o di├ílogo**, na linha seguinte ao `Show()`. Pior: a rede de seguran├ºa do `Destroy` reabilitava o pai nos dois casos ÔÇö ent├úo o ├║nico sintoma restante mandava o diagn├│stico para o chamador.
+
+**Corre├º├úo:** `PROCEDURE QueryUnload()` ÔåÆ funil + `NODEFAULT`. N├úo ├® desenho inventado ÔÇö o `FormBuscaAuxiliar`, que o pr├│prio coment├írio do form j├í citava como origem do `Hide()`, **tem exatamente esse par**. Faltava a metade do padr├úo can├┤nico que cuida do Alt+F4.
+
+## Medi├º├Áes que descartaram hip├│teses
+
+- `CommandGroup` **n├úo tem** `Cancel` (`PEMSTATUS` = `.F.`) ÔÇö ela est├í no bot├úo interno, como o SCX declara e a classe faz. ├ë a ├║nica raz├úo de o ESC fechar.
+- O `BINDEVENT` no `Click` do bot├úo interno **dispara no clique real** (`MOUSE CLICK AT`, com `cmg.Value` indo a 1): o bot├úo n├úo estava inerte, nada a consertar ali.
+- **Armadilha descartada:** ligar tamb├®m o `Click` do grupo "por seguran├ºa" faz o handler rodar **duas vezes** por clique. Aqui seria in├│cuo, num handler que grava duplicaria o registro. O binding ficou s├│ no bot├úo.
+
+## Verificado, n├úo presumido
+
+- **Gate da Fase 7**: `VEREDITO=PASSA` pelo ramo "legado sem CRUD, 1 bot├úo" (`automation\VerificarGateFase7Task796.ps1`, recorte do bloco real do switch ÔÇö dot-source do orquestrador dispara migra├º├úo). Os quatro tokens seguem ausentes do arquivo.
+- **Compila├º├úo** limpa do Form e do BO, prova vinda do arquivo de sa├¡da do pr├│prio script VFP (FXP presente, `.err` ausente) ÔÇö precedida de smoke test provando que o `vfp9.exe` desta sess├úo executa o corpo do `.prg`.
+- **Classe instanciada e exibida**, com os **tr├¬s caminhos percorridos de verdade** (Encerrar, ESC, Alt+F4): funil roda, pai reabilitado, objeto vivo, `Release()` OK em todos.
+- **Controle negativo reexecut├ível** reproduzindo o defeito.
+- `Test-CompletudeCodigo` passa; balanceamento de blocos OK; nenhum `RETURN` dentro de `TRY`.
+
+Arquivos: `FormSigOpRob.prg` (modificado) e, novos em `automation\`: `ProbeF7Task796.prg`, `ControleNegativoF7Task796.ps1`, `VerificarGateFase7Task796.ps1`.
+
+Uma observa├º├úo fora do escopo desta fase: o contrato no topo do arquivo diz que o form pai migrado de SIGCDPGR (`Formpgr.prg`) ainda **n├úo** aponta para esta classe ÔÇö ligar os 4 call sites continua pendente, e ├® trabalho do form chamador.

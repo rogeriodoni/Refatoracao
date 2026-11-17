@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. Compila├º├úo limpa e comportamento verificado no VFP9.
+
+## O que a fase entregou
+
+**`projeto\app\forms\operacionais\FormSIGOPPGC.prg`** (+642 linhas)
+
+| Bloco | Origem no dump |
+|---|---|
+| `ConfigurarRodapeStatus()` | `Label2` ("Saldo : ") + `Label3` ("[  ]") ÔÇö os dois ├║ltimos objetos da SECAO 1 |
+| `InstalarCelulasGrade()` | instala as c├®lulas por `Column.AddObject` + `CurrentControl` (regra #18) |
+| `PrepararCelulaBarra()` | `Grade.Column1.Text1.When` (`Set Confirm On` + `_OldCodigo`) |
+| `ValidarBarraDigitada()` | `Grade.Column1.Text1.Valid` (flush por `Skip/Skip -1`, recusa, linha nova + `{DNARROW}`) |
+| `AtualizarSaldoEQuantidade()` | `Grade.Column1.Text1.LostFocus` (`Set Confirm Off`, contador, saldo, aviso) |
+| `TextBoxCelBarraSigOpPgc_4c` / `TextBoxCelValorSigOpPgc_4c` | subclasses de c├®lula (`When`/`Valid`; `Column2.Text1.When ÔåÆ .F.`) |
+| property `this_nCodigoBarraAnterior` | `_OldCodigo` |
+
+**Esta tela n├úo tem lookup.** Conferido no dump inteiro: zero `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, zero `mAddColuna`, zero `sigacess`/`Acesso*`. O c├│digo de barra ├® **digitado** e conferido contra `SigCdOpe` pelo `Valid` da c├®lula ÔÇö criar `AbrirLookup*`/`AbrirBusca*` inventaria consulta que o legado nunca faz (PILAR 1). O equivalente funcional desta fase ├® a valida├º├úo de c├®lula, implementada por **subclasse** e n├úo `BINDEVENT`, porque o retorno *├®* o mecanismo (regra #46); s├│ o `LostFocus`, que n├úo tem retorno com significado, foi por `BINDEVENT` ÔÇö dentro do guard de cria├º├úo, para n├úo acumular bindings.
+
+## Verifica├º├úo (VFP9, smoke test passou primeiro)
+
+- `COMPILE` dos dois arquivos: `.fxp` gerado, **nenhum `.err`**.
+- Form **instancia** (`VARTYPE = "O"`); `CurrentControl` das duas colunas aponta para as subclasses; `Column2.When()` devolve `.F.`.
+- Funil de totais com 2 barras + a linha em branco: `BO_QTDE=2`, `BO_SALDO=40` (100 ÔêÆ 60), `Label3 = "[ 2 ]"` ÔÇö a linha `Codigos = 0` fica fora da contagem, como o `Where Codigos <> 0` do legado. Cursor vazio: `0` / saldo inicial. ├ürea de trabalho e `RECNO` repostos.
+- `When`: `SET("Confirm") = ON` + valor anterior capturado; `LostFocus`: volta a `OFF`.
+- `Valid` com c├®lula em 0: curto-circuita, n├úo insere linha. Com barra > 0 e BO recusando: devolve `.F.`, zera c├®lula **e** cursor, n├úo insere linha, sem mensagem duplicada (regra #20).
+
+## Dois pontos para o seu registro
+
+1. **Toquei o BO**, que ├® arquivo das Fases 1/2: acrescentei `RecalcularSaldoEQuantidade()` ÔÇö a conta de saldo/quantidade ├® regra de neg├│cio e a regra #17 manda o BO calcular e o form espelhar (as properties `this_nQtdeBarras`/`this_nSaldoAtual` j├í existiam para isso). E corrigi `WHERE Codigos = loc_nCodigoBarra` ÔåÆ `m.loc_nCodigoBarra` na consulta de duplicidade: sem o prefixo o VFP resolve nome solto como coluna primeiro, e essa ├® exatamente a consulta que esta fase passou a acionar.
+
+2. **O caminho de ACEITE n├úo foi provado em execu├º├úo.** Ele passa por `SELECT Dopes FROM SigCdOpe` no SQL Server 192.168.200.10, inalcan├º├ível nesta m├íquina ÔÇö o probe registrou *"Connection handle is invalid"*. O que ficou provado ├® o caminho de recusa; o aceite depende de teste manual com banco.
+
+Desvio deliberado de geometria: `Label3.Width` = **60** em vez dos 18 do dump. Os 18 s├úo o auto-size do caption de projeto `"[  ]"`, mas o caption ├® reescrito em runtime com a contagem; `AutoSize` ├® no-op em Label criado por `AddObject` (regra #23), ent├úo manter 18 cortaria o n├║mero. A faixa 156..216 no `Top = 359` est├í livre. Est├í documentado no c├│digo.

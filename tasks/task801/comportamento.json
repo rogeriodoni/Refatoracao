@@ -1,0 +1,538 @@
+{
+  "resumo": {
+    "totalMetodos": 31,
+    "metodosComSQL": 14,
+    "metodosComValidacao": 20,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For cpros = Space", "fConfigGeral", "fwBuscaSel", "fCustoMedio", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSER",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Select crTpmMvItn3\n\nReplace DPros     With [], ;\n\t\tObs       With [], ;\n\t\tCodBarras With 00, ;\n\t\tUtilizas  With 00, ;\n\t\tTamDe\t  With [], ;\n\t\tTamPara\t  With [], ;\n\t\tiConfs\t  With .F., ;\n\t\tNotas     With [] In crTpmMvItn3\n\nWith Thisform\n\tWith .fwGrade\n\t\t.Produto.Text1.Value  = []\n\t\t.Qtd.Text1.Value      = 0\n\t\t.Valor.Text1.Value    = 0\n\t\t.Moeda.Text1.Value    = ''\n\t\t.Total.Text1.Value    = 0\n\t\t.Produto.Text1.Refresh\n\t\t.Qtd.Text1.Refresh\n\t\t.Valor.Text1.Refresh\n\t\t.Moeda.Text1.Refresh\n\t\t.Total.Text1.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.Calc_ValIte([crTpmMvItn3])\n\nThisForm.fwGrade.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calc_ValIte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "Select crTpmMvItn3\nLocate For cpros = Space(14)\nIf Eof()\n\tInsert Into crTpmMvItn3(Emps, Dopes, Numes, Citens) ;\n\t\t\t\tValues (TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, ThisForm.Citem)\n\n\tInsert Into csTmpDesc (nControle, nLInhas) Values (RecNo([crTpmMvItn3]), ThisForm.nCItem2)\n\n\tThisForm.nCItem2 = ThisForm.nCItem2 + 1\nEndIf\n\nSelect crTpmMvItn3 \nSet Order To CItens\nSet Key To ThisForm.Citem\n\nSelect crTpmMvItn3\nSet Relation To Str(Recno([crTpmMvItn3]),8) Into csTmpDesc\n\nSelect crTpmMvItn3\nIf Not... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For cpros = Space",
+        "metodosFormChamados": "AntCPro = Space,AntValu = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": " =fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER",
+      "evento": "Init",
+      "linhas": 148,
+      "codigoOriginal": "LParameters poForm, pnDatSes, pGarantia, pVlrZeroGarantia\n\nPrivate pDat\npDat = Datetime()\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.plGarantia    = pGarantia\nThisForm.plVlrZeroGarantia = pVlrZeroGarantia\n\nLocal lnLeft\n\nSet Datasession to pnDatSes\nWith Thisform\n\t.Poform     = PoForm\n\t.ParentForm = poForm.parentform\n\t.Op_Escolha = Iif(ThisForm.Parentform.EdServicos,'ALTERAR',poForm.op_Escolha)\n\t.ValidOk = .f.\nEndWith\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery,SqlExecute",
+        "controlesReferenciados": "Get_Produto,Get_Descrição,Get_Mercs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSelect crTpmMvItn3\nIf crTpmMvItn3.iconfs\n\tThisForm.cntTamanho.Visible = .T.\nElse\n\tThisForm.cntTamanho.Visible = .F.\t\nEndIf \nThisForm.cntTamanho.getTamDe.Value = crTpmMvItn3.TamDe\nThisForm.cntTamanho.getTamPara.Value = crTpmMvItn3.TamPara",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.PRODUTO.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "Select crTpmMvItn3\nThisForm.AntCPro = This.Value\nThisForm.AntValu = crTpmMvItn.Units\n\nReturn Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.PRODUTO.Text1",
+      "evento": "Valid",
+      "linhas": 137,
+      "codigoOriginal": "Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe, lcMoeVs, lnUniVals \nLocal fcusto,fvenda,llProducao, lnAQtds, llTransfEtiq, lcEmpos, _Msg, _Caption, llVerEst2\n\nSelect crTpmMvItn3\n\nThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)\n\nprecop     = CrSigCdOpe.precops\ncpro       = ''\ndpro       = ''\npeso       = 0\nlcMoeVs    = ''\n\nIf (Padr(This.Value,10) # Padr(Thisform.AntCPro,10)) And !IsEmpty( Thisform.AntCPro )\n\tReplace Units With 0 In ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fCustoMedio",
+        "metodosFormChamados": "Cursorquery,AntCPro,10)) And !IsEmpty,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.PRODUTO.Text1",
+      "evento": "LostFocus",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.AntCpro = Space(10)\n\nIf Empty(This.Value) And (Lastkey() = 13)\n\tThisForm.cntOK.btnSair.SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntCpro = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.QTD.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(crTpmMvItn3.CPros) And Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.QTD.Text1",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local rec,ord,totite,cotacao,cotcv,valau, _SubNiv, llNovaLinha\n\n=ThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)\n\nIf Inlist( Thisform.Op_escolha, 'INSERIR', 'ALTERAR' ) \n\n\tIf Lastkey()=13 \n\t\tllNovaLinha = .t.\n\t\tSelect crTpmMvItn3\n\t\tThisform.Foco = 'fwgrade.Produto'\n\t\tThisform.mInsereLinha()\n\tEndif\n\nEndIf\n\nThisform.Calc_ValIte()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery,mInsereLinha,Calc_ValIte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.VALOR.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.OldPreco = This.Value\n\nReturn InList(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Not Empty(crTpmMvItn3.CPros) And ThisForm.lAutPreco\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.VALOR.Text1",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local lnCasas, Rec\n\nlnCasas = CrSigCdOpe.Casas\n\nThisform.Foco = ''\nThis.Value = Round( This.Value, lnCasas )\n\nIf This.Value < 0 \n\tMessageBox('Preço Inválido',0+48,'')\n\tThis.value = Thisform.OldPreco\n\tReturn 0\t\nEndIf\n\nIf Not ThisForm.plVlrZeroGarantia And This.Value = 0\n\tMessageBox('Preço Não Pode Ser Zerado.',0+48,'')\n\tReturn .F.\nEndIf \n\nThis.Refresh\nThisform.lAutPreco = .F.\n\nIf Empty(This.Value)\n\tThisform.Calc_valite()\nEndIf \t\n\nIf LastKey()=13\n\tIf Inlist( Thisform.Op_Escolha, 'INSERIR', 'ALTERA... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calc_valite,mInsereLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.VALOR.Text1",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Local lcFoco\n\nThisform.lAutPreco = .F.\nSelect crTpmMvItn3\nIf Not IsEmpty(Thisform.Foco)\n\tlcFoco = AllTrim(Thisform.Foco)\n\tThisform.Foco = ''\n\tThisform.&lcFoco..Refresh\n\tThisform.&lcFoco..SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.MOEDA.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.TOTAL.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.item.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.Descricao.Text1",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Select crTpmMvItn3\nThisForm.AntCPro = This.Value\nThisForm.AntValu = crTpmMvItn.Units\n\nReturn (Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Empty(crTpmMvItn3.Cpros))",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.Descricao.Text1",
+      "evento": "Valid",
+      "linhas": 130,
+      "codigoOriginal": "Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe, lcMoeVs, lnUniVals \nLocal fcusto,fvenda,llProducao, lnAQtds, llTransfEtiq, lcEmpos, _Msg, _Caption, llVerEst2\n\nSelect crTpmMvItn3\n\nThisForm.Parentform.poDataMgr.Cursorquery('SigCdOpe','CrSigCdOpe','Dopes',TprMvCab.Dopes)\n\nprecop     = CrSigCdOpe.precops\ncpro       = ''\ndpro       = ''\npeso       = 0\nlcMoeVs    = ''\n\nIf (Padr(This.Value,40) # Padr(Thisform.AntCPro,40)) And !IsEmpty( Thisform.AntCPro )\n\tReplace Units With 0 In ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fCustoMedio",
+        "metodosFormChamados": "Cursorquery,AntCPro,40)) And !IsEmpty,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.fwGrade.Descricao.Text1",
+      "evento": "LostFocus",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.AntCpro = Space(40)\n\nIf Empty(This.Value) And (Lastkey() = 13)\n\tThisForm.cntOK.btnSair.SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntCpro = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.btnAltImps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.Op_Escolha, [INSERIR], [ALTERAR]) And Not Eof([crTpmMvItn3])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.btnAltImps",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(crTpmMvItn3.CPros)\n\t_Retorno = [*] + Usuar\n\tThisForm.lAutPreco = (Left(_Retorno, 1) = [*])\n\tIf ThisForm.lAutPreco\n\t\tThisForm.fwgrade.SetFocus\n\t\tThisForm.fwgrade.Valor.SetFocus\n\tEndIf\nElse\n\t=MessageBox([Selecione um Produto Para Ter o Preço Alterado], 48, [Atenção!!!])\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "lAutPreco =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.btnCotacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(Thisform.Op_Escolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.btnCotacao",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Do Form SigOpCot With ThisForm.ParentForm, TprMvCab.Datas\n\nSelect crTpmMvItn\nSet Order To \nScan\n\tIf Not ThisForm.ParentForm.PodataMgr.CursorQuery([SigCdPro], [crTmpPro], [CPros], crTpmMvItn.CPros)\n\t\tLoop\n\tEndIf\n\n\tReplace AltImpost With .f. In crTpmMvItn\n\n\tThisForm.Calc_Valite()\nEndScan\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Calc_Valite",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.btnTotItens",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Enabled = .f.\n\nDo Form SigOpTot With ThisForm, ThisForm.DataSessionId\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTot",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.Get_Descrição",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.cntOK",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If InList(Thisform.op_escolha,[INSERIR],[ALTERAR])\n\tlnOldSel=Select()\n\tIf Used([csValConfs])\n\t\tUse in csValConfs\n\tEndIf \n\tSelect crTpmMvItn3\n\tSelect Count(1) as Qtd From crTpmMvItn3 Where iConfs = .T. and (Empty(TamDe) or Empty(TamPara)) Into Cursor csValConfs ReadWrite\n\n\tSelect csValConfs\n\tIf Reccount([csValConfs])>0\n\t\tIf csValConfs.Qtd > 0\n\t\t\tMessageBox([Existe Serviços sem Informar os campos :] + Chr(13) + [TAMANHO DE ou o TAMANHO PARA.]+Chr(13)+[Favor Verificar!!!],0+48,[Aviso])\n\t\t\tSelect(ln... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.Get_Mercs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSER.cntTamanho.getTamDe",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdTam','CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = CrListaRemota.Cods\n\tElse\n\t\tThis.Value = []\n\tEndIf\n\t\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\n\nSelect crTpmMvItn3\nReplace Ta... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSER.cntTamanho.getTamPara",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdTam','CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = CrListaRemota.Cods\n\tElse\n\t\tThis.Value = []\n\tEndIf\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nSelect crTpmMvItn3\nReplace TamPara... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSER.Procedure",
+      "queryOriginal": "\tInsert Into crTpmMvItn3(Emps, Dopes, Numes, Citens) ; \t\t\t\tValues (TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, ThisForm.Citem)",
+      "tabelas": "crTpmMvItn3",
+      "colunas": "Emps,Dopes,Numes,Citens",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSER.Procedure",
+      "queryOriginal": "\tInsert Into csTmpDesc (nControle, nLInhas) Values (RecNo([crTpmMvItn3]), ThisForm.nCItem2)",
+      "tabelas": "csTmpDesc",
+      "colunas": "nControle,nLInhas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSER.cntOK.Click",
+      "queryOriginal": "\tSelect Count(1) as Qtd From crTpmMvItn3 Where iConfs = .T. and (Empty(TamDe) or Empty(TamPara)) Into Cursor csValConfs ReadWrite",
+      "tabelas": "crTpmMvItn3",
+      "colunas": "iConfs,csValConfs,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crTpmMvItn3", "csTmpDesc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

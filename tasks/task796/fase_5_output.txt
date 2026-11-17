@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada.
+
+## O que a Fase 5 pedia e o que o legado tem
+
+O template pede a faixa do cabe├ºalho mais "metade dos campos" numa p├ígina de dados. Medi o dump contra o `.prg` (795 dumps / 70 propriedades conferidas uma a uma):
+
+| medida | valor |
+|---|---|
+| objetos na ├írvore do SCX | 7 |
+| controles de **entrada** | 1 (`Edit1`) |
+| desses, com `ReadOnly = .T.` | 1 (= todos) |
+| "metade dos campos" = ceil(1/2) | 1 |
+| campo j├í criado no `.prg` | 1 (Fase 4) |
+| faixa do cabe├ºalho j├í criada | 1 (Fase 3) |
+| propriedades do dump ausentes no migrado | **0** |
+
+`SIGOPROB` ├® um di├ílogo de exibi├º├úo: t├¡tulo + caixa somente-leitura + bot├úo Encerrar. O ├║nico campo foi entregue inteiro na Fase 4 e a faixa na Fase 3 ÔÇö **n├úo h├í campo novo a acrescentar**. Inventar um segundo campo violaria o PILAR 1; declarar m├®todo de p├ígina vazio seria stub disfar├ºado. O gate da fase j├í reconhece isso pelo ramo EXIBICAO, e confirmei que ele ├® o **├║nico** ramo que aprova (PAGINADO/FLAT/DESPACHANTE todos `False`).
+
+## O trabalho real ficou no pipeline
+
+O guard de NO-OP do `OrquestradorMigracao.ps1` ÔÇö avaliado **antes** do gate de conte├║do ÔÇö conhecia s├│ duas fam├¡lias de "fase sem trabalho" (DESPACHANTE e GRADE+BOT├òES) e n├úo a de EXIBICAO. Sem arquivo alterado ele for├ºaria uma re-execu├º├úo opus inteira s├│ para reconfirmar que n├úo havia nada a fazer. ├ë a mesma fam├¡lia j├í registrada em mem├│ria: exce├º├úo criada num gate n├úo se propaga sozinha para a porta vizinha que faz a mesma pergunta.
+
+Entrou o helper `Test-LegadoSoDialogoExibicao`, com a **mesma composi├º├úo** que os gates das Fases 5/6 j├í usam (sem lista + `Test-LegadoDialogoExibicao`), para guard e gate n├úo divergirem em sil├¬ncio.
+
+Delta medido nos 795 dumps de `tasks\`: **95 ÔåÆ 98** dumps dispensados, **sobreposi├º├úo entre as tr├¬s fam├¡lias = 0**. Os 3 novos s├úo exatamente os di├ílogos de 1 EditBox ReadOnly ÔÇö `SigPdMen` (task140), `SigMvMen` (task573) e este `SigOpRob` ÔÇö, todos `FormType = OPERACIONAL`. A exce├º├úo s├│ deixa de **for├ºar o retry**; o gate de conte├║do continua valendo.
+
+Escolhi deliberadamente o teste de lista **largo** (o dos gates 5/6) e n├úo o estrito da Fase 4 ÔÇö ├® o mais conservador aqui. Consequ├¬ncia medida e documentada no c├│digo: `SIGSERPR`/`FormSigPrTar` ├® di├ílogo de exibi├º├úo de verdade mas o token cru `ControlSource` do seu campo ReadOnly faz o largo acusar lista, ent├úo ele n├úo entra. Trocar largo por estrito nos gates 5/6 ├® outra mudan├ºa, com medi├º├úo pr├│pria ÔÇö **n├úo fiz**, fica registrado como pend├¬ncia.
+
+## Arquivos
+
+- `automation/OrquestradorMigracao.ps1` ÔÇö helper novo + guard passa a consultar as 3 fam├¡lias. `PARSE OK`, 0 CRLF introduzido.
+- `projeto/app/forms/operacionais/FormSigOpRob.prg` ÔÇö se├º├úo "FASE 5/8" no cabe├ºalho com a medi├º├úo e a decis├úo. Bloco 100% coment├írio, s├│ ASCII, 0 CRLF; `ConfigurarPaginaDados`, `.ControlSource =` e `AddObject("pgf_4c_` d├úo **zero** ocorr├¬ncias (cit├í-los literalmente faria o gate aprovar pelo ramo errado ÔÇö ressalva que j├í estava no cabe├ºalho desde a Fase 3).

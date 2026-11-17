@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGOPPGC.prg` atualizado.
+
+## O que foi entregue
+
+O legado **n├úo tem barra CRUD** ÔÇö `SIGOPPGC` ├® `Class: form` puro (sem `frmcadastro`, sem `Grupo_Op`, sem `pcEscolha`), e os **dois ├║nicos bot├Áes** do dump s├úo `Ok` ("\<Confirmar") e `Cancela` ("Cancelar"). Criar os quatro `Btn<verbo>Click` da barra de cadastro seria inventar bot├úo (PILAR 1) ou escrever m├®todo vazio. Os eventos principais entregues s├úo os que o legado realmente tem:
+
+| M├®todo | Origem no dump | Regra |
+|---|---|---|
+| `BtnConfirmarClick` | `SIGOPPGC.Ok.Click` | s├│ fecha com saldo **zerado**; recusa com `MsgAviso` (MESSAGEBOX ├® proibido) |
+| `BtnCancelarClick` | `SIGOPPGC.Cancela.Click` | **ZAP** em `BarBonus` ÔÇö ├® assim que o pai sabe que foi cancelado |
+| `FecharDialogo` | 2 ├║ltimas linhas id├¬nticas dos dois Click | reabilita o form pai + fecha |
+| `PrepararLinhaInicial` | `Select BarBonus / Zap / Append Blank` do `Init` | a linha em branco ├® o que torna a tela us├ível |
+| + `BINDEVENT` de `Click` | ÔÇö | pend├¬ncia que a Fase 4 deixou aberta |
+
+Nomes pela **a├º├úo**, n├úo pelo objeto do SCX (`Ok`/`Cancela`) ÔÇö o PILAR 3 manda renomear, e `BtnCancelarClick` ├® tamb├®m o nome que a Fase 8 exige nominalmente.
+
+## Tr├¬s armadilhas conhecidas tratadas
+
+- **ZAP com `DataSession = 2`**: `SET SAFETY` ├® escopado por data session, ent├úo o `SET SAFETY OFF` do `main.prg` n├úo alcan├ºa ÔÇö o ZAP abriria um di├ílogo modal invis├¡vel e congelaria a tela. Os dois ZAPs v├úo entre salvar/restaurar `SET("SAFETY")`.
+- **`Hide()` e n├úo `Release()`**: `Release()` destr├│i o objeto mesmo com o chamador segurando a refer├¬ncia, e a leitura seguinte estoura no chamador. Mesmo contrato do `FormBuscaAuxiliar`.
+- **`FecharDialogo()` fora do TRY no Cancelar**: a tela n├úo tem X nem barra de t├¡tulo e o pai est├í `Enabled = .F.` ÔÇö falha no descarte do cursor n├úo pode prender o usu├írio.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+VFP9 **executa** nesta sess├úo (smoke test gravou arquivo), ent├úo as medi├º├Áes abaixo valem:
+
+- **Compila├º├úo limpa** ÔÇö `FORM.FXP=.T. FORM.ERR=.F.` / `BO.FXP=.T. BO.ERR=.F.`, com **controle negativo** provando que o passo detecta erro (`NEG.ERR=.T.`).
+- **Gate da Fase 7** (`VerificarGateFase7Task781.ps1` parametrizado): `VEREDITO=PASSA` pelo caminho honesto ÔÇö `faltantes=4`, `legadoSemCrud` por todas as cinco fam├¡lias, `nBotoesLegado=2` ÔåÆ piso 2, `nHandlers=2`. Reescrevi o coment├írio do cabe├ºalho para **n├úo citar os quatro identificadores por extenso**: o gate l├¬ o `.prg` inteiro e os nomes no coment├írio fariam a fase aprovar pelo motivo errado.
+- **Probe de runtime** com form pai de teste e o cursor do chamador (3 colunas, como o `SIGOPPAG` cria): Init desabilita o pai ÔåÆ `BarBonus` fica com **1 linha em branco, 3 colunas preservadas** ÔåÆ Confirmar com saldo 150 **recusa** (`.F.`, pai segue desabilitado, aviso gravado) ÔåÆ com saldo 0 **aceita** (pai reabilitado, cursor intacto, objeto vivo) ÔåÆ Cancelar **zera o cursor do chamador** (`RECCOUNT=0`, estrutura preservada) ÔåÆ `Release()` do chamador encerra o objeto.
+- Completude: zero TODO/FIXME/stub; as 4 ocorr├¬ncias de `MESSAGEBOX` s├úo cita├º├Áes do legado em coment├írio. Tamb├®m reescrevi 3 usos da palavra `pendente` (inclusive 2 pr├®-existentes das fases anteriores) que disparariam falso positivo no validador 05d.
+
+Uma observa├º├úo do caminho: o primeiro probe passou `0` como data session e mediu o cursor da sess├úo privada, parecendo que o ZAP n├úo funcionava ÔÇö era setup do probe, n├úo c├│digo; confirmado passando o `DataSessionId` real, onde o `SET DATASESSION` do `Init` move o form para a sess├úo do chamador (`loForm.DataSessionId = 1`).

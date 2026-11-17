@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This confirms the reported `TITULO-NAO-PROPAGADO` finding is a **false positive** for this specific form.
+
+The detector's generic rule assumes a CRUD form with a `PageFrame` (`pgf_4c_Paginas.Page1.cnt_4c_Sombra...`), per CLAUDE.md rule #11. But `Formsigopsep.prg` is documented (lines 61-67) as a FLAT operational dialog with **no PageFrame at all** ÔÇö `cnt_4c_Sombra` hangs directly off `THIS`. And the propagation is already there, correctly:
+
+- Line 207: `Caption = "Seleciona Produtos"` (static form property)
+- Line 377: `THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption`
+- Line 397: `THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption`
+
+Both labels already pull from `THIS.Caption` at creation time inside `ConfigurarCabecalho()`, called from `InicializarForm()`. Applying the suggested fix verbatim (`THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra...`) would break the form ÔÇö that path doesn't exist here (`Property PGF_4C_PAGINAS is not found`).
+
+No code change needed. I'm not modifying the file since the only listed problem doesn't actually apply to this form's architecture.

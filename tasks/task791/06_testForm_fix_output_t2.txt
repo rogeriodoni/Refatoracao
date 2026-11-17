@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í defeito de c├│digo para corrigir aqui. O erro reportado (C├│digo 1526, DBNETLIB "SQL Server inexistente ou acesso negado") acontece na ETAPA 1B do `TestFormWrapper`, **antes** de qualquer `CREATEOBJECT` de `Formsigopprr`/`sigopprrBO` ÔÇö ├® um pre-flight gen├®rico de conectividade do harness, n├úo algo que o form/BO controla.
+
+Isso ├® um padr├úo de infraestrutura j├í documentado extensivamente na mem├│ria do projeto: desde 2026-11-05 a porta 1433 do SQL Server (192.168.200.10) est├í intermitente/inalcan├º├ível a partir desta m├íquina de pipeline, afetando ~20 tasks e 15+ forms diferentes, sempre com a mesma assinatura, sempre confirmado por revis├úo independente do c├│digo sem achar defeito real.
+
+Fiz uma revis├úo completa (nova, independente da mem├│ria) de `Formsigopprr.prg` e `sigopprrBO.prg` contra o checklist do CLAUDE.md:
+- RETURN sempre fora de TRY/CATCH Ô£ô
+- Handlers `UsuarioLostFocus`/`SenhaLostFocus` (alvos de BINDEVENT) s├úo PUBLIC, sem par├ómetros (regra #47), com guarda de reentr├óncia Ô£ô
+- Form s├│ chama m├®todos PUBLIC do BO; `ObterChavePrimaria` fica PROTECTED e nunca ├® chamado de fora (regra #51) Ô£ô
+- `ValidarParametros()` j├í implementa o bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` antes de checar `gnConnHandle` Ô£ô
+- `EscaparSQL` sem aspas extras, guard de Buffering antes de `TABLEREVERT` (regra #52) Ô£ô
+- CATCH do BO delega exibi├º├úo ao chamador via `this_cMensagemErro` (padr├úo j├í estabelecido no projeto, n├úo ├® CATCH silencioso) Ô£ô
+
+Nenhum defeito encontrado ÔÇö **n├úo editei os arquivos**, pois alterar c├│digo correto s├│ para "satisfazer" esse gate seria dano, n├úo corre├º├úo (conforme j├í registrado na mem├│ria do projeto). Confirmei tamb├®m a inalcan├ºabilidade da porta 1433 nesta sess├úo (`Test-NetConnection` sem resposta dentro do timeout, mesma assinatura das ocorr├¬ncias anteriores).
+
+**Recomenda├º├úo**: dar exce├º├úo ao gate `06_testForm` para erro 1526/conectividade nesta task (791), em vez de consumir as 8 tentativas restantes contra uma falha de rede que retry autom├ítico n├úo vai resolver.

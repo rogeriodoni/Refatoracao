@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Fase 7/8 for `Formsigoporc` is now implemented and compiles successfully.
+
+**Summary of what was added:**
+
+**`sigoporcBO.prg`:**
+- `CarregarConfiguracao()` ÔÇö loads SigCdOpe, SigCdEmp (by `Cemps`), SigOpCdd, and SigMvCab header percentuals/contas, populating the properties that were stubbed at 0/"" since Fase 1.
+- `CarregarItens()` / `CarregarParcelas()` ÔÇö grid-safe SQL loading of SigMvOrc/SigMvOrp into the grid cursors (previously these cursors existed but were never populated from the database).
+
+**`Formsigoporc.prg`:**
+- `CriarCursorItens()` fixed to include `emps/dopes/numes/empdopnums/pkchaves/moedas/moefats/moevs/opers` ÔÇö these NOT NULL columns were missing since Fase 3, which would have broken persistence.
+- `InicializarForm()`/`CarregarDados()` wired to call the new BO config/data-loading methods (guarded for validation/test mode).
+- `ConfigurarBotoesPrincipais()` ÔÇö creates the 6 remaining action buttons (OKÔåÆRetornar, Total, Itens Subn├¡vel, Inserir Bloco, Inserir Sub-bloco, Cadastro de Produtos), transcribed from the dump (position/picture/caption).
+- `BtnSalvarClick()` ÔÇö full SRCOM validation cascade + persists every grid row (items and parcelas) to SQL Server on confirm.
+- `BtnInserirBlocoClick()` / `BtnInserirSubBlocoClick()` ÔÇö block/sub-block insertion with renumbering.
+- `AtualizarEstadoCadastroProduto()` ÔÇö dynamic enable logic for the product-registration button.
+- `BtnCadastroProdutoClick()`, `BtnItensSubnivelClick()`/`BtnTotalItensClick()` ÔÇö with two deliberate, documented scope decisions (not silent omissions): the `SigOpTor` sub-dialog was never migrated (no `FormSigOpTor` exists anywhere in the project), and `SigOpCdI` (used only by the legacy "Cria├º├úo" sub-block feature) doesn't exist in the schema at all ÔÇö confirmed via `docs\schema.sql`. Both gaps are called out loudly in code comments rather than faked.
+
+Both files pass a VFP9 compile check with no errors.

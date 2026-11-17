@@ -1,0 +1,273 @@
+﻿{
+    "taskId":  "task790",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-11-14T13:30:55",
+    "atualizadoEm":  "2026-11-14T21:59:26",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-11-14T13:31:19",
+                                            "fim":  "2026-11-14T13:31:26",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task790\\sigoppro.sct",
+                                            "baseName":  "sigoppro",
+                                            "scxFile":  "C:\\4c\\tasks\\task790\\sigoppro.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-11-14T13:31:34",
+                                          "fim":  "2026-11-14T13:32:51",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigoppro",
+                                          "txtFile":  "C:\\4c\\tasks\\task790\\sigoppro_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-14T13:34:37",
+                                              "fim":  "2026-11-14T13:35:54",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task790\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-14T13:38:43",
+                                              "fim":  "2026-11-14T13:39:05",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task790\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task790\\meta_prompt.md",
+                                              "boClass":  "sigopproBO",
+                                              "formClass":  "Formsigoppro",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task790\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-14T13:39:14",
+                                              "fim":  "2026-11-14T13:40:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task790\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-14T13:40:31",
+                                               "fim":  "2026-11-14T13:41:46",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task790\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigoppro_esqueleto.prg",
+                                                                "sigopproBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-14T13:42:07",
+                                       "fim":  "2026-11-14T18:04:14",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopproBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  678.58,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppro.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  21065
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-11-14T18:04:14",
+                                                  "fim":  "2026-11-14T18:13:11",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopproBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppro.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-11-14T18:14:56",
+                                                 "fim":  "2026-11-14T18:15:06",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-11-14T19:49:53",
+                                       "fim":  "2026-11-14T21:52:55",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "autoSkipped":  true,
+                                       "erro":  "Teste de formulario falhou com exit code 1.",
+                                       "tentativasUsadas":  10,
+                                       "timedOut":  false
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-11-14T21:53:00",
+                                               "fim":  "2026-11-14T21:53:53",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task790\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-11-14T21:58:30",
+                                        "fim":  "2026-11-14T21:59:14",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "ValidarUIFidelity nao gerou relatorio HTML"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-11-14T21:59:20",
+                                              "fim":  "2026-11-14T21:59:24",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task790_sigoppro.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-11-14T13:33:06",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-11-14T13:34:27",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task790\\sigoppro_form_codigo_fonte.txt",
+                                              "reducaoPercent":  76.8,
+                                              "tamanhoOriginalKB":  678.58,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task790\\sigoppro_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  157.57
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-11-14T13:36:05",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-11-14T13:37:22",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task790\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-11-14T13:37:32",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-14T13:38:34"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-11-14T18:13:20",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-11-14T18:14:44",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigoppro_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppro.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task790\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-11-14T18:15:14",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-11-14T18:15:25",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-11-14T18:15:35",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-11-14T19:44:48",
+                                          "passes":  8,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_CODIGOS, CNT_4C_OBS, CNT_4C_REFFS, CNT_4C_ITEM. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NDOPES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DISTRIBUI, QTDS, CFGTITTPESO, CITENS, W, CPROS, LPRECOS, IFORS, PVENS, CMOES, CITEM2, CBARS, CODBARRAS, ORDTS, SEMIACABS, DOPES, MERCS, CGRUS, 0, PRODUTOS, EMPDOPNUMS, CDOPES, DIGITADO, ENCOMS, CODIGOS, OP_ESCOLHA, OPERS, MATS, CARGO, CATEGORIA, LCTIPOCARG, LNDIAGAR, ABREVIS, ABREVS, CODTAMS, SUBNOBRIGS, CNIVELS, OPEINATVS, TOTA, EMPDNCRDS, PADRAOS, PRESENTEIT, SERVICOIT, LCDYNFC, NITEMBXS, MOEDS, EDCOTAS, CHKOPNCSH, CADPRODS, SERVICOS, DTSITUAS, SITUAS, DESCOS, NPARCS, IF, OBSITEMS, NGRADERECNO, NOTAS, TIPOOPS, OPVLUNIS, NUMES, FPAGS, EDITDOCS, CTRLLOTES, PRECOPS, UTILIZAS, EPRECOS, UNITS, CORES, TAMS, CBARS_OLD, CIDCHAVES, CUNIS, EAN13, ICONFS, LCARQ, TIPOESTOS, CODS, I, DIGITENS, CHKVLDXML, CHAVENOTA, REFFS, DESCOB2S, ULTIMAGEM, ICLIS, VISNOMEFOR, EDITDECLS, VARCPPQS, QTDESMEMB, ALERTITEM, ALTETIQS, CEMPS, ATIVAS, ESTORIGS, ESTOQS, ESTDESTS, CONTAOS, CPROEQS, CODBARS, DOPPS, LINHAS, MTPRIMAS, TPPESOS, SEMETIQS, BARINDIVS, DPROS, CONJUNTS, MOSTRUARIO, ETIQS, PESOMETAL, EMPS, TT, LLPRODUCAO, CONTAS, CONTAORIG, EXCLUS, EMBS, QTD, EMPGRUESTS, SQTDS, BXPARCIALS, CONSIGS, STATUS, VLRFIXOS, VALITEMS, BARREFS, CITEM, CONSERS, EFATORS, ORIDOPNUMS, GEROPES, VALUE, VALQTDSUP, HABSUBITS, FATDIVS, TAG, ZERQTDS, LNPESOM, XPESO, RECQTD, DESMEMBS, EDUNIS, CODCORS, CONFES, TPLOCALS, ORIGEMS, DESTINOS, ATUAPESOS, EPESOS, ITSITUAS, LOCALOS, GRUPOS, ESTOS, LOCALS, OPERACAO, VALVARPESO, LNVARIAPROD, CHKABREVS, CHKVARCARG, VALCORTAM, CKCODPAIES, QTRESERVAS, PESOVTS, VALITENS, PARRECALS, LNVALPAR, CUN, LCCUN, VALINIS, VALSERVS; [TITULO-NAO-PROPAGADO] Form define Caption mas NAO propaga para lbl_4c_Sombra/lbl_4c_Titulo. O titulo na tela ficara incorreto (ex: \u0027Cadastro de Testes\u0027 ao inves do titulo real). CORRIGIR: No InicializarForm, APOS ConfigurarPageFrame, adicionar: THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption (e idem para lbl_4c_Titulo); [GRID-RECORDSOURCE-AUTOBIND] Linha 4298: RecordSource reatribuido mas ControlSource NAO redefinido nas proximas linhas. VFP faz auto-bind pela ordem dos campos do cursor, ignorando ControlSource anterior. CORRIGIR: Re-definir .ControlSource de TODAS as colunas APOS .RecordSource = ...; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterChaveMovimentacao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.TemProdutoSelecionado()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ExecutarConsultaPainel()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterContaFornecedor()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterGrupoEstoque()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ResolverProdutoDigitado()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.PodeEditarDescricao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Opt_Busca\u0027 (parent: SIGOPPRO.pgfPagina.pgProds): Top original=135 vs migrado \u0027obj_4c_Opt_Busca\u0027 Top=5 (diff=130px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Busca\u0027 (parent: SIGOPPRO.pgfPagina.pgProds): Left original=713 vs migrado \u0027obj_4c_Opt_Busca\u0027 Left=5 (diff=708px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnRetCash\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnRetCash\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btndevolu\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_Btndevolu\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnRecImps\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnRecImps\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnAltImps\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnAltImps\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnCotacao\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnCotacao\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnTotItens\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnTotItens\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnIteSub\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_BtnIteSub\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btncarregar\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_Btncarregar\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027CmdXml\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027cmd_4c_CmdXml\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnOptFin\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnOptFin\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnsubcp\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_Btnsubcp\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnDesc\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnDesc\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnVerImps\u0027 (parent: SIGOPPRO): Top original=81 vs migrado \u0027chk_4c_BtnVerImps\u0027 Top=0 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnCadPro\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnCadPro\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnPApaga\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnPApaga\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027BtnDet\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnDet\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnLocDes\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnLocDes\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnLocOri\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnLocOri\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnPedido\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnPedido\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnAltPrecos\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnAltPrecos\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnCompos\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnCompos\u0027 Top=0 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnPBuscas\u0027 (parent: SIGOPPRO): Top original=359 vs migrado \u0027cmd_4c_BtnPBuscas\u0027 Top=0 (diff=359px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  35
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-11-14T19:44:56",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-11-14T19:49:47",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigopproBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigoppro.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-11-14T21:53:59",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-11-14T21:58:21",
+                                             "thresholdPx":  5,
+                                             "unmatched":  149,
+                                             "errors":  150,
+                                             "matched":  113,
+                                             "warnings":  65,
+                                             "reportFile":  "C:\\4c\\tasks\\task790\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

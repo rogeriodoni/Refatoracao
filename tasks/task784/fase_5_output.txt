@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 executada e verificada.
+
+## O que entrou em `FormSigOpPdt.prg`
+
+Este form ├® **OPERACIONAL** ÔÇö n├úo tem `Page1=Lista/Page2=Dados`, ent├úo "campos principais da Page2" se traduz nos dois ├║ltimos blocos de controles que faltavam para a superf├¡cie ficar igual ao dump do SCX. Os tr├¬s bot├Áes standalone (`SelTudo`/`apaga`/`ok`) j├í tinham sido entregues junto com a grade na Fase 4, ent├úo n├úo foram duplicados.
+
+**`ConfigurarMolduras()`** ÔÇö `shp_4c_Shape2` (339/73/168├ù39, moldura do bloco de busca) e `shp_4c_Shape1` (7/672/27├ù41, moldura do bot├úo Ok), nessa ordem porque ├® a do dump (├║ltimo `AddObject` fica no topo do z-order).
+
+**`ConfigurarCamposBusca()`** ÔÇö `lbl_4c__Procura` ("Procurar C├│digo : ", 350/83/89├ù15) e `txt_4c_Procura` (347/186/48├ù23, `Value = 0` num├®rico, `Format = "K"`, `MaxLength = 6`).
+
+Ambos plugados em `ConfigurarPageFrame()` na posi├º├úo correta da sequ├¬ncia do dump: cabe├ºalho ÔåÆ molduras ÔåÆ grade ÔåÆ busca ÔåÆ bot├Áes.
+
+## Decis├Áes que valem registro
+
+- **`AutoSize = .F.` no label** apesar do dump declarar `.T.` ÔÇö `AutoSize` ├® no-op em Label criado por `AddObject` e, com `WordWrap`, descarta a `Height`. Transcrevi `Width=89`/`Height=15` do pr├│prio dump, que j├í *s├úo* o auto-size calculado pelo Form Designer (regra #23). `Alignment = 0` porque o dump n├úo declara Alignment.
+- **Shapes com `BackStyle=0` + `BorderStyle=0` n├úo pintam nada** apesar da `BorderColor` declarada. Isso ├® herdado do SCX, n├úo defeito: "corrigir" para `BorderStyle=1` faria aparecer na tela nova uma linha que nunca existiu na antiga. Documentei no c├│digo.
+- **`ForeColor = RGB(90,90,90)`** no label (valor expl├¡cito do dump, coincide com o can├┤nico) ÔÇö branco ficaria invis├¡vel sobre `new_background.jpg`.
+- N├úo inventei `InputMask` (o dump n├úo tem) nem `ShapeType`/`ForeColor` em Shape (regra #33).
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| `COMPILE` do Form e do BO (`.fxp` novo, `.err` ausente) | Ô£à limpo |
+| `CREATEOBJECT("FormSigOpPdt")` real no VFP9 | Ô£à `VARTYPE=O`, 9 controles na raiz, geometria exata do dump |
+| `VerificarPropriedadesInexistentes` | Ô£à 0 achados |
+| `VerificarFuncoesNaoDefinidas` | Ô£à 0 chamadas ├│rf├ús |
+| `VerificarMetodoProtegidoChamadoDeFora` | Ô£à 0 |
+| `VerificarFormatInputMask -Form FormSigOpPdt` | Ô£à ALTA=0 MEDIA=0 BAIXA=0 |
+| Recorte (regra #30) / sobreposi├º├úo (regra #28) | Ô£à tudo dentro de 800├ù600; label termina em 172, textbox come├ºa em 186 |
+| Bytes n├úo-ASCII / `RETURN` em TRY / TODOs / m├®todos vazios | Ô£à 0 em todos |
+| `AjustarBotoesPorModo` | Ô£à ramos antes mortos agora vivos: INSERIR mostra os 4, ALTERAR esconde os 4 e mant├®m Ok |
+
+Um detalhe medido: o VFP **clampou** `lbl_4c__Procura.TabIndex` de 6 para 4 (s├│ 4 controles existiam no momento do `AddObject`). ├ë inerte ÔÇö Label nunca recebe foco ÔÇö e a ordem que o usu├írio sente est├í fiel: `Grade=1`, `txt_4c_Procura=2`, como no dump.
+
+Scripts criados: `automation/CompilarF5SigOpPdt784.prg` e `automation/Probe784F5.prg` (ambos com `SET SAFETY OFF`/`SET RESOURCE OFF`, sem di├ílogo modal). N├úo toquei em `task_state.json` ÔÇö isso ├® do orquestrador.

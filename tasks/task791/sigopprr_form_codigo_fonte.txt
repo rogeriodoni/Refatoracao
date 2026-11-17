@@ -1,0 +1,344 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopprr.SCX
+* Data/Hora: 14/11/2026 22:00:15
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPRR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPPRR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPRR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPRR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: USUARIO
+  Parent: SIGOPPRR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SENHA
+  Parent: SIGOPPRR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGOPPRR
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPPRR
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 266
+  Left = 178
+  Width = 389
+  Height = 325
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 200
+  Width = 436
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Código do Operador"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPPRR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.USUARIO
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Format = "K"
+  Height = 30
+  InputMask = "999"
+  Left = 201
+  MaxLength = 3
+  SelectOnEntry = .F.
+  TabIndex = 1
+  Top = 104
+  Width = 50
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .T.
+  Name = "USUARIO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.SENHA
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Format = "K"
+  Height = 30
+  InputMask = "!!!!!!!!!!"
+  Left = 201
+  TabIndex = 2
+  Top = 139
+  Width = 136
+  PasswordChar = "*"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .T.
+  Name = "SENHA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Operador :"
+  Height = 21
+  Left = 110
+  Top = 109
+  Width = 89
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPRR.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Senha :"
+  Height = 21
+  Left = 136
+  Top = 144
+  Width = 63
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 12, 8, 19, 16, 46, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPPRR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector')
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+	=fLerFiscal()
+
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPRR.USUARIO
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPRR.SENHA
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local lcUser, lcPass, lcQuery
+
+lcUser = PADR(ThisForm.USUARIO.Value,10)
+lcPass = PADR(Thisform.SENHA.Value,10)
+
+lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]
+ThisForm.poDataMgr.SQLExecute(lcQuery, 'crSigCdUsu')
+
+If Not Used('CrSigCdUsu') Or Reccount('CrSigCdUsu')==0 Or Empty(lcUser) OR lcPass <> fCriptografar(CrSigCdUsu.SENHAS)
+	=MessageBox('Usuário ou Senha incorretos',0+48,'')
+	ThisForm.Senha.Value    = ''
+	Thisform.Usuario.Value  = ''
+	ThisForm.Usuario.SetFocus
+Else
+	If ProgOper(Val(Thisform.Usuario.Value),Thisform.oModem)
+		goSistema.Operador = Transform(Val(Thisform.Usuario.Value),'@L 999')
+	Endif
+	Thisform.Release
+EndIf
+Return
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPRR
+RESERVED3 (ClassInfo): podatamgr
+retorno
+tbvisivel
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

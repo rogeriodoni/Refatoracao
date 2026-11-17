@@ -1,0 +1,451 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 12,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "From CrSigCdLpi Where Empty", "fUniqueIds", "fArredondamento"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSEP",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Wait Clear\n\nIf Used('CsSigCdPro')\n\tUse In CsSigCdPro\nEndIf\n\nIf Used('CsSigCdLin')\n\tUse In CsSigCdLin\nEndIf\n\nSelect CrSigCdLpi\nWith ThisForm.ParentForm\n\tWith .Pagina.Dados\n\t\t.Refresh\n\t\t.SetFocus\n\t\t.Grade.Column1.SetFocus\n\tEndWith\n\t.Enabled = .T.\nEndwith\n\n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LParameters poForm\n\nThisForm.ParentForm = poForm\n\nWith Thisform.CrtFiltro\n\t.Get_GrVenda.Value   = ''\n\t.Get_GrProduto.Value = ''\n\t.Get_MoeVenda.Value  = ''\n\t.Get_AcreDesc.Value  = 0\n\t.Get_Arrend.Value    = 0\n\t.Opc_Situacao.Value  = 1\nEndWith\n\nThisForm.CrtFiltro.GradeLinhas.RecordSource = ''\n\nIf ThisForm.ParentForm.poDataMGr.SqlExecute([Select 0 As lMarcas,linhas,descs From SigCdLin ],'CsSigCdLin') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tThisForm.Release()\nEndIf\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Release,SetAll",
+        "controlesReferenciados": "Get_GrVenda,Get_GrProduto,Get_MoeVenda,Get_AcreDesc,Get_Arrend",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_grVenda",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Parent.Get_DGrVenda.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdCol','CrColecoes','colecoes',This.Value,'Coleções',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('colecoes','XXXXXXXXXX','Código')\n\t\tm.loLista.mAddColuna('descs','XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrColecoes')\n\t\tThis.Value                     = Evaluate('CrCole... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DGrVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_grVenda",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_moevenda",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Parent.Get_DMoeVenda.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Seleção',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                      = Evaluate('CrMoedas.cmoes')\n\t\tThis.Parent.Get_DMoeVenda.Value = Evalua... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DMoeVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_moevenda",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_grProduto",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Parent.Get_DGrProduto.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','cgrus',This.Value,'Seleção',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cgrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('dgrus','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value                       = Evaluate('CrGrupos.cgrus')\n\t\tThis.Parent.Get_DGrProduto.Value = Ev... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DGrProduto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_grProduto",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrVenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.Get_GrVenda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrVenda",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Parent.Get_GrVenda.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdCol','CrColecoes','descs',This.Value,'Coleções',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('descs','XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.mAddColuna('colecoes','XXXXXXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrColecoes')\n\t\tThis.Value                    = Evaluate('CrColecoes.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrVenda",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrProduto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.Get_GrProduto.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrProduto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrProduto",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Parent.Get_GrProduto.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','dgrus',This.Value,'Seleção',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('dgrus','','Descrição')\n\t\tm.loLista.mAddColuna('cgrus','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value                      = Evaluate('CrGrupos.dgrus')\n\t\tThis.Parent.Get_GrProduto.Value = Evalu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrProduto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_DgrProduto",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_Dmoevenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.Get_MoeVenda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_MoeVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_Dmoevenda",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','dmoes',This.Value,'Seleção',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                     = Evaluate('CrMoedas.dmoes')\n\t\tThis.Parent.Get_MoeVenda.Value = Evaluate('CrMoedas.cmoes')\n\tElse\n\t\tThis.Value     ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_MoeVenda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Get_Dmoevenda",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CopiaLista.Enabled = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Marcar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdLin\nReplace All lMarcas With 1\nGo Top\nThisForm.CrtFiltro.GradeLinhas.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CrtFiltro.Desmarcar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdLin\nReplace All lMarcas With 0\nGo Top\nThisForm.CrtFiltro.GradeLinhas.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.GradeItens.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(CsSigCdPro.lMarcas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.Sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.CopiaLista",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "Delete From CrSigCdLpi Where Empty(cpros)\n\nSelect CsSigCdPro\nGo Top\nScan \n\tIf CsSigCdPro.flagctabs = 1 And CsSigCdPro.lMarcas = 0 And !Seek(CsSigCdPro.cpros,'CrSigCdLpi','CPros')\n\t\tlnSituacao  = Thisform.CrtFiltro.Opc_Situacao.Value\n\t\tIf lnSituacao <> 3 And lnSituacao <> CsSigCdPro.situas\n\t\t\tLoop\n\t\tEndIf\n\t\tScatter MemVar\n\t\tm.lprecos   = CrSigCdLpc.lprecos\n\t\tm.flagutabs = .T.\n\t\tm.cidchaves = fUniqueIds()\n\t\tm.vencis    = {}\n\t\tm.vencfs    = {}\n\t\tm.pvens     = m.pliqs\n\n\t\tIf (ThisForm.ParentForm.Comp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From CrSigCdLpi Where Empty,fUniqueIds,fArredondamento",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.Processar",
+      "evento": "Click",
+      "linhas": 73,
+      "codigoOriginal": "Local vCond, lnMarcas, lnVariacao, lnArred, lnPLiqs\n\nIf Used('CsSigCdPro')\n\tZap In CsSigCdPro\nEndIf\n\nThisForm.GradeItens.Refresh\n\nWait Window 'Aguarde !!! Selecionando Produtos...' NoWait\n\nlnAjuste = 1 + (ThisForm.CrtFiltro.Get_AcreDesc.Value / 100)\n\nWith ThisForm.CrtFiltro\n\tlcCGrus    = Iif(!Empty(.Get_GrProduto.Value),.Get_GrProduto.Value,'')\n\tlcColecoes = Iif(!Empty(.Get_GrVenda.Value)  ,.Get_GrVenda.Value  ,'')\n\tlcMoevs    = Iif(!Empty(.Get_MoeVenda.Value) ,.Get_MoeVenda.Value ,'')\n\tlnSitua ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Release",
+        "controlesReferenciados": "Get_AcreDesc,Get_GrProduto,Get_GrVenda,Get_MoeVenda,Get_Arrend",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.cmdMarcaProd",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdPro\nReplace All flagctabs With 1 For lMarcas = 0\nGo Top\nThisForm.GradeItens.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEP.cmdDesmarcaProd",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdPro\nReplace All flagctabs With 0 For lMarcas = 0\nGo Top\nThisForm.GradeItens.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSEP.Init",
+      "queryOriginal": "If ThisForm.ParentForm.poDataMGr.SqlExecute([Select 0 As lMarcas,linhas,descs From SigCdLin ],'CsSigCdLin') < 1",
+      "tabelas": "SigCdLin",
+      "colunas": "linhas,descs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSEP.CopiaLista.Click",
+      "queryOriginal": "Delete From CrSigCdLpi Where Empty(cpros)",
+      "tabelas": "CrSigCdLpi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdLin", "CrSigCdLpi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

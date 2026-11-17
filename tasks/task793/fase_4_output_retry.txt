@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada em `projeto/app/forms/operacionais/Formsigoprbt.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 cai no ramo **DESPACHANTE** (legado sem lista e sem campo), e com `$nBotoesLegadoF4 >= 1` esse ramo exige **duas** coisas no mesmo arquivo:
+
+```powershell
+($conteudo -match 'AddObject\(\s*"(cmg_4c_|cmd_4c_)') -and ($conteudo -match 'PROCEDURE\s+(Cmd|Btn)\w*Click')
+```
+
+A entrega anterior falhava nas duas: o CommandGroup chamava-se `obj_4c_CntBotoes` (prefixo gen├®rico que o `mapeamento.json` emite para classe n├úo reconhecida) e n├úo havia handler de Click algum.
+
+## O que entreguei
+
+- **`cmg_4c_Acoes`** (renomeado) ÔÇö sufixo deliberadamente **n├úo** o can├┤nico de cadastro: aquele token ├® heur├¡stica de "form REPORT" em 5 patterns do CorretorAutomatico, que reescreveriam fonte/grade deste OPERACIONAL. `mapeamento.json` corrigido junto.
+- **`ConfigurarEventos()`** + **`CmdCancelarClick()`** (PUBLIC) ÔÇö transcri├º├úo do `btnSair.Click` legado (`ThisForm.Release`), chamado por ├║ltimo no `InicializarForm` (BINDEVENT s├│ resolve objeto existente).
+- Transcri├º├Áes que faltavam no dump: `.Themes = .F.` por bot├úo, `.Value = 0`, `TabIndex` 1/2 (o `TabIndex = 4` do grupo **n├úo** foi copiado: fora da faixa 1..2, ├® descartado em sil├¬ncio).
+- `ShowWindow = 1` / `WindowType = 1` ÔÇö o SCX n├úo declara, e o default 0 (modeless) mata a tela no sistema novo (`CREATEOBJECT` em LOCAL + `Show()` que retorna na hora).
+- Cabe├ºalho do `.prg` com a **medi├º├úo** que dispensa grade/CRUD: 0 `BaseClass grid|pageframe`, 0 controle de entrada, 0 `pColuna/RecordSource/ControlSource`, 15 `.AddCursor` todos de 3 argumentos (n├úo ligam grade), 1 commandgroup com `ButtonCount = 2`.
+
+## Provas
+
+| verifica├º├úo | resultado |
+|---|---|
+| predicados do gate | `temBotoes = True`, `PROCEDURE Cmd/Btn*Click = True`, dump sem grid/pageframe e sem campos ÔåÆ ramo DESPACHANTE passa |
+| `Test-CompletudeCodigo` (05d) | nenhum TODO/stub/procedure vazia |
+| CorretorAutomatico em c├│pia sob `\forms\` | **zero muta├º├Áes** (md5 id├¬ntico); s├│ `WARN-168`, que n├úo muta |
+| `COMPILE` no VFP9 | `FXP=SIM ERR=NAO` (gravado pelo pr├│prio script) |
+| instancia├º├úo | `VARTYPE=O`, `WindowType=1`, `ControlCount=2`, grupo `-2/560/166/85` vis├¡vel, ambos `.Picture` com `FILE()=.T.` |
+| binding | `AEVENTS(Buttons(1))` ÔåÆ `CLICK -> CMDCANCELARCLICK`; `Buttons(2)` = 0 |
+| comportamento | `Buttons(1).Click()` levou `_SCREEN.FormCount` de 1 ÔåÆ 0 (o Release rodou) |
+
+## O que deixei de fora, de prop├│sito
+
+O Click do **Processar**. O corpo legado ├® `ThisForm.Processamento()`, e esse `Processamento()` s├úo 27 linhas cujo passo central ├® `GeraMovimentacao()` (547 linhas) ÔåÆ `LancaContaCorrente` (917) ÔåÆ `FazContra` (69) ÔåÆ `MontaHists` (41) ÔÇö o motor de integra├º├úo, objeto das fases de eventos/consolida├º├úo, e o BO ainda s├│ tem o CRUD de `SigOpRbt`. Ligar o Click agora exigiria anunciar "Integra├º├úo Realizada." sem nada gravado (falso sucesso das regras #20/#21) ou chamar m├®todo de BO inexistente (regra #13). Est├í registrado no cabe├ºalho do arquivo com as refer├¬ncias do legado; `Buttons(2)` fica sem binding at├® l├í.

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 7/8 conclu├¡da ÔÇö `FormSigOpQtE.prg` atualizado** (871 ÔåÆ 1135 linhas; +264, 0 remo├º├Áes de c├│digo).
+
+## O que entrou
+
+O ├║nico bot├úo que o legado tem, com o Click real ÔÇö exatamente o que as Fases 4, 5 e 6 deixaram registrado como pend├¬ncia desta fase:
+
+| M├®todo | Papel |
+|---|---|
+| `ConfigurarBotoes()` | cria `cmg_4c_Saida` (CommandGroup, `ButtonCount 1`) + `cmd_4c_Retornar`, propriedades transcritas do dump, `BINDEVENT` do Click |
+| `BtnSairClick()` | o `ThisForm.Release` do legado, com `FormParaBO()` antes para fechar o fio campo ÔåÆ BO ÔåÆ `_QtEtiq` tamb├®m na sa├¡da por **ESC** (`Cancel = .T.` dispara o Click sem passar pelo `LostFocus`) |
+| `AplicarOrdemTabulacao()` | ordem de Tab **efetiva** do legado, medida no VFP9 |
+
+Chamadas no `InicializarForm()` entre `ConfigurarPaginaDados()` e `TornarControlesVisiveis()`.
+
+## N├úo h├í os quatro `Btn<verbo>Click` de CRUD ÔÇö e isso ├® medido, n├úo suposto
+
+O SCX ├® `Class: form` gen├®rico, sem `frmcadastro`, sem `Grupo_Op`, sem `pcEscolha`: o dump inteiro tem **2 m├®todos** (Init e `btnSair.Click`) e **1 bot├úo**. O gate roda pelo ramo correto: `legadoSemCrud=True, nBotoesLegado=1, minHandlers=1, nHandlers=1 ÔåÆ VALIDADO=True`.
+
+Encontrei e corrigi uma armadilha no caminho: meu primeiro coment├írio citava os quatro nomes por extenso, e o gate casa no texto do arquivo **inclusive em coment├írio** ÔÇö ele passou pelo motivo errado. Reescrevi sem os literais; a├¡ a dispensa real apareceu no log. Tamb├®m reescrevi a frase "o ├║nico **pendente** desta tela" da Fase 6, que reprovava o validador de completude (`RESULTADO=False` ÔåÆ `True`) e de todo modo estava desatualizada.
+
+## Verifica├º├Áes (VFP9 executou de fato ÔÇö todos os probes gravaram arquivo de sa├¡da)
+
+- **Compila limpo**: `.fxp` presente e `.err` ausente no form e no BO.
+- **Instancia**: `VARTYPE=O`, `Caption=[Etiquetas Para : 0000000001]`, grupo `L=374 T=-2 85x85` vis├¡vel, bot├úo `cmd_4c_Retornar [Retornar] Cancel=.T.`, borda direita em 454 (dentro dos 456 do form), `Picture` existe em disco.
+- **Fio do valor**: `.Value = 250` ÔåÆ handler ÔåÆ `BO=250 / _QtEtiq=250`; `BtnSairClick()` retorna sem travar.
+- **Tab**: simulei o load do SCX ÔÇö o legado efetivo ├® `OK=1, cntSombra=2, Label1=3, Text1=4` (o `btnSair.TabIndex=4` do dump vira 1, membro ├║nico de grupo). Ou seja, **no legado o foco abre no bot├úo "Retornar" e o Tab cai no campo**, n├úo o contr├írio; o passe reproduz isso (`cmg=1 txt=2 cnt=3 lbl=4`).
+
+## Dois desvios deliberados, ambos documentados no c├│digo
+
+1. **Nome do objeto**: o `mapeamento.json` trazia `obj_4c_OK` (prefixo que o gate da Fase 4 n├úo aceita) e o can├┤nico de CRUD usa o sufixo que faz 5 patterns do CorretorAutomatico tratarem o arquivo como REPORT. Usei `cmg_4c_Saida` e **atualizei o `tasks/task792/mapeamento.json`** junto, sen├úo o ValidarUIFidelity procuraria um objeto inexistente.
+2. **Fonte Tahoma 8** no bot├úo (e n├úo "Comic Sans MS"): ├® o que este dump declara ÔÇö o can├┤nico ├® da barra CRUD do `frmcadastro`, que esta tela n├úo usa.
+
+Um aviso sobre o harness, n├úo sobre o form: `AEVENTS()` e `Buttons(1).Click()` **penduram** o VFP9 headless nesta m├íquina. Perdi tempo achando que era defeito pr├®-existente do form at├® isolar ÔÇö se um probe futuro travar sem gravar nada, suspeite dessas duas chamadas antes do c├│digo migrado. Arquivos mantidos como evid├¬ncia: `automation/probe_tabindex_t792.*` e `automation/probe_final_t792.*`.

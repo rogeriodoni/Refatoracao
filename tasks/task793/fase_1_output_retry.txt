@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 1 complete.
+
+**Deliverable**: `C:\4c\projeto\app\classes\sigoprbtBO.prg` (237 lines, CRLF, pure ASCII)
+
+**What it contains**
+
+| Bloco | Conte├║do |
+|---|---|
+| 1. Entidade `SigOpRbt` | 5 props ÔÇö `this_cEmps`, `this_cDia`, `this_cMes`, `this_dDatas`, `this_cCidChaves` (nomes/tipos conferidos em `docs/schema.sql` com `Get-Content -Raw`, regra #14) |
+| 2. Props customizadas do SCX | `this_lAutomatico`, `this_cSigKey`, `this_nTipoCep`, `this_nContaPar`, `this_lMultEmps` (`poDataMgr` n├úo tem equivalente ÔÇö virou `gnConnHandle`) |
+| 3. Par├ómetros do sistema | `this_cDopRebate` (SigCdPaC.DopRBT char(20)), `this_cMoedaPadrao` (SigCdPam.Moedaps char(3)) |
+| 4. Estado do lote | 40 props cobrindo as vari├íveis compartilhadas entre `GeraMovimentacao`/`LancaContaCorrente`/`FazContra`/`MontaHists` (`_Inicio`, `_EDN`, `_Noper`, `_Titulo`, `_GrupoOrig`ÔÇª`_ContaTx`, `_Hist`/`_Hist2`, parcelas), cada uma com o nome legado anotado |
+| 5. Cursores | 30 props `cursor_4c_*` ÔÇö um por `.AddCursor()`/`SqlExecute` do `Init` legado + os de trabalho (`csMovRbt`, `csItnRbt`, `crTmpRbt`, `crSigOpTdz`) |
+| 6. Contadores | 9 props de resultado do processamento |
+| `Init()` | `DODEFAULT()` ÔåÆ `this_cTabela = "SigOpRbt"`, `this_cCampoChave = "cidchaves"`; par├ómetro `par_lAutomatico` (o `pAuto` do legado) lido com guarda `PCOUNT()`; `RETURN` ├║nico fora do TRY/CATCH |
+| `ZerarContadores()` | PUBLIC, reset do estado do lote ÔÇö o form fica aberto e permite reprocessar, ent├úo o reset mora no funil, n├úo nos bot├Áes |
+
+**Verifica├º├Áes executadas**
+- VFP9 `COMPILE` ÔåÆ `.fxp` gerado (4983 bytes), **nenhum `.err`** (`.fxp` removido depois, conforme conven├º├úo atual do repo)
+- `Test-CompletudeCodigo` real do orquestrador (etapa `05d`): `[OK] BO (sigoprbtBO) - nenhum TODO/stub/procedure vazia detectado`
+- Sem acentos literais, sem `PUBLIC` em `DEFINE CLASS`, sem `RETURN` dentro de TRY/CATCH, `BusinessBase.Init(pcTabela)` com param omitido ├® seguro (guarda `VARTYPE`)
+
+**Nota sobre a falha anterior**: o retry n├úo foi por c├│digo ruim ÔÇö o log `05_migracao_fase1.log` mostra o Claude CLI terminando em 12s com o output sendo s├│ avisos de permiss├úo + *"I don't see a specific request in your message"*. O prompt da tarefa n├úo chegou ao modelo naquela invoca├º├úo; o arquivo do BO nunca foi criado, e o gate da fase 1 ├® s├│ `Test-Path` do `.prg`.
+
+**Decis├úo de modelagem que vale registrar para a Fase 2**: `this_cTabela = "SigOpRbt"` porque essa ├® a tabela de **controle** da integra├º├úo (o legado consulta `Select CidChaves From SigOpRbt Where Emps/Dia/Mes` justamente para n├úo reprocessar o mesmo dia). As grava├º├Áes de verdade s├úo em `SigMvCab`/`SigMvItn`/`SigMvPar`/`SigMvCcr`, feitas em lote pelos cursores ÔÇö ent├úo o `Inserir()` da Fase 2 tem de cobrir as 4 colunas NOT NULL de `SigOpRbt` (`Emps`, `Dia`, `Mes`, `cidchaves` ÔÇö esta com `fUniqueIds()`, nunca vazia; regra #22).

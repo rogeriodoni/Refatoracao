@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is done and verified. Summary:
+
+## The legacy form has no CRUD ÔÇö and that's now proven, not assumed
+
+`SIGOPRES.SCX` has exactly **3 methods** (`Load`, `Init`, `Fwbtng1.Click`) and **1 button**. It's a read-only dialog that projects stock day-by-day and hands a number back to the caller. So the four canonical handlers the phase prompt asks for (`BtnÔÇªClick` for Incluir/Alterar/Visualizar/Excluir) don't exist in the legacy; creating them would mean inventing buttons (PILAR 1) or empty methods (completeness rule).
+
+I measured the gate instead of guessing: `legadoSemCrud=True`, `nBotoesLegado=1`, `nHandlers=1`, **VEREDITO=PASSA** via the documented carve-out ÔÇö and all four tokens stay `presente=False`, so the dispensation is real rather than satisfied by a comment substring (that trap is live: the gate matches those literals anywhere in the file, so I wrote the header rationale in parts). `nHandlers == nBotoesLegado` also rules out a mis-named handler hiding from the gates.
+
+## Three real defects fixed in the button path
+
+1. **`THIS.Release()` made the dialog unable to deliver its own result.** The header documented `lnSaldo = loForm.this_nSaldo` after `Show()` ÔÇö which `Release()` makes impossible (the caller's reference dies). Replaced with a `FecharDialogo()` funnel using `Hide()`, the pattern `FormBuscaAuxiliar` already uses; the caller now releases. The legacy's channel (`__saldo` in the caller's scope) doesn't exist under `CREATEOBJECT + Show()`.
+
+2. **The form never opened at all.** `.SplitBar = .F.` ÔÇö transcribed faithfully from the SCX ÔÇö is **read-only at runtime**. It aborted `InicializarForm` inside its `TRY`, so `CREATEOBJECT` returned a logical `.F.`. This compiled clean and `VerificarPropriedadesInexistentes.ps1` passes it (the property *exists*; it just rejects writes). Only instantiation catches it.
+
+3. **No test-mode guard around the SQL in `Init`.** `CarregarDados()` ran unconditionally, so `SQLEXEC` blocked the process ÔÇö this would equally hang `06b_testeAutomatico` and `ValidarUIFidelity`. Added the `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` guard CLAUDE.md requires.
+
+Items 2 and 3 are strictly outside "button events" ÔÇö they came from phases 3/4 ÔÇö but phase 7's artifact is unusable without them, so I fixed them and am flagging them rather than reporting a green phase on a form that couldn't open.
+
+## Evidence
+
+- **Compile**: form and BO `FXP=T ERR=F`, with a negative control (`IF .T. THEN DO`) producing `ERR=T` ÔÇö so a clean `.ERR` means compiled, not "COMPILE never ran".
+- **Instantiation + event**: `CREATEOBJECT=OK`; `AEVENTS` ÔåÆ `n=1 [CLICK -> BTNENCERRARCLICK]`, `Cancel=.T.`; both methods PUBLIC. After the click: `VARTYPE(loForm)=O`, `Visible=.F.`, `this_nSaldo=42,75` (copied from the BO) ÔÇö the exact read that `Release()` would have killed. After the caller's `Release()`: `VARTYPE=X`, cursors closed. Zero unhandled errors, zero suppressed dialogs.
+- Completeness validator clean; CRLF preserved (873/873); diff is 7 lines removed / 94 added, mostly comments.
+
+Two things worth your decision:
+
+- **Residual PILAR 1 divergence**: I measured `Grid.SplitBar`'s default as **`.T.`**, so omitting the line leaves the splitter draggable, unlike the legacy. The faithful route is a design-time declaration ÔÇö `GridBase` already has `SplitBar = .F.` ÔÇö but switching this grid's class also imports `GridLines = 3` / `HeaderHeight = 20`, which this dump doesn't declare. I documented it in the code instead of silently swapping the class. Note the two existing forms that handle `SplitBar` (`FormSigOpAut`, `FormSigReEqT`) claim in comments that the default is `.F.` ÔÇö that's wrong.
+- **Same crash, three other forms**: `FormPzo.prg:261`, `FormSIGPGCNB.prg:549` and `:640` still assign `.SplitBar` at runtime, so those screens don't open either. Outside this task; I recorded the finding and the sweep command in memory.
+
+Nothing committed ÔÇö both files are still untracked, as the pipeline expects.

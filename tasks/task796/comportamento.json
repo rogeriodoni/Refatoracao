@@ -1,0 +1,54 @@
+{
+  "resumo": {
+    "totalMetodos": 2,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPROB",
+      "evento": "Init",
+      "linhas": 8,
+      "codigoOriginal": "Lparameters pcTitulo, pcTexto, poForm\n\nThisForm.Caption = pcTitulo\nThisForm.Edit1.Value = pcTexto\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poParentForm = poForm ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPROB.Commandgroup1",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Type([ThisForm.poParentForm]) = [O] \n\tThisForm.poParentForm.Enabled = .T.\nEndIf\n\nRelease Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

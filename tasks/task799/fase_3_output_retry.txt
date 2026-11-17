@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigopsen.prg` criado (1032 linhas, 47 KB).
+
+## O que foi entregue
+
+Form **FLAT (OPERACIONAL)** ÔÇö o SCX legado tem raiz `form` gen├®rica e **nenhuma Page**, ent├úo n├úo h├í PageFrame Lista/Dados a reproduzir (invent├í-lo violaria o PILAR 1). A estrutura base ├® a que o legado de fato tem:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `Init(8 params)` | `Lparameters pTip..pVal` + bloco `If (Type([pDoc]) <> [N])...` (via PCOUNT/VARTYPE) |
+| `ValidarParametros()` | `If (.poDataMgr.pnIdconn > 0)` ÔÇö com bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` |
+| `InicializarForm()` | funil do Init, na ordem do legado |
+| `ConfigurarParametrosBO()` | `.ZSen/.NroDoc/.Tipo/...` ÔåÆ properties do `sigopsenBO` |
+| `CarregarParametrosSistema()` | as 2 `CursorQuery` (SigCdPam.liblcreds / SigCdPac.senhdemps) |
+| `ConfigurarPorTipo()` | o `Do Case pTip` inteiro ÔÇö 25 ramos, Caption + Frase + flag de permiss├úo |
+| `ConfigurarAparencia()` | `Picture` + `BackColor` |
+| `ConfigurarCabecalho()` | `cntSombra` + `lblSombra` + `lblTitulo` (**primeiro `AddObject`**) |
+| `AvaliarSenhaDoDia()` | bloco final `If (crParam.LiblCreds And pTip = [LIMITE]) Or InList(...)` |
+| `MontarRetorno()` / `FecharDialogo()` / `Destroy()` | `Unload` / `Release` |
+
+Decis├Áes que vale registrar: colunas `liblcreds`/`senhdemps` conferidas no `schema.sql` can├┤nico (ambas `bit` ÔåÆ `ConverterParaLogico`, e **sem** `WHERE Emps` ÔÇö nenhuma das duas tabelas tem coluna de empresa); `pTi1` ├® guardado nas duas formas (texto e num├®rico) porque o ramo `CHDEVOLVIDO` o usa como contagem; `FecharDialogo` fecha com `Hide()`, n├úo `Release()`, para o chamador conseguir ler `this_lZSen` (gate de autoriza├º├úo precisa responder); dois desvios do literal no cabe├ºalho (Width 800ÔåÆ`THIS.Width`, e Caption real no lugar do texto-template "Cadastro de Testes"), ambos documentados no c├│digo.
+
+## Verifica├º├Áes executadas
+
+- **Gate da Fase 3**: ramo FLAT validado ÔÇö `legadoSemPageFrame=True`, sem `AddObject("pgf_4c_`, com `InicializarForm` e `AddObject("cnt_4c_` Ô£ô
+- **`Test-CompletudeCodigo`**: `Form=True` ÔÇö nenhum TODO/stub/procedure vazia Ô£ô
+- **Compila├º├úo VFP9**: `.FXP` gerado, **`.ERR` ausente** ÔÇö com controle negativo provando que o m├®todo gera `.err` quando h├í erro de sintaxe Ô£ô
+- **Auditorias**: `VerificarPropriedadesInexistentes` OK; `VerificarColunaEmpresaSQL` ERRO=0; `VerificarFuncoesNaoDefinidas` sem ├│rf├ús do arquivo novo Ô£ô
+- **Cruzamento formÔåöBO**: as 40 properties referenciadas existem todas no `sigopsenBO`; nenhum m├®todo do BO ├® chamado nesta fase (regra #51 fora de jogo) Ô£ô
+- Blocos balanceados (13 PROCEDURE/ENDPROC, 5 WITH, 3 DO CASE, 2 TRY, 33 IF, 2 FOR); zero byte n├úo-ASCII; CRLF Ô£ô
+
+Uma ressalva sobre o ambiente: o `vfp9.exe` nesta sess├úo **compila mas n├úo executa** o corpo dos `.prg` (smoke test com `STRTOFILE` n├úo gravou em 3 variantes de invoca├º├úo). Portanto a prova ├® de **compila├º├úo limpa**, n├úo de instancia├º├úo ÔÇö a abertura real da tela s├│ se prova rodando o harness quando a execu├º├úo voltar a funcionar.
+
+Criei tamb├®m `automation/ValidarCompletude799F3.ps1` (mesmo padr├úo dos `ValidarCompletude*F*.ps1` j├í existentes), para a fase ser reaudit├ível. Os dois arquivos est├úo untracked; n├úo commitei.

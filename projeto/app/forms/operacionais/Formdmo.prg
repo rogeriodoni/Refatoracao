@@ -1813,12 +1813,16 @@ DEFINE CLASS FormDmo AS FormBase
     ENDPROC
 
     *==========================================================================
-    * BtnPendentesClick - Abre form de selecao de produtos (SigOpPdt)
-    * Atualiza crLclMvItn e recalcula totais
+    * BtnPendentesClick - Abre o dialogo de Operacoes Pendentes (SIGOPPDT ->
+    * FormSigOpPdt): nele o usuario marca as movimentacoes pendentes a vincular
+    * a esta desmontagem, o que alimenta crLclMvItn/TmpOperacao. Na volta,
+    * recalcula os totais de quantidade e peso.
     *==========================================================================
     PROCEDURE BtnPendentesClick()
-        LOCAL loc_oErro, loc_nTQtds, loc_nTPesos, loc_lContinuar
+        LOCAL loc_oErro, loc_nTQtds, loc_nTPesos, loc_lContinuar, loc_oDialogo
         loc_lContinuar = .T.
+        loc_oDialogo   = .NULL.
+
         TRY
             IF !INLIST(THIS.this_cModo, "INSERIR", "ALTERAR")
                 loc_lContinuar = .F.
@@ -1832,13 +1836,59 @@ DEFINE CLASS FormDmo AS FormBase
             ENDIF
 
             IF loc_lContinuar
-                *-- SigOpPdt nao foi migrado ainda - exibe aviso e continua
-                MsgAviso("Form de Sele" + CHR(231) + CHR(227) + "o de Produtos (SigOpPdt) " + ;
-                         "ainda n" + CHR(227) + "o foi migrado." + CHR(13) + ;
-                         "Adicione itens diretamente via SQL ou aguarde migra" + CHR(231) + CHR(227) + "o.", ;
-                         "Aviso")
+                *-- Abertura do dialogo de pendencias (SIGOPPDT -> task784).
+                *-- O legado faz, no Click deste botao:
+                *--     ThisForm.LockScreen = .t.
+                *--     Thisform.Enabled    = .f.
+                *--     Do Form SigOpPdt With Thisform, Thisform.DatasessionId,
+                *--                           ThisForm.poDataMgr
+                *-- "DO FORM" procura um .SCX, que NAO existe neste projeto
+                *-- (os forms sao DEFINE CLASS em .prg), por isso a chamada
+                *-- vira CREATEOBJECT com o nome LITERAL da classe - assim o
+                *-- indice_classes.txt tambem traz FormSigOpPdt e o
+                *-- SigOpPdtBO no fecho de dependencias deste form (sem
+                *-- GarantirClasse, que eh so para os Abrir* do menu e para
+                *-- classe vinda em VARIAVEL).
+                *-- O 3o argumento do legado (poDataMgr) nao tem equivalente
+                *-- nesta arquitetura - gnConnHandle ja eh compartilhado via
+                *-- config.prg - e por isso nao eh passado.
+                *-- Enabled = .F. eh pre-requisito do dialogo: o ok.Click
+                *-- dele reabilita o pai ("ThisForm.ParentForm.Enabled =
+                *-- .t."); aqui ele eh reposto de qualquer forma, para o
+                *-- usuario nunca ficar com a tela de movimentacao travada se
+                *-- o dialogo falhar antes disso.
+                THIS.LockScreen = .T.
+                THIS.Enabled    = .F.
 
-                *-- Recalcular totais apos fechar o form auxiliar
+                loc_oDialogo = CREATEOBJECT("FormSigOpPdt", THIS, THIS.DataSessionId)
+            ENDIF
+
+        CATCH TO loc_oErro
+            loc_oDialogo = .NULL.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro BtnPendentesClick")
+        ENDTRY
+
+        *-- Show() FORA de QUALQUER TRY: o dialogo eh MODAL (WindowType = 1),
+        *-- entao a chamada BLOQUEIA e a tela inteira dele - cada Click, cada
+        *-- Valid - vive dentro dela. Dentro de um TRY, qualquer erro de
+        *-- runtime do dialogo cairia no CATCH deste metodo (TRY/CATCH tem
+        *-- precedencia sobre ON ERROR em toda a pilha), a referencia LOCAL
+        *-- morreria e a tela filha fecharia SOZINHA - regra CLAUDE.md #29.
+        IF VARTYPE(loc_oDialogo) = "O"
+            loc_oDialogo.Show()
+        ENDIF
+        loc_oDialogo = .NULL.
+
+        *-- Volta do dialogo: repoe a tela de movimentacao e recalcula os
+        *-- totais, como o legado faz depois do "Do Form SigOpPdt" (o
+        *-- Select Sum(Qtds)/Sum(Qtds*Pesos) From crLclMvItn -> getTQtde/
+        *-- getTPeso). Enabled/LockScreen sao repostos mesmo quando a
+        *-- abertura falhou, para o usuario nunca ficar com a tela travada.
+        IF loc_lContinuar
+            THIS.Enabled = .T.
+
+            TRY
                 IF USED("crLclMvItn") AND RECCOUNT("crLclMvItn") > 0
                     SELECT SUM(Qtds) AS TQtds, SUM(Qtds * Pesos) AS TPesos ;
                         FROM crLclMvItn ;
@@ -1859,10 +1909,87 @@ DEFINE CLASS FormDmo AS FormBase
                         THIS.pgf_4c_Paginas.Page2.grd_4c_Itens.Refresh()
                     ENDIF
                 ENDIF
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message + CHR(13) + ;
+                         "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro BtnPendentesClick")
+            ENDTRY
+
+            THIS.LockScreen = .F.
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AtualizarDadosPendencia - repinta a pagina de Dados depois que o dialogo
+    * de Operacoes Pendentes (FormSigOpPdt) marcou uma pendencia. Equivale ao
+    * bloco final do PROCEDURE Marca() do SCX legado de SIGOPPDT, que
+    * terminava assim:
+    *
+    *   With ThisForm.ParentForm.Pagina.Dados
+    *       .Origem.get_dconta.Value      = crCli.RClis   (ou '')
+    *       .Destino.get_dconta.Value     = crCli.RClis   (ou '')
+    *       .Responsavel.get_dconta.Value = crCli.RClis   (ou '')
+    *       .Refresh
+    *   Endwith
+    *
+    * Marcar a pendencia PUXA grupo/conta de origem, destino e responsavel do
+    * movimento pendente para o movimento corrente - os "REPLACE ... IN
+    * crSigMvCab" de SigOpPdtBO.MarcarPendencia. No legado os campos
+    * Grupo/Conta desta pagina tinham ControlSource = "crSigMvCab.<coluna>" e
+    * portanto o ".Refresh" bastava; aqui eles sao carregados por BOParaForm a
+    * partir das properties do BO, logo o cursor tem de ser lido de volta para
+    * o BO ANTES de repintar - sem isso a tela continuaria exibindo os valores
+    * antigos e o Salvar seguinte os devolveria ao banco pelo FormParaBO,
+    * desfazendo o que o dialogo puxou.
+    *
+    * As tres descricoes (razao social de SigCdCli) chegam RESOLVIDAS pelo
+    * dialogo, que ja as consultou - nao se repete a consulta aqui.
+    *
+    * PUBLIC (sem PROTECTED) de proposito: eh chamado DE FORA, pelo dialogo
+    * filho. Metodo protegido em qualquer nivel da heranca estouraria
+    * "Property ATUALIZARDADOSPENDENCIA is not found" em runtime (regra
+    * CLAUDE.md #51), e o PEMSTATUS que o filho usa para se proteger devolve
+    * .T. tambem para PROTECTED - nao avisaria nada.
+    *==========================================================================
+    PROCEDURE AtualizarDadosPendencia(par_cDescOrigem, par_cDescDestino, par_cDescResponsavel)
+        LOCAL loc_oBO, loc_oErro
+
+        TRY
+            loc_oBO = THIS.this_oBusinessObject
+
+            IF VARTYPE(loc_oBO) = "O"
+                *-- Re-sincroniza o BO com o que o dialogo gravou no cursor do
+                *-- movimento corrente.
+                IF USED("crSigMvCab")
+                    IF !EOF("crSigMvCab")
+                        loc_oBO.this_cGrupoos = ALLTRIM(TratarNulo(crSigMvCab.GrupoOs, ""))
+                        loc_oBO.this_cContaos = ALLTRIM(TratarNulo(crSigMvCab.ContaOs, ""))
+                        loc_oBO.this_cGrupods = ALLTRIM(TratarNulo(crSigMvCab.GrupoDs, ""))
+                        loc_oBO.this_cContads = ALLTRIM(TratarNulo(crSigMvCab.ContaDs, ""))
+                        loc_oBO.this_cGrVends = ALLTRIM(TratarNulo(crSigMvCab.GrVends, ""))
+                        loc_oBO.this_cVends   = ALLTRIM(TratarNulo(crSigMvCab.Vends,   ""))
+                    ENDIF
+                ENDIF
+
+                *-- Descricoes ja resolvidas pelo dialogo. VARTYPE porque os
+                *-- tres argumentos sao opcionais.
+                IF VARTYPE(par_cDescOrigem) = "C"
+                    loc_oBO.this_cDescOrigem = ALLTRIM(par_cDescOrigem)
+                ENDIF
+                IF VARTYPE(par_cDescDestino) = "C"
+                    loc_oBO.this_cDescDestino = ALLTRIM(par_cDescDestino)
+                ENDIF
+                IF VARTYPE(par_cDescResponsavel) = "C"
+                    loc_oBO.this_cDescVend = ALLTRIM(par_cDescResponsavel)
+                ENDIF
+
+                THIS.BOParaForm()
+                THIS.Refresh()
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro BtnPendentesClick")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                     "Erro AtualizarDadosPendencia")
         ENDTRY
     ENDPROC
 

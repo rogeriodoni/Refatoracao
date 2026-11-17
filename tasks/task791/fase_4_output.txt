@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 4 CONCLU├ìDA** ÔÇö `Formsigopprr.prg` (17,4 KB, 369 linhas, CRLF, ASCII puro). **Zero c├│digo novo**, e essa ├® a entrega correta.
+
+## Por que n├úo h├í Grid nem bot├Áes CRUD
+
+O `SIGOPPRR` ├® um di├ílogo modal 436x200 de login. Medi o dump (n├úo deduzi):
+
+| superf├¡cie | medi├º├úo no dump |
+|---|---|
+| **LISTA** | ZERO nas 5 cl├íusulas do teste estrito: `BaseClass grid\|pageframe`=0, ListBox=0, token `Grade/grd`=0, `AddCursor`=0, `RecordSource`/`ControlSource`=0 (o dump n├úo tem nenhum dos dois) |
+| **BOT├âO** | ZERO: `BaseClass commandbutton\|commandgroup`=0, `PROCEDURE Click`=0 ÔÇö o di├ílogo fecha pelo pr├│prio `LostFocus` (`Thisform.Release`) |
+| **CAMPO** | 2 TextBox **edit├íveis** (USUARIO, SENHA); `ReadOnly`=0 no dump inteiro |
+
+A ├írvore inteira do SCX s├úo 9 objetos. Criar grade, 6 bot├Áes CRUD ou `AlternarPagina()` seria inventar superf├¡cie inexistente (PILAR 1 / "NUNCA inventar"); a alternativa seria m├®todo-adaptador vazio s├│ para casar com o regex ÔÇö o stub disfar├ºado que a regra de completude pro├¡be.
+
+Rodei o gate com os helpers **reais** do orquestrador carregados por AST (97 fun├º├Áes; nunca dot-source): `legadoCapturaF4 = True`, `temSuperficieCaptura = True` ÔåÆ **`temLayoutCaptura = True`**. O gate passa pelo ramo CAPTURA, antes e depois.
+
+## O que foi entregue
+
+Bloco `FASE 4/8` no cabe├ºalho do `.prg` registrando a aus├¬ncia **medida**, os precedentes do mesmo perfil (task699/task715/task717) e a quem pertence o que falta (Fases 5-6: USUARIO/SENHA/Label1/Label2; Fases 7-8: os dois `LostFocus`). Isso muda o hash e evita o retry opus in├║til do guard de NO-OP.
+
+Uma corre├º├úo que o probe for├ºou: `PEMSTATUS(form,"AlternarPagina",5)` devolve `.T.` ÔÇö por **heran├ºa** da `FormBase`, que j├í sai guardada por `TYPE("THIS.pgf_4c_Paginas")="O"` e no-opa sem PageFrame. Documentei em vez de afirmar aus├¬ncia total.
+
+## Verifica├º├úo
+
+- **Comment-only provado 3x**: 0 linhas n├úo-coment├írio adicionadas, 0 removidas; linhas de c├│digo 127 == 127; `md5` do c├│digo (coment├írios/branco removidos) **id├¬ntico** (`feb3e4c80a8e`).
+- **Compila limpo**: `FXP=.T. ERR=.F.`; `Test-CompletudeCodigo` = 0 problemas.
+- **Probe de instancia├º├úo**: `CREATEOBJECT=O`, Caption `[C├│digo do Operador]`, 436x200, `WindowType=1`, `TitleBar=0`, `BO=O`, faixa 436x80 `BackColor=6579300` (=RGB 100,100,100), `Release` OK; aus├¬ncia confirmada em runtime (`grd=.F. cmd=.F. pgf=.F.`).
+- Tempor├írios e `.fxp` removidos.
+
+Dois pontos para voc├¬ decidir, que deixei intocados:
+
+1. **A lacuna do guard de NO-OP na Fase 4 ├® a 5┬¬ ocorr├¬ncia** e segue sem fix. Os dois bloqueadores de sempre continuam: `OrquestradorMigracao.ps1` com **247 inser├º├Áes n├úo commitadas** e **RunLoop vivo** (PID 20544) ÔÇö editar o `.ps1` agora n├úo valeria para a execu├º├úo em curso. Por isso tratei s├│ o form.
+2. **O gate tem um falso-positivo latente neste arquivo**: a linha 38 (coment├írio da Fase 3) cita `ConfigurarPaginaLista` e `AlternarPagina`, ent├úo `$temLayoutPaginado` casa s├│ pelo texto do coment├írio. N├úo afeta o veredito aqui (o ramo CAPTURA passa legitimamente, medido), mas ├® a armadilha conhecida de "coment├írio citando nome satisfaz gate".
+
+Armadilha de ferramenta que vale registrar: o `awk` do Git Bash rodou em text mode e **apagou todos os CRs** do `.prg` (CR 318 ÔåÆ 0); restaurei com `perl` em binmode (CR=LF=369). E `grep -P '\r$'` **mente** aqui ÔÇö tamb├®m l├¬ em text mode; a contagem confi├ível ├® `tr -cd '\r' | wc -c`.

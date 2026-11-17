@@ -1,0 +1,668 @@
+{
+  "resumo": {
+    "totalMetodos": 40,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt", "fConfigGeral", "fChecaAcesso", "For Not IsEmpty", "for !IsEmpty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSIT",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Local lnI, lcColuna, lnPgDown\n\nIf Thisform.lNovaLinha\n\tThisform.lNovaLinha = .F.\n\tlnPgDown = Thisform.nPgDown\n\tThisform.nPgDown = 1\n\tSelect crTpmMvIts\n\tWith Thisform.fwgrade\n\t\t.Column3.SetFocus\n\tEndWith\n\tSkip -1\n\tSkip\n\tKeyboard \"{DNARROW}\"\n\tKeyboard \"{PGDN}\"\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT",
+      "evento": "Valid",
+      "linhas": 431,
+      "codigoOriginal": "Lparameters poColumn\n\nLocal lnQtds, lnRetorno, lnColunaAtiva, lnI, lnNoCols, lcColuna, lcDescs, lnRecNo, loLista\n\nSelect CrTmpGru\n\nThisform.cFoco = ''\nThisform.nPgDown = 1\nlnRetorno     = .T.\n\nWith Thisform.fwgrade\n\tlnColunaAtiva = .ActiveColumn\n\tlnNoCols      = .ColumnCount\nEndwith\n\nDo Case\nCase poColumn.ControlSource = 'crTpmMvIts.CodTams'\n\tIf !Inlist( Lastkey(), 5, 24 ) And !IsEmpty( poColumn.Value )\n\t\tloLista = Createobject('fwBuscaExt', Thisform.Parentform.Parentform.poDataMgr.pnIdConn, 'Si... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSIT",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "LParameters poColumn\n\nlnRetorno     = .T.\nIf poColumn.ControlSource = 'crTpmMvIts.QtdEmbs' And Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n\tlcQuery = [Select Multis From SigCdEmb Where Cods = ']+crTpmMvIts.CodEmbs+[']\n\tIf ThisForm.parentForm.parentform.PodataMgr.sqlexecute(lcquery,'TmpEmb') < 1\n\t\tReturn .F.\n\tEndIf\n\tIf TmpEmb.Multis > 0\n\t\tlnRetorno = .f.\n\tEndif\nEndif\nReturn( lnRetorno )",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSIT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT",
+      "evento": "Init",
+      "linhas": 491,
+      "codigoOriginal": "LParameters poForm, pnDatSes\n\nLocal lnColuna, lcFoco, lnDescs, lnWidth, llDescTams, llDescCors, llDescEmbs, lnWMax\nLocal lnLeftPeso, lnLeftQtde, lnDesl\n\nSet DataSession to pnDatSes\nSet Confirm Off\n\nGo Top In crTpmMvIts\n\nCreate Cursor csTmpDesc ( nLinhas N(4), nControle N(8), cDescTams C(20), cDescCors C(40), ;\n\t\t\t\t\t\t  cDescEmbs C(20) )\nIndex On Str(nControle,8) Tag iControle\n\nThisform.cWhere='.f.'\nDo Case\n\tCase ( CrTmpGru.TipoEstos = 2 ) Or ( CrTmpGru.Cores = 1 And CrTmpGru.Tams # 1 )\n\t\tThisform... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,For Not IsEmpty",
+        "metodosFormChamados": "cWhere = 'IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.ok",
+      "evento": "Click",
+      "linhas": 110,
+      "codigoOriginal": "Local _Qtds, _PesoMedio, _TotalItens, _TotalPeso, lcMsg, lcFoco, lcCaption, lnCasasPeso\n\nIf Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n\tlnCasasPeso = CrSigCdOpe.NCPesos\n\t_TotalItens = 0\n\t_TotalPeso  = 0\n\t_Qtds = 0\n\tlcMsg = ''\n\tlcFoco = ''\n\tlcCaption = ''\n\tSelect crTpmMvIts\n\tGoto Top\n\tDo While Not Eof('crTpmMvIts') And IsEmpty(lcMsg)\n\t\tDo Case\n\t\t\tCase crTpmMvIts.Qtds = 0\n\t\t\t\tDelete\n\t\t\t\t\t\n\t\t\tCase CrTmpGru.Pesos = 1 And CrSigCdOpe.EPesos = 3 And Not IsEmpty(crTpmMvIts.Qtds) And ;\n\t\t\t\t\tIsEm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for !IsEmpty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkQtMinv,ChkQtdss,ChkOpers",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Apaga",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Apaga",
+      "evento": "Click",
+      "linhas": 44,
+      "codigoOriginal": "Local lcControle, lcWhere\n\nThisform.nCItem2 = 1\nlcWhere = Thisform.cWhere\nSelect crTpmMvIts\nIf ( Not ( &lcWhere. ) ) And Not IsEmpty(crTpmMvIts.Qtds)\n\tSelect crTpmMvIts\n\tSet Relation Off Into csTmpDesc\n\tlcControle = Str(RecNo('crTpmMvIts'), 8)\n\tDelete\n\tSelect csTmpDesc\n\tSet Order to iControle\n\tSeek (lcControle)\n\tIf Not Eof()\n\t\tDelete\n\tEndIf\n\tThisform.nCItem2 = 1\n\tSelect csTmpDesc\n\tGoto Top\n\tScan\n\t\tReplace csTmpDesc.nLinhas With Thisform.nCItem2\n\t\tThisform.nCItem2 = Thisform.nCItem2 + 1\n\tEndScan\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Get_Produto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Get_Descrição",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSelect [ ] as Agrupar, Sum(Qtds) As TQtdes, Sum(Pesos) As TPesos ;\n\tFrom crTpmMvIts Where crTpmMvIts.CItens = crTpmMvItn.CItens And Not IsEmpty(crTpmMvIts.Qtds) ;\n\tInto Cursor csTotal group by 1\n\nWith Thisform\n\t.Get_TQtde.Value = csTotal.TQtdes\n\t.Get_TPeso.Value = csTotal.TPesos\n\t.fwgrade.Column1.ReadOnly = .T.\n\t.fwgrade.Column2.ReadOnly = .T.\nEndWith\t\n\nSelect crTpmMvIts\nSet Relation to Str(Recno('crTpmMvIts'),8) Into csTmpDesc\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_TQtde,Get_TPeso",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column1.Text1",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "If InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' )\n\tThisform.fwgrade.Column3.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column2.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column3.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.mNovaLinha()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column4.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column4.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mNovaLinha()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column5.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mNovaLinha()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column6.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column6.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column6.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mNovaLinha()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column7.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column7.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.mNovaLinha()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column8.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column8.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mNovaLinha()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column9.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column9.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mNovaLinha()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column10.Text1",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Local lcColuna\n\nlcColuna = AllTrim(Str(This.Parent.ColumnOrder))\nThisform.OldValue = This.Value\nReturn( Inlist( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Thisform.SLeitura&lcColuna. And ;\n\t\tNot Thisform.lNovaLinha And Thisform.mValidaGets( This ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaGets",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mValidaColunas( This )\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.fwGrade.Column10.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.mNovaLinha()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Get_TQtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSIT.Get_TPeso",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSIT.Valid",
+      "queryOriginal": "\tlcQuery = [Select Multis From SigCdEmb Where Cods = ']+crTpmMvIts.CodEmbs+['] \tIf ThisForm.parentForm.parentform.PodataMgr.sqlexecute(lcquery,'TmpEmb') < 1",
+      "tabelas": "SigCdEmb",
+      "colunas": "Multis,Cods,CodEmbs+[],sqlexecutelcquery,TmpEmb",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmb"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

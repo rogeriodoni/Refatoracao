@@ -1,0 +1,64 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and passing.
+
+## O que estava errado
+
+A Fase 4 anterior entregou a grade e os bot├Áes corretos, mas reprovou no **terceiro** predicado do ramo FLAT do gate (`case 4` do `OrquestradorMigracao.ps1`), que ├® conjuntivo e n├úo diz qual falhou:
+
+```
+temGrade  = AddObject("grd_4c_        -> True
+temBotoes = AddObject("cmd_4c_|cmg_4c_ -> True
+temCarga  = CarregarLista|CarregarDados|MontaGrade -> False   <- ├║nico que falhava
+```
+
+O gate est├í certo e a fase tinha trabalho real. O `Init` legado do `SIGOPPGC` termina com o bloco que o migrador tinha jogado fora:
+
+```foxpro
+With Thisform.Grade
+    .RecordSource          = 'BarBonus'
+    .Column1.ControlSource = 'BarBonus.Codigos'
+    .Column2.ControlSource = 'BarBonus.Valors'
+    .Refresh
+EndWith
+THisForm.Grade.Refresh
+```
+
+Encher o cursor n├úo repinta a grade (regra #21) ÔÇö sem esse funil a tela abriria com a grade visualmente vazia e o cursor cheio.
+
+## O que fiz
+
+- **`CarregarDados()` ÔÇö PUBLIC**, o funil: `VincularGrade()` ÔåÆ `SELECT` + `GO TOP` ÔåÆ `Grid.Refresh()`. PUBLIC de prop├│sito: o `TesteAutomatico.prg` o chama de fora com `PEMSTATUS(...,5)`, que devolve `.T.` tamb├®m para PROTECTED (regra #3). `RETURN` por flag, fora do `TRY` (regra #1); devolve `.F.` sem lan├ºar exce├º├úo quando n├úo h├í alias.
+- **`ConfigurarGrade()`** passou a guardar s├│ o que n├úo depende de dado; n├úo chama mais `VincularGrade` direto.
+- **`InicializarForm`** chama o funil, **depois** de `TornarControlesVisiveis` (Refresh em controle invis├¡vel n├úo pinta).
+- **`VincularGrade`**: `RecordSource`/`ControlSource` condicionados a `USED(alias)`; largura, m├íscara e `Header1.Caption` aplicados **sempre** e **depois** do bind (Problema 48 / regra #41).
+- **`this_cCursorGrade = "BarBonus"`**: fonte ├║nica do nome do alias, para ele n├úo divergir nas fases seguintes. Os `AddObject` continuam com nome **literal** ÔÇö o gate l├¬ o 1┬║ argumento por regex e vari├ível conta zero.
+
+## Verifica├º├úo
+
+| prova | resultado |
+|---|---|
+| smoke test VFP9 (o `.prg` de fato executa nesta sess├úo) | `VIVO` |
+| `COMPILE` | `FXP=.T.` / `ERR=.F.` |
+| 3 predicados do gate FLAT | `True / True / True` |
+| ramo PAGINADO n├úo dispara por acidente | `ConfigurarPaginaLista=False`, `AlternarPagina=False` |
+| `Test-CompletudeCodigo` (l├│gica replicada) | 0 problemas |
+
+Probe instanciando de verdade, nos tr├¬s cen├írios:
+
+```
+(1) sem args: Init OK | W=500 H=420 | BO=O | ColCount=2 RecSrc=[BarBonus]
+(2) com pai:  paiEnabled=.F. | saldo=100 | grade 117/156/188/236
+    col1 [BarBonus.Codigos] W=80 mask=[9999999999] hdr=[Barra]
+    col2 [BarBonus.Valors]  RO=.T. hdr=[Valor]
+    btnOk 3/350/75/75 [\<Confirmar] picOK=.T.  btnCancela 3/425/75/75 picOK=.T.
+(3) funil: PEMSTATUS(...,2)[PROTECTED]=.F. | 1a=.T. 2a=.T.
+    pos-2o-bind col1 W=80 hdr=[Barra] mask ok | col2 hdr=[Valor] RO=.T.
+```
+
+A linha (3) ├® a que importa: o m├®todo ├® cham├ível de fora, ├® idempotente, e largura/caption **sobrevivem** ao segundo bind. O `USED=.F.` do cen├írio (1) ├® medido da sess├úo do probe ÔÇö o cursor vive na datasession privada do form (`DataSession=2`); o cen├írio (3) mede de dentro e d├í `USED=.T.`.
+
+Arquivo normalizado de volta para CRLF (CR=726 / LF=726), `.fxp` removidos. Os scripts de prova ficaram em `automation/` (`CompilarF4SigOpPgc786.prg`, `ProbeF4SigOpPgc786.prg` ÔÇö este ├║ltimo estendido com `ExercitarFunil()`).

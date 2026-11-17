@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is complete and verified. Summary:
+
+## O que a Fase 8 entregou
+
+Tr├¬s funis de transfer├¬ncia em `FormSIGOPPGC.prg` (`projeto/app/forms/operacionais/FormSIGOPPGC.prg`):
+
+| M├®todo | Escopo | Papel |
+|---|---|---|
+| `FormParaBO(par_oTxt)` | PROTECTED | l├¬ a c├®lula da grade ÔåÆ `this_cCodigoBarra` (10 d├¡gitos, como o `Valid` legado fatia em nDope/Nume) + decide `this_lNovoRegistro` (Inserir ├ù Atualizar) pelo `_OldCodigo` do `When` |
+| `BOParaForm()` | PROTECTED | espelha os 3 valores que o BO calcula: r├│tulo da forma de pagamento, contador de barras, saldo (+ `Refresh`, como o legado) |
+| `PintarRotuloFormaPagto()` | PROTECTED | fonte ├║nica do `Caption` de `lbl_4c_Label1`, compartilhada pelo `Init` e pelo espelho |
+
+Os tr├¬s call sites (`ValidarBarraDigitada`, `AtualizarSaldoEQuantidade`, `AplicarRotuloFormaPagto`) passaram a usar os funis ÔÇö nenhuma l├│gica nova, s├│ consolida├º├úo do que estava duplicado valor a valor.
+
+## Um defeito real encontrado e corrigido no caminho
+
+Declarei os dois hooks sem modificador. O probe mostrou `PEMSTATUS(...,5)=.T.` **e** `PEMSTATUS(...,2)=.T.` ÔÇö `FormBase` j├í declara `FormParaBO`/`BOParaForm` como `PROTECTED` (`formbase.prg:280,285`) e o VFP9 n├úo deixa a subclasse alargar o escopo herdado. Corrigi para `PROTECTED` expl├¡cito e ajustei os coment├írios, que afirmavam "PUBLIC: chamado de fora" ÔÇö o que era falso.
+
+## O que **n├úo** entreguei, e por qu├¬
+
+O checklist da fase pede `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `CarregarLista`. Nenhum existe neste legado: o SCX ├® um di├ílogo modal com dois bot├Áes (Ok/Cancela ÔåÆ `BtnConfirmarClick`/`BtnCancelarClick`), sem modo de edi├º├úo, sem campos ligados a registro e sem p├ígina de lista. Cri├í-los seria inventar superf├¡cie (PILAR 1) ou escrever m├®todo vazio. A carga da grade j├í tem funil pr├│prio desde a Fase 4 (`CarregarDados`, que ├® tamb├®m o nome que o harness procura em form OPERACIONAL). Tudo isso est├í registrado no cabe├ºalho do arquivo, junto com o ├║nico evento legado sem equivalente (`Load ÔåÆ =fConfigGeral()`, N├âO PORTADO, mesmo crit├®rio de `FormSigMvExp.prg`).
+
+## Verifica├º├úo (executada, n├úo presumida)
+
+- **Smoke test VFP9** primeiro ÔÇö o `vfp9.exe` desta sess├úo **executa** (gravou o arquivo de sa├¡da), ent├úo as provas abaixo valem.
+- **`COMPILE` limpo**: `.FXP` gerado, **sem `.ERR`**.
+- **Instancia├º├úo + exerc├¡cio dos funis** (subclasse com wrappers p├║blicos, ├║nica forma de alcan├ºar membro protegido):
+  - sem cursor do chamador: `Label1` mant├®m o Caption do SCX `Condi├º├úo de Pagamento` ÔÇö a guarda contra apag├í-lo com `[  ]` funciona;
+  - com estado no BO: `[ DINHEIRO ]` / `[ 12 ]` / saldo `-35.5`;
+  - `FormParaBO` lendo a c├®lula: barra `1234567890`, `novo=.T.` com anterior=0 e `.F.` com anterior=999;
+  - `BtnConfirmarClick` recusa com saldo Ôëá 0 e fecha com saldo = 0 (regra do legado preservada).
+- **Gate da Fase 8** rodado standalone: `VALIDADO=True`, `FALTANTES=` vazio.
+- **Auditoria** `VerificarMetodoProtegidoChamadoDeFora.ps1`: exit 0, sem apontamentos.
+- **CRLF preservado** (CR=LF=2087), sem TODO/stub no arquivo.
+
+Uma ressalva honesta sobre o gate: ele aprova `FormParaBO`/`BOParaForm`/`CarregarLista` por `-match` no arquivo **inteiro, coment├írio inclu├¡do**. Antes desta fase ele j├í passava s├│ porque esses nomes apareciam em coment├írios. Agora `FormParaBO`/`BOParaForm` s├úo m├®todos reais; `CarregarLista` continua existindo apenas como men├º├úo em coment├írio ÔÇö correto para esta tela, mas ├® uma aprova├º├úo que n├úo prova nada.

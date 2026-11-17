@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGOPPGC.prg` atualizado (726 ÔåÆ 974 linhas, **inser├º├úo pura**: 248 linhas acrescentadas, 0 removidas).
+
+## O que foi entregue
+
+Transcrito do dump na ordem exata da SECAO 1 (`cntSombra ÔåÆ Shape1/Label1 ÔåÆ Ok/Cancela ÔåÆ Grade ÔåÆ Get_Saldo`), j├í que `AddObject` ├® quem define o z-order:
+
+| M├®todo novo | Controles | Origem |
+|---|---|---|
+| `ConfigurarMolduraFormaPagto()` | `shp_4c_Shape1`, `lbl_4c_Label1` | `SIGOPPGC.Shape1` / `SIGOPPGC.Label1` |
+| `ConfigurarCampoSaldo()` | `txt_4c_Saldo` | `SIGOPPGC.Get_Saldo` (classe `fwget`) |
+| `AplicarRotuloFormaPagto()` | ÔÇö | `.label1.Caption = '[ '+AllTrim(crSigOpFp.fpags)+' ]'` do `Init` legado |
+
+Decis├Áes que valem registro:
+
+- **Z-order**: `ConfigurarMolduraFormaPagto` entra **antes** de `ConfigurarBotoes` ÔÇö Shape1 (222..395 ├ù 7..117) cruza o `cmd_4c_Ok` e Label1 cruza Shape1; no legado os bot├Áes v├¬m depois e ficam por cima.
+- **Shape1** fica com `BackStyle=0` + `BorderStyle=0` como o SCX declara (n├úo desenha nada ÔÇö res├¡duo de layout), e **sem** `ForeColor`, que `Shape` n├úo tem (regra #33 ÔÇö derrubaria o `Init`).
+- **`AutoSize = .F.`** no Label1 com `Width`/`Height` expl├¡citos do SCX (regra #23 ÔÇö `AutoSize` ├® no-op em Label criado por `AddObject`).
+- **`Get_Saldo.When ÔåÆ Return(.F.)`** reproduzido como `ReadOnly = .T.` + `TabStop = .F.`; `Enabled = .F.` trocaria o fundo 224,253,254 pelo `DisabledBackColor` 192,192,192 da classe `fwget`. `Format="K"`/`Themes=.F.`/`DisabledBackColor`/`DisabledForeColor` vieram da classe `fwget` (`FRAMEWORK_class_codigo_fonte.txt`), `Height`/`Width` do SCX (20/81) sobrepondo os 23/100 da classe. `InputMask = "999,999.99"` transcrito (regra #49).
+- **`AplicarRotuloFormaPagto`** carrega `crSigOpFp` pelo BO (`CarregarDoCursor`), o que tamb├®m popula `this_nValorPorBarra` ÔÇö o valor que cada barra grava em `BarBonus.Valors`. Guardado por `USED()` (sem chamador o r├│tulo fica com o caption do SCX) e salva/restaura a ├írea de trabalho, j├í que `CarregarDoCursor` faz `SELECT`.
+
+## Verifica├º├Áes
+
+- `COMPILE` no VFP9: **sem `.ERR`**, `.FXP` gerado (removido depois para n├úo deixar artefato novo).
+- `VerificarPropriedadesInexistentes.ps1`: **OK ÔÇö nenhuma atribui├º├úo a propriedade inexistente**.
+- CRLF preservado (CR=974, LF=974, medido por contagem de bytes); sem literais acentuados, sem `MESSAGEBOX`, sem `RETURN` dentro de `TRY`, sem `PUBLIC` em `DEFINE CLASS`; blocos balanceados (13/13 `PROCEDURE`, 1/1 `FUNCTION`, 16/16 `WITH`).
+
+**Fica para a Fase 6** (anotado em coment├írio no `ConfigurarPageFrame`, com a geometria j├í medida): `Label2` "Saldo : " (158, 385, 42├ù15) e `Label3` "[  ]" (156, 359, 18├ù15), junto com o funil ├║nico que recalcula saldo e quantidade ÔÇö ├® esse funil (`LostFocus` da c├®lula) que d├í conte├║do aos dois.

@@ -1,0 +1,1262 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpPdt.SCX
+* Data/Hora: 13/11/2026 02:02:35
+* Total de registros: 31
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPDT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPPDT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPDT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPDT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPPDT
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGOPPDT
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grade
+  Parent: SIGOPPDT
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.seleciona
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGOPPDT.Grade.seleciona
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.empresa
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.empresa
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.operacao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.operacao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.codigo
+  Class: header
+  BaseClass: header
+
+Objeto: Ingrid1
+  Parent: SIGOPPDT.Grade.codigo
+  Class: ingrid
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.data
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.data
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.Grupo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.Grupo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.Conta
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.Conta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPDT.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPDT.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say_Procura
+  Parent: SIGOPPDT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Procura
+  Parent: SIGOPPDT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: SelTudo
+  Parent: SIGOPPDT
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGOPPDT
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ok
+  Parent: SIGOPPDT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Operações Pendentes"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  AlwaysOnTop = .F.
+  parentform = thisform.parentformthisform.parentform
+  Name = "SIGOPPDT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Shape2
+------------------------------------------------------------
+  Top = 339
+  Left = 73
+  Height = 39
+  Width = 168
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 672
+  Height = 41
+  Width = 27
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Courier New"
+  AllowAddNew = .F.
+  AllowHeaderSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 148
+  Left = 72
+  Panel = 1
+  ReadOnly = .F.
+  RecordSource = "tmppends"
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 180
+  Visible = .T.
+  Width = 622
+  Name = "Grade"
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 9
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.InputMask = "!!!!!!!!!!"
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "seleciona"
+  Column2.FontName = "Arial"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 25
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "empresa"
+  Column3.FontName = "Arial"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 110
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.InputMask = ""
+  Column3.Name = "operacao"
+  Column4.FontName = "Arial"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 40
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.Visible = .T.
+  Column4.InputMask = ""
+  Column4.Name = "codigo"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Width = 60
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.Visible = .T.
+  Column5.InputMask = ""
+  Column5.Name = "data"
+  Column6.FontName = "Arial"
+  Column6.FontSize = 8
+  Column6.Width = 130
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .F.
+  Column6.Visible = .T.
+  Column6.Name = "Grupo"
+  Column7.FontName = "Arial"
+  Column7.FontSize = 8
+  Column7.Width = 130
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Visible = .T.
+  Column7.Name = "Conta"
+  Column8.FontName = "Arial"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 8
+  Column8.Width = 75
+  Column8.ReadOnly = .T.
+  Column8.Visible = .T.
+  Column8.InputMask = "999,999.99"
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.seleciona.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.seleciona.fwcheckbox1
+------------------------------------------------------------
+  Top = 31
+  Left = 12
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.empresa.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.empresa.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.operacao.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.operacao.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.codigo.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.codigo.Ingrid1
+------------------------------------------------------------
+  Left = 17
+  Top = 55
+  cordertag = Numes
+  cseektag = Numes
+  Name = "Ingrid1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.data.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.data.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = 0
+  ControlSource = ""
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Grupo.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Origem"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Grupo.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Conta.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Destino"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Conta.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Grade.Column8.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Say_Procura
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Procurar Código : "
+  Height = 15
+  Left = 83
+  Top = 350
+  Width = 89
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say_Procura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.Get_Procura
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  Left = 186
+  MaxLength = 6
+  TabIndex = 2
+  Top = 347
+  Width = 48
+  Name = "Get_Procura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.SelTudo
+------------------------------------------------------------
+  Top = 216
+  Left = 704
+  Picture = ..\vbmp\to-do-list_checked2.ico
+  Caption = ""
+  ToolTipText = "Seleciona tudo"
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.apaga
+------------------------------------------------------------
+  Top = 256
+  Left = 704
+  Picture = ..\vbmp\onebit_33.ico
+  Caption = ""
+  ToolTipText = "Desmarca tudo"
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPDT.ok
+------------------------------------------------------------
+  Top = 4
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<Ok"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPPDT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE desmarca
+------------------------------------------------------------
+PROCEDURE desmarca
+Private pNot, pDay, pBai
+
+pNot = .f.
+pDay = Datetime()
+pBai = crSigMvCab.Datas
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'TempOpe', 'Dopes', TmpPends.Dopes, 'NDopes')
+lcNivel    = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 6)
+lnNumNivel = Val(Str(TempOpe.NDopes, 4) + Transform(TmpPends.Numes, '@L 999999'))
+
+Select crLclMvItn
+Delete All For Dopes + Str(Numes, 6) = TmpPends.Dopes + Str(TmpPends.Numes, 6)
+
+Select TmpOperacao
+If Seek(lnNumNivel, 'TmpOperacao', 'Codigos')
+	Delete
+EndIf
+
+lcQuery = [Update SigMvCab ] + ;
+			 [Set ChkSubn = ?pNot, ] + ;
+			 	 [DtAlts = ?pDay, ] + ;
+			 	 [DtBaixas = ?pBai ] + ;
+		   [Where EmpDopNums = '] + lcNivel + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Desmarca - Update - SigMvCab)')
+	Return 0
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE marca
+------------------------------------------------------------
+PROCEDURE marca
+Parameters llAutomatico
+
+Private pTru, pDay, pBai
+
+pTru = .t.
+pDay = Datetime()
+pBai = crSigMvCab.Datas
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'TempOpe', 'Dopes', TmpPends.Dopes, 'NDopes')
+lcNivel    = TmpPends.Emps + TmpPends.Dopes + Str(TmpPends.Numes, 6)
+lnNumNivel = Val(Str(TempOpe.NDopes, 4) + Transform(TmpPends.Numes, '@L 999999'))
+
+If Seek(lnNumNivel, 'TmpOperacao', 'Codigos' )
+	If Not llAutomatico
+		=Messagebox('Movimentação Já Digitada!!!', 0+48, '')
+	EndIf
+	Select TmpPends
+	Return .f.
+EndIf
+
+lcCpo = 'FixGDests, FixGOrigs, ConOSubs, ConDSubs'
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'TempOpe', 'Dopes', crSigMvCab.Dopes, lcCpo)
+lcPosicao = crSigMvCab.Emps + crSigMvCab.Dopes + Str( crSigMvCab.Numes, 6 )
+lnPuxaOrigem = TempOpe.ConOSubs
+lnPuxaDestino = TempOpe.ConDSubs
+
+lcCpo = 'ChkSubn, Obses, GrupoOs, ContaOs, GrupoDs, ContaDs, GrVends, Vends'
+ThisForm.poDataMgr.CursorQuery('SigMvCab', 'PendEest', 'EmpDopNums', lcNivel)
+_Retorna = .t.
+Do Case
+	Case PendEest.ChkSubn
+		If Not llAutomatico
+			=Messagebox('Movimentação Já Utilizada Em Outra Operação!!!', 0+48, '')
+		EndIf
+		_Retorna = .f.
+
+	Case Not Empty(crSigMvCab.ContaDs) And (PendEest.ContaDs <> crSigMvCab.ContaDs)
+		If Not llAutomatico
+			=Messagebox('Movimentação de Outra Conta!!!', 0+48, '')
+		EndIf
+		_Retorna = .f.
+		
+	Case Not Empty(crSigMvCab.ContaOs) And (PendEest.ContaOs <> crSigMvCab.ContaOs)
+		If Not llAutomatico
+			=Messagebox('Movimentação de Outra Conta!!!', 0+48, '')
+		EndIf
+		_Retorna = .f.
+EndCase
+
+If Not _Retorna
+	Select TmpPends
+	Return .f.
+EndIf
+
+lcQuery = [Update SigMvCab ] + ;
+			 [Set ChkSubn = ?pTru, ] + ;
+			 	 [DtAlts = ?pDay, ] + ;
+			 	 [DtBaixas = ?pBai ] + ;
+		   [Where EmpDopNums = '] + lcNivel + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Marca - Update - SigMvCab)')
+	Return 0
+EndIf
+
+Select crLclMvItn
+Delete All For Empty(Cpros)
+Go Bottom
+
+Select TmpOperacao
+Insert Into TmpOperacao (Codigos) Values (lnNumNivel)
+
+If IsEmpty(crSigMvCab.Obses)
+	Replace Obses With PendEest.Obses In crSigMvCab
+Endif
+
+With ThisForm.ParentForm.Pagina.Dados
+	If InList(lnPuxaOrigem,1,2)
+		If Empty(crSigMvCab.GrupoOs) Or (Empty(crSigMvCab.ContaOs) And Not TempOpe.FixGOrigs)
+			Replace GrupoOs With Iif(lnPuxaOrigem=1, PendEest.GrupoOs, PendEest.GrupoDs) In crSigMvCab
+		EndIf
+		If Empty(crSigMvCab.ContaOs) 
+			Replace ContaOs With Iif(lnPuxaOrigem=1, PendEest.ContaOs, PendEest.ContaDs) In crSigMvCab
+		EndIf
+	EndIf
+	
+	If InList(lnPuxaDestino, 1, 2)
+		If Empty(crSigMvCab.GrupoDs) Or (Empty(crSigMvCab.ContaDs) And Not TempOpe.FixGDests)
+			Replace GrupoDs With Iif(lnPuxaDestino=1, PendEest.GrupoOs, PendEest.GrupoDs) In crSigMvCab
+		EndIf
+		If Empty(crSigMvCab.ContaDs) 
+			Replace ContaDs With Iif(lnPuxaDestino=1, PendEest.ContaOs, PendEest.ContaDs) In crSigMvCab
+		EndIf
+	EndIf
+
+	If Empty(crSigMvCab.GrVends)
+		Replace GrVends With PendEest.GrVends In crSigMvCab
+	EndIf
+	If Empty(crSigMvCab.Vends) And (crSigMvCab.GrVends = PendEest.GrVends)
+		Replace Vends With PendEest.Vends In crSigMvCab
+	EndIf
+EndWith
+
+ThisForm.poDataMgr.CursorQuery('SigMvItn', 'crItens', 'EmpDopNums', lcNivel)
+Select crItens
+Scan
+	Scatter Memvar Memo
+ 	Insert Into crLclMvItn From Memvar
+EndScan
+
+lnItens = 0
+Select crLclMvItn
+Set Order to 
+Scan
+	If Empty(Cpros) 
+		Loop
+	EndIf
+	lnItens = lnItens + 1
+	Replace cItens With lnItens
+Endscan
+
+Go Top
+If Eof()
+ 	Insert Into crLclMvItn (Emps, Dopes, Numes, cItens) ;
+		 		  Values (crSigMvCab.Emps, crSigMvCab.Dopes, crSigMvCab.Numes, lnItens + 1)
+EndIf
+
+Select crSigMvCab
+With ThisForm.ParentForm.Pagina.Dados
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crCli', 'IClis', crSigMvCab.ContaOs, 'RClis')
+	If Not Eof('crCli')
+		.Origem.get_dconta.Value = crCli.RClis
+	Else
+		.Origem.get_dconta.Value = ''
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crCli', 'IClis', crSigMvCab.ContaDs, 'RClis')
+	If Not Eof('crCli')
+		.Destino.get_dconta.Value = crCli.RClis
+	Else
+		.Destino.get_dconta.Value = ''
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crCli', 'IClis', crSigMvCab.Vends, 'RClis')
+	If Not Eof('crCli')
+		.Responsavel.get_dconta.Value = crCli.RClis
+	Else
+		.Responsavel.get_dconta.Value = ''
+	EndIf
+	
+	.Refresh
+Endwith
+
+Select crLclMvItn
+Set Order To
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm, pData, pCnx
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+This.LockScreen = .t.
+
+ThisForm.ParentForm = pForm
+Set DataSession To pData
+ThisForm.poDataMgr = pCnx
+
+Create Cursor TmpPends(Flag l, Emps c(3), Dopes c(20), Numes n(6), MascNum c(6), Datas t Null, ;
+					   TpFats c(3), Origem c(21), Destino c(21), Valos n(12,2))
+Index On Emps + Dopes + Str(Numes, 6) Tag EmpDopNum
+Index On Numes Tag Numes
+
+Select TmpOperacao
+Delete All For Empty(Codigos)
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'TempOpe', 'Dopes', crSigMvCab.Dopes, 'Nivels, ConOSubs, ConDSubs')
+lcDopesNivel  = TempOpe.Nivels
+lnPuxaOrigem  = TempOpe.ConOSubs
+lnPuxaDestino = TempOpe.ConDSubs
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'TempOpe', 'Dopes', lcDopesNivel, 'NDopes')
+lcNumeroNivel = Str(TempOpe.NDopes, 4 )
+
+lcEd1 = _Empr + Padr(lcDopesNivel, 20) + Str(0, 6)
+lcEd2 = _Empr + Padr(lcDopesNivel, 20) + Str(999999, 6)
+
+lcQuery = [Select Emps, Dopes, Numes, MascNum, Datas, Valos, ChkSubn, GrupoOs, GrupoDs, ContaOs, ContaDs ] + ;
+		    [From SigMvCab ] + ;
+		   [Where EmpDopNums BetWeen '] + lcEd1 + [' And '] + lcEd2 + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'PendEest') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (PendEest)')
+	This.LockScreen = .f.
+	Return 0
+EndIf
+
+Select PendEest
+Scan
+	If PendEest.ChkSubn And Not Seek(Val(lcNumeroNivel + Transf(PendEest.Numes, '@L 999999')), 'TmpOperacao', 'Codigos')
+		Loop
+	EndIf
+
+	Store '' To lcOrigem, lcDestino
+	If Inlist(lnPuxaOrigem, 1, 2)
+		If (lnPuxaOrigem = 1)
+			If Not Empty(crSigMvCab.ContaOs) And (crSigMvCab.Contaos <> PendEest.ContaOs)
+				Loop
+			EndIf
+			lcOrigem = PendEest.GrupoOs + '/' + PendEest.ContaOs
+		Else
+			If Not Empty(crSigMvCab.ContaOs) And (crSigMvCab.ContaOs <> PendEest.ContaDs)
+				Loop
+			EndIf
+			lcOrigem = PendEest.GrupoDs + '/' + PendEest.ContaDs
+		EndIf
+	Else
+		lcOrigem = PendEest.GrupoOs + '/' + PendEest.ContaOs
+	EndIf
+
+	If Inlist(lnPuxaDestino, 1, 2)
+		If (lnPuxaDestino = 1)
+			If Not Empty(crSigMvCab.ContaDs) And (crSigMvCab.Contads <> PendEest.ContaOs)
+				Loop
+			EndIf
+			lcDestino = PendEest.GrupoOs + '/' + PendEest.ContaOs
+		Else
+			If Not Empty(crSigMvCab.ContaDs) And (crSigMvCab.ContaDs <> PendEest.ContaDs)
+				Loop
+			EndIf
+			lcDestino = PendEest.GrupoDs + '/' + PendEest.ContaDs
+		EndIf
+	Else
+		lcDestino = PendEest.GrupoDs + '/' + PendEest.ContaDs
+	EndIf
+
+	_Flag = Seek(Val(lcNumeroNivel + Transform(Numes, '@L 999999')), 'TmpOperacao', 'Codigos')
+
+	Insert Into TmpPends (Flag, Emps, Dopes, Numes, Mascnum, Datas, Origem, Destino, Valos) ;
+				  Values (_Flag, PendEest.Emps, PendEest.Dopes, PendEest.Numes, PendEest.MascNum,;
+						  PendEest.Datas, lcOrigem, lcDestino, PendEest.Valos)
+EndScan
+
+With ThisForm.Grade
+	.RecordSource 			 = 'TmpPends'
+	.Seleciona.ControlSource = 'TmpPends.Flag'
+	.Operacao.ControlSource  = 'TmpPends.Dopes'
+	.Codigo.ControlSource 	 = 'TmpPends.MascNum'
+	.Data.ControlSource 	 = 'TmpPends.Datas'
+	.Grupo.ControlSource 	 = 'TmpPends.Origem'
+	.Conta.ControlSource 	 = 'TmpPends.Destino'
+	.Column8.ControlSource 	 = 'TmpPends.Valos'
+EndWith
+
+ThisForm.Op_Escolha = ThisForm.Parentform.pcEscolha
+
+ThisForm.SelTudo.Visible 	 = (ThisForm.Op_Escolha = 'INSERIR')
+ThisForm.Apaga.Visible 		 = (ThisForm.Op_Escolha = 'INSERIR')
+ThisForm.Say_Procura.Visible = (ThisForm.Op_Escolha = 'INSERIR')
+ThisForm.Get_Procura.Visible = (ThisForm.Op_Escolha = 'INSERIR')
+
+If (ThisForm.Op_Escolha = 'INSERIR')
+	ThisForm.Get_Procura.SetFocus
+Else
+	ThisForm.Grade.Codigo.Ingrid1.SetFocus
+EndIf
+ThisForm.Refresh
+This.LockScreen = .f.
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.seleciona.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+=DoDefault()
+
+If Not This.Value
+	ThisForm.Desmarca
+Else
+	This.Value = ThisForm.Marca()
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.Op_Escolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.empresa.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.operacao.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.data.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.Grupo.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.Conta.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Grade.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.Get_Procura
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If (TmpPends.Numes == This.Value) Or (This.Value = 0)
+	ThisForm.Grade.Seleciona.fwcheckbox1.SetFocus
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select TmpPends
+	Set Order To Numes
+	Set Near On 
+	Seek This.Value
+	Set Near Off
+	ThisForm.Refresh
+	If (This.Value == TmpPends.Numes)
+		This.Value = 0
+	Else
+		Return 0
+	EndIf
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+This.Value = 0
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.SelTudo
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpPends
+Scan For Not Flag
+	Replace Flag With ThisForm.Marca(.t.)
+EndScan
+ThisForm.Grade.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.op_escolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.apaga
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpPends
+Scan For Flag
+	Replace Flag With .f.
+	=ThisForm.Desmarca()
+EndScan
+ThisForm.Grade.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.op_escolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPDT.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.Release
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPDT
+RESERVED3 (ClassInfo): op_escolha
+parentform
+podatamgr
+*desmarca 
+*marca 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

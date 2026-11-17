@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 7 executada.** `C:\4c\projeto\app\forms\operacionais\FormSIGOPPRM.prg` atualizado via Read + Edit.
+
+## Os 4 eventos pedidos n├úo existem neste legado
+
+O prompt pede `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. Medi o dump: **zero** `frmcadastro`, zero `Grupo_Op`, zero nome de bot├úo com verbo CRUD, zero `<X>.Click`, e as 3 cita├º├Áes de `pcEscolha` s├úo leitura do modo do form **pai** (`ThisForm.ParentForm.pcEscolha <> 'CONSULTAR'`). O legado herda de `form` puro ÔÇö criar esses 4 handlers exigiria inventar bot├Áes (viola o PILAR 1) ou gerar m├®todos vazios (viola a regra de completude). O gate tem carve-out exatamente para isso, e ├® por ele que a fase passa.
+
+## O que a fase entregou de fato
+
+Os 4 bot├Áes reais do SCX (`btnSair`, `btnRetirar`, `MarcarEmp`, `DesmarcarEmp`) j├í tinham handler, mas **dois estavam invis├¡veis para os gates** ÔÇö batizados pelo objeto legado, sem o prefixo can├┤nico. Medido: `nBotoesLegado = 4` contra `nHandlers = 2`, exatamente o piso, ou seja o gate j├í passava com margem zero e nada acusava metade da superf├¡cie de bot├úo.
+
+- `MarcarEmpClick` ÔåÆ **`BtnMarcarTodasClick`**
+- `DesmarcarEmpClick` ÔåÆ **`BtnDesmarcarTodasClick`**
+
+Nomeados pela **a├º├úo** (bot├Áes ├¡cone-puro, `Caption = ""` ÔÇö o verbo est├í no `ToolTipText`: "Marca/Desmarca Todas as Linhas de Produto"), n├úo pelo objeto. S├│ o handler mudou; `cmd_4c_MarcarEmp`/`cmd_4c_DesmarcarEmp` ficaram intactos, logo `mapeamento.json` n├úo foi tocado. `nHandlers` foi para 4.
+
+Dois defeitos reais corrigidos em `BtnRetirarClick`:
+- `grd_4c_Dados.Column1.SetFocus()` sem guarda no ramo "nada marcado" (o ramo de acesso negado j├í tinha).
+- `SELECT` + `GO TOP` antes do `Refresh` final: o `DELETE` do SCAN pode marcar como exclu├¡da a linha sob o ponteiro e, com `SET DELETED ON`, o `Refresh` sozinho repintaria a grade a partir de registro inalcan├º├ível (regra #21a). A ├írea corrente tamb├®m precisava voltar ÔÇö o ├║ltimo `SELECT` em vigor era o cursor de marcados, j├í fechado.
+
+## Verifica├º├úo
+
+| prova | resultado |
+|---|---|
+| Gate `case 7` (recortado do orquestrador, sem dot-source) | `VEREDITO=PASSA` pela linha `[i] legado sem botao CRUD algum - validado pelos 4 handler(s)` |
+| `Test-CompletudeCodigo` (etapa 05d), BO + Form | `[OK]` nos dois |
+| Smoke test VFP9 | rodou (`VIVO` gravado) ÔÇö a compila├º├úo abaixo ├® real |
+| `COMPILE` + **controle negativo** | `BO.FXP=.T. BO.ERR=.F.` / `FORM.FXP=.T. FORM.ERR=.F.`; o controle negativo gerou `.ERR` com 3 erros |
+| 8 delegates de `BINDEVENT` ├ù m├®todos existentes | todos OK, todos PUBLIC |
+
+Uma armadilha que vale registrar: ao documentar a dispensa no cabe├ºalho, citar os 4 nomes CRUD inteiros fez o gate aprovar **por substring do coment├írio** ÔÇö os 4 tokens viraram `presente=True` e a linha do carve-out desapareceu do log. Reescrevi o racional em partes e reconfirmei `presente=False` nos quatro. Atualizei a mem├│ria `feedback_gate_fase7_handler_sem_prefixo_btn_cmd` com essa armadilha e com o crit├®rio novo (comparar `nHandlers` com `nBotoesLegado`, n├úo com o piso ÔÇö o gate passando n├úo prova que os handlers est├úo bem nomeados).

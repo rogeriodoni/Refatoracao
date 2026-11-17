@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The connectivity check still hasn't produced output ÔÇö itself consistent with the established non-response signature (port 1433 unreachable). I have enough evidence to conclude.
+
+## Conclusion: this is not a code bug ÔÇö it's the known network outage
+
+The error is happening in **ETAPA 1B** of `TestFormWrapper.prg`, during the harness's generic SQL pre-flight check ÔÇö **before any `CREATEOBJECT` of `Formsigoppro`/`sigopproBO` even runs**:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL: Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+This matches a well-documented, ongoing pattern in this project's memory: SQL Server `192.168.200.10:1433` has been **intermittently unreachable from this pipeline machine since 2026-11-05**, confirmed across 18+ tasks and 50+ occurrences. This exact form was already reviewed line-by-line against the full CLAUDE.md checklist **three times** in earlier attempts of this same task (tentativas 2-4) with no defect found. I did an independent confirmatory pass this round:
+
+- Zero BINDEVENT handlers declared PROTECTED (grep-verified)
+- `ObterChavePrimaria` (PROTECTED in the BO) is never called from the form ÔÇö only internally
+- The CATCH blocks around the `BtnXxxClick` handlers that open child forms all call `MostrarErro(...)` ÔÇö not silent
+- `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` did not respond within timeout on two separate checks this session ÔÇö same signature as every prior occurrence
+
+**I did not edit `Formsigoppro.prg` or `sigopproBO.prg`** ÔÇö both are correct, and editing working code to chase a network outage would be damage, not a fix (per the project's own standing guidance on this issue).
+
+**Recommendation**: give the `06_testForm` gate an exception for error 1526/connectivity, or pause the automatic retry for this task. The retry loop can't converge against an intermittent network outage ÔÇö it will just burn through the remaining attempts. I've logged this attempt in the project's tracking memory for continuity.

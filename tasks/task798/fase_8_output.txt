@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Correct visibility as designed. The implementation is complete and verified to compile. Here's a summary of what was done for Phase 8:
+
+## Summary
+
+The generic Phase 8 template (BtnBuscarClick, FormParaBO/BOParaForm, CarregarLista, AjustarBotoesPorModo) doesn't apply to SIGOPSAT ÔÇö it's a non-interactive "server" screen with no fields, grid, or CRUD buttons in the legacy form. What was actually still missing (flagged as deferred in the Phase 3/4 comments) was the real behavior: the `lerarquivos()` integration loop.
+
+**`sigopsatBO.prg`** ÔÇö added:
+- `DeclararFuncoesSAT()` ÔÇö the 8 `DECLARE ... IN "SAT.dll"` calls, isolated in their own TRY/CATCH (DLL loads at declare-time and doesn't exist on this machine, so it must never abort `Init`)
+- `AssociarAssinaturaAC()` ÔÇö transcribes the one-time AC signature association before the loop
+- `ProcessarFilaRequisicoes()` / `ProcessarArquivoRequisicao()` / `DespacharComandoSAT()` ÔÇö one pass over `Req\*.XML`, extracting fields, deleting the request, dispatching to `ConsultarSAT`/`EnviarDadosVenda`/`CancelarUltimaVenda`, writing the response via `.tmp` + `RENAME`
+
+**`Formsigopsat.prg`** ÔÇö `Init()` now runs `Visible=.T./Refresh()/Lerarquivos()/Release()` after successful parameter loading, mirroring the legacy Init exactly (skipped in test/headless mode, since it's an ESC-interrupted infinite loop). `Lerarquivos()` owns the loop, the ESC trap, and the status label.
+
+**`menu.prg`** ÔÇö added bar 177 under Movimentos and `AbrirFormsigopsat()` ÔÇö deliberately without `.Show()`, since by the time `CREATEOBJECT` returns, `Init()` has already run the whole loop and released the form (same as the legacy, which also never waits for an external Show).
+
+Two deliberate omissions, documented inline: `SET STEP ON` (debugger leftover) and `DO pEncerrar` (undefined legacy global of unknown scope ÔÇö already a latent bug elsewhere in `Formsigtosen.prg`; guessing its effect here would be worse than leaving it out).
+
+All three files compiled clean via `vfp9.exe -T` + `ValidarCompilacao.prg`.

@@ -1,0 +1,34 @@
+LOCAL loc_o, loc_c, loc_n
+Error in line 11: Statement is not in a procedure.
+loc_o = CREATEOBJECT("TestClassX")
+Error in line 12: Statement is not in a procedure.
+loc_c = ""
+Error in line 13: Statement is not in a procedure.
+FOR loc_n = 0 TO 6
+Error in line 14: Statement is not in a procedure.
+TRY
+Error in line 15: Statement is not in a procedure.
+loc_c = loc_c + "Pub " + TRANSFORM(loc_n) + "=" + TRANSFORM(PEMSTATUS(loc_o, "PublicMethod", loc_n)) + CHR(13) + CHR(10)
+Error in line 16: Statement is not in a procedure.
+CATCH TO loc_oErr
+Error in line 17: Statement is not in a procedure.
+loc_c = loc_c + "Pub " + TRANSFORM(loc_n) + "=ERR" + CHR(13) + CHR(10)
+Error in line 18: Statement is not in a procedure.
+ENDTRY
+Error in line 19: Statement is not in a procedure.
+TRY
+Error in line 20: Statement is not in a procedure.
+loc_c = loc_c + "Prot " + TRANSFORM(loc_n) + "=" + TRANSFORM(PEMSTATUS(loc_o, "ProtectedMethod", loc_n)) + CHR(13) + CHR(10)
+Error in line 21: Statement is not in a procedure.
+CATCH TO loc_oErr
+Error in line 22: Statement is not in a procedure.
+loc_c = loc_c + "Prot " + TRANSFORM(loc_n) + "=ERR" + CHR(13) + CHR(10)
+Error in line 23: Statement is not in a procedure.
+ENDTRY
+Error in line 24: Statement is not in a procedure.
+ENDFOR
+Error in line 25: Statement is not in a procedure.
+STRTOFILE(loc_c, "C:\4c\automation\_testpem2_out.txt")
+Error in line 26: Statement is not in a procedure.
+QUIT
+Error in line 27: Statement is not in a procedure.

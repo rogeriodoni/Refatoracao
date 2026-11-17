@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: N├âO ├® bug de c├│digo ÔÇö ├® o Erro 1526 de rede, j├í documentado
+
+Revisei `FormSIGOPPEN.prg` e `SIGOPPENBO.prg` linha a linha contra o checklist do CLAUDE.md (RETURN sempre fora de TRY/CATCH, handlers PUBLIC para BINDEVENT, form nunca chama m├®todo PROTECTED do BO ÔÇö `ObterChavePrimaria` fica PROTECTED e s├│ ├® usado internamente, `Buscar`/`Atualizar`/`CarregarDoCursor`/`CarregarConfigOperacao` s├úo PUBLIC ÔÇö, CATCH sempre com `MsgErro`, `EscaparSQL`/`FormatarDataSQL` sem aspas extras). **Nenhum defeito encontrado.**
+
+O log da etapa `06_testForm` confirma isso:
+```
+[ETAPA 1] Carregando dependencias... OK
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL: Codigo: 1526
+SQL Server inexistente ou acesso negado
+```
+
+A falha ocorre **antes** de qualquer `CREATEOBJECT` de `FormSIGOPPEN`/`SIGOPPENBO` ÔÇö ├® a etapa de conectividade do pr├│prio `TestFormWrapper.prg` ao SQL Server (192.168.200.10), n├úo o `.prg` do form. Minha mem├│ria de projeto j├í tem **dezenas de confirma├º├Áes id├¬nticas** (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`) de que essa m├íquina do pipeline perde rota para `192.168.200.10:1433` de forma intermitente, afetando qualquer form/BO que precise conectar no Init ÔÇö j├í aconteceu nas tasks 772, 773, 774, 775, 784 e nesta mesma 785 (tentativas 1 e 2).
+
+Essa ├® a **tentativa 3/10** desta mesma task785/FormSIGOPPEN com a mesma assinatura exata. Atualizei a mem├│ria com essa reconfirma├º├úo.
+
+**N├úo editei os arquivos** ÔÇö regravar c├│digo j├í correto s├│ para "satisfazer" o gate automatizado seria dano, n├úo corre├º├úo (li├º├úo j├í registrada). A recomenda├º├úo registrada nas confirma├º├Áes anteriores continua valendo: pausar o retry autom├ítico desta task ou dar excess├úo ao gate `06_testForm` para o erro 1526/conectividade, j├í que novas tentativas v├úo repetir o mesmo resultado at├® a rota de rede voltar.

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+A tarefa pedia para executar a **Fase 8/8** de `FormSIGOPPRM` (migra├º├úo SIGOPPRM ÔåÆ "Promo├º├Áes do Produto", dialogo filho modal aberto pelo Cadastro de Produtos). Investigando o estado atual, descobri que **as Fases 1-7 j├í tinham entregado tudo que a Fase 8 exige** ÔÇö o form j├í estava funcionalmente completo, s├│ faltava confirmar isso.
+
+**O que fiz nesta fase:**
+1. Revisei o c├│digo j├í existente (`SIGOPPRMBO.prg` + `FormSIGOPPRM.prg`) e confirmei que os equivalentes reais dos m├®todos can├┤nicos da Fase 8 j├í existiam sob nomes fi├®is ao legado: `CarregarPromocoes()` (Ôëê CarregarLista), visibilidade inline de Retirar (Ôëê AjustarBotoesPorModo) e `BtnRetirarClick` como bot├úo de a├º├úo real (faz `DELETE FROM SigPrPmi`).
+2. Compilei BO + Form no VFP9 real (com controle negativo) ÔÇö `FXP=.T. ERR=.F.` nos dois.
+3. Rodei `Test-CompletudeCodigo` ÔÇö sem TODO/stub.
+4. Constru├¡ e executei um replicador do **gate real da Fase 8** (`automation\VerificarGateFase8Task789.ps1`), extraindo via AST as 15 fun├º├Áes puras do orquestrador (sem dot-source, que dispararia uma migra├º├úo real) ÔÇö confirmou `legadoFluxoUnicoF8 = .T.` e `Test-AcaoDoLegadoTemHandler = .T.` ÔåÆ **PASSA**.
+5. Ao documentar isso no cabe├ºalho do form, ca├¡ exatamente na armadilha que a pr├│pria Fase 7 j├í tinha registrado (citar o nome do m├®todo inteiro satisfaz o gate por substring do coment├írio) ÔÇö corrigi quebrando os nomes can├┤nicos em partes, e reconfirmei que o gate passa pela l├│gica real, n├úo pelo texto do coment├írio.
+
+Nenhuma l├│gica funcional foi alterada ÔÇö s├│ documenta├º├úo e verifica├º├úo. `FormSIGOPPRM.prg` e `SIGOPPRMBO.prg` est├úo prontos.

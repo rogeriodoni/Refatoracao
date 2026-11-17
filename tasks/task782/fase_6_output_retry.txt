@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da e validada. O diagn├│stico era **duplo** ÔÇö o log da fase registra `Exit Code: 0` e n├úo diz qual condi├º├úo falhou:
+
+**1. Gate da Fase 6 (`temMetodoLookup = False`)**
+O ramo *layout flat* (OPERACIONAL sem PageFrame) s├│ aprova com `PROCEDURE AbrirLookup*|AbrirBusca*` **pelo nome**. O dump do SIGOPPAG casa `fwbuscaext`/`fwbuscaint`/`fwbuscasel`/`mAddColuna`, ent├úo `legadoSemLookup = False` e o nome era o ├║nico caminho. Os dois lookups estavam completos e compilando, mas **inline** dentro de `ValidarModfpgLostFocus`/`ValidarFpgLostFocus`.
+
+Refatorado para o funil can├┤nico (tamb├®m ├® o que os patterns #114/#215/#217 do CorretorAutomatico ancoram):
+
+| m├®todo | papel |
+|---|---|
+| `Validar<X>LostFocus` | wrapper fino da flag `this_lEmLookup<X>` (libera **depois** do corpo ÔÇö `RETURN` antecipado n├úo trava) |
+| `Validar<X>Corpo` | decide: valor digitado + `gnConnHandle > 0` |
+| `<X>KeyPress` / `<X>DblClick` | F4/F5 com guarda `INLIST(115,116)` e duplo clique, flag em save/restore |
+| `AbrirBuscaMoeda` / `AbrirBuscaFormaPagamento` | o picker (regras #36/#37) |
+
+**2. Completude (`05d_validarCompletude`)** ÔÇö reprovava tamb├®m, por motivo independente: o cabe├ºalho da Fase 5 dizia *"fica para a **pr├│xima fase**"*, que o check 3 casa. Era verdade quando a Fase 5 escreveu e virou coment├írio stale no momento em que a Fase 6 entregou aquela metade. Trocado por "entrou na Fase 6/8, abaixo".
+
+**Escopo dos lookups** ÔÇö o dump tem 8 sites, mas 6 moram em controles dos containers flutuantes (`cntFundo.cntMascPgto`, `cntnsu`) que s├│ existem a partir da Fase 7; `BINDEVENT` em objeto inexistente estoura no pr├│prio bind. Os 2 de filho direto do form s├úo o escopo correto, e ├® o que o `analise.json` j├í indicava. Um dos 6 (`getGrupo`) tem `When / Return .F.` ÔÇö nunca recebe foco, o `Valid` nunca dispara.
+
+**Verifica├º├Áes executadas**
+- Gate extra├¡do verbatim para `.ps1`: `temLayoutFlat = True`
+- `Test-CompletudeCodigo`: OK no Form e no BO
+- `COMPILE` com `.fxp`/`.err` apagados antes: `FORM_ERR=.F. BO_ERR=.F.`
+- Probe headless: form instancia (1050x615), os 8 m├®todos do funil **PUBLIC** (`PEMSTATUS(...,2)=.F.`), helper `CarregarFormasPagamento` PROTECTED, 3 BINDEVENT por campo ligados via `AEVENTS` (LostFocus/KeyPress/DblClick), flags limpas, tecla n├úo-lookup ├® no-op, e o valor digitado ├® **preservado** sem conex├úo (regra #50)
+- Probe de colunas: `DefinirCursor` usa o nome do campo como caption, ent├úo zerar `this_nColunas` e remontar entrega os 4 headers/m├íscaras do legado (`C├│digo`/`Descri├º├úo`/`Moeda XXXXX`/` # 99`) com `Mostrar()` intacto; `SEEK` de 8 chars em TAG `char(10)` devolve `.T.` com `SET EXACT ON`
+- Auditorias: `VerificarLookupEmKeyPress` ERRO=0 sem achado no form; `VerificarFormBuscaAuxiliar` sem achado; `VerificarFuncoesNaoDefinidas` sem chamada ├│rf├ú; `VerificarMetodoProtegidoChamadoDeFora` OK; zero `RETURN` dentro de `TRY`
+
+Form em 1991 linhas. Atualizei a mem├│ria do gate da Fase 6 com a reincid├¬ncia, o segundo motivo de reprova├º├úo e os dois detalhes medidos do `FormBuscaAuxiliar`/`SEEK`.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stray accented characters ÔÇö everything uses `CHR()`. The implementation is complete.
+
+## Summary
+
+The phase prompt's generic template (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) doesn't apply here ÔÇö `SIGOPSEP` is an OPERACIONAL dialog with no CRUD, and the file's own header already specified what Fase 7/8 actually needed. I pulled the full legacy source (`sigopsep_form_codigo_fonte.txt`) and wired the real remaining events in `Formsigopsep.prg`:
+
+- **`cmd_4c_Marcar`/`cmd_4c_Desmarcar`.Click** ÔåÆ `BO.MarcarTodasLinhas(1/0)` + grid refresh
+- **`cmd_4c_MarcaProd`/`cmd_4c_DesmarcaProd`.Click** ÔåÆ `BO.MarcarTodosProdutos(1/0)` + grid refresh
+- **`chk_4c_MarcaProduto.When`** ÔåÆ literal transcription of `Check1.When` (`lMarcas = 0`)
+- **`cmd_4c_Processar`.Click** ÔåÆ `FormParaBO()` + `BO.BuscarProdutos("")`, rebinds the grid via a new `ReligarGradeItens()` (factored out of `CarregarDados` since the BO recreates the cursor alias, which destroys the grid's checkbox column ÔÇö same issue already documented for `InstalarCheckBoxColuna`), replicates the "no products found" / enable-CopiaLista logic
+- **`cmd_4c_CopiaLista`.Click** ÔåÆ `BO.ObterProdutosParaCopia("")`, then hands the filtered cursor to the parent via an optional, defensively-guarded contract method (`AdicionarProdutosSelecionados`) ÔÇö the actual `CrSigCdLpi` insert needs the parent's cursor/header/`fArredondamento`, none of which exist yet since no `SIGOPPxx` parent form is migrated
+- **`cmd_4c_Encerrar`.Click** ÔåÆ `THIS.Release()`
+- Added `RepintarFormPai()` (generic `Form.Refresh()` cascade, replacing the legacy's `Pagina.Dados.Refresh`) wired into `Destroy()` alongside the existing `ReabilitarFormPai()`
+
+All BINDEVENTs were added at their button declarations, procedure/ENDPROC and TRY/WITH blocks balance, and no literal accented characters were introduced.

@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei o ├║nico problema apontado neste pass ÔÇö `[SQL-FILTRO-INVENTADO]` para a coluna `NDOPES` ÔÇö e conclu├¡ que ├® **falso positivo**. N├úo fiz nenhuma altera├º├úo no c├│digo.
+
+**Evid├¬ncia:**
+
+1. O filtro est├í em `ValidarLotesLostFocus()` (`Formsigoppro.prg:5742-5743`):
+   ```foxpro
+   loc_cSQL = "SELECT Dopes, Ctrllotes FROM SigCdOpe" + ;
+              " WHERE nDopes = " + FormatarNumeroSQL(loc_nDope, 0)
+   ```
+
+2. O coment├írio imediatamente acima (linhas 5699-5700) **j├í documenta** que esse filtro vem do legado, s├│ que expresso via helper do framework, n├úo como SQL literal:
+   ```foxpro
+   *   ndope = Val( Left( Str( This.Value, 10 ), 4) )
+   *   Cursorquery('SigCdOpe','crSigCdOpe','nDopes',ndope) / Dope = Dopes
+   ```
+   `Cursorquery(tabela, cursor, campo, valor)` ├® exatamente um SEEK/filtro por `nDopes` ÔÇö ├® a mesma opera├º├úo, s├│ que o extrator autom├ítico do pass SQL s├│ varre texto SQL literal no dump e n├úo enxerga chamadas de helper do framework (por isso `NDOPES` n├úo aparece na lista de "colunas v├ílidas do WHERE original" fornecida no problema).
+
+3. Confirmei no `docs/schema.sql` (lido com `Get-Content -Raw`, pois ├® UTF-16 ÔÇö regra #14) que a coluna existe de fato:
+   ```
+   [ndopes] [numeric](4, 0) NOT NULL,
+   ```
+   em `SigCdOpe`, coerente com o `Val(Left(Str(valor,10),4))` do legado (4 d├¡gitos).
+
+Ou seja: a condi├º├úo n├úo foi inventada pela LLM ÔÇö ├® transcri├º├úo fiel de uma regra de neg├│cio do legado (resolver a opera├º├úo a partir dos 4 primeiros d├¡gitos do n├║mero do lote), s├│ que a ferramenta de detec├º├úo n├úo conseguiu rastrear a origem porque ela est├í num `Cursorquery()` em vez de SQL literal no dump. Remover o filtro quebraria `ValidarLotesLostFocus` e violaria o PILAR 2/3 (regra de neg├│cio preservada) e a regra fundamental de paridade funcional. Nenhum arquivo foi modificado.

@@ -1,0 +1,60 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7 ÔÇö conclu├¡da. A reprova├º├úo era **falso positivo do gate**, n├úo artefato faltando
+
+### 1. Medi├º├úo (antes de tocar em qualquer coisa)
+
+Rodei o `case 7` do orquestrador standalone (sem dot-source ÔÇö ele dispara migra├º├úo real):
+
+```
+legadoSemCrud=False  nHandlers=11  nBotoesLegado=11  minHandlersF7=2
+FALTANTES = BtnIncluirClick | BtnAlterarClick | BtnVisualizarClick | BtnExcluirClick
+```
+
+A **├║nica** evid├¬ncia de CRUD no dump inteiro ├® o NOME `btnIncluir` ÔÇö que no SIGOPORC ├® o bot├úo **"Inserir \<Linha"** (`Insert into crSigMvOrc` + renumera├º├úo + `grdItem.Refresh`), com o par `btnExcluir` ("\<Excluir", `Delete` na linha corrente): **toolbar de LINHA da grade de itens**. Sem `frmcadastro`, sem `Grupo_Op`, modo lido do pai (`poForm.pcEscolha`, `pcEscolhaViva = 0`). **O legado n├úo tem bot├úo Alterar nem Visualizar** ÔÇö satisfazer o gate exigiria inventar bot├úo (PILAR 1) ou criar m├®todo vazio (regra de completude). N├úo mexi no form.
+
+Causa: `Test-DialogoFilhoDoChamador` s├│ reconhece `Set DataSession to poForm.DataSessionId`; aqui o pai passa a sess├úo **j├í resolvida** (`LParameters poForm, pnDatSes` + `Set Datasession to pnDatSes` + `.ParentForm = poForm`).
+
+**N├úo ├® self-reference**: `.ps1` gravado 11/11 20:30 contra in├¡cio da task 12/11 17:29 ÔåÆ o gate que rodou era o do disco, falso positivo de verdade.
+
+### 2. Conserto do gate (fail-closed, 5 camadas)
+
+`Test-DialogoFilhoComSessaoPorId` + call site no ramo do NOME alimentando a vari├ível **estreita** `$ehDialogoFilhoF7` (nunca `$temCrudLegado`). Helper pr├│prio de prop├│sito ÔÇö a mesma prova existe inline na Fase 8 e o coment├írio de l├í j├í registrava a decis├úo de n├úo alargar a irm├ú; as vers├Áes n├úo s├úo id├¬nticas, documentei por qu├¬.
+
+**Blast radius medido nos 780 dumps**, com os helpers reais carregados por AST das duas vers├Áes: assinatura casa em **7** forms, predicado muda em **1** (o pr├│prio `sigoporc`), **zero** regress├úo nos 9 CRUD can├┤nicos. Harness novo: `automation\VerificarGateFase7Task781.ps1` ÔåÆ **PRE=REPROVA / POS=PASSA**.
+
+Encoding conferido: BOM `ef bb bf` intacto, `CR == LF` (20185), `U+FFFD` 172ÔåÆ172, diff `119/0` em 3 hunks.
+
+### 3. ÔÜá´©Å A Fase 7 desta task vai reprovar de novo
+
+O orquestrador parseou o `.ps1` ├ás 17:29; minha corre├º├úo s├│ vale da **pr├│xima invoca├º├úo** em diante. O artefato est├í certo ÔÇö provado por fora:
+
+| verifica├º├úo | resultado |
+|---|---|
+| `COMPILE` (form+BO, `.fxp` apagado) | `FORM_ERR=.F. BO_ERR=.F.`, `.fxp` recriados (smoke test provou que o VFP executa nesta sess├úo) |
+| Instancia├º├úo headless | `VARTYPE=O`, Caption `[Itens]`, 1000x600, BO criado, 33 controles, **zero di├ílogo suprimido** |
+| 11 bot├Áes do legado | todos presentes com a geometria do dump (3/400, 3/475, 3/550, 3/625, 3/700, 3/775, 3/850, OK ÔêÆ2/920, 516/954, 556/954, 481/600) |
+| 11 handlers | todos existem e **PUBLIC** (`protected=.F.`, regra #51) |
+| grades | `grd_4c_Itens` 30 colunas / `grd_4c_Parcelas` 7 ÔÇö iguais ao legado |
+| `Test-CompletudeCodigo` | `True` nos dois arquivos |
+| `ValidadorSQLSchema` (05f) | `PASSOU` |
+| auditorias | FuncoesNaoDefinidas OK ┬À ColunaEmpresaSQL ERRO=0 ┬À LookupEmKeyPress 0 ┬À MetodoProtegido OK ┬À PropriedadesInexistentes OK ┬À FormBuscaAuxiliar 0 ┬À TableRevert 0 |
+| acentos literais | 0 nos dois arquivos |
+| chave `empdopnums` | `PADR(3)+PADR(20)+STR(6)` = 29 = largura da coluna, **id├¬ntica** no BO e no form (regra #42) |
+
+### 4. `VerificarInsertNotNull` acusou o `sigoporcBO` ÔÇö ├® **falso positivo**, provado
+
+Acusou `CBLOCOS, DPROS, TOTAS, OPERS, TOTA7S, CITEM3, TAXAS` em `SIGMVORC`. Contra o schema: a tabela tem 44 colunas / **42 NOT NULL**, o INSERT declara **44** e as 7 acusadas est├úo l├í. O script s├│ aplaina a continua├º├úo `"..." + ;` e n├úo a re-atribui├º├úo `loc_cSQL = loc_cSQL + "..."`, ent├úo perde o 1┬║ token de cada linha e o ├║ltimo da lista ÔÇö limita├º├úo **j├í documentada no cabe├ºalho dele**. O conserto seria um `-replace` com backreference; **n├úo apliquei**, porque mudaria os 46 achados agregados e pede medi├º├úo pr├│pria.
+
+Tamb├®m registrei: `ValidadorSQLSchema`, `VerificarPropriedadesInexistentes` e `VerificarFormBuscaAuxiliar` morrem em `Split-Path` quando chamados com `-File` (`$PSScriptRoot` vazio) e devolvem "nenhum achado" **sem ter medido** ÔÇö rodei os tr├¬s pela forma correta.
+
+### 5. Para o pr├│ximo retry (Fase 8)
+
+O form n├úo tem nenhum dos 4 nomes que o `case 8` cobra (`BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`); `BtnSalvarClick` existe. O `case 8` tem bloco de predicados **pr├│prio** e n├úo consulta o helper de di├ílogo-filho ÔÇö **n├úo alarguei** sem reprova├º├úo medida (doutrina do projeto). Quando a Fase 8 reprovar, o ramo a avaliar ├® o de di├ílogo filho que devolve ao pai, n├úo inventar os 4 m├®todos.
+
+### Arquivos
+Modificados: `automation/OrquestradorMigracao.ps1` (+119, 3 hunks) ┬À `projeto/app/forms/operacionais/Formsigoporc.prg` (s├│ indenta├º├úo, +14 bytes, `diff -w` id├¬ntico, recompilado e reinstanciado).
+Novos: `automation/VerificarGateFase7Task781.ps1`, `CompilarF7SigOpOrc781.prg`, `ProbeSigOpOrcF7.prg` + os `.txt` de evid├¬ncia. Duas mem├│rias gravadas.

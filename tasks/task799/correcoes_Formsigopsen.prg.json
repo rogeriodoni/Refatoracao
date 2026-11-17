@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigopsen.prg",
+    "timestamp":  "2026-11-17T05:14:44",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  1316,
+                          "Original":  "BINDEVENT(THIS.txt_4c_Usuario, \"LostFocus\", THIS, \"UsuarioLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup UsuarioLostFocus. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  1320,
+                          "Original":  "BINDEVENT(THIS.txt_4c_Senha, \"LostFocus\", THIS, \"SenhaLostFocus\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup SenhaLostFocus. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-191-FORECOLOR-BRANCO-INVISIVEL",
+                          "Linha":  1043,
+                          "Original":  "1 controle(s) com .ForeColor = RGB(255,255,255): lbl_4c_Frase@1043",
+                          "Corrigido":  "(REVISAR MANUAL - canonico RGB(90, 90, 90))",
+                          "Descricao":  "Pattern #191: label/checkbox/optionbutton de DADOS com ForeColor branco criado direto na Page (ou em container transparente/claro). As Pages recebem .Picture = fundo_cad_1003.jpg (textura CLARA) POR CIMA do .BackColor = RGB(100,100,100), entao o texto branco fica INVISIVEL - o usuario clica Incluir, cai na aba Dados e ve as caixas de texto sem legenda. Cor certa: se o objeto do SCX legado NAO declara ForeColor (classe say do Framework), usar RGB(90, 90, 90); se declara, copiar o valor EXATO (36,84,155 nos titulos de secao em Verdana, 255,0,0 nas notas de rodape). Ao procurar o objeto no dump do legado, conferir os DOIS nomes: Say\u003cN\u003e do legado costuma virar lbl_4c_Label\u003cN\u003e no migrado. Branco continua correto em lbl_4c_Titulo/lbl_4c_Sombra do cabecalho, em label dentro de container opaco escuro (BackStyle=1 + BackColor RGB(100,100,100)/RGB(90,90,90)) e nas propriedades HighlightForeColor/SelectedForeColor/SelectedItemForeColor. Origem: Erro153 (2026-09-09, FormARV; sweep de 217 sites em 23 forms)."
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

@@ -1,0 +1,54 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue em `projeto\app\forms\operacionais\FormSigOpRob.prg`.
+
+## O que a fase pedia x o que este legado tem
+
+O template pede grade da p├ígina de listagem + 6 bot├Áes CRUD. Medi o dump antes de escrever qualquer linha:
+
+| medi├º├úo em `SigOpRob_form_codigo_fonte.txt` | |
+|---|---|
+| objetos na ├írvore | 7 |
+| `BaseClass: grid` / `pageframe` | **0** |
+| controle de entrada | **1** (`Edit1`, editbox) |
+| desses, com `ReadOnly = .T.` | **1** (= todos) |
+| `AddCursor`/`pColuna`/`RecordSource`/`ControlSource`/`Grade`/`grd` | **0** cada |
+| bot├Áes do legado (`ButtonCount`) | 1 |
+
+├ë o ramo **EXIBICAO** do gate: zero superf├¡cie de lista, um ├║nico campo somente-leitura. Inventar grade ou abas violaria o PILAR 1; escrever m├®todos vazios para casar com o regex seria stub disfar├ºado. Rodei os predicados do `case 4` isolados (helpers extra├¡dos por AST, sem dot-source do orquestrador): **antes `False`, depois `True`** ÔÇö ou seja, a fase tinha trabalho real, e o veredito vem do ramo EXIBICAO (o PAGINADO segue `False`, a prosa do cabe├ºalho n├úo cita os nomes que o disparariam).
+
+## Entregue
+
+- `obj_4c_Edit1` ÔÇö EditBox somente-leitura, geometria literal do dump, `Value` vindo de `SigOpRobBO.this_cTexto` (a linha `ThisForm.Edit1.Value = pcTexto`)
+- `cmg_4c_Commandgroup1` ÔÇö CommandGroup de 1 bot├úo "Encerrar", `ButtonCount` primeiro, geometria do bot├úo interno antes da do grupo (`AutoSize`), sem `ForeColor` no grupo
+- `ConfigurarEventos` + `CmdSairClick` (PUBLIC) + `FecharDialogo`
+- `mapeamento.json`: `obj_4c_Commandgroup1` ÔåÆ `cmg_4c_Commandgroup1` (o `obj_4c_` do gerador reprova o gate; o can├┤nico ├® `cmg_4c_`)
+
+## Duas decis├Áes que divergem da transcri├º├úo literal
+
+1. **`Hide()` no lugar de `Release Windows`.** O contrato do chamador (j├í no topo do arquivo) ├® `CREATEOBJECT` + `Show()` + `Release()`. Form em VFP9 n├úo segue refcount: `THIS.Release()` mataria o objeto e a linha seguinte do chamador estouraria "is not an object". Como `Hide()` adia o `Destroy`, a reabilita├º├úo do pai ficou **no funil**, antes de esconder ÔÇö o `Destroy` mant├®m a c├│pia como rede de seguran├ºa.
+2. **Ordem de cria├º├úo = ordem do SCX.** O grupo (Top ÔêÆ2, Left 720) fica dentro da ├írea da faixa do cabe├ºalho; criado antes dela, sumiria atr├ís.
+
+## Prova em VFP9 (n├úo s├│ compila├º├úo)
+
+Smoke test confirmou que o VFP9 executa nesta sess├úo. Depois, `automation\ProbeF4Task796.prg`:
+
+```
+COMPILE      BO/FRM: FXP=SIM ERR=NAO
+INSTANCIA    VARTYPE=O  Caption=[Historico]  800x430  ControlCount=3
+EDIT         98/181/438/312  ReadOnly=.T.  ValueOK=.T.
+CMG          -2/720/85/85  AutoSize=.T.  (AutoSize nao sobrescreveu)
+BTN          5/5/75/75  Caption=[Encerrar]  Cancel=.T.  icone existe
+ESCOPO       CmdSairClick/FecharDialogo protected=.F.
+BINDEVENT    Click -> CMDSAIRCLICK
+ENCERRAR     pai .F. -> .T. ; form VARTYPE=O, Visible=.F.  (Hide, nao Release)
+RELEASE      do chamador -> VARTYPE=X
+SEM ARGS     instancia e encerra sem estourar
+```
+
+Auditorias: propriedades inexistentes **OK**, fun├º├Áes ├│rf├ús **OK**, m├®todo PROTECTED chamado de fora **OK**; zero TODO/stub; blocos balanceados (10 `PROCEDURE`/10 `ENDPROC`); CRLF preservado (393 ÔåÆ 625 linhas, zero LF solto).
+
+**Ressalva:** o `RunLoop` em execu├º├úo re-valida com a c├│pia do orquestrador que estava em mem├│ria quando subiu ÔÇö a medi├º├úo acima foi feita por fora, contra o `.ps1` em disco.

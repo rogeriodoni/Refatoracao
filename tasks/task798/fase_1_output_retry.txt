@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\sigopsatBO.prg` criado (~11 KB).
+
+## O que foi entregue
+
+**38 propriedades** declaradas, extra├¡das do dump do legado (`SIGOPSAT.SCX`), agrupadas pela origem:
+
+| Grupo | Origem no legado |
+|---|---|
+| Empresa logada (4) | `Select * From sigcdemp where cemps = _empr` ÔåÆ `Cemps`/`Razas`/`Cgcs`/`Textopaf` |
+| Par├ómetros / diret├│rios (4) | `Select dirresta From sigcdpac` + a deriva├º├úo `Req\`/`Resp\` com a barra final do `Iif(Right(lcDir,1)=[\],...)` |
+| Associa├º├úo de assinatura (7) | `SUBSTR(textoPaf,1,14)`, `SUBSTR(textoPaf,16,344)`, `fGerUniqueKey('SAT')`, `lcCodAti='12345678'` |
+| SAT.dll (2) | bloco de `DECLARE` |
+| Requisi├º├úo corrente (12) | os 6 `STREXTRACT` do XML + caminhos `.xml`/`.tmp` + retorno |
+| Estado do la├ºo (5) | `llParar` do `On Escape`, contadores, mensagem do `Label1` |
+| Props customizadas do form (2) | `lnnofabr`, `parametrizado` |
+| Aliases de cursor (2) | equivalentes a `crCdEmp` / `crsigcdpac` |
+
+`Init()` segue o padr├úo can├┤nico (`DODEFAULT()` ÔåÆ flag `loc_lResultado` ÔåÆ `RETURN` fora do `TRY`), com `this_cTabela`/`this_cCampoChave` vazios: o legado n├úo tem `Insert/Update/Delete` nem `AddCursor`/`TableUpdate`, ent├úo o comportamento herdado de `BusinessBase` j├í ├® o correto. Sem gate por `gnConnHandle`, para o objeto instanciar tamb├®m em modo de teste.
+
+Colunas conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14): `SigCdPac.dirresta char(80)`, `SigCdEmp.cemps char(3)` / `razas char(40)` / `cgcs char(20)` / `textopaf text`.
+
+## Verifica├º├úo
+
+Compila├º├úo **provada por arquivo de sa├¡da**, n├úo por exit code: smoke test (`STRTOFILE` ÔåÆ "VIVO") passou primeiro, depois `COMPILE` gerou `.fxp` sem `.err`. Rodei um controle negativo (`PUBLIC PROCEDURE` dentro de `DEFINE CLASS`) que produziu `.err` com *Syntax error* ÔÇö ou seja, o teste discrimina. `.fxp`/`.err` e tempor├írios removidos.
+
+Est├íticas: zero n├úo-ASCII, zero `TODO`/stub, nenhum `RETURN` dentro de `TRY`, nenhum `PUBLIC` em `DEFINE CLASS`, nenhum `MESSAGEBOX` direto, `CATCH` reportando via `MsgErro`, blocos balanceados, nenhuma das 38 propriedades duplicada ou colidindo com `BusinessBase`.
+
+## Um ponto que a pr├│xima fase precisa saber
+
+**`SAT.dll` n├úo existe neste reposit├│rio** (procurei em `C:\4c` e `C:\4install`). Como `DECLARE ... IN "SAT.dll"` carrega a biblioteca na hora ÔÇö n├úo ├® pregui├ºoso ÔÇö colocar esse bloco dentro do `TRY` do `Init` faz o erro cair no `CATCH`, `Init` devolver `.F.` e **a tela n├úo abrir**, exibindo s├│ `VARTYPE retornou: L`. Deixei isso registrado em coment├írio sobre a pr├│pria flag `this_lDllsDeclaradas`, que ├® o guard previsto: os `DECLARE` v├úo num `TRY/CATCH` pr├│prio fora do `Init`, e cada chamada ├á DLL testa a flag e devolve o retorno de falha que o legado j├í trata.
+
+Escopo: apenas a Fase 1 (propriedades + `Init`). As Fases 2ÔÇô8 (`CarregarDoCursor`, carga dos cursores, `lerarquivos`, o Form) n├úo foram tocadas.

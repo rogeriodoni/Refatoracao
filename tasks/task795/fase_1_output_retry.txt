@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da: `projeto/app/classes/SIGOPRESBO.prg` criado (8,1 KB).
+
+**O que foi gerado**
+
+`DEFINE CLASS SIGOPRESBO AS BusinessBase` com todas as propriedades extra├¡das do `SIGOPRES.SCX` e `Init()`:
+
+| Bloco | Propriedades | Origem no legado |
+|---|---|---|
+| Entrada do chamador | `this_cProduto`, `this_cOperacao`, `this_cEmpDopNums`, `this_nSaldoInicial` | `lcproduto = <alias>.CPros`, `TprMvCab.dopes`, `TprMvCab.empdopnums`, par├ómetro `__saldo` |
+| Janela de datas | `this_dDataMovimento`, `this_dPrazoEntrega`, `this_dDataInicial`, `this_dDataFinal` | `TprMvCab.datas`, `TprMvCab.prazoents`, `dtini = Dtot(Date())`, `dtfin = fDtoSQL(...,'23:59:59')` |
+| Opera├º├úo PAI | `this_cOperacaoPai`, `this_lAchouOperacaoPai` | `select dopes from SigCdOpe where nivels = <oper> and copers = 1` |
+| Resultado | `this_nSaldo` | `thisform.nsaldo` (RESERVED3), devolvido no `Fwbtng1.Click` |
+| Cursores | `this_cCursorDados`/`Reservas`/`Locacoes`/`OperacaoPai`/`Datas` | `Tmpresul`/`TmpReser`/`TmpLoca`/`TmpOpe`/`Tmpdata` |
+| Estado | `this_lDadosCarregados`, `this_nTotalDias` | ÔÇö |
+
+`Init()` faz `DODEFAULT()` + `this_cTabela = "SigMvItn"` + `this_cCampoChave = "cidchaves"` + janela de datas iniciada em `DATE()`, com `TRY/CATCH` e `RETURN` fora do bloco (regra #1), `MsgErro` com `LineNo`/`Procedure` (regra #9).
+
+**Verifica├º├Áes executadas**
+- Colunas conferidas no `docs/schema.sql` lido com `Get-Content -Raw` (regra #14): `SigMvItn.cpros char(14)`, `dopes char(20)`, `qtds/qtbaixas numeric(9,3)`, `empdopnums char(29)`, PK `cidchaves`; `SigMvCab.datas/prazoents datetime`, `chksubn bit`; `SigCdOpe.nivels char(20)`, `copers numeric(1,0)`, PK `dopes`.
+- Compila├º├úo VFP9 (`automation/CompilarF1SigOpRes795.prg`): `.fxp` gerado, **sem `.err`**.
+- Gate de completude (`automation/ValidarCompletude795F1.ps1`, chamando `Test-CompletudeCodigo` do orquestrador): **BO=True, exit 0**. O primeiro passe reprovou por um coment├írio que come├ºava com a palavra "todo" (`^\s*\*\s*TODO`) ÔÇö reescrito, n├úo era marcador real.
+
+O `.fxp` foi apagado ap├│s a prova de sintaxe. Nenhum `SET PROCEDURE` foi adicionado ao `config.prg` (carga sob demanda via `indice_classes.txt`). A Fase 2 (CarregarDoCursor + os m├®todos de carga/c├ílculo mapeados no cabe├ºalho do arquivo) fica para a pr├│xima invoca├º├úo do pipeline.

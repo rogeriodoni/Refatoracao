@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpRob.prg` criado (393 linhas).
+
+## O que foi entregue
+
+`SIGOPROB` n├úo ├® cadastro: ├® um **popup gen├®rico de exibi├º├úo de texto** (t├¡tulo + EditBox somente-leitura + Encerrar), aberto pelo form pai, que se desabilita antes e ├® reabilitado pelo filho ao sair. ├Ünico chamador no acervo legado: `SIGCDPGR` (task499), 4 sites ÔÇö `Do Form SigOpRob With [Hist├│rico], TmpConta.Obsd, ThisForm`.
+
+Estrutura base entregue:
+
+| Membro | Origem no legado |
+|---|---|
+| `DEFINE CLASS FormSigOpRob AS FormBase` + propriedades | bloco `PROPRIEDADES DE: SIGOPROB` |
+| `Init(par_cTitulo, par_cTexto, par_oFormPai)` | os 3 argumentos do `Do Form ... With` |
+| `InicializarForm()` | cria `SigOpRobBO`, aplica Caption/Picture, monta cabe├ºalho |
+| `ConfigurarCabecalho()` | `cntSombra` + `lblSombra` + `lblTitulo`, transcritos pixel-perfect |
+| `TornarControlesVisiveis()` / `Destroy()` | padr├úo do projeto |
+
+`Edit1` e `Commandgroup1`/Encerrar ficam para as fases seguintes, conforme o recorte da fase.
+
+## Duas decis├Áes que valem registro
+
+**`WindowType = 1`, n├úo o `0` do dump.** O SCX declara modeless (default do baseclass `form`). No sistema novo o chamador faz `CREATEOBJECT` em vari├ível LOCAL + `Show()`: com modeless o `Show()` retorna na hora, a refer├¬ncia cai e o di├ílogo ├® destru├¡do ÔÇö pisca e some, sem erro. Documentado no cabe├ºalho.
+
+**`Closable`/`MaxButton`/`MinButton` n├úo foram inventados** ÔÇö o dump n├úo os declara. Como `Closable` segue `.T.`, o Alt+F4 funciona e fecharia a tela sem passar pelo Encerrar, deixando o pai desabilitado para sempre; por isso o `Destroy()` reabilita o pai como rede de seguran├ºa, al├®m da transcri├º├úo literal que o handler do Encerrar ter├í.
+
+## Verifica├º├Áes executadas
+
+- **Gate da Fase 3** (regexes reais do `case 3`, replicadas): `temEstruturaFlat = True`, `temEstruturaPaginada = False`, `temEstruturaFlatSemContainer = False` ÔÇö passa por **um ├║nico ramo, o correto**.
+- **Compila├º├úo VFP9 limpa** (`.fxp` presente, `.err` ausente) com **controle negativo**: c├│pia com `PUBLIC PROCEDURE` colado no fim gerou `.err` apontando s├│ as linhas injetadas (396/397), provando que o detector funciona.
+- **`Test-CompletudeCodigo`** (extra├¡da por AST do orquestrador, sem dot-source): OK no Form e no BO.
+- **Instancia├º├úo headless**: form criado (`VARTYPE = "O"`), Caption propagado do BO, cabe├ºalho com os 2 labels vis├¡veis nas medidas do dump, `BackColor = 6579300` = RGB(100,100,100), `Picture` resolvendo para arquivo existente, e `Destroy()` reabilitando o form pai (`.F.` ÔåÆ `.T.`).
+
+Um detalhe que custou uma itera├º├úo e vale como alerta: os gates leem o `.prg` **inteiro, coment├írio inclu├¡do**. A primeira vers├úo citava `ConfigurarPageFrame` e `AddObject("pgf_4c_...")` ao explicar por que n├úo se aplicam ÔÇö isso aprovava a fase pelo ramo PAGINADO (falso positivo) e simultaneamente feria o `-notmatch` do ramo FLAT. Reescrito em prosa, com nota no pr├│prio cabe├ºalho para quem editar depois n├úo reintroduzir.

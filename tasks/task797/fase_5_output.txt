@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 5 is done and verified.
+
+## What I added to `FormSIGOPRPS.prg`
+
+**`ConfigurarCamposIdentificacao()`** ÔÇö the first half of the 6 label/field pairs, in visual order (top row of the `Shape1` frame):
+
+| Legacy | Migrated | Top/Left/Width | MaxLength |
+|---|---|---|---|
+| `Say6` "Empresa :" / `get_Emps` | `lbl_4c_Label6` / `txt_4c__Emps` | 103/84/50 ┬À 100/136/31 | 3 |
+| `Say3` "Tipo :" / `get_Tipos` | `lbl_4c_Label3` / `txt_4c__Tipos` | 104/210/30 ┬À 100/241/45 | 5 |
+| `Say4` "S├®rie :" / `get_Series` | `lbl_4c_Label4` / `txt_4c__Series` | 104/321/33 ┬À 100/356/45 | 5 |
+
+**`BOParaForm()`** ÔÇö single funnel reproducing the legacy `ThisForm.get_*.Value = ...` block, reading the BO's identification properties (the BO owns the criteria and builds `BuscarHistorico`'s WHERE, so screen and query can't diverge). `PEMSTATUS` guard per field so Phase 6 extends it without breaking.
+
+## Decisions worth flagging
+
+- **Method name, not `ConfigurarPaginaDados`.** This legacy has no PageFrame (layout FLAT ÔÇö all `get_*`/`Say*` are direct children of the form). Inventing a Page2 would violate PILAR 1; the orchestrator's FLAT branch doesn't require that name, and it validates (`no pgf_4c_` + `.ControlSource =` present).
+- **`When ÔåÆ Return(.F.)` became `ReadOnly = .T.` + `TabStop = .F.`** ÔÇö not `Enabled = .F.`, which would grey out the black text the dump declares (`ForeColor = 0,0,0`). `ReadOnly` alone still lets Tab land on the field; `TabStop = .F.` is the other half of `When`. Matches the `FormSIGOPCCO` precedent, plus the Tab fix.
+- **Labels: `AutoSize = .F.` + explicit `Width`, `Alignment = 0`.** Class `say` is AutoSize/left-aligned, so the dump declares only Caption/Left/Top; `AutoSize = .T.` is a no-op under `AddObject` (stays at the 100px default and would invade the TextBox). `ForeColor = RGB(90,90,90)` ÔÇö white would be invisible on the light `new_background.jpg`.
+- **`MaxLength` from the schema, not pixels.** Verified against `docs/schema.sql` (UTF-16): `SigCdFrp.emps char(3)`, `tipos char(5)`, `series char(5)` ÔÇö matching the dump exactly.
+- **`TabIndex` is transcribed but VFP9 renormalizes it** (each `.TabIndex = 1` pushes earlier ones down, so runtime shows 3/2/1). Documented in the method header; immaterial since `TabStop = .F.` keeps these out of the tab order.
+
+## Verification
+
+- **Compiles clean** ÔÇö no `.err` for form or BO (stale `.fxp` deleted first).
+- **Instantiates** (`automation/_probe797f5.prg`, `gb_4c_ModoTeste` so no SQL): `VARTYPE=O`, 10 controls, no `ON ERROR`. Also opens with **no parameters** (fields empty, no crash).
+- **`BOParaForm` proven end-to-end**: opened with `("001","RPS","A1",4567,"MALOTE",33)` ÔåÆ screen shows `001` / `RPS` / `A1`.
+- **Measured properties**: `ReadOnly=T TabStop=F Enabled=T`, `VARTYPE(Value)=C`, `ForeColor=0`, Tahoma/8; labels `AutoSize=F Alignment=0 BackStyle=0 ForeColor=5921370` (= RGB 90,90,90).
+- **No overlap** ÔÇö every label's text ends before its field (134<136, 240<241, 354<356), nothing past `Form.Width`, nothing under the header band.
+- **Auditors pass**: real `Test-CompletudeCodigo` (no TODO/stub/empty procedure), `VerificarPropriedadesInexistentes`, `VerificarFormatInputMask -Form FormSIGOPRPS` (ALTA=0 MEDIA=0 BAIXA=0 ÔÇö the dump declares no Format/InputMask for these `fwget`s, so nothing was dropped), `VerificarMetodoProtegidoChamadoDeFora`.
+
+**Phase 6 remains**: `get_NumRps` (Left 481, W 95, MaxLength 12, **numeric**), `get_Dopes` (136/128, W 150, MaxLength 20), `get_Numes` (356/128, W 55, **H 23** ÔÇö the only one declaring Height, **numeric**). No lookups anywhere in this legacy ÔÇö no `get_*` has a `Valid`, only `When = .F.`.

@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Compila limpo no VFP9 (`.fxp` novo gerado, nenhum `.err`).
+
+## Entregue
+
+**`projeto\app\forms\operacionais\Formsigopsen.prg`** (2332 linhas) ÔÇö deliverable da fase:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `SenhaLostFocus` / `SenhaLostFocusExec` | `SIGOPSEN.senha.Valid` ÔÇö fluxo de A├ç├âO do di├ílogo |
+| `ConfirmarRedigitacaoSenha` | `messagebox('Deseja digitar novamente ? (S/N)', 4+256, ...)` |
+| `FormParaBO` / `BOParaForm` | os 2 campos edit├íveis (usu├írio, senha) + `say3/senha.visible` |
+| `HabilitarCampos` / `LimparCampos` | hooks de `FormBase` (`Novo`/`Cancelar` j├í os chamam) |
+
+Mais: `BINDEVENT` do campo senha em `LostFocus` (regra #47), `BOParaForm()` no fim do `InicializarForm`, 7┬║ cursor no `Destroy`, e as 2 properties de guarda (reentr├óncia + valor-n├úo-mudou).
+
+**Tamb├®m mexi em `projeto\app\classes\sigopsenBO.prg`** ÔÇö n├úo estava no escopo declarado da fase, mas o `senha.Valid` ├® 2 consultas + UPDATE + senha do dia + log, e isso ├® SQL/regra de neg├│cio (PILAR 3). Entregar s├│ o Form chamaria 7 m├®todos inexistentes (regra #13: erro s├│ em runtime). Acrescentei `SenhaConferidaPelaCadastrada`, `CarregarSenhaUsuario`, `CarregarSenhaLivre`, `CarregarMovimento`, `CalcularSenhaDoDia`, `GravarLogLiberacao` e `ConferirSenha`, todos PUBLIC (regra #51).
+
+## Dois achados
+
+**1. Incoer├¬ncia do legado, transcrita e N├âO corrigida.** A condi├º├úo que escolhe entre senha cadastrada e senha do dia ├® **diferente** no `Init` e no `senha.Valid`:
+
+```
+Init:        (LiblCreds And pTip='LIMITE') Or InList(pTip,'LIBPRDZ2','MAXIMO')
+senha.Valid: (Not LiblCreds Or (Tipo#'LIMITE' And Tipo#'LIBPRDZ2')) And Tipo#'MAXIMO'
+```
+
+Com `LiblCreds` desligado + tipo `LIBPRDZ2`, a tela exibe "Senha Do Dia :" e confere a senha **cadastrada**. As duas express├Áes ficaram em lugares separados (`this_lSenhaDoDia` para a apar├¬ncia, `SenhaConferidaPelaCadastrada()` para a confer├¬ncia) de prop├│sito ÔÇö derivar uma da outra "consertaria" a regra de neg├│cio.
+
+**2. `.UsuLibs = Usuar` era INCONDICIONAL no `Init` legado** e n├úo tinha sido migrado (s├│ o ramo senha-do-dia o preenchia). Di├ílogo recusado sem usu├írio informado devolvia `" "` em vez de `" " + usu├írio logado`. Corrigido em `ConfigurarParametrosBO`.
+
+## Diverg├¬ncias deliberadas, documentadas no c├│digo
+
+- **Cursor pr├│prio** para a releitura de `SigCdUsu` em vez de sobrescrever `TmpUsu` ÔÇö clobberar deixaria o picker do campo usu├írio sem a coluna `ccargs`.
+- **Testo o retorno** das duas consultas que o legado ignora: sem isso a senha seria conferida contra dado velho, ou `RECCOUNT('TmpSLivre')` estouraria. Falha ÔåÆ **nega** (gate fail-closed).
+- O **passo 3 continua mesmo falhando**, por fidelidade (o `llOks` do legado nunca ├® lido).
+- `MsgConfirma` no lugar de `MESSAGEBOX` (proibido): muda ├¡cone e bot├úo default; em modo teste devolve `.F.` = desistir, fail-closed.
+
+**N├úo inventei superf├¡cie CRUD** (grid, `CarregarLista`, `AjustarBotoesPorModo`, `Btn*Click`): o legado n├úo tem nenhum ÔÇö `PEMSTATUS` faz o harness pular esses nomes.
+
+## O que n├úo foi verificado
+
+- **`fCriptografar()` e `fGerPswDiario()` n├úo existem no projeto** (conferido: nenhum `.prg`, nenhuma defini├º├úo). Chamadas literais dentro do `TRY`, falha vira mensagem vis├¡vel e **nega** a libera├º├úo ÔÇö regra #27 pro├¡be stub para fun├º├úo que devolve valor de c├ílculo. Mesmo tratamento que `sigtosenBO`/`sigopcksBO` j├í usam. **Enquanto n├úo forem portadas, os dois caminhos de confer├¬ncia recusam toda senha**, com a causa real na tela.
+- **N├úo instanciei o form**: o SQL Server `192.168.200.10` est├í inalcan├º├ível nesta m├íquina, e o fluxo depende de 4 consultas. A valida├º├úo foi est├ítica (compila├º├úo + auditorias).
+
+Auditorias: `VerificarColunaEmpresaSQL` ERRO=0, `VerificarFuncoesNaoDefinidas` sem ├│rf├ús, `VerificarMetodoProtegidoChamadoDeFora` e `VerificarCamposCursorBO` sem apontamentos; blocos balanceados, nenhum `RETURN` em `TRY`, zero byte acentuado, regexes do gate 05d limpas.
+
+Um aviso de processo: minha primeira compila├º├úo rodou um `.fxp` **velho** do script auxiliar e reportou sa├¡da obsoleta. Apaguei o `.fxp` e repeti ÔÇö o resultado limpo acima ├® do run novo.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This all looks correct and syntactically sound. Let me summarize what was done.
+
+## Summary
+
+I reviewed each finding against the actual file content (not just the excerpts) before changing anything, since several findings turned out to be false positives:
+
+**Fixed (4 real issues):**
+1. **CONTAINER-VISIVEL** ÔÇö generalized the existing single-name exception in `TornarControlesVisiveis()` into an `INLIST` covering `CNT_4C_CABECALHO`, `CNT_4C_CODIGOS`, `CNT_4C_OBS`, `CNT_4C_REFFS`, `CNT_4C_ITEM`, so these containers keep their designed visibility state while still recursing into children.
+2 & 3. **LOSTFOCUS-SEM-GUARDIA** (`ValidarCodCorLostFocus`, `ValidarCodTamLostFocus`) ÔÇö added `this_cUltimoValidarCodCorLostFocusValidado` / `this_cUltimoValidarCodTamLostFocusValidado` properties and an early-return guard comparing the current value, updated after a successful lookup.
+4. **METODO-INEXISTENTE** ÔÇö verified via `Grep` that 7 of the 8 flagged methods (`ObterChaveMovimentacao`, `TemProdutoSelecionado`, `ExecutarConsultaPainel`, `ObterContaFornecedor`, `ObterGrupoEstoque`, `ResolverProdutoDigitado`, `PodeEditarDescricao`) already exist in the file ÔÇö those were false positives from the scan, left untouched. Only `AbrirLookupCanonico` was genuinely missing (called twice, never defined), so I implemented it following the project's canonical `FormBuscaAuxiliar` pattern (rule #37).
+
+**Not changed (confirmed false positives):**
+- All 27 **LAYOUT-POSITION** findings: the `Top=81`/`Top=359` buttons are children of `cnt_4c_Botoes`/`cnt_4c_BotoesAcao`, whose own `Top` already equals those values ÔÇö child `Top=0` is correct relative positioning, not a bug. `obj_4c_Opt_Busca` already has `Top=135`/`Left=713` in the current file, matching the legacy values exactly ÔÇö the finding was stale.
+
+No visual properties were altered, and no business logic was changed beyond the guard/method additions.

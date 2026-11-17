@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: este N├âO ├® um bug de c├│digo
+
+O erro reportado (C├│digo 1526, `DBNETLIB "SQL Server inexistente ou acesso negado"`) ocorre na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pr├®-flight gen├®rico do harness que tenta `SQLSTRINGCONNECT` **antes** de qualquer `CREATEOBJECT` de `Formsigoppro`/`sigopproBO`. O form nem chega a ser instanciado.
+
+Confirmei agora mesmo a causa:
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433
+TcpTestSucceeded = False
+```
+
+Isso ├® um padr├úo j├í documentado e confirmado **16+ vezes** em tasks diferentes desde 2026-11-05 (ver mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`): o SQL Server fica intermitentemente inalcan├º├ível a partir desta m├íquina do pipeline, e em NENHUMA das ocorr├¬ncias anteriores ÔÇö revisando o c├│digo do form/BO do zero a cada vez ÔÇö foi encontrado defeito real. Editar os `.prg` para "satisfazer" esse gate seria dano, n├úo corre├º├úo.
+
+Revisei `Formsigoppro.prg` e `sigopproBO.prg` de forma independente contra o checklist do CLAUDE.md mesmo assim:
+- RETURN sempre fora de TRY/CATCH em todos os m├®todos (InicializarForm, CarregarDados, FormParaBO, BOParaForm, valida├º├Áes de LostFocus, etc.)
+- Todos os ~45 handlers de BINDEVENT s├úo PUBLIC
+- `ObterChavePrimaria` ├® o ├║nico m├®todo PROTECTED do BO e nunca ├® chamado de fora (regra #51)
+- `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL` usados sem aspas extras
+- Guards de `USED()`+`Buffering` antes de `TABLEREVERT` (regra #52); `ZAP` com guard de `SAFETY`
+- Cursores criados antes de qualquer `ControlSource` (regra #41)
+- Bypass de `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` presente
+
+Nenhum defeito relacionado ├á conectividade. Encontrei um item cosm├®tico fora de escopo (`Destroy()` testa `USED("cursor_4c_Dados")`, cursor que este form n├úo usa ÔÇö deveria ser `cursor_4c_Itens`/`cursor_4c_Precos` ÔÇö mas ├® inofensivo porque `DataSession=2` libera os cursores da sess├úo privada ao destruir o form) e n├úo editei, pois n├úo ├® a causa do erro reportado.
+
+Registrei esta ocorr├¬ncia na mem├│ria do projeto. Recomendo dar exce├º├úo ao gate `06_testForm` para o erro 1526/conectividade em vez de consumir as tentativas restantes contra um bloqueio de rede.

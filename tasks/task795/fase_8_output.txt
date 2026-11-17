@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8/8 conclu├¡da ÔÇö FormSIGOPRES
+
+O arquivo `projeto\app\forms\operacionais\FormSIGOPRES.prg` j├í estava **completo** ao fim da Fase 7 (873 linhas, 14 m├®todos). A Fase 8 consistiu em validar a consolida├º├úo final e destravar o gate ÔÇö **n├úo havia m├®todo faltando a escrever**.
+
+**Por que os nomes can├┤nicos da Fase 8 n├úo se aplicam aqui.** O SCX legado (`tasks\task795`) ├® um di├ílogo de **CONSULTA** 470x320, `form` puro, com 3 m├®todos no dump inteiro (`Load`, `Init`, `Fwbtng1.Click`) e **um ├║nico bot├úo**. N├úo tem Page2 de Dados, nem modo de edi├º├úo, nem campo digit├ível, nem persist├¬ncia: `BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo` s├│ existiriam inventando superf├¡cie (PILAR 1) ou como m├®todos vazios (regra de completude). `CarregarLista` ├® `CarregarDados`, que alimenta o grid.
+
+**O gate (medido, n├úo adivinhado).** Rodei o `case 8` standalone: o ramo **fluxo-├║nico** j├í dispensava os quatro nomes; sobrava **s├│** a exig├¬ncia de `Btn(Salvar|Confirmar|Gravar|Processa|ÔÇª)Click`. O Click do ├║nico bot├úo do legado ├® `__saldo = thisform.nsaldo` + `thisform.Release()` ÔÇö o bot├úo de sa├¡da **├®** o canal de retorno. Nenhuma das 12 sa├¡das existentes alcan├ºa, cada uma por motivo diferente (medido).
+
+Adicionei em `automation\OrquestradorMigracao.ps1` o ramo **ENTREGA-VALOR-AO-PAI** (irm├úo do ENTREGA-AO-PAI da task777 ÔÇö l├í o resultado volta num cursor, aqui num valor): helpers `Get-PropriedadeEntregueAoPaiLegado` + `Test-LegadoEntregaValorAoPai`, fail-closed em 6 provas, sem alargar `Test-LinhaDeFechamentoLegado` (lido por v├írios ramos). A dispensa ├® paga: o migrado tem de entregar o handler ancorado **e** a property de resultado colhida do dump (`nsaldo` ÔåÆ `this_nSaldo`), prova derivada.
+
+**Medi├º├Áes**
+| verifica├º├úo | resultado |
+|---|---|
+| Blast radius do predicado novo (794 dumps de `tasks\`) | **1** ÔÇö s├│ `SigOpRes` |
+| Gate Fase 8 standalone | `VALIDADO=True`, `FALTANTES=` vazio |
+| `Test-CompletudeCodigo` (Form e BO) | sem TODO/stub/procedure vazia |
+| Compila├º├úo VFP9 (ap├│s smoke test provando que o vfp9 executa) | `FORM_FXP=SIM FORM_ERR=NAO`, `BO_FXP=SIM BO_ERR=NAO` |
+| `ValidadorSQLSchema` | PASSOU ÔÇö 4 statements, 0 coluna inv├ílida |
+| `VerificarFuncoesNaoDefinidas` / `MetodoProtegidoChamadoDeFora` / `PropriedadesInexistentes` | limpos |
+| Probe headless (instancia e exercita) | `VARTYPE=O`, 470x320, grid 2 colunas `Data`/`Estoque` (80/90), bot├úo `Encerrar` `Cancel=.T.`, `BtnEncerrarClick` entregou `77,5` em `this_nSaldo` e o form **sobreviveu** ao fechamento (Hide, n├úo Release ÔÇö o chamador consegue ler o resultado) |
+
+├ìndice de classes regenerado: `formsigopres` e `sigopresbo` com o fecho de depend├¬ncias correto.
+
+Li├º├úo registrada em mem├│ria (`F8EntregaValor`), incluindo duas armadilhas de ferramental que custaram tempo: o harness standalone precisa do BOM UTF-8 (sen├úo regex com acento do orquestrador estoura e helpers leg├¡timos devolvem `$false`), e `sed` estripa o CR nesta m├íquina ÔÇö splice com `head`/`cat`/`tail`.
+
+N├úo mexi no `.prg` migrado nem no BO: nada neles estava errado. O ├║nico arquivo de c├│digo alterado foi o orquestrador (234 linhas acrescentadas, 0 removidas), e ele **n├úo foi commitado** ÔÇö j├í havia modifica├º├Áes pendentes na ├írvore de trabalho antes desta sess├úo.

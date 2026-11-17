@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is the same intermittent SQL Server connectivity failure (c├│digo 1526, DBNETLIB) that's been hitting the pipeline machine on every form test since 2026-11-05 ÔÇö logged in `project_sqlserver_200_10_inalcancavel_maquina_pipeline`. It fails at **ETAPA 1B**, the harness's generic pre-flight `SQLSTRINGCONNECT`, which runs *before* `CREATEOBJECT` of `FormSigOpPrL`/`SigOpPrLBO` ever executes ÔÇö so the form/BO code is never actually reached by this test.
+
+I did an independent review of both files against the full CLAUDE.md checklist anyway (this is the 4th such review for this exact task/form, content unchanged since attempt 1):
+- RETURN always outside TRY/CATCH Ô£ô
+- All BINDEVENT handlers (`HeaderSelecaoClick`, `FocarCheckboxSelecao`, `ChkSelecaoClick/MouseDown/MouseUp/KeyPress`, `CmdBotoesClick`) are PUBLIC with correct parameter signatures Ô£ô
+- Form only calls `BuscarLinha()` (PUBLIC); `ObterChavePrimaria` (PROTECTED) is never called from outside Ô£ô
+- Every CATCH reports via `MsgErro` Ô£ô
+- `EscaparSQL` used without extra quotes Ô£ô
+- `gnConnHandle` validity guard before SQLEXEC Ô£ô
+- USED() guards before `USE IN` and before `ControlSource` Ô£ô
+- No duplicate `AddObject` (checked specifically ÔÇö this was a recurring defect in a *different* form, not present here) Ô£ô
+- Also double-checked two things that bit other forms recently: `go_4c_Sistema.Sys2015Tmp` is properly declared in `config.prg:156`, and the icon files `cadastro_sair_60.jpg`/`CHECKBX.BMP` exist on disk.
+
+No defect found, so per the established pattern (confirmed across 15+ tasks and ~50 prior occurrences) I did **not** edit the files ÔÇö editing correct code to chase a network failure would be harm, not a fix. `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` again didn't respond within timeout, matching the non-response signature of every occurrence since 2026-11-05.
+
+Recommendation (reiterated from memory): pause the automatic retry for this task, or add a gate exception for error 1526/connectivity in `06_testForm`, rather than burning through the remaining retry attempts against a network outage that won't resolve itself.

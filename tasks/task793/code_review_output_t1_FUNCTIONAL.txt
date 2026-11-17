@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei o ├║nico problema listado ÔÇö `THIS.MontarResumoLote()` chamado em `Processamento()` (linha 815).
+
+**N├úo ├® um m├®todo inexistente.** Ele est├í definido no pr├│prio form, linha 923:
+
+```foxpro
+PROTECTED FUNCTION MontarResumoLote()
+    ...
+    RETURN loc_cTexto
+ENDFUNC
+```
+
+Confirmei com grep que h├í exatamente 1 defini├º├úo e 1 chamada no arquivo ÔÇö nada duplicado, nada ├│rf├úo. O detector autom├ítico provavelmente s├│ procurou o padr├úo `PROCEDURE <nome>` e n├úo `FUNCTION <nome>` (ambos s├úo v├ílidos em VFP9 para declarar um m├®todo).
+
+Quanto a ser `PROTECTED`: a chamada vem de `Processamento()`, que ├® outro m├®todo da **mesma classe** (`Formsigoprbt`), via `THIS.`. Isso ├® legal em VFP9 ÔÇö `PROTECTED` bloqueia acesso de **fora** da hierarquia da classe, n├úo entre m├®todos irm├úos do mesmo objeto (regra #51 do CLAUDE.md ├® sobre Form chamando m├®todo PROTECTED do **BO**, caso diferente ÔÇö aqui ├® Form chamando m├®todo do pr├│prio Form).
+
+Nenhuma altera├º├úo foi necess├íria ÔÇö o c├│digo j├í est├í correto. N├úo fiz mudan├ºas no arquivo.

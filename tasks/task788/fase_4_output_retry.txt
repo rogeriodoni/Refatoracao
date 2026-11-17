@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpPrL.prg` (920 linhas) agora tem a grade e o bot├úo de a├º├úo.
+
+**O que a fase anterior tinha entregue e por que reprovou** ÔÇö o gate do ramo FLAT mede tr├¬s predicados, e dois davam `False`:
+
+| predicado | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_` | True | True |
+| `AddObject("cmg_4c_\|cmd_4c_` | **False** (`cnt_4c_Botoes`) | True |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **False** | True |
+
+**Mudan├ºas**
+
+- **`cnt_4c_Botoes` ÔåÆ `cmg_4c_Saida`** (CommandGroup). `mapeamento.json` corrigido junto ÔÇö ele mandava `obj_4c_CntBotoes`, que ├® o prefixo gen├®rico do `GeradorMapeamento` para tipo n├úo reconhecido.
+- **`CarregarLista()` criado como funil ├║nico** de liga├º├úo/repintura, transcrevendo o fim do `Init` legado (`Select`/`Go Top` + `RecordSource` + os 7 `ControlSource` + `Refresh`). `ConfigurarGrid` ficou s├│ com o que n├úo depende de dado e chama o funil.
+- **`GarantirCheckBoxMarcacao()`** ÔÇö cria├º├úo idempotente do `fwcheckbox1` com os 4 handlers de altern├óncia juntos. Isso consertou um defeito latente: o `Column1.ControlSource` estava sendo atribu├¡do **antes** do `AddObject` do CheckBox, e a ordem medida ├® `RecordSource ÔåÆ ControlSource ÔåÆ AddObject ÔåÆ CurrentControl ÔåÆ Width ÔåÆ Header`.
+- **`Activate()`** com o foco inicial no checkbox (`Grade.Column1.fwcheckbox1.SetFocus` do legado, que n├úo cabe no `Init` ÔÇö o form ainda n├úo est├í vis├¡vel).
+
+**Verifica├º├úo** ÔÇö `vfp9.exe` executa nesta sess├úo (smoke test com arquivo de sa├¡da exigido antes de afirmar qualquer coisa):
+
+- **Compila├º├úo**: `.fxp` gerado, **sem `.err`**, para form e BO ÔÇö com controle negativo (`PUBLIC FUNCTION` em `DEFINE CLASS`) gerando `.err`, provando que o `COMPILE` de fato rodou.
+- **Instancia├º├úo**: `CREATEOBJECT` devolve objeto; grade com 7 colunas ligada ao cursor; `CurrentControl = CHK_4C_SELECAO` e `Sparse = .F.` (o checkbox desenha em todas as linhas); "marcar tudo" pelo header vai 2 ÔåÆ 0 alternando o `Tag`; `CarregarLista()` chamado 2┬¬ vez preserva checkbox e larguras; pai desabilita ao abrir e reabilita no Encerrar.
+
+**Dois achados que valem aten├º├úo** (registrei os dois na mem├│ria):
+
+1. O nome can├┤nico `cmg_4c_Botoes` **envenena** form OPERACIONAL: cinco patterns do `CorretorAutomatico` (#97/#101/#102/#103/#113) classificam como REPORT s├│ por esse token aparecer no arquivo ÔÇö coment├írio inclusive ÔÇö e reescreviam a grade para VerdanaÔåÆ**Tahoma**, RowHeight 16ÔåÆ**18** e `HeaderHeight = 0`, contra o dump (Verdana/16/22). O `HeaderHeight = 0` esconderia o `checkbx.bmp` da Column1, que *├®* o controle de "marcar tudo". Com `cmg_4c_Saida` o corretor caiu de 10 para 5 corre├º├Áes, nenhuma na grade.
+2. Removi 4 `SetAll(...,"Column"/"Header")`: medi que `Grid.FontName/FontSize` **j├í** chegam a Column/Header1/Text1. De passagem, a premissa do pattern `SETALL_FONTNAME_COLUMN` ("Column n├úo tem FontName") ├® falsa ÔÇö `Column.FontName` existe e o `SetAll` n├úo estoura; ele s├│ mutava algo que n├úo estava quebrado.
+
+N├úo mexi em: `ShowWindow` (propriedade de form, escopo da Fase 3 ÔÇö o corretor injeta depois) e `Shape4`/`imgLinhas`/`lblLinha`, que s├úo o bloco da figura/descri├º├úo da Linha e n├úo s├úo grade nem bot├úo. O `WARN-216` (Format/InputMask) ├® falso positivo do contador: as duas m├íscaras que o dump declara est├úo na `Column`, que ├® onde pertencem, n├úo no `Text1`.

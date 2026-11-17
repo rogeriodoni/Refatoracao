@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete. 
+
+## O que faltava e foi entregue
+
+A tentativa anterior parou no container de filtro e deixou **a grade principal do di├ílogo de fora**, al├®m de n├úo produzir o m├®todo de carga que o gate da Fase 4 (ramo FLAT, `OPERACIONAL`) exige ÔÇö `CarregarLinhas` n├úo casa com `CarregarLista|CarregarDados|MontaGrade`. Agora:
+
+**`ConfigurarPaginaDados()`** (era stub) ÔÇö `grd_4c_Itens` (GradeItens: 6 colunas, `Top=316 Left=64 673x130`, InputMask `999,999,999.99` nas colunas de pre├ºo, Column6 edit├ível como no dump) e os **cinco bot├Áes de a├º├úo** filhos diretos da Form: `cmd_4c_Processar`, `cmd_4c_CopiaLista` (`PicturePosition=7`), `cmd_4c_Encerrar` (`Cancel=.T.`), `cmd_4c_MarcaProd`, `cmd_4c_DesmarcaProd`.
+
+**`CarregarDados()`** ÔÇö funil que replica o fecho do `SIGOPSEP.Init`: cria o cursor vazio, liga as 6 colunas, aplica o `DynamicForeColor` do legado e deixa `CopiaLista.Enabled = .F.`
+
+**Corre├º├Áes no que j├í existia:** as duas grades tinham `Column1.Check1` no dump e **nenhum CheckBox instalado** ÔÇö a coluna seguia desenhando o `Text1` (regra #18). O install foi para dentro dos funis, depois do bind, porque Grid sem `RecordSource` auto-binda na ├írea corrente e o `AddObject` de CheckBox sobre coluna de texto estoura. `Marcar`/`Desmarcar` estavam 32x32 contra os 40x40 da classe `fwbtnp`.
+
+## Dois achados medidos no VFP9
+
+- **`FormatarGridLista` apagava os cabe├ºalhos.** Atribuir `Grid.FontName/FontSize` **propaga para `Column.Header1.FontName`**: o Tahoma 8 que o dump declara sa├¡a Courier New 9. Medido isoladamente (`Tahoma/8` ÔåÆ `Courier New/9`). A fonte do grid passou a vir **antes** da reaplica├º├úo de cabe├ºalho, agora centralizada em `AplicarCabecalhoColuna`. O mesmo defeito j├í estava no `CarregarLinhas` da fase anterior.
+- **`Width` dos `fwbtng` ├® 75, n├úo os 80x100 da classe-exemplo.** Os `Left` do legado s├úo 576/651/725 (passo 75) e **725+75 = 800 = `Form.Width` exato**; com 80 o Encerrar ficaria 5px fora da tela.
+
+Tamb├®m adicionei o bypass de teste em `BuscarLinhas` (sem ele, `CREATEOBJECT` devolveria `.F.` no harness, que n├úo conecta ao SQL Server) e tornei `CriarCursorProdutos` p├║blico ÔÇö o Form o chama, e m├®todo chamado de fora n├úo pode ser PROTECTED em nenhum n├¡vel da heran├ºa (regra #51).
+
+## Verifica├º├úo
+
+Instanciei o form de verdade (`CREATEOBJECT` ÔåÆ `VARTYPE = "O"`, sem `.err`, sem erro de runtime): ambas as grades ligadas, `CurrentControl` = os dois CheckBox, `Sparse=.F.`, headers Tahoma 8 com `Alignment=2` e `ForeColor=36,84,155` na coluna de Pre├ºo (C), Encerrar terminando em 800. Gate da Fase 4 satisfeito nos tr├¬s predicados. `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas` passam limpos.
+
+Deixei intactos `FormParaBO`/`BOParaForm` e os handlers de `Click` ÔÇö s├úo escopo das fases 5ÔÇô7 e o gate da Fase 4 explicitamente n├úo cobra handler. O `When` do CheckBox de produto (`s├│ edita quando lMarcas = 0`) est├í registrado no cabe├ºalho do arquivo como pend├¬ncia da fase de eventos.

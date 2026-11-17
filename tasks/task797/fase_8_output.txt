@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada. `FormSIGOPRPS.prg` (1018 linhas) e `SIGOPRPSBO.prg` est├úo completos.
+
+## O que a fase entregou
+
+**Rodei o gate da Fase 8 standalone antes de tocar no arquivo** (fun├º├Áes do `OrquestradorMigracao` + corpo do `case 8` com as 5 vari├íveis semeadas), em vez de adivinhar. O ramo **VISUALIZADOR** reconheceu o legado (sem CRUD, sem bot├úo de gravar, todo campo somenteÔÇæleitura) e dispensou `BtnCancelarClick` e `FormParaBO`; a exig├¬ncia de bot├úo de a├º├úo tamb├®m caiu. Faltava **um** item: `CarregarLista`.
+
+1. **`CarregarDados` ÔåÆ `CarregarLista`** ÔÇö rename puro. O legado *tem* grade (`grdMov`, populada no fim do `Init`), ent├úo a dispensa n├úo alcan├ºa esse nome de prop├│sito; o gate da Fase 4 aceita os dois, logo n├úo h├í mudan├ºa de comportamento.
+2. **N├úo criei** `FormParaBO`/`BtnCancelarClick`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo`/`BtnSalvarClick`/`BtnBuscarClick` ÔÇö nenhum tem contrapartida no legado (6 campos com `When ÔåÆ Return(.F.)`, 1 bot├úo que s├│ fecha, nenhum modo de edi├º├úo). Seriam superf├¡cie inventada ou stub vazio.
+
+## Defeitos de transcri├º├úo que achei e corrigi (PILAR 1)
+
+| item | estava | dump do SCX |
+|---|---|---|
+| larguras das colunas | 130/170/100/120 **inventados** | **120/220/80/55** |
+| `Header1.Alignment` | 0/0/0/1 | **2** nas quatro |
+| `RowHeight` / `ScrollBars` | 19 / 3 | **16 / 2** |
+| `Text1.FontSize` / `.Margin` | ausentes | **8 / 0** |
+| `Column4.Text1.Alignment = 1` | inventado | n├úo declarado (volta ao default 3) |
+| `DataSession` | ausente | **2** (rule #9.4 ÔÇö coluna `Datas` ├® datetime) |
+| `Closable = .F.` | inventado | n├úo declarado ÔåÆ removido (tirava o Alt+F4) |
+| labels do cabe├ºalho | literal `769` > form 650 | `THIS.Width - 20` (artefato de Form Designer) |
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa** (form e BO, `.err` ausente) ÔÇö com smoke test provando que o `vfp9.exe` *executa* nesta sess├úo.
+- **Gate da Fase 8: `VALIDADO=True`, `FALTANTES=` vazio.**
+- **Probe de runtime**: form instancia, `DataSessionId=2`, `SET DATE=DMY CENTURY=ON` (prova a corre├º├úo #9.4), grid `120/220/80/55` (soma 475 de 520), `hdrAlign=2/2/2/2`, os 6 campos preenchidos por `BOParaForm`, `ReadOnly=.T./TabStop=.F.`, `BINDEVENT Click ÔåÆ CMDENCERRARCLICK`, **nenhum controle fora da ├írea do form**, `Release` OK, zero di├ílogos suprimidos.
+- **SQL contra o banco real** (o servidor estava alcan├º├ível hoje ÔÇö raro): schema confirma `SigCdFrp` e as 11 colunas; o SQL do BO executa com `ret=1` e cursor `DATAS T / TRANSACAOS C(30) / USUARS C(10) / NFIS C(8)`, batendo exatamente com os 4 `ControlSource`. **Controle negativo** (`SELECT Cemps`) devolveu `-1`, provando que o OK n├úo ├® falso positivo do driver.
+- Medi no VFP9 que reatribuir `ColumnCount` ao **mesmo** valor n├úo recria as `Column` e que o `RecordSource` n├úo zerou largura/caption/margin ÔÇö ent├úo o bloco de reaplica├º├úo ├® rede de seguran├ºa, e alinhei os valores dele com `ConfigurarGrid`.
+
+## Duas coisas que n├úo pude provar e uma decis├úo
+
+- **`SigCdFrp` tem 0 linhas** em `DB_MBAHIA`. N├úo consegui provar a grade exibindo dados ÔÇö isso ├® **dado, n├úo c├│digo**: a consulta est├í correta e a estrutura do cursor casa com o binding. O teste com dados reais precisa de um RPS cadastrado.
+- **N├úo adicionei item de menu**, contrariando o texto do prompt da fase: a tela ├® di├ílogo **filho**, identificada por 6 par├ómetros obrigat├│rios que o form chamador passa. Entrada pelo menu abriria o Follow Up sem RPS nenhum. O chamador legado n├úo est├í no acervo (zero ocorr├¬ncias de `sigoprps` em `Framework\`, `origem\` ou nos outros dumps) ÔÇö quando ele for migrado, abrir com `GarantirClasse("FormSIGOPRPS")` + `CREATEOBJECT` com os 6 argumentos. A classe e a depend├¬ncia j├í est├úo em `indice_classes.txt`.
+
+Registrei duas mem├│rias: o datapoint de hoje na mem├│ria de conectividade do SQL Server (refor├ºando "medir a cada sess├úo") e uma nova sobre a armadilha dos dois blocos de configura├º├úo de grade divergindo em sil├¬ncio.

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SIGOPPRMBO.prg` criado (7,6 KB).
+
+**Por que a tentativa anterior falhou:** n├úo foi o c├│digo ÔÇö o Claude CLI abortou num *warning* de regra de permiss├úo (`settings.local.json` com wildcard) e gravou s├│ 2667 bytes de mensagem de erro no output. Nenhum arquivo foi gerado.
+
+**O que o BO cont├®m**
+
+Entendendo o legado primeiro: `SIGOPPRM` ├® um **di├ílogo modal filho** do Cadastro de Produtos (`Do Form SigOpPrm With ThisForm` em `sigcdpro`, disparado ap├│s *"O Produto Encontra-se Em Promo├º├úo!!! Deseja Conferir?"*). Lista as promo├º├Áes do produto (`SigPrPmi`) numa grade com coluna de marca├º├úo e permite **retirar** o produto das marcadas.
+
+- **9 propriedades de coluna** de `SigPrPmi`, com tipo conferido no `docs/schema.sql` (lido com `Get-Content -Raw`, UTF-16 ÔÇö regra #14): `this_cCPros` char(14), `this_cPecas` char(10), `this_cPromos` char(25), `this_nCbars` numeric(14,0), `this_dDatas` datetime, `this_cCidChaves` char(20) PK, `this_dDtAlts`, `this_cPromoPro` char(35), `this_nVendavels` numeric(1,0). Nomes espelham a coluna do banco (evita o mismatch BOÔåöForm).
+- **9 propriedades de estado de tela**: `this_lImpEmps` (a coluna `ImpEmps l(1)` do cursor local `csEmpresas`), `this_cCursorItens`, `this_cCursorItensPai`, `this_cModoEscolha` (o `pcEscolha` do pai, que o legado compara com `'CONSULTAR'`), `this_lSomenteConsulta`, `this_lTemAcessoRetirar`, `this_cProgramaAcesso` = `"SigCdPrm"`, e os tr├¬s contadores.
+- **`Init()`** com `this_cTabela = "SigPrPmi"` / `this_cCampoChave = "cidchaves"`, `DODEFAULT()` sem argumento (padr├úo do `SigOpPrLBO`, o di├ílogo an├ílogo ÔÇö sem instanciar `DataAccess`, j├í que o acesso ├® Select/Delete por `SQLEXEC`), `RETURN` **fora** do TRY/CATCH e `CATCH` com `MsgErro` + linha + procedure.
+
+O cabe├ºalho documenta, transcrito do dump: a query do pai (`'Select * From SigPrPmi Where CPros = ?pPro'`), os tr├¬s passos do `btnRetirar.Click` (DELETE no SQL Server + no cursor do pai + no cursor da grade) e o gate `fChecaAcesso('SigCdPrm','EXCLUIR') Or ...ALTERAR`. Registra tamb├®m que o legado **s├│ exclui** nesta tela ÔÇö nada de inventar INSERT/UPDATE.
+
+**Verifica├º├Áes executadas**
+
+| Checagem | Resultado |
+|---|---|
+| Gate da Fase 1 (arquivo existe) | OK |
+| `Test-CompletudeCodigo` (os 4 regexes) | 0 marcadores, 0 pend├¬ncias, 0 stubs, 0 procedures vazias |
+| Caracteres acentuados literais (regra #4) | 0 n├úo-ASCII |
+| `COMPILE` no VFP9 | `.FXP` gerado, **`.ERR` n├úo criado** (zero erros) |
+| `CREATEOBJECT("SIGOPPRMBO")` real | `VARTYPE=O`; Tabela=`SigPrPmi`, Chave=`cidchaves`, tipos `D`/`L`/`N` corretos |
+
+Artefatos tempor├írios de compila├º├úo/probe removidos; o ├║nico arquivo novo ├® o `.prg`. Os `Probe78*`/`probe*` j├í n├úo rastreados em `automation/` s├úo de tasks anteriores e n├úo foram tocados.
+
+Uma observa├º├úo para a Fase 2, que o cabe├ºalho j├í deixa anotada: `this_dDatas` nasce **DATE** (`VARTYPE=D`, medido acima), mas a coluna `datas` ├® `datetime` e chega como DATETIME via `SQLEXEC` ÔÇö ent├úo ali vale `ConverterParaData()`, nunca `TTOD()` direto (regra #16).

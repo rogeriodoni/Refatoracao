@@ -1,0 +1,69 @@
+[2026-11-13 17:01:02] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-11-13 17:01:03] [INFO] Config FPW: (nao fornecido)
+[2026-11-13 17:01:05] [INFO] Script PRG: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+[2026-11-13 17:01:07] [INFO] Timeout: 300 segundos
+[2026-11-13 17:01:09] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ibasfexs.prg
+[2026-11-13 17:01:10] [INFO] Conteudo do wrapper:
+[2026-11-13 17:01:12] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+* Parameters: 'FormSIGOPPGC', 'C:\4c\tasks\task786\logs\06_testForm.log'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\automation\vfp_helpers\TestFormWrapper" WITH 'FormSIGOPPGC', 'C:\4c\tasks\task786\logs\06_testForm.log'
+QUIT
+
+[2026-11-13 17:01:14] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ibasfexs.prg
+[2026-11-13 17:01:15] [INFO] VFP output esperado em: C:\4c\tasks\task786\vfp_output.txt
+[2026-11-13 17:01:17] [INFO] Executando Visual FoxPro 9...
+[2026-11-13 17:01:19] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ibasfexs.prg
+[2026-11-13 17:01:21] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ibasfexs.prg
+[2026-11-13 17:01:23] [INFO] Timeout configurado: 300 segundos
+=== TESTE DE FORMULARIO ===
+Classe: FormSIGOPPGC
+Inicio: 13/11/2026 17:01:25
+
+[ETAPA 1] Carregando dependencias...
+OK - Dependencias carregadas
+
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+
+=== RESULTADO DO TESTE ===
+Fim: 13/11/2026 17:03:21
+Duracao: 116 segundos
+Return Code: 1
+Status: ERRO AO CRIAR OBJETO
+
+===========================
+[2026-11-13 17:03:21] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-11-13 17:03:23] [INFO] VFP9 finalizado em 123.408483 segundos
+[2026-11-13 17:03:25] [INFO] Exit Code: 
+[2026-11-13 17:03:27] [INFO] 
+[2026-11-13 17:03:28] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-11-13 17:03:30] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ibasfexs.prg
+[2026-11-13 17:03:32] [INFO] 
+[2026-11-13 17:03:33] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-11-13 17:03:35] [INFO] * Auto-generated wrapper for parameters
+[2026-11-13 17:03:37] [INFO] * Script: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+[2026-11-13 17:03:38] [INFO] * Parameters: 'FormSIGOPPGC', 'C:\4c\tasks\task786\logs\06_testForm.log'
+[2026-11-13 17:03:40] [INFO] 
+[2026-11-13 17:03:42] [INFO] * Anti-dialog protections for unattended execution
+[2026-11-13 17:03:44] [INFO] SET SAFETY OFF
+[2026-11-13 17:03:46] [INFO] SET RESOURCE OFF
+[2026-11-13 17:03:47] [INFO] SET TALK OFF
+[2026-11-13 17:03:47] [INFO] SET NOTIFY OFF
+[2026-11-13 17:03:49] [INFO] SYS(2335, 0)
+[2026-11-13 17:03:51] [INFO] 
+[2026-11-13 17:03:54] [INFO] DO "C:\4c\automation\vfp_helpers\TestFormWrapper" WITH 'FormSIGOPPGC', 'C:\4c\tasks\task786\logs\06_testForm.log'
+[2026-11-13 17:03:55] [INFO] QUIT
+[2026-11-13 17:03:57] [INFO] 
+[2026-11-13 17:03:59] [INFO] === Fim do Wrapper.prg ===
+[2026-11-13 17:04:01] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)

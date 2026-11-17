@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 completa. `Formsigoporc.prg`: 1061 ÔåÆ 1607 linhas.
+
+## Por que a tentativa anterior reprovou
+
+O ramo **FLAT** do gate (`case 4` do `OrquestradorMigracao.ps1`) exige tr├¬s predicados, e a mensagem de erro n├úo diz qual falhou. Medidos no arquivo do HEAD anterior:
+
+| predicado | antes | agora |
+|---|---|---|
+| `temGrade` ÔÇö `AddObject("grd_4c_` | `True` | `True` |
+| `temBotoes` ÔÇö `AddObject("(cmg_4c_\|cmd_4c_)` | `True` | `True` |
+| **`temCarga`** ÔÇö `CarregarLista\|CarregarDados\|MontaGrade` | **`False`** | `True` |
+
+Era o terceiro. O gate estava certo e havia trabalho real: o `Init` legado termina com `Set Order To CItens` + `Set Key To crSigMvOrc.CItens` + `Go Top` + `thisform.Refresh` ÔÇö o `SET KEY` ├® o que faz a grade de parcelas mostrar s├│ as do item corrente, e trocar ordem/chave de um alias **n├úo repinta** a grade ligada a ele (regra #21). Sem o funil, esse par de Refresh n├úo existia em lugar nenhum.
+
+## O que foi entregue
+
+**Grade de itens** ÔÇö `ConfigurarGridItens` foi dividido: ficou s├│ o que n├úo depende de dado; `RecordSource`/`ControlSource`/`Width`/`Header1.Caption` sa├¡ram para `VincularGradeItens()`, sob `USED(cursor)` e na ordem can├┤nica (regra #41 ÔÇö `RecordSource` reseta Width e Caption).
+
+**Grade de parcelas (nova)** ÔÇö o legado tem **duas** grades e a `grdParcela` estava inteiramente ausente. Deix├í-la para uma fase de campos/handlers era o risco conhecido de "aba inteira perdida": `CriarCursorParcelas` (colunas conferidas em `schema.sql`; `dfors` marcada como proje├º├úo, n├úo existe em `SigMvOrp`), `ConfigurarGradeParcelas` (7 colunas), `VincularGradeParcelas`, os dois bot├Áes ├¡cone-only `btnIncluirp`/`btnExcluirp` (`fwbtnp` 40x40, sem `Enabled=.F.` ÔÇö regra #106) e os handlers com as tr├¬s condi├º├Áes de neg├│cio do legado transcritas.
+
+**`CarregarDados()`** ÔÇö funil PUBLIC: garante cursores ÔåÆ vincula ÔåÆ posiciona ÔåÆ `THIS.Refresh()` + Refresh das duas grades. Mais `PosicionarParcelasDoItem()` e `GradeItensAfterRowColChange` (uso correto de `AfterRowColChange`: detalhe da linha, sem filtro por coluna ÔÇö regra #46).
+
+## Verifica├º├úo
+
+Compila├º├úo e instancia├º├úo **foram provadas**, n├úo presumidas: smoke test (`STRTOFILE` gravou) antes de qualquer afirma├º├úo, como a li├º├úo do ambiente exige.
+
+- `COMPILE` do form e do BO: `.fxp` gerado, **sem `.err`**
+- Instancia├º├úo: `VARTYPE=O`, zero di├ílogos capturados, **zero controles fora da ├írea do form**
+- Os 4 m├®todos chamados de fora: `PEMSTATUS(...,2) = .F.` (p├║blicos ÔÇö regra #3)
+- `Width`/`Header1.Caption` sobreviveram ao bind e ├á **recarga**: `290/"Item"`, `122/"Quantidade"`, `290/"Descri├º├úo"`, `122/"Cr├®dito"`
+- **Filtro mestre-detalhe provado**: `RECCOUNT=3` com **vis├¡vel `2`** no item 1 e **`1`** no item 2 ÔÇö `RECCOUNT` n├úo cai com `SET KEY`, s├│ a contagem da vista
+- Guarda de modo: `CONSULTAR` n├úo inclui parcela
+- `Release` fechou os dois cursores
+
+Auditorias: `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas` passaram limpas. `VerificarTableRevertSemBuffering` acusa 3 sites, **nenhum neste form** (`FormSigOpIpE`, `SigOpFlpBO`, `sigopclgBO` ÔÇö pr├®-existentes).
+
+Dois pontos fora do pedido que ajustei, ambos coment├írio: a frase `"ainda pendente"` no form e `"continua pendente"` no BO casavam o regex `\bpendente` do `05d_validarCompletude` e reprovariam a valida├º├úo por falso positivo ÔÇö ├® a armadilha j├í documentada no CLAUDE.md.
+
+Fica para as fases 5-8, declarado no cabe├ºalho: campos de percentual do topo, `getDescritivo`/`getDpros`/`btnProcura`, `imgProds`, os bot├Áes de a├º├úo (`btnInsBlo`/`btnInsSub`/`btnIteSub`/`btnTotItens`/`btnCadPro`/`OK`), lookups de c├®lula e as regras din├ómicas de m├íscara/cor que dependem de `SigCdOpe`/`SigCdEmp`/`SigOpCdd` ÔÇö ainda n├úo carregados pelo BO.

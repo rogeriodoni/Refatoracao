@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö matches the existing repo convention (prior phase-3 compile scripts like `CompilarF3SigOpPgc786.prg` are also tracked as untracked scratch artifacts of the pipeline), so I'll leave those two verification files in place as evidence of the compile check, consistent with existing practice. Compilation confirmed clean (`FORM_FXP=.T.`, `FORM_ERR=.F.`).
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\Formsigoppro.prg` (Fase 3/8 ÔÇö Form, Estrutura Base) for the **Formsigoppro** (SIGOPPRO/Produtos) OPERACIONAL form:
+
+- `DEFINE CLASS Formsigoppro AS FormBase`, window props matching the legacy form (Width=1050, Height=600, modal, no title bar)
+- `Init()` / `Destroy()` / `InicializarForm()` wired through `FormBase`'s standard lifecycle
+- `ConfigurarCabecalho()` ÔÇö canonical gray header banner (regra #11) + canonical Saida/Encerrar exit block (regra #10)
+- `ConfigurarBotoes()` ÔÇö two empty placeholder containers (`cnt_4c_Botoes`, `cnt_4c_BotoesAcao`) sized to match the legacy toolbar rows (Top=81/Top=359), to be populated with the real CRUD/action buttons in Fase 4
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` with 4 **visible** tabs (unlike CRUD forms, this panel keeps `Tabs=.T.`, matching the legacy's real tabbed layout), captioned and ordered per the legacy `PageOrder` (Produto, Movimenta├º├úo, Fiscais, Precifica├º├úo)
+- `TornarControlesVisiveis()` recursive helper
+- Verified with an actual VFP9 compile pass (`COMPILE`) in this session ÔÇö `FORM_FXP=.T.`, `FORM_ERR=.F.`, no syntax errors
+
+Next (Fase 4) will add the grid(s) and CRUD/action buttons into the containers created here.

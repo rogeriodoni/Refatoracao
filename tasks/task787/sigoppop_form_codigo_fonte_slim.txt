@@ -1,0 +1,1372 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigoppop.SCX
+* Data/Hora: 13/11/2026 17:10:24
+* Total de registros: 59
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPOP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPPOP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnGrade
+  Parent: SIGOPPOP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntGrade
+  Parent: SIGOPPOP
+  Class: container
+  BaseClass: container
+
+Objeto: GrdOperacoes
+  Parent: SIGOPPOP.cntGrade
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column11
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPOP.cntGrade.GrdOperacoes.Column11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntOperacoes
+  Parent: SIGOPPOP
+  Class: container
+  BaseClass: container
+
+Objeto: Say2
+  Parent: SIGOPPOP.cntOperacoes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFin
+  Parent: SIGOPPOP.cntOperacoes
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPPOP.cntOperacoes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtIni
+  Parent: SIGOPPOP.cntOperacoes
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSelecionar
+  Parent: SIGOPPOP.cntOperacoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmbOperacoes
+  Parent: SIGOPPOP.cntOperacoes
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: fwcheckbox1
+  Parent: SIGOPPOP.cntOperacoes
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPPOP.cntOperacoes
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGOPPOP.cntOperacoes
+  Class: label
+  BaseClass: label
+
+Objeto: optProcessados
+  Parent: SIGOPPOP.cntOperacoes
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkMensa
+  Parent: SIGOPPOP.cntOperacoes
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntFiltro
+  Parent: SIGOPPOP
+  Class: container
+  BaseClass: container
+
+Objeto: getEmpDs
+  Parent: SIGOPPOP.cntFiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpOs
+  Parent: SIGOPPOP.cntFiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmpDs
+  Parent: SIGOPPOP.cntFiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmpOs
+  Parent: SIGOPPOP.cntFiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPPOP.cntFiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPPOP.cntFiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGOPPOP.cntFiltro
+  Class: label
+  BaseClass: label
+
+Objeto: cntComplemento
+  Parent: SIGOPPOP
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGOPPOP.cntComplemento
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtLanc
+  Parent: SIGOPPOP.cntComplemento
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getToleras
+  Parent: SIGOPPOP.cntComplemento
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say7
+  Parent: SIGOPPOP.cntComplemento
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPPOP.cntComplemento
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdBtnForm
+  Parent: SIGOPPOP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Transferência Entre Locais"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 0
+  WindowState = 0
+  Themes = .F.
+  citem = .F.
+  cproeqs = .F.
+  gdgo = .F.
+  Name = "SIGOPPOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1004
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cmdBtnGrade
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 135
+  Left = 944
+  Top = 364
+  Width = 43
+  TabIndex = 4
+  Themes = .F.
+  Name = "cmdBtnGrade"
+  Command1.Top = -1
+  Command1.Left = -1
+  Command1.Height = 45
+  Command1.Width = 45
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Selecionar"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcaTudo"
+  Command2.Top = 45
+  Command2.Left = -1
+  Command2.Height = 45
+  Command2.Width = 45
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Desmarcar"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+  Command3.Top = 91
+  Command3.Left = -1
+  Command3.Height = 45
+  Command3.Width = 45
+  Command3.FontName = "Verdana"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_configuracao_26.jpg
+  Command3.Caption = ""
+  Command3.TabIndex = 3
+  Command3.ToolTipText = "Documento"
+  Command3.ForeColor = 36,84,155
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "btnDocumentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade
+------------------------------------------------------------
+  Top = 209
+  Left = 9
+  Width = 932
+  Height = 375
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 3
+  ZOrderSet = 4
+  Name = "cntGrade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes
+------------------------------------------------------------
+  ColumnCount = 11
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 372
+  Left = 1
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 16
+  Top = 2
+  Width = 929
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "GrdOperacoes"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 15
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 52
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 80
+  Column3.Visible = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 104
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 75
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 85
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.Width = 85
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.Width = 85
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.Width = 37
+  Column9.Name = "Column9"
+  Column10.FontName = "Tahoma"
+  Column10.FontSize = 8
+  Column10.Width = 37
+  Column10.Name = "Column10"
+  Column11.FontName = "Tahoma"
+  Column11.FontSize = 8
+  Column11.Width = 242
+  Column11.ReadOnly = .F.
+  Column11.Name = "Column11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  ToolTipText = "Marca/Desmarca Esta Operação Para o Processamento"
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  ToolTipText = "Código da Operação na Origem"
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  ToolTipText = "Data da Operação na Origem"
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Valor da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Documento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Documento da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Usuário Que Gerou a Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Conta de Origem da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Conta de Destino da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Orig."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Empresa da Operação de Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column10.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Dest."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column10.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Empresa da Operação de Destino"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column11.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntGrade.GrdOperacoes.Column11.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes
+------------------------------------------------------------
+  Top = 88
+  Left = 6
+  Width = 732
+  Height = 46
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 1
+  ZOrderSet = 4
+  Name = "cntOperacoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.Say2
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 464
+  Top = 24
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.getDtFin
+------------------------------------------------------------
+  Height = 23
+  Left = 477
+  SpecialEffect = 1
+  TabIndex = 9
+  ToolTipText = "Data Final Para Seleção das Operações "
+  Top = 21
+  BorderColor = 90,90,90
+  Name = "getDtFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.Say1
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 323
+  Top = 23
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.getDtIni
+------------------------------------------------------------
+  Left = 377
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = "Data Inicial Para Seleção das Operações "
+  Top = 20
+  BorderColor = 90,90,90
+  Name = "getDtIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.cmdSelecionar
+------------------------------------------------------------
+  Top = 21
+  Left = 595
+  Height = 23
+  Width = 99
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Caption = "\<Selecionar"
+  TabIndex = 10
+  ToolTipText = "Seleciona as Operações Conforme os Dados Digitados"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdSelecionar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.cmbOperacoes
+------------------------------------------------------------
+  FontName = "Courier New"
+  ColumnCount = 0
+  ColumnWidths = ""
+  RowSourceType = 1
+  RowSource = ""
+  FirstElement = 1
+  Height = 24
+  Left = 87
+  NumberOfElements = 0
+  SpecialEffect = 1
+  Style = 2
+  TabIndex = 5
+  ToolTipText = "Operações de Cópia Configuradas no Cadastro de Operações Para Cópia"
+  Top = 20
+  Width = 196
+  ZOrderSet = 11
+  BorderColor = 90,90,90
+  Name = "cmbOperacoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.fwcheckbox1
+------------------------------------------------------------
+  Top = 21
+  Left = 704
+  Height = 23
+  Width = 24
+  Picture = ..\framework\imagens\consultar.bmp
+  Alignment = 0
+  Caption = ""
+  Value = 0
+  Style = 1
+  TabIndex = 11
+  BackColor = 255,255,255
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.Say3
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Processo :"
+  Left = 23
+  Top = 24
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Oper\<ações"
+  Height = 15
+  Left = 13
+  Top = 3
+  Width = 62
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.optProcessados
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 15
+  Left = 83
+  Top = 5
+  Width = 235
+  TabIndex = 2
+  Name = "optProcessados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Não Processadas"
+  Option1.Left = 5
+  Option1.Top = -1
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Já Processadas"
+  Option2.Left = 126
+  Option2.Top = -1
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntOperacoes.chkMensa
+------------------------------------------------------------
+  Top = 3
+  Left = 377
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Exibir Mensagens de Erro"
+  Value = .T.
+  TabIndex = 3
+  ToolTipText = "Exibe Mensagens Relativas a Erros de Lançamento"
+  ForeColor = 90,90,90
+  Name = "chkMensa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro
+------------------------------------------------------------
+  Top = 134
+  Left = 6
+  Width = 699
+  Height = 89
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 2
+  ZOrderSet = 4
+  Name = "cntFiltro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.getEmpDs
+------------------------------------------------------------
+  Left = 88
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 45
+  Width = 31
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "getEmpDs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.getEmpOs
+------------------------------------------------------------
+  Left = 88
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 19
+  Width = 31
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "getEmpOs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.getDEmpDs
+------------------------------------------------------------
+  Height = 23
+  Left = 122
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 45
+  Width = 305
+  BorderColor = 90,90,90
+  ZOrderSet = 4
+  Name = "getDEmpDs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.getDEmpOs
+------------------------------------------------------------
+  Height = 23
+  Left = 122
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 19
+  Width = 305
+  BorderColor = 90,90,90
+  ZOrderSet = 4
+  Name = "getDEmpOs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.Say4
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Origem :"
+  Left = 31
+  Top = 23
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.Say5
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Destino :"
+  Left = 30
+  Top = 49
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntFiltro.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Filtro por \<Empresa"
+  Height = 15
+  Left = 9
+  Top = 1
+  Width = 105
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento
+------------------------------------------------------------
+  Top = 151
+  Left = 453
+  Width = 240
+  Height = 60
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 5
+  ZOrderSet = 4
+  Name = "cntComplemento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "La\<nçar em :"
+  Left = 20
+  Top = 5
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento.getDtLanc
+------------------------------------------------------------
+  Height = 23
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Data Para Lançamento das Operações no Destino (Em Branco Assume a Data da Origem)"
+  Top = 1
+  Width = 80
+  BorderColor = 90,90,90
+  Name = "getDtLanc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento.getToleras
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 9
+  Format = "K"
+  Height = 25
+  InputMask = "999.99"
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 27
+  Width = 55
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  BorderColor = 90,90,90
+  ZOrderSet = 11
+  Name = "getToleras"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "\<Tolerância AU :"
+  Height = 15
+  Left = 3
+  Top = 32
+  Width = 75
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cntComplemento.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Gr."
+  Height = 15
+  Left = 152
+  Top = 32
+  Width = 17
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPOP.cmdBtnForm
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 769
+  SpecialEffect = 1
+  Top = -2
+  Width = 235
+  TabIndex = 6
+  BorderColor = 90,90,90
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Command1.Caption = "Limpar"
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Limpar Seleção"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnLimpar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\geral_subnivel_60.jpg
+  Command2.Caption = "Copiar"
+  Command2.TabIndex = 2
+  Command2.ToolTipText = ""
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnCopiar"
+  Command3.Top = 5
+  Command3.Left = 155
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command3.Cancel = .T.
+  Command3.Caption = "Encerrar"
+  Command3.TabIndex = 3
+  Command3.ToolTipText = "[ESC] Sair"
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+=================================================================================
+* SECAO 3: METODOS (REDUZIDA - ver arquivo original para codigo completo)
+=================================================================================
+
+*-- SECAO REDUZIDA PARA EVITAR 'Prompt is too long'
+*-- O arquivo mapeamento.json contem informacoes sobre os objetos
+*-- Use as SECAO 1 e 2 para estrutura e propriedades
+
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPOP
+RESERVED3 (ClassInfo): cbars
+cests
+citem
+cproeqs
+cpros
+dpros
+fpros
+gdgo grupods + contads + grupoos + contaos
+lnconexao
+podatafiscal
+podatalogs
+podatamgf
+podatamgr
+sigkey
+valos
+*acertaempdopnums 
+*ajustapesos 
+*casamento 
+*copiarfiscais 
+*delecao 
+*fazcontra 
+*financeiro 
+*gercodigop 
+*lancaclientes 
+*lancadestino 
+*lancaproducao 
+*lancaproduto 
+*lancaprodutof 
+*lancatabdescto 
+*limpaselecao 
+*processamento 
+*selecionar 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 44
+================================================================================

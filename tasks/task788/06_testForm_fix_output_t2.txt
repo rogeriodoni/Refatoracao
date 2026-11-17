@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei ambos os arquivos (`FormSigOpPrL.prg` e `SigOpPrLBO.prg`) contra o checklist completo do CLAUDE.md e n├úo encontrei nenhum defeito de c├│digo. O log mostra claramente que a falha ocorre na **ETAPA 1B** (pr├®-flight gen├®rico de conex├úo SQL do `TestFormWrapper`), *antes* de qualquer `CREATEOBJECT` do form ou do BO ÔÇö ou seja, o erro n├úo tem rela├º├úo com a l├│gica destes arquivos:
+
+```
+Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso bate exatamente com um padr├úo j├í documentado na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): desde 2026-11-05 a porta 1433 de `192.168.200.10` est├í intermitente/inalcan├º├ível desta m├íquina do pipeline, e esse mesmo erro j├í ocorreu em 15+ forms diferentes (incluindo este mesmo `FormSigOpPrL`, na Tentativa 1/10), sempre sem nenhum defeito real no c├│digo revisado.
+
+Confirmei de novo nesta sess├úo:
+- `RETURN` sempre fora de `TRY/CATCH` (Init/InicializarForm do form, Init/BuscarLinha do BO)
+- Todos os handlers `BINDEVENT` s├úo `PUBLIC` (HeaderSelecaoClick, FocarCheckboxSelecao, ChkSelecaoClick/MouseDown/MouseUp/KeyPress, CmdBotoesClick)
+- Form s├│ chama m├®todos `PUBLIC` do BO (`BuscarLinha`); `ObterChavePrimaria` ├® `PROTECTED` e nunca chamado de fora
+- Todo `CATCH` chama `MsgErro`
+- `EscaparSQL` usado sem aspas extras
+- Guard de `gnConnHandle` antes do `SQLEXEC`; guard `USED()` antes de `ControlSource`/`USE IN`
+- `Column1.AddObject` + `CurrentControl` + `Sparse=.F.` feitos na ordem certa e de forma idempotente
+
+`Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` n├úo respondeu dentro do timeout nesta sess├úo tamb├®m ÔÇö a mesma assinatura de n├úo-resposta de todas as ocorr├¬ncias desde 05/11.
+
+**N├úo editei os arquivos** ÔÇö n├úo h├í defeito de c├│digo para corrigir, e alter├í-los s├│ para "satisfazer" o gate seria dano, conforme j├í registrado na mem├│ria do projeto. Atualizei a mem├│ria com esta 2┬¬ tentativa confirmando o padr├úo (restam 8/10 tentativas).
+
+Recomendo novamente dar exce├º├úo ao gate `06_testForm` para o c├│digo de erro 1526/falha de conectividade, ou pausar o retry autom├ítico at├® a rede/VPN para `192.168.200.10:1433` ser restabelecida ÔÇö retry contra uma falha de rede intermitente n├úo vai convergir por si s├│.

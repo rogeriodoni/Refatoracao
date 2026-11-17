@@ -1,0 +1,53 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 ÔÇö `SIGOPSEN` ÔåÆ `Formsigopsen`
+
+**N├úo alterei o form, e isso ├® o entreg├ível correto.** O legado n├úo tem a superf├¡cie que esta fase acrescenta. O conserto foi no harness.
+
+### Por que n├úo h├í trabalho no `.prg`
+
+A ├írvore do `sigopsen.SCX` tem **11 objetos**: dataenvironment, form, container, image, 5 label e 2 textbox. Medido no dump:
+
+- **ZERO** `BaseClass: commandbutton | commandgroup | grid | pageframe | listbox`
+- **ZERO** `AddCursor` / `pColuna`
+- **ZERO** `PROCEDURE ...Click`
+
+├ë um di├ílogo modal de senha de autoriza├º├úo (400x180) que confirma no `Valid` do campo senha ÔÇö n├úo tem lista, n├úo tem bot├úo, n├úo tem p├ígina. Criar `ConfigurarPaginaLista` + grid + 6 bot├Áes CRUD seria inventar UI (viola o PILAR 1), e escrever os m├®todos vazios seria o stub disfar├ºado que a regra de completude pro├¡be. Os campos ficam para a Fase 5, os lookups/eventos para as 6ÔÇô8.
+
+### O gate de conte├║do j├í passava
+
+Medido com os helpers **reais** do orquestrador: `temListaEstritaF4=False`, `temCampo=True`, `dialogoExibicao=False`, `temApiNos=False` ÔåÆ **`temLayoutCaptura = True`**. A Fase 4 ├® dispensada pelo ramo CAPTURA, sem tocar no form.
+
+Quem for├ºava retry era o **guard de NO-OP**, que listava s├│ as Fases 5, 6 e 7.
+
+### Corre├º├úo no `OrquestradorMigracao.ps1`
+
+Fase 4 entregue no guard com o crit├®rio casado ao que ela acrescenta ÔÇö *sem lista* **E** *sem bot├úo*. N├úo serve o predicado das Fases 5/6 (`Test-LegadoSemCampoNemLista` exige zero campo; aqui h├í 2 TextBox edit├íveis). Lista pelo teste **estrito** (o largo conta `ControlSource` cru e daria falso positivo em TextBox solto); bot├úo delegado a `Test-LegadoSemBotaoAlgum`, j├í fail-closed.
+
+Medido nas duas dire├º├Áes com o **bloco real** do guard, 790 tasks:
+
+| Fase | antes | depois |
+|---|---|---|
+| **4** | **0** | **25** (= 15 forms distintos) |
+| 5 | 83 | 83 |
+| 6 | 63 | 63 |
+| 7 | 25 | 25 |
+
+Zero regress├úo; 765 OPERACIONAL seguem sujeitos ao guard na Fase 4. Os 15 forms conferidos um a um: superf├¡cie de lista/bot├úo = 0 e `Click` = 0 em todos. Diff: 41 linhas (2 alteradas + 39 adicionadas) contra c├│pia do disco ÔÇö o arquivo j├í tinha ~1034 linhas n├úo commitadas de outras sess├Áes, ent├úo comparar com `HEAD` n├úo mediria meu hunk. `BOM=True` e `bytes>127=2965` id├¬nticos, CRLF puro restaurado (o heredoc inseriu LF), `ParseFile` com 0 erros.
+
+### Verifica├º├úo do entreg├ível
+
+Smoke test do VFP9 passou primeiro, ent├úo as provas abaixo s├úo de execu├º├úo real:
+
+- `COMPILE` do BO e do form com `.fxp` apagado antes: `FXP=SIM` / `ERR=NAO` nos dois.
+- `CREATEOBJECT("Formsigopsen", "LIMITE")` em harness m├¡nimo: `VARTYPE=O`, `BaseClass=Form`, `400x180`, `WindowType=1`, `Caption=[Limite Excedido]`, **1** controle (`cnt_4c_Sombra`, a entrega da Fase 3), `grd_4c_*`/`pgf_4c_Paginas`/`ConfigurarPaginaLista` ausentes, `PEMSTATUS(...,2)=.F.` nos m├®todos chamados de fora.
+- `AlternarPagina` responde a `PEMSTATUS(...,5)` por **heran├ºa de `FormBase`** (linha 308) ÔÇö o `.prg` do form tem zero ocorr├¬ncia dela e de `ConfigurarPaginaLista`, por isso `temLayoutPaginado=False`.
+
+### Ressalva ÔÇö a corre├º├úo n├úo vale para o run em curso
+
+`RunLoop.ps1` (PID 6520) subiu em **16/11 17:54** e o fix foi gravado em **17/11 04:00**. O PowerShell parseia o script inteiro na invoca├º├úo, ent├úo a Fase 4 da task799 ainda gasta um retry opus com o gate velho. A dispensa passa a valer a partir do **pr├│ximo relan├ºamento do loop** ÔÇö se quiser que valha j├í, ├® preciso reiniciar o `RunLoop.ps1`.
+
+N├úo commitei nada. A li├º├úo foi gravada na mem├│ria que j├í rastreava essa lacuna como pendente.

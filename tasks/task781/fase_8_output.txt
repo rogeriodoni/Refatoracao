@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 est├í entregue e verificada.
+
+## O que a fase acrescentou a `Formsigoporc.prg`
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarLista()` | funil de recarga das duas grades ÔÇö saiu de dentro de `CarregarDados`, que agora delega. Preserva a linha corrente (`SEEK` por `Citens`) |
+| `FormParaBO()` / `BOParaForm()` | os 5 percentuais do topo, que no SCX tinham `ControlSource = TprMvCab.ptax2s/descs/ptax1s/acres/ptax3s` |
+| `HabilitarCampos([par_lHabilitar])` | os `When` dos campos (`getPmargem` ÔåÆ `.f.`, `getDpros/getDpro2s` ÔåÆ `lProcura`, resto ÔåÆ `INSERIR/ALTERAR`) |
+| `AjustarBotoesPorModo()` | os `When` dos bot├Áes (`btnTotItens` e `OK` n├úo t├¬m `When`) |
+| `LimparCampos()` | reset do estado auxiliar (busca, grupo novo, foto, valores anteriores) |
+| `BtnCancelarClick()` | o ramo CONSULTAR do `OK.btnSair.Click`, que cai direto em `ThisForm.release()` sem gravar. `BtnSalvarClick` passou a delegar a ele |
+
+## Tr├¬s defeitos que estavam no caminho e corrigi
+
+1. **A grava├º├úo n├úo funcionava.** `BO.CarregarDoCursor` l├¬ `tpesos`/`univals`/`utilizas` (colunas reais de `SigMvOrc`, j├í no SELECT e nos INSERT/UPDATE do BO), mas as tr├¬s faltavam no `CREATE CURSOR` ÔÇö o m├®todo estourava `Variable TPESOS is not found` dentro do pr├│prio TRY e devolvia `.F.` na **primeira** linha do `SCAN` do Salvar. O probe agora mostra `.T.` com os tr├¬s valores lidos.
+2. **`AtualizarModoCriacao` cobria 2 de ~20 controles** do bloco de layout do `Init`: faltavam os 6 pares de percentual, a grade de parcelas e seus bot├Áes, `btnTotItens`/`btnIteSub` e as duas legendas que P&G troca (`Lucro`/`Imposto Cheio`).
+3. **`BtnProcurarClick` n├úo tinha a guarda de modo**, e o bot├úo (s├│-├¡cone) recebia `.Enabled = .F.` ÔÇö o que apaga o ├¡cone (regra #106). Guarda movida para o handler.
+
+No BO acrescentei os 3 `LEFT JOIN` que projetam `dcunis`/`dcunips`/`dacabs`, fechando o gap documentado na Fase 4 (as colunas Unidade/Unidade-pedido/Acabamento abriam em branco).
+
+## Um desvio deliberado, n├úo silencioso
+
+No ramo P&G o legado faz `grdItem.Height = 444` **e** `getDpros/getDpro2s/btnProcura.Top = 570`. Os dois n├║meros s├úo incompat├¡veis: com `Top = 218`, altura 444 leva a grade a 662 e ela cobriria a linha de busca (e passaria do rodap├® de 600). O SCX n├úo declara `Height` do form ÔÇö a se├º├úo de propriedades vem vazia no dump ÔÇö, ent├úo 444 n├úo ├® verific├ível; 570 ├®, e cabe. Usei `Height = 350` (218+350 = 568), com a grade crescendo at├® a linha de busca. Transcrever 444 soterraria tr├¬s controles. Est├í registrado no cabe├ºalho do m├®todo.
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa (`.fxp` novo, sem `.err`) nos dois arquivos.
+- **Gate real da Fase 8** (bloco `case 8` recortado do `OrquestradorMigracao.ps1`): `VEREDITO=PASSA`.
+- `Test-CompletudeCodigo` do pr├│prio orquestrador: sem TODO/stub nos dois arquivos.
+- `ValidadorSQLSchema`: 18 statements, 0 colunas inv├ílidas. `VerificarCamposCursorBO`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarColunaEmpresaSQL`, `VerificarMetodoProtegidoChamadoDeFora`: todos limpos para esta task.
+- Dois probes headless exercitando o fluxo real em **ALTERAR** e **CONSULTAR** (`automation\ProbeSigOpOrcF8*.prg`): FormParaBOÔåÆBOÔåÆBOParaForm faz round-trip dos 5 percentuais, `CarregarLista` preserva a linha e mant├®m `Width`/`Header`, `BtnCancelarClick` descarta os cursores e libera o form, e em CONSULTAR o Salvar sai sem nenhum SQLEXEC. **Zero di├ílogos suprimidos** nos dois ÔÇö nenhum `MsgErro` escondido no caminho.
+
+Uma observa├º├úo: `FormParaBO`, `BOParaForm` e `LimparCampos` aparecem como PROTECTED em runtime porque `FormBase` os declara assim (linhas 276/280/285) e um override n├úo alarga escopo ÔÇö ├® a conven├º├úo do projeto, e o harness n├úo os chama de fora. Por isso os probes usam uma subclasse de teste em vez de eu mexer no c├│digo de produ├º├úo.
+
+N├úo adicionei item de menu: este ├® di├ílogo filho (`Do Form SigOpOrc With ThisForm, ThisForm.DataSessionId`) e precisa do form pai + `Emps/Dopes/Numes`; uma entrada de menu abriria uma tela vazia. Os irm├úos j├í migrados (`FormSigMvSbn`, `FormSigOpCtd`, `FormSigOpCcj`) seguem o mesmo padr├úo ÔÇö s├│ o `indice_classes.txt`, que j├í tem as entradas.

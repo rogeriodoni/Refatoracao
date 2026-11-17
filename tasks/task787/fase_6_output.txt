@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The only "TODO" match is an unrelated word in a comment ("TODOS" = "ALL" in Portuguese), not a stub marker. Everything is properly wired.
+
+## Summary
+
+FASE 6/8 complete for `Formsigoppop.prg`. Added:
+
+- **`ConfigurarFiltro()`** ÔÇö creates `cnt_4c_Filtro` with the empresa origem/destino fields (`txt_4c_EmpOs`/`txt_4c_DEmpOs`/`txt_4c_EmpDs`/`txt_4c_DEmpDs` + their labels), geometry transcribed exactly from the dump.
+- **8 lookup handler methods** ÔÇö `ValidarEmpOs`/`AbrirBuscaEmpOs`, `ValidarDEmpOs`/`AbrirBuscaDEmpOs`, `ValidarEmpDs`/`AbrirBuscaEmpDs`, `ValidarDEmpDs`/`AbrirBuscaDEmpDs`. These replace the legacy `fAcessoEmpresa()` (which doesn't exist in the new system) with the canonical `FormBuscaAuxiliar` pattern over `SigCdEmp`, following the exact reference implementation in `Formsigatcrp.prg`. KeyPress tests the key code (F4 opens the picker directly; Enter/Tab do an exact match and only open the picker on a miss), so no reentrancy guard is needed.
+- **`ConfigurarComplemento()`** ÔÇö creates `cnt_4c_Complemento` with `txt_4c_DtLanc` and `txt_4c_Toleras` (Format `"K"` / InputMask `"999.99"` transcribed literally per CLAUDE.md rule #49), plus their labels.
+- Wired both new methods into `ConfigurarLayout()`.
+- Updated the file's header comment block to document what was actually implemented in this phase.
+
+No TODOs or stubs; all lookup methods are complete per the task's mandatory-completeness rule. Next phase (7/8) will wire the remaining events (CommandGroup clicks, grid checkbox toggle) and the BO's copy methods.

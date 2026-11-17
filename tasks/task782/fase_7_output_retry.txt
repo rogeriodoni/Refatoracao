@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 passa agora. **O conte├║do da Fase 7 j├í estava completo** ÔÇö a reprova├º├úo era de conven├º├úo de nome, n├úo de falta de c├│digo.
+
+## O que o gate media (medido, n├úo adivinhado)
+
+Rodei o `case 7` standalone (`VerificarGateFase7Task781.ps1`, que ├® parametrizado):
+
+```
+legadoSemCrud = .T.   (frmcadastro=F, Grupo_Op=F, nomeCRUD=F, pcEscolha=0)
+nBotoesLegado = 9  ->  piso 2 handlers
+nHandlers     = 1      <-- REPROVA
+```
+
+Os 4 nomes CRUD (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) **j├í estavam dispensados** pelo carve-out "legado sem CRUD" ÔÇö o SIGOPPAG ├® di├ílogo filho de recebimento, n├úo tem barra CRUD. O que faltava era o piso de handlers: o gate conta s├│ `PROCEDURE (Cmd|Btn)\w*Click`, e 4 dos 5 handlers estavam batizados pelo **objeto legado**, n├úo pela a├º├úo.
+
+## Corre├º├úo
+
+Renomeei pela a├º├úo, conferindo antes se a renomea├º├úo paga a Fase 8:
+
+| de | objeto/Caption legado | para | paga Fase 8? |
+|---|---|---|---|
+| `CancelaClick` | `Cancela` / "Encerrar" | `BtnCancelarClick` | **sim** (exigido nominalmente) |
+| `OkClick` | `Ok` / "\<Confirmar" | `BtnConfirmarClick` | **sim** (fallback de salvar) |
+| `ApagaClick` | `Apaga` / "Excluir Condi├º├úo" | `BtnExcluirCondicaoClick` | ÔÇö |
+| `TotiteClick` | `totite` / "Total dos Produtos" | `BtnTotalProdutosClick` | ÔÇö |
+
+`BtnRetCashClick` j├í tinha prefixo. Renomeei o arquivo inteiro (BINDEVENT + cabe├ºalhos + refer├¬ncias cruzadas em coment├írio); os **objetos** `cmd_4c_*` n├úo mudaram, ent├úo `mapeamento.json` ficou intocado.
+
+Tamb├®m reescrevi dois coment├írios que a etapa `05d_validarCompletude` acusava como falso positivo de `\bpendente` (palavra de dom├¡nio, n├úo TODO): "Cada bloco pendente" ÔåÆ "Cada bloco que falta", "libera o TEF pendente" ÔåÆ "libera a transa├º├úo TEF em aberto".
+
+## Verifica├º├úo
+
+- Gate Fase 7: `VEREDITO=PASSA` ÔÇö `nHandlers = 5`, ramo `[i] legado sem botao CRUD algum - validado pelos 5 handler(s)`
+- `Test-CompletudeCodigo`: `FORM=True`, `BO=True`
+- VFP9: `FORM_FXP=.T. FORM_ERR=.F. BO_FXP=.T. BO_ERR=.F.` (recompilado ap├│s o reword)
+- `.fxp` gerados removidos; zero refer├¬ncia aos nomes antigos
+
+Uma ressalva sobre o escopo que **n├úo** toquei: as tr├¬s pend├¬ncias que a execu├º├úo anterior documentou (`SigOpTot` n├úo migrado, `ParentForm.OpenCash()` n├úo wireado, e as depend├¬ncias `CalcServico`/`CalcImposto`/`Cotacao`/`SigOpSen`) continuam l├í, com coment├írio expl├¡cito em cada m├®todo. Elas pertencem ao form pai do cabe├ºalho de movimento, que n├úo existe no projeto ÔÇö n├úo s├úo omiss├Áes silenciosas desta fase.

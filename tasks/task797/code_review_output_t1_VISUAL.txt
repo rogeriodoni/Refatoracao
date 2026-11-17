@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o ├║nico problema apontado neste pass e **n├úo vou aplicar nenhuma altera├º├úo** no arquivo.
+
+O achado `[GRID-WITH]` em `CarregarLista` (`WITH loc_oGrid` / `THIS.grd_4c_Dados`) ├® um falso positivo j├í catalogado 28 vezes na mem├│ria (`feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco.md`). Confirmei lendo o bloco real (linhas 535-543 de `FormSIGOPRPS.prg`):
+
+```foxpro
+WITH loc_oGrid
+    .RecordSource          = ""
+    .ColumnCount           = 4
+    .RecordSource          = "cursor_4c_Historico"
+    .Column1.ControlSource = "cursor_4c_Historico.Datas"
+    .Column2.ControlSource = "cursor_4c_Historico.Transacaos"
+    .Column3.ControlSource = "cursor_4c_Historico.Usuars"
+    .Column4.ControlSource = "cursor_4c_Historico.Nfis"
+ENDWITH
+```
+
+A ordem j├í ├® a can├┤nica da regra #41/#44 do CLAUDE.md (`ColumnCount -> RecordSource -> ControlSource`, tudo no mesmo bloco), sem nenhuma invers├úo. `WITH` em VFP9 ├® pura sintaxe (prefixo impl├¡cito de `.`), n├úo adia execu├º├úo ÔÇö `ColumnCount = 4` cria `Column1..Column4` imediatamente, de modo que `.Column1.ControlSource` j├í encontra as colunas existentes. Esse exato padr├úo ├® usado com sucesso em `FormCor`, `FormFti` e dezenas de outros forms do projeto; "mover RecordSource/ColumnCount para fora do WITH" n├úo corrige nada porque n├úo h├í defeito.
+
+Registrei esta como a 29┬¬ reincid├¬ncia na mem├│ria para o detector do pass VISUAL ser ajustado futuramente. Nenhuma mudan├ºa de c├│digo foi necess├íria neste form.

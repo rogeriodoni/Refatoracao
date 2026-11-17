@@ -1,0 +1,161 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCriptografar", "fGravarLog", "fGerPswDiario"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSEN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEN",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEN",
+      "evento": "Init",
+      "linhas": 201,
+      "codigoOriginal": "LParameters pTip, pTi1, pTi2, pDoc, pDat, pEmp, pFpg, pVal\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tIf (Type([pDoc]) <> [N])\n\t\t\tpDoc = 0\n\t\tEndIf\n\t\tIf (Type([pDat]) <> [D])\n\t\t\tpDat = Date()\n\t\tEndIf\n\t\tIf (Type([pEmp]) <> [C])\n\t\t\tpEmp = []\n\t\tEndIf\n\t\tIf (Type([pFpg]) <> [C])\n\t\t\tpFpg = []\n\t\tEndIf\n\t\tIf (Type([pVal]) <> [N])\n\t\t\tpVal = 0\n\t\tEndIf\n\n\t\t.ZSen    \t  = .f.\n\t\t.NroDoc  \t  = pDoc\n\t\t.DatDoc  \t  = pDat\n\t\t.Tipo    \t  = pTip\n\t\t.UsuLibs \t  = Usu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSEN.usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not crParam.LiblCreds Or (ThisForm.Tipo <> [LIMITE] And (ThisForm.Tipo <> [LIBPRDZ2]))) And (ThisForm.Tipo <> [MAXIMO])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Tipo <> [LIMITE] And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEN.usuario",
+      "evento": "Valid",
+      "linhas": 166,
+      "codigoOriginal": "Local lCod, lFan, CodCor, xObj, TotIte\n\nusual=''\nsd = .t.\n\nIf Empty(This.Value)\n\tZSen = .f.\n\tThisForm.ZSen = .f.\n\tThisForm.Release\n\tReturn .t.\nEndIf\n\nDo Case\n\tCase ThisForm.Cancitem\n\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;\n\t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.CancItens = \"S\" and not a.Senhas = ']+Space(6)+[']\n\n\tCase ThisForm.Financ\n\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+;\n\t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.limites = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEN.usuario",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf (Lastkey() = 27) And Empty(This.Value)\n\tZSen = .f.\n\tThisForm.ZSen = .f.\n\tThisForm.Release\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSEN.senha",
+      "evento": "Valid",
+      "linhas": 81,
+      "codigoOriginal": "local senha,resp,lcQuery\n\nsenha = Chr(254)\nlcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + ALLTRIM(ThisForm.Usuario.Value) + [' order by 1]\nThisForm.poDataMgr.SQLExecute(lcQuery, 'TmpUsu')\n\n*** Mena - 21/06/2017 - seleciona se é senha livre cadastrada *********************************************************\nlcQuery = [select * from SigPrSnd a where a.empdopnums = '' and a.usuars='] + ThisForm.Usuario.Value + [' and a.senhads='] + ALLTRIM(this.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCriptografar,fGravarLog,fGerPswDiario",
+        "metodosFormChamados": "SQLExecute,Commit,Tipo = 'LIBERAFPG','",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSEN.usuario.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+; \t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.CancItens = \"S\" and not a.Senhas = ']+Space(6)+['] ",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSEN.usuario.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select a.* From SigCdUsu a, SigCdCrg b ]+; \t\t\t\t  [Where Not a.cAtivos='N' And a.Ccargs = b.ccargs And b.limites = ... [TRUNCADO]",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSEN.senha.Valid",
+      "queryOriginal": "lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + ALLTRIM(ThisForm.Usuario.Value) + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cAtivos,Value",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSEN.senha.Valid",
+      "queryOriginal": "lcQuery = [select * from SigPrSnd a where a.empdopnums = '' and a.usuars='] + ThisForm.Usuario.Value + [' and a.senhads='] + ALLTRIM(this.V... [TRUNCADO]",
+      "tabelas": "SigPrSnd",
+      "colunas": "empdopnums,usuars,Value,senhads",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu", "SigPrSnd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

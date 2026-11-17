@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7/8 conclu├¡da: `C:\4c\projeto\app\forms\operacionais\FormSigOpRef.prg` (1194 ÔåÆ 1631 linhas).
+
+## O que foi entregue
+
+O SIGOPREF **n├úo tem barra CRUD** ÔÇö o legado herda de `form` puro (zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha` no dump inteiro) e os **├║nicos** bot├Áes do SCX s├úo os dois do `cntBotoes`. Inventar `BtnIncluir/Alterar/Visualizar/Excluir` violaria o PILAR 1, ent├úo os "eventos principais" desta tela s├úo, literalmente, esses dois:
+
+| Handler | Legado | O que faz |
+|---|---|---|
+| `BtnConfirmarClick` | `cntBotoes.btnConfirmar.Click` | duplicidade da nova refer├¬ncia (+ `SetFocus`), c├│digo vazio, confirma├º├úo (pulada quando `SaiAuto`), e a c├│pia via `NovoRegistro()` + `Salvar()` |
+| `BtnSairClick` | `cntBotoes.btnSair.Click` | devolve ao contador o sequencial reservado e fecha sem gerar |
+
+Ligados por `BINDEVENT` em `Buttons(1)`/`Buttons(2)` no fim de `ConfigurarBotoes` (um por bot├úo, como no legado ÔÇö n├úo no Click do grupo). Entrou tamb├®m o ├║ltimo bloco do `Init` legado (`If .SaiAuto / .cntBotoes.btnConfirmar.Click()`), em `InicializarForm`.
+
+**Contrato de retorno** ÔÇö o legado devolve o c├│digo pelo `RETURN` do `Unload`, que s├│ chega a quem abre com `DO FORM ... TO` (├® exatamente como `SIGOPPRO`/`SIGMVCAB` o abrem). Como o sistema novo abre por `CREATEOBJECT + Show()`, os dois bot├Áes fecham com `Hide()` (funil `FecharDialogo`), **n├úo** `Release()`, e o resultado sai por `ObterRetorno()`; `Unload()`/`Destroy()` mantidos com cache. Isso segue a li├º├úo j├í registrada (`Release()` mata a refer├¬ncia do chamador).
+
+No `SigOpRefBO.prg` acrescentei `CancelarCodigoReservado()` (transcri├º├úo linha a linha do `btnSair.Click`, inversa exata de `GerarCodigoProdutoDestino` ÔÇö mesma chave de contador nos dois) e `ObterRetorno()`. A regra de neg├│cio ficou no BO, junto da g├¬mea.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- Smoke test VFP9 passou ÔåÆ `COMPILE` real dos dois arquivos: **FXP=SIM / ERR=NAO** em ambos.
+- Probe headless (`automation\ProbeRef794F7.prg`): `CREATEOBJECT=O`; escopo correto (os 5 m├®todos chamados de fora s├úo PUBLIC, `CachearRetorno` PROTECTED); `AEVENTS` prova `Buttons(1).ClickÔåÆBTNCONFIRMARCLICK` e `Buttons(2).ClickÔåÆBTNSAIRCLICK`; Confirmar com c├│digo vazio **recusa** com a mensagem do legado, n├úo fecha e n├úo grava, e libera a guarda de reentr├óncia; p├│s-Sair o objeto **sobrevive** (`VARTYPE=O`, `Visible=.F.`) com `ObterRetorno`/`Unload` leg├¡veis, e s├│ o `Release()` do chamador o destr├│i.
+- Gate da Fase 7 (recortando o `case 7` real do orquestrador, sem execut├í-lo): **VEREDITO=PASSA** ÔÇö `legadoSemCrud`, 2 bot├Áes no legado, 2 handlers.
+- Auditorias `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarTableRevertSemBuffering`, `VerificarLookupEmKeyPress`: nenhum achado em SigOpRef. Blocos balanceados, zero `RETURN` dentro de TRY, zero acentuado literal, zero TODO/stub.
+
+Uma observa├º├úo sobre fidelidade: `fVerificarBarras(lcNewPros, crSigCdPam.TpCBars)` n├úo veio no acervo (SIGFUNCS.PRG) ÔÇö s├│ o `Empty()` que a acompanha foi transcrito, com a aus├¬ncia documentada no handler, igual ao que j├í consta em `Formsigoppro`/`FormSigPrEtq`. N├úo inventei o algoritmo.

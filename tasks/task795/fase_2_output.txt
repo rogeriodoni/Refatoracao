@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+13 methods defined, 13 closers matched ÔÇö balanced. Phase 2 is complete.
+
+## Summary
+
+Completed `SIGOPRESBO.prg` (Phase 2/8) by implementing the 5-method roadmap that Phase 1 already laid out in the header comments, plus a public orchestrator:
+
+- **`ExecutarCalculo()`** (PUBLIC) ÔÇö the funnel the Form will call, chaining the steps below exactly like the legacy `Init`.
+- **`CarregarReservas()`** / **`CarregarLocacoes()`** ÔÇö both reuse a shared **`MontarQueryMovimento()`** builder (same SQL text as legacy, parameterized by operation), since the legacy literally re-executes the identical query twice with a different `lcoper`.
+- **`CarregarOperacaoPai()`** ÔÇö queries `SigCdOpe` for the parent (loca├º├úo) operation; when none is found, falls back to the original operation, matching the legacy's "keeps old `lcoper`" behavior.
+- **`CalcularEstoquePorDia()`** ÔÇö rebuilds the `Tmpresul` cursor logic: seed row, scan reservations, scan loca├º├Áes (via **`AplicarMovimentoReserva`**/**`AplicarMovimentoLocacao`**), gap-fill days with no movement (**`PreencherDiasSemMovimento`**), then filters/sorts into the final `cursor_4c_Dados`.
+- **`ObterSaldoAteData()`** / **`ObterSaldoNoIntervalo()`** ÔÇö shared helpers reproducing the repeated "find saldo as of/between dates" pattern, reusing the `this_cCursorDatas` auxiliary cursor already reserved by Phase 1's naming plan.
+- **`ObterSaldoNaData()`** ÔÇö final `SET NEAR` seek + `GO BOTTOM` fallback, setting `this_nSaldo`.
+
+I deliberately did **not** add fake `Inserir()`/`Atualizar()`/`CarregarDoCursor()` as the generic phase template requested ÔÇö this form is a read-only consulta dialog with no remote writes, which the BO's own Phase-1 header already documents as the correct exception (CLAUDE.md's rule for somente-leitura BOs). Adding those would have meant inventing logic that doesn't exist in the legacy and violating the no-fake-stubs rule.
+
+All SQL formatting follows project conventions (`EscaparSQL`, `FormatarDataSQL`, `ConverterParaData`), dates/BETWEEN windows are transcribed literally per rule #17 (including the asymmetric loca├º├úo start/end bounds), and every cursor open/close follows the `IF USED()/USE IN` guard pattern.

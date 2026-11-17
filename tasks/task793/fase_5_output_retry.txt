@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö nada a acrescentar no `.prg`, e o gate j├í est├í corrigido
+
+Verifiquei tudo de forma independente, sem confiar no relat├│rio da tentativa anterior.
+
+**O legado `SIGOPRBT` n├úo tem campo nenhum.** Contei objeto por objeto no dump ÔÇö s├úo 6: `form`, `dataenvironment`, `container` (cntSombra), 2 `label`, 1 `commandgroup` (2 bot├Áes). Zero `BaseClass: grid|pageframe`, zero `textbox/editbox/combobox/listbox/checkbox/optiongroup/spinner`, zero `ControlSource|RecordSource|pColuna`, zero `\bGrade\b|\bgrd`. Metade de zero campos ├® zero, ent├úo `Formsigoprbt.prg` j├í est├í completo para esta fase e **n├úo o alterei**: inventar uma Page2 com campos violaria o PILAR 1, e um `ConfigurarPaginaDados` vazio ├® o stub disfar├ºado que a regra de completude pro├¡be (e exploraria o `-match "ConfigurarPaginaDados"` do gate, que ├® s├│ casamento de string).
+
+**O gate estava insatisfaz├¡vel e a corre├º├úo j├í est├í em disco** (`OrquestradorMigracao.ps1`, mtime 18:43:41). Medi o motivo: as 15 chamadas de `AddCursor` s├úo todas de **3 argumentos** ÔÇö s├│ registram cursor no data manager; quem liga grade ├® o 5┬║ (regra #35). `Test-LegadoAddCursorLigaGrade` = `False`. Com a corre├º├úo, rodando os predicados reais do `case 5`:
+
+| | velho | novo |
+|---|---|---|
+| `temListaLegadoF5` | `True` | **`False`** |
+| `legadoSemListaNemCamposF5` | `False` | **`True`** |
+| `temSuperficieDespachanteF5` (2 bot├Áes ÔåÆ exige `cmg_4c_`/`cmd_4c_` + `PROCEDURE Cmd\w*Click`) | ÔÇö | **`True`** |
+| `temLayoutDespachanteF5` | `False` | **`True`** ÔåÆ Fase 5 passa |
+
+**Blast radius remedido por mim nos 792 dumps de `tasks\`**: 21 dumps mudam o predicado, **0** com `grid/pageframe`, e **todos os 21 na dire├º├úo segura** (tinha-lista ÔåÆ n├úo-tem); zero na dire├º├úo oposta. 14 t├¬m campo e por isso n├úo entram em DESPACHANTE. Delta efetivo: 7 dumps = 3 forms legado (`sigoprbt`, `SIGPRMEI`, `SigPrRss`), todos com 2 bot├Áes e zero campo. Conferi a monotonicidade em cada call site: `temListaLegadoF5` (10404, 10411) e `temListaLegadoF6` (10829, 10835) s├úo consultados **s├│ negados**, e `Test-LegadoSemCampoNemLista` (9520) s├│ para **conceder** a dispensa do guard NO-OP ÔÇö pode acrescentar passagem, nunca retirar. `temListaLegadoF8` ficou intocado, e est├í certo: l├í o predicado ├® consultado tamb├®m de forma positiva.
+
+**Uma corre├º├úo ao relat├│rio anterior.** Ele dizia que o RunLoop velho (PID 6520, de 17:54, anterior ao fix) "vai rejeitar a Fase 5 de novo" e deixava a decis├úo de reiniciar como pend├¬ncia. O retry ├® **limitado a um** (`OrquestradorMigracao.ps1:14536-14593`) e a checagem p├│s-retry ├® apenas `Test-Path $formFileCheck`. O arquivo existe, ent├úo este retry ├® aceito ("Fase 5 recuperada com retry OPUS") e o pipeline segue para a Fase 6 ÔÇö n├úo h├í la├ºo e nada est├í travado.
+
+**O que ainda custa**: as Fases 6 e 7 desta task rodam na mesma c├│pia em mem├│ria do gate antigo, ent├úo cada uma vai gastar o seu retry opus e depois ser aceita pela mesma checagem de exist├¬ncia. Para a Fase 6 tamb├®m n├úo h├í trabalho real ÔÇö o legado tem zero lookup (`fwbusca`, `mAddColuna`, `sigacess(`, `FormBuscaAuxiliar`: todos ausentes). Reiniciar o loop agora pouparia esses dois retries; a corre├º├úo j├í vale para o **pr├│ximo** arquivo legado de qualquer forma, porque o `RunLoop` invoca o orquestrador com `&` por arquivo, e o `&` reparseia o `.ps1` em cada invoca├º├úo. N├úo reiniciei ÔÇö continua sendo sua decis├úo.
+
+Integridade do form conferida: 0 bytes >127 (acentos via `CHR(231)/CHR(243)/CHR(237)/CHR(227)`), CRLF nas 561 linhas, `Destroy` com `DODEFAULT()`.

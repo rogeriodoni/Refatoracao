@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e validada em `projeto/app/forms/operacionais/Formsigoporc.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 6 aceita o ramo **FLAT** (OPERACIONAL sem PageFrame) s├│ com `BINDEVENT` **+** `PROCEDURE AbrirLookup*|AbrirBusca*`. A dispensa "legado sem lookup" n├úo se aplica aqui ÔÇö o dump tem `fwBuscaInt` e `mAddColuna` em 5 sites. A l├│gica de picker existia, mas **inline** dentro dos `Validar*`, ent├úo nenhum m├®todo `AbrirBusca*` existia. Confirmado medindo o gate: `temMetodoLookup: False`.
+
+## O que entreguei
+
+**4 lookups completos, todos com m├®todo `AbrirBusca*` pr├│prio** (transcritos do dump, n├úo inventados):
+
+| Legado | Migrado | Tabela |
+|---|---|---|
+| `get_NewGrp.Valid` | `TxtNovoGrupoLostFocus` ÔåÆ `AbrirBuscaNovoGrupo` | SigCdGrp Ôïê SigCdRpo (+ fallback lista inteira) |
+| `grdItem.Column1.Text1.Valid` | `ValidarProdutoItemKeyPress` ÔåÆ `AbrirBuscaProdutoItem` | SigCdPro Ôïê SigCdRpo |
+| `grdItem.Column4/Column6` | `ValidarUnidadeGenerica` ÔåÆ `AbrirBuscaUnidade` | SigCdUni |
+| `grdItem.Column30.Text1` | `ValidarAcabamentoKeyPress` ÔåÆ `AbrirBuscaAcabamento` | SigCdAca |
+
+O lookup de **produto** (Column1) era o que faltava: `AddObject` + `CurrentControl` + `Sparse=.F.` (regra #18), `GuardarAntDpros` reproduzindo o `thisform.antdpros` do `When`, e as duas guardas do legado transcritas ÔÇö linha de SUBTOTAL/marcador propaga o r├│tulo para `dpro2s` e sai sem consultar; valor inalterado (`PADR(...,40)`) tamb├®m.
+
+## Tr├¬s defeitos latentes que encontrei no caminho
+
+1. **`cunis`/`cunips`/`codacabs` ausentes do `CREATE CURSOR`** ÔÇö os `REPLACE` dos handlers de unidade/acabamento j├í existentes estourariam `Variable CUNIS is not found` na primeira escolha do usu├írio. Acrescentados com a largura do schema (`char(3)` nas tr├¬s, `docs/schema.sql` lido com `-Raw`).
+2. **`VincularGradeItens` n├úo repunha `CurrentControl`** ÔÇö reatribuir `RecordSource` reseta `CurrentControl`/`Sparse`/`ReadOnly`, ent├úo as c├®lulas de lookup voltariam ao `Text1` nativo no primeiro recarregamento. Criei `ReinstalarCelulasLookupItens()`, chamado ap├│s cada bind.
+3. **`MaxLength` ausente** nas c├®lulas de lookup ÔÇö adicionado pelo schema (65/20/20), n├úo pelo `Width` em pixels (regra #19).
+
+## O que deliberadamente N├âO fiz
+
+`grdParcela.Column4/Column6.Text1` t├¬m `Valid` com `fAcessoContas` no dump, **mas o `Init` legado fixa `.ReadOnly = .t.` nas duas** (sem depender do modo) ÔÇö coluna ReadOnly n├úo dispara `Valid`, logo esse lookup j├í ├® inalcan├º├ível no legado. N├úo criei lookup de conta: seria editar campo que o legado nunca deixou editar. Documentado no cabe├ºalho da classe.
+
+## Verifica├º├úo
+
+- Compila├º├úo VFP9: **SEM ERROS** (`.fxp` apagado antes, timestamp conferido)
+- Instancia├º├úo real em `gb_4c_ModoTeste`: **abre**, `Caption=[Itens]`, as 4 colunas com `CurrentControl` correto, os 5 m├®todos novos PUBLIC
+- `REPLACE`/`SEEK` dos handlers exercitados sobre o cursor: OK
+- Gate Fase 6 medido: `temLayoutFlat: True` ÔåÆ **GATE: True**
+- Completude (TODO/stub/procedure vazia/"pr├│xima fase"): **0**
+- `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarLookupEmKeyPress`: **sem achados** em `sigoporc`
+- Zero literais acentuados
+
+Fica para as fases 7-8, como j├í estava previsto: `btnCadPro` e a **precifica├º├úo autom├ítica** que o `Valid` do Column1 executa *depois* do lookup (`PrecoAuts`/`PrecoPs`/moedas ÔÇö depende de `crSigCdOpe`, carregado em fase pr├│pria do BO). O lookup em si est├í completo e funcional.

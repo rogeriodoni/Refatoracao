@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced. The Fase 4 work is complete for `Formsigopsat.prg`.
+
+**Summary of what was delivered and why it diverges from the task's literal instructions:**
+
+The task asked to add a Grid + 6 CRUD buttons to "Page1", but this form (`SIGOPSAT` ÔÇö "Integra├º├úo Aparelho SAT") has no CRUD, no grid, and no Page1/Page2 in the legacy SCX ÔÇö confirmed by the dump, `layout.json` (only 2 Labels, 417├ù147 flat form), and `comportamento.json` (no Insert/Update/Delete, no AddCursor, just a device-polling loop). Fabricating CRUD structure here would violate PILAR 1 (inventing functionality the legacy never had).
+
+Following the established precedent in `Formsigprico.prg` (same situation, documented in its header), I reinterpreted this phase as "deliver the real deferred visual content" instead:
+- Added `lbl_4c_Label2` (fixed title) and `lbl_4c_Label1` (runtime status label, fed by `this_cMensagemStatus`), transcribed literally from the SCX dump (position, font, color, alignment).
+- Added the form chrome properties from the legacy dump that Fase 3 hadn't transcribed yet (`BorderStyle`, `ControlBox`, `MaxButton`, `MinButton`, `KeyPreview`, `TitleBar`, `AlwaysOnTop`, `AutoCenter`, `DataSession`, `Picture`).
+- Documented in the file header exactly why the CRUD/grid instruction doesn't apply, mirroring the Formsigprico pattern so later pipeline phases (5-8) aren't confused either.
+
+Brace/block counts are balanced (DEFINE CLASS/PROCEDURE/WITH/IF/TRY all matched). The SAT.dll polling loop itself remains for a later phase, as noted in the file header.

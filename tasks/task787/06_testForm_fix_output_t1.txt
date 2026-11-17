@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: erro de infraestrutura, n├úo de c├│digo
+
+O log mostra a falha na **ETAPA 1B** (conex├úo SQL gen├®rica do `TestFormWrapper`), **antes** de qualquer `CREATEOBJECT` de `Formsigoppop`/`sigoppopBO`:
+
+```
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® exatamente o padr├úo j├í confirmado **15+ vezes** desde 2026-11-05 nesta m├íquina de pipeline (tasks767-786, fam├¡lia SigOp*): a porta 1433 de `192.168.200.10` fica intermitente, e o pr├®-flight gen├®rico do harness falha antes do form sequer ser instanciado ÔÇö n├úo h├í como um defeito em `.prg` causar esse sintoma, porque o form/BO nunca chegam a rodar.
+
+**Verifica├º├Áes feitas nesta tentativa (1/10):**
+- `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` n├úo respondeu dentro do timeout ÔÇö mesma assinatura de n├úo-resposta de todas as ocorr├¬ncias anteriores.
+- Revis├úo independente de `Formsigoppop.prg` e `sigoppopBO.prg` contra o checklist do CLAUDE.md (RETURN sempre fora de TRY/CATCH, handlers BINDEVENT sempre PUBLIC, form nunca chama m├®todo PROTECTED do BO, CATCH nunca silencioso, helpers SQL sem aspas extras, guards de USED()/Buffering antes de TABLEREVERT, padr├úo Column.AddObject+CurrentControl+Sparse): **nenhum defeito relacionado ao erro reportado**.
+
+**N├úo editei os arquivos** quanto a este erro ÔÇö seguindo o padr├úo j├í estabelecido no projeto, "corrigir" c├│digo correto s├│ para satisfazer esse gate seria dano, n├úo corre├º├úo, j├í que o bloqueio ├® de rede/ambiente.
+
+**Achado ├á parte (fora do escopo desta corre├º├úo)**: `CarregarLista()` chama `Column1.AddObject("Check1", ...)` de novo, duplicando o que `ConfigurarGrid()` j├í criou ÔÇö isso estouraria "Name is already in use" na primeira chamada real do form (quando a conex├úo existir). Registrei isso na mem├│ria do projeto para revis├úo numa itera├º├úo que trate bugs de c├│digo deste form, mas n├úo corrigi aqui porque n├úo ├® o erro indicado por este gate.
+
+**Recomenda├º├úo**: pausar o retry autom├ítico desta task ou dar exce├º├úo ao gate `06_testForm` para erro 1526/conectividade ÔÇö um retry autom├ítico contra falha de rede n├úo vai convergir sozinho.

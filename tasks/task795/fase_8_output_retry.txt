@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada.
+
+## O que estava acontecendo
+
+O gate da Fase 8 **j├í passa** com o form atual. A reprova├º├úo das 23:14/23:34 foi auto-refer├¬ncia: o ramo `ENTREGA-VALOR-AO-PAI` foi adicionado ao `OrquestradorMigracao.ps1` depois do in├¡cio desta task, e o orquestrador l├¬ o `.ps1` na abertura ÔÇö o mesmo padr├úo registrado em `feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma`. Rodando o `case 8` standalone: `VALIDADO=True`, `FALTANTES=` (vazio), com tr├¬s dispensas reconhecidas (fluxo-├║nico, entrega-valor-ao-pai, sem bot├úo de gravar).
+
+## Mas a fase tinha trabalho real pendente
+
+O guard de no-op n├úo isenta a Fase 8 (s├│ 5, 6 e 7), ent├úo deixar o arquivo intacto for├ºaria outro retry. Fui procurar lacunas de verdade e achei **dois defeitos**, ambos provados por medi├º├úo no VFP9:
+
+**1. `GO TOP` incondicional apagava o posicionamento do legado.** O Init legado faz `Seek(Ttod(TprMvCab.datas))` e s├│ ent├úo liga o `RecordSource` ÔÇö a grade abre na linha da *data da opera├º├úo*, a ├║nica que o usu├írio veio conferir. O migrado dava `GO TOP` logo ap├│s, abrindo no primeiro dia da janela. Medi que re-bind de `ColumnCount`/`RecordSource`/`ControlSource` **n├úo** move o ponteiro (RECNO fica em 7 nos quatro passos; s├│ o `GO TOP` leva a 1) ÔÇö ent├úo bastou restringir o `GO TOP` ao caminho de falha.
+
+**2. O bot├úo Encerrar zerava o saldo do chamador.** `BtnEncerrarClick` copiava `BO.this_nSaldo` incondicionalmente; com a proje├º├úo n├úo executada o BO vale 0, e o chamador recebia **0** como se fosse estoque calculado ÔÇö contrariando o que o pr├│prio cabe├ºalho da classe prometia. Sintoma da guarda perdida: `this_lCalculoOK` era escrita em tr├¬s pontos e nunca lida. Medido: entrega 123.456 ÔåÆ Click devolvia 0; com o guard devolve 123.456.
+
+## Verifica├º├úo
+
+| prova | resultado |
+|---|---|
+| Smoke test VFP9 | executa nesta sess├úo (arquivo de sa├¡da gravado) |
+| `COMPILE` BO + Form | `FXP=SIM ERR=NAO` nos dois |
+| Instancia├º├úo real | `CREATEOBJECT` ÔåÆ objeto, 4 controles vis├¡veis, grid 2 colunas ligado, headers "Data"/"Estoque", larguras 80/90 |
+| Click (contrato de entrega) | copia o saldo do BO, `Hide()` em vez de `Release()`, objeto vivo para o chamador ler |
+| Fix 1 (stub de BO) | sucesso ÔåÆ RECNO 5 (linha da opera├º├úo); falha ÔåÆ RECNO 1 |
+| Fix 2 | sucesso ÔåÆ 50; falha ÔåÆ 123.456 preservado |
+| `ValidadorSQLSchema` | PASSOU, 0 colunas inv├ílidas |
+| Auditorias (fun├º├Áes ├│rf├ús, coluna empresa, m├®todo PROTECTED, propriedade inexistente, lookup em KeyPress) | 0 achados para SIGOPRES |
+| Est├íticas | 0 TODO/stub, 0 bytes n├úo-ASCII, 0 `RETURN` em TRY, blocos balanceados, CRLF preservado (924/924) |
+| Gate Fase 8 (p├│s-fix) | `VALIDADO=True`, `FALTANTES=` |
+
+Arquivo final: `projeto/app/forms/operacionais/FormSIGOPRES.prg` (43,3 KB).
+
+Duas ressalvas, nenhuma bloqueante: **n├úo adicionei item de menu** ÔÇö ├® di├ílogo filho que recebe `Init(ocnx, __saldo)` e l├¬ os cursores do chamador (`TprMvCab` + alias corrente); pelo menu abriria sem contexto. O ├¡ndice `indice_classes.txt` j├í traz form, BO e depend├¬ncias (foi por ele que o `GarantirClasse` funcionou no probe). E **nenhum chamador existe ainda no projeto** ÔÇö a tela de venda/loca├º├úo que a abre n├úo foi migrada; o bloco "Uso" no cabe├ºalho documenta o contrato (`Show()` ÔåÆ ler `this_nSaldo` ÔåÆ `Release()`). N├úo commitei: os dois arquivos seguem untracked, e estamos na branch `fix/erro283-tabstretch`.
+
+Registrei a li├º├úo do `GO TOP` em mem├│ria ÔÇö ela tensiona a regra #21a, que manda justamente o contr├írio, e por isso ├® a que mais provavelmente se repete.

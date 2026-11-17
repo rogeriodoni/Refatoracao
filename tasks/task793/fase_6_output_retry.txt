@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 6 ÔÇö conclu├¡da
+
+**A Fase 6 n├úo reprovou por defeito no form: reprovou por um bug do pr├│prio gate, que j├í estava corrigido na ├írvore de trabalho** (o processo do orquestrador em execu├º├úo ainda tem a vers├úo antiga carregada em mem├│ria).
+
+**Diagn├│stico medido** (gate rodado standalone, conforme `feedback_rodar_gate_de_uma_fase_standalone`):
+
+| predicado | valor |
+|---|---|
+| `temLayoutDespachanteF6` | **True** |
+| `legadoSemListaNemCamposF6` | True |
+| `legadoSemLookup` | True |
+| `temSuperficieDespachanteF6` | True |
+| **VALIDADO** | **True** |
+
+A causa raiz: `$temListaLegadoF6` contava o token `AddCursor` por simples presen├ºa. O `SIGOPRBT` tem 15 chamadas `.AddCursor` **de 3 argumentos** ÔÇö forma que s├│ registra o cursor no data manager; quem liga grade ├® o 5┬║ argumento (regra #35). O diff n├úo-commitado em `automation/OrquestradorMigracao.ps1` j├í troca esse regex largo por `Test-LegadoAddCursorLigaGrade`, e o coment├írio do fix cita esta task nominalmente.
+
+**Medi├º├Áes pr├│prias no dump** (1965 linhas) ÔÇö re-verificadas, n├úo herdadas do relato anterior:
+
+- `BaseClass:` ÔåÆ form, container, 2 ├ù label, commandgroup, dataenvironment. **Zero** textbox/editbox/combobox/listbox/checkbox/optiongroup/optionbutton/spinner.
+- `ControlSource`, `pColuna`, `RecordSource`, `Grade`, `grd` ÔåÆ **0**
+- `PROCEDURE Valid` / `PROCEDURE When` ÔåÆ **0**
+- `fwbusca` / `mAddColuna` / `sigacess(` / `Acesso*(` / `FormBuscaAuxiliar` ÔåÆ **0**
+- `AddCursor` com 4+ v├¡rgulas (liga grade) ÔåÆ **0** de 15
+
+├ë o perfil DESPACHANTE: a tela s├│ dispara um processamento em lote. **N├úo h├í campo para acrescentar nem lookup para implementar** ÔÇö inventar um violaria o PILAR 1 e um m├®todo vazio seria o stub proibido pela regra de completude.
+
+**Altera├º├úo entregue**: registrei no cabe├ºalho do `Formsigoprbt.prg` a medi├º├úo das 15 `AddCursor` de 3 argumentos ÔÇö exatamente o fato que faltava documentado e que confundiu o gate. O bloco anterior cobria campos e lookups, mas n├úo explicava por que 15 linhas de `AddCursor` n├úo s├úo superf├¡cie de lista.
+
+**Verifica├º├úo**: compila├º├úo limpa no VFP9 (`FXP=SIM ERR=NAO`, exit 0) ÔÇö e o script de compila├º├úo de fato executou (gravou o arquivo de sa├¡da), ent├úo o `.err` ausente ├® prova real, n├úo sil├¬ncio. Harness tempor├írios removidos.
+
+**Pend├¬ncia leg├¡tima para as Fases 7/8** (j├í anotada no cabe├ºalho, n├úo introduzida agora): o `btnConfirmar.Click` ÔåÆ `Processamento()` ÔåÆ `GeraMovimentacao` (547 linhas) / `LancaContaCorrente` (917) / `FazContra` / `MontaHists`, mais o disparo autom├ítico via `this_lAutomatico`. Hoje s├│ o `CmdCancelarClick` est├í ligado.
+
+Um alerta: como o processo do orquestrador carregou a vers├úo antiga do script, a Fase 8 deste mesmo run pode trope├ºar no mesmo predicado estreitado (`Test-LegadoSemCampoNemLista`). Ela cair├í no force-retry, que s├│ exige a exist├¬ncia do arquivo, ent├úo o pipeline segue ÔÇö mas o veredito dessa fase sair├í por esse caminho, n├úo pelo gate.

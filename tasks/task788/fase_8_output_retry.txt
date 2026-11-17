@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada.
+
+## O que a fase precisava fazer: nada de novo no `.prg`
+
+Rodei o gate da Fase 8 **standalone** (fun├º├Áes do orquestrador + corpo do `case 8`, semeado) em vez de adivinhar. Veredito: `VALIDADO=True`, `FALTANTES=` vazio. Dos 4 nomes can├┤nicos, `CarregarLista` j├í existe de verdade desde a Fase 4 e os outros 3 s├úo dispensados pelo ramo **fluxo-├║nico** ÔÇö n├úo h├í p├ígina de Dados, modo de edi├º├úo nem o que persistir: as duas ├║nicas escritas do dump inteiro s├úo `Update LocalBusLin Set Selecao`, no cursor **local do chamador**. Escrever os nomes do template com corpo vazio seria o stub que a regra de completude pro├¡be.
+
+## O que eu de fato corrigi
+
+Revisando o entreg├ível achei uma **diverg├¬ncia de fidelidade** no caminho de abertura, e consertei:
+
+**`SigOpPrLBO.BuscarLinha`** devolvia `.F.` quando o c├│digo da Linha chegava vazio ÔÇö e `InicializarForm` usa esse retorno como gate (`IF THIS.ConfigurarLinha()`), ent├úo o di├ílogo **n├úo abria**. O `Return .f.` do `Init` legado tem uma condi├º├úo s├│, e ├® estreita: `If Not Used([LocalLin])`, isto ├® falha de **conex├úo**. Com `pLin` vazio o `CursorQuery` roda, devolve zero linha, o cursor existe e o legado segue com `This.lblLinha.Caption = []` ÔÇö a tela **abre**. Agora chave vazia segue o mesmo ramo de "n├úo encontrou": campos em branco e `.T.`.
+
+**`FormSigOpPrL.FocarCheckboxSelecao`** ganhou o guard `PEMSTATUS` que o `Activate` irm├úo j├í tinha ÔÇö ├® handler de `GotFocus`, roda fora de qualquer TRY, e `SetFocus` em membro inexistente estoura `Unknown member`.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- **Compila├º├úo**: smoke test provou que o VFP9 executou o script, com controle negativo gerando `.err`. Form e BO: `FXP=SIM`, `ERR=NAO`.
+- **Runtime, fluxo completo** (`_probe788f8.prg`): form instancia (1000x600, DataSession=1), pai desabilita ao abrir e reabilita no Encerrar, cabe├ºalho com o Caption do form, figura gravada **byte-id├¬ntica** (2861/2861 ÔÇö o decode condicionado da Fase 5 est├í certo), grade com 7 colunas ligada ao cursor, CheckBox como `CurrentControl` com `Sparse=.F.`, larguras/captions do dump, Verdana/8 + HeaderHeight 22 + RowHeight 16 (n├úo sobrescritos), Column1 edit├ível e 2ÔÇô7 read-only (os `When -> .F.`), marcar/desmarcar tudo com o Tag alternando, toggle de linha por Enter e Espa├ºo ignorando outras teclas, `CarregarLista` idempotente preservando CheckBox e larguras, todos os m├®todos chamados de fora PUBLIC.
+- **BO real** (`_probe788f8b.prg`): `BuscarLinha("")` ÔåÆ `.T.` com campos vazios e o form **abre**; com c├│digo e sem conex├úo ÔåÆ `.F.` (equivale ao `Not Used([LocalLin])`); `BuscarLinha` e `CarregarDoCursor` n├úo s├úo PROTECTED.
+- **Gate do orquestrador**, ap├│s as edi├º├Áes: Fase 8 `VALIDADO=True` e Fase 7 `VALIDADO=True`, ambas pelos ramos de subst├óncia (a Fase 7 por *"legado sem bot├úo CRUD e com UM ├ÜNICO bot├úo no SCX"*, n├úo por texto de coment├írio).
+- **Conserto do gate herdado desta task** (`Get-NomeBotaoUnicoDeGrupoLegado`, para o bot├úo que ├® membro de CommandGroup): medi o blast radius eu mesmo nos **787 dumps** ÔÇö 34 True, 4 bases pelo caminho novo (`SIGOPPRL`, `SIGMVCTH`, `SigOpCgl`, `SIGPRSTF`), e conferi os tr├¬s outros Click: dois s├úo `ThisForm.Release` puro e o terceiro limpa um campo e d├í `RELEASE Windows`. Zero regress├úo; o predicado s├│ ├® lido para **conceder**.
+
+## Uma ressalva
+
+**A Fase 8 desta execu├º├úo ainda vai reprovar.** O orquestrador ├® um script PowerShell parseado no in├¡cio da task (00:29) e o conserto do gate entrou ├ás 04:14 ÔÇö a fun├º├úo antiga ├® a que est├í em mem├│ria no processo. O conserto vale da pr├│xima execu├º├úo em diante. N├úo h├í como fazer esta passar sem falsificar o dump ou inventar um bot├úo de gravar que o legado n├úo tem.
+
+Registrei a li├º├úo nova na mem├│ria (`ChaveVaziaNaoFalha`). Deixei os dois probes e seus logs em `automation\` (conven├º├úo do projeto ÔÇö os anteriores est├úo versionados) e apaguei o harness tempor├írio e o `.bak`.

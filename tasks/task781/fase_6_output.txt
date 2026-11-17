@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed. The Fase 6 implementation is complete and internally consistent.
+
+## Summary
+
+I implemented Fase 6/8 ("Campos Restantes e Lookups") for `Formsigoporc.prg` / `sigoporcBO.prg`:
+
+1. **Busca textual** (`getDpros`/`getDpro2s`/`btnProcura` ÔåÆ `txt_4c_ProcuraDpros`/`edt_4c_ProcuraDpro2s`/`cmd_4c_Procurar`): two-phase search button, fields mirror the current item's description when not searching, `AtualizarModoCriacao` extended to hide them in "Cria├º├úo" mode.
+2. **Pr├®-visualiza├º├úo de imagem do produto** (`imgProds` ÔåÆ `img_4c_Produto`): loaded in `GradeItensAfterRowColChange`/`CarregarImagemProdutoCorrente` gated by new BO properties `this_nImagems`/`this_nConfes` (follow the established "populated later" pattern), with zoom via `ImgProdutoDblClick` reusing the project's canonical `FormSigOpZom`/`ShellExecute` fallback from `Formsigprccp`.
+3. **Lookups de c├®lula** for unit (grid Column4/Column6 ÔåÆ `SigCdUni`, shared via `ValidarUnidadeGenerica`) and finish (Column30 ÔåÆ `SigCdAca`), using `Column.AddObject` + `CurrentControl` + `Sparse=.F.` with `GotFocus`/`KeyPress` delegation, and the project's `FormBuscaAuxiliar.DefinirCursor` pattern. Applied rule #50 for Acabamento's "not found" case (keep message, never erase what the user typed).
+
+Fixed a real bug along the way: VFP9's `LOCATE FOR` needs the `LIKE()` function with `*` wildcards, not SQL-style infix `LIKE '%...%'` ÔÇö corrected in all four grid-navigation search spots.
+
+Deferred to Fase 7/8 (documented in the header): `btnCadPro` and the 169-line product cell lookup (Column1), both tightly coupled to `SigCdOpe`/`SigOpCdd` fields not yet loaded by the BO, plus the remaining action buttons (`btnInsBlo`/`btnInsSub`/`btnIteSub`/`btnTotItens`/`OK`).

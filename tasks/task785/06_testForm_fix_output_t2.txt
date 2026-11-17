@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: n├úo ├® um defeito de c├│digo
+
+Revisei `FormSIGOPPEN.prg` e `SIGOPPENBO.prg` por completo contra o checklist padr├úo (RETURN fora do TRY/CATCH, handlers PUBLIC para BINDEVENT, nenhuma chamada de m├®todo PROTECTED do BO de fora, CATCH sempre com MsgErro, EscaparSQL/FormatarDataSQL sem aspas extras) ÔÇö est├í tudo correto, id├¬ntico ao j├í revisado na Tentativa 1/10 desta mesma task785.
+
+O log mostra a falha **antes** de qualquer `CREATEOBJECT` de FormSIGOPPEN/SIGOPPENBO:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® o erro cl├íssico de infraestrutura (confirmado por `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433`, que n├úo respondeu dentro do timeout ÔÇö mesma assinatura de n├úo-resposta j├í registrada em dezenas de tentativas anteriores de outras tasks). N├úo h├í nenhum `.prg` envolvido nesse ponto da execu├º├úo.
+
+**N├úo editei os arquivos** ÔÇö alterar c├│digo correto s├│ para "satisfazer" o gate automatizado seria dano, n├úo corre├º├úo. Essa ├® a 2┬¬ confirma├º├úo id├¬ntica nesta mesma task785 (j├í registrada em mem├│ria do projeto).
+
+Recomenda├º├úo, refor├ºando as entradas anteriores da mem├│ria: pausar o retry autom├ítico desta task ou dar exce├º├úo no gate `06_testForm` para o erro 1526/conectividade ÔÇö sen├úo a task vai esgotar as 10 tentativas e falhar por um problema de rede da m├íquina do pipeline, n├úo por defeito no c├│digo migrado.

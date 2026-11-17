@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O que medi e o que entreguei:
+
+## Diagn├│stico: a fase n├úo precisava de m├®todo novo
+
+Rodei o gate da Fase 8 **standalone** em vez de adivinhar. Veredito: dos 4 nomes exigidos, `CarregarLista` j├í existia e os outros 3 (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`) j├í eram dispensados pelo ramo **FLUXO-├ÜNICO**. Reprovava por **um** item s├│ ÔÇö o bot├úo de gravar ÔÇö de uma tela que n├úo grava nada: as duas ├║nicas escritas do dump inteiro s├úo `Update LocalBusLin Set Selecao`, no cursor **local do chamador**.
+
+O ramo certo (`botaoUnicoSoFecha`) existia e falhava por uma prova que o dump **tinha**, s├│ escrita em outro lugar: o ├║nico bot├úo ├® membro de um CommandGroup (`ButtonCount = 1` + `Command1.Name = "btnSair"`), e `Get-NomesBotoesLegado` l├¬ s├│ a ├írvore de objetos. Ent├úo o conserto foi no **gate**, n├úo inventando m├®todos no `.prg`.
+
+## Mudan├ºas
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö helper pr├│prio `Get-NomeBotaoUnicoDeGrupoLegado` (fail-closed: um ├║nico grupo, um ├║nico membro renomeado, nome n├úo gen├®rico), usado como *fallback* em `Test-LegadoBotaoUnicoSoFecha`; mais toler├óncia a linha `LOCAL` de declara├º├úo (o `btnSair.Click` abre declarando 5 memvars que nunca usa). N├úo alarguei `Get-NomesBotoesLegado` nem `Test-LinhaDeFechamentoLegado` ÔÇö ambos t├¬m outros consumidores.
+
+Blast radius medido com a fun├º├úo **real** nos 787 dumps: `27 ÔåÆ 34` True, **4 bases** flipam `FalseÔåÆTrue` (`SIGOPPRL`, `SIGMVCTH`, `SigOpCgl`, `SIGPRSTF` ÔÇö conferi as tr├¬s outras, todas legitimamente "um bot├úo que s├│ fecha") e **zero** regress├Áes. Mon├│tono por constru├º├úo: o predicado s├│ ├® lido dentro de `if (-not $legadoSemAcao)` para conceder.
+
+**`FormSigOpPrL.prg`** ÔÇö achei e corrigi um defeito **mudo** herdado da Fase 5: base64-decode *incondicional* de `SigCdLin.figjpgs`. O legado grava com `StrToFile(FigJpgs, arq)` sem convers├úo, e o `FormLin` ÔÇö a tela que alimenta a coluna ÔÇö grava com `FILETOSTR`, bin├írio cru. Medido: `STRCONV(raw,14)` reduzia o JPG de **1560 para 771 bytes**, e nada reclamava (STRTOFILE > 0, `.Picture` atribu├¡da, `.Visible` ligado) ÔÇö a moldura s├│ ficava vazia. Agora o decode ├® condicionado a prefixo de data URL; sem prefixo o caminho ├® id├¬ntico ao do legado.
+
+Tamb├®m tirei os identificadores de template dos coment├írios do cabe├ºalho: eles faziam os gates das Fases 7 e 8 aprovarem por **texto** (o gate l├¬ o `.prg` inteiro, coment├írio incluso) em vez de pelo carve-out real. Medi antes de mexer ÔÇö a Fase 7 continua aprovando, agora por *"legado sem bot├úo CRUD e com UM ├ÜNICO bot├úo no SCX"*.
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa de form e BO (`.fxp` gerado, nenhum `.err`).
+- Fases 7 e 8: `VALIDADO=True`, ambas pelos ramos de subst├óncia.
+- Probe em runtime (stub do BO ÔÇö o SQL 192.168.200.10 ├® inalcan├º├ível aqui): figura gravada **byte-id├¬ntica** ├á origem (1560/1560), grade com 7 colunas ligada ao cursor, CheckBox da Column1 vivo, marcar/desmarcar tudo, altern├óncia de linha, `CarregarLista` idempotente preservando CheckBox e larguras, pai desabilitado na abertura e reabilitado no Encerrar.
+
+Uma ressalva: o orquestrador l├¬ o `.ps1` no in├¡cio da task, ent├úo **a Fase 8 desta execu├º├úo ainda reprova** ÔÇö o conserto do gate s├│ vale da pr├│xima em diante. ├ë a 9┬¬ vez que isso acontece e j├í est├í catalogado; registrei nas duas mem├│rias que atualizei (o ramo do gate e a do decode de imagem).

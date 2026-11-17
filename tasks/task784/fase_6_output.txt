@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6/8 executada e verificada.
+
+## O que entrou
+
+Nenhuma altera├º├úo de superf├¡cie em `FormSigOpPdt.prg`. Fase 6 pede "├║ltimos 50% dos campos + lookups", mas este form ├® OPERACIONAL (sem Page1=Lista/Page2=Dados) e j├í teve **todos** os controles do dump entregues nas Fases 3-5 (cabe├ºalho, molduras, grade de 8 colunas, campo de busca, 3 bot├Áes standalone) ÔÇö confirmado comparando contra `layout.json`: os 9 objetos-raiz + 8 colunas de grade j├í existem e batem 1-para-1.
+
+A ├║nica mudan├ºa foi documentar a verifica├º├úo de lookup diretamente no cabe├ºalho do arquivo (linhas que antes eram uma nota prospectiva "fica para a fase 7" e agora registram a confirma├º├úo exaustiva feita nesta fase).
+
+## Verifica├º├úo de aus├¬ncia de lookup (motivo de n├úo haver c├│digo para gerar)
+
+Varredura no dump (`SigOpPdt_form_codigo_fonte.txt`) e em `comportamento.json`:
+- `fwbuscaext` / `fwBuscaSel` / `sigacess(` / `CreateObject(` de busca: **0 ocorr├¬ncias** em qualquer objeto da tela.
+- `PROCEDURE KeyPress`: **0 ocorr├¬ncias** (logo nenhum F4/F5).
+- `PROCEDURE Valid`: **1 ├║nica**, em `Get_Procura` ÔÇö corpo ├® `Seek This.Value` dentro do pr├│prio cursor `TmpPends` (SEEK posicional na grade), n├úo ├® consulta a outra tabela. Fica para a Fase 7 junto com `LostFocus`/`When` do mesmo campo, como j├í estava planejado.
+- `funcoesExternas` agregadas em `comportamento.json` (`For Dopes + Str`, `For Empty`, `fConfigGeral`, `Flag With ThisForm.Marca`): nenhuma ├® lookup.
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| `COMPILE` do Form e do BO (`.fxp` novo, `.err` ausente) | Ô£à limpo |
+| `CREATEOBJECT("FormSigOpPdt")` real no VFP9 | Ô£à `VARTYPE=O`, 9 controles na raiz, grade com 8 colunas ÔÇö superf├¡cie id├¬ntica ├á da Fase 5 |
+| Arquivo de erro de teste (`gc_4c_ArquivoErroTeste`) | Ô£à vazio |
+
+Scripts criados: `automation/CompilarF6SigOpPdt784.prg` e `automation/Probe784F6.prg` (ambos com `SET SAFETY OFF`/`SET RESOURCE OFF`, sem di├ílogo modal). N├úo toquei em `task_state.json` ÔÇö isso ├® do orquestrador.

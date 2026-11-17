@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The Fase 3/8 file is complete and verified. Summary of what was delivered:
+
+**`C:\4c\projeto\app\forms\operacionais\Formsigoprbt.prg`** (new file, compiled clean in VFP9):
+
+- `DEFINE CLASS Formsigoprbt AS FormBase` with visual properties transcribed literally from the legacy SCX dump (718├ù130, Caption "Lan├ºamentos de Rebates", ControlBox/MaxButton/MinButton=.F., TitleBar=0) ÔÇö no PageFrame, since the legacy dump's object tree (`cntSombra` + 2 labels + `cntBotoes` only, raiz `Class: form/BaseClass: form`) proves this is a **flat OPERACIONAL layout**, matching the precedent already established in `FormSigOpOco.prg`. Inventing a Page1/Page2 PageFrame here would violate PILAR 1 and the "never invent" rule.
+- `Init(par_lAutomatico)` ÔÇö captures the legacy `Parameters pAuto` with a `PCOUNT`/`VARTYPE` guard (harness instantiates with no args).
+- `InicializarForm()` ÔÇö sets the background picture, creates `sigoprbtBO` (passing Automatico straight through, since the BO's own `Init` already has the matching guard), builds the header, and calls `TornarControlesVisiveis`.
+- `ConfigurarCabecalho()` ÔÇö the gray header strip (`cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`), widths tied to `THIS.Width` instead of the dump's literal 800/769 (which exceed the 718px form and would get clipped ÔÇö regra #30).
+- `TornarControlesVisiveis()` and `Destroy()`.
+
+Deliberately deferred (per the Fase 3 scope and documented in the file header): the `cnt_4c_Botoes` CommandGroup (Processar/Cancelar) ÔåÆ Fase 4, and the button click events / automatic-mode self-trigger ÔåÆ Fase 7.
+
+I verified this satisfies the orchestrator's Fase 3 gate for "layout flat" OPERACIONAL forms (`OrquestradorMigracao.ps1` lines ~9820-9845): legacy proven PageFrame-less, no `pgf_4c_` invented, `InicializarForm` present, and `AddObject("cnt_4c_...")` present.

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\sigopsenBO.prg` criado (558 linhas, 24 KB, CRLF, ASCII puro).
+
+## O que o BO cont├®m
+
+`DEFINE CLASS sigopsenBO AS BusinessBase` ÔÇö **63 propriedades** declaradas e **todas** normalizadas no `Init()`, organizadas em 11 blocos que espelham as 30 propriedades customizadas do `ClassInfo` do SCX:
+
+| Bloco | Propriedades |
+|---|---|
+| 1. Par├ómetros de entrada (`pTip..pVal`) | `this_cTipo`, `this_cTitulo`, `this_cTitulo2`, `this_nNroDoc`, `this_dDatDoc`, `this_cEmpresa`, `this_cFpagto`, `this_nValFpag` |
+| 2. Textos derivados | `this_cCaption`, `this_cFrase` |
+| 3. Flags de autoriza├º├úo | as **21** flags l├│gicas do legado (`this_lCancItem`, `this_lFinanc`, `this_lLibFpag`/`2`, `this_lLibProducao`, `this_lSaldoEstoque`, `this_lLibValida`, `this_lLibOpe`, `this_lLibMovUsu`, `this_lLibQtMin`, `this_lLibLimitador`, `this_lMovEstoque`, `this_lLibVMovDup`, `this_lLibLeilao`, `this_lLibDupEnd`, `this_lLiberaTitulo`, `this_lLibPrzEnt`, `this_lCustoProd`, `this_lLibValMaxMal`, `this_lLibExcPrd`, `this_lLibSubn`) |
+| 4-5. Credenciais e usu├írio | `this_cUsuario`, `this_cSenha`, `this_cSenhaCadastrada`, `this_cCargoUsuario`, `this_cUsuarioAtivo`, `this_lExigeSenha` |
+| 6-7. Par├ómetros + senha do dia | `this_lLiblCreds`, `this_lSenhDEmps`, `this_lSenhaDoDia`, `this_cSenhaDoDia`, `this_nNumeroBase`, `this_nNumEmpresa`, `this_nNumFpagto` |
+| 8-9. Senha livre + movimento | `this_lSenhaLivre`, `this_cChaveSenhaLivre`, `this_cEmpDopNums`, `this_cEmpsMov`, `this_cDopesMov`, `this_nNumesMov`, `this_lMovimentoCarregado` |
+| 10-11. Resultado + cursores | `this_lZSen`, `this_cUsuLibs`, `this_cRetorno`, `this_cCampoFoco`, `this_lRedigitarSenha` + 7 nomes de cursor |
+
+`Init()` faz `DODEFAULT("SigCdUsu")` (sem isso o `this_oDataAccess` fica `.NULL.`), define `this_cCampoChave = "usuarios"`, zera tudo com **fail-closed** (`this_lZSen = .F.`) e n├úo executa SQL nenhum. ├Ünico `RETURN` fora do `TRY/CATCH` (regra #1). `ObterChavePrimaria()` fica `PROTECTED` (hook da base, regra #51).
+
+## Achados registrados no cabe├ºalho (afetam a Fase 2)
+
+1. **O BO N├âO ├® somente-leitura**: o `Valid` da senha executa `Update SigPrSnd Set EmpDopNums = ... Where CidChaves = ...` + `Commit()` ÔÇö ├® a baixa da senha livre. A Fase 2 deve sobrescrever `Atualizar()` com esse UPDATE; `Inserir()`/`ExecutarExclusao()` ficam herdados.
+2. **`fCriptografar()` e `fGerPswDiario()` n├úo foram portadas.** Sendo gate de autoriza├º├úo, a aus├¬ncia fica vis├¡vel (transcrever e deixar estourar dentro do `TRY/CATCH`) ÔÇö proibido stub.
+3. **Cinco colunas citadas pelo dump n├úo existem no schema can├┤nico** (medido: 0 ocorr├¬ncias em 682 tabelas, lido com `Get-Content -Raw`): `SigCdUsu.liberamov`, `SigCdUsu.liblmpss`, `SigCdUsu.libvopes`, `SigCdCrg.conssubn`, `SigCdCrg.libvalmmax`. O dump ├® mais novo que o snapshot ÔÇö diverg├¬ncia de banco/ambiente, transcrever o nome do legado e isolar cada ramo.
+4. **Ramo `DTVALIDA` tem o `WHERE` inteiro comentado no legado** (`*!*`) ÔÇö tratar como fail-closed expl├¡cito.
+5. **`EmpDopNums` ├® chave posicional `char(29)`** (3+20+6) ÔÇö usar `PADR` expl├¡cito, nunca `ALLTRIM` nas partes (regra #42).
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9 real**: smoke test passou (`VIVO` gravado), depois `COMPILE` ÔåÆ `FXP=SIM ERR=NAO`. O `.fxp` foi apagado em seguida.
+- **`Test-CompletudeCodigo`** (o validador do orquestrador, rodado standalone via `automation\ValidarCompletude799F1.ps1`): `[OK] nenhum TODO/stub/procedure vazia detectado`.
+- Zero caractere acentuado literal; `CR == LF == 558` (CRLF ├¡ntegro); blocos balanceados; nenhum `RETURN` dentro de `TRY`; as 4 propriedades referenciadas e n├úo declaradas aqui s├úo exatamente as herdadas de `BusinessBase`.
+
+Uma observa├º├úo de processo: a tentativa anterior falhou porque o prompt n├úo chegou ao Claude CLI ÔÇö o output salvo em `fase_1_output.txt` ├® a resposta a uma mensagem vazia ("n├úo vejo uma tarefa na sua mensagem"), precedida de cinco avisos de regra de permiss├úo com wildcard em `.claude\settings.local.json`. Nada no BO estava errado; o arquivo simplesmente nunca foi criado.

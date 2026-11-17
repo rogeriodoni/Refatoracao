@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Structure looks correct and the file compiles clean. The task (Fase 6/8) is complete.
+
+## Summary
+
+Implemented Fase 6/8 for `Formsigopsep.prg` (task800): the 6 reciprocal lookups in `cnt_4c_Filtro`, transcribed from the legacy `Valid`/`When`/`InteractiveChange` events:
+
+- **Grupo Venda** Ôåö descri├º├úo (`SigCdCol`: `colecoes`/`descs`)
+- **Grupo Produto** Ôåö descri├º├úo (`SigCdGrp`: `cgrus`/`dgrus`)
+- **Moeda Venda** Ôåö descri├º├úo (`SigCdMoe`: `cmoes`/`dmoes`)
+
+Key points:
+- Corrected a Fase 4/5 assumption: the description textboxes were marked `ReadOnly = .T.`, but the legacy actually lets the user type the description directly (mutual exclusivity enforced via `When`, bound with `BINDEVENT`, only allowing focus when the paired code field is empty). Removed `ReadOnly` and added proper `MaxLength` per schema column width (40/20/15).
+- Lookups use `FormBuscaAuxiliar` (project canonical) rather than legacy `fwBuscaExt`, wired on `LostFocus` (never `KeyPress`, per rule #47) with a shared `this_lEmLookup` reentrancy guard (rule #37) ÔÇö same pattern as `FormCco`.
+- On cancel from the picker, both code+description are cleared ÔÇö this matches the legacy's own `LastKey()<>27` logic, not a violation of the "never erase what the user typed" rule (that rule applies when no picker is shown at all).
+- Added `FiltroAlterado` (bound to the 3 code fields' `InteractiveChange`) to disable `cmd_4c_CopiaLista`, as in the legacy dump.
+- Verified compiling via VFP9 (`COMPILE`) ÔÇö no errors.
+
+Phases 7ÔÇô8 (remaining Click/When events: Marcar/Desmarcar/Processar/CopiaLista/Sair and the grid checkbox gate) are still pending, as noted in the updated file header.

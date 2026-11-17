@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete. Both files compile clean and the form now actually instantiates.
+
+## What the gate was failing on
+
+The form already had the grid and all 22 buttons from the first attempt, but no data-loading method ÔÇö so `temLayoutFlat` failed on `temCarga`, and `temLayoutPaginado` failed on `ConfigurarPaginaLista`. I took the FLAT branch rather than inventing a Lista/Dados page split: SIGOPPRO's legacy `pgfPagina` has four *domain* pages (pgProds/pgContas/pgFiscs/pgPrecos) with the grid at form root, so a "Lista page" would have violated PILAR 1.
+
+## Added
+
+**`sigopproBO.prg`** ÔÇö `MontarChaveEmpDopNums()` (PADR per rule #42, not ALLTRIM ÔÇö measured 29 chars) and `CarregarItens()`, which SELECTs into a *temporary* cursor, never over the grid's alias.
+
+**`Formsigoppro.prg`** ÔÇö `CarregarDados()` (load funnel: BO ÔåÆ ZAP ÔåÆ `APPEND FROM DBF`), `RepintarGradeItens()` (single repaint funnel per rule #21), `AplicarModoNaGrade()` (the legacy's fwGrade/fwGradeR editable-vs-readonly split, which are the same rectangle at runtime), `ObterChaveMovimentacao()`, plus the two helpers below.
+
+## Two latent defects the probe caught
+
+**The form never opened at all.** `Column.AddObject` of the CheckBoxes ran while `ColumnCount = 22` had auto-bound Column22 to the cursor's 22nd field, `codcors C(4)`. Adding a numeric control there raises *"Error with CHK_4C_SERVICO - Value : Data type mismatch"*, which the `TRY` in `InicializarForm` swallowed ÔåÆ `CREATEOBJECT` returned logical `.F.` ÔåÆ clicking the menu would do nothing, with no error and nothing in any log. It compiled clean. Fixed by binding every column first, then installing the CheckBoxes in an idempotent helper that also runs in the repaint funnel.
+
+**`AjustarBotoesPorModo` was PROTECTED**, but `TesteAutomatico.prg:579` calls it from outside the class ÔÇö and `PEMSTATUS(...,5)` returns `.T.` for PROTECTED, so the harness enters the branch and the call fails at runtime. Made PUBLIC. I also routed every `ZAP` through a SAFETY-guarded helper, since this form is `DataSession = 2`.
+
+## Verified
+
+Compile: no `.err` for either file. Headless probe: form `VARTYPE=O`; `ColumnCount=22` bound to `cursor_4c_Itens`; both CheckBox columns with correct `CurrentControl`/`Sparse=.F.`/numeric `Value`; mode toggle CONSULTARÔåÆ`ReadOnly=.T.` / INSERIRÔåÆ`.F.` with Reserva staying read-only; key 29 chars; `AjustarBotoesPorModo` and `AlternarPagina` callable from outside. Completeness checks: 0 TODOs, 0 empty procedures, 0 non-ASCII.
+
+**One thing I could not test:** the probe ran with `gnConnHandle = 0`, so `CarregarItens`'s SQL never hit the database ÔÇö SQL Server 192.168.200.10 isn't reachable from this machine. The grid also opens empty until the parent Movimenta├º├úo form supplies `this_cEmpDopNums` (faithful to the legacy, where the parent owns `crTpmMvItn`), so the populated-grid path is unexercised. Phase 5 wiring the detail pages against this same cursor is where that gets closed.

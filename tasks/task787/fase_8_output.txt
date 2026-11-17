@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 executada. Segue o que foi entregue e o que ficou fora, com as medi├º├Áes.
+
+## O que a Fase 8 realmente precisava
+
+O gate da Fase 8 **j├í passava** com o estado da Fase 7 (medi rodando o `case 8` standalone: `VALIDADO=True`, ramo *fluxo-├║nico* dispensa `BtnCancelarClick`/`FormParaBO`). O buraco real era outro: o Form chamava `this_oBusinessObject.Selecionar()` e `.Processamento()` ÔÇö **nenhum dos dois existia no BO**. Clicar em Selecionar ou Copiar estouraria `Property SELECIONAR is not found`.
+
+## Entregue (compila limpo, instancia├º├úo provada)
+
+`sigoppopBO.prg` 311 ÔåÆ **3.709 linhas**, 44 m├®todos:
+
+| M├®todo | Origem no dump |
+|---|---|
+| `Selecionar()` + `AcumularCandidatas()` | 9939-10291 ÔÇö bot├úo Selecionar completo |
+| `CopiarFiscais()` / `CopiarLogs()` / `MarcarCopiado()` | 1669-2033 e 10184-10272 |
+| `AcertaEmpDopNums()` | 1326-1440 (chave `char(29)` posicional, regra #42) |
+| `AjustaPesos()` | 1441-1488 (aritm├®tica das faixas transcrita) |
+| `GerCodigoP()` | 2765-2826 (o `DO CASE` inteiro) |
+| `Casamento()` + `EscolherMelhorCasamento()` | 1489-1668 |
+| `Financeiro()` + `FazContra()` + log | 2490-2764 e 2412-2489 ÔÇö **modo FRANQUIA completo** |
+| `Delecao()` + `DesfazerCheques()` + `ArquivarCheque()` | 2034-2411 (~30 tabelas) |
+| `Processamento()` | 5650-9938 (orquestra├º├úo + despacho) |
+
+`Formsigoppop.prg` 2.255 ÔåÆ **2.484 linhas**: os 5 ├¡ndices do `Load` legado, o la├ºo final do `Init` (Courier New + colunas travadas), o `DynamicForeColor` vermelho para opera├º├úo exclu├¡da, `BOParaForm()`, `AplicarOrdemGrade()`, confirma├º├úo de reprocessamento, valida├º├úo de per├¡odo com `SetFocus`, `fConfigGeral()`, o gate do `AcertaEmpDopNums` e `fChecaAcesso([SIGOPPOP],[OPJAPROC])`. Mais entrada em `menu.prg` (BAR 173 de `popMovimentos` + `AbrirFormsigoppop` com `GarantirClasse`) e `indice_classes.txt` regerado.
+
+## O que ficou fora ÔÇö e por qu├¬
+
+A **c├│pia da movimenta├º├úo item a item**: `LancaProduto` (1.641 linhas), `LancaProdutoF` (361), `LancaProducao` (621) e o la├ºo de destinos do `Processamento` (5810-9700). ~6.900 linhas que gravam oito tabelas de movimento com dezenas de variantes por flag.
+
+`Processamento()` **recusa esse caminho antes de gravar qualquer coisa**, com mensagem dizendo o que falta. N├úo ├® stub silencioso: a alternativa era gravar cabe├ºalho sem itens (movimenta├º├úo pela metade entre empresas, em produ├º├úo) ou inventar as variantes sem o dump ÔÇö o que a regra #17 pro├¡be.
+
+## Decis├úo de arquitetura que vale registrar
+
+O legado abria **uma conex├úo f├¡sica por empresa de destino** (cada empresa tinha seu conjunto de `.DBF`). Aqui h├í um SQL Server s├│ e a empresa ├® a coluna `Emps`/`EmpDs` ÔÇö origem e destino s├úo a **mesma tabela**. Consequ├¬ncia: toda a c├│pia de *cadastro* para o destino (112 chamadas de `LancaDestino`, quase todas `SigCdMoe`/`SigCdGcr`) vira no-op correto, e o ramo de **APAGAR** fiscais n├úo foi reproduzido: apagaria a ├║nica c├│pia do dado. Quando o processo pede exclus├úo, a tela **avisa** em vez de apagar.
+
+## Verifica├º├Áes
+
+Compila├º├úo BO/Form/menu sem `.err`; smoke test do VFP9 feito antes (mem├│ria manda). Probe de instancia├º├úo: `VARTYPE=O`, `BaseClass=Form`, grid com 11 colunas, BO criado, `Selecionar`/`Processamento`/`Financeiro`/`Delecao`/`Casamento`/`CopiarFiscais` existem e **n├úo s├úo PROTECTED** (regra #51), `ContarSelecionadas()` executou. `ValidadorSQLSchema` PASSOU (55 statements, 0 colunas inv├ílidas), `VerificarColunaEmpresaSQL` ERRO=0, `VerificarFuncoesNaoDefinidas` sem ├│rf├ús no projeto, `VerificarPropriedadesInexistentes` OK, `VerificarMetodoProtegidoChamadoDeFora` OK, `Test-CompletudeCodigo` OK nos dois arquivos, gate da Fase 8 `VALIDADO=True`.
+
+**N├úo provado:** nada foi executado contra banco ÔÇö 192.168.200.10 ├® inalcan├º├ível desta m├íquina. O modo FRANQUIA e a `Delecao` gravam/apagam de verdade e precisam de valida├º├úo em base de teste antes de produ├º├úo.
+
+`SqlCalcP2`/`fRecalculaC` seguem **ausentes de prop├│sito** (devolvem valor de c├ílculo ÔÇö regra #27); mantive as chamadas, que ficam *antes* dos DELETE da `Delecao`, ent├úo a falha aborta a exclus├úo e deixa o dado intacto.

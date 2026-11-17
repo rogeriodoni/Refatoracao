@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. `Formsigoprbt.prg` atualizado (596 ÔåÆ 879 linhas) + suporte no `sigoprbtBO.prg` (354 ÔåÆ 525).
+
+## O que entrou
+
+**Form ÔÇö eventos dos bot├Áes:**
+
+| Membro | Origem no legado |
+|---|---|
+| `ConfigurarEventos()` | + `BINDEVENT` do Click de `Buttons(2)` (btnConfirmar) |
+| `CmdProcessarClick()` | `btnConfirmar.Click` ÔåÆ `ThisForm.Processamento()` |
+| `Processamento()` | `PROCEDURE processamento` (dump 763-791), transcrita passo a passo |
+| `Activate()` + `this_lAutomaticoDisparado` | `If ThisForm.Automatico / btnConfirmar.Click() / ThisForm.Release` do fim do `Init` |
+| `InicializarForm()` | + chamada a `CarregarParametros()` |
+
+**BO:** `CarregarParametros()` / `ConsultarParametro()` / `CriarParametrosVazios()` ÔÇö as tr├¬s consultas que o `Init` legado roda ap├│s o `=DoDefault()` (`SigCdGcr` + ├¡ndice `Codigos`, `SigCdPaC`, `SigCdPam`). ├ë isso que torna **real** o guard de `DopRBT` do Processar; sem essa carga o guard olharia property vazia e bloquearia todo lote leg├¡timo. Colunas conferidas no `docs/schema.sql` com `Get-Content -Raw` (regra #14): `doprbt char(20)`, `sigkeys char(3)`, `moedaps char(3)`.
+
+## Decis├Áes que valem registro
+
+- **N├úo h├í os quatro `Btn<verbo>Click`** ÔÇö medido no dump: zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha`, zero objeto CRUD. A superf├¡cie ├® 1 CommandGroup `ButtonCount = 2` (btnSair/btnConfirmar). Escrev├¬-los exigiria inventar bot├Áes ou criar m├®todos vazios. A exce├º├úo do gate confirma: `legadoSemCrud = True`, 2 handlers ÔëÑ m├¡nimo 2.
+- **Duas linhas do legado n├úo transcritas**: `Set Step On` (breakpoint esquecido no fonte de produ├º├úo ÔÇö abriria o depurador e travaria o lote sem supervis├úo) e `=fConfigGeral()` do `Load` (j├í roda no `config.prg`).
+- **Quirk preservado (regra #17)**: o guard de `DopRBT` s├│ aborta quando `Automatico = .F.`; em modo autom├ítico com `DopRBT` vazio o legado *segue* para o motor. Transcrito como est├í, com coment├írio marcando o ponto ÔÇö "arrumar" mudaria o que o lote autom├ítico faz hoje.
+- **Disparo autom├ítico em `Activate()`, n├úo no `Init`**: o legado usava `Do Form` (refer├¬ncia mantida), aqui o chamador faz `CREATEOBJECT` em vari├ível LOCAL + `Show()` ÔÇö soltar a refer├¬ncia durante o `Init` devolveria objeto inutiliz├ível. Padr├úo can├┤nico do projeto (`Formsigprccp.Activate`), com trava contra reprocessar a cada reativa├º├úo de janela e skip em `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`.
+
+## O que ficou fora, explicitamente
+
+O **motor de integra├º├úo** (`GeraMovimentacao` + `LancaContaCorrente` + `FazContra` + `MontaHists` = 1574 linhas do legado sobre ~40 tabelas) ├® a Fase 8. `Processamento()` chama `BO.GerarMovimentacao()` atr├ís de um guard `PEMSTATUS`: enquanto o m├®todo n├úo existir, o lote **para**, nomeia na tela o que falta e devolve `.F.` ÔÇö nunca anuncia "Integra├º├úo Realizada." sem ter gravado (regras #20/#21). Aus├¬ncia alta e vis├¡vel, n├úo retorno de valor calculado em sil├¬ncio.
+
+**Bloqueio para a Fase 8**: `fChkFeriado` n├úo est├í em `projeto/app/utils/` e o legado a usa no c├ílculo de prazo de entrega em dias ├║teis. Como ela devolve valor de c├ílculo, um stub gravaria data errada em sil├¬ncio (regra #27) ÔÇö tem de ser portada antes.
+
+## Verifica├º├úo
+
+- VFP9 `COMPILE` dos dois arquivos: `.fxp` gerado, **zero `.err`** (`.fxp` apagados antes, timestamp conferido depois).
+- Gate Fase 7 reproduzido: passa pela exce├º├úo de legado sem CRUD, 2 handlers.
+- `Test-CompletudeCodigo` reproduzido nos dois arquivos: **OK**, nenhum TODO/stub/procedure vazia.
+- `VerificarMetodoProtegidoChamadoDeFora.ps1`, `VerificarFuncoesNaoDefinidas.ps1`, `VerificarPropriedadesInexistentes.ps1`: zero achados.
+- Checados ├á m├úo: zero caractere > 126 (regra #4), zero `RETURN` dentro de TRY/CATCH (#1), todo m├®todo com `THIS.` (#8), `TABLEREVERT` sob guard de `Buffering` (#52), nenhum `PUBLIC` em `DEFINE CLASS` (#9.1), nenhum `MESSAGEBOX` direto, balan├ºo TRY/WITH/PROCEDURE ├¡ntegro.
+
+Um detalhe que corrigi no caminho: meu pr├│prio coment├írio de cabe├ºalho citava `BtnExcluirClick` por extenso e **satisfazia o gate por substring** sem haver m├®todo ÔÇö reescrito como `Btn<verbo CRUD>Click`, com nota do porqu├¬.

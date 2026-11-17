@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da. Arquivo atualizado: `projeto/app/forms/operacionais/Formsigopsen.prg` (+627 linhas, nenhuma removida).
+
+## Campos restantes (os 3 que faltavam do dump)
+
+| Legado | Migrado | Transcrito |
+|---|---|---|
+| `Say3` | `lbl_4c_Label3` | T=135 L=120 W=46 ForeColor 90,90,90, `AutoSize=.F.` (no-op em AddObject, regra #23) |
+| `senha` | `txt_4c_Senha` | T=127 L=168 119x30, `PasswordChar="*"`, `InputMask="!!!!!!!!!!"`, `MaxLength=10` (= `SigCdUsu.senhas char(10)`, n├úo o Width) |
+| `Image1` | `img_4c_Image1` | `geral_login_60.jpg`, Stretch=0, T=109 L=44 32x32 ÔÇö `.Picture` **antes** de W/H |
+
+Em `ConfigurarCamposSenha()`, chamado por `InicializarForm` depois de `AvaliarSenhaDoDia` (que decide o r├│tulo).
+
+## Lookup (`fwBuscaSel` do `usuario.Valid`) ÔÇö completo
+
+`AbrirBuscaUsuario()` usa `FormBuscaAuxiliar` pela API `DefinirCursor`/`Mostrar` (Pattern A) sobre o cursor j├í filtrado ÔÇö a API com par├ómetros montaria um `SELECT` na tabela inteira, e o universo aqui ├® "quem pode conceder **esta** libera├º├úo". Legendas do legado (`C├│digo`/`cargo`). Ligado em `"LostFocus"` (regra #47), com `"KeyPress"` s├│ para o ESC do legado + F4, e `"DblClick"`; guarda de reentr├óncia no wrapper `UsuarioLostFocus` ÔåÆ `...Exec` (imune a RETURN antecipado) e save/restore nos irm├úos.
+
+**Escopo que precisei abrir**: a consulta de usu├írios autorizados (o `Do Case` de 21 ramos do `Valid`) estava s├│ *descrita* no cabe├ºalho do BO, nunca gerada nas Fases 1-2. Sem ela o picker abriria vazio, ent├úo acrescentei `MontarQueryUsuarios()` + `CarregarUsuariosAutorizados()` ao `sigopsenBO.prg` (+240 linhas). Ramo `DTVALIDA` (WHERE comentado no legado) ficou **fail-closed** com mensagem.
+
+## Tr├¬s desvios deliberados, documentados no c├│digo
+
+1. **`Say3.Left = 142` no modo senha-do-dia n├úo foi transcrito.** Medido no VFP9: "Senha Do Dia :" tem **80px**, logo 142 terminaria em **222**, dentro do TextBox (L=168) ÔÇö e como o label ├® criado antes, o campo o cobriria, exibindo "Senha Do". ├ë sobreposi├º├úo herdada do SCX (regra #28). Usei L=86/W=80 ÔåÆ termina em 166, o mesmo escalonamento das outras duas linhas.
+2. **`this.value = evaluate('usuarios')` incondicional p├│s-picker n├úo foi reproduzido** ÔÇö cancelar preservava o digitado em vez de troc├í-lo pelo registro do `SET NEAR ON` (regras #37/#50). Desfecho igual: n├úo autoriza, di├ílogo aberto.
+3. **`zsen = fCriptografar(TmpUsu.senhas)` n├úo transcrito aqui** ÔÇö ├® vari├ível global morta (sobrescrita no `Valid` da senha) e, como `fCriptografar` n├úo foi portada, a linha faria a tela estourar na resolu├º├úo de todo usu├írio. A chamada que importa fica no fluxo da senha, onde a aus├¬ncia tem de ficar vis├¡vel.
+
+**N├úo entra nesta fase**: a confer├¬ncia da senha (senha livre `SigPrSnd`, senha do dia, `fGravarLog`) ÔÇö ├® o fluxo de a├º├úo, da Fase 8. O campo de senha est├í criado e vis├¡vel, sem handler.
+
+## Verificado (VFP9, n├úo s├│ est├ítico)
+
+Smoke test passou, ent├úo os resultados abaixo s├úo de execu├º├úo real:
+- `COMPILE` dos dois arquivos: `FXP=SIM ERR=NAO`.
+- Form instancia: 7 controles com a geometria exata do dump, todos vis├¡veis; `ForeColor` do r├│tulo = 5921370 (RGB 90,90,90).
+- `AEVENTS` (2 args, evento na col. 3): **3 bindings** ÔÇö LOSTFOCUS/KEYPRESS/DBLCLICK, todos os handlers PUBLIC (`prot=.F.`).
+- As 7 variantes de query conferidas uma a uma: join vs sem-join, literal de 6 espa├ºos, `ORDER BY`, `DTVALIDA` vazia com mensagem.
+- Sem conex├úo: `CarregarUsuariosAutorizados()=.F.` e `AbrirBuscaUsuario()=.F.` ÔÇö n├úo pendura, n├úo abre picker vazio; flag de reentr├óncia volta a `.F.` em todos os caminhos.
+- `MAXIMO`: `SenhaDoDia=.T.`, campo usu├írio `Enabled=.F.` (o `When` reproduzido), r├│tulo "Senha Do Dia :" terminando em 166.
+
+CRLF restaurado (CR=LF=1842 / 947), ASCII puro (acentos em `CHR()`), `.fxp` removidos, scratch apagado.

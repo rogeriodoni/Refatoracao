@@ -1,0 +1,1965 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigoprbt.SCX
+* Data/Hora: 16/11/2026 17:54:17
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPRBT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPRBT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPRBT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPRBT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGOPRBT
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRBT
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 130
+  Width = 718
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Lançamentos de Rebates"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  ContinuousScroll = .F.
+  automatico = .F.
+  podatamgr = .F.
+  sigkey = .F.
+  tipocep = .F.
+  contapar = .F.
+  multemps = .F.
+  Name = "SIGOPRBT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRBT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRBT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRBT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRBT.cntBotoes
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 560
+  SpecialEffect = 1
+  Top = -2
+  Width = 166
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 83
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 8
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\geral_configuracao_60.jpg
+  Command2.Caption = "\<Processar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPRBT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE geramovimentacao
+------------------------------------------------------------
+PROCEDURE geramovimentacao
+Local lnOldSel, lnErro1
+lnOldSel = Select()
+
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+Select crSigCdPaC
+lcDopes = crSigCdPaC.DopRBT
+
+Thisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdc],[crSigOpCdc],[Dopes],lcDopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdi],[crSigOpCdi],[Dopes],lcDopes)
+
+*-- Rafael - Não Gera solicitação nas lojas quando o pedido esta com o pagamento pendente ou cancelado
+lcQuery = [SELECT B.DATAS,B.EMPS,CONVERT(CHAR(2),B.DIA) AS DIA,CONVERT(CHAR(2),B.MES) AS MES,A.COLECOES,B.VENDA,A.DESCONTO ] + ;
+	[FROM ( ] + ;
+	[SELECT A.EMPDOPNUMS,B.COLECOES,SUM(VDES) AS 'DESCONTO' FROM SIGMVITD A ] + ;
+	[LEFT OUTER JOIN SIGCDPRO B ON A.CPROS=B.CPROS ] + ;
+	[WHERE DDESC IN ('DESCONTO ELO/OUROCARD','DESCONTO ELO') ] + ;
+	[GROUP BY A.EMPDOPNUMS,B.COLECOES ) A ] + ;
+	[INNER JOIN ( ] + ;
+	[SELECT A.EMPS,A.DATAS,REPLICATE('0',2-LEN(DAY(A.DATAS))) +CONVERT(VARCHAR(2),DAY(A.DATAS)) AS DIA, ] + ;
+	[REPLICATE('0',2-LEN(MONTH(A.DATAS))) +CONVERT(VARCHAR(2),MONTH(A.DATAS)) AS MES, ] + ;
+	[A.EMPDOPNUMS,D.COLECOES,SUM(C.TOTAS) AS 'VENDA' FROM SIGMVCAB A ] + ;
+	[INNER JOIN SIGCDOPE B ON A.DOPES=B.DOPES ] + ;
+	[INNER JOIN SIGMVITN C ON A.EMPDOPNUMS=C.EMPDOPNUMS ] + ;
+	[LEFT OUTER JOIN SIGCDPRO D ON C.CPROS=D.CPROS ] + ;
+	[LEFT OUTER JOIN SIGMVITD E ON C.EMPDOPNUMS=E.EMPDOPNUMS AND C.CITENS=E.CITENS AND E.CPROS=D.CPROS ] + ;
+	[WHERE B.TIPOOPS=4 AND A.DOPES NOT IN ('ENTREGA CONSERTO CLI') ] + ;
+	[GROUP BY A.DATAS,A.EMPS,DAY(A.DATAS),MONTH(A.DATAS),A.EMPDOPNUMS,D.COLECOES)  B ON A.EMPDOPNUMS=B.EMPDOPNUMS ] + ;
+	[AND A.COLECOES=B.COLECOES ] + ;
+	[AND LTRIM(RTRIM(B.EMPS))+LTRIM(RTRIM(B.DIA))+LTRIM(RTRIM(B.MES)) NOT IN(SELECT LTRIM(RTRIM(EMPS))+LTRIM(RTRIM(DIA))+LTRIM(RTRIM(MES)) FROM SIGOPRBT) ] + ;
+	[ORDER BY 4,3,5,2]
+
+If Thisform.poDataMgr.SqlExecute(lcQuery,[crSigMvRbt]) < 1
+	Return .F.
+Endif
+
+Select crSigMvCab
+Zap
+
+Select crSigMvItn
+Zap
+
+Select crSigMvIts
+Zap
+
+Select crSigMvPar
+Zap
+
+Select crSigMvCcr
+Zap
+
+Select CrSigOpCoc
+Zap
+
+Select crSigChe
+Zap
+
+Select crSigChLcq
+Zap
+
+Select crSigCqChm
+Zap
+
+Select crSigOpRbt
+Zap 
+
+Select crSigMvRbt
+Select DataS, Emps, Dia, Mes, Sum(Desconto) As Desconto From crSigMvRbt Group By DataS, Emps, Dia, Mes Into Cursor csMovRbt Readwrite
+
+Select csMovRbt
+Index On Emps + Mes + Dia Tag Chave
+Go Top
+
+Scan
+
+	_Inicio = 0
+	lcContaDs = []
+	lcEmps  = csMovRbt.Emps
+	lcDia 	= csMovRbt.Dia
+	lcMes 	= csMovRbt.Mes
+	lnValor = csMovRbt.Desconto
+	ldData 	= csMovRbt.DataS
+	_Inicio = fGerUniqueKey( Alltrim( lcDopes ) + lcEmps )
+	_IniLet = Alltrim( fGerMascara( _Inicio ) )
+	_TabD   = Iif( Not Inlist(crSigCdOpe.TabDescs, 1, 2, 4, 5, 6 ), Space( 10 ), crSigCdOpe.Tabdps )
+	_pData  = Datetime()
+	_Pedido = []
+	_EDN	= lcEmps + lcDopes + Str(_Inicio,6)
+	_Trans	= []
+	_IdEntr = []
+	_IdTran = []
+	lcTpFats = Iif(crSigCdOpe.edtpfats=1,crSigOpCdc.TpFatPs,' ')
+
+	
+	lcQuery = [Select CidChaves From SigOpRbt Where Emps = ']+lcEmps+[' And Dia = ']+lcDia+[' and Mes = ']+lcMes+[' ]
+	=Thisform.poDataMgr.SqlExecute(lcQuery,'crTmpRbt')
+	Select crTmpRbt
+	If Reccount([crTmpRbt])>0
+		Select csMovRbt
+		loop
+	EndIf 
+	
+	Select crSigOpRbt
+	Insert into crSigOpRbt(Emps, dia, mes, datas, cidchaves) ;
+		values(lcEmps, lcDia, lcMes, ldData, fUniqueIds())
+		
+	Select csMovRbt
+	Insert Into crSigMvCab ( Emps, Dopes, Numes, Usuars, Datars, DataS, Transps, Mascnum, Tabds, LPrecos, CidChaves, EmpDopNums, Dgopes, vcompensas, TpFats ) ;
+		Values ( lcEmps, lcDopes, _Inicio, Usuar, _pData, ldData, .F., _IniLet, _TabD, '', fUniqueIds(), _EDN, '', crSigCdOpe.vcompensas, lcTpFats )
+
+	Replace Valos	  With lnValor  In crSigMvCab
+	Replace ValInis	  With lnValor  In crSigMvCab
+
+	If crSigCdOpe.cEmpSubns = 5 And crSigOpCdc.CarESubns <> 1
+		Replace crSigMvCab.Empds With crSigMvCab.Emps
+	Endif
+
+	If (Inlist(crSigCdOpe.DigObs, 1, 3)) And !IsEmpty(crSigCdOpe.ObsPads)
+		=Thisform.poDataMgr.CursorQuery('SigCdObs','CrTmpObs','codigos',crSigCdOpe.ObsPads)
+		Select CrTmpObs
+		Go Top
+		If (Reccount() > 0) And ;
+				Not ([#]  $ CrTmpObs.Observas) And ;
+				Not ([$]  $ CrTmpObs.Observas) And ;
+				Not ([%]  $ CrTmpObs.Observas) And ;
+				Not ([@]  $ CrTmpObs.Observas) And ;
+				Not ([!]  $ CrTmpObs.Observas) And ;
+				Not ([^$] $ CrTmpObs.Observas) And ;
+				Not ([^V] $ CrTmpObs.Observas)
+
+			Select crSigMvCab
+			Replace crSigMvCab.Obses  With CrTmpObs.Observas, ;
+				crSigMvCab.CodObs With crSigCdOpe.ObsPads
+		Endif
+	Endif
+
+	lcQuery = [Select a.* From SigOpTdz a, SigOpTdo b Where b.Dopes = ']+crSigCdOpe.Dopes+[' And a.Codigos = b.Tabds ]
+	=Thisform.poDataMgr.SqlExecute(lcQuery,'crSigOpTdz')
+
+	Select * From crSigOpTdz Where (IsEmpty(DtTerms) Or DtTerms >= crSigMvCab.DataS) Into Cursor csSigOpTdz
+	Select csSigOpTdz
+	Goto Top
+	If Eof()
+		lcQuery = [Select a.*,b.Padraos From SigOpTdz a, SigOpTde b Where a.Codigos = b.CodtabDs And b.Emps = ']+crSigMvCab.Emps+[' ]
+		=Thisform.poDataMgr.SqlExecute(lcQuery,'crSigOpTdz')
+
+		Select * From crSigOpTdz Where (IsEmpty(DtTerms) Or DtTerms >= crSigMvCab.DataS) Into Cursor csSigOpTdz
+		Select csSigOpTdz
+		Goto Top
+		If Eof()
+			=Thisform.poDataMgr.SqlExecute([Select *, 0 as Padraos From SigOpTdz ],'crSigOpTdz')
+			Select * From crSigOpTdz Where ( IsEmpty(DtTerms) Or DtTerms >= crSigMvCab.DataS ) Into Cursor csSigOpTdz
+		Endif
+	Endif
+
+	Select csSigOpTdz
+	Index On Codigos Tag Codigos
+
+	If (crSigCdOpe.TabDescs = 4) And ( IsEmpty( crSigMvCab.Tabds ) Or Not Seek(crSigMvCab.Tabds,'csSigOpTdz','Codigos') )
+		Select csSigOpTdz
+		Scan
+			If csSigOpTdz.Padraos = 1
+				Select crSigMvCab
+				Replace crSigMvCab.Tabds With csSigOpTdz.Codigos
+				Exit
+			Endif
+		Endscan
+	Endif
+
+	If (crSigCdOpe.vars = 1 And crSigOpCdc.VarPads <> 0)
+		Replace vars With crSigOpCdc.VarPads In crSigMvCab
+	Endif
+
+	If !Empty(crSigOpCdd.MinFretes)
+		If Inlist(crSigCdOpe.NFiscals,1,2)
+			Replace VlFretes With crSigOpCdd.MinFretes In crSigMvNfi
+		Else
+			Replace ValTrans With crSigOpCdd.MinFretes In crSigMvCab
+		Endif
+	Endif
+
+	If Inlist(crSigCdOpe.Vendes, 1, 2, 4, 5)
+		Replace grvends With Left(crSigCdOpe.grvends,10) In crSigMvCab
+	Endif
+	If Inlist( crSigCdOpe.ComisDivs, 1, 3, 4, 5, 6, 7, 8,9,10,11,12 )
+		Replace GrResps With Right(crSigCdOpe.grvends,10) In crSigMvCab
+	Endif
+	If Inlist(crSigCdOpe.Vendes, 4, 5)
+		Replace Vends With Iif(crSigOpCdd.LibcSens = 3,'',Usuar) In crSigMvCab
+		If Not Empty(crSigMvCab.Vends)
+			If (Thisform.poDataMgr.SqlExecute([Select Iclis, Rclis, Cpfs, Senhas From SigCdCli Where Iclis = ']+crSigMvCab.Vends+['], 'CrTmpCli') < 1)
+				If Not Thisform.Automatico
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrTmpCli 3)')
+				Endif
+				Return 0
+			Endif
+		Endif
+	Endif
+
+	If crSigCdOpe.Origems = 1
+		Replace grupoos With crSigCdOpe.GruOrigs In crSigMvCab
+		Replace contaos With crSigCdOpe.ConOrigs In crSigMvCab
+	Endif
+
+	If crSigCdOpe.Destinos = 1
+		Replace grupods With crSigCdOpe.GruDests In crSigMvCab
+		Replace contads With crSigCdOpe.ConDests In crSigMvCab
+	Endif
+
+	If crSigCdOpe.ComisDivs = 8
+		Thisform.poDataMgr.SqlExecute([Select Deptos From SigCdUsu Where Usuarios = ']+Usuar+['],'LocalUsu')
+		Replace Resps With LocalUsu.Deptos In crSigMvCab
+	Endif
+
+	If crSigCdOpe.ComisDivs = 12 And Not Empty(crSigOpCdd.CargV2s)
+		lcGrupoCad = Right(crSigCdOpe.GruCadVs,10)
+		lcSql = [Select Iclis From SigCdCli Where CCargs = ']+crSigOpCdd.CargV2s+[' And ]+;
+			[Emps = ']+lcEmps+[' ]+Iif(Not Empty(lcGrupoCad),[And Grupos = ']+lcGrupoCad+[' ],[ ])
+		If Thisform.poDataMgr.SqlExecute(lcSql,'CsGerente') < 1
+			If Not Thisform.Automatico
+				Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão (CsGerente)')
+			Endif
+			Return .F.
+		Endif
+		If Reccount('CsGerente') = 1
+			Replace Resps With CsGerente.Iclis In crSigMvCab
+		Endif
+	Endif
+
+	If crSigOpCdc.InibMVends = 6
+		If !Empty(Left(crSigCdOpe.GruCadVs,10))
+			lcGrupoCad = Left(crSigCdOpe.GruCadVs,10)
+		Else
+			lcGrupoCad = crSigMvCab.GrResps
+		Endif
+
+		Thisform.poDataMgr.SqlExecute([Select Iclis, Rclis From SigCdCli Where Grupos = ']+lcGrupoCad+[' And Codigos <> 'GENÉRICO'],'LocalEestV')
+		Select LocalEestV
+		Scan
+			Insert Into TprMvCabV (Emps,Dopes,Numes,Grupos,Contas,Rclis,CodSegs) Values ;
+				( crSigMvCab.Emps,crSigMvCab.Dopes, crSigMvCab.Numes, lcGrupoCad,LocalEestV.Iclis,LocalEestV.Rclis.LocalEestV.CodSegs )
+		Endscan
+	Endif
+
+	If crSigCdOpe.TransOns = 1
+		lcCta = crSigMvCab.contads
+		If Inlist(crSigCdOpe.DtEntrs, 1, 4, 6)
+			lcCta = Iif(crSigCdOpe.COpers = 1, crSigMvCab.contads, crSigMvCab.contaos)
+			If IsEmpty(crSigMvCab.PrazoEnts)
+				ldDat = Date()
+				If crSigOpCdc.NMinEnts = crSigOpCdc.nMaxEnts
+					ldDat = Date() + crSigOpCdc.NMinEnts
+					Replace PrazoEnts With ldDat In crSigMvCab
+				Endif
+			Else
+				ldDat = Iif(Type('crSigMvCab.PrazoEnts')='T', Ttod(crSigMvCab.PrazoEnts), crSigMvCab.PrazoEnts)
+			Endif
+
+			Thisform.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcCta, 'PrazoEnts')
+			If Used('LocalCli') And Not Eof('LocalCli') And (LocalCli.PrazoEnts > 0)
+				ldDat = ldDat + LocalCli.PrazoEnts
+				Replace PrazoEnts With ldDat In crSigMvCab
+			Endif
+		Endif
+	Endif
+
+	*************************************************************************************************************************************************************
+	*---Geração dos Itens do Pedido
+	*************************************************************************************************************************************************************
+	lcOpers = Iif(crSigCdOpe.Opers=1,'E',Iif(crSigCdOpe.Opers=2,'S',Iif(crSigCdOpe.Opers=3,crSigCdOpe.OpePads,'S')))
+
+	lcEmps  = csMovRbt.Emps
+	lcDia 	= csMovRbt.Dia
+	lcMes 	= csMovRbt.Mes
+	ldData 	= csMovRbt.DataS
+
+	Select crSigMvRbt
+	Select  DataS, Emps, Dia, Mes, Colecoes, Desconto As Valor From crSigMvRbt ;
+		where DataS = ldData And Emps = lcEmps And Dia = lcDia And Mes = lcMes Order By Colecoes ;
+		Into Cursor csItnRbt Readwrite
+
+	lnItem = 1
+	lnQtItem = 1
+
+	Select csItnRbt
+	Go Top
+	Scan
+
+		lcProd   = 'GENERICO ' + Alltrim(csItnRbt.Colecoes)
+		lnQtds   = 1
+		lnDesc   = 0
+		lnValor  = csItnRbt.Valor
+		lcMsg 	 = []
+		lnValor2 = lnValor - lnDesc
+
+		lcQuery = [Select Dpros, Cunis, Cunips, Moevs, Cpros, CodCors, Conjunts, CGrus From SigCdPro Where Cpros = '] + lcProd + [']
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crSigCdPro') < 1)
+			If Not Thisform.Automatico
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPro)')
+			Endif
+			Return 0
+		Endif
+
+		Select crSigCdPro
+		If Reccount([crSigCdPro])>0
+
+			lcQuery = [Select TipoEstos From SigCdGrp Where CGrus = '] + crSigCdPro.CGrus + [' ]
+			If (Thisform.poDataMgr.SqlExecute(lcQuery,'crTmpGru') < 1)
+				If Not Thisform.Automatico
+					=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crTmpGru)])
+				Endif
+				Return 0
+			Endif
+
+			lcTam = []
+			lnBarras = 0
+			For i=1 To Abs(lnQtds)
+				*-- Gera Itens
+				Insert Into crSigMvItn (cPros,Dopes,Emps,Numes,Opers,Qtds,CItens,Units,Unit2s,RatFrts,ValRats,Totas,;
+					Moedas,DPros,CUnis,CidChaves,DtAlts,EmpDopNums,Pesos,codbarras,Obs) ;
+					Values (crSigCdPro.cPros,lcDopes,lcEmps,_Inicio,lcOpers,1,lnItem,lnValor,lnValor2,0,(lnDesc * (-1)),;
+					(lnValor * 1),crSigCdPro.MoeVs,crSigCdPro.DPros,crSigCdPro.CUnis,fUniqueIds(),Date(),_EDN,0,lnBarras,lcMsg)
+
+				lnItem = lnItem + 1
+			Endfor
+
+		Endif
+
+		*lnItem = lnItem + 1
+		Select csItnRbt
+	Endscan
+
+
+	If Inlist(crSigCdOpe.DtEntrs, 1, 4, 6)
+		If (crSigCdOpe.Situas > 1) && Adicionar na Entrega: 1-Nenhum; 2-Cor; 3-Componente; 4-Ambos
+			lnSum = 0
+			If Inlist(crSigCdOpe.Situas, 2, 4)
+				If (Thisform.poDataMgr.SqlExecute([Select Cods, DiasEnts From SigCdCor], [LocalCor]) < 1)
+					If Not Thisform.Automatico
+						=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCor)])
+					Endif
+					Return 0
+				Endif
+
+				Select Max(b.DiasEnts) As Dias ;
+					From crSigMvIts a, LocalCor b ;
+					Where a.CodCors = b.Cods ;
+					Into Cursor LocalDias
+
+				Select LocalDias
+				Go Top In LocalDias
+				If Not Eof([LocalDias]) And (LocalDias.Dias > 0)
+					lnSum = lnSum + LocalDias.Dias
+				Endif
+				Use In LocalCor
+				Use In LocalDias
+			Endif
+
+			If Inlist(crSigCdOpe.Situas, 3, 4)
+				lnMax = 0
+				If (lnMax > 0)
+					lnSum = lnSum + lnMax
+				Endif
+			Endif
+
+			*** mena - 07/11/2016 - busca qtde de dias para calculo de prazo de entrega de serviço - montecarlo
+			If Inlist(crSigCdOpe.Situas, 5)
+				lnMax = 0
+				Select crSigMvIts
+				Scan
+					lcQuery = [Select b.DiasPrz From SigCdPro a, SigCdprz b where a.cpros = ']+crSigMvIts.cPros+['] +;
+						[ and a.CGrus = b.codigos And b.Emps =']+crSigcdemp.Cemps+[']
+
+					If (Thisform.poDataMgr.SqlExecute(lcQuery, [crPrz]) < 1)
+						If Not Thisform.Automatico
+							=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPrz)])
+						Endif
+						Return 0
+					Endif
+
+					Select crPrz
+					Go Top In crPrz
+					If Not Eof([crPrz]) And (crPrz.DiasPrz > lnMax)
+						lnMax = crPrz.DiasPrz
+					Endif
+					Use In crPrz
+				Endscan
+
+				If (lnMax > 0)
+					lnSum = lnMax
+				Endif
+			Endif
+			**********************************************************
+
+			If (lnSum > 0)
+				If Not Inlist(crSigOpCdd.chkUteis, 0, 4) && Dias Úteis
+					llSab = Inlist(crSigOpCdd.chkUteis, 1)
+					llDom = Inlist(crSigOpCdd.chkUteis, 1, 3)
+					llFer = Inlist(crSigOpCdd.chkUteis, 1, 2, 3)
+
+					ldDI1 = Ttod(crSigMvCab.DataS)
+					ldDI2 = Ttod(crSigMvCab.DataS) + lnSum
+					Do While (ldDI1 <= ldDI2)
+						If fChkFeriado(Thisform.poDataMgr, ldDI1, llSab, llDom)
+							lnSum = lnSum + 1
+						Endif
+						ldDI1 = ldDI1 + 1
+						ldDI2 = Ttod(crSigMvCab.DataS) + lnSum
+					Enddo
+				Endif
+
+				ldEnt = Ttod(crSigMvCab.DataS) + lnSum
+
+				If (Ttod(crSigMvCab.PrazoEnts) <> ldEnt)
+					Replace PrazoEnts With ldEnt In crSigMvCab
+				Endif
+			Endif
+		Endif
+	Endif
+
+	*************************************************************************************************************************************************************
+	*--- Lança as informações da Parcela
+	*************************************************************************************************************************************************************
+	_Noper = fGerUniqueKey('SigMvCcr')
+	lcMoe = crSigCdPam.Moedaps
+
+	Select crSigMvPar
+	Index On EmpDopNums Tag EmpDopNums
+
+
+	Store [] To lcBandeira, lcAdquirente, lcPagto, lcFilEmp
+
+	lnPar   = 1
+	ldDatas = crSigMvCab.DataS
+	lnValor = crSigMvCab.Valos
+	ldDtV   = ldDatas
+
+	lcPagto = crSigCdOpe.FpagOpCrs
+	lcFpags = crSigCdOpe.cMoes
+
+	lcQuery = [Select * from SigOpFp Where FPags = ']+lcPagto+[']
+	If Thisform.poDataMgr.SqlExecute (lcQuery,[LocalFPag]) < 1
+		If Not Thisform.Automatico
+			=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalFPag)])
+		Endif
+		Return .F.
+	Endif
+
+
+	Thisform.ContaPar = 0
+
+	totpar	= 0
+	totdsc  = 0
+	nump 	= 1
+	nparc   = lnPar
+
+	Select LocalFPag
+	If Not Eof([LocalFPag])
+
+		lcMdf = Iif(Empty(LocalFPag.MoeFpgs), lcMoe, LocalFPag.MoeFpgs)
+		lcPagto = LocalFPag.FPags
+		ldDat   = ldDatas
+
+		ldDtV = Iif(Type([ldDtV])=[T],Ttod(ldDtV),ldDtV)
+		ldDtV = ldDtV + LocalFPag.Dias
+
+		For i = 1 To lnPar
+
+			valpar = Round(lnValor / lnPar,2)
+
+			totpar = totpar + valpar
+
+			Insert Into crSigMvPar (Emps, Dopes, Numes, EmpDopNums, DataS, CidChaves, CotFPgs, FPags, MoeFpgs, NOpers, Valos, Vencs, Parcs, Pagos, DtAlts, Nsu, Autoriza) ;
+				Values (lcEmps, lcDopes, _Inicio, _EDN, ldDatas, fUniqueIds(), 1, lcPagto, lcMdf, _Noper, valpar, ldDtV, i, [1], Datetime(), _Trans,[.])
+
+			ldDtV = ldDtV + LocalFPag.Dias
+
+			If nparc = nump
+				If totpar # ( lnValor )
+					_dIf = ( lnValor -  totpar )
+					Replace crSigMvPar.Valos With crSigMvPar.Valos + _dIf
+				Endif
+			Endif
+
+			*************************************************************************************************************************************************************
+			*--- Lança as informações da Conta Corrente
+			*************************************************************************************************************************************************************
+			Thisform.ContaPar = Thisform.ContaPar + 1
+
+			If ( crSigCdOpe.COpers = 1 Or crSigCdOpe.ctipos = 2 ) And Inlist(crSigCdOpe.ParContas,1,3)
+				=Thisform.LancaContaCorrente()
+			Endif
+
+			nparc = nparc - 1
+
+		Next
+	Endif
+
+Endscan
+
+With Thisform.poDataMgr
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvCab'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvItn'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvIts'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvPar'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvCCr'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigMvHst'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('CrSigOpCoc'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigChe'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigChLcq'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigCqChm'), 1, -1)
+	EndIf
+	If lnErro1>0
+		lnErro1 = Iif(.Update('crSigOpRbt'), 1, -1)
+	Endif
+	If lnErro1>0
+		lnErro1 = .Commit()
+	Endif
+	If Not lnErro1>0
+		= .Rollback()
+	Endif
+Endwith
+
+Select(lnOldSel)
+Return .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+If Not Thisform.Automatico
+	If Messagebox([Confirma o Lançamento dos Rebates no Sistema?],4+32,[Atenção])<>6
+		Return .F.
+	Endif
+Endif
+Set Step On 
+Select crSigCdPaC
+If IsEmpty(crSigCdPaC.DopRBT)
+	If Not Thisform.Automatico
+		MessageBox([Movimentação de Rebate não Informada.],0+48,[Aviso])
+		Return .F.
+	EndIf 	
+EndIf 
+
+=fGravarLog('T', Thisform.Name,[REBATE],[Inicio da Gravação],Usuar)
+
+If Not ThisForm.GeraMovimentacao()
+	Return .F.
+EndIf 
+
+If Not Thisform.Automatico
+	MessageBox([Integração Realizada.],0+64,[Atenção])
+EndIf 	
+
+=fGravarLog('T', Thisform.Name,[REBATE],[Atualização dos Dados da Integração],Usuar)	
+
+Return .T.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE lancacontacorrente
+------------------------------------------------------------
+PROCEDURE lancacontacorrente
+LParameters llvoper
+
+Local ldDtContab, lcRclis, lcGrupoCob, lcContaCob, _pData, lnCont, _lcOcorSv, _lcNota
+
+Wait Window 'Aguarde. Processando Lancamentos de Conta Corrente!!! ' Nowait
+
+_pData = Datetime() &&ThisForm.poDataMgr.GetDatetime()
+
+lcRclis = ''
+lnCont  = 0
+lnRetVOper = 0
+
+If crSigCdOpe.DtContab=2 
+	*-- Contabilizar na Data de Vencimento
+	ldDtContab = crSigMvPar.Vencs
+Else 
+	*-- Contabilizar na Data de Lançamento
+	ldDtContab = Iif(Empty(crSigMvPar.Datas), crSigMvCab.Datas, crSigMvPar.Datas)
+EndIf
+=ThisForm.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',crSigMvPar.Fpags)
+_doc = Transf( crSigCdOpe.NDopes,"@L 999" ) + Transf( crSigMvCab.Numes, "@L 999999" )
+
+lcTitBan      = Iif(crSigOpFp.Infos = 'B' And crSigOpFp.ImpBols = 1,crSigMvPar.nCarnes,'')
+_Departamento = Space(10)
+
+lcTit=Alltrim(crSigMvCab.Notas)
+If Empty(lcTit) And Not Empty(crSigCdOpe.DopCs)
+	If ThisForm.poDataMgr.CursorQuery([SigOpFp], [LocalOpFp], [Fpags], crSigMvPar.Fpags) And (LocalOpFp.ValPends = 1)
+		ThisForm.poDataMgr.CursorQuery([SigOpOpe], [LocalOpOpe], [Dopes], crSigCdOpe.DopCs, [Identifics])
+		lcTit = LocalOpOpe.Identifics + Transform(fGerUniqueKey(crSigCdOpe.DopCs), [@L 999999])
+	EndIf
+EndIf
+_Titulo       = lcTit 
+_lcNota       = Iif(crSigOpFp.OpcSNAs = 2,[ ],crSigMvCab.Notas)
+
+*!*	If crSigOpFp.OpcSNAs = 1 And Empty(crSigMvCab.Notas)
+*!*		MessageBox('Obrigatorio o Preenchimento do Campo Notas para a Condição de Pagamento '+crSigOpFp.Fpags,0+16,'')
+*!*		If llvOper
+*!*			Return -1
+*!*		Else
+*!*			Return .f.
+*!*		EndIf
+*!*	EndIf
+
+*** Movimentação x Cliente
+If !IsEmpty( crSigCdOpe.Grupos + crSigCdOpe.Contas ) Or Eof([crSigMvPar])
+	If crSigCdOpe.ctipos = 1
+		_GrupoOrig = crSigCdOpe.Grupos
+		_ContaOrig = crSigCdOpe.Contas
+	Else
+		If crSigCdOpe.COpers = 1
+			_GrupoOrig = crSigMvCab.Grupoos
+			_ContaOrig = crSigMvCab.Contaos
+		Else
+			_GrupoOrig = crSigMvCab.Grupods
+			_ContaOrig = crSigMvCab.Contads
+		EndIf
+		
+		If (crSigOpCdd.LanFinMats = 2) And !Empty(_ContaOrig) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',_ContaOrig, [grupomats, contamats])
+			If !Empty( crtmpCli.GrupoMats ) And !Empty( CrTmpCli.ContaMats )
+				_GrupoOrig = CrTmpCli.GrupoMats
+				_ContaOrig = CrTmpCli.ContaMats
+			EndIf
+		EndIf
+	EndIf
+
+	If crSigCdOpe.COpers = 1
+		_GrupoDest = crSigMvCab.Grupods
+		_ContaDest = crSigMvCab.Contads
+	Else
+		_GrupoDest = crSigMvCab.Grupoos
+		_ContaDest = crSigMvCab.Contaos
+	EndIf
+	
+	If (crSigOpCdd.LanFinMats = 2) And !Empty(_ContaDest) And ThisForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',_ContaDest,[grupomats, contamats])
+		If !Empty( crtmpCli.GrupoMats ) And !Empty( CrtmpCli.ContaMats )
+			_GrupoDest = crtmpCli.GrupoMats
+			_ContaDest = crtmpCli.ContaMats
+		EndIf
+	EndIf
+
+	lcRclis = ''
+	If Not IsEmpty(_ContaDest) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',_ContaDest, [Rclis])
+		lcRclis = crtmpCli.Rclis
+	EndIf
+	
+	_Departamento = Space(10)
+
+	If !IsEmpty( crSigCdOpe.Dopcs ) And crSigOpFp.ValPends = 1
+		_numc = fGerUniqueKey( crSigCdOpe.Dopcs )
+		_dopc = crSigCdOpe.Dopcs
+		=ThisForm.poDataMgr.cursorquery('SigCdUsu','CrUsu','Usuarios',Usuar,[Deptos])
+		_Departamento = CrUsu.Deptos
+
+		If Not IsEmpty(crSigMvCab.Obses)
+			Insert Into crSigTtCcd (EmpdopNums, EmpDopNcs, CidChaves, ObsD ) Values ;
+						(crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), ;
+						 crSigMvCab.Emps + _Dopc + Str(_Numc,6), fUniqueIds(), crSigMvCab.Obses )
+		EndIf
+	Else
+		_numc = 0 
+		_dopc = '' 
+	EndIf
+
+	Select crSigMvCab
+	_Hist = ThisForm.MontaHists(_Titulo, crSigOpFp.FPags, lcRClis)
+	
+	_noper = fGerUniqueKey( 'SigMvCcr' )
+	If llVOper
+		_voper = crSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+		lnRetVOper = _noper
+	Else
+		_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+		lnRetVOper = 0
+	EndIf
+
+	lnValor = Abs( Iif(Empty(crSigMvPar.Valos), crSigMvCab.Valos, crSigMvPar.Valos) )
+	If crSigOpFp.Trocos = 1
+		xsoper = iif(crSigCdOpe.copers=1,'C','D')
+		xoper = iif(crSigCdOpe.copers=1,'D','C')
+	Else
+		xoper = iif(crSigCdOpe.copers=1,'C','D')
+		xsoper = iif(crSigCdOpe.copers=1,'D','C')
+	EndIf
+	
+	lcGrupoCob = ''
+	lcContaCob = ''
+	lcRclis    = ''
+	
+	If Not IsEmpty(_ContaOrig) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrtmpCli','Iclis',_ContaOrig, [Grupocobs, contacobs, Rclis ])
+		lcGrupoCob = crtmpCli.GrupoCobs
+		lcContaCob = crtmpCli.ContaCobs
+		lcRclis    = CrTmpCli.Rclis
+	EndIf
+
+	_GrupoTx = _GrupoDest
+	_ContaTx = _ContaDest
+
+	_Hist2 = Alltrim( crSigCdOpe.Hist2s )
+	DO Case
+		Case crSigCdOpe.tpHist2s = 1
+			_hist2 = _hist2 + ' ' + _Titulo
+
+		Case crSigCdOpe.tpHist2s = 2
+			If crSigOpFp.Infos = [C]
+				_Hist2 = _Hist2 + ' Ch:'+crSigMvPar.Bancos+'-'+crSigMvPar.Agencias+'-'+crSigMvPar.Contas+'-'+crSigMvPar.numeros
+			Else
+				If crSigOpFp.Infos = [T]
+					_Hist2 = _Hist2 + ' Ct:'+crSigMvPar.cnnsuparcs
+				EndIf
+			EndIf
+			
+		Case crSigCdOpe.tpHist2s = 3
+			_hist2 = _hist2 + ' ' + Alltrim(lcRclis)
+
+		Case crSigCdOpe.tpHist2s = 4
+			_hist2 = _hist2 + ' ' + Alltrim(_ContaOrig)
+
+		Case crSigCdOpe.TpHist2s = 5
+			_hist2 = _hist2 + ' ' + Iif(!IsNull(crSigMvCab.Obses),Alltrim(crSigMvCab.Obses),'')
+	EndCase
+
+	_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+	_ArqMccr = 'crSigMvCcr'
+	_LancaCC = .f.
+	lnvTx    = 0
+
+	=ThisForm.poDataMgr.cursorquery('SigOpOpe','CrDope','Dopes',_Dopc,[RealPrevs,Opers])
+	If _numc > 0
+		If crDope.RealPrevs = 2
+			_ArqMccr = 'crSigMvCpv'
+		EndIf
+		If crDOpe.Opers = [CR]
+			GrupoTran = crSigCdPam.GrupoPags
+			ContaTran = crSigCdPam.ContaPags
+		Else
+			GrupoTran = crSigCdPam.GrupoRecs
+			ContaTran = crSigCdPam.ContaRecs
+		EndIf
+		If InList(crSigCdOpe.EdComis,3,4)
+			_LancaCC = .t.
+		EndIf
+		
+		If crSigOpFp.Infos = [T] And Not Empty(crSigOpFp.GrupoTs) And Not Empty(crSigOpFp.ContaTs) And crSigOpFp.Desc2s > 0
+			lnvTx  = Round( lnValor * crSigOpFp.Desc2s / 100 , 2 ) * -1
+		Else
+			If Not Empty(crSigMvNfi.CodServs)
+				lcSql = [Select * From SigCdSrv Where ctipos = ]+Iif(crSigCdOpe.Opers=1,['E'],['S'])+[ And CodServs = ']+crSigMvNfi.CodServs+[']
+				ThisForm.poDataMgr.Sqlexecute(lcSql,'cServEest')
+
+				If Not Empty(cServEest.cOcorPiss) And ( crSigMvPar.vPis + Iif(crSigMvPar.Vpis=0 And ThisForm.ContaPar=1,crSigMvNfi.vPis,0)) > 0
+					lnvTx = lnvTx + crSigMvPar.vPis + Iif(crSigMvPar.Vpis=0 And ThisForm.ContaPar=1,crSigMvNfi.vPis,0)
+				EndIf
+				If Not Empty(cServEest.cOcorCofin) And ( crSigMvPar.vCofins + Iif(crSigMvPar.vCofins=0 And ThisForm.Contapar = 1,crSigMvNfi.vCofins,0)) > 0
+					lnvTx = lnvTx + crSigMvPar.vCofins + Iif(crSigMvPar.vCofins=0 And ThisForm.Contapar=1,crSigMvNfi.vCofins,0)
+				EndIf
+				If Not Empty(cServEest.cOcorIrrfs) And ( crSigMvPar.virf + Iif(crSigMvPar.virf=0 And ThisForm.ContaPar=1,crSigMvNfi.virf,0) ) > 0
+					lnvTx = lnvTx + crSigMvPar.vIrf + Iif(crSigMvPar.virf=0 And ThisForm.ContaPar=1,crSigMvNfi.virf,0)
+				EndIf
+				If Not Empty(cServEest.cOcorCslls) And ( crSigMvPar.vCsll + Iif(crSigMvPar.vCsll=0 And ThisForm.ContaPar=1,crSigMvNfi.vCsll,0)) > 0
+					lnvTx = lnvTx + crSigMvPar.vCsll + Iif(crSigMvPar.vCsll=0 And ThisForm.ContaPar=1,crSigMvNfi.vCsll,0)
+				EndIf
+				If ThisForm.ContaPar = 1
+					If Not Empty(cServEest.cOcorinss) And crSigMvNfi.vInss > 0
+						lnvTx = lnvTx + crSigMvNfi.vInss
+					EndIf
+					If Not Empty(cServEest.cOcorIss) And crSigMvNfi.vTotIss > 0
+						lnvTx = lnvTx + crSigMvNfi.vTotIss
+					EndIf
+				EndIf
+				lnvTx = lnvTx * -1
+				lnValor = lnValor + Abs(lnvTx)
+			EndIf
+		EndIf
+	Else
+		If crDOpe.Opers = [CR]
+			GrupoTran = crSigCdPam.GrupoPags
+			ContaTran = crSigCdPam.ContaPags
+		Else
+			GrupoTran = crSigCdPam.GrupoRecs
+			ContaTran = crSigCdPam.ContaRecs
+		EndIf
+		If InList(crSigCdOpe.EdComis,3,4)
+			_LancaCC = .t.
+		EndIf
+	EndIf
+	If crSigOpFp.AgCobs = 1
+		lcGrupoCob = crSigOpFp.GrupoDs
+		lcContaCob = crSigOpFp.ContaDs
+	EndIf
+
+	lcGPEmI = _GrupoDest
+	lcCPemI = _ContaDest
+
+	If (crSigOpFp.TpHists = 4)
+		Do Case
+			Case (crSigOpFp.Infos = [C]) && Cheque
+				_Hist = crSigMvCab.Notas + [ CHQ: ] + crSigMvPar.Bancos + [/] + crSigMvPar.Agencias + [/] + ;
+						crSigMvPar.Contas + [/] + crSigMvPar.Numeros
+				_Hist2 = [CPF: ] + crSigMvPar.Cpfs		
+
+			Case (crSigOpFp.Infos = [D]) && Duplicata
+				_Hist = crSigMvCab.Notas + [ (] + Alltrim(Str(crSigMvPar.Parcs, 2)) + [/] + ;
+						Alltrim(Str(crSigMvPar.TParcs, 2)) + [)]
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [O]) && Outros
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [R]) && Conta Corrente
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [T]) && Cartão
+				_Hist = crSigMvCab.Notas + [ - ] + Alltrim(crSigMvPar.Outros) + [ - (] + Alltrim(Str(crSigMvPar.Parcs, 2)) + [/] + ;
+						Alltrim(Str(crSigMvPar.TParcs, 2)) + [)]
+				_Hist2 = lcRclis
+
+			Otherwise
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+		EndCase 
+	EndIf
+
+	lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+	
+	Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+							opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, sgrupos, scontas, ;
+							smoedas, scotacaos, svalors, Dopes, numes, valpags,	dopcs, numcs, nfs, titulos,;
+							grupems, contems, grupages, contages, valliqs, dtemis, Hist2s, CidChaves, EmpDopNums,;
+							bContas,TitBans, ValOcurs, Jobs ) ;
+				   Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, Iif(Empty(crSigMvPar.Vencs), ldDtContab, crSigMvPar.Vencs), ;
+				   			_hist, xoper, xsoper, lcMd1, 1, lnValor, .t., Iif(_LancaCC,GrupoTran,_GrupoOrig), ;
+				   			Iif(_lancaCC,ContaTran,_ContaOrig), _GrupoDest, _ContaDest, lcMd1, 1, lnValor, ;
+				   			crSigMvCab.Dopes, crSigMvCab.numes, crSigMvPar.VPags,_dopc, _numc, _lcNota, ;
+				   			Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ), _GrupoOrig, _ContaOrig, ;
+				   			lcGrupoCob, lcContaCob, lnValor, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+				   			crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan, lnVtx, crSigMvCab.Jobs )
+	Select ( _ArqMccr )
+	Replace gruconmoes with grupos + contas + moedas,;
+			EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+			Pagos      With Iif(Valors=valpags,'0','1'),;
+			DopoTps    with Dopcs + Opers + Tipos + Pagos
+			
+	If _ArqMccr = 'crSigMvCcr'
+		If _Numc > 0
+			Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+		EndIf
+		=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+	Else
+		If Valors + valocurs = 0
+			Replace Pagos   With '1',;
+					DopoTps With Dopcs + Opers + Tipos + Pagos
+		EndIf
+	EndIf
+
+	*** Tiago - 07/11/11 - Vianna - Alteração para lançar a perna de despesas através da conta do cliente ou fornecedor
+	If ((crSigCdOpe.CTipos = 2) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',_ContaOrig, [GrupocEnts,ContacEnts]) And ;
+		Not Empty(crTmpCli.GrupoCEnts))
+
+		Select crSigMvCcr
+		Scatter Memo Memvar
+		Insert Into crSigMvCcr From memvar
+
+		Replace Tipos     With [E], ;
+				Grupos    With crTmpCli.GrupoCEnts, ;
+				Contas    With Iif(Empty(crTmpCli.ContaCEnts), _ContaOrig, crTmpCli.ContaCEnts), ;
+				SGrupos   With _GrupoOrig, ;
+				SContas   With _ContaOrig, ;
+				GrupEms   With _GrupoOrig, ;
+				ContEms   With _ContaOrig, ;
+				Opers     With m.Opers, ; 
+				SOpers    With m.SOpers, ;
+				Nopers    With fGerUniqueKey([SigMvCcr]), ;
+				Autos     With .t. In crSigMvCcr		
+
+		* Richard em 10/09/2012 - Acerto Para Preenchimento Correto dos Campos Abaixo
+		lcKey = Dtos(crSigMvCcr.Datas) + Transform(fGerUniqueKey(Dtos(crSigMvCcr.Datas)), [@L 999999]) + ThisForm.SigKey
+
+		Replace GruConMoes With Grupos + Contas + Moedas, ;
+				EmpDopNcs  With Emps + Dopcs + Str(Numcs, 6), ;
+				Pagos      With Iif(Valors = ValPags, [0], [1]), ;
+				DopoTps    With Dopcs + Opers + Tipos + Pagos, ;
+				cIdChaves  With lcKey In crSigMvCcr
+
+		=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr)
+	EndIf
+	***
+	
+	lcGrupoCob = ''
+	lcContaCob = ''
+
+	If Not IsEmpty(_ContaDest) And ThisForm.poDataMgr.cursorquery('SigCdCli','CrTmpCli','Iclis',_ContaDest, [grupocobs, contacobs])
+		lcGrupoCob = crtmpCli.GrupoCobs
+		lcContaCob = crtmpCli.ContaCobs
+	EndIf
+	If crSigOpFp.AgCobs = 1
+		lcGrupoCob = crSigOpFp.GrupoDs
+		lcContaCob = crSigOpFp.ContaDs
+	EndIf
+
+	_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+	lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+	Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+							sopers, opers, smoedas, scotacaos, svalors, autos, sgrupos, scontas, ;
+							grupos, contas, moedas, cotacaos, valors, Dopes, numes, valpags,;
+							dopcs, numcs, nfs, titulos, grupems, contems, grupages, contages, ;
+							valliqs, dtemis, Hist2s, CidChaves, EmpDopNums, bContas, TitBans, ValOcurs, Jobs ) ;
+				   Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, Iif(Empty(crSigMvPar.Vencs), ldDtContab, crSigMvPar.Vencs), ;
+				   			_hist, xoper, xsoper, lcMd1, 1, lnValor, .t., Iif(_Lancacc,GrupoTran,_GrupoOrig), ;
+				   			Iif(_LancaCC,ContaTran,_ContaOrig), _GrupoDest, _ContaDest, lcMd1, 1, ;
+				   			lnValor, crSigMvCab.Dopes, crSigMvCab.numes, crSigMvPar.VPags + Abs(lnvTx), _dopc, _numc, ;
+				   			_lcNota, Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ), _GrupoDest, ;
+				   			_ContaDest, lcGrupoCob, lcContaCob, lnValor, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+				   			crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan, lnvTx, crSigMvCab.Jobs )
+	Select ( _ArqMccr )
+	Replace gruconmoes with grupos + contas + moedas,;
+			EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+			Pagos      With Iif(Valors=valpags,'0','1'),;
+			DopoTps    with Dopcs + Opers + Tipos + Pagos 
+
+	If _ArqMccr = 'crSigMvCcr'
+		If _Numc > 0
+			Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+		EndIf
+		=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas , ThisForm.poDataMgr )
+	Else
+		If Valors + ValOcurs = 0
+			Replace Pagos   With '1',;
+					DopoTps With Dopcs + Opers + Tipos + Pagos
+		EndIf
+	EndIf
+
+	Select crSigMvPar
+	Replace NOpers With _NOper, DtAlts With _pData
+
+	If _LancaCC
+		xCota   = crSigMvPar.CotFpgs
+		lnvTitp = 0
+		lnvTitT = 0
+
+		Select crSigCdCmm
+		z=Reccount()
+		w=0
+		Scan
+			xCota1 = ThisForm.Cotacao(crSigCdCmm.Moedas)
+			lnvTit = Round( Round(crSigCdCmm.Comissaos * xCota1 / xCota,2) * Iif(crSigMvPar.TotCcs=0,100,Round(lnValor / crSigMvPar.Totccs * 100,6)) / 100, 2 )
+			lnvTitT = lnvTitT + lnvTit
+			w=w+1
+			If w = z
+				xDif = lnvTitT - lnValor
+				lnvTit = lnvTit + xDif
+			EndIf
+
+			If lnvTit = 0
+				Loop
+			EndIf
+			
+			_noper = fGerUniqueKey( 'SigMvCcr' )
+
+			For lnCont = 1 to 2
+				
+				lcGOri = Iif(lnCont=1,crSigCdCmm.Grupos,GrupoTran)
+				lcCOri = Iif(lnCont=1,crSigCdCmm.Contas,ContaTran)
+				lcGDes = Iif(lnCont=1,GrupoTran,crSigCdCmm.Grupos)
+				lcCDes = Iif(lnCont=1,ContaTran,crSigCdCmm.Contas)
+				lcodc  = Iif(lnCont=1,xOper,xsoper)
+				lcSdc  = Iif(lnCont=1,xsoper,xoper)
+				lcGPem = Iif(lnCont=1,_GrupoOrig,_GrupoDest)
+				lcCPem = Iif(lnCont=1,_ContaOrig,_ContaDest)
+				
+				If llVOper
+					_voper = crSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+				Else
+					_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+				EndIf
+				_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+				lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+				Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+						opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, sgrupos, scontas, ;
+						smoedas, scotacaos, svalors, Dopes, numes, valpags,	dopcs, numcs, nfs, titulos,;
+						grupems, contems, grupages, contages, valliqs, dtemis, Hist2s, CidChaves, EmpDopNums,;
+						bContas,TitBans,Tipos, Jobs ) ;
+					Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, Iif(Empty(crSigMvPar.Vencs), ldDtContab, crSigMvPar.Vencs), ;
+							_hist, lcodc, lcsdc, lcMd1, 1, lnvTit, .t., lcGOri, lcCOri, ;
+							lcGDes,lcCDes, lcMd1, 1, lnvTit, ;
+							crSigMvCab.Dopes, crSigMvCab.numes, Iif(crSigMvPar.VPags>0,lnvTit,0),_dopc, _numc, ;
+							_lcNota, Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ),;
+							lcGPem, lcCPem, lcGrupoCob, lcContaCob, lnvTit, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+							crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan,'C', crSigMvCab.Jobs )
+				Select ( _ArqMccr )
+				Replace gruconmoes with grupos + contas + moedas,;
+						EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+						Pagos      With Iif(Valors=valpags,'0','1'),;
+						DopoTps    with Dopcs + Opers + Tipos + Pagos
+						
+				If _ArqMccr = 'crSigMvCcr'
+					If _Numc > 0
+						Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+					EndIf
+					=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If Not (crSigOpFp.Infos = [T] And Not Empty(crSigOpFp.GrupoTs) And Not Empty(crSigOpFp.ContaTs) And crSigOpFp.Desc2s > 0 And _Numc > 0) And Not Eof([crSigMvPar])
+		If Not Empty(crSigMvNfi.CodServs) And lnvTx <> 0
+
+			lcSql = [Select * From SigCdSrv Where ctipos = ]+Iif(crSigCdOpe.Opers=1,['E'],['S'])+[ And CodServs = ']+crSigMvNfi.CodServs+[']
+			ThisForm.poDataMgr.Sqlexecute(lcSql,'cServEest')
+			For lnCtSv = 1 to 6
+				Do Case
+					Case lnCtSv = 1
+						lnvTxOcor = (crSigMvPar.vPis + Iif(crSigMvPar.vPis = 0 And ThisForm.ContaPar = 1,crSigMvNfi.vpis,0) )
+						If Not Empty(cServEest.cOcorPiss) And lnvTxOcor > 0 &&( crSigMvPar.vPis + crSigMvNfi.vPis ) > 0
+							_lcOcorSv = cServEest.cOcorPiss
+*							lnvTxOcor = (crSigMvPar.vPis + crSigMvNfi.vpis )
+							lLancFin  = cServEest.nLanFPiss = 1 And Not Empty(cServEest.cgrppiss) And Not Empty(cServEest.cCtaPiss)
+							lcGImpost = cServEest.cgrppiss
+							lcCImpost = cServEest.cCtaPiss
+							lntpVenc  = cServEest.VcPis
+						Else
+							Loop
+						EndIf
+					
+					Case lnCtSv = 2	
+						lnvTxOcor = ( crSigMvPar.vCofins + Iif(crSigMvPar.vCofins = 0 And ThisForm.ContaPar = 1,crSigMvNfi.vCofins,0 ))
+						If Not Empty(cServEest.cOcorCofin) And lnvTxOcor > 0 &&And (crSigMvPar.vCofins + crSigMvNfi.vCofins )> 0
+							_lcOcorSv = cServEest.cOcorCofin
+*							lnvTxOcor = ( crSigMvPar.vCofins + crSigMvNfi.vCofins )
+							lLancFin  = cServEest.nLanFCofin = 1 And Not Empty(cServEest.cgrpCofins) And Not Empty(cServEest.cCtaCofins)
+							lcGImpost = cServEest.cgrpCofins
+							lcCImpost = cServEest.cCtaCofins
+							lntpVenc  = cServEest.VcCofins
+						Else
+							Loop
+						EndIf
+		
+					Case lnCtSv = 3
+						lnvTxOcor = ( crSigMvPar.vIrf + Iif(crSigMvPar.vIrf = 0 And ThisForm.Contapar = 1,crSigMvNfi.vIrf,0))
+						If Not Empty(cServEest.cOcorIrrfs) And lnvTxOcor > 0 &&And ( crSigMvPar.virf + crSigMvNfi.vIrf )> 0
+							_lcOcorSv = cServEest.cOcorIrrfs
+*							lnvTxOcor = ( crSigMvPar.vIrf + crSigMvNfi.vIrf)
+							lLancFin  = cServEest.nLanFirrfs = 1 And Not Empty(cServEest.cgrpIrrfs) And Not Empty(cServEest.cCtaIrrfs)
+							lcGImpost = cServEest.cgrpIrrfs
+							lcCImpost = cServEest.cCtaIrrfs
+							lntpVenc  = cServEest.VcIrrf
+						Else
+							Loop
+						EndIf
+
+					Case lnCtSv = 4
+						If Not Empty(cServEest.cOcorinss) And crSigMvNfi.vInss > 0 And ThisForm.ContaPar = 1
+							_lcOcorSv = cServEest.cOcorinss
+							lnvTxOcor = crSigMvNfi.vInss
+							lLancFin  = cServEest.nLanFInss = 1 And Not Empty(cServEest.cgrpInss) And Not Empty(cServEest.cCtainss)
+							lcGImpost = cServEest.cgrpInss
+							lcCImpost = cServEest.cCtaInss
+							lntpVenc  = cServEest.VcInss
+						Else
+							Loop
+						EndIf
+
+					Case lnCtSv = 5
+						lnvTxOcor = (crSigMvPar.vCsll + Iif(crSigMvPar.vCsll = 0 And ThisForm.Contapar = 1,crSigMvNfi.vCsll,0))
+						If Not Empty(cServEest.cOcorCslls) And lnvTxOcor > 0 
+							_lcOcorSv = cServEest.cOcorCslls
+							lLancFin  = cServEest.nLanFcslls = 1 And Not Empty(cServEest.cgrpcslls) And Not Empty(cServEest.cCtacslls)
+							lcGImpost = cServEest.cgrpcslls
+							lcCImpost = cServEest.cCtacslls
+							lntpVenc  = cServEest.VcCsll
+						Else
+							Loop
+						EndIf
+
+					Case lnCtSv = 6
+						If Not Empty(cServEest.cOcorIss) And crSigMvNfi.vTotIss > 0 And ThisForm.ContaPar = 1
+							_lcOcorSv = cServEest.cOcorIss
+							lnvTxOcor = crSigMvNfi.vTotIss
+							lLancFin  = cServEest.nLanFIss = 1 And Not Empty(cServEest.cgrpIss) And Not Empty(cServEest.cCtaIss)
+							lcGImpost = cServEest.cgrpIss
+							lcCImpost = cServEest.cCtaIss
+							lntpVenc  = cServEest.VcIss
+						Else
+							Loop
+						EndIf
+
+				EndCase
+
+				lcSql = [Select * From ScoOcr Where Codigos = ']+_lcOcorSv+[']
+				ThisForm.poDataMgr.Sqlexecute(lcSql,'CrScoOcr')
+		
+				Select CrScoOcr
+				If Reccount('CrScoOcr') = 0
+					MessageBox('Ocorrencia Nao Cadastrada!!! '+_lcOcorSv,0+16,'')
+					If llvOper
+						Return -1
+					Else
+						Return .f.
+					EndIf
+				EndIf
+				xsOper = CrSIGOPOCO.Opers
+				xOper  = Iif(xsOper=[DB],[CR],[DB])
+				_GrupoTx = CrSIGOPOCO.Grupos
+				_ContaTx = CrSIGOPOCO.Contas
+		
+				_noper = fGerUniqueKey( 'SigMvCcr' )
+				
+				Insert Into crSigOpCoc (Emps,Dopcs,Dataos,Notitulos,Moedas,Cotacaos, EmpDopNcs,CidChaves,Nopers,Valors,Opers,;
+										Codigos,ValConvs, Autos ) Values ;
+									   (crSigMvCab.Emps,_Dopc,Date(),_Numc,crSigMvPar.MoeFpgs, crSigMvPar.CotFpgs,;
+									   crSigMvCab.Emps + _Dopc + Str(_Numc,6), fUniqueIds(), _nOper, lnvTxOcor, CrSIGOPOCO.Opers, ;
+									   CrSIGOPOCO.Codigos, Abs(lnvTxOcor), .t.)
+
+				_Hist = Alltrim(crSigOpCoc.codigos)+' Ref Nf '+_lcNota
+
+				For lnCont=1 to 2
+
+					lcGOri = Iif(lnCont=1,Iif(_LancaCC,_GrupoDest,_GrupoOrig),_GrupoTx)
+					lcCOri = Iif(lnCont=1,Iif(_LancaCC,_ContaDest,_ContaOrig),_ContaTx)
+					lcGDes = Iif(lnCont=1,_GrupoTx,Iif(_LancaCC,_GrupoDest,_GrupoOrig))
+					lcCDes = Iif(lnCont=1,_ContaTx,Iif(_LancaCc,_ContaDest,_ContaOrig))
+					lcodc  = Iif(lnCont=1,xsOper,xoper)
+					lcSdc  = Iif(lnCont=1,xoper,xsoper)
+						
+					If llVOper
+						_voper = crSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+					Else
+						_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+					EndIf
+					
+					If lnvTxOcor = 0
+						Loop
+					EndIf
+			
+					_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+					lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+					Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+							opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, sgrupos, scontas, ;
+							smoedas, scotacaos, svalors, Dopes, numes, valpags,	dopcs, numcs, nfs, titulos,;
+							grupems, contems, grupages, contages, valliqs, dtemis, Hist2s, CidChaves, EmpDopNums,;
+							bContas,TitBans,Tipos, Jobs ) ;
+						Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, Iif(Empty(crSigMvPar.Vencs), ldDtContab, crSigMvPar.Vencs), ;
+								_hist, lcodc, lcsdc, lcMd1, 1, lnvTxOcor, .t., lcGOri, lcCOri, ;
+								lcGDes,lcCDes, lcMd1, 1, lnvTxOcor, ;
+								crSigMvCab.Dopes, crSigMvCab.numes, lnvTxOcor ,_dopc, _numc, ;
+								_lcNota, Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ),;
+								lcGPemI, lcCPemI, lcGrupoCob, lcContaCob, 0, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+								crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan,'O',crSigMvCab.Jobs )
+					Select ( _ArqMccr )
+					Replace gruconmoes with grupos + contas + moedas,;
+							EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+							Pagos      With Iif(Valors=valpags,'0','1'),;
+							DopoTps    with Dopcs + Opers + Tipos + Pagos
+							
+					If _ArqMccr = 'crSigMvCcr'
+						If _Numc > 0
+							Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+						EndIf
+						=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+					EndIf
+				Next
+				If lLancFin
+					_noper = fGerUniqueKey( 'SigMvCcr' )
+					_NumcF = Iif(_Numc > 0,fGerUniqueKey( crSigCdOpe.Dopcs ), 0 )
+
+					=ThisForm.poDataMgr.cursorquery('SigOpOpe','CrscOpe','Dopes',crSigCdOpe.Dopcs,[Identifics])
+					_TitOco = crscOpe.Identifics+Trans(_NumcF,"@L 999999")
+
+					_Hist  = Alltrim(crSigOpCoc.codigos)+' Ref Nf '+_lcNota
+					_Hist2 = _Hist
+					
+					ldVenc = ThisForm.CalcularVcto(Iif(Empty(crSigMvPar.Datas), ldDtContab, crSigMvPar.Datas),Iif(Empty(crSigMvPar.Vencs), ldDtContab, crSigMvPar.Vencs),lntpVenc,ThisForm.poDataMgr)
+
+					For lnCont=1 to 2
+
+						lcGOri = Iif(lnCont=1,lcGImpost,_GrupoTx)
+						lcCOri = Iif(lnCont=1,lcCImpost,_ContaTx)
+						lcGDes = Iif(lnCont=1,_GrupoTx,lcGImpost)
+						lcCDes = Iif(lnCont=1,_ContaTx,lcCImpost)
+						lcodc  = Iif(lnCont=1,xOper,xsoper)
+						lcSdc  = Iif(lnCont=1,xsoper,xoper)
+						
+						If llVOper
+							_voper = crSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+						Else
+							_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+						EndIf
+						
+						If lnvTxOcor = 0
+							Loop
+						EndIf
+				
+						_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+						lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+						Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+								opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, sgrupos, scontas, ;
+								smoedas, scotacaos, svalors, Dopes, numes, valpags,	dopcs, numcs, nfs, titulos,;
+								grupems, contems, grupages, contages, valliqs, dtemis, Hist2s, CidChaves, EmpDopNums,;
+								bContas,TitBans, ContaPgs, Jobs ) ;
+							Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, ldVenc, ;
+									_hist, lcodc, lcsdc, lcMd1, 1, lnvTxOcor, .t., lcGOri, lcCOri, ;
+									lcGDes,lcCDes, lcMd1, 1, lnvTxOcor, ;
+									crSigMvCab.Dopes, crSigMvCab.numes, 0 ,_dopc, _numcF, ;
+									_lcNota, Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ),;
+									lcGPemI, lcCPemI, lcGrupoCob, lcContaCob, 0, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+									crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan, 3, crSigMvCab.Jobs )
+						Select ( _ArqMccr )
+						Replace gruconmoes with grupos + contas + moedas,;
+								EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+								Pagos      With Iif(Valors=valpags,'0','1'),;
+								DopoTps    with Dopcs + Opers + Tipos + Pagos
+								
+						If _ArqMccr = 'crSigMvCcr'
+							If _NumcF > 0
+								Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+							EndIf
+							=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+						EndIf
+					Next
+				EndIf
+			Next
+
+			DifPOcor = 0 &&( lnvTx )
+			Replace VPags    With Abs(DifPocor),;
+					ValoCurs With DifPocor,;
+					Valos    With Valos + Abs(DifPocor),;
+					Pagos    With Iif(Valos=Vpags,'0','1') in crSigMvPar
+		EndIf
+	EndIf
+EndIf
+
+*** Cliente X Forma de Pagamento
+If Not IsEmpty(crSigOpFp.Grupods) And (crSigOpFp.ValPends <> 1 Or (crSigOpFp.ValPends = 1 And crSigOpFp.AgCobs <> 1 )) ;
+		 And (Not IsEmpty(crSigOpFp.Contads) Or InList(crSigOpFp.OriDes,1,2) ) And Not Eof([crSigMvPar])
+
+	_GrupoDest = crSigOpFp.Grupods
+	_ContaDest = Iif(Not Empty(crSigOpFp.ContaDs),crSigOpFp.Contads,Iif(crSigOpFp.OriDes=1,crSigMvCab.ContaOs,crSigMvCab.ContaDs))
+	If crSigOpFp.ValPends = 1
+		_GrupoOrig = Iif( crSigCdOpe.copers = 1, crSigCdPam.gruporecs, crSigCdPam.grupopags )
+		_ContaOrig = Iif( crSigCdOpe.copers = 1, crSigCdPam.contarecs, crSigCdPam.Contapags )
+	Else
+		If crSigCdOpe.COpers = 1
+			_GrupoOrig = crSigMvCab.Grupods
+			_ContaOrig = crSigMvCab.Contads
+		Else
+			_GrupoOrig = crSigMvCab.Grupoos
+			_ContaOrig = crSigMvCab.Contaos
+		EndIf
+		If (crSigOpCdd.LanFinMats = 2) And !Empty(_ContaOrig) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrtmpCli','Iclis',_ContaOrig, [grupomats, contamats])
+			If !IsEmpty( crtmpCli.GrupoMats ) And !IsEmpty( crtmpCli.ContaMats )
+				_GrupoOrig = CrTmpCli.GrupoMats
+				_ContaOrig = CrTmpCli.ContaMats
+			EndIf
+		EndIf
+	EndIf
+	
+	If Not IsEmpty(_ContaOrig) And ThisForm.poDataMgr.CursorQuery('SigCdCli','CrtmpCli','Iclis',_ContaOrig, [rclis])
+		lcRclis = crtmpCli.Rclis
+	EndIf
+
+	Select crSigMvCab
+	_Hist = ThisForm.MontaHists(_Titulo, crSigOpFp.FPags, lcRClis)
+
+	_noper = fGerUniqueKey( 'SigMvCcr' )
+	If llVOper
+		_voper = crSigMvCab.Emps + Alltrim( Str( lnRetVOper, 9 ) )
+	Else
+		_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+	EndIf
+
+	lnValor = Abs( crSigMvPar.Valos )
+	If crSigOpFp.Trocos = 1
+		xsoper = iif(crSigCdOpe.copers=1,'C','D')
+		xoper = iif(crSigCdOpe.copers=1,'D','C')
+	Else
+		If crSigOpFp.OriDes = 1 And crSigOpFp.ValPends = 1
+			xoper = iif(crSigCdOpe.copers=2,'C','D')
+			xsoper = iif(crSigCdOpe.copers=2,'D','C')
+		Else
+			xoper = iif(crSigCdOpe.copers=1,'C','D')
+			xsoper = iif(crSigCdOpe.copers=1,'D','C')
+		EndIf
+	EndIf
+
+	_Hist2 = Alltrim( crSigCdOpe.Hist2s )
+	
+	DO Case
+		Case crSigCdOpe.tpHist2s = 1
+			_hist2 = _hist2 + ' ' + _Titulo
+
+		Case crSigCdOpe.tpHist2s = 2
+			If crSigOpFp.Infos = [C]
+				_Hist2 = _Hist2 + ' Ch:'+crSigMvPar.Bancos+'-'+crSigMvPar.Agencias+'-'+crSigMvPar.Contas+'-'+crSigMvPar.numeros
+			Else
+				If crSigOpFp.Infos = [T]
+					_Hist2 = _Hist2 + ' Ct:'+crSigMvPar.cnnsuparcs
+				EndIf
+			EndIf
+
+		Case crSigCdOpe.tpHist2s = 3
+			_hist2 = _hist2 + ' ' + Alltrim(CrTmpCli.Rclis)
+
+		Case crSigCdOpe.tpHist2s = 4
+			_hist2 = _hist2 + ' ' + Alltrim(_ContaOrig)
+
+		Case crSigCdOpe.TpHist2s = 5
+			_hist2 = _hist2 + ' ' + Iif(!IsNull(crSigMvCab.Obses),Alltrim(crSigMvCab.Obses),'')
+	EndCase
+
+	If (crSigOpFp.TpHists = 4)
+		Do Case
+			Case (crSigOpFp.Infos = [C]) && Cheque
+				_Hist = crSigMvCab.Notas + [ CHQ: ] + crSigMvPar.Bancos + [/] + crSigMvPar.Agencias + [/] + ;
+						crSigMvPar.Contas + [/] + crSigMvPar.Numeros
+				_Hist2 = [CPF: ] + crSigMvPar.Cpfs		
+
+			Case (crSigOpFp.Infos = [D]) && Duplicata
+				_Hist = crSigMvCab.Notas + [ (] + Alltrim(Str(crSigMvPar.Parcs, 2)) + [/] + ;
+						Alltrim(Str(crSigMvPar.TParcs, 2)) + [)]
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [O]) && Outros
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [R]) && Conta Corrente
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+						
+			Case (crSigOpFp.Infos = [T]) && Cartão
+				_Hist = crSigMvCab.Notas + [ - ] + Alltrim(crSigMvPar.Outros) + [ - (] + Alltrim(Str(crSigMvPar.Parcs, 2)) + [/] + ;
+						Alltrim(Str(crSigMvPar.TParcs, 2)) + [)]
+				_Hist2 = lcRclis
+
+			Otherwise
+				_Hist = crSigMvCab.Notas
+				_Hist2 = lcRclis
+		EndCase 
+	EndIf
+	
+	_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+	lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+	Insert Into crSigMvCcr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+			opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, ;
+			sgrupos, scontas, smoedas, scotacaos, svalors, Dopes, numes, valpags, Hist2s, CidChaves, EmpDopNums, Jobs ) ;
+		Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, crSigMvPar.Vencs, ;
+				_hist, xoper, xsoper, lcMd1, 1, lnValor, .t., ;
+				_GrupoOrig, _ContaOrig, _GrupoDest, _ContaDest, ;
+				lcMd1, 1, lnValor, ;
+				crSigMvCab.Dopes, crSigMvCab.numes, crSigMvPar.VPags, _Hist2, _CidChave, ;
+				crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), crSigMvCab.Jobs )
+	Replace crSigMvCcr.gruconmoes with crSigMvCcr.grupos + crSigMvCcr.contas + crSigMvCcr.moedas,;
+			crSigMvCcr.EmpDopncs  With crSigMvCcr.Emps + crSigMvCcr.Dopcs + Str(crSigMvCcr.Numcs,6),;
+			crSigMvCcr.Pagos      With Iif(crSigMvCcr.Valors=crSigMvCcr.valpags,'0','1') ,;
+			crSigMvCcr.DopoTps    with crSigMvCcr.Dopcs + crSigMvCcr.Opers + crSigMvCcr.Tipos + crSigMvCcr.Pagos in crSigMvCcr
+			
+	=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+
+	ThisForm.FazContra
+
+	Select crSigMvPar
+
+	If Not InList(crSigOpFp.OriDes,1,2)
+		Replace NOpers With _NOper, DtAlts With _pData
+	EndIf
+EndIf
+
+* Taxas de Cartão de Crédito
+If Not Empty(crSigCdOpe.Grupos + crSigCdOpe.Contas) And (crSigOpFp.Infos = [T]) And Not Empty(crSigOpFp.GrupoTs) And ;
+   Not Empty(crSigOpFp.ContaTs) And (crSigOpFp.Desc2s > 0) And (_Numc > 0) And Not Eof([crSigMvPar])
+   
+	lcSql = [Select * From SIGOPOCO Where Grupos = ']+crSigOpFp.GrupoTs+[' And Contas = ']+crSigOpFp.ContaTs+[' ]+;
+			Iif(crDOpe.Opers=[CR],[And Opers = 'DB' ],[And Opers = 'CR'] )
+
+	ThisForm.poDataMgr.Sqlexecute(lcSql,'CrSIGOPOCO')
+	
+	Select CrSIGOPOCO
+	If Reccount('CrSIGOPOCO') = 0
+		MessageBox('Ocorrencia não Cadastrada para Taxa de Cartão da Condição de Pagamento '+crSigOpFp.Fpags,0+16,'')
+		If llvOper
+			Return -1
+		Else
+			Return .f.
+		EndIf
+	EndIf
+	xsOper = CrSIGOPOCO.Opers
+	xOper  = Iif(xsOper=[DB],[CR],[DB])
+	
+	lnvTx  = Round( lnValor * crSigOpFp.Desc2s / 100 , 2 ) * crSigMvPar.Cotfpgs
+		
+	_noper = fGerUniqueKey( 'SigMvCcr' )
+
+	Insert Into crSigOpCoc (Emps,Dopcs,Dataos,Notitulos,Moedas,Cotacaos, EmpDopNcs,CidChaves,Nopers,Valors,Opers,;
+							Codigos,ValConvs, Autos ) Values ;
+						   (crSigMvCab.Emps,_Dopc,Date(),_Numc,crSigMvPar.MoeFpgs, crSigMvPar.CotFpgs,;
+						   crSigMvCab.Emps + _Dopc + Str(_Numc,6), fUniqueIds(), _nOper, lnvTx, CrSIGOPOCO.Opers, ;
+						   CrSIGOPOCO.Codigos, Abs(lnvTx), .t.)
+
+	_Hist = Alltrim(crSIGOPOCO.Descrs) + [-] + Alltrim(crSigOpCoc.codigos) + [-] + _Titulo
+
+	For lnCont=1 to 2
+
+		lcGOri = Iif(lnCont=1,crSigOpFp.GrupoTs,_GrupoTx)
+		lcCOri = Iif(lnCont=1,crSigOpFp.ContaTs,_ContaTx)
+		lcGDes = Iif(lnCont=1,_GrupoTx,crSigOpFp.GrupoTs)
+		lcCDes = Iif(lnCont=1,_ContaTx,crSigOpFp.ContaTs)
+		lcodc  = Iif(lnCont=1,xOper,xsoper)
+		lcSdc  = Iif(lnCont=1,xsoper,xoper)
+		lcGPem = ' '
+		lcCPem = ' '
+			
+		If llVOper
+			_voper = crSigMvCab.Emps + Alltrim( str( _noper, 9 ) )
+		Else
+			_voper = crSigMvCab.Emps + _TIPOE + Alltrim( str( _noper, 9 ) )
+		EndIf
+		
+		If lnvTx = 0
+			Loop
+		EndIf
+		
+		_CidChave = Dtos(ldDtContab)+Transform(fGerUniqueKey(Dtos(ldDtContab)),"@L 999999")+ThisForm.Sigkey 
+
+		lcMd1 = Iif(Empty(crSigOpFp.MoeFpgs), crSigCdOpe.CMoes, crSigOpFp.MoeFpgs)
+
+		Insert Into &_ArqMccr ( NOpers, VOpers, Docus, Emps, Datas, usualts, datalts, Vencs, hists,;
+				opers, sopers, moedas, cotacaos, valors, autos, grupos, contas, sgrupos, scontas, ;
+				smoedas, scotacaos, svalors, Dopes, numes, valpags,	dopcs, numcs, nfs, titulos,;
+				grupems, contems, grupages, contages, valliqs, dtemis, Hist2s, CidChaves, EmpDopNums,;
+				bContas,TitBans,Tipos, Jobs ) ;
+			Values ( _NOper, _VOper, _Doc, crSigMvCab.emps, ldDtContab, usuar, _pData, crSigMvPar.Vencs, ;
+					_hist, lcodc, lcsdc, lcMd1, 1, lnvTx, .t., lcGOri, lcCOri, ;
+					lcGDes,lcCDes, lcMd1, 1, lnvTx, ;
+					crSigMvCab.Dopes, crSigMvCab.numes, lnvTx ,_dopc, _numc, ;
+					_lcNota, Alltrim( _Titulo ) + '/' + Alltrim( Str( ThisForm.ContaPar ) ),;
+					lcGPem, lcCPem, lcGrupoCob, lcContaCob, 0, crSigMvCab.DtEmis, _Hist2, _CidChave, ;
+					crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), _Departamento, lcTitBan,'O', crSigMvCab.Jobs )
+		Select ( _ArqMccr )
+		Replace gruconmoes with grupos + contas + moedas,;
+				EmpDopncs  With Emps + Dopcs + Str(Numcs,6),;
+				Pagos      With Iif(Valors=valpags,'0','1'),;
+				DopoTps    with Dopcs + Opers + Tipos + Pagos
+				
+		If _ArqMccr = 'crSigMvCcr'
+			If _Numc > 0
+				Replace bGrupos With crSigMvCab.UsuPagos in crSigMvCcr
+			EndIf
+			=fRecalculaS( crSigMvCcr.Grupos, crSigMvCcr.Contas, crSigMvCcr.Datas, crSigMvCcr.Moedas, ThisForm.poDataMgr  )
+		EndIf
+	Next
+
+	Replace VPags    With lnvTx,;
+			ValoCurs With lnvTx,;
+			Pagos    With Iif(Valos = Vpags, '0', '1') in crSigMvPar
+EndIf
+
+If llvOper 
+	Return lnRetVOper
+Else
+	Return .t.
+EndIf
+
+*************** fim ******************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE fazcontra
+------------------------------------------------------------
+PROCEDURE fazcontra
+LPARAMETERS vTipo, pArquivo
+
+Local NOper, VOper, Oper, Grupo, Conta, Cot, Valor, SOper, SGrupo, SConta, SMoed, SCot
+Local SValor, NLanc, VLanc, Venc, Dataa, ValPag, Emp, Hist, Dope, Nume, Dopc, Numc, Nota
+Local Titulo, Grupoe, Contae, Grupoa, Contaa, ValLiq, Hist2
+
+lcArqMccr = 'crSigMvCcr'
+If Type('pArquivo') = [C]
+	lcArqMccr = pArquivo
+EndIf
+
+Select (lcArqMccr)
+NOper  = &lcArqMccr..nopers
+VOper  = &lcArqMccr..vopers
+Oper   = &lcArqMccr..sopers
+Grupo  = &lcArqMccr..sgrupos
+Conta  = &lcArqMccr..scontas
+Moed   = &lcArqMccr..smoedas
+Cot    = &lcArqMccr..scotacaos
+Valor  = &lcArqMccr..svalors
+SOper  = &lcArqMccr..opers
+SGrupo = &lcArqMccr..grupos
+SConta = &lcArqMccr..contas
+SMoed  = &lcArqMccr..moedas
+SCot   = &lcArqMccr..cotacaos
+SValor = &lcArqMccr..valors
+NLanc  = &lcArqMccr..nlancs
+VLanc  = &lcArqMccr..vlancs
+Data   = &lcArqMccr..datas
+Venc   = &lcArqMccr..vencs
+Dataa  = &lcArqMccr..datalts
+Valpag = &lcArqMccr..valpags
+Emp    = &lcArqMccr..emps
+Hist   = &lcArqMccr..hists
+Hist2  = &lcArqMccr..Hist2s
+Dope   = &lcArqMccr..Dopes
+Nume   = &lcArqMccr..numes
+Dopc   = &lcArqMccr..dopcs
+Numc   = &lcArqMccr..numcs
+Nota   = &lcArqMccr..nfs
+Titulo = &lcArqMccr..titulos
+Grupoe = &lcArqMccr..grupems
+Contae = &lcArqMccr..contems
+Grupoa = &lcArqMccr..grupages
+Contaa = &lcArqMccr..contages
+ValLiq = &lcArqMccr..valliqs
+lcTipo = IIF(vTipo,&lcArqMccr..Tipos,' ')
+lcJob    = &lcArqMccr..Jobs
+_CidChave = Dtos(Data)+Transform(fGerUniqueKey(Dtos(Data)),"@L 999999")+ThisForm.Sigkey 
+
+Insert Into (lcArqMccr) ( VOpers, NOpers, NLancs, VLancs, Opers, Grupos,;
+		Contas, Moedas, Cotacaos, Valors, Emps, Datas, usualts, datalts,;
+		sgrupos, scontas, smoedas, scotacaos, svalors, sopers, autos,;
+		hists, Dopes, numes, valpags, vencs, dopcs, numcs, nfs, titulos,;
+		grupems, contems, grupages, contages, valliqs, CidChaves, Tipos, Hist2s, Jobs ) ;
+	Values ( vOper, nOper, nLanc, vLanc, Oper, Grupo, Conta, Moed, Cot,;
+		Valor, Emp, Data, Usuar, Dataa, sGrupo, sConta, sMoed, sCot,;
+		sValor, sOper, .t., hist, Dope, Nume, valpag, venc, dopc, numc,;
+		nota, titulo, grupoe, contae, grupoa, contaa, valliq, _CidChave, lcTipo, Hist2, lcJob )
+Replace &lcArqMccr..gruconmoes with &lcArqMccr..grupos + &lcArqMccr..contas + &lcArqMccr..moedas,;
+		&lcArqMccr..empdopnums with &lcArqMccr..emps + &lcArqMccr..dopes + Str(&lcArqMccr..numes,6),;
+		&lcArqMccr..empdopncs  with &lcArqMccr..emps + &lcArqMccr..dopcs + Str(&lcArqMccr..numcs,6),;
+		&lcArqMccr..Pagos      With Iif(&lcArqMccr..Valors=&lcArqMccr..valpags,'0','1') ,;
+		&lcArqMccr..DopoTps    with &lcArqMccr..Dopcs + &lcArqMccr..Opers + &lcArqMccr..Tipos + &lcArqMccr..Pagos in &lcArqMccr.
+
+If lcArqMccr = 'crSigMvCcr'
+	=fRecalculaS( &lcArqMccr..Grupos, &lcArqMccr..Contas, &lcArqMccr..Datas, &lcArqMccr..Moedas, ThisForm.poDataMgr  )
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montahists
+------------------------------------------------------------
+PROCEDURE montahists
+Lparameters pTit, pFpg, pCli
+
+Local lcHis, lcTit, lcFpg, lcCli
+
+lcTit = Iif(Type([pTit])=[C], pTit, Titulos)
+lcFpg = Iif(Type([pFpg])=[C], pFpg, [])
+lcCli = Iif(Type([pCli])=[C], pCli, [])
+
+lcHis = []
+If Not Empty(crSigCdOpe.Hists)
+	lcHis = lcHis + Alltrim(crSigCdOpe.Hists) + [ ]
+EndIf
+
+If (crSigCdOpe.TpHists = 5) And ThisForm.MultEmps
+	lcHis = lcHis + Alltrim(Emps) + [ ]
+EndIf
+
+Do Case
+	Case (crSigCdOpe.TpHists = 1) && NF
+		lcHis = lcHis + Iif(Empty(Notas), [SEM DOCUMENTO], Alltrim(Notas))
+
+	Case (crSigCdOpe.TpHists = 2) && Título
+		lcHis = lcHis + Iif(Empty(lcTit), [SEM DOCUMENTO], Alltrim(lcTit)) + [/] + Alltrim(Str(ThisForm.ContaPar))
+
+	Case (crSigCdOpe.TpHists = 3) && Movimentação
+		lcHis = lcHis + fGerMascara(Numes)
+
+	Case (crSigCdOpe.TpHists = 5) && Movimentação Detalhada
+		lcHis = lcHis + Alltrim(Dopes) + [ ] + Alltrim(fGerMascara(Numes)) + [ ] + ;
+						Iif(Empty(lcFpg), [], [(] + Alltrim(crSigOpFp.FPags) + [) ]) + ;
+						Alltrim(lcCli)
+
+	Case (crSigCdOpe.TpHists = 6) && Conta
+		lcCta = Iif(crSigCdOpe.Origems = 1, crSigMvCab.ContaOs, crSigMvCab.ContaDs)
+
+		ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crTmpCli', 'Iclis', lcCta, [IClis, RClis])
+		lcHis = lcHis + Alltrim(crTmpCli.RClis) + [ (] + Alltrim(crTmpCli.IClis) + [)]
+EndCase
+
+Return lcHis
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters pAuto
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.Automatico = pAuto
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		With .poDataMgr
+			.AddCursor('SigCdCli', 'Iclis', 	'crSigCdCli')
+			.AddCursor('SigCdCeE', 'Codigos', 	'crSigCdCeE')
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab')
+			.AddCursor('SigMvCab', 'cIdChaves', 'csSigMvCab')
+			.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn')
+			.AddCursor('SigMvIts', 'cIdChaves', 'crSigMvIts')
+			.AddCursor('SigMvPar', 'cIdChaves', 'crSigMvPar')
+			.AddCursor('SigMvHst', 'cIdChaves', 'crSigMvHst')
+			.AddCursor('SigMvCcr', 'cIdChaves', 'crSigMvCcr')
+			.AddCursor('SigOpCoc', 'CidChaves', 'CrSigOpCoc')
+			.Addcursor('SigChe',   'Nums',      'crSigChe')
+			.Addcursor('SigCqChm', 'CidChaves', 'crSigCqChm')
+			.Addcursor('SigChLcq', 'Numlotes',  'crSigChLcq')
+			.Addcursor('SigMvNfi', 'CidChaves', 'crSigMvNfi')
+			.Addcursor('SigOpRbt', 'CidChaves', 'crSigOpRbt')
+
+		EndWith
+		
+		=DoDefault()
+	Else
+		If Not ThisForm.Automatico
+			=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		EndIf 	
+		Return .f.
+	EndIf
+EndWith
+
+lcSql = [Select * From SigCdGcr ]
+ThisForm.poDataMgr.Sqlexecute(lcsql,'crSigCdGcr')
+
+Select crSigCdGcr
+Index On Codigos Tag Codigos
+Go Top 
+
+lcSql = [Select * From SigCdPac ]
+ThisForm.poDataMgr.Sqlexecute(lcsql,'crSigCdPac')
+ThisForm.Sigkey = crSigCdPac.SigKeys
+
+lcSql = [Select * From SigCdPam ]
+ThisForm.poDataMgr.Sqlexecute(lcsql,'crSigCdPam')
+
+If ThisForm.Automatico 
+	ThisForm.cntBotoes.btnConfirmar.Click()
+	ThisForm.Release
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRBT.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+ThisForm.Processamento()
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPRBT
+RESERVED3 (ClassInfo): automatico
+podatamgr
+sigkey
+tipocep
+contapar
+multemps
+*geramovimentacao 
+*processamento 
+*lancacontacorrente 
+*fazcontra 
+*montahists 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

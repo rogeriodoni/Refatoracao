@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o ├║nico achado (`[SQL-FILTRO-INVENTADO]` na coluna `QT`) e ├® **falso positivo** ÔÇö n├úo h├í corre├º├úo a aplicar.
+
+**Por que**: busquei todas as ocorr├¬ncias de `Qt`/`WHERE` em `FormSIGOPPGC.prg` e `SIGOPPGCBO.prg`. Os ├║nicos `WHERE` existentes filtram por `Codigos` (`WHERE Codigos = m.loc_nCodigoBarra` e `WHERE Codigos <> 0`), exatamente como o legado (`Where Codigos = This.Value` / `Where Codigos <> 0`). N├úo existe nenhum `WHERE ... Qt`.
+
+O que o detector capturou foi esta linha em `SIGOPPGCBO.prg:178`:
+```foxpro
+IF USED("cursor_4c_CheckDup") AND cursor_4c_CheckDup.Qt > 1
+```
+Isso **n├úo ├® cl├íusula SQL** ÔÇö ├® um `IF` do VFP checando o resultado da agrega├º├úo j├í filtrada por `Codigos`, transcrito literalmente do legado:
+```foxpro
+* If CheckDup.Qt > 1
+```
+(coment├írio no pr├│prio arquivo, linha 1140 do form / linha 1140 do dump). O detector provavelmente associou o `.Qt` de um `IF` p├│s-query ao bloco SQL anterior e tratou como "filtro WHERE inventado", mas ├® exatamente a l├│gica de detec├º├úo de barra duplicada do original (regra de neg├│cio preservada pela PILAR 1).
+
+Remov├¬-la quebraria a checagem de duplicidade de barra ÔÇö que existe no legado ÔÇö ent├úo n├úo fiz nenhuma altera├º├úo nos arquivos. Nenhum outro item do pass SQL (colunas, tabelas, aspas, transa├º├úo avulsa) se aplica aqui.

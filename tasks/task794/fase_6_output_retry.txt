@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e **validada** (`VALIDADO=True`).
+
+## Por que a tentativa anterior reprovou
+
+Medi o gate da Fase 6 standalone (fun├º├Áes do orquestrador via AST + corpo do `case 6`, sem dot-source). O `FormSigOpRef` cai no ramo **CAPTURA** (OPERACIONAL, sem PageFrame, legado sem lista e sem lookup), que exige tr├¬s coisas: paridade de campos (7/7, piso 4 ÔÇö j├í estava), `BINDEVENT` (j├í estava) e **`PROCEDURE Validar<X>`** ÔÇö que faltava. A Fase 6 anterior adiou para a Fase 7 justamente o `getNewCGrus.Valid`, que ├® a valida├º├úo de campo desta fase.
+
+O gate tamb├®m confirmou, por escrito, o que **n├úo** se deve inventar: `ControlSource` e `FormBuscaAuxiliar` ÔÇö varri o dump e n├úo h├í `fwbusca*`/`sigacess`/`mAddColuna`.
+
+## O que foi implementado
+
+**`SigOpRefBO.prg`** (+324 linhas) ÔÇö 5 propriedades (`this_nPamCodProds`/`this_cPamDigProds`/`this_nPamTpCbars`/`this_cPamCUnis`/`this_nGrupoDestinoDigGprs`) e 4 m├®todos PUBLIC:
+- `CarregarParametrosSistema()` ÔÇö o `CursorQuery([SigCdPam]...)` do Init legado
+- `CarregarGrupoDestino()` ÔÇö o `CursorQuery([SigCdGrp],[csTmpGru]...)`
+- `ObterDigitoGrandeGrupo()` ÔÇö o par `CursorQuery('SigCdGpr')` + `Iif(Empty(DigAuts), DigProds, DigAuts)`
+- `GerarCodigoProdutoDestino()` ÔÇö o corpo do `getNewCGrus.Valid` **transcrito literalmente** (regra #17): `InList(lnTpPro,2,4,5)`, m├íscaras `@L 99999`/`@L 99999999`, `fGerUniqueKey`
+
+**`FormSigOpRef.prg`** (+230 linhas) ÔÇö `ValidarGrupoDestino()` (guard de "valor n├úo mudou" do legado + flag `Automatico` + TRY/CATCH, j├í que roda fora de TRY via LostFocus), `GrupoDestinoGotFocus()` (o `AntValue` do `When`), `AjustarCamposPorEstado()` (os tr├¬s `When` ÔåÆ `.Enabled`), `AplicarEstadoGrupoDestino()` (o bloco `DigGprs <> 1 Or SaiAuto`), `BINDEVENT` em **`LostFocus`/`GotFocus`** (nunca `KeyPress` ÔÇö regra #47) e o carregamento de SigCdPam/SigCdGrp no `CarregarProdutoOrigem`.
+
+Uma diverg├¬ncia deliberada, documentada no BO: quando o grupo n├úo existe em `SigCdGrp`, o legado **esvazia** o campo (`GetNewCGrus.Value = csTmpGru.Cgrus` em EOF); aqui o grupo pedido ├® preservado. Na pr├ítica o ramo n├úo ocorre (o grupo vem de `pGru` ou de `SigCdPro.cgrus`).
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 6 (standalone) | **VALIDADO=True** ÔÇö ramo CAPTURA |
+| `COMPILE` VFP9 (ap├│s smoke test) | FXP gerado, **sem `.err`** nos dois arquivos |
+| Probe de instancia├º├úo | `VARTYPE=O`, 20 controles, 4 m├®todos PUBLIC, `BIND_TOTAL=2` (GOTFOCUS/LOSTFOCUS ligados), chamadas de fora OK, `Enabled` conforme os `When` |
+| `Test-CompletudeCodigo` | OK nos dois (zero TODO/stub) |
+| `ValidadorSQLSchema` | PASSOU ÔÇö 683 tabelas, 9 statements, zero coluna inv├ílida |
+| `VerificarFuncoesNaoDefinidas` | zero chamadas ├│rf├ús (projeto inteiro) |
+| `VerificarMetodoProtegidoChamadoDeFora` | OK |
+| `VerificarLookupEmKeyPress` | ERRO=0, nenhum aviso em SigOpRef |
+| `VerificarPropriedadesInexistentes` | OK |
+| Bytes > 127 | **0** nos dois arquivos (tudo via `CHR()`) |
+
+Os `.fxp` gerados pelo teste foram apagados e os scripts tempor├írios removidos. Os handlers de Click (`btnConfirmar`/`btnSair`) e o disparo autom├ítico com `SaiAuto = .T.` seguem para a Fase 7, como o escopo das fases define.

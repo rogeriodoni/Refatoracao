@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® defeito de c├│digo ÔÇö ├® a conectividade com o SQL Server
+
+Testei agora: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` ÔåÆ **`TcpTestSucceeded = False`**.
+
+O erro acontece na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pre-flight gen├®rico de conex├úo (`SQLSTRINGCONNECT`) que roda **antes de qualquer `CREATEOBJECT`** do form/BO sendo testado. O log confirma isso: falha logo ap├│s "Carregando depend├¬ncias... OK", sem nenhum `CREATEOBJECT` de `Formsigopprr`/`sigopprrBO` chegando a executar.
+
+Fiz uma revis├úo independente completa dos dois arquivos contra o checklist do CLAUDE.md e **n├úo encontrei nenhum defeito**:
+- `RETURN` sempre fora de `TRY/CATCH` em todos os m├®todos de ambos os arquivos.
+- Handlers de `BINDEVENT` (`UsuarioLostFocus`/`SenhaLostFocus`) s├úo `PUBLIC`, sem par├ómetros (correto para `LostFocus`), com guarda de reentr├óncia.
+- Form nunca chama m├®todo `PROTECTED` do BO de fora (`ObterChavePrimaria` fica interno; s├│ usa `ValidarDados`/`ValidarLogin`/`CarregarDoCursor`/`LimparDados`/`DefinirOperadorLogado`, todos `PUBLIC`).
+- `CATCH` nunca vazio ÔÇö no form chama `MsgErro`; no BO preenche `this_cMensagemErro` e o chamador exibe via `MsgAviso` (padr├úo j├í usado no projeto).
+- `EscaparSQL` sem aspas extras.
+- Guard de `Buffering` antes do `TABLEREVERT`.
+- `ValidarParametros()` j├í implementa exatamente o bypass can├┤nico `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` antes de checar `gnConnHandle`.
+
+Esse mesmo padr├úo (erro 1526/DBNETLIB na ETAPA 1B, antes do `CREATEOBJECT`) j├í foi confirmado **20+ vezes em 15+ tasks diferentes** desde 2026-11-05, sempre sem defeito de c├│digo encontrado. Por isso, **n├úo editei os arquivos** ÔÇö regravar c├│digo j├í correto s├│ para "satisfazer" o gate seria dano, n├úo corre├º├úo, conforme j├í registrado na mem├│ria do projeto (que atualizei com esta ocorr├¬ncia).
+
+**Recomenda├º├úo**: dar uma exce├º├úo ao gate `06_testForm` para o erro 1526/conectividade nesta task, em vez de consumir as tentativas de retry restantes contra uma falha de rede que n├úo vai se resolver por si s├│.

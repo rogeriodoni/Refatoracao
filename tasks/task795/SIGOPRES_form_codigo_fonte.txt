@@ -1,0 +1,496 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPRES.SCX
+* Data/Hora: 16/11/2026 22:03:23
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPRES
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPRES
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPRES.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPRES.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPRES
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grid1
+  Parent: SIGOPRES
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPRES.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRES.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPRES.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRES.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Fwbtng1
+  Parent: SIGOPRES
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES
+------------------------------------------------------------
+  Height = 320
+  Width = 470
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Estoque estimado por dia"
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 36,84,155
+  Themes = .T.
+  nsaldo = 0
+  parentform = .F.
+  Name = "SIGOPRES"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 374
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Grid1
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 200
+  Left = 124
+  RowHeight = 16
+  SplitBar = .F.
+  Top = 99
+  Width = 221
+  Themes = .F.
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 90
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Estoque"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRES.Fwbtng1
+------------------------------------------------------------
+  Top = 3
+  Left = 395
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Fwbtng1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPRES
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters ocnx, __saldo
+
+*!*	thisform.parentform = oform
+
+lcAlias = Upper(Alias())
+*!*	lcArqCb = [TprMvCab]
+lcproduto = &lcAlias..CPros
+dtini = Dtot(Date()) &&TprMvCab.datas
+dtfin = Iif(IsNull(TprMvCab.prazoents) or Empty(TprMvCab.prazoents),TprMvCab.datas,TprMvCab.prazoents)
+dtfin = fDtoSQL(dtfin,'23:59:59')
+
+*** Seleciona as operações que tem movimentação do determinado produto no período da venda e entrega, e que não foi usada subnível
+lcoper = TprMvCab.dopes
+lcquery = [select b.empdopnums, b.datas, b.prazoents, a.qtds, a.qtbaixas, 000000.000 as qtdests ] + ;
+			[from SigMvItn a inner join SigMvCab b on a.empdopnums = b.empdopnums where cpros = ?lcproduto and a.dopes = ?lcoper and ]+;
+			[(b.datas between ?dtini and ?dtfin or b.prazoents >= ?dtini) and b.chksubn = 0 ] +;
+			[order by b.datas , b.prazoents ]
+ocnx.sqlexecute(lcquery,[TmpReser])
+
+*** Seleciona as operações Pai que tem movimentação do determinado produto no período da venda e entrega
+lcquery2 = [select dopes from SigCdOpe where nivels = '] + lcoper + [' and copers = 1]
+ocnx.sqlexecute(lcquery2,[TmpOpe])
+lcoper = tmpOpe.dopes
+ocnx.sqlexecute(lcquery,[TmpLoca])
+
+Create Cursor Tmpresul(datas d, estoque n(11,3))
+index on datas to datas
+
+Insert into Tmpresul(datas,estoque) values (Date(), __saldo)
+
+*** Calcula o estoque por dia dos itens já reservados
+Select TmpReser
+Scan
+	=Seek(Ttod(Tmpreser.datas),'TmpResul','datas')
+	If !Eof('TmpResul')
+		If TprMvCab.empdopnums = tmpreser.empdopnums
+			replace estoque with estoque + (TmpReser.qtds - TmpReser.qtbaixas) for datas >= Ttod(Tmpreser.datas) in TmpResul
+		Else
+			replace estoque with estoque - (TmpReser.qtds - TmpReser.qtbaixas) for datas >= Ttod(Tmpreser.datas) in TmpResul
+		EndIf
+	Else
+		dmax = Max(Ttod(dtini),TmpReser.datas)
+		Select Max(datas) as datas from tmpresul where datas <= dmax into cursor Tmpdata
+		lnsaldo = __saldo
+		If !IsNull(tmpdata.datas)
+	*!*			Set near On
+			=Seek(tmpdata.datas,'Tmpresul','datas')
+	*!*			Set Near Off
+			If !Eof('Tmpresul')
+	*!*				Skip -1 in Tmpresul
+	*!*				If !Eof('Tmpresul')
+					lnsaldo = Tmpresul.estoque
+	*!*				EndIf
+			EndIf	
+		EndIf
+		If TprMvCab.empdopnums = tmpreser.empdopnums
+			Insert into TmpResul(datas,estoque) values (Ttod(Tmpreser.datas), lnsaldo + (TmpReser.qtds - TmpReser.qtbaixas))
+		Else
+			Insert into TmpResul(datas,estoque) values (Ttod(Tmpreser.datas), lnsaldo - (TmpReser.qtds - TmpReser.qtbaixas))
+		EndIf
+	EndIf
+	
+	=Seek(Ttod(TmpReser.prazoents),'TmpResul','datas')
+	If !Eof('TmpResul')
+		replace estoque with estoque + (TmpReser.qtds - TmpReser.qtbaixas) for datas >= Ttod(Tmpreser.prazoents) in TmpResul
+	Else
+		Select Max(datas) as datas from tmpresul where datas between TmpReser.datas and Ttod(TmpReser.prazoents) into cursor Tmpdata
+		lnsaldo = __saldo
+
+		If !IsNull(tmpdata.datas)
+	*!*			Set near On
+			=Seek(tmpdata.datas,'Tmpresul','datas')
+	*!*			Set Near Off
+			If !Eof('Tmpresul')
+	*!*				Skip -1 in Tmpresul
+	*!*				If !Eof('Tmpresul')
+					lnsaldo = Tmpresul.estoque
+	*!*				EndIf
+			EndIf	
+		EndIf
+		
+		Insert into Tmpresul(datas,estoque) values (Ttod(TmpReser.prazoents), lnsaldo + (TmpReser.qtds - TmpReser.qtbaixas)) &&
+	EndIf
+EndScan
+
+*** Calcula o estoque por dia dos itens já locados
+Select TmpLoca
+Scan 
+	=Seek(Ttod(TmpLoca.datas),'Tmpresul','datas')
+	If !Eof('Tmpresul')
+		replace estoque with estoque - (TmpLoca.qtds - TmpLoca.qtbaixas) for datas >= Ttod(TmpLoca.datas) and datas < dtini in TmpResul
+	Else
+		dmax = Max(Ttod(dtini),TmpLoca.datas)
+		Select Max(datas) as datas from tmpresul where datas <= dmax into cursor Tmpdata
+		lnsaldo = __saldo
+	
+		If !IsNull(tmpdata.datas)
+	*!*			Set near On
+			=Seek(tmpdata.datas,'Tmpresul','datas')
+	*!*			Set Near Off
+			If !Eof('Tmpresul')
+	*!*				Skip -1 in Tmpresul
+	*!*				If !Eof('Tmpresul')
+					lnsaldo = Tmpresul.estoque
+	*!*				EndIf
+			EndIf	
+		EndIf
+		Insert into Tmpresul(datas,estoque) values (Ttod(TmpLoca.datas), lnsaldo - (TmpLoca.qtds - TmpLoca.qtbaixas)) &&__saldo 
+	EndIf
+*!*		lnsaldo = lnsaldo - TmpLoca.qtds 
+	
+	=Seek(Ttod(TmpLoca.prazoents),'TmpResul','datas')
+	If !Eof('TmpResul')
+		replace estoque with estoque + (TmpLoca.qtds - TmpLoca.qtbaixas) for datas >= Ttod(TmpLoca.prazoents) in TmpResul
+	Else
+		Select Max(datas) as datas from tmpresul where datas between TmpLoca.datas and Ttod(TmpLoca.prazoents) into cursor Tmpdata
+		lnsaldo = __saldo
+	
+		If !IsNull(tmpdata.datas)
+	*!*			Set near On
+			=Seek(tmpdata.datas,'Tmpresul','datas')
+	*!*			Set Near Off
+			If !Eof('Tmpresul')
+	*!*				Skip -1 in Tmpresul
+	*!*				If !Eof('Tmpresul')
+					lnsaldo = Tmpresul.estoque
+	*!*				EndIf
+			EndIf	
+		EndIf	
+		Insert into TmpResul(datas,estoque) values (Ttod(TmpLoca.prazoents), lnsaldo + (TmpLoca.qtds - TmpLoca.qtbaixas)) &&__saldo 
+	EndIf
+EndScan
+
+*** Inseri estoque nos dias que não tiveram movimentação
+Select Min(datas) as dtini, Max(datas) as dtfin from TmpResul into cursor TmpData
+nsaldoant = __saldo
+If Reccount('TmpResul') > 0
+	For x = 0 to (TmpData.dtfin - TmpData.dtini)
+		=Seek(TmpData.dtini+x,'Tmpresul','datas')
+		If !Eof('Tmpresul')
+			nsaldoant = Tmpresul.estoque
+		Else
+			Insert into Tmpresul(datas,estoque) values (TmpData.dtini+x, nsaldoant)
+		EndIf
+	Next 
+Else
+	Insert into Tmpresul(datas,estoque) values (Ttod(TprMvCab.datas), nsaldoant)
+EndIf
+
+Select * from Tmpresul where datas between dtini and dtfin into cursor Tmpresul order by datas
+
+Select Tmpresul
+index on datas to datas
+Set near On
+=Seek(Ttod(TprMvCab.datas),'Tmpresul','datas')
+Set Near Off
+If Bof() or Eof()
+	Go bottom
+EndIf
+thisform.nsaldo = TmpResul.estoque
+thisform.grid1.RecordSource = [TmpResul]
+thisform.grid1.column1.ControlSource = [TmpResul.datas]
+thisform.grid1.column2.ControlSource = [TmpResul.estoque]
+
+thisform.Refresh()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRES.Fwbtng1
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+__saldo = thisform.nsaldo
+thisform.Release()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPRES
+RESERVED3 (ClassInfo): nsaldo
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

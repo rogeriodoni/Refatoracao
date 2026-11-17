@@ -1,0 +1,1277 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpRef.SCX
+* Data/Hora: 16/11/2026 20:23:42
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPREF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPREF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPREF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPREF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: getNewCpro
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOldCPro
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNewCGrus
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getOldCGrus
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Qtd
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblNotOk
+  Parent: SIGOPREF
+  Class: label
+  BaseClass: label
+
+Objeto: lblOk
+  Parent: SIGOPREF
+  Class: label
+  BaseClass: label
+
+Objeto: Say5
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say19
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opc_situacao
+  Parent: SIGOPREF
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntBotoes
+  Parent: SIGOPREF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getnewdpro
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getolddpro
+  Parent: SIGOPREF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPREF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 125
+  Left = 109
+  Width = 265
+  Height = 92
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 282
+  Width = 583
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cadastro de Produto"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Themes = .F.
+  cadpro = .F.
+  dopes = .F.
+  identfixa = .F.
+  saiauto = 
+  _memberdata = <VFPData><memberdata name="saiauto" type="property" display="SaiAuto"/></VFPData>
+  Name = "SIGOPREF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.getNewCpro
+------------------------------------------------------------
+  Height = 23
+  InputMask = ""
+  Left = 197
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 114
+  Width = 108
+  BorderColor = 0,0,0
+  Name = "getNewCpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.GetOldCPro
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 197
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 89
+  Width = 108
+  DisabledBackColor = 251,254,226
+  DisabledForeColor = 36,84,155
+  BorderColor = 0,0,0
+  Name = "GetOldCPro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.getNewCGrus
+------------------------------------------------------------
+  Height = 23
+  InputMask = ""
+  Left = 435
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 114
+  Width = 31
+  BorderColor = 0,0,0
+  Name = "getNewCGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.getOldCGrus
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 435
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 89
+  Width = 31
+  DisabledBackColor = 251,254,226
+  DisabledForeColor = 36,84,155
+  BorderColor = 0,0,0
+  Name = "getOldCGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Get_Qtd
+------------------------------------------------------------
+  FontBold = .T.
+  Height = 23
+  InputMask = "99"
+  Left = 435
+  MaxLength = 2
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 140
+  Width = 31
+  BackColor = 231,254,253
+  BorderColor = 0,0,0
+  Name = "Get_Qtd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Quantidade :"
+  Height = 15
+  Left = 357
+  Top = 144
+  Width = 65
+  TabIndex = 16
+  ForeColor = 0,0,0
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.lblNotOk
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Novo Produto Não Foi Criado!"
+  Height = 17
+  Left = 147
+  Top = 226
+  Visible = .F.
+  Width = 306
+  TabIndex = 19
+  ForeColor = 192,46,20
+  Name = "lblNotOk"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.lblOk
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Novo Produto Criado!"
+  Height = 37
+  Left = 144
+  Top = 239
+  Visible = .F.
+  Width = 306
+  TabIndex = 18
+  ForeColor = 0,128,0
+  Name = "lblOk"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código de Destino :"
+  Height = 15
+  Left = 96
+  Top = 118
+  Width = 96
+  TabIndex = 11
+  ForeColor = 0,0,0
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say19
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Situação :"
+  Left = 142
+  Top = 144
+  TabIndex = 14
+  ForeColor = 0,0,0
+  Name = "Say19"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Opc_situacao
+------------------------------------------------------------
+  AutoSize = .F.
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 17
+  Left = 190
+  Top = 143
+  Width = 129
+  TabIndex = 15
+  Name = "Opc_situacao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Ativ\<o"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 1
+  Option1.Width = 43
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 0,0,0
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "I\<nativo"
+  Option2.Height = 17
+  Option2.Left = 63
+  Option2.Top = 0
+  Option2.Width = 61
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 0,0,0
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código de Origem :"
+  Height = 15
+  Left = 98
+  Top = 93
+  Width = 94
+  TabIndex = 8
+  ForeColor = 0,0,0
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Destino :"
+  Height = 15
+  Left = 330
+  Top = 118
+  Width = 92
+  TabIndex = 13
+  ForeColor = 0,0,0
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Origem :"
+  Height = 15
+  Left = 332
+  Top = 93
+  Width = 90
+  TabIndex = 9
+  ForeColor = 0,0,0
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 425
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 7
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Realizar a Cópia de Produtos"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnConfirmar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 4
+  Command2.ToolTipText = "[Esc] Sair Sem Gravar os Dados"
+  Command2.SpecialEffect = 0
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.getnewdpro
+------------------------------------------------------------
+  Height = 23
+  InputMask = ""
+  Left = 196
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 191
+  Width = 290
+  BorderColor = 0,0,0
+  Name = "getnewdpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.getolddpro
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 196
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 166
+  Width = 290
+  DisabledBackColor = 251,254,226
+  DisabledForeColor = 36,84,155
+  BorderColor = 0,0,0
+  Name = "getolddpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código de Destino :"
+  Height = 15
+  Left = 96
+  Top = 195
+  Width = 96
+  TabIndex = 17
+  ForeColor = 0,0,0
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPREF.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código de Origem :"
+  Height = 15
+  Left = 98
+  Top = 170
+  Width = 94
+  TabIndex = 12
+  ForeColor = 0,0,0
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPREF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE auxmontadescs
+------------------------------------------------------------
+PROCEDURE auxmontadescs
+Private pGru, pSGr
+
+Local lnCPro
+
+Select crSigCdPro
+pGru = crSigCdPro.CGrus
+pSGr = crSigCdPro.SGrus
+
+Select crSigCdPrd
+Go Top In crSigCdPrd
+Locate For CGrus = pGru
+If Not Eof([crSigCdPrd])
+	ThisForm.MontaDescrs
+	
+	Return .t.
+EndIf
+
+Go Top In crSigCdPam
+lnCPro      = crSigCdPam.CodProds
+
+lnMontaGrDs = 0
+
+If Not Empty(pGru)
+
+	lStrQuery = [Select * From SigCdGrp Where CGrus = '] + pGru + [']
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'crSigCdGrp') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdGrp)')
+		Return 0
+	EndIf
+	
+	lStrQuery = [Select * From SigCdPsg Where Cgrus = '] + pGru + [' And codigos = '] + pSGr + [']
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'crSigCdPsg') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdPsg)')
+		Return 0
+	EndIf
+
+	Go Top In crSigCdGrp
+	Go Top In crSigCdPsg
+	
+	lnCPro      = Iif(Empty(crSigCdGrp.CodProds), crSigCdPam.CodProds, crSigCdGrp.CodProds)
+	lnMontaGrds = Nvl(crSigCdGrp.MontaGrDs,0)
+EndIf
+
+If (lnMontaGrDs <> 5)
+	* 1 - Composição
+	* 2 - Grupo + Composição
+	* 3 - SubGrupo + Composição
+	* 4 - Grupo + SubGrupo + Composição
+	* 5 - Manual
+	* 6 - Grupo + Fornecedor (4 Dig.) + Ref.Forneedor
+	* 7 - Grupo + Cor + Composição
+	* 8 - Grupo + Pedras + Ouro
+	Do Case
+		
+		Case (crSigCdGrp.MontaGrDs = 1) && Composição
+			pGru = ''
+
+		Case (crSigCdGrp.MontaGrDs = 2) && Grupo + Composição
+			pGru = Alltrim(Iif(Eof('crSigCdGrp'), '', crSigCdGrp.DGrus))
+
+		Case (crSigCdGrp.MontaGrDs = 3) && SubGrupo + Composição
+			pGru = Alltrim(Iif(Not Eof('crSigCdPsg'), crSigCdPsg.Descricaos, Iif(Eof('crSigCdGrp'), '', crSigCdGrp.DGrus)))
+			
+		Case (crSigCdGrp.MontaGrDs = 4) && Grupo + SubGrupo + Composição
+			pGru = Alltrim(Iif(Eof('crSigCdGrp'), '', Alltrim(crSigCdGrp.DGrus)) + ' ' + Iif(Eof('crSigCdPsg'), '', Alltrim(crSigCdPsg.Descricaos)))
+
+		Case (crSigCdGrp.MontaGrDs = 6) && Grupo + Fornecedor (4 digitos) + Referencia Fornecedor
+			pGru = Alltrim(Iif(Eof('crSigCdGrp'), '', Alltrim(crSigCdGrp.DGrus)) + ' ' +;
+					Iif(Eof('crSigCdCli'), '', Alltrim(Left(Alltrim(crSigCdCli.Rclis), 4))) + ' ' +;
+					Alltrim(crSigCdPro.reffs))
+
+		Case (crSigCdGrp.MontaGrDs = 7) && Grupo + Cor + Composição
+			ThisForm.poDataMgr.CursorQuery('SigCdCor', 'LocalCor', 'Cods', crSigCdPro.CodCors, 'Cods,Descs')
+			pGru = Alltrim(Iif(Eof('crSigCdGrp'), '', Alltrim(crSigCdGrp.DGrus)) + ' ' + Iif(Eof('LocalCor'), '', Alltrim(LocalCor.Descs)))
+
+	EndCase
+
+	lcDescr = fGerarDescrs(pGru, crSigCdPro.CPros, 3, ThisForm.poDataMgr, .f., .f., .f.)
+
+	If Empty(lcDescr)
+		lcDescr = [PRODUTO SEM COMPOSIÇÃO]
+	EndIf
+	
+	If (crSigCdGrp.MontaGrDs = 8) && Grupo + Pedras + Ouro
+		Replace DPros      With lcDescr, ;
+				ObsCompras With lcDescr In crSigCdPro
+	Else
+		Replace DPros With Subs(lcDescr, 01, 40) In crSigCdPro
+	EndIf
+Else
+	If !Empty(thisform.getnewdpro.Value)
+		Replace DPros With Subs(thisform.getnewdpro.Value, 01, 40) In crSigCdPro
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montadescrs
+------------------------------------------------------------
+PROCEDURE montadescrs
+Local lcDes
+
+If ThisForm.mSv_Inserir()
+	Select Distinct CGrus, Linguas, TpMontas ;
+	  From crSigCdPrd ;
+	 Where CGrus = crSigCdPro.CGrus ;
+	 Order By TpMontas ;
+	  Into Cursor LocalMontas
+
+	Select LocalMontas
+	Scan
+		lcDes = fGerDescritivo(ThisForm.poDataMgr, crSigCdPro.CPros, LocalMontas.TpMontas)
+
+		If Not lcDes = Chr(254)
+			If Not Empty(lcDes) And (LocalMontas.Linguas = 2) && Descrição Em Inglês
+				Select crSigCdDic
+				Scan
+					lcDes = Strtran(lcDes, Alltrim(crSigCdDic.Expressao), Alltrim(crSigCdDic.Traducao))
+				EndScan
+			EndIf
+
+			Do Case
+				Case (LocalMontas.TpMontas = 1) && Descrição do Produto	
+					Replace DPros With lcDes In crSigCdPro
+
+				Case (LocalMontas.TpMontas = 2) && Descrição de Compra	
+					Replace DscCompras With lcDes In crSigCdPro
+
+				Case (LocalMontas.TpMontas = 3) && Descrição Completa	
+					Replace DPro3s With lcDes In crSigCdPro
+
+				Case (LocalMontas.TpMontas = 4) && Observação da Compra	
+					Replace ObsCompras With lcDes In crSigCdPro
+
+				Case (LocalMontas.TpMontas = 5) && Descrição Fiscal		
+					Replace DescFis With lcDes In crSigCdPro
+
+				Case (LocalMontas.TpMontas = 6) && Descrição ECF		
+					Replace DescEcfs With lcDes In crSigCdPro
+			EndCase
+		EndIf
+	EndScan
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Private pPro, llTaOk
+
+pPro = crSigCdPro.CPros
+
+llTaOk = .t.
+* Incluindo os Registros
+If Not ThisForm.poDataMgr.Update('crSigCdPro')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - crSigCdPro)')
+	llTaOk = .f.
+EndIf
+If llTaOk And Not ThisForm.poDataMgr.Update('crSigPrCpo')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - crSigPrCpo)')
+	llTaOk = .f.
+EndIf
+If llTaOk And Not ThisForm.poDataMgr.Update('crSigCdPrf')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - crSigCdPrf)')
+	llTaOk = .f.
+EndIf
+If llTaOk And (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - Commit)')
+	llTaOk = .f.
+EndIf
+
+If Not llTaOk
+	ThisForm.poDataMgr.RollBack()
+EndIf
+Return llTaOk
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pPro, pSit, pAut, pIFx, pCad, pDop, pGru
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdPro],   [CPros],     [crSigCdPro])
+			.AddCursor([SigPrCpo], [cIdChaves], [crSigPrCpo])
+			.AddCursor([SigCdPrf],  [cIdChaves], [crSigCdPrf])
+		EndWith
+
+		.poDataMgr.CursorQuery([SigCdPam], [crSigCdPam], .f., .f., [CodProds, DigProds, TpCbars, CUnis])
+		If Not Used([crSigCdPam])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdPam)])
+			Return .f.
+		EndIf
+
+		.poDataMgr.CursorQuery([SigCdPro], [csTmpPro], [CPros], pPro, [CPros, CGrus, Dpros])
+		If Not Used([csTmpPro])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - csTmpPro)])
+			Return .f.
+		EndIf
+
+		lcGrp = Iif(Type([pGru]) = [C], pGru, csTmpPro.Cgrus)
+		.poDataMgr.CursorQuery([SigCdGrp], [csTmpGru], [CGrus], lcGrp, [CGrus, DigGprs])
+		If Not Used([csTmpGru])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - csTmpGru)])
+			Return .f.
+		EndIf
+
+		lcQuery = [Select * From SigCdPrd]
+		If (.poDataMgr.SqlExecute(lcQuery, [crSigCdPrd]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdPrd)])
+			Return .f.
+		EndIf
+		Select crSigCdPrd
+		Index On CGrus + Str(TpMontas, 2) + Str(COrds, 2) Tag CGrus
+		Go Top In crSigCdPrd
+
+		lcQuery = [Select Str(Len(Ltrim(Rtrim(a.Expressao))), 10) as COrdems, a.Expressao, a.Traducao ] + ;
+					[From SigCdDic a ] + ;
+				   [Where a.Idioma = 'INGLES    ' ] + ;
+				   [Order By 1 Desc, 2 Asc]
+
+		If (.poDataMgr.SqlExecute(lcQuery, [crSigCdDic]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdDic)])
+			Return .f.
+		EndIf
+
+		.IdentFixa  = Iif(Type([pIFx]) <> [N], 0, pIFx)
+		.Situacaoit = pSit
+		.Newseq 	= 0
+		.AntValue 	= []
+		.SaiAuto 	= pAut
+		.CadPro  	= Iif(Type([pCad]) = [N], pCad, 0)
+		.Dopes  	= Iif(Type([pDop]) <> [C], [], pDop)
+
+		.GetOldCPro.Value  = csTmpPro.Cpros
+		.GetOldCGrus.Value = csTmpPro.Cgrus
+		.GetNewCGrus.Value = csTmpGru.Cgrus
+		.getOldDpro.value = csTmpPro.Dpros		
+		.Get_Qtd.Value     = 1
+
+		If (csTmpGru.DigGprs <> 1) Or .SaiAuto
+			.AcesGru = .f.
+			.GetNewCGrus.Valid()
+			.GetNewCGrus.ReadOnly = .t.
+		Else
+			.AcesGru = .t.
+			.GetNewCGrus.ReadOnly = .f.
+			.GetNewCGrus.Setfocus
+		EndIf
+		If (.Situacaoit = 1)
+			.Opc_situacao.Value = 1
+			.Opc_situacao.Enabled = .f.
+		EndIf
+		If (.Situacaoit = 2)
+			.Opc_situacao.Value = 2
+			.Opc_situacao.Enabled = .f.
+		EndIf
+		If .SaiAuto 
+			.cntBotoes.btnConfirmar.Click()
+		EndIf
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return ThisForm.RetCodProduto
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPREF.getNewCpro
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not ThisForm.Automatico 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPREF.getNewCGrus
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (ThisForm.AntValue = This.Value) And Not Empty(Thisform.GetNewCpro.Value)
+	Return .t.
+EndIf
+
+ThisForm.Automatico = .f.
+
+lcCGrus = Alltrim(This.Value)
+lcNewCPros = ''
+lStrQuery = [Select CGrus, Mercs, CodProds, IdeCPros From SigCdGrp Where CGrus = '] + lcCGrus + [']
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpGruPro') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpGruPro)')
+	Return 0
+EndIf
+Select TmpGruPro
+Go Top
+lnTpPro = Iif(Empty(lcCGrus) Or Empty(TmpGruPro.CodProds), crSigCdPam.CodProds, TmpGruPro.CodProds)
+
+If InList(lnTpPro,2,4,5) And Not Empty(lcCGrus)
+	ThisForm.poDatamgr.CursorQuery('SigCdGpr','crSigCdGpr1','Codigos',TmpGruPro.Mercs)
+	Select crSigCdGpr1
+	Go Top
+		
+	If (lnTpPro = 2)
+		lcDigProds = Iif(Empty(crSigCdGpr1.DigAuts),crSigCdPam.DigProds,crSigCdGpr1.DigAuts)
+		ThisForm.Newseq = fGerUniqueKey('PRODUTO' + Alltrim(lcCGrus))
+		lcNewCPros = Alltrim(lcDigProds + lcCGrus + Transform(ThisForm.NewSeq,'@L 99999'))
+	Else 
+		ThisForm.NewSeq = fGerUniqueKey('PRODUTO' + Alltrim(TmpGruPro.IdeCPros))
+		If (lnTpPro = 4)
+			lcNewCPros = Alltrim(TmpGruPro.IdeCPros + Transform(ThisForm.NewSeq,'@L 99999999'))
+		Else
+			lcNewCPros = Alltrim(TmpGruPro.IdeCPros + Transform(ThisForm.NewSeq,'@L 99999'))
+		EndIf 
+	EndIf 
+
+	With ThisForm
+		.getNewCpro.Value = lcNewCPros
+		.getNewCpro.Refresh
+	EndWith
+	If Not Empty(lcnewCpros)
+		ThisForm.Automatico = .t.
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.Antvalue = This.Value
+
+Return (ThisForm.AcesGru)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPREF.Get_Qtd
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.Automatico And Not ThisForm.SaiAuto)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPREF.Opc_situacao
+* Classe: fwoption (Base: optiongroup)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option1.When
+------------------------------------------------------------
+PROCEDURE Option1.When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option2.When
+------------------------------------------------------------
+PROCEDURE Option2.When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPREF.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+Local lcThisRec, lcNewPros, lcLocPros, lCreated
+
+lcLocPros = Padr(Thisform.getOldCpro.Value, 14)
+lcNewPros = Padr(Thisform.getNewCpro.Value, 14)
+
+lcLocGrus = Padr(Thisform.getOldCGrus.Value, 03)
+lcNewGrus = Padr(Thisform.getNewCGrus.Value, 03)
+
+ThisForm.RetCodproduto = ' '
+
+lCreated = .f.
+
+ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crTmp', 'CPros', lcNewPros)
+If (Reccount('crTmp') > 0)
+	=MessageBox('A Nova Referência Informada Já Está Cadastrada!!!', 0+48, '')
+	Thisform.getNewCpro.SetFocus
+	Use In crTmp
+	Return 0
+EndIf
+Use In crTmp
+
+Go Top In crSigCdPam
+If Empty(lcNewPros) Or fVerificarBarras(lcNewPros, crSigCdPam.TpCBars)
+	=MessageBox('Código de Produto Inválido!!!', 0+48, '')
+	Return 0
+EndIf
+
+If Not ThisForm.SaiAuto And MessageBox('Será Gerado Um Novo Produto Com a Referência : [' + lcNewPros + ']' + Chr(13) + ;
+			  'Com a Situação : ['+ Iif(Thisform.Opc_situacao.Value=1,'ATIVA','NÃO ATIVA') + ']' + Chr(13) + ;
+			  Iif(Not Empty(lcNewGrus) And (lcLocGrus <> lcNewGrus), 'O Grupo Gerado Será o [' + lcNewGrus + ']', '') + Chr(13) + ;
+              'Confirma a Geração ?', 4+32+256, 'Solicitação de Confirmação...') <> 6
+	Wait Window 'Operação Cancelada Pelo Usuário...' timeOut 2
+	Wait Clear
+	Return 0
+EndIf
+
+Select crSigPrCpo
+Zap
+
+* Gerando a Composição
+If ThisForm.poDataMgr.CursorQuery('SigPrCpo', 'crTmp', 'CPros', lcLocPros)
+	Select crTmp
+	Scan
+		Select crTmp
+		Scatter Memvar
+		m.CPros  	= lcNewPros
+		m.DtMovs 	= DateTime()
+		m.cIdChaves = fUniqueIds()
+
+		Insert Into crSigPrCpo From Memvar
+	EndScan
+EndIf
+Use In crTmp
+
+Select crSigCdPrf
+Zap
+
+* Gerando as Linhas
+If ThisForm.poDataMgr.CursorQuery('SigCdPrf', 'crTmp', 'Produtos', lcLocPros)
+	Select crTmp
+	Scan
+		Select crTmp
+		Scatter Memvar Memo
+		m.FigProcs  = Iif(IsEmpty(m.FigProcs), Null, m.FigProcs)
+		m.Obs       = Iif(IsEmpty(m.Obs),      Null, m.Obs)
+		m.Produtos  = lcNewPros
+		m.cIdChaves = fUniqueIds()
+
+		Insert Into crSigCdPrf From Memvar
+	EndScan
+EndIf
+Use In crTmp
+
+lcSql = [Select * from SigCdPro where Cpros = ']+lcLocPros+[']
+ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmp')
+
+* Gerando o Produto
+Select CrTmp
+Scatter Memvar Memo
+Select crSigCdPro
+Zap
+
+m.Cpros  = lcNewPros
+If Not Empty(lcNewGrus) And (lcLocGrus <> lcNewGrus)
+	m.CGrus = lcNewGrus
+EndIf
+m.Situas = Thisform.Opc_situacao.Value
+m.nIdentFixa = ThisForm.IdentFixa
+If ThisForm.CadPro = 5
+	ThisForm.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],ThisForm.Dopes,[FinPads,nLimpaFoto,nSeriaPads])
+	m.CodFinP = crSigOpCdd.FinPads
+	If InList(crSigOpCdd.nSeriaPads,1,2)
+		m.Encoms = crSigOpCdd.nSeriaPads
+	EndIf
+	If crSigOpCdd.nLimpaFoto = 1
+		m.FigJpgs = []
+	EndIf		
+EndIf
+
+Insert Into crSigCdPro From Memvar
+
+Select crSigCdPro
+ThisForm.Inicio = fGerUniqueKey('SigCdPro')
+
+Cbar     = Transform(ThisForm.Inicio, '@L 9999999999999')
+Cbar1    = fDigVerificador(Cbar)
+Cbar2    = Cbar + Transform(Cbar1, '@L 9')
+lcProEqs = Thisform.GetOldCPro.Value
+
+If ThisForm.CadPro = 5
+	lcProEqs = Space(14)
+EndIf
+
+Set Decimals To 0
+Replace Cbars With Val(Cbar2) In crSigCdPro
+Set Decimals To 2
+
+Replace Datas     With DateTime(), ;
+		DtIncs    With DateTime(), ;
+		Flagctabs With .t., ;
+		Transps   With .f., ;
+		UsuIncs   With Usuar,;
+		CProEqs   With lcProEqs In crSigCdPro
+
+ThisForm.Auxmontadescs()  &&Monta Descricao do Produto
+
+ThisForm.RetCodproduto = ' '
+If ThisForm.mSv_Inserir()
+	ThisForm.retcodproduto = Padr(lcNewPros,14) + Str(ThisForm.Get_Qtd.Value,2)
+EndIf
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+lcCGrus = Thisform.GetNewCgrus.Value
+lcCPNew = Thisform.GetNewCPro.Value
+
+lStrQuery = [Select CGrus,CodProds,IdeCPros From SigCdGrp Where CGrus = ']+lcCGrus+[' ]
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpGruPro') < 1
+	ThisForm.Release
+EndIf
+Select TmpGruPro
+Go Top
+lnTpPro = Iif(Empty(lcCGrus) Or Empty(TmpGruPro.CodProds),crSigCdPam.CodProds,TmpGruPro.CodProds)
+If InList(lnTpPro,2,4,5) And !Empty(lcCGrus)
+	lcCGrus = Alltrim(lcCGrus)
+	If (lnTpPro = 2)
+		_Codigo = Val(Substr(lcCPNew,Len(lcCGrus) + 2,5))
+		=fCanUniqueKey(ThisForm.NewSeq,'PRODUTO' + Alltrim(lcCGrus) )
+	Else
+		Select TmpGruPro
+		Go Top
+		If !Eof()
+			=fCanUniqueKey(ThisForm.NewSeq,'PRODUTO' + Alltrim(TmpGruPro.IdeCPros))
+		EndIf
+	EndIf
+EndIf
+ThisForm.Retcodproduto = ' '
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPREF
+RESERVED3 (ClassInfo): acesgru
+antvalue
+atualizadescr
+automatico
+cadpro
+dopes
+identfixa
+inicio
+newseq
+parentform
+podatamgr
+retcodproduto
+saiauto
+situacaoit
+_memberdata XML Metadata for customizable properties
+*auxmontadescs 
+*montadescrs 
+*msv_inserir 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

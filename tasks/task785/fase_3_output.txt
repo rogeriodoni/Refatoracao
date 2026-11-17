@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 complete. **FormSIGOPPEN.prg** created at `C:\4c\projeto\app\forms\operacionais\FormSIGOPPEN.prg` with:
+
+- `DEFINE CLASS FormSIGOPPEN AS FormBase` ÔÇö canonical visual props (1000x600, DataSession=2, sem barra de t├¡tulo), `this_oBusinessObject`, `this_cModoAtual`
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (regra #8 do FormCor ÔÇö n├úo chama `InicializarForm()` duas vezes)
+- `Destroy()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `SIGOPPENBO`, monta PageFrame + p├íginas, ativa `pgf_4c_Paginas.Visible`/`ActivePage`
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com 2 p├íginas, `Tabs = .F.` (sem offset -29, seguindo o padr├úo j├í usado em `Formdmo.prg`)
+- `ConfigurarPaginaLista()` ÔÇö faixa `cnt_4c_Cabecalho` completa (labels Sombra/T├¡tulo) + `cnt_4c_Botoes` vazio (shell, posi├º├úo reservada para os bot├Áes de sele├º├úo de itens)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` vazio (shell, posi├º├úo reservada para Aprovar/Reprovar/Cancelar)
+
+Validei compilando com o `vfp9.exe -c` real (gerou `.fxp` sem `.err`) ÔÇö sintaxe limpa. Grid, bot├Áes CRUD, campos de dados e eventos ficam para as Fases 4-8, como pedido.

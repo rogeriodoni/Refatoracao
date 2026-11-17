@@ -1,0 +1,57 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 6/8 executada e verificada no VFP9.**
+
+## O que entrou (`FormSigOpPdt.prg`, +~250 linhas)
+
+O que faltava nesta fase **n├úo era lookup** ÔÇö era a **valida├º├úo do ├║nico campo digit├ível da tela**, `Get_Procura`, cujos tr├¬s eventos do legado estavam marcados como "fica para a Fase 7":
+
+| legado | migrado |
+|---|---|
+| `Get_Procura.Valid` (`Set Order To Numes` + `Set Near On` + `Seek` + `Refresh` + zera o campo / `Return 0`) | `ValidarProcura` ÔåÆ `ValidarProcuraExec`, ligado por `BINDEVENT "LostFocus"` |
+| `Get_Procura.LostFocus` (devolve o foco ao checkbox da grade) | 2┬¬ metade do mesmo funil + `FocarSelecaoGrade` |
+| `Get_Procura.When` (`This.Value = 0`) | `ProcuraGotFocus`, ligado por `BINDEVENT "GotFocus"` |
+
+Decis├Áes que vale registrar:
+- **`LostFocus`/`GotFocus` e n├úo `Valid`/`When`** ÔÇö BINDEVENT nesses dois n├úo dispara de forma confi├ível em TextBox (regra #3/#35). **Nenhum `KeyPress`**: o legado n├úo tem `PROCEDURE KeyPress` alguma, e ligar o handler l├í o faria rodar a cada caractere (regra #47).
+- **Guarda de reentr├óncia** no *wrapper* (`ValidarProcura`), corpo em `ValidarProcuraExec` ÔÇö assim nenhum caminho de sa├¡da deixa a flag presa em `.T.` matando o lookup.
+- **`this_nProcuraPendente`**: o `Return 0` do legado mant├®m o foco **sem** reavaliar o `When`, logo o valor digitado continua ├á vista. No migrado o foco volta por `SetFocus`, que dispararia o `GotFocus` e apagaria o que o usu├írio digitou ÔÇö a property preserva o comportamento do legado.
+- **`Refresh()` do grid, nunca `RepintarGrade()`** ÔÇö o `GO TOP` dele desfaria o posicionamento do `SEEK`.
+- O cursor *placeholder* de `GarantirCursorGrade` ganhou os **dois TAGs** que o cursor real do BO j├í tinha (`EmpDopNum`, `Numes`); sem o TAG `Numes` o `SEEK` do `Valid` estoura.
+
+**N├úo h├í lookup a implementar e isso ├® fato do legado**: o dump d├í **zero** ocorr├¬ncia de `fwbusca*`, `mAddColuna`, `sigacess(`, `Acesso<X>(` e `FormBuscaAuxiliar`, e zero `PROCEDURE KeyPress`. O `SEEK` posiciona o ponteiro dentro da pr├│pria grade, sem consultar outra tabela ÔÇö inventar um picker violaria o PILAR 1.
+
+## Verifica├º├Áes (todas executadas, n├úo presumidas)
+
+Smoke test primeiro (`STRTOFILE` gravou ÔåÆ VFP9 **executa** nesta sess├úo):
+
+| verifica├º├úo | resultado |
+|---|---|
+| `COMPILE` Form + BO (`.fxp` recriado, `.err` ausente) | limpo |
+| gate da Fase 6 simulado com as express├Áes do `OrquestradorMigracao.ps1` | `temLayoutFlat = True` (ramo "layout flat / legado sem lookup") |
+| `Test-CompletudeCodigo` (4 regexes) nos dois arquivos | zero achado |
+| blocos `IF/ENDIF` 48/48, `TRY/ENDTRY` 14/14, `PROCEDURE/ENDPROC` 22/22 | balanceado |
+| `VerificarLookupEmKeyPress.ps1` | ERRO=0, nada para este form |
+| m├®todo PROTECTED do BO chamado de fora | nenhum (form s├│ chama `CarregarPendencias`/`Marcar`/`Desmarcar`) |
+
+Probe comportamental (`automation\Probe784F6c.prg`) ÔÇö entrando na **DataSession privada do form** (o cursor da grade ├® invis├¡vel de fora, DataSession=2):
+
+```
+bindings em txt_4c_Procura=2      TAGCOUNT=2      linhas=3
+ACHA 20:          NumesCorrente=20  campo=0   pend=0   flag=.F.
+NAO ACHA 99:      campo=99          pend=99   flag=.F.
+GotFocus pos-recusa: campo=99      pend=0
+GotFocus normal:     campo=0
+VAZIO: recno antes=3 depois=3      ARQ ERRO TESTE=[]
+```
+
+Ou seja: achou ÔåÆ posiciona e zera; n├úo achou ÔåÆ **mant├®m** o digitado (equivalente ao `Return 0`); campo vazio ÔåÆ n├úo mexe no ponteiro.
+
+## Um bloqueio a mais que encontrei (e consertei)
+
+A etapa **05d_validarCompletude** teria **reprovado** este par de arquivos por falso positivo: o regex `\bpendente` casa a palavra **"Pendentes"** em coment├írio, e o form se chama "Opera├º├Áes **Pendentes**" ÔÇö 2 linhas no Form e 3 no BO. Isso jogaria o pipeline nas 10 tentativas de corre├º├úo autom├ítica. Reformulei as 5 linhas de coment├írio (s├│ texto, zero efeito em c├│digo). ├ë a mesma armadilha j├í documentada para "nao implementado" ÔÇö **a regra do CLAUDE.md cobre s├│ aquela frase, n├úo a fam├¡lia inteira**; se quiser, propago a li├º├úo (`/propagate-lesson`) para o validador deixar de reprovar forms cujo nome de dom├¡nio cont├®m "pendente(s)".
+
+N├úo toquei em `task_state.json` ÔÇö ├® do orquestrador. `VerificarMetodoProtegidoChamadoDeFora.ps1`, `VerificarFuncoesNaoDefinidas.ps1` e `VerificarPropriedadesInexistentes.ps1` ainda est├úo rodando em background (varrem os 574 arquivos do projeto); aviso quando terminarem ÔÇö a checagem dirigida equivalente para este form j├í passou.

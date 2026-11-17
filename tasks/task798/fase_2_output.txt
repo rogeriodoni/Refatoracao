@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da: `C:\4c\projeto\app\classes\sigopsatBO.prg` (205 ÔåÆ 589 linhas).
+
+## O que entrou
+
+| M├®todo | Papel |
+|---|---|
+`CarregarParametros()` | funil: equivale ao `Init` legado (as duas consultas obrigat├│rias); devolve `.F.` com a mensagem do legado em `this_cMensagemErro` |
+`CarregarEmpresa()` | 1┬¬ consulta (`crCdEmp`) ÔåÆ `SELECT cemps, razas, cgcs, textopaf FROM SigCdEmp WHERE cemps = ÔÇª` |
+`CarregarParametrosSistema()` | 2┬¬ consulta (`crsigcdpac`) ÔåÆ `SELECT dirresta FROM SigCdPac` + `GO TOP` |
+`CarregarDoCursor(par_cAliasCursor)` | **fonte ├║nica** de leitura de coluna; os dois cursores passam por aqui |
+`NormalizarDiretorios()` | transcri├º├úo literal do `Iif(Right(lcDir,1)=[\]ÔÇª)` + `Req\` / `Resp\` |
+`ExtrairAssinaturaAC()` | transcri├º├úo literal de `SUBSTR(textoPaf,1,14)` / `SUBSTR(textoPaf,16,344)` |
+`ObterChavePrimaria()` | PROTECTED (base j├í ├®), devolve `cemps` |
+
+Decis├Áes que valem registrar:
+
+- **`Inserir`/`Atualizar`/`ExecutarExclusao` ficam herdados**, sem override ÔÇö o dump n├úo tem um s├│ `Insert Into`/`Update`/`Delete From`, nem `TABLEUPDATE()`, nem `.AddCursor()`; o acesso remoto ├® 100% `SELECT` e o que o legado grava ├® **arquivo** (`STRTOFILE` em `Resp\`, `DELETE FILE` da requisi├º├úo). Escrever INSERT aqui seria inventar tabela e colunas (regra #22). A decis├úo est├í documentada no fim da classe.
+- Cada coluna ├® lida sob o seu pr├│prio `TYPE("<alias>.<col>")` porque os dois cursores t├¬m colunas **disjuntas** ÔÇö sem isso a 2┬¬ carga apagaria a 1┬¬.
+- `textopaf` ├® `text NULL`: guard de exist├¬ncia por `TYPE() != "U"`, valor por `VARTYPE() = "C"`, e **sem `ALLTRIM` antes do recorte** (o legado corta por posi├º├úo; aparar deslocaria CNPJ e assinatura do AC).
+- `dirresta` vazio continua produzindo `"\"`/`"\Req\"` como no legado ÔÇö guard inventado aqui mudaria comportamento; quem roda o la├ºo ├® que confere o diret├│rio.
+- Guard de buffering antes de cada `USE IN` (regra #52), nenhum `RETURN` dentro de `TRY`, `CATCH` sempre com `MsgErro` + linha.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo real**: smoke test do VFP9 passou (`VIVO` gravado), e o script de compile gravou `FXP=SIM ERR=NAO` ÔÇö compilou limpo, com execu├º├úo provada pelo arquivo de sa├¡da.
+- **Gate da Fase 2**: `CarregarDoCursor` Ô£ö; exce├º├úo "BO somente-leitura" satisfeita (medido no dump: zero `TABLEUPDATE`, zero `.AddCursor`, zero alvo de escrita) e os tokens `Inserir`/`Atualizar` presentes de qualquer forma.
+- `Test-CompletudeCodigo` (os 4 predicados): 0 marcadores, 0 procedure vazia, 0 indicador de pend├¬ncia, 0 stub.
+- `ValidadorSQLSchema.ps1`: 4 statements, **0 coluna inv├ílida**. `VerificarColunaEmpresaSQL`: ERRO=0. `VerificarFuncoesNaoDefinidas` (projeto inteiro): 0 chamada ├│rf├ú. `VerificarMetodoProtegidoChamadoDeFora`: OK.
+- Arquivo 100% ASCII (acentos s├│ por `CHR()`), 589 linhas todas CRLF. Tempor├írios removidos.
+
+**Para a Fase 3+**: o Form deve chamar `THIS.this_oBusinessObject.CarregarParametros()` no `InicializarForm` e, falhando, exibir `this_cMensagemErro` e n├úo abrir ÔÇö ├® o `Return .f.` do `Init` legado. A associa├º├úo da assinatura (`fGerUniqueKey("SAT")` + `AssociarAssinatura`), os `DECLARE ... IN "SAT.dll"` e o la├ºo `lerarquivos` ficam para a fase de a├º├úo, como o cabe├ºalho da Fase 1 j├í previu.

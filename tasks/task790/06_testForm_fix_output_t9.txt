@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Esta ├® a **tentativa 9/10** desta mesma task (task790/Formsigoppro), e o erro ├® o mesmo de todas as 8 tentativas anteriores j├í documentadas na mem├│ria do projeto: `Codigo 1526 - SQL Server inexistente ou acesso negado`, disparado na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pre-flight gen├®rico de conectividade SQL que roda **antes de qualquer `CREATEOBJECT`** do form ou do BO. O form/BO nunca chegam a executar.
+
+Fiz uma 9┬¬ revis├úo independente de `Formsigoppro.prg` e `sigopproBO.prg` contra o checklist do CLAUDE.md (conte├║do id├¬ntico, byte-a-byte, ├ás tentativas 2-8):
+
+- RETURN sempre fora de TRY/CATCH em todos os m├®todos (`InicializarForm`, `CarregarDados`, `AtualizarPainelProduto`, `ResolverProdutoDigitado`, `TxtQtdLostFocus`, `ValidarDocsLostFocus`, `ValidarLotesLostFocus`, `BtnBuscarClick`, `Init`/`CarregarDoCursor`/`CarregarItens`/`Inserir`/`Atualizar` no BO)
+- Todos os ~35 alvos de BINDEVENT s├úo PUBLIC (sem `PROTECTED`)
+- O form nunca chama `ObterChavePrimaria` (o ├║nico m├®todo PROTECTED do BO) ÔÇö s├│ usa `CarregarDoCursor`/`CarregarItens`/`MontarChaveEmpDopNums`, que s├úo PUBLIC
+- Todo CATCH chama `MsgErro`/`MostrarErro`, exceto dois silenciosos pr├®-existentes e j├í documentados (irrelevantes para este erro)
+- `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL` sem aspas extras
+- `TABLEREVERT` guardado por `CURSORGETPROP("Buffering",...)` (regra #52)
+- Cursores criados antes de qualquer `ControlSource` (regra #41)
+
+**Nenhum defeito encontrado.** Confirmei tamb├®m via `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433`, que n├úo respondeu dentro do timeout ÔÇö a mesma assinatura de inalcan├ºabilidade registrada em **todas** as ocorr├¬ncias desde 2026-11-05 (20+ tasks, agora 9┬¬ confirma├º├úo s├│ nesta task).
+
+N├úo editei os arquivos: per a regra do CLAUDE.md e o padr├úo j├í estabelecido na mem├│ria do projeto, esse erro ├® de **infraestrutura/rede** (porta 1433 intermitente a partir desta m├íquina), e editar um `.prg` correto s├│ para "satisfazer" o gate seria dano, n├úo corre├º├úo.
+
+Resta **1 das 10 tentativas** desta task. Reitero a recomenda├º├úo: dar exce├º├úo ao gate `06_testForm` para o erro 1526/conectividade, em vez de consumir a ├║ltima tentativa ÔÇö o retry autom├ítico contra uma falha de rede intermitente n├úo vai convergir sozinho.

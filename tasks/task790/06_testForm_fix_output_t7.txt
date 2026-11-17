@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Reviewed the error and confirmed it's the known infrastructure issue, not a code defect ÔÇö did **not** modify either file.
+
+**What happened:** The failure is at ETAPA 1B (`06_testForm`'s generic pre-flight `SQLSTRINGCONNECT`), which runs *before* any `CREATEOBJECT` of `Formsigoppro`/`sigopproBO`. `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` just now returned `TcpTestSucceeded = False` ÔÇö the SQL Server is unreachable from this pipeline machine right now.
+
+**Why I didn't touch the code:** Project memory (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`) documents this exact signature (C├│digo 1526, DBNETLIB) recurring across 20+ tasks since 2026-11-05, always failing before the form/BO is even instantiated. The established, repeatedly-validated conclusion is that this is a network/environment issue, and editing correct `.prg` files just to "satisfy" this gate is explicitly flagged as damage, not correction.
+
+I still did an independent review of `Formsigoppro.prg` and `sigopproBO.prg` against the CLAUDE.md checklist rather than just trusting the memory:
+- No `RETURN` inside any `TRY/CATCH` (verified both files programmatically)
+- All 35 `BINDEVENT` targets are `PUBLIC` (none `PROTECTED`)
+- Form never calls the BO's one `PROTECTED` method (`ObterChavePrimaria`) ÔÇö only public methods/properties
+- Every `loc_oBO.this_X` property the form reads/writes is actually declared on the BO (no mismatch)
+- `EscaparSQL` used with no extra quotes
+- Both `TABLEREVERT` calls are guarded by a `Buffering` check (rule #52), no bare calls
+- `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` bypass present before `CarregarDados()`
+
+Found no defect connected to the reported error. (Two pre-existing silent `CATCH` blocks ÔÇö `TornarControlesVisiveis` and `CarregarImagemProduto` ÔÇö are documented-intentional and unrelated; left untouched as out of scope.)
+
+**Recommendation:** This is attempt 7/10 for this task hitting the identical network failure. Consider pausing the automatic retry or granting a gate exception for error 1526/connectivity on `06_testForm` ÔÇö retrying against an intermittent network outage won't converge on its own.

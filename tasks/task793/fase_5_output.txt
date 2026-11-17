@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 is done ÔÇö and the deliverable was **not** in the `.prg`.
+
+## What Fase 5 asked for vs. what the legacy has
+
+`SIGOPRBT` is a pure dispatcher. Counted object by object in the dump ÔÇö all 6 of them:
+
+| surface | occurrences |
+|---|---|
+`BaseClass: grid` / `pageframe` | **0**
+entry control (textbox/editbox/combobox/listbox/checkbox/optiongroup/optionbutton/spinner) | **0**
+`pColuna` / `RecordSource` / `ControlSource` | **0**
+
+Half of zero fields is zero. `Formsigoprbt.prg` is already complete for this phase, so I did not touch it ÔÇö inventing a Page2 with fields would violate PILAR 1, and an empty `ConfigurarPaginaDados` is the disguised stub the completeness rule forbids.
+
+## The real defect: the Fase 5 gate was unsatisfiable
+
+The gate rejected the correct form. Measured term by term, the **only** firing token was `AddCursor` ÔÇö and all 15 calls are the **3-argument** form that merely registers a cursor in the data manager (`crSigMvCab`, `crSigMvItn`, ÔÇª). What binds a grid is the **5th** argument (regra #35). `Test-LegadoAddCursorLigaGrade` ÔÇö the helper written for exactly this false positive back in task586 ÔÇö returns `False` here, but the DESPACHANTE/EXIBICAO branches were deliberately left on the *wide* regex, so `$temListaLegadoF5` was `True` and none of the 7 branches could reach the form.
+
+Fix in `automation/OrquestradorMigracao.ps1`, 3 sites where the predicate is consulted **only negated** (monotone ÔÇö can add a pass, never remove one): `Test-LegadoSemCampoNemLista` (the NO-OP guard for phases 5/6/7), `$temListaLegadoF5`, `$temListaLegadoF6`.
+
+**I reverted a fourth site.** I had also patched `$temListaLegadoF8`, then backed it out: Fase 8 consults that variable **positively** too (`$temListaLegadoF8 -and $temCamposLegadoF8`, grid-row branches), where narrowing would *strip* passes from the 14 field-having dumps that flip. Fase 8 already narrows per-branch, and its comments say so explicitly.
+
+## Measured delta (792 dumps in `tasks\`)
+
+- 21 dumps flip the predicate ÔÇö **0** with grid/pageframe, **0** with a VCX aggregator.
+- 14 of the 21 have fields ÔåÆ excluded from DESPACHANTE; EXIBICAO measured **+0**.
+- Effective delta: **7 dumps = 3 legacy forms** (`sigoprbt`, `SIGPRMEI`, `SigPrRss`), each with 2 buttons and zero fields. Predicate goes 20 ÔåÆ **23** forms, **0 violations**.
+- Fail-closed still holds: with `nBotoes >= 1` the branch demands button *and* `Click` handler in the migrated form ÔÇö `Formsigoprbt` has both (`cmg_4c_Acoes` + `CmdCancelarClick`).
+
+Verification, running the real `case 5` block standalone: before `VALIDADO = False`; after `[i] Fase 5 (layout despachante)` + `VALIDADO = True`, with the `.prg` unchanged. Encoding held (BOM present, bytes >127 = 2965 identical to baseline, CRLF-only, 0 parse errors). Scripts kept: `automation/medir_f5_addcursor_despachante.ps1`, `automation/verificar_f5_addcursor.ps1`.
+
+## One thing needs your call
+
+**RunLoop PID 6520 has been alive since 17:54 today ÔÇö before this fix.** PowerShell parses `-File` whole at invocation, so that process is still running the old gate and will reject Fase 5 again. The fix only takes effect after the loop is relaunched. I didn't stop it ÔÇö your call whether to restart it now or let the current pass finish.

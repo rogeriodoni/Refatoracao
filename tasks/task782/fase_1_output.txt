@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 completa: criei `C:\4c\projeto\app\classes\sigoppagBO.prg` com a classe `sigoppagBO AS BusinessBase`, cobrindo:
+
+- Flags recebidas do pai (`this_lAltDireta`, `this_lAutomatico`)
+- Identifica├º├úo do cabe├ºalho do movimento (`this_cEmps`/`this_cDopes`/`this_nNumes`)
+- Todas as colunas de **SigMvPar** (a tabela real por tr├ís do cursor legado `xPar`, confirmada em `docs/schema.sql`) como propriedades da entidade (condi├º├úo/parcela de pagamento)
+- Campos de cabe├ºalho (`TprMvCab`/`SigMvCab`) e de configura├º├úo (`SigCdOpe`) usados pelos m├®todos do legado, com sufixos `Cab`/`Ope` para evitar colis├úo de nomes com a entidade (ex.: `valos` da parcela vs. `this_nValosCab` do movimento, `parcs` da parcela vs. `this_nParcsOpe` da opera├º├úo)
+- `Init()` que seta `this_cTabela = "SigMvPar"`, `this_cCampoChave = "cidchaves"` e recebe os par├ómetros escalares (Emps/Dopes/Numes/AltDireta/Automatico)
+
+Validei compilando com o VFP9 real (`vfp9.exe -t`) ÔÇö gerou `.fxp` sem `.err`, confirmando sintaxe limpa. Artefatos tempor├írios de compila├º├úo foram removidos.
+
+Pr├│xima fase (2/8) cobrir├í `CarregarDoCursor()`, `Inserir()`, `Atualizar()` e `ObterChavePrimaria()`.

@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da para `FormSigOpPdt`.
+
+## O que a Fase 7 realmente era
+
+O prompt pedia `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`. **Esse form n├úo tem bot├úo CRUD algum** ÔÇö o legado `SIGOPPDT` herda de `form` puro (zero `frmcadastro`, zero `Grupo_Op`, zero verbo CRUD no dump). Escrever os quatro violaria o PILAR 1. Rodei o gate da Fase 7 standalone para confirmar e ele pr├│prio reconhece o caso: *"legado sem botao CRUD algum - validado pelos 3 handler(s) de botao que o legado realmente tem"*.
+
+O trabalho real da fase estava nos coment├írios que a Fase 6 deixou: o toggle do checkbox e os redirecionamentos de foco, ambos marcados *"entram na Fase 7"*.
+
+## Entregue
+
+| Evento legado | Migrado |
+|---|---|
+| `fwcheckbox1.InteractiveChange` | `GradeSelecaoInteractiveChange` + `...Exec` (wrapper/corpo, guarda de reentr├óncia) |
+| `fwcheckbox1.When` | `Column1.ReadOnly` em `AjustarBotoesPorModo` **+** gate dentro do handler |
+| `GotFocus` do `Text1` de 6 colunas | `GradeColunaGotFocus` ÔåÆ `FocarSelecaoGrade` |
+| religamento de tudo | `VincularEventosGrade`, chamado do fim de `VincularGrade` |
+
+Os tr├¬s `Click` (`SelTudo`/`apaga`/`ok`) j├í estavam completos e fi├®is ÔÇö n├úo mexi.
+
+## Medi├º├Áes que mudaram decis├Áes
+
+Rodei smoke test do VFP9 primeiro (execu├º├úo funciona nesta sess├úo) e medi em vez de supor:
+
+- **`InteractiveChange`, n├úo o quarteto NODEFAULT da regra #46** ÔÇö o legado abre com `=DoDefault()`, ou seja conta com o toggle nativo. Medido: o toggle nativo funciona aqui (cursor local grav├ível, `Flag` l├│gico) e atribuir `Check1.Value` propaga para o cursor. O quarteto alternaria duas vezes e anularia o clique.
+- **`Check1.Value` ├® L├ôGICO** (n├úo num├®rico) com `ControlSource` l├│gico ÔÇö a compara├º├úo ├® `IF !chk.Value`, n├úo `= 1`.
+- **Fechar o alias derruba `ColumnCount` para 0** ÔÇö mais destrutivo que o documentado. Por isso os `BINDEVENT` ficam em `VincularGrade`, n├úo em `ConfigurarGrade`: sem isso o checkbox reapareceria mudo ap├│s a primeira carga.
+- **`BINDEVENT` repetido ├® deduplicado** (`AEVENTS`=1, dispara uma vez) ÔåÆ religar incondicionalmente ├® seguro; `UNBINDEVENT` de 2 args d├í erro 11.
+- **`BINDEVENT` com delegado `PROTECTED` ESTOURA** ("Property X is not found") ÔÇö n├úo falha em sil├¬ncio. Por isso os handlers s├úo PUBLIC e `FocarSelecaoGrade` (PROTECTED) n├úo pode ser ligado direto.
+- **`Grid.ReadOnly` sobrescreve `Column.ReadOnly`** ÔåÆ o gate de modo vai depois, no fim do m├®todo.
+- `FocarSelecaoGrade` ganhou `ActivateCell(linha, 1)`: `Grid.SetFocus()` sozinho ativa a c├®lula *corrente*, que no caminho do `GotFocus` ├® justamente a coluna de onde o foco precisa sair.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (`.fxp` gerado, `.err` ausente ÔÇö e o script de compila├º├úo provadamente executou). Probe de instancia├º├úo headless confirma: form instancia, `Check1` + `BINDEVENT` presentes, `GotFocus` ligado nas colunas 2,3,5ÔÇô8 e **n├úo** na 4 (o legado n├úo declara evento l├í); ap├│s fechar o alias e recarregar, tudo volta; gate de modo liga/desliga nos dois sentidos; marca├º├úo recusada pelo BO **reverte** o Flag; modo `ALTERAR` n├úo grava; flags de reentr├óncia liberadas em todos os caminhos; **zero di├ílogos suprimidos**.
+
+Auditorias do projeto: `FuncoesNaoDefinidas`, `MetodoProtegidoChamadoDeFora`, `PropriedadesInexistentes` e `LookupEmKeyPress` todas OK ÔÇö `SigOpPdt` aparece **zero** vezes.
+
+Duas notas: (a) `VerificarPropriedadesInexistentes` e `VerificarFormBuscaAuxiliar` morrem com `powershell -File` (`$PSScriptRoot` vazio) e saem com exit 1 *sem achado nenhum* ÔÇö tive que re-rodar com `&`; o sil├¬ncio delas n├úo era limpeza. (b) Corrigi um coment├írio obsoleto em `InicializarForm` que dizia que a carga do cursor "fica para a Fase 8" ÔÇö ela j├í est├í l├í, e deixar isso faria a Fase 8 duplicar o que existe.
+
+N├úo commitei (o arquivo ├® novo/untracked e voc├¬ n├úo pediu). Deixei `automation/Probe784F7.prg` no padr├úo dos `Probe784F5/F6` j├í existentes, caso a Fase 8 queira reusar.

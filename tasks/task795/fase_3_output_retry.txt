@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGOPRES.prg` criado (23 KB).
+
+## Por que a tentativa anterior falhou
+
+N├úo foi o c├│digo: o log (`05_migracao_fase3.log`) mostra que o Claude CLI retornou em 8s com *"N├úo h├í uma tarefa ou pergunta no momento"* ÔÇö o prompt foi entregue mas a invoca├º├úo n├úo produziu arquivo nenhum. O gate reprovou por `Form N├âO foi criado`.
+
+## Decis├úo de arquitetura: layout FLAT, sem PageFrame
+
+O dump prova que o `SIGOPRES.SCX` tem raiz em `form` **gen├®rico** (n├úo `frmcadastro`/`frmrelatorio`) e **nenhum** `BaseClass: pageframe` ÔÇö os 5 objetos penduram direto na Form. Criar Page Lista/Dados aqui seria inventar superf├¡cie que o legado n├úo tem. O gate da Fase 3 tem exatamente esse ramo, e verifiquei cada condi├º├úo dele com as mesmas regexes do orquestrador: `legadoSemPageFrame=True`, `temEstruturaFlat=True`.
+
+## Entregue (estrutura base completa, sem stub)
+
+| Membro | Legado |
+|---|---|
+| Bloco de propriedades | 470x320, `TitleBar=0`, `WindowType=1`, Verdana 8, `BorderStyle=2` ÔÇö transcritos |
+| `Init(saldo, cabecalho, item, formPai)` | `Lparameters ocnx, __saldo` + `lcAlias = Upper(Alias())` capturado na 1┬¬ linha |
+| `InicializarForm()` | cria o BO e monta a tela na ordem do SCX |
+| `ConfigurarAparencia()` | `Picture = new_background.jpg`, `ForeColor = RGB(36,84,155)` |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` + `lbl_4c_LblSombra` + `lbl_4c_LblTitulo` |
+| `ConfigurarMoldura()` | `shp_4c_Shape1` |
+| `ConfigurarParametrosBO()` | leitura de `<alias>.CPros` e de `TprMvCab.*` |
+| `TornarControlesVisiveis()` / `Destroy()` | ÔÇö |
+
+Grade (`grd_4c_Dados`), bot├úo Encerrar (`cmd_4c_Fwbtng1`) e a chamada de `ExecutarCalculo()` ficam para as fases seguintes, como manda o escopo.
+
+Dois **desvios deliberados** do literal do dump, ambos documentados em coment├írio: (1) o Form Designer desenhou `cntSombra.Width=800` e labels de 769 num form de 470 ÔÇö copiar o literal recortaria o t├¡tulo; uso `THIS.Width` / `THIS.Width - 20`; (2) o Caption dos labels no SCX ├® `"Cadastro de Testes"` (res├¡duo de template, o ToolTipText ainda diz "T├¡tulo do Relat├│rio") ÔÇö uso `THIS.Caption`. Tamb├®m mantive `Closable` **n├úo declarado**, como o legado: com `TitleBar=0` o Encerrar ├® a ├║nica sa├¡da.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- **Smoke test VFP9 primeiro** ÔÇö `STRTOFILE` gravou, ent├úo o VFP executa nesta sess├úo e o resultado abaixo ├® prova real, n├úo `exit=0`.
+- **Compila├º├úo limpa**: `FXP=SIM ERR=NAO` (o `.fxp` foi apagado depois, para as fases seguintes n├úo rodarem c├│digo velho).
+- **Instancia├º├úo headless, nos dois caminhos**: sem par├ómetro (o do harness) e com par├ómetros (o do chamador real). No segundo, os valores chegaram ao BO: `Produto=[PROD001]` do cursor do item, `Operacao=[VENDA]` e `EmpDopNums=[001MALOTEÔÇª3]` do cabe├ºalho ÔÇö a chave posicional de 29 chars **com o padding preservado** ÔÇö e `dtfin=01/12/2026`, ou seja o `prazoents` vencendo o `datas`, como no `Iif` do legado. `Release` passou sem erro.
+- **Cores conferidas pelo valor num├®rico**: faixa `6579300` = RGB(100,100,100), t├¡tulo `16777215` = branco, form `10179620` = RGB(36,84,155). `Picture` resolveu para arquivo existente (`FILE=SIM`).
+- **Auditores do projeto**: `Test-CompletudeCodigo` real do orquestrador ÔåÆ OK; `VerificarPropriedadesInexistentes` ÔåÆ nenhuma propriedade inv├ílida; `VerificarFuncoesNaoDefinidas` ÔåÆ nenhuma chamada ├│rf├ú; blocos balanceados (8/8 PROC, 4/4 WITH, 14/14 IF, 1/1 TRY, 2/2 FOR).
+
+Um detalhe que custou uma itera├º├úo e vale registrar: o validador de completude reprovou a primeira vers├úo por casar a palavra **"pendente"** dentro de um coment├írio meu sobre buffer do `TABLEREVERT` ÔÇö ├® a mesma armadilha j├í catalogada para "nao implementado". Reescrevi a frase.

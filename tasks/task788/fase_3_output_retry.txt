@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete. `C:\4c\projeto\app\forms\operacionais\FormSigOpPrL.prg` created (367 lines).
+
+**Why the previous attempt failed:** the CLI was invoked with only the context blocks and no actionable instruction ÔÇö its output was "I don't see an actual request yet." No file was ever written.
+
+**Key structural decision: no PageFrame.** The legacy `SigOpPrL.SCX` tree has root `Class: form / BaseClass: form` and declares **no** `BaseClass: pageframe` ÔÇö `cntSombra`, `cntBotoes`, `Grade`, `Shape4`, `imgLinhas`, `lblLinha` are all direct children of the form. Inventing a PageFrame would violate PILAR 1, and the generic skeleton's `ConfigurarPageFrame`/`ConfigurarPaginaLista`/`ConfigurarPaginaDados` would have been empty stubs. I used the flat pattern from `Formsigopexi.prg` (same dialog family) instead. I confirmed against the orchestrator that this is the gate's own FLAT branch, not a bypass.
+
+**What's in the file**
+- Form properties transcribed exactly from the dump, including `DataSession = 1` ÔÇö the grid binds to the selection cursor the *caller* leaves open (`LocalBusLin` ÔåÆ `cursor_4c_BusLin`); `DataSession = 2` would isolate it and hide that cursor.
+- `Init(par_oFormPai, par_cLinha, par_oDataMgr)` mirroring legacy `pObj, pLin, pCnx`; stores the parent ref, the line code (consumed by `SigOpPrLBO.BuscarLinha` from Phases 1/2), mirrors `op_escolha`, creates the BO, then `DODEFAULT()`.
+- `ConfigurarCabecalho` ÔÇö `cnt_4c_Sombra` + the two labels, with `AutoSize = .F.` explicit (rule #23: it's a no-op under `AddObject` and with `WordWrap = .T.` it discards `Height`).
+- `AjustarFormPai` + `Destroy`. One deliberate hardening I should flag: the legacy re-enables the parent only in `btnSair.Click`; I also do it in `Destroy`. It's idempotent, and it's what prevents the caller being left dead when `Init` fails *after* disabling it (`FormBase.Init` returns `.F.`, so only `Destroy` runs). Documented in the file.
+
+**Verification ÔÇö measured, not assumed.** VFP9 does execute in this session (smoke test wrote its output file), so these results are real:
+- Compile clean: `.fxp` created, no `.err`. A deliberately broken negative control *did* produce an `.err`, so the absent `.err` is actual evidence.
+- Instantiated headless: `VARTYPE = "O"` with no exception; `cnt_4c_Sombra` at 0/0/1000/80, `BackColor` 6579300, `Visible = .T.`, 2 children; both label captions = `"Sele├º├úo de Produtos"`; **Heights stayed 46 and 40, not collapsed to 25** ÔÇö confirming the `AutoSize` fix; `Picture` resolved to an existing file; BO instantiated; `Release()` clean.
+- Phase-3 gate (FLAT branch): all four conditions True. `Test-CompletudeCodigo` checks: 0 problems. `VerificarPropriedadesInexistentes.ps1`: exit 0. Blocks balanced; no `MESSAGEBOX`, no literal accents, no `PUBLIC PROCEDURE`, both `RETURN`s outside `TRY/CATCH`.
+
+Test artifacts removed; the only change is the new form file (untracked).
+
+One thing for Phase 4 to carry forward: `cntBotoes` is a **CommandGroup** (`ButtonCount = 1`, the `btnSair`/Encerrar), not a Container ÔÇö so the Encerrar block here is the legacy's own group at `Left = 917`, and it does not take the CRUD `cnt_4c_Saida` canonical treatment.

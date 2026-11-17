@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este ├® o mesmo cen├írio j├í documentado na mem├│ria do projeto, agora na 7┬¬ ocorr├¬ncia consecutiva para este form (`FormSigOpPrL`/`SigOpPrLBO`, task788):
+
+## Diagn├│stico: falha de infraestrutura, n├úo de c├│digo
+
+O erro acontece na **ETAPA 1B** do `TestFormWrapper` ÔÇö um pr├®-flight gen├®rico do harness que faz `SQLSTRINGCONNECT` **antes** de qualquer `CREATEOBJECT` do form/BO sendo testado. O form/BO nunca chega a rodar.
+
+```
+Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® o mesmo padr├úo de ~15 forms da fam├¡lia SigOp*/SIGOPPEN/etc. desde 2026-11-05: a rota at├® `192.168.200.10:1433` fica intermitente nesta m├íquina do pipeline. Confirmei agora mesmo:
+
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433
+```
+ÔåÆ n├úo respondeu dentro do timeout (mesma assinatura de n├úo-resposta de todas as ocorr├¬ncias desde 2026-11-05).
+
+## Revis├úo independente do c├│digo (n├úo confiei s├│ na mem├│ria)
+
+Fiz uma verifica├º├úo via grep sobre os dois arquivos atuais, que s├úo **id├¬nticos** aos recebidos nas 6 tentativas anteriores desta mesma task:
+
+- **Regra #1 (RETURN fora de TRY/CATCH)**: varredura autom├ítica TRYÔåÆCATCH/ENDTRY em ambos os arquivos ÔÇö zero `RETURN` dentro de bloco TRY.
+- **Regra #3 (BINDEVENT exige PUBLIC)**: os 7 handlers ligados por BINDEVENT (`HeaderSelecaoClick`, `FocarCheckboxSelecao`, `ChkSelecaoClick/MouseDown/MouseUp/KeyPress`, `CmdBotoesClick`) s├úo todos PUBLIC ÔÇö nenhum est├í na lista de m├®todos PROTECTED do form.
+- **Regra #51 (form n├úo chama m├®todo PROTECTED do BO)**: `ObterChavePrimaria` ├® PROTECTED no BO e s├│ aparece em **coment├írio** no form; a ├║nica chamada real ├® `this_oBusinessObject.BuscarLinha()`, que ├® PUBLIC.
+
+Nenhum defeito encontrado. N├úo editei os arquivos.
+
+## Recomenda├º├úo
+
+Esse erro **n├úo tem corre├º├úo de c├│digo** ÔÇö ├® a 7┬¬ confirma├º├úo consecutiva de que a porta 1433 est├í inalcan├º├ível desta m├íquina. Reiterando a recomenda├º├úo j├í registrada na mem├│ria: pausar o retry autom├ítico desta task ou dar exce├º├úo ao gate `06_testForm` especificamente para o erro 1526/conectividade, em vez de consumir as 2 tentativas restantes repetindo a mesma revis├úo sobre o mesmo conte├║do byte-a-byte.

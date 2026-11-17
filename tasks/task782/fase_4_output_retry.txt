@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da e verificada em `projeto\app\forms\operacionais\Formsigoppag.prg`.
+
+## Por que a tentativa anterior reprovou
+
+A grade j├í estava no arquivo ÔÇö o gate reprovou por **tr├¬s** motivos simult├óneos, nenhum deles aparecendo no log:
+
+| Condi├º├úo do gate (ramo FLAT) | Antes | Causa |
+|---|---|---|
+| `AddObject("grd_4c_` literal | Ô£ù | criada como `AddObject(THIS.this_cGridCondicoes, "Grid")` ÔÇö regex n├úo resolve vari├ível |
+| `AddObject("cmd_4c_`/`cmg_4c_` | Ô£ù | nenhum bot├úo criado (adiados para a Fase 8) |
+| `CarregarLista\|CarregarDados\|MontaGrade` | Ô£ù | m├®todo inexistente |
+
+## O que entreguei
+
+**Grade** ÔÇö corrigida contra o dump, que divergia do que estava escrito: `FontName` era Tahoma e o legado ├® **Verdana**; `ReadOnly` estava `.T.` e o legado ├® **`.F.`** (grade edit├ível); as larguras eram inventadas (140/90/95/48/90/110) e as reais s├úo **148/120/78/30/80/90**. Acrescentei `HeaderHeight=18`, `RowHeight=16`, os `InputMask` de valor/c├ómbio/desconto, e a ordem visual do dump (`venc` em 5┬¬). `Column1.ReadOnly = .T.` vem **depois** do `Grid.ReadOnly`, que propaga.
+
+**Bot├Áes** ÔÇö os 5 que o legado realmente tem (`btnRetCash`/`Apaga`/`totite`/`Ok`/`Cancela`), com `Left` relativo ao container (12/88/163/238/313). **N├úo** inventei os 6 bot├Áes CRUD que o template pede: o SIGOPPAG n├úo os tem, e fabric├í-los violaria o PILAR 1 ÔÇö o gate aceita qualquer `cmd_4c_`. Os `Click` ficam para as Fases 7ÔÇæ8, que ├® a divis├úo declarada pelo pr├│prio template.
+
+**`CarregarLista()`** ÔÇö PUBLIC, reproduz o rebind do `Init` legado: liga a grade ao `xPar` do form pai quando ele existe na DataSession compartilhada (`Grade.RecordSource = "XPAR"` no dump), sen├úo ao cursor local; ordem can├┤nica `ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption`, `DynamicForeColor` transcrito e fechamento com `GO TOP + Refresh`.
+
+## Verifica├º├úo
+
+Compila limpo (`.fxp` gerado, sem `.err`) e **instancia de verdade** ÔÇö e foi a├¡ que apareceu um defeito que a compila├º├úo n├úo pega: `Grid.SplitBar` ├® **read-only em runtime**, ent├úo `CREATEOBJECT` devolvia `.F.` e a tela n├úo abriria. Era propriedade que eu havia inventado (n├úo est├í no dump); removida. O probe agora confirma `VARTYPE=O`, as 6 colunas com largura/ordem/caption do dump, os 5 bot├Áes dentro do container (├║ltimo termina em 388 de 390) com os 5 ├¡cones resolvendo em `vbmp\`, e nenhum `MsgErro` disparado.
+
+Auditorias: propriedades inexistentes `OK`, fun├º├Áes ├│rf├ús `0` no escopo completo, lookup-em-KeyPress `ERRO=0`, completude `0` ocorr├¬ncias. Gate da Fase 4: **PASSA** ÔÇö e corrigi um detalhe de higiene: a prosa dos coment├írios fazia o ramo PAGINADO casar por acidente, o que deixaria o arquivo parecendo ter PageFrame; reescrita, o veredito vem s├│ do ramo FLAT.
+
+Dois pontos para quem seguir: as Fases 7ÔÇæ8 precisam ligar os `Click`/`When` desses 5 bot├Áes, e a carga real a partir de `SigMvPar` (quando `xPar` n├úo vier do pai) ainda n├úo existe no BO. Registrei em mem├│ria a armadilha do `AddObject` com nome literal, que foi o que custou esta repeti├º├úo de fase.

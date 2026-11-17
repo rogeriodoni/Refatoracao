@@ -1,0 +1,186 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPPGC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPGC",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "LParameters poForm, pnDataSes, poValor, pConexao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\nThisform.Podatamgr = pConexao\nThisForm.Saldo     = poValor\n\nThisForm.Get_Saldo.Value = ThisForm.Saldo\n\nWith Thisform\n\t.label1.Caption = '[ '+AllTrim(crSigOpFp.fpags)+' ]'\nEndWith\n\nSelect BarBonus\nZap\nAppend Blank\n\nWith Thisform.Grade\n\t.RecordSource          = 'BarBonus'\n\t.Column1.ControlSource = 'BarBonus.Codigos'\n\t.Column2.ControlSource = 'BarB... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Ok",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.Get_Saldo.Value <> 0\n\tMessageBox('Quantidade de Barras incorretos!!!',0+16,'')\n\tReturn .f.\nEndIf\nThisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Saldo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Cancela",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select BarBonus\nZap\nThisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Public _OldCodigo\n\nSet Confirm On\n_OldCodigo = This.Value\n\nReturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "If This.Value > 0\n\tSet Decimals to 0\n\tnDope = Val( Left( Str( This.Value, 10 ), 4 ) )\n\tNume  = Val( Right( Str( This.Value, 10 ), 6 ) )\n\tlnCodigos = This.Value\n\n\tlcSql = [Select Dopes From SigCdOpe Where ndopes = ]+Str(nDope)\n\tThisForm.PodataMgr.Sqlexecute(lcSql,'LocalSnOpe')\n\n\tIf Used('LocalSnOpe') And Reccount('LocalSnOpe') = 0\n\t\tMessageBox('Barra Invalido!!!!',0+16,'')\n\t\tThis.Value = 0\n\t\tReturn .f.\n\tEndIf\n\t\n\tSelect BarBonus\n\tSkip\n\tSkip -1\n\tSelect Sum(1) as Qt, Codigos From BarBonus ;\n\tWhere C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 18,
+      "codigoOriginal": "Set Confirm Off\n\nSelect [ ] as Agrupar, Sum(1) as Qt, Sum(valors) as Valor From BarBonus Where Codigos <> 0 Into Cursor Selecao group by 1\n\nThisForm.label3.Caption = '[ '+Alltrim(Str(Selecao.Qt))+' ]'\nThisForm.Get_Saldo.Value = ThisForm.Saldo - Selecao.Valor\n\nThisForm.label3.Refresh\nThisForm.Get_Saldo.Refresh\n\nIf ThisForm.Get_Saldo.Value < 0\n\tMessageBox('Quantidade de Barras excedida!!!',0+16,'Valor a Maior')\nEndif\n\nIf This.Value = 0 And Lastkey() = 13\n\tThisForm.Ok.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption = '[ '+Alltrim",
+        "controlesReferenciados": "Get_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPPGC.Get_Saldo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPPGC.Grade.Column1.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select Dopes From SigCdOpe Where ndopes = ]+Str(nDope) \tThisForm.PodataMgr.Sqlexecute(lcSql,'LocalSnOpe')",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,ndopes,SqlexecutelcSql,LocalSnOpe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPGC.Grade.Column1.Text1.Valid",
+      "queryOriginal": "\tSelect Sum(1) as Qt, Codigos From BarBonus ; \tWhere C... [TRUNCADO]",
+      "tabelas": "BarBonus",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPPGC.Grade.Column1.Text1.LostFocus",
+      "queryOriginal": "Select [ ] as Agrupar, Sum(1) as Qt, Sum(valors) as Valor From BarBonus Where Codigos <> 0 Into Cursor Selecao group by 1",
+      "tabelas": "BarBonus",
+      "colunas": "Codigos,Selecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe", "BarBonus"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

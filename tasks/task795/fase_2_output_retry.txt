@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\SIGOPRESBO.prg` (858 linhas, 16 m├®todos, pares `PROCEDURE/ENDPROC` e `FUNCTION/ENDFUNC` balanceados) compila limpo no VFP9 (sem `.err`) e passa o gate da Fase 2 e o validador de completude (05d).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (OrquestradorMigracao.ps1:9770) exige:
+
+```
+$conteudo -match "CarregarDoCursor" -and (($conteudo -match "Inserir" -and "Atualizar") -or $boSomenteLeitura)
+```
+
+A exce├º├úo "BO somente-leitura" **se aplica** aqui ÔÇö conferi as 4 provas contra o dump: zero `TABLEUPDATE`, zero `.AddCursor(`, os 8 alvos de `Insert Into` s├úo todos `Tmpresul` (cursor local declarado) e o BO n├úo tem `SQLEXEC` de escrita. O que faltava era s├│ `CarregarDoCursor`, ausente por completo.
+
+## O que foi acrescentado
+
+- **`CarregarDoCursor(par_cAliasCursor)`** (PUBLIC) ÔÇö l├¬ do cursor do chamador os par├ómetros de entrada, reproduzindo o bloco que abre o `Init` legado (`cpros`, `dopes`, `empdopnums`, `datas`, `prazoents`). Cada coluna ├® procurada com `TYPE(alias + ".col")` antes de ser lida, porque no legado o produto vem do cursor do **item** e o resto do cabe├ºalho `TprMvCab` ÔÇö o mesmo m├®todo atende os dois. (`PEMSTATUS` n├úo serve em cursor.)
+- **`AtualizarJanelaDatas()`** (PUBLIC) ÔÇö o `dtini`/`dtfin` do legado, extra├¡do para que o Form possa recalcular a janela ao receber datas por par├ómetro.
+- **`ObterChavePrimaria()`** (PROTECTED, como na base).
+
+## Dois defeitos reais corrigidos no c├│digo da fase anterior
+
+1. **`TratarNulo(x, "C")`** em 4 sites ÔÇö o 2┬║ argumento ├® o **valor padr├úo**, n├úo o tipo (`functions.prg:449`). Com coluna NULL, `this_cProduto`/`this_cOperacaoPai` receberiam a string literal `"C"`. Trocado por `""`.
+
+2. **Fallback errado da opera├º├úo pai.** O legado faz `lcoper = tmpOpe.dopes` incondicionalmente; com `TmpOpe` vazio isso l├¬ em EOF e devolve **brancos**, de modo que a consulta das loca├º├Áes n├úo casa nada (sem opera├º├úo pai, n├úo h├í loca├º├úo a descontar). O migrado ca├¡a de volta em `this_cOperacao`, o que faria a consulta das loca├º├Áes devolver exatamente as mesmas linhas das reservas ÔÇö cada movimento aplicado **duas vezes** na proje├º├úo, n├║mero errado e sem erro na tela (regra #17). Agora `this_cOperacaoPai = ""` nesse caso.
+
+## Corre├º├Áes preventivas
+
+- **Restaura├º├úo da ├írea de trabalho dentro dos dois `SCAN`** ÔÇö `INSERT INTO` e os `SELECT ... INTO CURSOR` dos helpers de saldo trocam a ├írea corrente, e o `ENDSCAN` precisa do cursor de origem selecionado para avan├ºar o ponteiro.
+- **Prefixo `m.`** nas vari├íveis locais/par├ómetros usadas dentro dos `SELECT` locais do VFP (`ObterSaldoAteData`, `ObterSaldoNoIntervalo`), e as propriedades `THIS.this_dData*` do filtro final hoisted para locais ÔÇö conven├º├úo do projeto (Pattern #118).
+
+Nota: mantive `Inserir()`/`Atualizar()`/`ExecutarExclusao()` herdados de `BusinessBase`, como a exce├º├úo documentada do pr├│prio gate prev├¬ ÔÇö o legado n├úo grava em tabela nenhuma, e escrev├¬-los significaria inventar um INSERT/UPDATE sem origem no schema.

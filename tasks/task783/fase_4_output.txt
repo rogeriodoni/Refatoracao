@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete. Summary of what was done for `FormSigOpPck.prg` (task783, SIGOPPCK "Atendimento Picking"):
+
+This form is **OPERACIONAL**, not CRUD ÔÇö the generic phase-4 template ("Grid + 6 bot├Áes CRUD") didn't match the actual legacy screen, so I built the real Page1 (`pgFiltros`) instead, per PILAR 1 fidelity:
+
+- **`ConfigurarPaginaLista()`**: faixa do cabe├ºalho, filtros de Per├¡odo/Empresa/Movimenta├º├úo, a grade de Tipos de Opera├º├úo (ou campo avulso, conforme `this_lAcessoPorTipo`), as grades de Grande Grupo e Grupo de Produto (3 colunas), e o `CommandGroup` Consultar/Sair ÔÇö todas as posi├º├Áes/cores/captions transcritas do dump do SCX.
+- **`CriarCursoresFiltroPlaceholder()`**: cursores placeholder para as 3 grades (regra #41 ÔÇö Column.ControlSource de cursor inexistente derruba o Init); a popula├º├úo real via SQL fica para fase posterior (`CarregarFiltros()` no BO).
+- **`ConfigurarGradeFiltro()` / `ConfigurarBotaoMarcar/Desmarcar()`**: helpers reutiliz├íveis para os 3 pares de grade+bot├Áes.
+- **Handlers** `BtnMarca/DesmarcaClick`, `BtnMarGde/DesGdeClick`, `BtnMarGrp/DesGrpClick`: marcam/desmarcam `nMarcas` via `UPDATE` + `Refresh`.
+- **`BtnConsultarClick()`**: valida o per├¡odo (transcrito do legado) e avan├ºa para a p├ígina de Dados; **`BtnSairClick()`**: encerra o form.
+- **`AlternarPagina()`**: funil ├║nico FiltrosÔåöDados.
+
+Caught and fixed a real bug during review: my first draft nested `.AddObject` + `WITH .filho` inside the parent container's own `WITH` block (for the header labels) ÔÇö a documented VFP9 pitfall that silently drops properties. Rewrote it using the proven safe pattern (close the parent `WITH`, `AddObject` outside any `WITH`, then `WITH` the full path) for the header labels and the 3-column grid, matching canonical references in the codebase.
+
+Verified by compiling both `SigOpPckBO.prg` and `FormSigOpPck.prg` with VFP9 directly ÔÇö zero errors.

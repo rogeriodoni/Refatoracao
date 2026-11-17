@@ -1,0 +1,633 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPPGC.SCX
+* Data/Hora: 13/11/2026 11:43:25
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPPGC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPPGC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPPGC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPPGC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPPGC
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label1
+  Parent: SIGOPPGC
+  Class: label
+  BaseClass: label
+
+Objeto: Ok
+  Parent: SIGOPPGC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cancela
+  Parent: SIGOPPGC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Grade
+  Parent: SIGOPPGC
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPPGC.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPGC.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPPGC.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPPGC.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Saldo
+  Parent: SIGOPPGC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGOPPGC
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGOPPGC
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 420
+  Width = 500
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 1
+  Caption = "Informe os Barras"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  podatamgr = .F.
+  saldo = .F.
+  Name = "SIGOPPGC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 222
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Condição de Pagamento"
+  Height = 15
+  Left = 156
+  Top = 98
+  Width = 138
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 350
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<Confirmar"
+  TabIndex = 52
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 51
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 236
+  Left = 156
+  RowHeight = 16
+  TabIndex = 14
+  Top = 117
+  Width = 188
+  ZOrderSet = 4
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = "9999999999"
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Barra"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "tmpoperacao.CODIGOS"
+  Margin = 0
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Get_Saldo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BackStyle = 1
+  Value = 0
+  Height = 20
+  InputMask = "999,999.99"
+  Left = 206
+  Margin = 0
+  TabIndex = 41
+  Top = 383
+  Width = 81
+  ForeColor = 0,0,0
+  BackColor = 224,253,254
+  Name = "Get_Saldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Saldo : "
+  Height = 15
+  Left = 158
+  Top = 385
+  Width = 42
+  TabIndex = 58
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPPGC.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "[  ]"
+  Height = 15
+  Left = 156
+  Top = 359
+  Width = 18
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPPGC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, poValor, pConexao
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+Thisform.Podatamgr = pConexao
+ThisForm.Saldo     = poValor
+
+ThisForm.Get_Saldo.Value = ThisForm.Saldo
+
+With Thisform
+	.label1.Caption = '[ '+AllTrim(crSigOpFp.fpags)+' ]'
+EndWith
+
+Select BarBonus
+Zap
+Append Blank
+
+With Thisform.Grade
+	.RecordSource          = 'BarBonus'
+	.Column1.ControlSource = 'BarBonus.Codigos'
+	.Column2.ControlSource = 'BarBonus.Valors'
+	.Refresh
+EndWith
+THisForm.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPGC.Ok
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.Get_Saldo.Value <> 0
+	MessageBox('Quantidade de Barras incorretos!!!',0+16,'')
+	Return .f.
+EndIf
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPGC.Cancela
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select BarBonus
+Zap
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPGC.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Public _OldCodigo
+
+Set Confirm On
+_OldCodigo = This.Value
+
+Return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > 0
+	Set Decimals to 0
+	nDope = Val( Left( Str( This.Value, 10 ), 4 ) )
+	Nume  = Val( Right( Str( This.Value, 10 ), 6 ) )
+	lnCodigos = This.Value
+
+	lcSql = [Select Dopes From SigCdOpe Where ndopes = ]+Str(nDope)
+	ThisForm.PodataMgr.Sqlexecute(lcSql,'LocalSnOpe')
+
+	If Used('LocalSnOpe') And Reccount('LocalSnOpe') = 0
+		MessageBox('Barra Invalido!!!!',0+16,'')
+		This.Value = 0
+		Return .f.
+	EndIf
+	
+	Select BarBonus
+	Skip
+	Skip -1
+	Select Sum(1) as Qt, Codigos From BarBonus ;
+	Where Codigos = This.Value ;
+	Group By Codigos ;
+	Into Cursor CheckDup
+
+	If CheckDup.Qt > 1
+		MessageBox('Barra já digitado !!!',0+48,'')
+		This.Value = 0
+		Return .F.
+	Endif
+
+	Replace Valors With CrSigOpFp.VlrFpgs in BarBonus
+
+	Select BarBonus
+	Skip
+	If Eof()
+		Insert Into BarBonus( Codigos ) Values ( 0 )
+		KeyBoard "{DNARROW}"
+	EndIf
+Endif
+Return .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Set Confirm Off
+
+Select [ ] as Agrupar, Sum(1) as Qt, Sum(valors) as Valor From BarBonus Where Codigos <> 0 Into Cursor Selecao group by 1
+
+ThisForm.label3.Caption = '[ '+Alltrim(Str(Selecao.Qt))+' ]'
+ThisForm.Get_Saldo.Value = ThisForm.Saldo - Selecao.Valor
+
+ThisForm.label3.Refresh
+ThisForm.Get_Saldo.Refresh
+
+If ThisForm.Get_Saldo.Value < 0
+	MessageBox('Quantidade de Barras excedida!!!',0+16,'Valor a Maior')
+Endif
+
+If This.Value = 0 And Lastkey() = 13
+	ThisForm.Ok.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPGC.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPPGC.Get_Saldo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (.F.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPPGC
+RESERVED3 (ClassInfo): antvalue
+gravadados
+parentform
+podatamgr
+saldo
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

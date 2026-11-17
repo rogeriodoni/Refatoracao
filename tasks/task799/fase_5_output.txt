@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 aplicada em `projeto/app/forms/operacionais/Formsigopsen.prg`.
+
+## O que foi entregue
+
+O SCX legado ├® **FLAT** (form gen├®rico, sem PageFrame ÔÇö os 9 objetos penduram direto na Form), ent├úo n├úo h├í `ConfigurarPaginaDados` a escrever: criar uma Page2 inventaria superf├¡cie que o legado n├úo tem. Os campos foram transcritos direto na Form, como o cabe├ºalho do arquivo (Fase 3) j├í documentava.
+
+Dos 6 objetos de dados, foi entregue a **primeira metade na ordem do SCX** ÔÇö `Frase`, `Say2`, `usuario`:
+
+| Legado | Migrado | Origem das propriedades |
+|---|---|---|
+| `Frase` | `lbl_4c_Frase` | dump (Top 46, Left 2, 394x34, Alignment 2, WordWrap, it├ílico, branco) |
+| `Say2` | `lbl_4c_Label2` | dump (Top 102, Left 112, bold, `RGB(90,90,90)`) + classe `say` |
+| `usuario` | `txt_4c_Usuario` | dump (Top 94, Left 168, 119x30, Tahoma 12, `InputMask "!!!!!!!!!!"`, Century 2, Alignment 3) + classe `fwget` |
+
+Dois m├®todos novos: `ConfigurarCamposUsuario()` (PROTECTED) e `UsuarioEditavel()` (PUBLIC), com a chamada inserida em `InicializarForm` **depois** de `ConfigurarCabecalho`/`AvaliarSenhaDoDia`.
+
+## Decis├Áes que valem registrar
+
+- **Branco no `lbl_4c_Frase` ├® leg├¡timo** (n├úo virou `RGB(90,90,90)`): Top 46 + Height 34 = 46..80, inteiramente dentro da faixa opaca `cnt_4c_Sombra` (0..80), e a frase ├® filha da Form criada *depois* da faixa ÔÇö desenha por cima do cinza.
+- **`AutoSize = .F.` expl├¡cito** nos dois labels + Width/Height: `AutoSize` ├® no-op em Label de `AddObject` e, com `WordWrap = .T.`, descarta a Height ÔÇö a frase de 2 linhas colapsaria em sil├¬ncio.
+- **`lbl_4c_Label2`**: o dump n├úo declara Width nem Alignment (classe `say` pura), ent├úo `Alignment = 0` + `Width = 54` (legenda termina em 166, 2px antes do campo em 168). Os 27 da classe s├úo a largura do caption `"Label"` e cortariam a legenda.
+- **`MaxLength = 10`** veio de `SigCdUsu.usuarios char(10)` no schema (lido com `Get-Content -Raw`), n├úo do Width em pixels ÔÇö e casa com os 10 `!` do InputMask.
+- **O `When` do campo** (`(Not LiblCreds Or (Tipo<>LIMITE And Tipo<>LIBPRDZ2)) And Tipo<>MAXIMO`) foi reproduzido por `.Enabled` via `UsuarioEditavel()`: BINDEVENT descarta o retorno do delegate, ent├úo `When` ligado por bind n├úo bloquearia nada ÔÇö e reproduzir `When` por `Enabled` ├® o que o projeto j├í faz (FormCLC). As cores de desabilitado v├¬m da classe `fwget` (192,192,192 / 0,0,0), para o campo travado ter a apar├¬ncia do legado.
+
+## Verifica├º├Áes executadas
+
+- **Compila limpo** no VFP9 (`.fxp` apagado antes, `.err` n├úo gerado) ÔÇö `.fxp` de teste removido depois.
+- `VerificarPropriedadesInexistentes.ps1`: **OK** (confirma que `Century`/`Format`/`InputMask`/`MaxLength`/`DisabledBackColor` existem em TextBox e `Alignment`/`AutoSize`/`WordWrap`/`Rotation` em Label).
+- `VerificarFuncoesNaoDefinidas.ps1`: **nenhuma chamada ├│rf├ú** (os dois m├®todos novos resolvem como m├®todo de classe).
+- Blocos balanceados: 15 `PROCEDURE`/15 `ENDPROC`, 8 `WITH`/8 `ENDWITH`; zero literal acentuado; zero `RETURN` dentro de TRY; zero `MESSAGEBOX` direto.
+- Gate da Fase 5 simulado contra os arquivos reais: cai no ramo **CAPTURA** (legado sem lista pelo teste estrito, 2 TextBox, nenhum ReadOnly, sem API de n├│s) ÔÇö piso de 1 campo, 1 entregue.
+
+## Pend├¬ncias que as fases seguintes recebem
+
+A segunda metade (`Say3` ÔåÆ `lbl_4c_Label3`, `senha` ÔåÆ `txt_4c_Senha` com `PasswordChar`, `Image1` ÔåÆ `img_4c_Image1` com `geral_login_60.jpg`) e o picker `fwBuscaSel` do `usuario.Valid` ficam para a Fase 6, que ├® onde o pipeline cobra campos restantes + lookups.
+
+Um ponto do legado que vale olhar quando o `Say3` for migrado: no bloco final do `Init` ele move `Say3.Left` de 120 para **142** ao trocar o caption para `"Senha Do Dia :"` ÔÇö caption mais longo come├ºando mais ├á direita, o que coloca o texto por cima do campo em 168. ├ë candidato a sobreposi├º├úo herdada do SCX (regra #28), n├úo a erro de migra├º├úo.

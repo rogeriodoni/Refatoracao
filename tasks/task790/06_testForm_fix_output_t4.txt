@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: isto n├úo ├® um bug de c├│digo ÔÇö ├® o problema de infraestrutura j├í conhecido e documentado
+
+O erro reportado n├úo ├® falha no `Formsigoppro.prg`/`sigopproBO.prg`. O log mostra a falha na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö pr├®-flight gen├®rico do harness que tenta `SQLSTRINGCONNECT` **antes de qualquer `CREATEOBJECT`** do form/BO sendo testado:
+
+```
+Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® exatamente o padr├úo j├í registrado em mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): desde 2026-11-05 o SQL Server `192.168.200.10:1433` fica intermitentemente inalcan├º├ível desta m├íquina do pipeline. Esse padr├úo j├í se repetiu em **15+ tasks e 50+ confirma├º├Áes** (FormSigOpGar, Gco, Mop, Mpd, Mpn, Nch, NFd, Nop, Oca, Och, Oco, SIGOPPEN, SIGOPPGC, sigoppop, SigOpPrL, e agora Formsigoppro), e em **nenhuma delas** foi encontrado defeito real de c├│digo.
+
+**Confirmei de duas formas independentes:**
+
+1. `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` n├úo respondeu dentro do timeout (mesma assinatura de n├úo-resposta de todas as ocorr├¬ncias anteriores ÔÇö tratada como `False`).
+2. Revisei integralmente `Formsigoppro.prg` e `sigopproBO.prg` contra o checklist do CLAUDE.md:
+   - RETURN sempre fora de TRY/CATCH em todos os m├®todos;
+   - Todos os ~35 handlers de BINDEVENT (incluindo os bot├Áes de `cnt_4c_Botoes`/`cnt_4c_BotoesAcao`) s├úo PUBLIC;
+   - O form s├│ chama m├®todos PUBLIC do BO (`CarregarDoCursor`, `MontarChaveEmpDopNums`, `CarregarItens`) ÔÇö `ObterChavePrimaria` fica PROTECTED e nunca ├® chamado de fora (regra #51);
+   - `CriarCursorItens`/`CriarCursorPrecos` s├úo criados antes de qualquer `ControlSource` apontar para eles (regra #41);
+   - `TABLEREVERT` sempre guardado por `USED()` + `Buffering` (regra #52);
+   - Instala├º├úo dos CheckBox de coluna ├® idempotente via `PEMSTATUS` (regra #18), sem o defeito de `AddObject` duplicado visto em outros forms da fam├¡lia.
+
+Nenhum defeito encontrado ÔÇö por isso **n├úo editei os arquivos**. Alterar um `.prg` correto s├│ para "satisfazer" esse gate seria dano, n├úo corre├º├úo (├® exatamente o que a mem├│ria do projeto adverte).
+
+**Recomenda├º├úo (reiterada de ocorr├¬ncias anteriores):** o retry autom├ítico contra uma falha de rede n├úo vai convergir sozinho. Sugiro pausar o retry desta task ou dar exce├º├úo ao gate `06_testForm` especificamente para o erro 1526/conectividade, e verificar a disponibilidade da rota 192.168.200.10:1433 fora do pipeline.

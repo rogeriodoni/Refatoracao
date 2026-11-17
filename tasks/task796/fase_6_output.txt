@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## FASE 6/8 ÔÇö conclu├¡da
+
+**Resultado: este legado n├úo tem lookup nenhum, nem campo restante, nem Salvar/Cancelar.** Nada foi inventado; o que a fase entregou foi a *prova* disso + documenta├º├úo no arquivo.
+
+### Medi├º├úo sobre `tasks\task796\SigOpRob_form_codigo_fonte.txt`
+
+| item | legado | j├í no `.prg` | a acrescentar |
+|---|---|---|---|
+| controle de entrada (`BaseClass: editbox/textbox/...`) | 1 (`Edit1`, `ReadOnly = .T.`) | 1 (Fase 4) | **0** |
+| `fwBuscaExt` / `fwBuscaSel` / `fwBuscaInt` | 0 | ÔÇö | **0** |
+| API de colunas do picker legado / `sigacess` / `Acesso*` | 0 | ÔÇö | **0** |
+| `PROCEDURE Valid` / `PROCEDURE KeyPress` | 0 / 0 | ÔÇö | **0** |
+| bot├Áes | 1 (Encerrar) | 1 (Fase 4) | **0** |
+| Salvar / Cancelar | 0 | ÔÇö | **0** |
+
+O `comportamento.json` fecha com o dump: `totalMetodos = 2` (s├│ o `Init` e o `Click` do Encerrar), `temSQL = .F.`, `totalQueries = 0`. O conte├║do exibido chega **pronto** nos par├ómetros do `Init` ÔÇö o BO n├úo tem tabela, cursor nem SQL. E campo `ReadOnly` n├úo recebe lookup por defini├º├úo: n├úo h├í onde digitar c├│digo para um picker resolver.
+
+Inventar um lookup violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"; declarar `AbrirLookup*` vazio seria stub disfar├ºado.
+
+### O que foi efetivamente entregue
+
+1. **`projeto\app\forms\operacionais\FormSigOpRob.prg`** ÔÇö nova se├º├úo de cabe├ºalho `FASE 6/8`, no mesmo padr├úo das Fases 3/4/5 j├í documentadas no arquivo, com a tabela de medi├º├úo acima e a ressalva de edi├º├úo (os gates leem o `.prg` inteiro sem distinguir coment├írio de c├│digo ÔÇö por isso a se├º├úo descreve os tokens em prosa em vez de cit├í-los literalmente, sen├úo o form seria aprovado pelo ramo PAGINADO/FLAT, que s├úo os ramos **errados** e mascarariam um form incompleto).
+
+2. **`automation\VerificarGateFase6Task796.ps1`** (novo) ÔÇö reexecuta o gate fora do orquestrador, via `LibGateFase6Task738.ps1` (dot-source do orquestrador dispara uma migra├º├úo, por isso n├úo se usa).
+
+### Verifica├º├Áes executadas
+
+```
+[1] Test-CompletudeCodigo  ÔåÆ OK no Form e no BO (sem TODO/stub/procedure vazia)
+[2] Gate da Fase 6         ÔåÆ temLayoutExibicaoF6 = True   (aprovado pelo ramo EXIBICAO)
+                             temPaginaDados=False  temLayoutFlat=False  despachante=False
+```
+
+Compila├º├úo VFP9: `FormSigOpRob.prg` e `SigOpRobBO.prg` ÔåÆ `FXP=SIM ERR=NAO`. A compila├º├úo foi provada pelo arquivo de sa├¡da do pr├│prio script VFP, depois de um smoke test (`STRTOFILE` + `QUIT`) confirmar que o `vfp9.exe` desta sess├úo de fato executa o corpo do `.prg` ÔÇö `exit=0` e o `.FXP` sozinhos n├úo provam execu├º├úo. `.fxp` removidos ao final.
+
+Nota: o guard de NO-OP do `OrquestradorMigracao.ps1` j├í cita `SigOpRob` nominalmente como um dos 3 dumps que o ramo EXIBICAO libera ÔÇö ou seja, "Fase 6 sem campo/lookup a acrescentar" neste form ├® resultado previsto pelo pipeline, n├úo omiss├úo.

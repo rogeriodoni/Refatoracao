@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This failure is not a code defect ÔÇö it's the recurring pipeline infrastructure issue already documented extensively in project memory.
+
+**Diagnosis:** The log shows the failure at **ETAPA 1B** (`[ETAPA 1B] Conectando ao banco de dados...`), which is a generic SQL pre-flight check in `TestFormWrapper.prg` that runs **before any `CREATEOBJECT` of `FormSigOpPdt`**. The error is:
+
+```
+Codigo: 1526
+Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+This is the exact signature of `192.168.200.10:1433` being unreachable from the pipeline machine ÔÇö a pattern confirmed dozens of times across prior tasks (task767ÔÇôtask775 and others) in project memory, always occurring at this same pre-flight stage, independent of which form is being tested. A `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` I ran just now didn't respond within the timeout either, matching the same non-response signature seen repeatedly before.
+
+**Code review:** I read `FormSigOpPdt.prg` and `SigOpPdtBO.prg` in full (both freshly written in Fase 8/8) against the project's checklist ÔÇö `RETURN` always outside `TRY/CATCH`, BINDEVENT handlers all `PUBLIC`, form never calls a `PROTECTED` BO method, every `CATCH` has `MsgErro`, reentrancy guards correctly split into wrapper/body. No defect found.
+
+**Action taken:** Per established project feedback ("editar codigo correto so para satisfazer o gate seria dano, nao correcao"), I did **not** edit the files ÔÇö there's nothing in them causing this failure. I recorded this occurrence in project memory (task784/FormSigOpPdt) as the latest confirmation of the recurring infra issue.
+
+If this keeps exhausting retry attempts, the recommendation from prior confirmations stands: pause the automatic retry for this task or add an exception in the `06_testForm` gate for error 1526/connectivity before attempts run out with otherwise-correct code.

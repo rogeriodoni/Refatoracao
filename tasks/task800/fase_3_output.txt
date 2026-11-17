@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete. Summary:
+
+**Created** `C:\4c\projeto\app\forms\operacionais\Formsigopsep.prg` ÔÇö the base structure for the "Seleciona Produtos" dialog.
+
+Key decision: the legacy `SIGOPSEP.SCX` has **no PageFrame** (it's a FLAT layout, like the existing `FormSigOpCrd.prg` in the same OPERACIONAL family), so I did not force the generic Page1/Page2 CRUD template onto it ÔÇö that would have invented UI structure absent from the legacy form (violating PILAR 1). Instead I followed the established project pattern for FLAT child dialogs:
+
+- `DEFINE CLASS Formsigopsep AS FormBase` with visual properties transcribed from the dump (Width=800, Height=600, Caption="Seleciona Produtos", TitleBar=0, etc.)
+- `this_oFormPai` property + `Init(par_oFormPai)` mirroring the legacy `LParameters poForm` contract
+- `InicializarForm()` creating the `sigopsepBO`, building the header banner (`cnt_4c_Sombra` + two labels, transcribed exactly from the dump), and calling stub hooks `ConfigurarPaginaLista()`/`ConfigurarPaginaDados()` reserved for fases 4ÔÇô5 (filters+grade-de-linhas, and grade-de-itens+bot├Áes)
+- `ReabilitarFormPai()` / `Destroy()` mirroring `SIGOPSEP.Release` (closes BO cursors, re-enables the parent form unconditionally, as the legacy does)
+- Documented in the file header a naming fix: `mapeamento.json` collides `GradeLinhas` and `GradeItens` onto the same `grd_4c_Dados` target ÔÇö both grids will get distinct names (`grd_4c_Linhas` / `grd_4c_Itens`) in later phases.
+
+Verified with VFP9 directly (not just static review): a smoke test confirmed the interpreter actually executes in this session, the form compiles clean (no `.err`), and an instantiation probe confirmed `CREATEOBJECT` succeeds, the header container/labels render with correct values, and `Release()` correctly re-enables the parent form via `ReabilitarFormPai()`.

@@ -1100,6 +1100,36 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 167 OF popMovimentos DO AbrirFormSIGOPNOP
 
+    DEFINE BAR 168 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 169 OF popMovimentos PROMPT "Atendimento Picking" ;
+           MESSAGE "Consulta dos itens movimentados no per" + CHR(237) + "odo por empresa/tipo de opera" + CHR(231) + CHR(227) + "o e grupo de produto (SIGOPPCK)"
+
+    ON SELECTION BAR 169 OF popMovimentos DO AbrirFormSigOpPck
+
+    DEFINE BAR 170 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 171 OF popMovimentos PROMPT "Pend" + CHR(234) + "ncias Em Subn" + CHR(237) + "veis" ;
+           MESSAGE "Worklist de movimenta" + CHR(231) + CHR(245) + "es pendentes de baixa em subn" + CHR(237) + "vel - Aprovar/Reprovar/Cancelar (SIGOPPEN)"
+
+    ON SELECTION BAR 171 OF popMovimentos DO AbrirFormSIGOPPEN
+
+    DEFINE BAR 172 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 173 OF popMovimentos PROMPT "Transfer" + CHR(234) + "ncia Entre Locais" ;
+           MESSAGE "Copia movimenta" + CHR(231) + CHR(245) + "es de uma empresa/opera" + CHR(231) + CHR(227) + "o de origem para a de destino conforme o Processo de C" + CHR(243) + "pia (SIGOPPOP)"
+
+    ON SELECTION BAR 173 OF popMovimentos DO AbrirFormsigoppop
+
+    DEFINE BAR 174 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 175 OF popMovimentos PROMPT "Lan" + CHR(231) + "amentos de Rebates" ;
+           MESSAGE "Integra as vendas com desconto ELO/OuroCard: gera a movimenta" + CHR(231) + CHR(227) + "o, os itens, as parcelas e os lan" + CHR(231) + "amentos de conta corrente por Empresa/Dia/M" + CHR(234) + "s (SIGOPRBT)"
+
+    ON SELECTION BAR 175 OF popMovimentos DO AbrirFormsigoprbt
+
+    DEFINE BAR 176 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 177 OF popMovimentos PROMPT "Integra" + CHR(231) + CHR(227) + "o Aparelho SAT" ;
+           MESSAGE "Associa a assinatura do AC e processa as requisi" + CHR(231) + CHR(245) + "es de venda/cancelamento do PDV junto ao equipamento SAT-CF-e (SIGOPSAT)"
+
+    ON SELECTION BAR 177 OF popMovimentos DO AbrirFormsigopsat
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -12717,6 +12747,37 @@ ENDPROC
 *------------------------------------------------------------------------------
 * AbrirFormSigOpImg - Abre a Captura de Imagens de Produtos (SIGOPIMG)
 *------------------------------------------------------------------------------
+*------------------------------------------------------------------------------
+* AbrirFormSigOpPck - Abre Atendimento Picking (OPERACIONAL, SIGOPPCK)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpPck()
+    LOCAL loForm, loException
+
+    TRY
+        GarantirClasse("FormSigOpPck")
+        loForm = CREATEOBJECT("FormSigOpPck")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Atendimento Picking" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Atendimento Picking:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
 PROCEDURE AbrirFormSigOpImg()
     LOCAL loForm, loException
 
@@ -12932,6 +12993,153 @@ PROCEDURE AbrirFormSigOpMet()
         *-- NAO chamar loForm.Release() - FormBase cuida disso
         loForm.Show()   && FORA do TRY (CLAUDE.md #29)
     ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGOPPEN - Pendencias Em Subniveis (worklist de movimentacoes
+* aguardando baixa em subnivel - Aprovar/Reprovar/Cancelar). TRY cobre SO
+* a criacao; o Show() fica FORA (CLAUDE.md #29) - form modal dentro do TRY
+* faria qualquer erro de runtime cair no CATCH e destruir a referencia,
+* fechando a tela sozinha.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGOPPEN()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("FormSIGOPPEN")
+        loForm = CREATEOBJECT("FormSIGOPPEN")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario FormSIGOPPEN" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Pend" + CHR(234) + "ncias Em Subn" + CHR(237) + "veis:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigoppop - Transferencia Entre Locais (SIGOPPOP)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigoppop()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("Formsigoppop")
+        loForm = CREATEOBJECT("Formsigoppop")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario Formsigoppop" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Transfer" + CHR(234) + "ncia Entre Locais:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigoprbt - Lancamentos de Rebates (SIGOPRBT)
+*
+* O Init do form aceita o pAuto do legado (lote sem dialogo). Pelo MENU a
+* chamada eh sempre INTERATIVA, entao nenhum argumento eh passado - a guarda de
+* PCOUNT/VARTYPE do Init resolve a omissao como .F.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigoprbt()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("Formsigoprbt")
+        loForm = CREATEOBJECT("Formsigoprbt")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario Formsigoprbt" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Lan" + CHR(231) + "amentos de Rebates:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigopsat - Integracao Aparelho SAT (SIGOPSAT)
+*
+* SEM .Show() de proposito (unico caso do menu.prg que diverge do padrao
+* acima): Formsigopsat.Init() ja executa Visible=.T./Refresh()/Lerarquivos()
+* (laco de integracao com a SAT.dll, ate o usuario pedir ESC)/Release(), na
+* mesma ordem do Init legado - fiel ao fato de que o SIGOPSAT original
+* tambem nunca espera um Show() externo (ver cabecalho de Formsigopsat.prg).
+* Chamar .Show() aqui tentaria reabrir uma tela que, quando o CREATEOBJECT
+* retorna, ja terminou o laco e ja se liberou.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigopsat()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse("Formsigopsat")
+        loForm = CREATEOBJECT("Formsigopsat")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formulario Formsigopsat" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Integra" + CHR(231) + CHR(227) + "o Aparelho SAT:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
 ENDPROC
 
 *------------------------------------------------------------------------------

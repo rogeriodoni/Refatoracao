@@ -1,0 +1,305 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 7,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Fornecedor", "fGerarDescrs", "fGerDescritivo", "fConfigGeral", "fGerUniqueKey", "fUniqueIds", "fDigVerificador", "fCanUniqueKey"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 95,
+      "codigoOriginal": "Private pGru, pSGr\n\nLocal lnCPro\n\nSelect crSigCdPro\npGru = crSigCdPro.CGrus\npSGr = crSigCdPro.SGrus\n\nSelect crSigCdPrd\nGo Top In crSigCdPrd\nLocate For CGrus = pGru\nIf Not Eof([crSigCdPrd])\n\tThisForm.MontaDescrs\n\t\n\tReturn .t.\nEndIf\n\nGo Top In crSigCdPam\nlnCPro      = crSigCdPam.CodProds\n\nlnMontaGrDs = 0\n\nIf Not Empty(pGru)\n\n\tlStrQuery = [Select * From SigCdGrp Where CGrus = '] + pGru + [']\n\tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'crSigCdGrp') < 1\n\t\tMessageBox('Favor reinicializar o processo !... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fornecedor,fGerarDescrs",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "Local lcDes\n\nIf ThisForm.mSv_Inserir()\n\tSelect Distinct CGrus, Linguas, TpMontas ;\n\t  From crSigCdPrd ;\n\t Where CGrus = crSigCdPro.CGrus ;\n\t Order By TpMontas ;\n\t  Into Cursor LocalMontas\n\n\tSelect LocalMontas\n\tScan\n\t\tlcDes = fGerDescritivo(ThisForm.poDataMgr, crSigCdPro.CPros, LocalMontas.TpMontas)\n\n\t\tIf Not lcDes = Chr(254)\n\t\t\tIf Not Empty(lcDes) And (LocalMontas.Linguas = 2) && Descrição Em Inglês\n\t\t\t\tSelect crSigCdDic\n\t\t\t\tScan\n\t\t\t\t\tlcDes = Strtran(lcDes, Alltrim(crSigCdDic.Expressao), Alltrim... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerDescritivo",
+        "metodosFormChamados": "mSv_Inserir",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Private pPro, llTaOk\n\npPro = crSigCdPro.CPros\n\nllTaOk = .t.\n* Incluindo os Registros\nIf Not ThisForm.poDataMgr.Update('crSigCdPro')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - crSigCdPro)')\n\tllTaOk = .f.\nEndIf\nIf llTaOk And Not ThisForm.poDataMgr.Update('crSigPrCpo')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - crSigPrCpo)')\n\tllTaOk = .f.\nEndIf\nIf llTaOk And Not ThisForm.poDataMgr.Update('crSigCdPrf')\n\t=MessageB... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Init",
+      "linhas": 95,
+      "codigoOriginal": "LParameters pPro, pSit, pAut, pIFx, pCad, pDop, pGru\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdPro],   [CPros],     [crSigCdPro])\n\t\t\t.AddCursor([SigPrCpo], [cIdChaves], [crSigPrCpo])\n\t\t\t.AddCursor([SigCdPrf],  [cIdChaves], [crSigCdPrf])\n\t\tEndWith\n\n\t\t.poDataMgr.CursorQuery([SigCdPam], [crSigCdPa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Qtd",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.RetCodProduto",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.getNewCpro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not ThisForm.Automatico ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.getNewCGrus",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "If (ThisForm.AntValue = This.Value) And Not Empty(Thisform.GetNewCpro.Value)\n\tReturn .t.\nEndIf\n\nThisForm.Automatico = .f.\n\nlcCGrus = Alltrim(This.Value)\nlcNewCPros = ''\nlStrQuery = [Select CGrus, Mercs, CodProds, IdeCPros From SigCdGrp Where CGrus = '] + lcCGrus + [']\nIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpGruPro') < 1\n\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpGruPro)')\n\tReturn 0\nEndIf\nSelect TmpGruPro\nGo Top\nlnTpPro = Iif(Empty(lcCGrus) Or Empty(TmpGruPro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "Value) And Not Empty,SqlExecute,CursorQuery,Newseq = fGerUniqueKey",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.getNewCGrus",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\n\nReturn (ThisForm.AcesGru)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.Get_Qtd",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Automatico And Not ThisForm.SaiAuto)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.Opc_situacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.Opc_situacao",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.Opc_situacao",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.cntBotoes",
+      "evento": "Click",
+      "linhas": 132,
+      "codigoOriginal": "Local lcThisRec, lcNewPros, lcLocPros, lCreated\n\nlcLocPros = Padr(Thisform.getOldCpro.Value, 14)\nlcNewPros = Padr(Thisform.getNewCpro.Value, 14)\n\nlcLocGrus = Padr(Thisform.getOldCGrus.Value, 03)\nlcNewGrus = Padr(Thisform.getNewCGrus.Value, 03)\n\nThisForm.RetCodproduto = ' '\n\nlCreated = .f.\n\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'crTmp', 'CPros', lcNewPros)\nIf (Reccount('crTmp') > 0)\n\t=MessageBox('A Nova Referência Informada Já Está Cadastrada!!!', 0+48, '')\n\tThisform.getNewCpro.SetFocus\n\tUse... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,fGerUniqueKey,fDigVerificador",
+        "metodosFormChamados": "CursorQuery,SaiAuto And MessageBox,Sqlexecute,Inicio = fGerUniqueKey,Auxmontadescs,mSv_Inserir,retcodproduto = Padr",
+        "controlesReferenciados": "Get_Qtd",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPREF.cntBotoes",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "lcCGrus = Thisform.GetNewCgrus.Value\nlcCPNew = Thisform.GetNewCPro.Value\n\nlStrQuery = [Select CGrus,CodProds,IdeCPros From SigCdGrp Where CGrus = ']+lcCGrus+[' ]\nIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpGruPro') < 1\n\tThisForm.Release\nEndIf\nSelect TmpGruPro\nGo Top\nlnTpPro = Iif(Empty(lcCGrus) Or Empty(TmpGruPro.CodProds),crSigCdPam.CodProds,TmpGruPro.CodProds)\nIf InList(lnTpPro,2,4,5) And !Empty(lcCGrus)\n\tlcCGrus = Alltrim(lcCGrus)\n\tIf (lnTpPro = 2)\n\t\t_Codigo = Val(Substr(lcCPNew,Len(lcCGru... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "SqlExecute,NewSeq,'PRODUTO' + Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPREF.Procedure",
+      "queryOriginal": "\tlStrQuery = [Select * From SigCdGrp Where CGrus = '] + pGru + [']",
+      "tabelas": "SigCdGrp",
+      "colunas": "CGrus,pGru",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPREF.Procedure",
+      "queryOriginal": "\tSelect Distinct CGrus, Linguas, TpMontas ; \t  From crSigCdPrd ; \t Where CGrus = crSigCdPro.CGrus ; \t Order By TpMontas ; \t  Into Cursor LocalMontas",
+      "tabelas": "crSigCdPrd",
+      "colunas": "Linguas,CGrus,TpMontas,LocalMontas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPREF.getNewCGrus.Valid",
+      "queryOriginal": "lStrQuery = [Select CGrus, Mercs, CodProds, IdeCPros From SigCdGrp Where CGrus = '] + lcCGrus + [']",
+      "tabelas": "SigCdGrp",
+      "colunas": "CGrus,Mercs,CodProds,IdeCPros,lcCGrus",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPREF.cntBotoes.Click",
+      "queryOriginal": "lStrQuery = [Select CGrus,CodProds,IdeCPros From SigCdGrp Where CGrus = ']+lcCGrus+[' ] If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpGruPro') < 1",
+      "tabelas": "SigCdGrp",
+      "colunas": "CGrus,CodProds,IdeCPros,SqlExecutelStrQuery,TmpGruPro",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGrp", "crSigCdPrd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

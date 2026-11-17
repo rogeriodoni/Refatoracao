@@ -1,0 +1,765 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPRPS.SCX
+* Data/Hora: 17/11/2026 01:25:15
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPRPS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPRPS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPRPS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPRPS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPRPS
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say5
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_NumRps
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Commandgroup2
+  Parent: SIGOPRPS
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grdMov
+  Parent: SIGOPRPS
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPRPS.grdMov.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRPS.grdMov.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPRPS.grdMov.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRPS.grdMov.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPRPS.grdMov.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRPS.grdMov.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPRPS.grdMov.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPRPS.grdMov.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Dopes
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Numes
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Tipos
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Series
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPRPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Emps
+  Parent: SIGOPRPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS
+------------------------------------------------------------
+  DataSession = 2
+  Height = 380
+  Width = 650
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Follow Up de RPS"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .T.
+  TitleBar = 0
+  podatamgr = .F.
+  Name = "SIGOPRPS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Shape1
+------------------------------------------------------------
+  Top = 94
+  Left = 65
+  Height = 65
+  Width = 520
+  BackStyle = 0
+  BorderColor = 90,90,90
+  ZOrderSet = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say5
+------------------------------------------------------------
+  Caption = "RPS :"
+  Left = 451
+  Top = 104
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_NumRps
+------------------------------------------------------------
+  Left = 481
+  MaxLength = 12
+  TabIndex = 1
+  Top = 100
+  Width = 95
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_NumRps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Commandgroup2
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 570
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 9
+  BorderColor = 136,189,188
+  Name = "Commandgroup2"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 202
+  Left = 65
+  ReadOnly = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 164
+  Width = 520
+  Name = "grdMov"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 120
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 220
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 55
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data/Hora"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo Lançamento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nº NF"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.grdMov.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say1
+------------------------------------------------------------
+  Caption = "Operação :"
+  Left = 78
+  Top = 131
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_Dopes
+------------------------------------------------------------
+  Left = 136
+  MaxLength = 20
+  TabIndex = 1
+  Top = 128
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_Dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say2
+------------------------------------------------------------
+  Caption = "Número :"
+  Left = 309
+  Top = 132
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_Numes
+------------------------------------------------------------
+  Height = 23
+  Left = 356
+  MaxLength = 6
+  TabIndex = 1
+  Top = 128
+  Width = 55
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_Numes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say3
+------------------------------------------------------------
+  Caption = "Tipo :"
+  Left = 210
+  Top = 104
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_Tipos
+------------------------------------------------------------
+  Left = 241
+  MaxLength = 5
+  TabIndex = 1
+  Top = 100
+  Width = 45
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_Tipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say4
+------------------------------------------------------------
+  Caption = "Série :"
+  Left = 321
+  Top = 104
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_Series
+------------------------------------------------------------
+  Left = 356
+  MaxLength = 5
+  TabIndex = 1
+  Top = 100
+  Width = 45
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_Series"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.Say6
+------------------------------------------------------------
+  Caption = "Empresa :"
+  Left = 84
+  Top = 103
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPRPS.get_Emps
+------------------------------------------------------------
+  Left = 136
+  MaxLength = 3
+  TabIndex = 1
+  Top = 100
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_Emps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPRPS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pcEmp, pcTipoRps, pcSerieRps, pnNumRps, pcDopes, pnNumes
+
+With Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	EndIf
+Endwith	
+
+ThisForm.get_Emps.Value   = pcEmp
+ThisForm.get_Tipos.Value  = pcTipoRps
+ThisForm.get_Series.Value = pcSerieRps
+ThisForm.get_NumRps.Value = pnNumRps
+ThisForm.get_Dopes.Value  = pcDopes
+ThisForm.get_Numes.Value  = pnNumes
+
+lcQuery = [Select Datas, Transacaos, usuars, nfis from SigCdFrp where Emps = ']+pcEmp+[' ] + ;
+			[and Tipos = ']+pcTipoRps+[' and Series = ']+pcSerieRps+[' and NumRps = ] + ;
+			Str(pnNumRps,6) + [ Order by Datas Desc]
+			
+If ThisForm.poDataMgr.SQLExecute(lcQuery,[crSigCdFrp]) < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFrp)')
+	Return
+Endif
+
+With ThisForm.grdMov
+	.RecordSource = [crSigCdFrp]
+	.Column1.ControlSource = [crSigCdFrp.Datas]
+	.Column2.ControlSource = [crSigCdFrp.Transacaos]
+	.Column3.ControlSource = [crSigCdFrp.Usuars]
+	.Column4.ControlSource = [crSigCdFrp.NFis]
+EndWith
+
+ThisForm.Refresh()
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_NumRps
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.Commandgroup2
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CmdSair.Click
+------------------------------------------------------------
+PROCEDURE CmdSair.Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_Dopes
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_Numes
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_Tipos
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_Series
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPRPS.get_Emps
+* Classe: fwget (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPRPS
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

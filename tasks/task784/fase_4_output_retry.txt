@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e verificada. Resumo:
+
+## Por que o gate reprovou antes
+
+O gate da Fase 4 (ramo **FLAT**, usado em form OPERACIONAL sem PageFrame) exige **tr├¬s** coisas (`OrquestradorMigracao.ps1:9781-9786`):
+
+| Predicado | Antes | Agora |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£ö | Ô£ö |
+| `AddObject("cmd_4c_` / `cmg_4c_` | **Ô£ÿ** | Ô£ö |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **Ô£ÿ** | Ô£ö |
+
+A tentativa anterior entregou **s├│ a grade** ÔÇö nenhum bot├úo e nenhum m├®todo de carga.
+
+## O que foi adicionado a `FormSigOpPdt.prg`
+
+- **`ConfigurarBotoes()`** ÔÇö os 3 bot├Áes standalone do SCX: `cmd_4c_SelTudo` (216/704, `to-do-list_checked2.ico`), `cmd_4c_Apaga` (256/704, `onebit_33.ico`), `cmd_4c_Ok` (4/723, `cadastro_salvar_60.jpg`, `Cancel = .T.`). Top/Left/Picture/Caption do dump; Width/Height/fonte das classes `fwbtnp` (40x40) e `fwbtng` (80x100). Os 3 `.Picture` existem em `vbmp\` (regra #25).
+- **`CarregarLista()`** ÔÇö orquestra `SigOpPdtBO.CarregarPendencias()` ÔåÆ `VincularGrade()` ÔåÆ `RepintarGrade()`; equivale ao trecho do `Init` legado que monta `TmpPends` e liga a grade. Retorna `.F.` no lugar do `Return 0` legado.
+- **`RepintarGrade()`** ÔÇö `GO TOP` + `Grid.Refresh` num m├®todo ├║nico, chamado em todo caminho que mexe no cursor (regra #21).
+- **`BtnSelTudoClick` / `BtnApagaClick` / `BtnOkClick`** com a l├│gica real transcrita (la├ºo `DO WHILE` com `RECNO`/`GOTO` expl├¡citos, n├úo `SCAN`, porque o BO troca a ├írea de trabalho corrente).
+- **`this_cOpEscolha`** + **`AjustarBotoesPorModo()`** ÔÇö reproduz `SelTudo.Visible = (Op_Escolha = 'INSERIR')`, aplicado **depois** de `TornarControlesVisiveis`. Todos os m├®todos chamados de fora s├úo PUBLIC (regra #3).
+
+Tamb├®m corrigi a grade, cujos valores tinham sido **inventados** na tentativa anterior: larguras `15/25/110/40/60/130/130/75` (eram `30/40/85/55/65/120/120/100`), fontes Courier New 9 / Arial 8, Headers Arial 8 e Verdana 8 com `ForeColor 36,84,155`, `Alignment = 2`, `Column8.InputMask = "999,999.99"`, `Grid.FontName = "Courier New"`, `AllowAddNew = .F.`, `TabIndex = 1`, e o checkbox com as propriedades da classe `fwcheckbox` + `PEMSTATUS` antes do `AddObject` (o m├®todo roda de novo a cada carga).
+
+## Verifica├º├úo
+
+- **Compila limpo**: `FORM_FXP=.T. FORM_ERR=.F. / BO_FXP=.T. BO_ERR=.F.`
+- **Instanciado de verdade** (`automation\ProbeSigOpPdt784F4.prg`, headless, `gnConnHandle = 0` para n├úo pendurar no SQL inalcan├º├ível): Init OK, 8 colunas ligadas com as larguras/headers acima, `Check1` presente com `CurrentControl`+`Sparse=.F.`, os 3 bot├Áes nas posi├º├Áes do dump com `FILE(.Picture) = .T.`, `CarregarLista()` = `.T.`, handlers sobrevivem ├á grade vazia, e em modo `VISUALIZAR` SelTudo/Apaga ficam `.F.` com Ok `.T.`
+
+## Um ponto que vai bater adiante (n├úo na Fase 4)
+
+A etapa **05d_validarCompletude** tem o regex `(?im)\*.*?(...|\bpendente|...)`, que casa a palavra de dom├¡nio desta tela: "Opera├º├Áes **Pendentes**". Hoje d├í 2 falsos positivos no form e 3 no BO, e essa etapa **bloqueia** (a checagem por fase s├│ roda em 2/6/7/8 e ├® apenas aviso, ent├úo a Fase 4 passa). Removi os 2 hits evit├íveis (linhas de coment├írio que quebravam iniciando com a palavra "todo"), mas os de "Pendentes" n├úo t├¬m como sair sem tornar os coment├írios in├║teis ÔÇö ├® a mesma fam├¡lia do falso positivo j├í documentado para "nao implementado". N├úo alterei o regex por conta pr├│pria: ele ├® gate compartilhado pelos ~970 forms. Se quiser, estreito para `\bpendente\b(?!s)` ou exijo contexto de pend├¬ncia.

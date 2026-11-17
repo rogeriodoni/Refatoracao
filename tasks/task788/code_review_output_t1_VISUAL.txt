@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo
+
+Analisei o ├║nico achado deste pass (`[GRID-WITH]` em `FormSigOpPrL.prg`, m├®todo `CarregarLista`) e **n├úo aplico a corre├º├úo** ÔÇö ├® a 27┬¬ reincid├¬ncia confirmada de um falso positivo j├í catalogado na mem├│ria do projeto.
+
+**Por qu├¬ ├® falso positivo:**
+- `.ColumnCount = 7` ├® atribu├¡do em `ConfigurarGrid` (linha 648), **fora** de qualquer `WITH`, antes de `CarregarLista` sequer rodar ÔÇö as colunas `Column1..Column7` j├í existem.
+- O `WITH THIS.grd_4c_Dados` de `CarregarLista` (linhas 805-817) s├│ faz `.RecordSource` seguido de `.Column1..Column7.ControlSource`, no mesmo bloco ÔÇö exatamente a ordem can├┤nica da regra #41/#44 do CLAUDE.md (`ColumnCount -> RecordSource -> ControlSource -> Width -> Header1.Caption`).
+- `WITH` em VFP9 ├® pura sintaxe (prefixo impl├¡cito de `.`), sem lazy evaluation ÔÇö n├úo existe adiamento de cria├º├úo de Column dentro do bloco. Essa premissa do detector j├í foi refutada 26 vezes antes (FormSigOpCpo, FormSigOpCrd, FormSIGOPDVM, FormSigOpFpg, etc.), sempre no mesmo padr├úo estrutural.
+
+Nenhum arquivo de c├│digo foi alterado. Registrei esta 27┬¬ reincid├¬ncia na mem├│ria (`feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco.md`) para que passes futuros n├úo repitam a investiga├º├úo do zero.

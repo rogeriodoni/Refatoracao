@@ -283,17 +283,52 @@ DEFINE CLASS dmoBO AS BusinessBase
                     USE IN crSigMvCab
                 ENDIF
 
+                *-- Obses faz parte da lista porque o dialogo de Operacoes
+                *-- Pendentes (FormSigOpPdt/SigOpPdtBO.MarcarPendencia) le e
+                *-- grava crSigMvCab.Obses - no legado este cursor vinha de um
+                *-- AddCursor sem query (SELECT *) e portanto tinha TODAS as
+                *-- colunas. Coluna ausente num alias nao eh erro de
+                *-- compilacao: estoura em RUNTIME ("Variable 'OBSES' is not
+                *-- found") e, ali, DEPOIS de o UPDATE de ChkSubn ja ter sido
+                *-- gravado - o movimento ficaria marcado como usado no banco
+                *-- com a tela mostrando a pendencia desmarcada.
+                *-- Obses eh "text" no SQL Server (chega como Memo): vai por
+                *-- ULTIMO na lista, posicao segura para colunas LOB em driver
+                *-- ODBC antigo - nada depende da ordem das colunas, a grade
+                *-- liga as dela por NOME.
                 loc_cSQL = "SELECT Emps, Dopes, Numes, MascNum, Datas, " + ;
                            "GrupoOs, ContaOs, GrupoDs, ContaDs, GrVends, Vends, " + ;
                            "Usuars, EmpDopNums, cIdChaves, ChkSubn, " + ;
-                           "DtAlts, DtBaixas, DataTrans, Datars, EmpGopNums " + ;
+                           "DtAlts, DtBaixas, DataTrans, Datars, EmpGopNums, " + ;
+                           "Obses " + ;
                            "FROM SigMvCab " + ;
                            "WHERE Datas BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim + ;
                            " AND Emps = " + EscaparSQL(loc_cEmps) + ;
                            " AND Dopes = " + EscaparSQL(PADR(loc_cDopes, 20)) + ;
                            " ORDER BY Datas DESC, Numes DESC"
 
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigMvCab") >= 1
+                *-- SQLEXEC direto em "crSigMvCab" deixaria o cursor
+                *-- SOMENTE-LEITURA (cursor de SQL pass-through nasce read-only
+                *-- no VFP9): o dialogo de Operacoes Pendentes faz
+                *-- "REPLACE GrupoOs/ContaOs/GrupoDs/ContaDs/GrVends/Vends/
+                *-- Obses ... IN crSigMvCab" para PUXAR origem/destino do
+                *-- movimento pendente, e no legado isso funcionava porque o
+                *-- cursor vinha de AddCursor (atualizavel). Dai o SQLEXEC ir
+                *-- para um alias TEMPORARIO e o cursor de trabalho sair de um
+                *-- "SELECT * ... INTO CURSOR ... READWRITE" - mesmo padrao
+                *-- canonico usado quando uma grade tem coluna editavel.
+                IF USED("cursor_4c_SigMvCabTmp")
+                    USE IN cursor_4c_SigMvCabTmp
+                ENDIF
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigMvCabTmp") >= 1
+                    SELECT * FROM cursor_4c_SigMvCabTmp ;
+                        INTO CURSOR crSigMvCab READWRITE
+
+                    IF USED("cursor_4c_SigMvCabTmp")
+                        USE IN cursor_4c_SigMvCabTmp
+                    ENDIF
+
                     SELECT crSigMvCab
                     INDEX ON Numes TAG Numes
                     SET ORDER TO Numes

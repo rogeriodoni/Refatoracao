@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. Arquivo criado: **`C:\4c\projeto\app\classes\SigOpRobBO.prg`** (92 linhas).
+
+## O que o legado ├®
+
+`SIGOPROB.SCX` n├úo ├® um cadastro ÔÇö ├® um **di├ílogo somente-leitura de exibi├º├úo de texto** (`Edit1.ReadOnly = .T.`, `TitleBar = 0`, `ControlBox = .F.`, um ├║nico bot├úo Encerrar). Todo o seu comportamento s├úo 2 m├®todos:
+
+- `Init(pcTitulo, pcTexto, poForm)` ÔÇö popula Caption/lblSombra/lblTitulo, `Edit1.Value` e guarda o form chamador;
+- `CmdSair.Click` ÔÇö reabilita o form chamador e fecha.
+
+`comportamento.json` confirma: `temSQL = false`, `totalQueries = 0`. Verifiquei o schema can├┤nico com `Get-Content -Raw` (regra #14 ÔÇö 682 tabelas lidas, acima do piso de sanidade): **n├úo existe tabela `SIGOPROB`**. Por isso `this_cTabela` e `this_cCampoChave` ficam vazios, igual ao precedente `SIGPRALEBO` (di├ílogo de aguarde da task582).
+
+## Propriedades declaradas
+
+| Property | Par├ómetro legado | Destino na tela |
+|---|---|---|
+| `this_cTitulo` | `pcTitulo` | `Caption` + `lblSombra.Caption` + `lblTitulo.Caption` |
+| `this_cTexto` | `pcTexto` | `Edit1.Value` |
+
+## Decis├úo que registrei no cabe├ºalho
+
+O 3┬║ par├ómetro do `Init` legado (`poForm`) **n├úo virou property do BO**. ├ë refer├¬ncia de objeto de UI, usada s├│ para `ThisForm.poParentForm.Enabled = .T.` no fechamento ÔÇö guard├í-la no Business Object criaria refer├¬ncia circular e seguraria o Form em mem├│ria ap├│s o `Release`. Ela vai para `this_oFormChamador` no pr├│prio Form (Fase 3). Documentei isso em coment├írio no topo do arquivo para que uma fase posterior n├úo "conserte" inventando a property no BO.
+
+## Verifica├º├Áes executadas
+
+- Gates do `05d_validarCompletude`: 0 marcadores TODO/FIXME/PLACEHOLDER, 0 indicadores de pend├¬ncia, 0 procedures vazias.
+- 0 caracteres n├úo-ASCII (regra #4); 0 `PUBLIC FUNCTION/PROCEDURE` dentro de `DEFINE CLASS` (regra #9.1); nenhum `RETURN` dentro de `TRY` (regra #1).
+- Blocos balanceados: `DEFINE CLASS`/`ENDDEFINE` 1:1, `PROCEDURE`/`ENDPROC` 2:2, `IF`/`ENDIF` 2:2.
+- `Init` retorna `.T.` (BO que devolve `.F.` mata o form).
+
+**N├úo consegui compilar no VFP9 para confirmar**: o `vfp9.exe` desta m├íquina n├úo executa script nesta sess├úo ÔÇö travou al├®m dos 120s sem gerar `.fxp` nem `.err`, e eu encerrei o processo. ├ë a mesma limita├º├úo j├í registrada em mem├│ria. A valida├º├úo acima ├® estrutural/regex, n├úo uma compila├º├úo real.
+
+Nada foi adicionado ao `config.prg` ÔÇö a carga ├® sob demanda via `indice_classes.txt`, que se regenera sozinho.

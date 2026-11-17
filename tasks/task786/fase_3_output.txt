@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 is complete: `FormSIGOPPGC.prg` created at `C:\4c\projeto\app\forms\operacionais\FormSIGOPPGC.prg`, compiled clean via VFP9 (verified with a smoke test first, per the session's known "compile may silently not execute" risk).
+
+What's in it:
+- `DEFINE CLASS FormSIGOPPGC AS FormBase` with the legacy dialog's visual properties (modal, no title bar, `BorderStyle=1`, `Caption="Informe os Barras"`)
+- `this_oFormPai` / `this_nSaldoRecebido` staging properties for the 4 parameters the parent form passes in (`poForm, pnDataSes, poValor, pConexao`)
+- `Init()` replicating the legacy order: `SET DATASESSION` ÔåÆ disable parent form ÔåÆ cache saldo ÔåÆ `DODEFAULT()`
+- `InicializarForm()` creating `SIGOPPGCBO`, seeding its saldo properties, then calling `ConfigurarPageFrame()` + `TornarControlesVisiveis()`
+- `ConfigurarPageFrame()`/`ConfigurarCabecalho()` building just the header band (`cnt_4c_Sombra` + `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`), matching the dump
+- `Destroy()` calling `DODEFAULT()`
+
+Followed the established precedent from `Formsigopped.prg` (same dialog shape ÔÇö no real PageFrame, no menu entry since it's opened by a parent form) instead of the generic CRUD Page1/Page2 template, since this is an OPERACIONAL modal dialog. Grid/buttons, fields, and the Init SQL orchestration are deferred to fases 4-7 as scoped.

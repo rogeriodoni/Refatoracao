@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "fGravarLog", "fRecalculaS", "fGerMascara", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 547,
+      "codigoOriginal": "Local lnOldSel, lnErro1\nlnOldSel = Select()\n\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nSelect crSigCdPaC\nlcDopes = crSigCdPaC.DopRBT\n\nThisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)\nThisform.poDataMgr.CursorQuery([SigOpCdc],[crSigOpCdc],[Dopes],lcDopes)\nThisform.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)\nThisform.poDataMgr.CursorQuery([SigOpCdi],[crSigOpCdi],[Dopes],lcDopes)\n\n*-- Rafael - Não Gera solicitação nas lojas quando o pedido esta com o pagamento... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "If Not Thisform.Automatico\n\tIf Messagebox([Confirma o Lançamento dos Rebates no Sistema?],4+32,[Atenção])<>6\n\t\tReturn .F.\n\tEndif\nEndif\nSet Step On \nSelect crSigCdPaC\nIf IsEmpty(crSigCdPaC.DopRBT)\n\tIf Not Thisform.Automatico\n\t\tMessageBox([Movimentação de Rebate não Informada.],0+48,[Aviso])\n\t\tReturn .F.\n\tEndIf \t\nEndIf \n\n=fGravarLog('T', Thisform.Name,[REBATE],[Inicio da Gravação],Usuar)\n\nIf Not ThisForm.GeraMovimentacao()\n\tReturn .F.\nEndIf \n\nIf Not Thisform.Automatico\n\tMessageBox([Integração Real... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "GeraMovimentacao",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 917,
+      "codigoOriginal": "LParameters llvoper\n\nLocal ldDtContab, lcRclis, lcGrupoCob, lcContaCob, _pData, lnCont, _lcOcorSv, _lcNota\n\nWait Window 'Aguarde. Processando Lancamentos de Conta Corrente!!! ' Nowait\n\n_pData = Datetime() &&ThisForm.poDataMgr.GetDatetime()\n\nlcRclis = ''\nlnCont  = 0\nlnRetVOper = 0\n\nIf crSigCdOpe.DtContab=2 \n\t*-- Contabilizar na Data de Vencimento\n\tldDtContab = crSigMvPar.Vencs\nElse \n\t*-- Contabilizar na Data de Lançamento\n\tldDtContab = Iif(Empty(crSigMvPar.Datas), crSigMvCab.Datas, crSigMvPar.Dat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "GetDatetime,CursorQuery,MontaHists",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 69,
+      "codigoOriginal": "LPARAMETERS vTipo, pArquivo\n\nLocal NOper, VOper, Oper, Grupo, Conta, Cot, Valor, SOper, SGrupo, SConta, SMoed, SCot\nLocal SValor, NLanc, VLanc, Venc, Dataa, ValPag, Emp, Hist, Dope, Nume, Dopc, Numc, Nota\nLocal Titulo, Grupoe, Contae, Grupoa, Contaa, ValLiq, Hist2\n\nlcArqMccr = 'crSigMvCcr'\nIf Type('pArquivo') = [C]\n\tlcArqMccr = pArquivo\nEndIf\n\nSelect (lcArqMccr)\nNOper  = &lcArqMccr..nopers\nVOper  = &lcArqMccr..vopers\nOper   = &lcArqMccr..sopers\nGrupo  = &lcArqMccr..sgrupos\nConta  = &lcArqMccr..s... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "Lparameters pTit, pFpg, pCli\n\nLocal lcHis, lcTit, lcFpg, lcCli\n\nlcTit = Iif(Type([pTit])=[C], pTit, Titulos)\nlcFpg = Iif(Type([pFpg])=[C], pFpg, [])\nlcCli = Iif(Type([pCli])=[C], pCli, [])\n\nlcHis = []\nIf Not Empty(crSigCdOpe.Hists)\n\tlcHis = lcHis + Alltrim(crSigCdOpe.Hists) + [ ]\nEndIf\n\nIf (crSigCdOpe.TpHists = 5) And ThisForm.MultEmps\n\tlcHis = lcHis + Alltrim(Emps) + [ ]\nEndIf\n\nDo Case\n\tCase (crSigCdOpe.TpHists = 1) && NF\n\t\tlcHis = lcHis + Iif(Empty(Notas), [SEM DOCUMENTO], Alltrim(Notas))\n\n\tCa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerMascara",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Init",
+      "linhas": 55,
+      "codigoOriginal": "Parameters pAuto\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.Automatico = pAuto\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdCli', 'Iclis', \t'crSigCdCli')\n\t\t\t.AddCursor('SigCdCeE', 'Codigos', \t'crSigCdCeE')\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab')\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'csSigMvCab')\n\t\t\t.AddCursor('SigMvItn', 'c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRBT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRBT.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPRBT.cntBotoes",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Processamento()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}
