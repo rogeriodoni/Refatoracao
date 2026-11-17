@@ -1,0 +1,71 @@
+VARTYPE(loForm)=O
+Caption=[Follow Up de RPS]
+Form WxH=650x380
+ControlCount=10
+
+--- controles do form (ordem de AddObject = z-order) ---
+1  CNT_4C_CABECALHO    Container     T=   0 L=   0 W= 650 H=  80 Vis=T
+2  SHP_4C_SHAPE1       Shape         T=  94 L=  65 W= 520 H=  65 Vis=T
+3  CMD_4C_ENCERRAR     Commandbutton T=   3 L= 575 W=  75 H=  75 Vis=T
+4  GRD_4C_DADOS        Grid          T= 164 L=  65 W= 520 H= 202 Vis=T
+5  LBL_4C_LABEL6       Label         T= 103 L=  84 W=  50 H=  17 Vis=T
+6  TXT_4C__EMPS        Textbox       T= 100 L= 136 W=  31 H=  21 Vis=T
+7  LBL_4C_LABEL3       Label         T= 104 L= 210 W=  30 H=  17 Vis=T
+8  TXT_4C__TIPOS       Textbox       T= 100 L= 241 W=  45 H=  21 Vis=T
+9  LBL_4C_LABEL4       Label         T= 104 L= 321 W=  33 H=  17 Vis=T
+10 TXT_4C__SERIES      Textbox       T= 100 L= 356 W=  45 H=  21 Vis=T
+
+--- metodos da Fase 5 ---
+ConfigurarCamposIdentificacao exists=T protected=T
+BOParaForm                    exists=T protected=T
+
+--- LBL_4C_LABEL6 ---
+Caption=[Empresa :] T=103 L=84 W=50 H=17 fim do texto em 134
+AutoSize=F Alignment=0 BackStyle=0 WordWrap=F ForeColor=5921370 Font=Tahoma/8 TabIndex=7 Vis=T
+
+--- LBL_4C_LABEL3 ---
+Caption=[Tipo :] T=104 L=210 W=30 H=17 fim do texto em 240
+AutoSize=F Alignment=0 BackStyle=0 WordWrap=F ForeColor=5921370 Font=Tahoma/8 TabIndex=8 Vis=T
+
+--- LBL_4C_LABEL4 ---
+Caption=[Série :] T=104 L=321 W=33 H=17 fim do texto em 354
+AutoSize=F Alignment=0 BackStyle=0 WordWrap=F ForeColor=5921370 Font=Tahoma/8 TabIndex=9 Vis=T
+
+--- TXT_4C__EMPS ---
+T=100 L=136 W=31 H=21 Vis=T
+VARTYPE(Value)=C Value=[001]
+MaxLength=3 ReadOnly=T TabStop=F Enabled=T TabIndex=3 Alignment=0 ForeColor=0 Font=Tahoma/8
+Format=[] InputMask=[]
+
+--- TXT_4C__TIPOS ---
+T=100 L=241 W=45 H=21 Vis=T
+VARTYPE(Value)=C Value=[RPS]
+MaxLength=5 ReadOnly=T TabStop=F Enabled=T TabIndex=2 Alignment=0 ForeColor=0 Font=Tahoma/8
+Format=[] InputMask=[]
+
+--- TXT_4C__SERIES ---
+T=100 L=356 W=45 H=21 Vis=T
+VARTYPE(Value)=C Value=[A1]
+MaxLength=5 ReadOnly=T TabStop=F Enabled=T TabIndex=1 Alignment=0 ForeColor=0 Font=Tahoma/8
+Format=[] InputMask=[]
+
+--- BOParaForm: parametro -> BO -> tela ---
+BO   Emps=[001] Tipos=[RPS] Series=[A1]
+TELA Emps=[001] Tipos=[RPS] Series=[A1]
+esperado: 001 / RPS / A1
+
+--- sobreposicao label x campo (regra #23/#28) ---
+Label6 fim=134 < Emps Left=136 ? OK
+Emps fim=167 < Label3 Left=210 ? OK
+Label3 fim=240 < Tipos Left=241 ? OK
+Tipos fim=286 < Label4 Left=321 ? OK
+Label4 fim=354 < Series Left=356 ? OK
+
+--- campos dentro da moldura e do form (regra #30) ---
+Shape1 T=94..159 L=65..585
+Series fim L=401 <= Form.Width=650 ? OK
+Label6 Top=103 > cabecalho fim=80 ? OK
+
+--- 2a instancia SEM parametros ---
+VARTYPE=O
+ControlCount=10 Emps=[] Tipos=[] Series=[]

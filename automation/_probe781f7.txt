@@ -1,0 +1,40 @@
+[1] inicio
+[2] config.prg ok
+[3] SET PROCEDURE ok
+[4] CREATEOBJECT retornou VARTYPE=O
+INSTANCIOU    = SIM
+Caption       = [Itens]
+Width/Height  = 1000 x 600
+BO VARTYPE    = O
+Op_Escolha    = [ALTERAR]
+ControlCount  = 33
+--- botoes (existencia / Caption / Enabled / Visible / handler ligado) ---
+  cmd_4c_IncluirLinha      Cap=[Inserir Linha] Vis=.T. Ena=.T. Top=3 Left=700
+  cmd_4c_ExcluirLinha      Cap=[Excluir] Vis=.T. Ena=.T. Top=3 Left=775
+  cmd_4c_IncluirParcela    Cap=[] Vis=.T. Ena=.T. Top=516 Left=954
+  cmd_4c_ExcluirParcela    Cap=[] Vis=.T. Ena=.T. Top=556 Left=954
+  cmd_4c_Procurar          Cap=[] Vis=.T. Ena=.T. Top=481 Left=600
+  cmd_4c_TotItens          Cap=[Total] Vis=.T. Ena=.T. Top=3 Left=400
+  cmd_4c_IteSub            Cap=[Itens Subnível] Vis=.T. Ena=.T. Top=3 Left=475
+  cmd_4c_InsBlo            Cap=[Inserir Bloco] Vis=.T. Ena=.T. Top=3 Left=550
+  cmd_4c_InsSub            Cap=[Inserir Sub-bloco] Vis=.T. Ena=.T. Top=3 Left=625
+  cmd_4c_CadPro            Cap=[Cadastro de Produtos] Vis=.T. Ena=.F. Top=3 Left=850
+  obj_4c_OK                ButtonCount=1 Btn1Cap=[Retornar] Vis=.T. Ena=.T. Top=-2 Left=920
+--- handlers: existe / PROTECTED? (regra #51: tem de ser .F.) ---
+  BtnIncluirLinhaClick       existe=.T. protected=.F.
+  BtnExcluirLinhaClick       existe=.T. protected=.F.
+  BtnIncluirParcelaClick     existe=.T. protected=.F.
+  BtnExcluirParcelaClick     existe=.T. protected=.F.
+  BtnProcurarClick           existe=.T. protected=.F.
+  BtnTotalItensClick         existe=.T. protected=.F.
+  BtnItensSubnivelClick      existe=.T. protected=.F.
+  BtnInserirBlocoClick       existe=.T. protected=.F.
+  BtnInserirSubBlocoClick    existe=.T. protected=.F.
+  BtnCadastroProdutoClick    existe=.T. protected=.F.
+  BtnSalvarClick             existe=.T. protected=.F.
+--- grades ---
+  grd_4c_Itens ColumnCount=30 RecordSource=[cursor_4c_Itens]
+  grd_4c_Parcelas ColumnCount=7 RecordSource=[cursor_4c_Parcelas]
+RELEASE = OK
+dialogos suprimidos: NENHUM
+[5] fim

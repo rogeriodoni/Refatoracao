@@ -1,0 +1,23 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+Init OK | Caption=[Operações Pendentes] WxH=800x600 OpEscolha=[INSERIR]
+GRADE Cols=8 RecSrc=[cursor_4c_Pendentes] Top/Left/W/H=180/72/622/148
+  Col1 W=15 Src=[cursor_4c_Pendentes.Flag] CurCtl=[CHECK1] RO=.F. Hdr=[]
+  Col2 W=25 Src=[cursor_4c_Pendentes.Emps] CurCtl=[Text1] RO=.T. Hdr=[Emp]
+  Col3 W=110 Src=[cursor_4c_Pendentes.Dopes] CurCtl=[Text1] RO=.T. Hdr=[Operação]
+  Col4 W=40 Src=[cursor_4c_Pendentes.MascNum] CurCtl=[Text1] RO=.T. Hdr=[Cód]
+  Col5 W=60 Src=[cursor_4c_Pendentes.Datas] CurCtl=[Text1] RO=.T. Hdr=[Data]
+  Col6 W=130 Src=[cursor_4c_Pendentes.Origem] CurCtl=[Text1] RO=.T. Hdr=[Origem]
+  Col7 W=130 Src=[cursor_4c_Pendentes.Destino] CurCtl=[Text1] RO=.T. Hdr=[Destino]
+  Col8 W=75 Src=[cursor_4c_Pendentes.Valos] CurCtl=[Text1] RO=.T. Hdr=[Valor]
+  Check1 existe=.T. Sparse1=.F.
+SelTudo Vis=.T. T/L=216/704 Pic=.T.
+Apaga   Vis=.T. T/L=256/704 Pic=.T.
+Ok      Vis=.T. Cap=[\<Ok] Cancel=.T. Pic=.T.
+CarregarLista=.T.
+AjustarBotoesPorModo OK
+BtnSelTudoClick/BtnApagaClick OK (grade vazia)
+modo VISUALIZAR -> SelTudo.Visible=.F. Apaga.Visible=.F. Ok.Visible=.T.
+
+Z: fim

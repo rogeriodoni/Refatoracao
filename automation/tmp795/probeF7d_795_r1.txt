@@ -1,0 +1,15 @@
+PASSO=config.prg
+gnConnHandle pos-config=0
+PASSO=createobject
+CREATEOBJECT=OK
+PROT_BtnEncerrarClick=NAO  PROT_FecharDialogo=NAO  EXISTE_FecharDialogo=SIM
+ON_ERROR erro=1230 msg=[Too many arguments.] linha=93 prog=[PROBEF7D_795]
+ON_ERROR erro=107 msg=[Operator/operand type mismatch.] linha=97 prog=[PROBEF7D_795]
+ANTES Visible=.F. this_nSaldo=123,456 BO.this_nSaldo=0
+PASSO=BtnEncerrarClick (chamando, BO.saldo=42,75)
+PASSO=BtnEncerrarClick RETORNOU
+PASSO=lendo loForm DEPOIS do clique
+POS VARTYPE(loForm)=O
+POS Visible=.F. this_nSaldo=42,75
+POS_RELEASE VARTYPE(loForm)=X  cursor_4c_Dados USED=NAO
+FIM

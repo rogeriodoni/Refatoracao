@@ -1,0 +1,13 @@
+inicio
+C1 CarregarDados sucesso = .T.
+C2 RECNO da grade        = 5   (esperado 5 - a linha da data da operacao; antes do fix vinha 1)
+C3 estoque na linha      = 50  (esperado 50)
+C4 form.this_nSaldo      = 50  (esperado 50)
+C5 this_lCalculoOK       = .T.
+C6 Grid ColumnCount=2 RecSrc=[cursor_4c_Dados] C1cap=[Data] reccount=10
+D1 CarregarDados sucesso = .F.  (esperado .F.)
+D2 RECNO da grade        = 1   (esperado 1 - fallback GO TOP)
+D3 form.this_nSaldo      = 123,456  (esperado 123.456 - saldo de partida, nao zero)
+D4 this_lCalculoOK       = .F.  (esperado .F.)
+D5 apos Click this_nSaldo= 123,456  (esperado 123.456)
+FIM

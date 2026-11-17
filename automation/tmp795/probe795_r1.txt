@@ -1,0 +1,25 @@
+PASSO=config.prg
+PASSO=set procedure
+PASSO=createobject
+CREATEOBJECT=OK
+BaseClass=Form
+Caption=[Estoque estimado por dia]
+Width=470 Height=320 TitleBar=0 WindowType=1
+Picture=[c:\4c\vbmp\new_background.jpg] FILE=SIM
+ForeColor=10179620
+ControlCount=2
+BO=Sigopresbo
+cnt_4c_Sombra: Top=0 Left=0 Width=470 Height=80 BackColor=6579300 Visible=.T.
+lbl_4c_LblTitulo: Caption=[Estoque estimado por dia] Width=450 Height=46 ForeColor=16777215 AutoSize=.F. Visible=.T.
+lbl_4c_LblSombra: Caption=[Estoque estimado por dia] Width=450 Visible=.T.
+shp_4c_Shape1: Top=7 Left=374 Width=90 Height=110 Visible=.T.
+BO.dtini=16/11/2026 BO.dtfin=16/11/2026 BO.SaldoInicial=0
+this_nSaldo=0 this_cCursorCabecalho=[TprMvCab]
+RELEASE=OK
+PASSO=createobject com parametros
+CREATEOBJECT2=OK
+P2 this_nSaldo=123,456 CursorItem=[item_teste] CursorCab=[cab_teste]
+P2 BO.Produto=[PROD001] BO.Operacao=[VENDA] BO.EmpDopNums=[001MALOTE                   3]
+P2 BO.dtini=16/11/2026 BO.dtfin=01/12/2026 BO.SaldoInicial=123,456
+RELEASE2=OK
+FIM

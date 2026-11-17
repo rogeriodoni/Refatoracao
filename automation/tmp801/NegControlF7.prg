@@ -1,0 +1,3 @@
+PROCEDURE Teste
+IF .T. THEN DO algo
+ENDPROC

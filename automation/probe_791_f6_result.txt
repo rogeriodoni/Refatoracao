@@ -1,0 +1,14 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+EXISTE lbl_4c_Label1=.T. txt_4c_USUARIO=.T. lbl_4c_Label2=.T. txt_4c_SENHA=.T.
+LBL2 Caption=[Senha :] T=144 L=136 W=63 H=21 AutoSize=.F. Fore=5921370 Vis=.T.
+SENHA Fmt=[K] Mask=[!!!!!!!!!!] Pwd=[*] T=139 L=201 W=136 H=30 Tab=2 VT=C Themes=.T. Vis=.T.
+PROTECTED? UsuarioLostFocus=.F. SenhaLostFocus=.F. ValidarOperador=.F. ValidarCredenciais=.F. FormParaBO=.T. LimparCampos=.T.
+POS-SenhaLostFocus USUARIO=[] SENHA=[] Autenticado=.F. Operador=[] EmValidacao=.F.
+ValidarOperador(vazio)=.F.
+ValidarOperador(007)=.T. ValidarCredenciais=.F. BO.this_cUsuarios=[007]
+POS-UsuarioLostFocus(vazio) VARTYPE=O EmValidacao=.F.
+POS-FecharDialogo VARTYPE=O Visible=.F. Autenticado=.F.
+POS-Release(chamador) VARTYPE=X
+FIM OK

@@ -1,0 +1,40 @@
+CK00 inicio
+CK01 config ok
+CK01a base=[C:\4C\PROJETO\APP\START]
+CK01b path ok
+CK01c functions ok
+CK02 classes carregadas
+CK03 VARTYPE(loForm)=O
+CK03b DataSessionId=2 USED(itens)=.T. USED(precos)=.T.
+CK04 PageCount=4 ControlCount P1=51 P2=8 P3=1 P4=1 cntItem=50
+CK05 P1 visiveis: prod=.T. qtd=.T. busca=.T. dpros=.T. | ocultos (esperado F): cntObs=.F. img=.F. valors=.F. codcors=.F. difors=.F. grdPrecos=.F.
+CK06 ControlSource P1 dpros=[cursor_4c_Itens.dpros] notas=[cursor_4c_Itens.notas] vdescs=[cursor_4c_Itens.valdescs] | P3 cpros=[cursor_4c_Itens.cpros] sittri=[cursor_4c_Itens.sittricms] nadis=[cursor_4c_Itens.nadis]
+CK07 grdPrecos CC=4 RS=[cursor_4c_Precos] W=210/70 Cap1=[Lista de Precificação]
+CK08 escopo (5=existe/2=protected) CarregarLista=.T./.F. BtnCancelarClick=.T./.F. AjustarBotoesPorModo=.T./.F. AtualizarPainelProduto=.T./.F. GradeAfterRowColChange=.T./.F. HabilitarCampos=.T./.F.
+CK09 RECCOUNT=1
+CK10 HabilitarCampos(.T.)=.T. dpros.RO=.T. docs.RO=.F. prod.En=.T. P3.En=.F.
+CK11 ProbeFormParaBO=.T.
+CK12 BO cpros=[PROD0001] dpros=[PRODUTO DE TESTE] qtds=10 nadis=2 sittricms=[060] edn=[001MALOTE                   3] len=29 usulibs=[SISTEMA]
+CK13 ProbeBOParaForm=.T.
+CK14 cursor dpros=[ALTERADO PELO BO] nadis=7 codfabs=[FAB99] | tela dpros=[ALTERADO PELO BO] P3 nadis=7
+CK15 AtualizarPainelProduto=.F. (sem conexao: esperado F)
+CK16 GradeAfterRowColChange=.T.
+CK17 BtnBuscarClick(barra)=.T. campo apos=[]
+CK18 BtnBuscarClick(produto)=.T.
+CK19 ValidarVDescs=.T. units=3 (unitorigs=5, desconto 2 -> esperado 3)
+CK20 ValidarPDescs=.T. units=4 (unitorigs=5, 20% -> esperado 4)
+CK20a ValidarDocs(vazio,obrig)=.F. (esperado F)
+CK20b ValidarDocs(123)=.T. campo=[000123] (esperado 000123 - normalizacao do legado)
+CK20c ValidarLotes=.T. (sem conexao: esperado T, sai antes de consultar)
+CK21 ObsAbrirPainelClick=.T. cntObs.Visible=.T.
+CK22 ObsFecharPainelLostFocus=.T. cntObs.Visible=.F.
+CK23 CarregarPrecos=.T. RECCOUNT=1 grdVisible=.T.
+CK24 AlternarPagina(3)=.T. ActivePage=1
+CK25 AlternarPagina(1)=.T. ActivePage=1
+CK25b VerImps=1 P3.En=.T. AlternarPagina(3)=.T. ActivePage=3 (esperado 3)
+CK25c TxtProdLostFocus=.F. prod=[PROD0001]
+CK25d TxtQtdLostFocus=.T. iconfs=.T. prod=[] qtd=0
+CK26 ProbeLimparCampos=.T. prod=[] qtd=0 cursor dpros ainda=[ALTERADO PELO BO]
+CK27 CarregarLista=.F. RECCOUNT=2 gridCC=22 RS=[cursor_4c_Itens] Cap1=[Produto]
+CK28 release ok
+CK99 fim

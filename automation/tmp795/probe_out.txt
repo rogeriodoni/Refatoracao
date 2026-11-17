@@ -1,0 +1,18 @@
+P0 inicio
+P1 config.prg carregado
+P2 ConfigurarAmbiente OK
+P3 GarantirClasse OK
+P4 CREATEOBJECT VARTYPE=O
+P5 Caption=[Estoque estimado por dia] W=470 H=320
+P6 ControlCount=4
+    ctrl 1 = CNT_4C_SOMBRA [Container] Vis=.T.
+    ctrl 2 = SHP_4C_SHAPE1 [Shape] Vis=.T.
+    ctrl 3 = GRD_4C_DADOS [Grid] Vis=.T.
+    ctrl 4 = CMD_4C_FWBTNG1 [Commandbutton] Vis=.T.
+P7 Grid.ColumnCount=2 RecSrc=[cursor_4c_Dados] C1=[Data/80] C2=[Estoque/90]
+P8 BO VARTYPE=O this_nSaldo=0
+ERRO: Too many arguments. | LINHA 50 | PROBE
+ERRO: Operator/operand type mismatch. | LINHA 52 | PROBE
+P10 apos Click: this_nSaldo=0 Visible=.F. ainda objeto=O
+P11 Release OK
+FIM

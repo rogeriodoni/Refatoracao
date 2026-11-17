@@ -1,0 +1,21 @@
+PROBE v1 INICIO 13/11/2026 01:27:47
+CK01 config.prg OK
+CK02 SET PROCEDURE OK
+CK03 globais OK (ValidandoUI=.T.)
+CK04 CREATEOBJECT -> VARTYPE=O
+CK05 Caption=[Atendimento Picking] BaseClass=[Form] Width=1300 Height=700
+CK06 DcI=[13/11/2026] DcF=[13/11/2026] (hoje=13/11/2026)
+CK07 escopo: CarregarDados ex=.T. prot=.F. | CarregarGradeResultado ex=.T. prot=.F. | AcertaColunas ex=.T. prot=.F. | GradePadrao ex=.T. prot=.F. | ColunaDados01Resize ex=.T. prot=.F. | GrdDadosProdutoDblClick ex=.T. prot=.F.
+CK08 ColumnOrder=[1,9,2,3,11,4,6,7,8,12,13,14,15,10,5,16,] esperado=[1,9,2,3,11,4,6,7,8,12,13,14,15,10,5,16,] IGUAL=.T.
+CK09 Width inicial=[31,150,55,71,150,80,110,296,35,35,213,60,60,164,100,141,]
+CK10 Width pos-GradePadrao=[31,150,55,71,150,80,110,296,35,35,100,100,290,150,100,25,] esperado=[31,150,55,71,150,80,110,296,35,35,100,100,290,150,100,25,]
+CK11 CfgGrade=[0311 1501 0551 0711 1501 0801 1101 2961 0351 0351 1001 1001 2901 1501 1001 0251 ] len=80 (esperado 80)
+CK12 pos-LER Column3.Width=55 (esperado 55 - restaurado da string)
+CK13 ProbeFormParaBO=.T.
+CK14 ProbeBOParaForm=.T.
+CK15 ActivePage=2 modo=[DADOS]
+CK16 ActivePage=1 modo=[FILTROS]
+CK17 ColunaDados01Resize (Width<>0, no-op) OK - Visible=.T.
+CK18 AEVENTS Column1=1 evt=RESIZE met=COLUNADADOS01RESIZE
+CK19 AEVENTS Column7.Text1=1 evt=DBLCLICK met=GRDDADOSPRODUTODBLCLICK
+PROBE FIM

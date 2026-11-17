@@ -1,0 +1,32 @@
+PROBE F5 task784 (FormSigOpPdt) INICIO
+ambiente OK
+CREATEOBJECT -> VARTYPE=O
+Form: W=800 H=600 Caption=[Operações Pendentes] OpEscolha=[INSERIR]
+--- FASE 5: MOLDURAS (dump: Shape2 339/73/168/39, Shape1 7/672/27/41) ---
+shp_4c_Shape2: Top=339 Left=73 W=168 H=39 BackStyle=0 BorderStyle=0 BorderColor=12369288 Curvature=0 Visible=.T.
+shp_4c_Shape1: Top=7 Left=672 W=27 H=41 BackStyle=0 BorderStyle=0 BorderColor=12369288 Curvature=0 Visible=.T.
+--- FASE 5: CAMPO DE BUSCA (dump: Say 350/83/89/15, Get 347/186/48/23) ---
+lbl_4c__Procura: Caption=[Procurar Código : ] Top=350 Left=83 W=89 H=15 AutoSize=.F. Align=0 BackStyle=0 Fore=5921370 Font=Tahoma/8 TabIndex=4 Visible=.T.
+txt_4c_Procura: Top=347 Left=186 W=48 H=23 MaxLength=6 Align=3 Format=[K] InputMask=[] VType=N Value=0 Font=Tahoma/8 TabIndex=2 Visible=.T.
+--- RECORTE (limites do form: W=800 H=600) ---
+  Shape2 fim: Left+W=241 Top+H=378
+  Shape1 fim: Left+W=699 Top+H=48
+  Say fim: Left+W=172 | Get Left=186 (sobreposicao se Say fim > Get Left - regra #28)
+  Get fim: Left+W=234 Top+H=370
+  Busca dentro de Shape2? Shape2=73..241 x 339..378
+--- AjustarBotoesPorModo: modo INSERIR (tela completa) ---
+  SelTudo=.T. Apaga=.T. Ok=.T. Say=.T. Get=.T.
+--- modo ALTERAR (legado esconde os 4) ---
+  SelTudo=.F. Apaga=.F. Ok=.T. Say=.F. Get=.F.
+Controles no form (raiz): 9
+  [1] CNT_4C_SOMBRA (Container) Top=0 Left=0 W=800 H=80 Visible=.T.
+  [2] SHP_4C_SHAPE2 (Shape) Top=339 Left=73 W=168 H=39 Visible=.T.
+  [3] SHP_4C_SHAPE1 (Shape) Top=7 Left=672 W=27 H=41 Visible=.T.
+  [4] GRD_4C_DADOS (Grid) Top=180 Left=72 W=622 H=148 Visible=.T.
+  [5] LBL_4C__PROCURA (Label) Top=350 Left=83 W=89 H=15 Visible=.F.
+  [6] TXT_4C_PROCURA (Textbox) Top=347 Left=186 W=48 H=23 Visible=.F.
+  [7] CMD_4C_SELTUDO (Commandbutton) Top=216 Left=704 W=40 H=40 Visible=.F.
+  [8] CMD_4C_APAGA (Commandbutton) Top=256 Left=704 W=40 H=40 Visible=.F.
+  [9] CMD_4C_OK (Commandbutton) Top=4 Left=723 W=80 H=100 Visible=.T.
+Release OK
+PROBE F5 FIM

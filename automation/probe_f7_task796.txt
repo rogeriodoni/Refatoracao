@@ -1,0 +1,29 @@
+INICIO
+== 1. COMPILE ==
+BO  FXP=SIM ERR=NAO
+FRM FXP=SIM ERR=NAO
+
+== 2. ESCOPO (protected tem de ser .F.) ==
+QueryUnload     existe=.T. protected=.F.
+FecharDialogo   existe=.T. protected=.F.
+CmdSairClick    existe=.T. protected=.F.
+
+== CAMINHO DE SAIDA: ENCERRAR ==
+  ANTES  pai.Enabled=.F.
+  Show() devolveu
+  DEPOIS pai.Enabled=.T. dlg VARTYPE=O dlg.Visible=.F.
+  Release() do chamador: OK
+
+== CAMINHO DE SAIDA: ESC ==
+  ANTES  pai.Enabled=.F.
+  Show() devolveu
+  DEPOIS pai.Enabled=.T. dlg VARTYPE=O dlg.Visible=.F.
+  Release() do chamador: OK
+
+== CAMINHO DE SAIDA: ALTF4 ==
+  ANTES  pai.Enabled=.F.
+  Show() devolveu
+  DEPOIS pai.Enabled=.T. dlg VARTYPE=O dlg.Visible=.F.
+  Release() do chamador: OK
+
+FIM OK

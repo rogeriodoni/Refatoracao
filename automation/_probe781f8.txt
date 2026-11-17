@@ -1,0 +1,42 @@
+[1] inicio
+[2] config.prg ok
+[3] SET PROCEDURE ok
+[4] CREATEOBJECT retornou VARTYPE=O
+INSTANCIOU    = SIM
+Op_Escolha    = [ALTERAR]
+--- metodos da Fase 8: existe / PROTECTED (tem de ser .F.) ---
+  CarregarLista          existe=.T. protected=.F.
+  FormParaBO             existe=.T. protected=.T.
+  BOParaForm             existe=.T. protected=.T.
+  HabilitarCampos        existe=.T. protected=.F.
+  AjustarBotoesPorModo   existe=.T. protected=.F.
+  LimparCampos           existe=.T. protected=.T.
+  BtnCancelarClick       existe=.T. protected=.F.
+  BtnSalvarClick         existe=.T. protected=.F.
+--- cursor de itens ---
+  alias=cursor_4c_Itens RECCOUNT=1 citens=7
+  BO.CarregarDoCursor() = .T. tpesos=1,5000 univals=11 utilizas=4
+--- FormParaBO ---
+  retorno=.T.
+  BO ptax2s=11,11 descs=22,22 ptax1s=33,33 acres=44,44 ptax3s=55,55
+  BO item citens=7 dpros=[PRODUTO DE TESTE] emps=[001] dopes=[ORCAMENTO] numes=1
+--- BOParaForm ---
+  retorno=.T. contingente=11,11 taxaadm=22,22 bv=33,33 imposto=44,44 impservico=55,55
+--- HabilitarCampos(.F.) ---
+  contingente.Ena=.F. margem.Ena=.F. novogrupo.Ena=.F.
+--- HabilitarCampos() (modo ALTERAR) ---
+  contingente.Ena=.T. margem.Ena=.F. procuradpros.Ena=.F. (lProcura=.F.)
+--- AjustarBotoesPorModo (modo ALTERAR) ---
+  incluirlinha.Ena=.T. insblo.Ena=.T. totitens.Ena=.T. OK.Ena=.T. procurar.Ena=.T.
+--- CarregarLista ---
+  retorno=.T. RECCOUNT antes=1 depois=1 citens corrente=7
+  grd itens RecordSource=[cursor_4c_Itens] Col1.Width=290 Col1.Header=[Item]
+  grd parcelas RecordSource=[cursor_4c_Parcelas] Col1.Header=[%]
+--- LimparCampos ---
+  lProcura=.F. procuradpros=[] antdpros=[] img.Visible=.F.
+  percentuais preservados: contingente=11,11 taxaadm=22,22
+--- BtnCancelarClick ---
+  USED(itens)=.F. USED(parcelas)=.F. (esperado .F. nos dois)
+  form liberado: VARTYPE=X
+dialogos suprimidos: NENHUM
+[5] fim

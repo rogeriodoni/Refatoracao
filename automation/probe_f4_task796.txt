@@ -1,0 +1,35 @@
+INICIO
+== 1. COMPILE ==
+BO  FXP=SIM ERR=NAO
+FRM FXP=SIM ERR=NAO
+
+== 2. INSTANCIACAO ==
+VARTYPE=O
+BaseClass=Form Caption=[Historico] WxH=800x430 WindowType=1 ControlCount=3
+
+== 3. CONTROLES ==
+EDIT  T/L/W/H=98/181/438/312 ReadOnly=.T. Visible=.T. TipoValue=C LenValue=42 ValueOK=.T.
+CMG   T/L/W/H=-2/720/85/85 AutoSize=.T. ButtonCount=1 BackStyle=0 BorderStyle=0 SpecialEffect=1 Visible=.T.
+BTN   T/L/W/H=5/5/75/75 Caption=[Encerrar] Cancel=.T. Themes=.F. Font=Comic Sans MS
+PIC   existe=SIM [c:\4c\vbmp\cadastro_sair_60.jpg]
+FAIXA existe=.T. TituloCaption=[Historico]
+
+== 4. ESCOPO (Protected? tem de ser .F.) ==
+CmdSairClick   existe=.T. protected=.F.
+FecharDialogo  existe=.T. protected=.F.
+
+== 5. BINDEVENT ==
+AEVENTS(Buttons(1)) linhas=1 Click: [col3=CLICK delegate=CMDSAIRCLICK]
+
+== 6. ENCERRAR ==
+ANTES  pai.Enabled=.F.
+DEPOIS pai.Enabled=.T. form VARTYPE=O form.Visible=.F.
+
+== 7. RELEASE DO CHAMADOR ==
+VARTYPE pos-Release=X
+
+== 8. SEM ARGUMENTOS ==
+VARTYPE=O Caption=[] LenTexto=0
+Encerrar sem pai: OK, VARTYPE=O
+
+FIM OK

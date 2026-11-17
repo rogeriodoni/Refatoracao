@@ -1,0 +1,26 @@
+[1] inicio
+[2] SET PROCEDURE ok
+[3] FORM INSTANCIADO: Caption=[Recebimento] Width=1050 Height=615
+    METODO ValidarModfpgLostFocus     EXISTE=.T. PROTECTED=.F.
+    METODO ValidarModfpgCorpo         EXISTE=.T. PROTECTED=.F.
+    METODO ModfpgKeyPress             EXISTE=.T. PROTECTED=.F.
+    METODO ModfpgDblClick             EXISTE=.T. PROTECTED=.F.
+    METODO AbrirBuscaMoeda            EXISTE=.T. PROTECTED=.F.
+    METODO ValidarFpgLostFocus        EXISTE=.T. PROTECTED=.F.
+    METODO FpgKeyPress                EXISTE=.T. PROTECTED=.F.
+    METODO AbrirBuscaFormaPagamento   EXISTE=.T. PROTECTED=.F.
+    HELPER CarregarFormasPagamento EXISTE=.T. PROTECTED=.T.
+    AEVENTS txt_4c_Modfpg = 3
+        LOSTFOCUS -> VALIDARMODFPGLOSTFOCUS
+        KEYPRESS -> MODFPGKEYPRESS
+        DBLCLICK -> MODFPGDBLCLICK
+    AEVENTS txt_4c_Fpg = 3
+        LOSTFOCUS -> VALIDARFPGLOSTFOCUS
+        KEYPRESS -> FPGKEYPRESS
+        DBLCLICK -> FPGDBLCLICK
+    FLAGS Modfpg=.F. Fpg=.F.
+    KEYPRESS 'A' no-op OK; flags Modfpg=.F. Fpg=.F.
+    LOSTFOCUS sem conexao OK; flags Modfpg=.F. Fpg=.F.
+    VALOR PRESERVADO Modfpg=[X] Fpg=[DINHEIRO]
+    REENTRANCIA guard OK; flag segue=.T.
+[4] RELEASE OK

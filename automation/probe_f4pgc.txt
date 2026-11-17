@@ -1,0 +1,15 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+(1) sem args: Init OK | W=500 H=420 | BO=O | BarBonus aberto=.F. reccount=-1 | grade ColCount=2 RecSrc=[BarBonus]
+(2) com pai: Init OK | paiEnabled=.F. | this_nSaldoRecebido=100
+    grade T/L/W/H=117/156/188/236 ColCount=2 RO=.F. RecSrc=[BarBonus]
+    col1 CtrlSrc=[BarBonus.Codigos] W=80 InputMask=[9999999999] RO=.F. hdr=[Barra]
+    col2 CtrlSrc=[BarBonus.Valors] W=74 RO=.T. hdr=[Valor]
+    btnOk T/L/W/H=3/350/75/75 cap=[\<Confirmar] cancel=.T. picOK=.T. vis=.T.
+    btnCancela T/L/W/H=3/425/75/75 cap=[Cancelar] picOK=.T. vis=.T.
+    BarBonus reccount=1 col1Value(1aLinha)=0
+(3) funil CarregarDados: Init OK | PEMSTATUS(...,2)[PROTECTED]=.F. | 1a chamada=.T. 2a chamada=.T.
+    alias=[BarBonus] USED=.T. RecSrc=[BarBonus] ColCount=2
+    pos-2o-bind col1 W=80 hdr=[Barra] mask=[9999999999] | col2 hdr=[Valor] RO=.T.
+Z: fim
