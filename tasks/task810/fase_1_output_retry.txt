@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da: `C:\4c\projeto\app\classes\SigOpTloBO.prg` criado (17,4 KB).
+
+**O que a tela ├®** (apurado no dump legado + no form pai): `SIGOPTLO` ├® um di├ílogo **filho modal somente-leitura** aberto pela aba Leitura do `SIGCDBAL` (task348, hoje `FormBAL`), em dois modos ÔÇö `TotalLocal.Click` (offline, agrega os cursores locais `Historico`/`Etiqueta` do pai) e `LocalGravado.Click` (online, agrega `csHistorico`/`csEtiqueta` que o pai popula de `SigIvTrH`/`SigIvTrE`). Em nenhum dos dois ele consulta o banco: totaliza cursores do chamador, na data session **compartilhada** do pai.
+
+**Propriedades declaradas (todas, nenhuma vers├úo reduzida)**
+- Entidade (linha de `TmpLocal` legado): `this_cLocalis`, `this_nLeitura`, `this_nReLeitura` ÔÇö larguras do `Create Cursor` do pai (`c(10)`, `n(8,2)`, `n(8,2)`).
+- Totais do rodap├®: `this_nTotalLido`, `this_nTotalReleitura`, `this_nTotalEstoque`, `this_nPercLeitura`, `this_nPercReleitura` ÔÇö mapeados 1:1 em `lnTetQReadL/lnTetQReadR/lnTetQLoad/lnPercLeit/lnPercRLeit`.
+- Contexto do pai (`LParameters lnTipoLeitura, llOnLine`): `this_nTipoLeitura`, `this_lOnLine`.
+- Par├ómetro de sistema: `this_lPerLocals` (`SigCdPam.perlocals`, `bit` ÔåÆ lido por `ConverterParaLogico`).
+- Aliases: `this_cCursorLocais` + os 4 cursores de origem do chamador + `crSigCdPam`.
+
+**Init**: `DODEFAULT()`, `this_cTabela = "SigIvTrH"` / `this_cCampoChave = "cidchaves"`, zera totais (equivale ao `Zap` em `TmpLocal`) e resolve `perlocals` via `CarregarParametroPerLocais()` ÔÇö carga em 3 camadas (cursor global j├í aberto ÔåÆ `SELECT * FROM SigCdPam` em cursor pr├│prio ÔåÆ sem conex├úo fica `.F.`, que ├® o caminho do legado com o par├ómetro desligado). `RETURN` sempre fora de TRY/CATCH.
+
+Tr├¬s decis├Áes que registrei no cabe├ºalho por serem de fidelidade, n├úo de estilo:
+- `lnTetQReadR` nunca ├® incrementado pelo legado (logo `lnPercRLeit` ├® sempre 0) ÔÇö reproduzido de prop├│sito; "corrigir" a conta exibiria n├║mero que o usu├írio nunca viu.
+- Alias do cursor de totais ├® `cursor_4c_Locais`, **n├úo** `cursor_4c_Dados`/`cursor_4c_TotalLocal`: como a data session ├® compartilhada com o `FormBAL`, reusar alias dele faria o `Zap` derrubar a lista do pai.
+- `Inserir`/`Atualizar`/`ExecutarExclusao` n├úo foram sobrescritos ÔÇö a tela n├úo grava (sem `TABLEUPDATE`, sem `.AddCursor`, ├║nico `Insert Into` ├® no cursor local). Aviso: o gate da **Fase 2** exige os tokens `Inserir`+`Atualizar` e a exce├º├úo fail-closed de BO somente-leitura exige que todo alvo de `Insert Into` seja cursor declarado *no pr├│prio dump* ÔÇö `TmpLocal` ├® declarado no `Load` do **pai**, ent├úo a exce├º├úo provavelmente n├úo vai disparar automaticamente nessa fase.
+
+**Verifica├º├Áes executadas**: compila├º├úo VFP9 limpa (`FXP=SIM ERR=NAO`, `.fxp` removido depois para a Fase 2 n├úo rodar c├│digo velho), `Test-CompletudeCodigo` = True (sem TODO/stub/procedure vazia), `ValidadorSQLSchema` = PASSOU, arquivo 100% ASCII (acentos s├│ via `CHR()`) e nenhum `RETURN` dentro de TRY/CATCH.

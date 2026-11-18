@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada. `FormSigOpSqn.prg` e `SigOpSqnBO.prg` atualizados.
+
+## O que entrou
+
+**`FormSigOpSqn.prg`** (form OPERACIONAL FLAT ÔÇö o legado SIGOPSQN n├úo tem PageFrame, ent├úo n├úo h├í `ConfigurarPaginaLista`/`AlternarPagina` a inventar):
+
+| m├®todo | o que faz |
+|---|---|
+| `ConfigurarGrade` | `grd_4c_Dados` (GradeSubN) ÔÇö 110/147/206x221, 2 colunas transcritas do dump: Column1 "Opera├º├úo" W=150 `Movable/Resizable=.F.`, Column2 "Seq" W=25 `InputMask="9"`, `Text1.MaxLength` 20/1 |
+| `ConfigurarBotoes` | `shp_4c_Separador` (Shape1) + `cmd_4c_Inserir`/`cmd_4c_Excluir`/`cmd_4c_Sair`, 80x100 em Top=3 / Left 390-465-540, propriedades da classe legado `fwbtng` (Comic Sans MS 8 bold italic, ForeColor 90,90,90) |
+| `AplicarVisibilidadeBotoes` | as 6 linhas finais do `WITH Thisform` do Init legado (`.Visible`/`.Enabled` por acesso+`pcEscolha`, e o rec├ílculo de `shape1.Left/Width`) |
+| `PossuiAcessoOperacao` | `fChecaAcesso('SigOpSqn', <a├º├úo>)` com bypass em modo teste |
+| `VincularGrade` + `CarregarDados` (PUBLIC) | funil ├║nico: `ListarSequencias` ÔåÆ bind ÔåÆ `GO TOP` + `Refresh` |
+
+**`SigOpSqnBO.prg`**: `ListarSequencias()` ÔÇö era citada como "fases seguintes", mas sem ela o funil de carga chamaria m├®todo inexistente. ├ë a mesma query que o form pai SIGCDOPE registra no `AddCursor` de `crSigMvCxs` (`INNER JOIN SigCdOpe`, filtro por `cdopes`, `ORDER BY cdopes, cnivels`), com cursor **READWRITE** ÔÇö obrigat├│rio porque as duas colunas da grade s├úo edit├íveis.
+
+Tr├¬s decis├Áes que divergem de uma transcri├º├úo literal, todas comentadas no c├│digo: `RecordMark = .F.` (can├┤nico do projeto para grade de OPERACIONAL), `Themes = .T.` + `DisabledPicture` (sem isso o ├¡cone n├úo renderiza em bot├úo `Enabled = .F.`), e o Shape criado **antes** dos bot├Áes (a ├írea dele cobre os tr├¬s; criado depois, interceptaria o clique).
+
+`AplicarVisibilidadeBotoes` roda **depois** do `TornarControlesVisiveis` ÔÇö este for├ºa `Visible = .T.` em tudo e apagaria o `Visible = .F.` do controle de acesso. O form irm├úo `FormSigOpSno` tem exatamente esse defeito (ordem invertida); n├úo foi replicado.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa** com controle negativo: `FXP=SIM ERR=NAO` nos dois arquivos; um `.prg` deliberadamente quebrado produziu `.err` no mesmo setup, provando que o `COMPILE` detecta.
+- **Instancia├º├úo real** (SQL Server estava alcan├º├ível): `VARTYPE = "O"`, grade em 110/147/206x221 com `RecordSource = cursor_4c_Sequencias`, `Column1.ControlSource = .cnivels` W=150 header "Opera├º├úo", `Column2 = .seqs` W=25 mask "9", cursor `ISREADONLY = .F.`, campos `cdopes(C20) cidchaves(C20) cnivels(C20) seqs(N4)`, bot├Áes vis├¡veis com ├¡cone resolvido, Shape em 385/256 (= 3├ù80+16, o mesmo 257 do dump). Nenhum `MsgErro` disparado.
+- Auditores do pipeline: `ValidadorSQLSchema` PASSOU, `VerificarPropriedadesInexistentes` OK, `VerificarFuncoesNaoDefinidas` OK, `VerificarMetodoProtegidoChamadoDeFora` OK, `VerificarFormatInputMask` 0 faltas, `Test-CompletudeCodigo` OK nos dois. Gate da Fase 4 (ramo FLAT) satisfeito: `grd_4c_*` + `cmd_4c_*` + `CarregarDados`.
+
+**N├úo ficou provado**: que a grade exibe linhas com dado real ÔÇö `SigMvCxs` tem **0 registros** em `DB_MBAHIA` (medido direto: `SELECT COUNT(*)` = 0, e zero grupos em `GROUP BY cdopes`). A consulta executa e o cursor nasce com a estrutura certa, mas o transporte de linhas n├úo p├┤de ser exercitado. N├úo inseri dado de teste porque isso escreveria na base de produ├º├úo.
+
+Evid├¬ncias em `automation\`: `ProbeF4SigOpSqn806.prg`, `ProbeF4SigOpSqnDados.prg`, `CompilarF4SigOpSqn806.prg` e as sa├¡das `_f4sqn_probe.txt` / `_f4sqn_dados.txt` / `_f4sqn_compile.txt`. Os `.fxp` gerados foram apagados para a pr├│xima fase n├úo rodar p-code velho. CRLF restaurado nos dois `.prg` (a ferramenta de edi├º├úo normaliza para LF).
+
+Fora de escopo por desenho das fases, e registrado no cabe├ºalho do arquivo: os `Click` dos tr├¬s bot├Áes (Fase 7/8, incluindo `mCtrlBotoes(.T.)` no pai e as valida├º├Áes de duplicidade/sequ├¬ncia ausente) e o lookup da Column1 contra `SigCdOpe` com `CupFis IN (1,3)` (Fase 5/6).

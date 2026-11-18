@@ -1,0 +1,991 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpSpr.SCX
+* Data/Hora: 17/11/2026 20:32:27
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPSPR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPSPR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPSPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPSPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdProdutos
+  Parent: SIGOPSPR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPSPR.grdProdutos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSPR.grdProdutos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSPR.grdProdutos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSPR.grdProdutos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdEscolha
+  Parent: SIGOPSPR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: ImgBarra1
+  Parent: SIGOPSPR
+  Class: image
+  BaseClass: image
+
+Objeto: cmdSalva
+  Parent: SIGOPSPR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: ImgBarra2
+  Parent: SIGOPSPR
+  Class: image
+  BaseClass: image
+
+Objeto: cmdProcessar
+  Parent: SIGOPSPR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: ImgBarra3
+  Parent: SIGOPSPR
+  Class: image
+  BaseClass: image
+
+Objeto: getDias
+  Parent: SIGOPSPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblDias
+  Parent: SIGOPSPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cnpProcessando
+  Parent: SIGOPSPR
+  Class: container
+  BaseClass: container
+
+Objeto: Image4
+  Parent: SIGOPSPR.cnpProcessando
+  Class: image
+  BaseClass: image
+
+Objeto: Say1
+  Parent: SIGOPSPR.cnpProcessando
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Selecionar Produtos"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGOPSPR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.grdProdutos
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 309
+  Left = 190
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 192
+  Width = 420
+  GridLineColor = 238,238,238
+  Name = "grdProdutos"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 290
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.grdProdutos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.grdProdutos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.grdProdutos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.grdProdutos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cmdEscolha
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 343
+  SpecialEffect = 1
+  Top = -1
+  Width = 160
+  TabIndex = 5
+  BorderColor = 136,189,188
+  Name = "cmdEscolha"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Command1.Caption = "\<Inserir"
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Inserir Um Novo Produto"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnInserir"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Command2.Caption = "\<Excluir"
+  Command2.ToolTipText = "Excluir o Produto Selecionado"
+  Command2.SpecialEffect = 0
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.ImgBarra1
+------------------------------------------------------------
+  Picture = ..\vbmp\barrinha.bmp
+  Height = 33
+  Left = 627
+  Top = 109
+  Visible = .F.
+  Width = 9
+  Name = "ImgBarra1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cmdSalva
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 718
+  SpecialEffect = 1
+  Top = -1
+  Width = 85
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "cmdSalva"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "Sair do Cadastro"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.ImgBarra2
+------------------------------------------------------------
+  Picture = ..\vbmp\barrinha.bmp
+  Height = 33
+  Left = 644
+  Top = 109
+  Visible = .F.
+  Width = 8
+  Name = "ImgBarra2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cmdProcessar
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 493
+  SpecialEffect = 1
+  Top = -1
+  Width = 235
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Name = "cmdProcessar"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_cambio_60.jpg
+  Command1.Caption = "Produtos com Mov."
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Apanha Produtos Com Movimentação e Não Inventariados"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnEstI"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\geral_empilha_60.jpg
+  Command2.Caption = "Produtos não Inv."
+  Command2.ToolTipText = "Apanha Produtos Que Tenham Estoque e Não Inventariados"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnEst"
+  Command3.Top = 5
+  Command3.Left = 155
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.WordWrap = .T.
+  Command3.Picture = ..\framework\imagens\geral_palete_60.jpg
+  Command3.Caption = "Todos não Inv."
+  Command3.ToolTipText = "Apanha Todos os Produtos Não Inventariados"
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "btnGeral"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.ImgBarra3
+------------------------------------------------------------
+  Picture = ..\vbmp\barrinha.bmp
+  Height = 33
+  Left = 612
+  Top = 109
+  Visible = .F.
+  Width = 9
+  Name = "ImgBarra3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.getDias
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = "9999"
+  Left = 236
+  MaxLength = 4
+  TabIndex = 3
+  ToolTipText = "Número de Dias a Considerar Nos Produtos Não Inventariados"
+  Top = 506
+  Width = 38
+  Name = "getDias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.lblDias
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 0
+  Caption = "Dias :"
+  Height = 15
+  Left = 197
+  Top = 511
+  Width = 32
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "lblDias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cnpProcessando
+------------------------------------------------------------
+  Top = 300
+  Left = 231
+  Width = 345
+  Height = 60
+  BorderWidth = 2
+  SpecialEffect = 2
+  BackColor = 255,255,255
+  BorderColor = 167,167,167
+  Name = "cnpProcessando"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cnpProcessando.Image4
+------------------------------------------------------------
+  Picture = ..\vbmp\processando.gif
+  Height = 30
+  Left = 13
+  Top = 15
+  Width = 30
+  Name = "Image4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSPR.cnpProcessando.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 14
+  WordWrap = .F.
+  Alignment = 2
+  Caption = "Selecionando Produtos..."
+  Height = 25
+  Left = 60
+  Top = 18
+  Width = 239
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPSPR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set DataSession To poForm.DataSessionId
+
+With This
+	.ParentForm = poForm
+	.ParentForm.Enabled = .f.
+	.cmdEscolha.Visible   = InList(.ParentForm.pcEscolha, [INSERIR], [ALTERAR])
+	.cmdProcessar.Visible = InList(.ParentForm.pcEscolha, [INSERIR], [ALTERAR]) And (Upper(.ParentForm.Name) = [SIGCDBAL])
+	.lblDias.Visible 	  = InList(.ParentForm.pcEscolha, [INSERIR], [ALTERAR]) And (Upper(.ParentForm.Name) = [SIGCDBAL])
+	.getDias.Visible 	  = InList(.ParentForm.pcEscolha, [INSERIR], [ALTERAR]) And (Upper(.ParentForm.Name) = [SIGCDBAL])
+	Go Top In crProdutos
+
+	With .grdProdutos
+		.RecordSource          = [crProdutos]
+		.Column1.ControlSource = [crProdutos.CPros]
+		.Column2.ControlSource = [crProdutos.DPros]
+		.Refresh
+
+		Select * ;
+		  From crProdutos ;
+		 Where Empty(CPros) ;
+		  Into Cursor LocalBrancos
+		Go Top In LocalBrancos
+
+		If Eof([LocalBrancos])
+			Append Blank In crProdutos
+			Go Bottom In crProdutos
+		EndIf
+
+		.Column1.SetFocus
+		.Refresh
+	EndWith
+	
+	.cnpProcessando.Top = 500
+Endwith	
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSPR.grdProdutos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.ParentForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	=Inkey(.01)
+	
+	loLista = CreateObject('fwBuscaExt', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+
+	ThisForm.grdProdutos.Column1.Text1.Value = crListaRemota.CPros
+	ThisForm.grdProdutos.Column2.Text1.Value = crListaRemota.DPros
+	ThisForm.grdProdutos.Column1.Text1.Refresh
+	ThisForm.grdProdutos.Column2.Text1.Refresh
+	Use In crListaRemota
+
+	If Not Empty(This.Value)
+		lnRec = Recno([crProdutos])
+
+		Select crProdutos
+		*Go Top In crProdutos
+
+		Select * ;
+		  From crProdutos ;
+		 Where CPros = This.Value And Recno() <> lnRec  ;
+		  Into Cursor LocalBrancos
+		Go Top In LocalBrancos
+		If Not Eof([LocalBrancos])
+			=MessageBox([Produto Já Selecionado!!!], 0+16, [Atenção!!!])
+			This.Value = []
+			Return .f.
+		EndIf
+
+		Select * ;
+		  From crProdutos ;
+		 Where Empty(CPros) ;
+		  Into Cursor LocalBrancos
+		Go Top In LocalBrancos
+
+		If Not Eof([LocalBrancos])
+			Select crProdutos
+			Locate For Empty(CPros)
+		Else
+			Append Blank In crProdutos
+			Go Bottom In crProdutos
+		EndIf
+		ThisForm.grdProdutos.Refresh
+		ThisForm.grdProdutos.Column1.Refresh
+		If (Lastkey() = 13)
+			Keyboard '{DNARROW}'
+		EndIf
+	EndIf
+Else
+	ThisForm.grdProdutos.Column2.Text1.Value = []
+	ThisForm.grdProdutos.Column2.Text1.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSPR.grdProdutos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.grdProdutos.Column1.Text1.Value) And InList(ThisForm.ParentForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	=Inkey(.01)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+
+	ThisForm.grdProdutos.Column1.Text1.Value = crListaRemota.CPros
+	ThisForm.grdProdutos.Column2.Text1.Value = crListaRemota.DPros
+	ThisForm.grdProdutos.Column1.Text1.Refresh
+	ThisForm.grdProdutos.Column2.Text1.Refresh
+	Use In crListaRemota
+
+	If Not Empty(This.Value)
+		lnRec = Recno([crProdutos])
+
+		Select crProdutos
+		Go Top In crProdutos
+
+		Select * ;
+		  From crProdutos ;
+		 Where CPros = This.Value And Recno() <> lnRec  ;
+		  Into Cursor LocalBrancos
+		Go Top In LocalBrancos
+		If Not Eof([LocalBrancos])
+			=MessageBox([Produto Já Selecionado!!!], 0+16, [Atenção!!!])
+			Return .f.
+		EndIf
+
+		Select * ;
+		  From crProdutos ;
+		 Where Empty(CPros) ;
+		  Into Cursor LocalBrancos
+		Go Top In LocalBrancos
+
+		If Not Eof([LocalBrancos])
+			Select crProdutos
+			Locate For Empty(CPros)
+		Else
+			Append Blank In crProdutos
+			Go Bottom In crProdutos
+		EndIf
+		ThisForm.grdProdutos.Refresh
+		ThisForm.grdProdutos.Column1.Refresh
+		If (Lastkey() = 13)
+			Keyboard '{DNARROW}'
+		EndIf
+	EndIf
+Else
+	ThisForm.grdProdutos.Column1.Text1.Value = []
+	ThisForm.grdProdutos.Column1.Text1.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSPR.cmdEscolha
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnInserir.Click
+------------------------------------------------------------
+PROCEDURE btnInserir.Click
+Select crProdutos
+Go Top In crProdutos
+
+Select * ;
+  From crProdutos ;
+ Where Empty(CPros) ;
+  Into Cursor LocalBrancos
+Go Top In LocalBrancos
+
+If Not Eof([LocalBrancos])
+	Select crProdutos
+	Locate For Empty(CPros)
+Else
+	Append Blank In crProdutos
+	Go Bottom In crProdutos
+EndIf
+ThisForm.grdProdutos.Column1.SetFocus
+ThisForm.grdProdutos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnExcluir.Click
+------------------------------------------------------------
+PROCEDURE btnExcluir.Click
+Select crProdutos
+If Not Eof([crProdutos])
+	Delete In crProdutos
+	Skip
+	Skip - 1
+EndIf
+ThisForm.grdProdutos.Column1.SetFocus
+ThisForm.grdProdutos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSPR.cmdSalva
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Delete From crProdutos Where Empty(CPros)
+
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSPR.cmdProcessar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private pDat
+
+If (ThisForm.getDias.Value < 1)
+	=MessageBox([Preencha os Dias a Considerar Para os Produtos!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+pDat = fDtoSQL(Date() - ThisForm.getDias.Value)
+
+ThisForm.cnpProcessando.Top = 120
+
+lcWhe = []
+If Not Empty(ThisForm.ParentForm.loFil.MercsI)
+	lcWhe = lcWhe + [And p.Mercs >= '] + ThisForm.ParentForm.loFil.MercsI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.MercsF)
+	lcWhe = lcWhe + [And p.Mercs <= '] + ThisForm.ParentForm.loFil.MercsF + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.CGrusI)
+	lcWhe = lcWhe + [And p.CGrus >= '] + ThisForm.ParentForm.loFil.CGrusI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.CGrusF)
+	lcWhe = lcWhe + [And p.CGrus <= '] + ThisForm.ParentForm.loFil.CGrusF + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.SGrusI)
+	lcWhe = lcWhe + [And p.SGrus >= '] + ThisForm.ParentForm.loFil.SGrusI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.SGrusF)
+	lcWhe = lcWhe + [And p.SGrus <= '] + ThisForm.ParentForm.loFil.SGrusF + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.ColecoesI)
+	lcWhe = lcWhe + [And p.Colecoes >= '] + ThisForm.ParentForm.loFil.ColecoesI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.ColecoesF)
+	lcWhe = lcWhe + [And p.Colecoes <= '] + ThisForm.ParentForm.loFil.ColecoesF + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.LinhasI)
+	lcWhe = lcWhe + [And p.Linhas >= '] + ThisForm.ParentForm.loFil.LinhasI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.LinhasF)
+	lcWhe = lcWhe + [And p.Linhas <= '] + ThisForm.ParentForm.loFil.LinhasF + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.IForsI)
+	lcWhe = lcWhe + [And p.IFors >= '] + ThisForm.ParentForm.loFil.IForsI + [' ]
+EndIf
+If Not Empty(ThisForm.ParentForm.loFil.IForsF)
+	lcWhe = lcWhe + [And p.IFors <= '] + ThisForm.ParentForm.loFil.IForsF + [' ]
+EndIf
+
+Do Case
+	Case (This.Value = 1)
+		lcQuery = [Select Distinct a.CPros, p.DPros ] + ;
+					[From SigMvItn a ] + ;
+				   [Inner Join SigCdPro p On a.CPros = p.CPros ] + ;
+				   [Where a.Emps = '] + _Empr + [' ] + lcWhe + [ And ] + ;
+				   		 [a.CPros Not In (Select l.CPros From SigPrIvl l Where l.Emps = '] + _Empr + [' And l.DtHrs >= ?pDat) ] + ;
+				   [Order By a.CPros]
+
+	Case (This.Value = 2)
+		lcQuery = [Select Distinct a.CPros, p.DPros ] + ;
+					[From SigMvEst a ] + ;
+				   [Inner Join SigCdPro p On a.CPros = p.CPros ] + ;
+				   [Where a.Emps = '] + _Empr + [' ] + lcWhe + [ And ] + ;
+				   		 [Not a.SQtds = 0 And ] + ;
+				   		 [a.CPros Not In (Select l.CPros From SigPrIvl l Where l.Emps = '] + _Empr + [' And l.DtHrs >= ?pDat) ] + ;
+				   [Order By a.CPros]
+
+	Case (This.Value = 3)
+		lcQuery = [Select Distinct p.CPros, p.DPros ] + ;
+					[From SigCdPro p ] + ;
+				   [Where p.CPros Not In (Select l.CPros From SigPrIvl l Where l.Emps = '] + _Empr + [' And l.DtHrs >= ?pDat) ] + lcWhe + ;
+				   [Order By p.CPros]
+				   
+	Otherwise
+		Return .f.
+EndCase
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCPros]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCPros)])
+	Return .f.
+EndIf
+
+Delete From crProdutos Where Empty(CPros)
+
+lnCnt = 0
+Select LocalCPros
+Scan
+	If Not Empty(LocalCPros.CPros)
+		Scatter Memvar Memo
+		Select crProdutos
+		Go Top In crProdutos
+		Locate For CPros = LocalCPros.CPros
+		If Eof([crProdutos])
+			lnCnt = lnCnt + 1
+			Insert Into crProdutos From Memvar
+		EndIf
+	EndIf
+EndScan
+
+ThisForm.cnpProcessando.Top = 500
+
+=MessageBox([Foram Selecionados ] + Alltrim(Str(lnCnt, 10)) + [ Produtos!!!], 0+64, [Seleção Concluída!!!])
+
+Select crProdutos
+Go Top In crProdutos
+ThisForm.grdProdutos.Refresh
+Go Bottom In crProdutos
+ThisForm.grdProdutos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPSPR
+RESERVED3 (ClassInfo): lhouveexcl
+lhouveins
+parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

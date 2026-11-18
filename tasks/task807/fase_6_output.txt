@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete. `FormSIGOPSTC.prg` updated (1135 ÔåÆ 1422 lines).
+
+## What was delivered
+
+**Second half of the fields** (closing the header block in `ConfigurarCamposCabecalho`):
+- `lbl_4c_Label4` + `txt_4c_Text4` ÔÇö "Impresssora :" / `cimpfabs`. The legacy's three-`s` typo is transcribed literally (regra #17). `AtualizarCabecalho` now mirrors all four fields.
+
+**`ConfigurarCampoRetorno`** ÔÇö `edt_4c_Edit1`, the detail pane beside the grid (`SigFiSii.cretornos`). Geometry transcribed from the dump; the legacy's `When ÔåÆ Return(.F.)` converted to `.ReadOnly = .T.` + `.TabStop = .F.`, matching the convention phase 5 established. `ControlSource` is **not** set here ÔÇö it's bound in `CarregarDados` once the alias exists.
+
+**`ConfigurarEventos` + `GradeAfterRowColChange` + `AtualizarDetalheRetorno`** ÔÇö the legacy `Grid1.AfterRowColChange`, bound via BINDEVENT to a PUBLIC handler declaring `par_nColIndex`. No column filter: master-detail reacts to row change, which is the *correct* use of `AfterRowColChange` (regra #46). `AtualizarDetalheRetorno` is the single funnel used both by the event and by the first display in `CarregarDados`, so the two paths can't diverge.
+
+## No lookups ÔÇö and that's not an omission
+
+The legacy dump has **zero** `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`sigacess()`/`mAddColuna` and no `Valid` on any control. All five data controls (`Text1..Text4`, `Edit1`) have `When ÔåÆ Return(.F.)` ÔÇö nothing accepts typing, so there is nowhere to type a code that would open a picker. Inventing one would violate PILAR 1. The phase-6 gate's VISUALIZADOR branch covers exactly this case; I confirmed it evaluates `True` (`legadoSomenteLeituraF6=True`, `legadoSemLookup=True`, `temSuperficieVisualizadorF6=True`).
+
+## Measured in VFP9 rather than assumed
+
+Four behaviors decided how to transcribe the handler, all measured today:
+
+| probe | result |
+|---|---|
+| `ControlSource` on a **closed** alias | **Erro 13** ÔÇö confirms it must go in `CarregarDados` (regra #41) |
+| `.Value = x` with ControlSource bound, **writable** cursor | writes back **into the cursor** |
+| same, **read-only** cursor (`REPLACE` ÔåÆ Erro 111, like SQLEXEC) | `.Value` changes, cursor doesn't; **no error** |
+| field `.NULL.` / cursor at EOF | no error; NULL displays **blank** (`NullDisplay` is `""`) |
+
+So the legacy's two lines (`Edit1.Value = ...` then `Edit1.Refresh`) are safe to transcribe verbatim ÔÇö no need to "simplify" to just `Refresh()`, and no need for `TratarNulo` (which would be a divergence the `Refresh` would undo anyway). I recorded these measurements in the code comments so the next pass doesn't "fix" them.
+
+## Verification
+
+- **Compiles clean** ÔÇö `COMPILE` produced the `.FXP` with no `.err`; the compile script's own output file exists, so execution is proven, not inferred.
+- **BINDEVENT proven registered and effective** ÔÇö `AEVENTS` returns `EVENTO=[AFTERROWCOLCHANGE] METODO=[GRADEAFTERROWCOLCHANGE]`, and the funnel moved Edit1 from "RETORNO DA LINHA 1" to "RETORNO DA LINHA 2" on row change.
+- **Completeness validator** (`Test-CompletudeCodigo`) passes: no TODO markers, no pendency phrases, no empty procedures, no `MsgAviso` stubs.
+- **Auditors clean** for this form: `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarLookupEmKeyPress` (its 36 warnings are pre-existing, in `FormSIGRECPM` and others).
+- Every EditBox property I used was checked against the measured base-class table, not guessed (regra #33).
+
+One thing I did **not** do: instantiate the real form. `ConfigurarAmbiente()` doesn't return on this machine, so `TestFormWrapper` hangs before `CREATEOBJECT` ÔÇö that's a known environment block, not a property of this form. Instantiation remains unproven; the behavioral probes above were run on an isolated replica of the grid+editbox pair instead.
+
+Remaining for phase 7-8: the `Encerrar` button's `Click` (`ThisForm.Release`), the dialog's only exit.

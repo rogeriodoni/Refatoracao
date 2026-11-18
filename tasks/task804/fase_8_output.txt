@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 of `task804` (FormSigOpSno) is complete.
+
+**What I found:** Phases 1ÔÇô7 had already implemented essentially everything Fase 8 normally delivers for a CRUD form ÔÇö just under OPERACIONAL-form equivalents, since SIGOPSNO is a modal popup (two grids + Inserir/Excluir/Encerrar), not a Lista/Dados cadastro:
+
+| Fase-8 CRUD template item | Already present as |
+|---|---|
+| CarregarLista() | `CarregarDados()` |
+| AjustarBotoesPorModo() | `ConfigurarBotoes()` (computed once from `this_cEscolha`/`this_lModoInverso`, matching the legado's Init) |
+| BtnEncerrarClick() | `CmdSairClick()` |
+| FormParaBO()/BOParaForm() | `PersistirSubNiveis()`/`PersistirSubSubNiveis()` (grid-to-BO mapping, all NOT NULL columns covered) |
+| BtnBuscarClick/BtnSalvarClick/BtnCancelarClick | N/A ÔÇö legado has no such buttons here; inventing them would violate PILAR 1 |
+
+Cross-checked every method in `comportamento.json` (37 legacy methods/events) against the current `.prg` ÔÇö all accounted for, and the INSERTs cover every NOT-NULL column of `SigOpCsn`/`SigOpOss` per the canonical schema.
+
+**Real bug caught and fixed:** this form has `DataSession = 2`, which (per the project's documented rule) doesn't inherit `SET DELETED ON` from `config.prg`. Without it:
+- Clicking Excluir marked the row deleted but it stayed visible in the grid (the legado's `Skip`/`Skip -1` trick only works with `DELETED ON`).
+- `PersistirSubNiveis`'s `SCAN FOR DELETED()` would have returned zero rows once `DELETED ON` was added, silently skipping the SQL `DELETE` on Encerrar.
+
+Fixed by adding `SET DELETED ON` to `InicializarForm` and wrapping the exclusion scan in `PersistirSubNiveis` with the same OFF/ON toggle already used in `PersistirSubSubNiveis`. Recompiled both `SigOpSnoBO.prg` and `FormSigOpSno.prg` via VFP9 ÔÇö both compile clean.
+
+**Note (out of scope for this task):** `FormOPE.prg` (Cadastro de Opera├º├Áes) has `BtnMultiSubNClick()`/`BtnSubNivel2Click()` stubbed with `MsgAviso("Em desenvolvimento")` ÔÇö these are the real call sites that should open `FormSigOpSno`. Wiring them up is a separate change to a different form's file, so I left it untouched, but it's needed before this popup is reachable from the UI.

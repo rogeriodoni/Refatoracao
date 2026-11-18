@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is done and verified. Summary:
+
+## What I implemented
+
+**`FormSigOpSts.prg`** ÔÇö the three button events the legacy actually has, plus their wiring:
+
+| Method | Legacy origin |
+|---|---|
+| `ConfigurarBINDEVENTs` | binds the 3 `Click`s (AddObject creates buttons with no event code) |
+| `CmdInserirClick` | `cmdInserir.Click` ÔÇö adds one blank row (reusing an existing blank one via the `LOCATE` guard) and focuses Column1 |
+| `CmdExcluirClick` | `cmdExcluir.Click` ÔÇö `Delete / Skip / Skip -1` on the local cursor |
+| `BtnSairClick` | `cmdSair.Click` ÔÇö duplicity check, REPLACE-ALL save, close |
+
+**`SigOpStsBO.prg`** ÔÇö the handlers were calling methods the header had only *planned*, so I implemented them (otherwise `BtnSairClick` would fail at runtime per rule #13/#51): `ExisteStatusDuplicado`, `MontarLoteGravacao`, `GravarStatus`, `RegistrarAuditoriaLote`. The save is the legacy's atomic `DELETE` + N `INSERT`s in a **single** `SQLEXEC` with T-SQL `SAVE TRANSACTION` ÔÇö separate `BEGIN/COMMIT` calls don't protect anything on this connection.
+
+## On the four `Btn*Click` names the prompt asked for
+
+I did not create them. Measured against the phase-7 gate: this legacy has no CRUD bar (`frmcadastro` absent; the only `Grupo_Op` is the **parent** form's, which `mCtrlBotoes` disables). The gate reports `legadoSemCrud=True`, requires ÔëÑ2 handlers, and I delivered 3. Inventing Incluir/Alterar/Visualizar/Excluir would have violated PILAR 1 or produced empty methods.
+
+## A real defect found while testing
+
+Instantiating the form exposed `Unknown member COLUMN1`. Measured chain: a Grid with empty `RecordSource` **auto-binds to the current work area** (RecordSource went `[]` ÔåÆ `[Cursor_4c_status]` with nothing assigning it); the `USE IN` that `ListarStatusOperacao` does on *every* load then zeroes `ColumnCount`; `ColumnCount = 2` on rebind recreates the Columns and **`txt_4c_Status` is gone** ÔÇö so `CurrentControl` raised *"Expression evaluated to an illegal value"*, swallowed by the Init CATCH, leaving the status column as a raw `Text1` with no `When` guard and no `SigStats` lookup. Triggered by simply reopening the dialog.
+
+Fixed by single-sourcing the cell install in `GarantirCelulaStatus()`, called from both `ConfigurarGrade` and the rebind funnel `VincularGrade`, plus a guard before `Column1.SetFocus()`. Re-measured: the cell is reinstalled with the right class and `MaxLength`, idempotent on repeat, and Inserir no longer errors on a detached grid.
+
+## Verification
+
+Both files compile clean (no `.err`). BO probe 12/12 OK, form probe (real `CREATEOBJECT`) 8/8 OK ÔÇö duplicity blocks the close, the other three paths close, BINDEVENTs resolve to the right handlers, Inserir/Excluir behave. Completeness check, phase-7 gate, `ValidadorSQLSchema`, and the protected-method / undefined-function / NOT NULL / nonexistent-property auditors all pass (the NOT NULL hits are pre-existing, in other BOs).
+
+**Not verified:** `GravarStatus` against the live database ÔÇö that SQL Server is unreachable from this machine. I verified the generated batch text instead: DELETE before the INSERTs, blank and deleted rows skipped, DELETE-only batch when the user clears the grid, and `'O''BRIEN'` correctly escaped.
+
+I also fixed a pre-existing completeness failure in the form header (`"FASES FUTURAS (ainda NAO implementadas)"` matched the validator's pendency regex).

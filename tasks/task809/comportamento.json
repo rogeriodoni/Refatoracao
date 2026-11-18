@@ -1,0 +1,488 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 10,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConverteStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "PARAMETERS pnRetornos\n\nIf Type(\"lnRetorno\") <> \"N\" and (lnRetorno > -1 Or lnRetorno < -5)\n\tThisForm.RetornoFalha(\"Operacao Cancelada pelo Usuario\", \"0,00\")\nEndif\n\nIF pnRetornos = -1\n\tThisForm.RetornoFalha(\"Modulo Nao Iniciado\", \"0,00\")\nENDIF\nIF pnRetornos = -2\n\tThisForm.RetornoFalha(\"Operacao Cancelada pelo Usuario\", \"0,00\")\nENDIF\nIF pnRetornos = -3\n\tThisForm.RetornoFalha(\"Fornecida uma Modalidade Invalida\", \"0,00\")\nENDIF\nIF pnRetornos = -4\n\tThisForm.RetornoFalha(\"Falta Memoria para Rodar a Func... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetornoFalha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Procedure",
+      "linhas": 74,
+      "codigoOriginal": "PARAMETERS lsTipTran, lsDataHora, lsCupom, pcCartao, lsNsu, lsAutoriza, lsFinaliza, lnValPago, MenRet\n\nlsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,\"99999999999.99\")),\".\",\",\")\n\nDECLARE laCartao[11]\nlaCartao[1]=\"Outro, nao definido\"\nlaCartao[2]=\"Visa\"\nlaCartao[3]=\"Mastercard\"\nlaCartao[4]=\"Diners\"\nlaCartao[5]=\"American Express\"\nlaCartao[6]=\"Sollo\"\nlaCartao[7]=\"Sidecard (Redecard)\"\nlaCartao[8]=\"Private Label (Redecard)\"\nlaCartao[9]=\"Redeshop\"\nlaCartao[10]=\"\"\nlaCartao[11]=\"Fininvest\"\n\nIF VAL(pcCart... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "PARAMETERS lcMensagem, lnValPago\n\nlcMensagem=Iif(Empty(lcMensagem),\"Operação Cancelada Pelo Usuario\",lcMensagem)\n\nlsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,\"99999999999.99\")),\".\",\",\")\n\nCREATE CURSOR crSiTef (tef c(100))\n\nINSERT INTO crSiTef (Tef) VALUES (\"000-000 = CRT\")\nINSERT INTO crSiTef (Tef) VALUES (\"001-000 = \"+STR(ltIdent,10))\nINSERT INTO crSiTef (Tef) VALUES (\"002-000 = \")\nINSERT INTO crSiTef (Tef) VALUES (\"003-000 = \"+lsValPago)\nINSERT INTO crSiTef (Tef) VALUES (\"004-000 = 0\")\nINSER... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "*CLEAR DLLS \"ConfiguraIntSiTefInterativo\"\n*CLEAR DLLS \"IniciaFuncaoSiTefInterativo\"\n*CLEAR DLLS \"ContinuaFuncaoSiTefInterativo\"\n*CHRSAW(2)\nIf ! Type('ThisForm.pcBandeira') = [C] or Empty(ThisForm.pcBandeira)\n\tThisForm.pcBandeira = [00000]\nEndif\nIf ! Type('ThisForm.lsCartao') = [C] or Empty(ThisForm.lsCartao)\n\tThisForm.lsCartao = [00000]\nEndif\nRETURN(\"0,00/\"+lnParcs+\"/\"+DTOC(DATE()) + ThisForm.pcBandeira + ThisForm.lsCartao)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcBandeira') = [C] or Empty,lsCartao') = [C] or Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "DECLARE Integer ConfiguraIntSiTefInterativo IN \"CliSiTef32I.DLL\" string lsEndereco, String lsLoja, String lsTerminal, Integer lnReservado \nDECLARE Integer IniciaFuncaoSiTefInterativo IN \"CliSiTef32I.DLL\" Integer lnModalidade, String lsValor, String lsCupom, String lsData, String lsHorario, String lsOperador, String lsRestricao \nDECLARE Integer ContinuaFuncaoSiTefInterativo IN \"CliSiTef32I.DLL\" Integer @lnComando, Integer @lnTipo, Integer @lnMinimo, Integer @lnMaximo, String @lsBuffer, Integer ln... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf nKeyCode = 27 And  nShiftAltCtrl = 0 And ThisForm.pcKeyEsc\n\tNoDefault\n\tThisForm.SAIDA.CANCELA.Click\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF",
+      "evento": "Init",
+      "linhas": 90,
+      "codigoOriginal": "PARAMETERS EndSiTef, ValPago, Cupom, Caixa, DebCred, TipPagto, NumParcs, lcIdent, pcOpers\n\nPublic lsEndSiTef, lsIdTerminal, lnValPago, lsCupom, lsCaixa, lsDebCred, lsTipPagto, lnNumParcs\nPublic ProximoComando, TipoCampo, TamanhoMinimo, TamanhoMaximo, Buffer, lnContinua, ltIdent, lnParcs, lnciclos\nLocal lnKey\n\nPRIVATE lcOpers\n\nThisForm.pcOpers = pcOpers\n\nThisForm.pckeyesc = .t.\n\nThisForm.lsCartao = ''\n\nLocal lcOnErroCmd1,llOnErro1\n\nm.llOnErro1 = .f.\nm.lcOnErroCmd1 = On('Error')\nOn Error m.llOnErr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConverteStr",
+        "metodosFormChamados": "ZOrder,Value = TRANSFORM",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.SAIDA",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)\nThisForm.RetornoFalha(\"Oper. Cancelada pelo Usuario(1)\",lnValPago)\nRELEASE WINDOWS",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetornoFalha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetValor",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetDigitos",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(This.Value)\n\tSet Confirm Off\nEndif\nReturn(EMPTY(This.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetDigitos",
+      "evento": "Valid",
+      "linhas": 263,
+      "codigoOriginal": "IF LEN(Alltrim(This.Value)) <> 4 .and. ! EMPTY(This.Value)\n\tDO Form SigTfDss With \"Erro na Transação\",\"\",\"Quantidade de Digitos Invalida\",\"\",\"\",\"VM\",ThisForm.Left,ThisForm.Top \n\tThis.Value = \"\"\n\tReturn(.f.)\nENDIF\nIF EMPTY(This.Value)\n\tRETURN\nEndif\n\nPRIVATE lsNsu, lsAutoriza, lsDataHora, lsTipTran, lsCupom, lsFinaliza, lsMRet\n\nlsMRet=\"\"\n\nDO While ProximoComando <> 30  \n\tlnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnCont... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ErroTef,lsCartao=Left,pcBandeira=Left,SqlExecute,RetornoFalha",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetDigitos",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetDigitos",
+      "evento": "GotFocus",
+      "linhas": 199,
+      "codigoOriginal": "IF crSigOpFp.lCartao = \"N\"\n\n\tlcIdTerminal=fConverteStr(CrSigCdEmp.nEmps)+TRANSFORM(VAL(crSigFiMpF.Cncaixas),\"@L 999999\")\n\t\n\tlcValpago=ALLTRIM(TRANSFORM(lnValPago,\"99999999.99\"))\n\tlcValPago=STRTRAN(lcValPago,\".\",\",\")\n\n\tIF ConfiguraIntSiTefInterativo(lsEndSitef,lsIdTerminal,lcIdTerminal,0) <> 0\n\t\tThisform.RetornoFalha(\"Sem comunicacao com SiTef\")\n\t\tRELEASE WINDOWS\n\tEndif\n\n\tlcData=STR(YEAR(DATE()),4)+SUBSTR(DTOC(DATE()),4,2)+SUBSTR(DTOC(DATE()),1,2)\n\tlchora=STRTRAN(TIME(),\":\",\"\")\n\n\tIF IniciaFuncaoS... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConverteStr",
+        "metodosFormChamados": "RetornoFalha,Value)+REPLICATE,ErroTef",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetParcela",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "If Not InList(This.Value,\"1\",\"2\")\n\tSet Confirm Off\nELSE\n\tINKEY(0.1)\n\tCLEAR TYPEAHEAD\n\tKEYBOARD CHR(9)\nEndif\n*Return(!INLIST(This.Value,\"1\",\"2\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetParcela",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(This.Value,\"1\",\"2\",\" \"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetParcela",
+      "evento": "LostFocus",
+      "linhas": 131,
+      "codigoOriginal": "Set Confirm on\nIF EMPTY(This.Value) \n\tRETURN\nENDIF\nlnRetorno=10000\nlsMensagem=''\n*IF lsTipPagto = \"E\"\n\tIf ThisForm.lsCartao = '00125'\n\t\tBuffer=IIF(lnNumParcs=1,\"1\",IIF(This.Value=\"1\",\"3\",\"2\"))+REPLICATE(CHR(0),1999)\n\tElse\n\t\tBuffer=IIF(lnNumParcs=1,\"1\",IIF(This.Value=\"1\",\"2\",\"3\"))+REPLICATE(CHR(0),1999)\n\tEndif\n\tlnContinua=1000\n*Endif\nlsMRet=\"\"\n\nDO WHILE lnRetorno = 10000\n\tlnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnCo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetornoFalha,ErroTef,lsCartao=Left,pcBandeira=Left,SqlExecute,MontaRetorno",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCartao",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "IF LEN(ALLTRIM(THIS.Value)) > 19\n\tDO Form SigTfDss With \"Erro na Transação\",\"\",\"Cartao com mais de 19 digito\",\"\",\"\",\"VM\",ThisForm.Left,ThisForm.Top \n\tReturn(.f.)\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCartao",
+      "evento": "GotFocus",
+      "linhas": 79,
+      "codigoOriginal": "lcIdTerminal=fConverteStr(CrSigCdEmp.nEmps)+TRANSFORM(VAL(crSigFiMpF.Cncaixas),\"@L 999999\")\n\nlcValpago=ALLTRIM(TRANSFORM(lnValPago,\"99999999.99\"))\nlcValPago=STRTRAN(lcValPago,\".\",\",\")\n\nIF ConfiguraIntSiTefInterativo(lsEndSitef,lsIdTerminal,lcIdTerminal,0) <> 0\n\tThisform.RetornoFalha(\"Sem comunicacao com SiTef\")\n\tRELEASE WINDOWS\nEndif\n\nlcData=STR(YEAR(DATE()),4)+SUBSTR(DTOC(DATE()),4,2)+SUBSTR(DTOC(DATE()),1,2)\nlchora=STRTRAN(TIME(),\":\",\"\")\n\nIF IniciaFuncaoSiTefInterativo(0, lcValPago, lsCupom, l... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConverteStr",
+        "metodosFormChamados": "RetornoFalha,ErroTef",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCodSeg",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(This.Value)\n\tSet Confirm Off\nEndif\nReturn(EMPTY(This.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCodSeg",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "*!*\tIF VAL(This.Value)>1 .and. VAL(This.Value)<100\n*!*\t\tDO Form SigTfDss With \"Erro na Transação\",\"\",\"CSEG Invalido\",\"\",\"\",\"VM\",ThisForm.Left,ThisForm.Top \n*!*\t\tReturn(.f.)\n*!*\tELSE\n*!*\t\tReturn(.t.)\n*!*\tEndif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCodSeg",
+      "evento": "LostFocus",
+      "linhas": 153,
+      "codigoOriginal": "Set Confirm on\nIF EMPTY(This.Value)\n\tRETURN\nEndif\n\nPRIVATE lsNsu, lsAutoriza, lsDataHora, lsTipTran, lsCupom, lsFinaliza\n\nlsMensagem=''\nBuffer=Alltrim(This.Value)+REPLICATE(CHR(0),2000-LEN(Alltrim(This.Value)))\nlnContinua=1000\nlnRetorno=10000\nlsMRet=\"\"\n\nDO WHILE lnRetorno = 10000\n\tlnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)\n\tIf Lastkey() = 27\n\t\tlnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetornoFalha,ErroTef,lsCartao=Left,pcBandeira=Left,SqlExecute",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.GetCodSeg",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Container1.Label1.Caption=\"Digite o Codigo\"+CHR(13)+\"de Seguranca\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm Off",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.Text1",
+      "evento": "Valid",
+      "linhas": 179,
+      "codigoOriginal": "IF EMPTY(This.Value)\n\tRETURN\nEndif\n\nThis.Value=TRANSFORM(VAL(This.Value),\"@L 99\")\n\nPRIVATE lsNsu, lsAutoriza, lsDataHora, lsTipTran, lsCupom, lsFinaliza\n\nDO WHILE ProximoComando <> 30\n\tlnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)\n\tIF lnRetorno < 0\n\t\tThisForm.ErroTef(lnRetorno)\n\t\tRELEASE WINDOWS\n\tEndif\nEnddo\n\nlnParcs=This.Value\n\nlsMRet=\"\"\nlsMensagem=''\nBuffer=Alltrim(This.Value)+REPLICATE(CHR(0),2000-LEN(Allt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ErroTef,RetornoFalha,lsCartao=Left,pcBandeira=Left,SqlExecute",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.Text1",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Container1.Label1.Caption=\"Digite o Numero\"+CHR(13)+\"de Parcelas\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTEF.Timer1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "THisForm.pcKeyEsc = .t.\nThis.Enabled = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPTEF.Procedure",
+      "queryOriginal": "INSERT INTO crSiTef (Tef) VALUES (\"000-000 = CRT\")",
+      "tabelas": "crSiTef",
+      "colunas": "Tef",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTEF.Procedure",
+      "queryOriginal": "INSERT INTO crSiTef (Tef) VALUES (\"001-000 = \"+STR(ltIdent,10))",
+      "tabelas": "crSiTef",
+      "colunas": "Tef",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTEF.Procedure",
+      "queryOriginal": "INSERT INTO crSiTef (Tef) VALUES (\"002-000 = \")",
+      "tabelas": "crSiTef",
+      "colunas": "Tef",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTEF.Procedure",
+      "queryOriginal": "INSERT INTO crSiTef (Tef) VALUES (\"003-000 = \"+lsValPago)",
+      "tabelas": "crSiTef",
+      "colunas": "Tef",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTEF.Procedure",
+      "queryOriginal": "INSERT INTO crSiTef (Tef) VALUES (\"004-000 = 0\")",
+      "tabelas": "crSiTef",
+      "colunas": "Tef",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSiTef"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

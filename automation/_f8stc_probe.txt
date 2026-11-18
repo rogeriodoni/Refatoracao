@@ -1,0 +1,36 @@
+CHECKPOINT 1 - vivo 18/11/2026 02:01:34
+CHECKPOINT 2 - dependencias OK
+(a1) SEM form pai   VARTYPE(form) = [O]  esperado [O]
+(a2) COM form pai   VARTYPE(form) = [O]  this_cArqMovsPai = [CAT0001.TXT]
+(b) ESCOPO (protected=SIM reprova)
+    ValidarParametros          existe=SIM protected=NAO
+    CarregarLista              existe=SIM protected=NAO
+    AtualizarCabecalho         existe=SIM protected=NAO
+    AtualizarDetalheRetorno    existe=SIM protected=NAO
+    GradeAfterRowColChange     existe=SIM protected=NAO
+    BtnEncerrarClick           existe=SIM protected=NAO
+    ObterCursorEnvios          existe=SIM protected=NAO
+    CarregarDados              existe=NAO protected=NAO
+(b2) BINDEVENT registrados (AEVENTS por objeto de origem)
+    grade   bindings = 1
+      evento [AFTERROWCOLCHANGE] -> metodo [GRADEAFTERROWCOLCHANGE]
+    Buttons(1) bindings = 1
+      evento [CLICK] -> metodo [BTNENCERRARCLICK]
+(b3) chamadas externas sem dado:  ObterCursorEnvios=[cursor_4c_Envios]  ValidarParametros=.T.  AtualizarDetalheRetorno=.F.  AtualizarCabecalho=.T.
+(c) CarregarLista retorno = .T.  BO injetado = [Stcbofakef8]  DataSessionId = 2
+    USED(cursor) = .T.  RECCOUNT = 2  esperado 2
+    Grid RecordSource = [cursor_4c_Envios]  ColumnCount = 2
+    Column1.ControlSource = [cursor_4c_Envios.envios]  Header = [Data]  Width = 65
+    Column2.ControlSource = [cursor_4c_Envios.cusuarios]  Header = [Usuário]  Width = 95
+    Edit1.ControlSource = [cursor_4c_Envios.cretornos]
+    Text1=[CAT0001.TXT] Text2=[778899] Text3=[001] Text4=[IMPFISCAL01]
+    CONFERE cabecalho = SIM
+(d) mestre-detalhe (AfterRowColChange)
+    linha 1  Edit1 = [RETORNO DA 1a TENTATIVA]
+    linha 2  Edit1 = [RETORNO DA 2a TENTATIVA]
+    CONFERE detalhe = SIM
+(e) BtnEncerrarClick retorno = .T.  VARTYPE(form) depois = [X]
+    cursor fechado pelo Destroy (sessao 1 nao enxerga a privada): USED = .F.
+--- ARQUIVO DE ERRO DE TESTE
+  (vazio - nenhum MsgErro/MsgAviso disparado)
+FIM

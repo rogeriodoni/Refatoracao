@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e **validada contra o gate real** (719 ÔåÆ 954 linhas).
+
+## O que faltava
+
+O gate da Fase 4 roda pelo ramo **FLAT** (OPERACIONAL, legado COM grid ÔåÆ os ramos despachante/exibi├º├úo/captura n├úo se aplicam). Dos tr├¬s predicados conjuntivos, a Fase 3 j├í entregava um:
+
+| predicado | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£ô | Ô£ô |
+| `AddObject("cmd_4c_\|cmg_4c_` | Ô£ù | Ô£ô |
+| `CarregarLista\|CarregarDados\|MontaGrade` | Ô£ù | Ô£ô |
+
+## O que foi acrescentado
+
+**`ConfigurarBotoesAcao()`** ÔÇö os **dois** bot├Áes que o SCX declara (`Confirma`/`Cancela`), n├úo os 6 CRUD do `frmcadastro`: invent├í-los violaria o PILAR 1. Criados logo ap├│s o cabe├ºalho para desenhar por cima da faixa (regra #11). Caption `"\<Ok"` e `"Encerrar"`, `Cancel = .T.` no Cancela, Pictures transcritas do dump (`cadastro_salvar_60.jpg` / `cadastro_sair_60.jpg`, regra #25) com `Themes = .T.` + `DisabledPicture` (standalone com Picture).
+
+Sobre o tamanho: o SCX n├úo declara `Width`/`Height`, e os **80├ù100 da classe `fwbtng` n├úo fecham** com os `Left` dele ÔÇö 650+80 invadiria 5px o Cancela e 725+80 passaria 5px da borda (recorte, regra #30). Com **75├ù75** a geometria do pr├│prio SCX fecha exata (650+75 = 725 = Cancela.Left; 725+75 = 800 = Form.Width), e ├® o tamanho can├┤nico desses bot├Áes no projeto.
+
+**`AplicarFormatoGrade()` + `CarregarDados()`** ÔÇö o funil de carga. A grade liga-se a `TmpCliente`, cursor do **chamador**, ent├úo n├úo h├í SQL pr├│prio: `CarregarDados` guarda por `USED` (sem o alias, devolve `.F.` em vez de derrubar o Init ÔÇö regra #41), faz o bind, reaplica o formato e fecha com `GO TOP` + `Refresh` (regra #21a). As larguras/captions moram **s├│** em `AplicarFormatoGrade`, chamado pela montagem e pela recarga ÔÇö fonte ├║nica, sem os dois lados divergindo em sil├¬ncio.
+
+`CarregarDados` ├® PUBLIC porque o `TesteAutomatico.prg` o chama de fora (regra #3) ÔÇö e foi batizado `CarregarDados`, **n├úo** `CarregarLista`: esse nome satisfaria o gate igual, mas faria o harness classificar o di├ílogo como CRUD e cobrar `BtnIncluirClick`/`TesteModoVisualizar`.
+
+## Verifica├º├úo
+
+- **Gate real da Fase 4** (recortado por AST do `OrquestradorMigracao.ps1`, sem dot-source): `VEREDITO=PASSA`, ramo FLAT.
+- **`Test-CompletudeCodigo` real**: nenhum TODO/stub/procedure vazia.
+- **VFP9** (smoke test passou antes, ent├úo a execu├º├úo ├® real): `COMPILE` do form e do BO com `.FXP` gerado e **zero `.err`**.
+- **Instancia├º├úo com o objeto vivo** ÔÇö bot├Áes em 650/725, Top 3, 75├ù75, Pictures resolvendo para arquivo existente, `Confirma fim=725 / Cancela fim=800 / Form.Width=800`; grade com `65/65/175` e `Grupo|Conta|Nome`, corretamente **invis├¡vel** (regra #17). `CarregarDados()` chamado de fora devolveu `.F.` sem cursor e `.T.` com ele, com `RecordSource=[TmpCliente]`, os tr├¬s `ControlSource` ligados, larguras e headers **id├¬nticos depois do bind** e `RECNO=1`.
+
+Registrei na mem├│ria o ponto novo (o nome do funil decide a classifica├º├úo do harness), anexado ├á mem├│ria existente da fam├¡lia em vez de criar duplicata.

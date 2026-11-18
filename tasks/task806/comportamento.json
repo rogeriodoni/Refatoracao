@@ -1,0 +1,218 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSQN",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.cmdMultiSubN.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN",
+      "evento": "Init",
+      "linhas": 61,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = 'Operações do Caixa : ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.antvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local lcOperacao, lnRecNo, loBrowse\n\nlcDopes = crSigCdOpe.Dopes\n\nIf This.Value <> ThisForm.Antvalue\n\tIf Not Empty(This.Value)\n\t\tIf Not Seek(This.Value, 'TmpOper', 'Dopes')\n\t\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpOper', 'Dopes', This.Value, 'Cadastro de Operações')\n\t\t\tloBrowse.AddColuna('Dopes', '', 'Operação', .t., 'Dopes')\n\t\t\tloBrowse.Show\n\t\t\tThis.Value = TmpOper.Dopes\n\t\tEndIf\n\t\tlcNivels = This.Value\n\tEndIf\n\tThisForm.lhouveAlt = .t.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AntValue2 = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.GradeSubN.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value <> ThisForm.Antvalue2\n\tIf Not Between(This.Value,1,8)\n\t\tMessageBox('Informe Sequência entre 1 - 8',0+64,'')\n\t\tReturn .f.\n\tEndIf\n\tThisForm.lhouveAlt = .t.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.cmdExcluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigMvCxs\n\nIf Not Eof() And ( crSigMvCxs.cDopes = crSigCdOpe.Dopes )\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.cmdSair",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns Or ThisForm.lHouveAlt )\n\t\tSelect CrSigMvCxs\n\t\tGo Top\n\t\tGo bottom\n\t\tSelect cNivels,sum(1) From CrSigMvCxs Into Cursor Selecao Group by cNivels having sum(1) > 1\n\t\tSelect Selecao\n\t\tIf Reccount() > 0\n\t\t\tMessageBox('Existem Operações Duplicadas!!!',0+16,'')\n\t\t\tReturn .f.\n\t\tEndif\n\n\t\tSelect [ ] as Agrupar,Sum(1) From CrSigMvCxs Into Cursor Selecao where Not Empty(cNivels) And Seqs = 0 group by... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSQN.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect crSigMvCxs\nLocate for cDopes = crSigCdOpe.Dopes .and. cnivels = Space(20)\nIf Eof()\n\tInsert Into crSigMvCxs (cDopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\n\nSelect crSigMvCxs\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSQN.cmdSair.Click",
+      "queryOriginal": "\t\tSelect cNivels,sum(1) From CrSigMvCxs Into Cursor Selecao Group by cNivels having sum(1) > 1",
+      "tabelas": "CrSigMvCxs",
+      "colunas": "cNivels",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSQN.cmdSair.Click",
+      "queryOriginal": "\t\tSelect [ ] as Agrupar,Sum(1) From CrSigMvCxs Into Cursor Selecao where Not Empty(cNivels) And Seqs = 0 group by... [TRUNCADO]",
+      "tabelas": "CrSigMvCxs",
+      "colunas": "Seqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSQN.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into crSigMvCxs (cDopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "crSigMvCxs",
+      "colunas": "cDopes,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigMvCxs"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

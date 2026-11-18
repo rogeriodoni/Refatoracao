@@ -1,0 +1,25 @@
+BO VARTYPE=O
+OFFLINE TotalizarLocais=T msg=[]
+OFFLINE linhas=3 (esperado 3)
+  linha [L001] Leitura=15.00 ReLeitura=0.00
+  linha [L002] Leitura=7.00 ReLeitura=3.00
+  linha [L003] Leitura=0.00 ReLeitura=0.00
+OFFLINE TotalLido=18.00 (esperado 18.00)
+OFFLINE TotalEstoque=4.00 (esperado 4.00)
+OFFLINE PercLeitura=450.00 (esperado 450.00)
+OFFLINE TotalReleitura=0.00 (esperado 0.00)
+OFFLINE PercReleitura=0.00 (esperado 0.00)
+OFFLINE linha corrente carregada=[L001] (esperado L001)
+OFFLINE ponteiro do historico (RECNO)=5 (esperado 5 = Go Bottom)
+PerLocals=F TextoLido=[] TextoEstoque=[] TextoPerc=[]
+PerLocals=T TextoLido=[   18] TextoEstoque=[    4] TextoPerc=[ 450.00%]
+ONLINE TotalizarLocais=T msg=[]
+ONLINE linhas=1 (esperado 1 - o Zap descartou a totalizacao anterior)
+ONLINE local=[L009] Leitura=0.00 ReLeitura=20.00 (esperado L009 0.00 20.00)
+ONLINE TotalLido=20.00 (esperado 20.00)
+ONLINE TotalEstoque=2.00 (esperado 2.00)
+ONLINE PercLeitura=1000.00 (esperado 1000.00)
+ONLINE ponteiro do historico online (RECNO)=2 (esperado 2 = EOF, sem Go Bottom neste ramo)
+Buscar()=T linhas=1 TotalLido=20.00 (esperado T 1 20.00)
+SEM CURSOR TotalizarLocais=F msg=[O cursor de leituras [cursor_4c_NaoExiste] não está disponível.] (esperado F com mensagem)
+ERRO MSG ARQUIVO=ausente

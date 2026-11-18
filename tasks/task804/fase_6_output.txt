@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is structurally sound and consistent with the project's established conventions. Here's a summary of Phase 6 work:
+
+**Lookups implemented** (all completely wired, no stubs), following CLAUDE.md regra #46/#18 (grid-cell lookups live in the `Valid` of a `TextBox` subclass installed via `Column.AddObject` + `CurrentControl` + `Sparse=.F.`, never in `AfterRowColChange`):
+
+1. **`grd_4c_SubN.Column1`** (Opera├º├úo Sub-N├¡vel) ÔÇö lookup against `SigCdOpe` (Dopes/Ndopes), editable only for a still-unlinked row (`When` mirrors the legado guard), `LostFocus` focuses `cmd_4c_Sair` when left empty.
+2. **`grd_4c_SubN.Column7`** (Obs) ÔÇö lookup against `SigCdObs` (Codigos/Descrs).
+3. **`grd_4c_SubN.Column8`** (Tp.Fat) ÔÇö lookup against `SigCdTif` (Codigos/Descricaos).
+4. **`grd_4c_SubS.Column1`** (Sub-N├¡vel do Sub-N├¡vel) ÔÇö lookup restricted to operations that use the current sub-n├¡vel as a child (`SigOpCsn` filtered by `cnivels`), `LostFocus` auto-appends a blank row so the user can keep typing (mirrors the legado's `Append Blank` behavior).
+
+Added the new `TextBoxCelulaSno_4c` class to the shared `textboxgridlookup.PRG` (loaded globally via `config.prg`), and 5 new form methods (`CelulaSnoEditavel`, `ValidarCelulaSnoExec`, `AbrirLookupCelulaSno`, `ResolverLookupCelulaSno`, `CelulaSnoLostFocusExec`).
+
+**Bug fix found and corrected along the way**: `SigOpSnoBO.ListarSubNiveis` always joined `SigCdOpe` on `cdopes`, which in direct mode is the *fixed* (pai) column ÔÇö every row would've shown the pai's `ndopes` repeated instead of each chosen sub-n├¡vel's own number. Fixed to join on the *variable* column per mode, and switched to `LEFT JOIN` so a freshly-inserted blank row doesn't vanish from the cursor.
+
+Checkbox toggle wiring (Columns 3/4/5/6/9) and the CRUD button `Click` handlers are deliberately left for the next phase, consistent with the existing code's own phase markers.

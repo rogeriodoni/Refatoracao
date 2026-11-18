@@ -1,0 +1,801 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpSlc.SCX
+* Data/Hora: 17/11/2026 17:58:26
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPSLC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPSLC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPSLC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPSLC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: SayGrupo
+  Parent: SIGOPSLC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SayConta
+  Parent: SIGOPSLC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGOPSLC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Conta
+  Parent: SIGOPSLC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DCONTA
+  Parent: SIGOPSLC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGOPSLC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGOPSLC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPSLC.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSLC.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSLC.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSLC.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSLC.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSLC.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPSLC
+  Class: label
+  BaseClass: label
+
+Objeto: SayMoeda
+  Parent: SIGOPSLC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGOPSLC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGOPSLC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Confirma
+  Parent: SIGOPSLC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ""
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPSLC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.SayGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Grupo : "
+  Left = 235
+  Top = 310
+  Visible = .F.
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "SayGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.SayConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Conta : "
+  Left = 235
+  Top = 332
+  Visible = .F.
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "SayConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Get_Grupo
+------------------------------------------------------------
+  ControlSource = "crSigCdPgr.Grupos"
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 278
+  Margin = 0
+  TabIndex = 3
+  Top = 308
+  Visible = .F.
+  Width = 79
+  ZOrderSet = 3
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Get_Conta
+------------------------------------------------------------
+  ControlSource = "crSigCdPgr.Contas"
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 278
+  Margin = 0
+  TabIndex = 4
+  Top = 330
+  Visible = .F.
+  Width = 79
+  ZOrderSet = 4
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Get_DCONTA
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 21
+  Left = 278
+  Margin = 0
+  ReadOnly = .F.
+  TabIndex = 5
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 352
+  Visible = .F.
+  Width = 291
+  ZOrderSet = 5
+  Name = "Get_DCONTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Left = 278
+  MaxLength = 3
+  TabIndex = 6
+  Top = 284
+  Width = 31
+  ZOrderSet = 6
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 155
+  Left = 230
+  Panel = 1
+  RecordSource = "TmpCliente"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 123
+  Width = 339
+  Name = "Grade"
+  Column1.FontSize = 8
+  Column1.ControlSource = "Grupo"
+  Column1.Width = 65
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = "Conta"
+  Column2.Width = 65
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = "Nome"
+  Column3.Width = 175
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Grupos"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Contas"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Grade.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "Nomes"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Label1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Selecione a moeda para efetuar lançamentos de crédito."
+  Height = 36
+  Left = 295
+  Top = 90
+  Width = 209
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.SayMoeda
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Moeda : "
+  Left = 232
+  Top = 287
+  Width = 44
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "SayMoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Left = 309
+  MaxLength = 15
+  TabIndex = 7
+  Top = 284
+  Width = 115
+  ZOrderSet = 10
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSLC.Confirma
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Ok"
+  Name = "Confirma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPSLC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _GetConta, _GetMoeda, _Parent
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+_GetConta = .f.
+
+ThisForm.ParentForm = _Parent
+
+This.Grade.Visible = _GetConta
+This.Get_Grupo.Visible = _GetConta
+This.Get_Conta.Visible = _GetConta
+This.Get_dConta.Visible = _GetConta
+This.SayGrupo.Visible = _GetConta
+This.SayConta.Visible = _GetConta
+
+This.Get_cd_moeda.Visible = _GetMoeda
+This.Get_ds_moeda.Visible = _GetMoeda
+This.SayMoeda.Visible = _GetMoeda
+
+If !_GetMoeda 
+	This.Height = This.Height - 25
+Else
+	Select TmpBaixa
+	Scan for Tipos = 'X'
+		This.Get_cd_moeda.value = moedas
+		=Seek( moedas, 'crSigCdMoe', 'CMoes' )
+		This.Get_ds_moeda.value = crSigCdMoe.dmoes
+		exit
+	Endscan
+Endif
+If !_GetConta And _GetMoeda
+	This.Get_cd_moeda.Top = 50
+	This.Get_ds_moeda.top = 50
+	This.SayMoeda.top = 54
+	This.Height = 100
+*!*		This.Confirma.Top = 34
+*!*		This.Cancela.Top = 34
+Endif
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !fAcessoContab( Usuar, 'C', This.Value, This,'',Thisform.get_conta.value )
+	Messagebox( 'Acesso Negado...', 48, '' )
+	This.Value = ''
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !fAcessoContas( Usuar, This.Get_Grupo.Value, 'C', This.Value, This.Get_Conta, This.Get_dConta )
+	Messagebox( 'Acesso Negado...', 48, '' )
+	This.Get_Conta.Value = ''
+	This.Get_dConta.Value = ''
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Get_DCONTA
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !fAcessoContas( Usuar, This.Get_Grupo.Value, 'D', This.Value, This.Get_Conta, This.Get_dConta )
+	Messagebox( 'Acesso Negado...', 48, '' )
+	This.Get_Conta.Value = ''
+	This.Get_dConta.Value = ''
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( Thisform.Get_Conta.Value )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( This.Value ) And !Seek( This.Value, 'crSigCdMoe', 'CMoes' )
+	loBrowse = CreateObject( 'fwBuscaSel', 'crSigCdMoe', 'CMoes', This.Value, 'Cadastro de Moedas' )
+	loBrowse.AddColuna( 'CMoes', '', 'Código', .t., 'CMoes' )
+	loBrowse.AddColuna( 'Dmoes', '', 'Descrição', .t., 'DMoes' )
+	loBrowse.Show
+	Thisform.Get_Cd_Moeda.Value = Iif( Lastkey() == 27, '', crSigCdMoe.CMoes )
+	Thisform.Get_Ds_Moeda.Value = Iif( Lastkey() == 27, '', crSigCdMoe.DMoes )
+Else
+	If IsEmpty( This.Value )
+		Thisform.Get_Cd_Moeda.Value = ''
+		Thisform.Get_Ds_Moeda.Value = ''
+	Endif
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Grade
+* Classe: grid (Base: grid)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.Get_Grupo.Value = Grupo
+ThisForm.Get_Conta.Value = Conta
+ThisForm.Get_DConta.Value = Nome
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 9 or nKeyCode = 13
+	ThisForm.Get_Grupo.SetFocus
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 9 or nKeyCode = 13
+	ThisForm.Get_Grupo.SetFocus
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 9 or nKeyCode = 13
+	ThisForm.Get_Grupo.SetFocus
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( This.Value ) And !Seek( This.Value, 'crSigCdMoe', 'DMoes' )
+	loBrowse = CreateObject( 'fwBuscaSel', 'crSigCdMoe', 'DMoes', This.Value, 'Cadastro de Moedas' )
+	loBrowse.AddColuna( 'Dmoes', '', 'Descrição', .t., 'DMoes' )
+	loBrowse.AddColuna( 'CMoes', '', 'Código', .t., 'CMoes' )
+	loBrowse.Show
+	Thisform.Get_Cd_Moeda.Value = Iif( Lastkey() == 27, '', crSigCdMoe.CMoes )
+	Thisform.Get_Ds_Moeda.Value = Iif( Lastkey() == 27, '', crSigCdMoe.DMoes )
+Else
+	If IsEmpty( This.Value )
+		Thisform.Get_Cd_Moeda.Value = ''
+		Thisform.Get_Ds_Moeda.Value = ''
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_cd_moeda.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.CanceladoExterno = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSLC.Confirma
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.MoedaMaior = ThisForm.get_cd_moeda.value
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPSLC
+RESERVED3 (ClassInfo): parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

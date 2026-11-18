@@ -1,0 +1,30 @@
+PROBE 805 FASE 4 - INICIO
+=== CENARIO A: sem cursor_4c_Produtos ===
+CREATEOBJECT -> VARTYPE=O
+Caption=[Selecionar Produtos] W=800 H=600 DataSession=1
+z-order do form: CNT_4C_SOMBRA | GRD_4C_DADOS | CMG_4C_CMDESCOLHA | IMG_4C_IMGBARRA1 | CMG_4C_CMDSALVA | IMG_4C_IMGBARRA2
+Grade: Top=192 Left=190 W=420 H=309 ColumnCount=2 ReadOnly=.F. Visible=.T. RecordSource=[]
+Colunas: C1.W=108 C1.Header=[Código] C2.W=290 C2.Header=[Descrição]
+CmdEscolha: Top=-1 Left=343 W=160 H=85 Visible=.T. ButtonCount=2
+  Btn1 [\<Inserir] Left=5 Top=5 W=75 H=75 PictureOK=.T.
+  Btn2 [\<Excluir] Left=80 W=75 PictureOK=.T.
+CmdSalva: Top=-1 Left=718 W=85 H=85 Visible=.T.
+  Btn1 [Encerrar] Cancel=.T. W=75 PictureOK=.T.
+ImgBarra1.Visible=.F. ImgBarra2.Visible=.F.
+Escopo (0=PUBLIC): CarregarDados prot=.F. AplicarFormatoGrade prot=.F. GarantirLinhaEmBranco prot=.F. AplicarVisibilidade prot=.F.
+CarregarDados() de fora, sem cursor = .F.
+Release OK
+
+=== CENARIO B: com cursor_4c_Produtos (2 linhas preenchidas) ===
+cursor criado: RECCOUNT=2
+CREATEOBJECT -> VARTYPE=O
+RecordSource=[cursor_4c_Produtos] C1.ControlSource=[cursor_4c_Produtos.CPros] C2.ControlSource=[cursor_4c_Produtos.DPros]
+Apos bind: C1.W=108 C1.Header=[Código] C2.W=290 C2.Header=[Descrição]
+Linha em branco: RECCOUNT=3 (esperado 3)  RECNO=3 alias corrente=[CURSOR_4C_PRODUTOS]
+2a chamada CarregarDados() = .T. RECCOUNT=3 (esperado 3 - idempotente)
+Apos recarga: C1.W=108 C1.Header=[Código] C2.W=290
+Cursor temporario de brancos fechado: .T.
+Release OK - cursor do pai sobreviveu: .T.
+
+ERROS CAPTURADOS: []
+PROBE FIM

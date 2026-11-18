@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6/8 conclu├¡da.
+
+## O que a fase encontrou no legado (medido, n├úo presumido)
+
+- **Campos restantes: zero.** A Fase 4 j├í criou os 6 TextBox, 13 Labels, Shape, CommandGroup e Timer por inteiro.
+- **Lookups: zero.** Varredura no dump n├úo acha `fwBuscaExt/Sel/Int`, `sigacess(`, `mAddColuna`, `Acesso<X>()` nem `FormBuscaAuxiliar` ÔÇö o ├║nico `CreateObject` ├® o `fSqlConector` do Init. Este di├ílogo fala com o terminal SiTef pela `CliSiTef32I.DLL`, nunca com tabela de lookup. Gerar `AbrirLookup*/AbrirBusca*` aqui exigiria inventar tabela (PILAR 1).
+
+## O que foi entregue
+
+**`Formsigoptef.prg`** (1350 ÔåÆ 1965): os eventos de campo do legado que **n├úo** dependem do la├ºo de protocolo, cada um transcrito do m├®todo legado inteiro ÔÇö `Form.KeyPress` (ESC), `GetValor.When` (gate de foco), `GetDigitos.When/LostFocus`, `GetParcela.When/Valid`, `GetCartao.Valid`, `GetCodSeg.When/GotFocus`, `Text1.When/LostFocus/GotFocus`, `Timer1.Timer`, mais `ExibirMensagemTef()` (substituto do `SigTfDss`), `RegistrarEventosCampos()` com 11 BINDEVENT e `AplicarGatesDeFoco()`.
+
+**`sigoptefBO.prg`** (187 ÔåÆ 662): a camada de acesso ├á DLL que as Fases 1-2 n├úo criaram ÔÇö `DeclararFuncoesSiTef()` (as 4 declara├º├Áes do `Load` legado, em TRY, porque DECLARE carrega a biblioteca na hora e mataria a tela), `ConectarSiTef`, `IniciarSiTef`, `ContinuarSiTef`, `FinalizarTransacaoSiTef`, `MontarBufferSiTef`, `ValidarBinCartao`, `CarregarIdentificacaoTerminal`, `ObterData/HoraSiTef` e o estado compartilhado do protocolo.
+
+**Fases 7-8** ficam com os 6 la├ºos de protocolo inteiros (`GetDigitos.Valid/GotFocus`, `GetParcela.LostFocus`, `GetCartao.GotFocus`, `GetCodSeg.LostFocus`, `Text1.Valid`), o Click do Cancelar e o Unload ÔÇö s├úo variantes do mesmo di├ílogo com a DLL sobre o mesmo estado; fragment├í-los daria peda├ºo de m├íquina de estado in├║til.
+
+## Verifica├º├úo (medida no VFP9, n├úo lida no c├│digo)
+
+- Compila├º├úo: BO e Form com `.fxp` e **zero `.ERR`** (`.fxp` apagados antes).
+- Form instancia (`VARTYPE=O`); os 11 BINDEVENT medidos por `AEVENTS` com 2 args; os 13 alvos s├úo PUBLIC e `ExibirMensagemTef` PROTECTED.
+- Os delegates de `"When"` **disparam de verdade** (`SET("CONFIRM")` muda), inclusive nos dois ramos do `ParcelaWhen`.
+- `ValidarCartao` recusa 20 d├¡gitos/aceita 19; os dois GotFocus escrevem o painel; o Timer rearma o ESC e se desliga; sem a DLL os wrappers devolvem `.F./.F./-1/-1`.
+- Gate da Fase 6 (ramo CAPTURA) = **True**, booleanos extra├¡dos do `switch` do orquestrador; `ValidadorSQLSchema` passou (683 tabelas); `VerificarFuncoesNaoDefinidas` e `VerificarMetodoProtegidoChamadoDeFora` sem achados; checks de completude (TODO/stub/pend├¬ncia/procedure vazia) em zero; CRLF preservado (os dois arquivos s├úo LF, como sa├¡ram das fases anteriores).
+
+**Uma corre├º├úo de coment├írio por medi├º├úo:** eu havia escrito que `INLIST(Value,"1","2"," ")` recusa o campo em branco. Medido (`Probe809F6b.prg`): com `SET EXACT ON` ÔÇö que o `config.prg` liga ÔÇö `"" = " "` ├® `.T.`, ent├úo o branco **passa**, e a entrada `" "` da lista do legado ├® exatamente o que permite isso. O coment├írio agora traz a tabela EXACT ON/OFF; a express├úo segue transcrita literalmente.

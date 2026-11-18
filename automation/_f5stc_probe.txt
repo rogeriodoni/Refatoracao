@@ -1,0 +1,27 @@
+CHECKPOINT 1 - script vivo
+CHECKPOINT 2 - config.prg OK
+CHECKPOINT 3 - SET PROCEDURE OK
+CHECKPOINT 4 - gnConnHandle = 1
+VARTYPE(loc_oForm) = [O]
+this_cArqMovsPai = []
+--- CAMPOS DA FASE 5 (existencia / geometria / estado)
+  Text1=SIM Label2=SIM Text2=SIM Label3=SIM Text3=SIM
+  Text1 T/L/WxH = 141/153/100x23  Vis=.T.  RO=.T.  TabStop=.F.  Ena=.T.  Align=3
+  Text2 T/L/WxH = 142/405/100x23  Vis=.T.  RO=.T.  TabStop=.F.
+  Text3 T/L/WxH = 141/687/35x23  Vis=.T.  RO=.T.  TabStop=.F.
+  Label2 [Lote :] T/L/WxH = 146/373/30x15  AutoSize=.F.  Vis=.T.  Fore=5921370
+  Label3 [Empresa :] T/L/WxH = 145/635/50x15  AutoSize=.F.  Vis=.T.
+--- VALOR EXIBIDO (o que o legado poe com Text1.Value = crTmpLgSit.col)
+  Text1 (carqmovs)  = []
+  Text2 (cnumlotes) = []
+  Text3 (cemps)     = []
+--- PROPERTIES DO BO (fonte unica dos valores acima)
+  ArqMovs=[] NumLotes=[] Emps=[] ImpFabs=[]
+--- GRADE E CURSOR (dentro da sessao privada do form)
+  cursor_4c_Envios AUSENTE
+  Grid RecordSource=[] Col1=[] Col2=[]
+--- AtualizarCabecalho chamado DE FORA (metodo PUBLIC)
+  retorno = .T.
+--- ARQUIVO DE ERRO DE TESTE
+  (vazio - nenhum MsgErro/MsgAviso disparado)
+FIM

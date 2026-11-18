@@ -1,0 +1,601 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpSts.SCX
+* Data/Hora: 18/11/2026 02:06:41
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPSTS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPSTS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPSTS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPSTS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeSubN
+  Parent: SIGOPSTS
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPSTS.GradeSubN.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSTS.GradeSubN.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPSTS.GradeSubN.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPSTS.GradeSubN.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGOPSTS
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdExcluir
+  Parent: SIGOPSTS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGOPSTS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGOPSTS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 350
+  Width = 600
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Status por Operações"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .T.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGOPSTS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.GradeSubN
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 238
+  Left = 146
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 94
+  Width = 307
+  GridLineColor = 238,238,238
+  Name = "GradeSubN"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 40
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 235
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.GradeSubN.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Status"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.GradeSubN.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.GradeSubN.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.GradeSubN.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.Shape1
+------------------------------------------------------------
+  Top = 12
+  Left = 92
+  Height = 110
+  Width = 257
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 450
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 2
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 525
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 3
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPSTS.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 375
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 4
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPSTS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mctrlbotoes
+------------------------------------------------------------
+PROCEDURE mctrlbotoes
+LParameters plHabilita
+
+Local lnI
+
+If Type('plHabilita') # 'L'
+	plHabilita = .F.
+Endif
+
+With Thisform.ParentForm.Pagina.Lista
+	For lnI=1 to .Grupo_Op.ButtonCount
+		If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible
+			.Grupo_Op.Buttons(lnI).Enabled = plHabilita
+		EndIf
+	EndFor
+	.cmdFPOper.Enabled = plHabilita
+	.Grupo_Saida.Sair.Enabled = plHabilita
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha
+
+Local lcOperacao
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.PcEscolha  = pcEscolha
+Thisform.ParentForm.Enabled  = .F.
+lcOperacao = crSigCdOpe.Dopes
+
+With Thisform
+	.Caption = 'Status das Operações ' + AllTrim( Proper( crSigCdOpe.Dopes ) )
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+
+	.cmdInserir.Visible = fChecaAcesso('SIGOPSTS','INSERIR') And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdInserir.Enabled = fChecaAcesso('SIGOPSTS','INSERIR')	And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Visible = fChecaAcesso('SIGOPSTS','EXCLUIR') And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Enabled = fChecaAcesso('SIGOPSTS','EXCLUIR')	And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.shape1.Left = IIF(.cmdInserir.visible, .cmdInserir.Left - 5, IIF(.cmdExcluir.visible , .cmdExcluir.left - 5, .cmdSair.Left - 5))
+	.shape1.width = IIF(.cmdInserir.visible, 3, IIF(.cmdExcluir.visible, 2, 1)) * .cmdsair.width + 16
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Thisform.mCtrlBotoes(.F.)
+
+lcSql = [Select a.*,b.Descs From SIGOPSTS a, SigStats b Where a.Dopes = ']+CrSigCdOpe.Dopes+[' And a.Status = b.cods ]
+ThisForm.ParentForm.PodataMgr.Sqlexecute(lcsql,'LocalStats')
+
+Select LocalStats
+Goto Top	
+With Thisform.GradeSubN
+	.RecordSource          = 'LocalStats'
+	.Column1.ControlSource = 'LocalStats.status'
+	.Column2.ControlSource = 'LocalStats.Descs'
+	.Refresh
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSTS.GradeSubN.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcOperacao, lnRecNo, loBrowse
+
+lcDopes = crSigCdOpe.Dopes
+
+If Not IsEmpty(This.Value)
+	xBrox = CreateObject('fwbuscaext',ThisForm.ParentForm.poDatamgr.pnIdconn,'SigStats','CrListaRemota','Cods',This.Value,'Seleção',.t.,'Cods')
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Cods', '', 'Código', .t.)	
+		xBrox.mAddColuna('Descs', '', 'Descrição',.t.)
+		xBrox.Show()
+	EndIf 
+	This.Value = CrListaRemota.Cods
+	Replace Descs With CrListaRemota.Descs in LocalStats
+	This.Refresh
+EndIf
+Select LocalStats
+Return .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( Empty( LocalStats.status ) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSTS.GradeSubN.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSTS.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select LocalStats
+If Not Eof()
+	Thisform.lHouveExcl = .T.
+	Delete
+	Skip
+	Skip - 1
+Endif
+Thisform.GradeSubN.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSTS.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If ( Thisform.lHouveExcl Or Thisform.lHouveIns )
+		Select LocalStats
+		Go Bottom
+		Go Top
+		
+		Select status,sum(1) as TT From LocalStats GROUP by 1 Into cursor Totais
+		Select Totais
+		Scan
+			If TT > 1
+				MessageBox('Status '+Alltrim(Totais.status)+' Digitado em Duplicidade!!!!',0+16,'Atenção')
+				Return .f.
+			EndIf
+		EndScan
+		
+		Select CrSIGOPSTS
+		Zap
+		Select LocalStats
+		Scan
+			Scatter Memvar
+			If Empty(m.status)
+				Loop
+			Endif
+			Insert Into CrSIGOPSTS (Dopes,status,CidChaves) Values ;
+				(CrSigCdOpe.Dopes,m.status,fUniqueIds())
+		EndScan
+		
+		m.lnErro1 = ThisForm.ParentForm.poDatamgr.pnIdConn
+
+		With ThisForm.ParentForm
+			If m.lnErro1>0 
+				lcDelete = [Delete From SIGOPSTS Where Dopes = ']+CrSigCdOpe.Dopes+[']
+				m.lnErro1 = Iif(.poDataMgr.SqlExecute(lcDelete,'')>0,1,-1)
+			EndIf 
+			If m.lnErro1>0 
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSIGOPSTS'),1,-1)
+			EndIf 
+			If m.lnErro1>0 
+				m.lnErro1 = .poDataMgr.Commit()
+			EndIf 
+			If Not m.lnErro1>0 
+				.poDataMgr.RollBack()
+			EndIf 
+		EndWith 
+		If Not m.lnErro1>0 
+			= MessageBox('Erro na Gravação dos Dados do Cadastro de Status.',48)
+		EndIf 
+	EndIf
+ENDIF
+
+Thisform.ParentForm.Enabled = .T.
+Thisform.mCtrlBotoes(.T.)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPSTS.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.lHouveIns = .T.
+
+Select LocalStats
+Locate for Dopes = crSigCdOpe.Dopes And status = ' '
+If Eof()
+	Insert Into LocalStats (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())
+EndIf
+
+Select LocalStats
+Thisform.GradeSubN.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPSTS
+RESERVED3 (ClassInfo): antvalue
+lhouveexcl
+lhouveins
+parentform
+pcescolha
+podatamgr
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

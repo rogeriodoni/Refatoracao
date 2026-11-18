@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada em `C:\4c\projeto\app\forms\operacionais\FormSIGOPSTC.prg` (modificado com Edit, +106 linhas).
+
+## O que foi entregue
+
+**`PROCEDURE BtnEncerrarClick`** (PUBLIC) ÔÇö transcri├º├úo do ├║nico evento de bot├úo do legado:
+
+```foxpro
+PROCEDURE Command2.Click     &&  SIGOPSTC.Commandgroup1
+ThisForm.Release
+```
+
+ÔåÆ `THIS.Release()`, sem TRY/CATCH (uma chamada s├│, nada a tratar ÔÇö e engolir erro aqui prenderia o usu├írio numa tela sem outra sa├¡da) e sem repetir o fechamento do cursor (quem fecha ├® o `Destroy`, fonte ├║nica, pelo qual o `Release()` passa).
+
+**BINDEVENT em `ConfigurarEventos`** ÔÇö alvo `cmg_4c_Botoes.Buttons(1)`, n├úo o grupo: o dump traz `Command1.Name = "Command2"` no bloco de propriedades do `Commandgroup1`, ou seja o ├║nico membro (`ButtonCount = 1`) foi **renomeado** para "Command2" ÔÇö logo o `PROCEDURE Command2.Click` da se├º├úo de m├®todos ├® o Click desse bot├úo, n├úo c├│digo morto de um segundo bot├úo removido. Ligar ao grupo n├úo receberia o evento.
+
+## Os 4 nomes CRUD do prompt n├úo se aplicam
+
+Conferido no dump inteiro: `Class: form` **puro** (n├úo `frmcadastro`, logo sem a barra CRUD herdada), **zero** `Grupo_Op`, **zero** `pcEscolha` (vari├ível de modo), e o ├║nico CommandGroup tem `ButtonCount = 1` = o Encerrar. Escrever `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├Áes (viola o PILAR 1) ou criar 4 m├®todos vazios (proibido pela regra de completude). O gate da Fase 7 cobre isso: `legadoSemCrud` + piso de handlers = 1 (superf├¡cie de bot├úo do legado = 1) ÔÇö satisfeito pelo handler acima. Decis├úo registrada no cabe├ºalho do arquivo.
+
+## Verifica├º├Áes
+
+- **Compila limpo** no VFP9 (`automation/CompilarF7SigOpStc807.prg` ÔåÆ `_f7stc_compile.txt`: `FORM FXP=SIM ERR=NAO`)
+- Gate Fase 7: `PROCEDURE Btn*Click` = 1 (`BtnEncerrarClick`)
+- Completude (05d): zero TODO/FIXME/PLACEHOLDER, zero "pendente"/"pr├│xima fase"/"n├úo implement", zero procedure vazia, zero stub com MsgAviso
+- Zero acentos literais (s├│ CHR()); arquivo segue LF, como as fases anteriores o deixaram
+
+Fica para a Fase 8 o fechamento/revis├úo final ÔÇö n├úo h├í outro evento de bot├úo no legado a portar.

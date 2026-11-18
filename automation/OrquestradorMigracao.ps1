@@ -5749,6 +5749,147 @@ function Test-ModoRecebidoDoChamador {
 
 <#
 .SYNOPSIS
+    Diz se TODA ocorrencia VIVA de 'pcEscolha' no dump legado e' apenas o
+    TESTE DE EXISTENCIA da propria property - isto e', o form nao tem modo
+    CRUD nenhum, so pergunta se alguem por acaso definiu um.
+
+.DESCRIPTION
+    Terceira forma de "pcEscolha que NAO prova CRUD", irma de
+    Test-ModoRecebidoDoChamador (modo recebido do chamador) e de
+    Get-ContagemPcEscolhaViva (ocorrencia INERTE - comentada, declaracao da
+    property, inventario do ClassInfo).
+
+    Aqui a ocorrencia e' VIVA e e' do PROPRIO form, mas o que o legado faz com
+    ela e' perguntar se a property EXISTE - e seguir em frente quando nao
+    existe:
+
+        .cmdInserir.Visible = fChecaAcesso('SigOpSqn','INSERIR') And ;
+                              Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+                              InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+
+    O `Type( 'Thisform.PcEscolha' ) # 'C'` e' o idioma Fortyus de "se este form
+    NAO tem modo, libera" - quem o escreve esta dizendo, no proprio codigo, que
+    nao conta com modo algum. No SIGOPSQN ("Sequencia de Operacoes do Caixa",
+    task806) as OITO ocorrencias vivas do dump sao esses quatro pares (um por
+    .Visible/.Enabled de cmdInserir/cmdExcluir), o form NUNCA atribui
+    pcEscolha, pcEscolha NAO e' parametro do Init (`LParameters poForm,
+    pnDataSes`) e a unica outra citacao e' o inventario do ClassInfo - ou seja,
+    property vestigial.
+
+    Sem esta dispensa, a Fase 7 marcava o dump como CRUD (a contagem viva = 8)
+    e exigia os quatro BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/
+    BtnExcluirClick - insatisfazivel sem INVENTAR botao (viola o PILAR 1) ou
+    criar metodo vazio (proibido pela regra de completude), num legado cujos
+    TRES botoes sao cmdInserir (linha da grade) / cmdExcluir (linha da grade) /
+    cmdSair. O 'Grupo_Op' do mesmo dump ja era dispensado por
+    Test-BarraCrudEhDoFormPai (e' a barra do form PAI que o dialogo desabilita
+    enquanto esta aberto), entao a contagem de pcEscolha era a UNICA evidencia
+    que sobrava.
+
+    FAIL-CLOSED em cinco camadas - qualquer duvida devolve $false e preserva o
+    veredito de hoje:
+      (1) dump vazio;
+      (2) 'frmcadastro' presente (a barra CRUD e' do PROPRIO form);
+      (3) o form ATRIBUI pcEscolha em codigo (SECAO 3) - a declaracao da
+          property na SECAO 2 nao conta, e' o cabecalho que o SCX grava para
+          toda custom property;
+      (4) pcEscolha e' PARAMETRO formal de algum metodo (ali o modo chega de
+          fora e e' usado de verdade - caso de Test-ModoRecebidoDoChamador);
+      (5) existe ocorrencia viva FORA de um statement com
+          Type('...pcEscolha...') - um `If pcEscolha = [INSERIR]` solto, por
+          exemplo, continua provando modo.
+
+    As continuacoes de linha do VFP (';' no fim) sao juntadas antes da camada
+    (5): no idioma acima o `Type(...)` e o `InList(...)` ficam em LINHAS
+    diferentes do mesmo statement, e julgar por linha deixaria a segunda sem
+    guarda. Os descontos de ocorrencia inerte sao os mesmos de
+    Get-ContagemPcEscolhaViva (linha comentada, declaracao na SECAO 2,
+    inventario na SECAO 4, leitura no form PAI) - duplicados aqui porque esta
+    funcao precisa classificar ocorrencia POR STATEMENT, nao so contar.
+#>
+function Test-PcEscolhaSoEmTesteDeExistencia {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # (2) a barra CRUD e' do proprio form
+    if ($TextoDump -match 'frmcadastro') { return $false }
+
+    # (4) pcEscolha como parametro formal - modo recebido e usado
+    foreach ($m in [regex]::Matches($TextoDump, '(?im)^\s*(?:LParameters|LParameter|Parameters)\s+(.+)$')) {
+        foreach ($p in ($m.Groups[1].Value -split ',')) {
+            if ($p.Trim() -match '(?i)^pcEscolha$') { return $false }
+        }
+    }
+
+    $secao       = ''
+    $statement   = ''
+    $secaoStmt   = ''
+    $nVivas      = 0
+    $nGuardadas  = 0
+    $temAtribui  = $false
+
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        # Cabecalho de secao do extrator ('* SECAO 2: PROPRIEDADES ...').
+        # Copiado para $secao na hora: o $matches do -match seguinte
+        # sobrescreve este (CLAUDE.md #43).
+        if ($linha -match '^\*\s*SECAO\s+(\d)') {
+            $secao     = $matches[1]
+            $statement = ''
+            continue
+        }
+
+        # (a) linha comentada - '*', '*!*' ou '&&': codigo MORTO
+        if ($linha -match '^\s*(\*|&&)') {
+            $statement = ''
+            continue
+        }
+
+        if ([string]::IsNullOrEmpty($statement)) { $secaoStmt = $secao }
+        $statement = ($statement + ' ' + $linha).Trim()
+
+        # continuacao de linha do VFP: ';' no fim junta com a proxima
+        if ($linha -match ';\s*$') { continue }
+
+        $stmt      = $statement
+        $statement = ''
+
+        $nOcorr = ([regex]::Matches($stmt, '(?i)pcEscolha')).Count
+        if ($nOcorr -eq 0) { continue }
+
+        # (b) declaracao da property no cabecalho do SCX
+        if ($secaoStmt -eq '2' -and $stmt -match '(?i)^pcescolha\s*=') { continue }
+        # (c) inventario de properties do RESERVED3/ClassInfo
+        if ($secaoStmt -eq '4' -and $stmt -match '(?i)^pcescolha$') { continue }
+
+        # (3) atribuicao em CODIGO - o modo e' do proprio form
+        if ($stmt -match '(?im)^(?:ThisForm\.|This\.|\.)?pcEscolha\s*=[^=]' -or
+            $stmt -match '(?i)\.\s*pcEscolha\s*=[^=]') {
+            $temAtribui = $true
+        }
+
+        # (d) modo LIDO do form pai - nao eh modo proprio
+        $nDoPai = ([regex]::Matches($stmt, '(?i)(ParentForm|pForm|oForm|oFormulario|par_oForm)\s*\.\s*pcEscolha')).Count
+
+        $nLive = $nOcorr - $nDoPai
+        if ($nLive -le 0) { continue }
+
+        $nVivas = $nVivas + $nLive
+
+        # (5) o statement testa a EXISTENCIA da property?
+        if ($stmt -match '(?i)Type\s*\(\s*[\[''"][^\]''"]*pcEscolha') {
+            $nGuardadas = $nGuardadas + $nLive
+        }
+    }
+
+    if ($temAtribui) { return $false }
+
+    return (($nVivas -gt 0) -and ($nGuardadas -eq $nVivas))
+}
+<#
+.SYNOPSIS
     Conta as ocorrencias VIVAS de 'pcEscolha' no dump legado - as unicas que
     podem ser evidencia de modo CRUD.
 .DESCRIPTION
@@ -11858,7 +11999,18 @@ function Invoke-MigracaoFase {
                                 # desconta essas E a leitura no pai.
                                 $nPcEscolhaViva = Get-ContagemPcEscolhaViva -TextoDump $txtLegadoF7
                                 if ($nPcEscolhaViva -gt 0) {
-                                    if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF7)) {
+                                    # Terceira forma de "pcEscolha que NAO prova
+                                    # CRUD": ocorrencia VIVA e do PROPRIO form,
+                                    # mas usada SO para testar se a property
+                                    # EXISTE (Type("ThisForm.PcEscolha") # "C").
+                                    # No SIGOPSQN (task806) era a UNICA evidencia
+                                    # que sobrava (o Grupo_Op ja era dispensado
+                                    # por Test-BarraCrudEhDoFormPai) e a fase
+                                    # exigia os quatro BtnXxxClick de um legado
+                                    # cujos botoes sao cmdInserir/cmdExcluir
+                                    # (linha da grade) e cmdSair.
+                                    if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF7) -and
+                                        -not (Test-PcEscolhaSoEmTesteDeExistencia -TextoDump $txtLegadoF7)) {
                                         $temCrudLegado = $true
                                     }
                                 }
@@ -12317,7 +12469,15 @@ function Invoke-MigracaoFase {
                         # exigia dele um BtnSalvarClick inexistente.
                         $nPcEscolhaVivaF8 = Get-ContagemPcEscolhaViva -TextoDump $txtLegadoF8
                         if ($nPcEscolhaVivaF8 -gt 0) {
-                            if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF8)) {
+                            # Terceira forma de "pcEscolha que NAO prova CRUD":
+                            # ocorrencia VIVA e do PROPRIO form, mas usada SO
+                            # para testar se a property EXISTE
+                            # (Type("ThisForm.PcEscolha") # "C") - o legado diz
+                            # no proprio codigo que nao conta com modo algum.
+                            # Helper COMPARTILHADO com a Fase 7 (CLAUDE.md #44
+                            # item 6): predicado identico nas duas fases.
+                            if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF8) -and
+                                -not (Test-PcEscolhaSoEmTesteDeExistencia -TextoDump $txtLegadoF8)) {
                                 $semCrudLegadoF8 = $false
                                 $semCrudRealF8   = $false
                             }

@@ -1,0 +1,26 @@
+CASO 1 - 2 validos / 1 branco / 1 excluida
+  linhas no lote = 2 (esperado 2)
+  chave[1] = [7M0077UQD47751807]
+  chave[2] = [7M0077UQE22223305]
+  alias corrente apos montar = [CURSOR_4C_STATUS] (esperado CURSOR_4C_STATUS)
+  LOTE:
+SET NOCOUNT ON;
+    DECLARE @nivel int = @@TRANCOUNT;
+    IF @nivel = 0 BEGIN TRANSACTION ELSE SAVE TRANSACTION Sts4c;
+    BEGIN TRY DELETE FROM SIGOPSTS WHERE dopes = 'MALOTE';
+    INSERT INTO SIGOPSTS (cidchaves, dopes, status) VALUES ('7M0077UQD47751807', 'MALOTE', 'A');
+    INSERT INTO SIGOPSTS (cidchaves, dopes, status) VALUES ('7M0077UQE22223305', 'MALOTE', 'F');
+    IF @nivel = 0 COMMIT TRANSACTION;
+    END TRY BEGIN CATCH IF @nivel = 0 BEGIN IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+    END ELSE BEGIN IF XACT_STATE() = 1 ROLLBACK TRANSACTION Sts4c;
+    END;
+    THROW;
+    END CATCH
+
+CASO 2 - nenhuma linha valida (usuario apagou tudo)
+  linhas no lote = 0 (esperado 0)
+  tem DELETE = SIM (ok)
+  tem INSERT = NAO (ok)
+
+CASO 3 - apostrofo na operacao (O'BRIEN)
+  trecho do DELETE = [DELETE FROM SIGOPSTS WHERE dopes = 'O''BRIEN'; INSERT INTO S]

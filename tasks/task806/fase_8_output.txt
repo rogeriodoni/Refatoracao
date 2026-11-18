@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada. Arquivo final: `C:\4c\projeto\app\forms\operacionais\FormSigOpSqn.prg` (1924 linhas) + `C:\4c\projeto\app\classes\SigOpSqnBO.prg` (473 linhas).
+
+## O que foi entregue
+
+**Hooks de transporte (c├│digo novo, load-bearing)**
+- `FormParaBO()` e `BOParaForm()` (`PROTECTED PROCEDURE`, confirmado por `PEMSTATUS(...,2)=.T.`). Nasceram de c├│digo que j├í existia **inline e duplicado** em `PersistirSequencias` ÔÇö a atribui├º├úo das 4 properties estava repetida nos dois la├ºos. `BOParaForm` tem trabalho real: devolve ├á linha a chave que o `Inserir()` regenera quando a PK chega vazia (sem isso, um segundo Encerrar mandaria UPDATE/DELETE para um `cidchaves` inexistente, em sil├¬ncio).
+- `SigOpSqnBO.LimparDados()` (override): `NovoRegistro()` o chama **antes** do `FormParaBO`, e sem ele as 4 properties entravam na linha nova com o valor da linha anterior do la├ºo. Zera s├│ a entidade ÔÇö preserva aliases de cursor e contexto do form pai.
+
+**Consolida├º├úo / corre├º├Áes de documenta├º├úo estale**
+- 8 coment├írios "(fase futura)" no form e 4 "fases seguintes" no BO apontavam para coisas j├í entregues nas fases 4ÔÇô7. Corrigidos. O pior: o cabe├ºalho do BO anunciava um m├®todo `SalvarSequencias(...)` que nunca existiu ÔÇö substitu├¡do pela explica├º├úo de por que a persist├¬ncia do cursor inteiro ficou no form (dono ├║nico do estado da sess├úo).
+- Nomes can├┤nicos de CRUD sem referente aqui documentados com o **miolo elidido** (`Btn...larClick`, `Carregar...sta`), para a dispensa do gate n├úo virar no-op por substring.
+
+**Dois m├®todos do legado deliberadamente n├úo transcritos** (documentados no cabe├ºalho, n├úo omitidos): `Load ÔåÆ =fConfigGeral()` (o wrapper em `utils\` pro├¡be uso em c├│digo nosso ÔÇö seria linha sem efeito) e `mctrlbotoes` (a tela desabilita o form pai inteiro; for├ºar `Enabled=.T.` bot├úo a bot├úo atropelaria o `AjustarBotoesPorModo` do pai ÔÇö regra #40). Mesma decis├úo do irm├úo `FormSigOpSno`, j├í entregue.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: 3 arquivos, 0 erros, nenhum `.ERR`; `.FXP` apagados antes e regerados depois (mais novos que os `.prg`).
+- **Probe no VFP9 real** (`automation\ProbeF8SigOpSqn806.prg`): 8 checkpoints, todos no esperado ÔÇö form instancia, hooks PROTECTED, `LimparDados` com escopo certo, `FormParaBO` leva a linha corrente, guarda de EOF devolve `.F.` sem estourar, `BOParaForm` troca s├│ a chave e n├úo toca as outras colunas nem a outra linha.
+- **Gate da Fase 8** rodado standalone: `VALIDADO=True`, `FALTANTES=` vazio. As dispensas *diminu├¡ram* (de 4 nomes para 2) porque `FormParaBO`/`BOParaForm` agora s├úo defini├º├Áes reais.
+- **Validadores do projeto**: `VerificarFuncoesNaoDefinidas` OK, `VerificarMetodoProtegidoChamadoDeFora` OK, `VerificarPropriedadesInexistentes` OK, `VerificarLookupEmKeyPress` ERRO=0. `SigMvCxs` tem 4 colunas, todas NOT NULL, todas cobertas pelo INSERT (regra #22). ├ìndice de classes j├í traz as duas com o fecho de depend├¬ncias.
+
+**Duas suspeitas que medi e descartei** (n├úo eram defeito ÔÇö `automation\_probe_scan_sqn*.prg`): `INSERT INTO <cursor local>` omitindo colunas preenche com **branco/zero, nunca `.NULL.`** mesmo em campo declarado `NULL`, ent├úo o guard `EMPTY(cnivels)` do `CmdInserirClick` funciona; e `SCAN/ENDSCAN` **n├úo** se perde quando o corpo troca a work area, ent├úo os `SQLEXEC` do BO dentro dos la├ºos de `PersistirSequencias` n├úo quebram o percurso.
+
+**Fora de escopo, para a task do pai**: o form pai `SIGCDOPE` (Cadastro de Opera├º├Áes do Caixa) ainda n├úo foi migrado, ent├úo ningu├®m chama `FormSigOpSqn` ainda ÔÇö o contrato de chamada est├í documentado no cabe├ºalho. N├úo h├í item de menu porque ├® di├ílogo filho, n├úo tela de menu.

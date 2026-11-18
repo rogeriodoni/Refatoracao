@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 done. `C:\4c\projeto\app\forms\operacionais\Formsigoptef.prg`
+
+## O que a fase entregou
+
+O template desta fase pede quatro `Btn<verbo>Click` da barra CRUD. Medi no dump antes de escrever: a raiz do SCX ├® `Class: form` (n├úo `frmcadastro`), n├úo h├í Page nem Grid, e a **├║nica** superf├¡cie de bot├úo da tela ├® o CommandGroup `SAIDA` com `ButtonCount = 1` (`SAIDA.CANCELA`, Caption `\<Cancelar`). Gerar os quatro nomes exigiria inventar bot├Áes que o legado n├úo tem. Entreguei o evento de bot├úo que ele de fato tem:
+
+- **`BtnCancelarClick`** ÔÇö transcri├º├úo integral de `SIGOPTEF.SAIDA.CANCELA.Click` (dump 939ÔÇæ943): aborta o protocolo com `ContinuarSiTef(-1)`, marca `this_lCancelado` no BO, grava `IntPos.001/.STS` via `GravarRetornoFalha` e fecha.
+- **`EncerrarDialogo`** ÔÇö ponto ├║nico de sa├¡da, no lugar dos 23 `RELEASE WINDOWS` do dump.
+- **`QueryUnload`** ÔÇö funil + `NODEFAULT`.
+- `KeyPress` passou a chamar `THIS.BtnCancelarClick()` direto; `BINDEVENT` do Click adicionado em `RegistrarEventosCampos`.
+
+**Decis├úo de arquitetura (PILAR 3):** fecha com `Hide()`, n├úo `Release()`. O legado devolvia a autoriza├º├úo pelo `RETURN` do `Unload`, que s├│ chega a quem abre com `DO FORM ... TO`; o sistema novo l├¬ property depois do `Show()`, e em VFP9 o `Release()` destr├│i o objeto mesmo com refer├¬ncia externa viva ÔÇö a tela ficaria sem como devolver nada ao PDV. Para o operador a tela fecha igual.
+
+## Verificado (n├úo s├│ compilado)
+
+| prova | resultado |
+|---|---|
+| smoke test VFP9 + compile (form e BO) | `FXP=SIM ERR=NAO` nos dois |
+| gate da Fase 7 standalone | `VALIDADO=True` via `legadoSemCrud=True`, `nBotoesLegado=1`, `nHandlers=1`, piso=1 |
+| `Test-CompletudeCodigo` | OK no form e no BO |
+| 3 caminhos de sa├¡da (`ProbeF7Task809.prg`) | Cancelar / ESC / Alt+F4 ÔåÆ objeto **vivo** (`O`), `Visible=.F.`, property leg├¡vel, `Release()` do chamador ÔåÆ `X` |
+| controle negativo (`ControleNegativoF7Task809.prg`) | sem o `QueryUnload`: `VARTYPE=X` + `LOF is not an object.` ÔÇö reproduziu o defeito |
+| auditorias (m├®todo protegido, fun├º├úo n├úo definida, propriedade inexistente) | zero achados neste arquivo |
+
+Uma ressalva de m├®todo: na primeira rodada o gate passou **pelo motivo errado** ÔÇö meu coment├írio de cabe├ºalho citava os quatro nomes CRUD por extenso e o gate casa nome em texto livre. Reescrevi em forma gen├®rica; s├│ ent├úo ele passou pelo carve-out real.
+
+## Pendente para a Fase 8 (registrado no cabe├ºalho do `.prg`)
+
+O la├ºo de protocolo (`GetDigitos.Valid/GotFocus`, `GetParcela.LostFocus`, `GetCartao.GotFocus`, `GetCodSeg.LostFocus`, `Text1.Valid` ÔÇö seis variantes do mesmo di├ílogo com a DLL) e o `Unload`. **O c├ílculo desse retorno tem de ser cacheado dentro de `EncerrarDialogo()`, antes do `Hide()`** ÔÇö com `Hide()` o `Destroy` roda s├│ quando o chamador liberar, tarde demais para quem l├¬ logo ap├│s o `Show()`. Deixei isso escrito no pr├│prio m├®todo.

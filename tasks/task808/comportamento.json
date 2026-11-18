@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSTS",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = 'Status das Operações ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   Thisfo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcOperacao, lnRecNo, loBrowse\n\nlcDopes = crSigCdOpe.Dopes\n\nIf Not IsEmpty(This.Value)\n\txBrox = CreateObject('fwbuscaext',ThisForm.ParentForm.poDatamgr.pnIdconn,'SigStats','CrListaRemota','Cods',This.Value,'Seleção',.t.,'Cods')\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Cods', '', 'Código', .t.)\t\n\t\txBrox.mAddColuna('Descs', '', 'Descrição',.t.)\n\t\txBrox.Show()\n\tEndIf \n\tThis.Value = CrListaRemota.Cods\n\tReplace Descs With CrListaRemota.Descs in LocalStats\n\tThis.Refresh\nEndIf\nSelect Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Empty( LocalStats.status ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.cmdExcluir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select LocalStats\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.cmdSair",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\t\tSelect LocalStats\n\t\tGo Bottom\n\t\tGo Top\n\t\t\n\t\tSelect status,sum(1) as TT From LocalStats GROUP by 1 Into cursor Totais\n\t\tSelect Totais\n\t\tScan\n\t\t\tIf TT > 1\n\t\t\t\tMessageBox('Status '+Alltrim(Totais.status)+' Digitado em Duplicidade!!!!',0+16,'Atenção')\n\t\t\t\tReturn .f.\n\t\t\tEndIf\n\t\tEndScan\n\t\t\n\t\tSelect CrSIGOPSTS\n\t\tZap\n\t\tSelect LocalStats\n\t\tScan\n\t\t\tScatter Memvar\n\t\t\tIf Empty(m.status)\n\t\t\t\tLoop... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPSTS.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect LocalStats\nLocate for Dopes = crSigCdOpe.Dopes And status = ' '\nIf Eof()\n\tInsert Into LocalStats (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\n\nSelect LocalStats\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSTS.cmdSair.Click",
+      "queryOriginal": "\t\tSelect status,sum(1) as TT From LocalStats GROUP by 1 Into cursor Totais",
+      "tabelas": "LocalStats",
+      "colunas": "status",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPSTS.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into LocalStats (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "LocalStats",
+      "colunas": "Dopes,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalStats"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

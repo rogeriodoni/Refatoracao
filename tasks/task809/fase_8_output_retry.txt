@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e aprovada pelo gate.
+
+## O que estava faltando (medido, n├úo adivinhado)
+
+Rodei o `case 8` do `OrquestradorMigracao.ps1` standalone (AST-only, sem disparar migra├º├úo). A reprova├º├úo era por **um ├║nico predicado**:
+
+```
+FALTANTES=BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)
+```
+
+Os quatro nomes can├┤nicos j├í vinham dispensados pelo ramo **fluxo-├║nico**. O ├║nico bloco aplic├ível para liberar a exig├¬ncia de bot├úo de a├º├úo ├® o **protocolo bruto** (`$legadoProtocoloBrutoF8`, task683) ÔÇö e todas as provas do lado do LEGADO j├í passavam (`temDllExternaF8=True`, `semGradeProtocoloF8=True`, `nBotoes=1`, `semCrud`, `semSalvar`). O que faltava era no lado do MIGRADO: `$temSuperficieProtF8` exige `FormParaBO` **+** `BOParaForm` **+** `Btn*Click` ancorados em in├¡cio de linha, e o form tinha os dois ├║ltimos mas **nenhum `FormParaBO`** ÔÇö nem em coment├írio.
+
+## O que implementei
+
+N├úo inventei bot├úo nem m├®todo vazio. `FormParaBO` ├® trabalho real aqui: os campos digit├íveis da tela s├úo exatamente o que alimenta o `Buffer` enviado ├á `CliSiTef32I.DLL`.
+
+**`sigoptefBO.prg`** ÔÇö 6 properties para os campos da tela (`this_cValorPago`, `this_cDigitosCartao`, `this_cRespParcelamento`, `this_cNumeroCartao`, `this_cCodSeguranca`, `this_cQtdParcelas`), mais `AplicarCamposDigitados()` e `NormalizarTexto()`. O guard ├® por **`PCOUNT()`**, n├úo por tipo: par├ómetro omitido chega como L├│gico `.F.`, e um `VARTYPE()="L"` sobrescreveria a property com o texto de um `.F.`.
+
+**`Formsigoptef.prg`** ÔÇö `PROTECTED PROCEDURE FormParaBO()` (PROTECTED expl├¡cito: o escopo vem da heran├ºa e o VFP9 n├úo deixa alargar) + `LerCampoDaTela()`, que alcan├ºa o membro por `EVALUATE`, nunca por `Controls(<nome>)` (regra #34). Est├í no **caminho vivo**: os 5 handlers `*Exec` do protocolo chamam `THIS.FormParaBO()` antes do la├ºo e passaram a ler o valor da property do BO em vez de reler o `.Value` ÔÇö fonte ├║nica, porque o la├ºo abre modal e mexe em `.Enabled`/`.SetFocus`.
+
+## Provas
+
+| verifica├º├úo | resultado |
+|---|---|
+| Compila├º├úo VFP9 (BO + Form) | `FXP=SIM ERR=NAO` nos dois |
+| `EVALUATE("THIS."+nome+".Value")` em m├®todo | resolve; controle ausente ÔåÆ `""`; num├®rico ÔåÆ `VARTYPE=N` e normalizado |
+| `PCOUNT()` com 2 de 6 args | os 4 omitidos ficam intactos (confirmado) |
+| Gate Fase 8 standalone | `FALTANTES=` / **`VEREDITO=PASSA`**, pelo ramo protocolo-DLL |
+| `Test-CompletudeCodigo` (a do pr├│prio orquestrador) | `FORM=True`, `BO=True` ÔÇö zero TODO/stub |
+| `ValidadorSQLSchema` | 683 tabelas, `PASSOU` |
+| `TestFormWrapper` (harness oficial) | `Status: SUCESSO`, form abre 500x370 e fecha |
+
+Artefatos deixados em `automation\`: `VerificarGateFase8Task809.ps1` (reproduz o veredito), `CompilarF8SigOpTef809.prg`, `ProbeF8TefEvaluate809.prg`, `ProbeF8TefInstancia809.prg` e as sa├¡das `_f8tef_*`.
+
+Uma ressalva honesta sobre escopo: o teste de instancia├º├úo prova que o `Init` n├úo quebrou, mas **n├úo** exercita o la├ºo do SiTef ÔÇö isso exigiria a `CliSiTef32I.DLL` e um terminal, que n├úo existem nesta m├íquina (`this_lSiTefDisponivel` nasce `.F.` justamente por isso). A transfer├¬ncia telaÔåÆBO est├í medida isoladamente; o protocolo em si s├│ se confirma em ambiente com o terminal.

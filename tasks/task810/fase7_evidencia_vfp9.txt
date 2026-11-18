@@ -1,0 +1,114 @@
+FASE 7/8 - FormSigOpTlo - EVIDENCIA DE VERIFICACAO EM VFP9
+Data: 2026-11-18
+
+--- 1) O QUE A FASE 7 PEDE x O QUE O LEGADO TEM ---
+A fase pede os 4 handlers de botao CRUD (Btn<Incluir|Alterar|Visualizar|
+Excluir>Click). O legado SIGOPTLO nao tem CRUD algum:
+
+  Class/BaseClass do form ........ form / form (nao frmcadastro)
+  commandbutton no SCX ........... 1  ("Sa?da", Cancel = .T.)
+  commandgroup no SCX ............ 0
+  eventos de clique no dump ...... 1  (Sa?da.Click = "ThisForm.Release")
+  pcEscolha / Grupo_Op ........... ausentes
+  AddCursor / TableUpdate ........ ausentes (a tela so LE cursores do pai)
+
+Gate da Fase 7 do OrquestradorMigracao.ps1, rodado STANDALONE sobre o form
+desta fase (funcoes carregadas por AST, sem dot-source, seed
+TaskPath/BaseName/FormType/formFile):
+
+  [i] Fase 7: legado sem botao CRUD e com UM UNICO botao no SCX -
+      validado pelo(s) 1 handler(s) desse botao
+  VALIDADO=True   FALTANTES=(vazio)
+  nHandlers=1  nBotoesLegado=1  minHandlersF7=1  legadoSemCrud=True
+
+Os quatro nomes NAO foram escritos nem em comentario: o gate procura cada um
+por texto no arquivo inteiro, entao cita-los faria a fase passar pelo motivo
+errado e esconderia a prova acima.
+
+Test-CompletudeCodigo -> [OK] nenhum TODO/stub/procedure vazia detectado.
+
+--- 2) ENTREGAVEL DA FASE: o fecho do Init legado que faltava ---
+O bloco final do Init do SCX nunca tinha sido portado:
+
+    If CrSigCdPam.PerLocals
+        ThisForm.lb_TotLIdo.Caption    = Str(lnTetQReadL,5)
+        ThisForm.lb_TotEstoque.Caption = Str(lnTetQLoad,5)
+        ThisForm.Leitura.Caption       = Transform(lnPercLeit,'@Z 9999.99%')
+    EndIf
+
+Acrescentados ConfigurarRodapeTotais() (Label1, Label2, lb_TotLido,
+lb_TotEstoque e leitura, transcritos do dump) e AtualizarTotais() (PUBLIC),
+chamado DENTRO de CarregarDados() - o mesmo funil que repinta a grade, para
+grade e rodape nunca divergirem (regra #21). A formatacao e o gate do
+parametro ja estavam no BO (ObterTextoTotalLido / ObterTextoTotalEstoque /
+ObterTextoPercLeitura), que passa a ser consumido.
+
+--- 3) DESVIO DELIBERADO: Width dos 3 labels de VALOR ---
+O SCX grava Width = 2 em lb_TotLido, lb_TotEstoque e leitura (Caption = "" no
+Form Designer) e NAO declara AutoSize - Label nasce AutoSize = .F., e eh por
+isso que a Height deles eh 17 contra os 15 dos auto-size vizinhos. Com 2px o
+texto que o Init atribui fica CORTADO: o rodape apareceria vazio, sem erro e
+sem log (regras #23/#30 - defeito HERDADO do SCX, que comparar migrado x
+legado nunca pega porque os dois concordam).
+
+Largura MEDIDA no VFP9 (automation\_tmp810\medir810b.prg,
+TXTWIDTH * FONTMETRIC(6), Tahoma 8):
+
+  unidade Tahoma 8 .............. 5
+  STR(99999, 5)   = "99999" ..... 30px  -> Width = 32
+  "@Z 9999.99%"   = "9999.99%" .. 51px  -> Width = 53
+  "Lido :" ...................... 26px  (SCX gravou 28)
+  "Estoque :" ................... 46px  (SCX gravou 48)
+
+O +2 eh a MESMA margem que o Form Designer gravou nos labels auto-size, logo a
+largura nova segue a regra do proprio legado. Nada invade vizinho: a direita
+de Left+Width (295 nos totais, 363 no percentual) nao ha controle nessas
+linhas; a grade termina em Top = 277 e o ultimo rotulo fecha em 344, dentro da
+Height 361 do form.
+
+--- 4) COMPILACAO ---
+COMPILE FormSigOpTlo.prg (FXP apagado antes):
+  FXP=SIM
+  ERR=NAO
+
+--- 5) PROBE DE INSTANCIACAO (automation\ProbeF7SigOpTlo810.prg) ---
+Saida integral em automation\_f7tlo_probe.txt:
+
+CHECKPOINT 1 - script vivo
+CHECKPOINT 2 - dependencias OK
+
+=== CENARIO A: sem cursores do chamador, perlocals ausente ===
+VARTYPE(loForm)=O
+lbl_4c_Label1 existe=.T. Caption=[Lido :] L/T/W/H=227/282/28/15
+lbl_4c_Label2 Caption=[Estoque :] L/T/W/H=205/299/48/15
+PerLocals do BO=.F.
+TotLido Caption=[] (esperado vazio)
+TotEstoque Caption=[] (esperado vazio)
+Leitura Caption=[] (esperado vazio)
+AtualizarTotais PROTECTED(2)=.F. (esperado .F.)
+AtualizarTotais() de fora=.T.
+cmd_4c_Saida existe=.T. BtnSaidaClick existe=.T.
+
+=== CENARIO B: cursores do chamador, perlocals = .T. ===
+VARTYPE(loForm)=O
+PerLocals do BO=.T.
+TotalLido=18 TotalEstoque=4 Perc=450
+TotLido    Caption=[   18] Width=32 textoPx=21 CABE=SIM
+TotEstoque Caption=[    4] Width=32 textoPx=18 CABE=SIM
+Leitura    Caption=[ 450,00%] Width=53 textoPx=48 CABE=SIM
+SCX usava Width=2: CABERIA=NAO
+Recarregar()=.T. TotLido apos=[   18]
+RECCOUNT(cursor_4c_Locais)=2 (esperado 2)
+
+FIM DO PROBE
+
+Leitura: com perlocals DESLIGADO o rodape fica vazio, igual ao legado; com ele
+ligado os tres numeros aparecem e CABEM na largura nova, enquanto os 2px do
+SCX nao caberiam - prova direta do desvio do item 3. O probe nao toca o banco
+(gnConnHandle = -1, e o BO cai no caminho "sem conexao").
+
+--- 6) PENDENCIA CONHECIDA, FORA DESTA FASE ---
+Nenhum form do projeto abre FormSigOpTlo ainda: o FormBAL migrado nao tem os
+botoes de total por local do SIGCDBAL (ver memoria
+project_formbal_acerto_inventario_ausente). Enquanto isso nao for feito, este
+dialogo so eh alcancavel por CREATEOBJECT direto, como no probe.

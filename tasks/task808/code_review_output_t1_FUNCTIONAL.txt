@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+That's fine ÔÇö BO's FUNCTION/ENDFUNC pairs are balanced and weren't among the flagged findings (none of those are called externally in a way that tripped the checker).
+
+## Summary
+
+All 6 findings traced back to the same file and resolved:
+
+1. **Two METODO-INEXISTENTE for `GarantirCelulaStatus()`/`PossuiAcessoOperacao()`** ÔÇö both methods already existed and were called correctly via `THIS.` from inside the class, but were declared as `FUNCTION`/`ENDFUNC` instead of `PROCEDURE`/`ENDPROC`, which is literally what the checker's "not defined as PROCEDURE" rule was keying on. Converted both to `PROCEDURE`/`ENDPROC` (behavior-identical in VFP9, `RETURN` works the same in both).
+2. **METODO-INEXISTENTE for `THIS.Width()`** ÔÇö no such call exists anywhere; the comment at line 632 read `THIS.Width (canonico da faixa, regra #11) em`, whose space-then-paren shape was mis-parsed by the checker as a call. Reworded the comment.
+3. **Two MADDCOLUNA-PARAMS findings** ÔÇö no 4-arg call exists in real code (the live calls already use 3 args correctly); the match was a doc-comment transcribing the legacy `fwbuscaext` pseudocode verbatim with 4 args. Reworded to prose so it no longer parses as a call signature.
+4. **GRID-WITH** ÔÇö `ConfigurarGrade`/`VincularGrade` already set `RecordSource`/`ColumnCount` outside any `WITH` that touches `.Column1`/`.Column2`. The match was the `VincularGrade` doc-comment quoting the legacy `With Thisform.GradeSubN / .RecordSource.../.Column1.ControlSource...` block. Reworded to prose.
+
+No logic, SQL, visual properties, or business rules were touched ÔÇö only two FUNCTIONÔåÆPROCEDURE keyword swaps and three comment rewordings.

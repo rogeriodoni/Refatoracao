@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1 conclu├¡da.
+
+**Arquivo criado**: `C:\4c\projeto\app\classes\SigOpStsBO.prg` (9.594 bytes, CRLF, 100% ASCII ÔÇö zero literal acentuado)
+
+**O que foi entregue**
+
+`DEFINE CLASS SigOpStsBO AS BusinessBase` com **13 propriedades** declaradas, extra├¡das do dump legado (`SigOpSts_form_codigo_fonte.txt`) e conferidas contra `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14):
+
+| Grupo | Propriedades | Origem |
+|---|---|---|
+| Entidade `SIGOPSTS` | `this_cCidChaves` (char 20, PK), `this_cDopes` (char 20), `this_cStatus` (char 1) | as **3 ├║nicas** colunas da tabela ÔÇö todas NOT NULL, logo o INSERT cobrir├í a tabela inteira (regra #22) |
+| Exibi├º├úo | `this_cDescs` | `SigStats.descs` char(20) ÔÇö vem do join `b.Descs` do SELECT do Init legado, alimenta a Column2 (que ├® `When = .F.`), **nunca** entra no INSERT |
+| Contexto do pai | `this_cOperacaoPai`, `this_cEscolha`, `this_nDataSessionPai` | `Init(poForm, pnDataSes, pcEscolha)` + `crSigCdOpe.Dopes` |
+| Estado da sess├úo | `this_lHouveInclusao`, `this_lHouveExclusao` | `lhouveins`/`lhouveexcl` do SCX |
+| Valida├º├úo | `this_cStatusDuplicado` | carrega o c├│digo repetido para a mensagem literal do legado |
+| Aliases | `this_cCursorStatus`, `this_cCursorBusca`, `this_cCursorTotais` | `LocalStats`, `CrListaRemota`, `Totais` |
+
+`Init()` faz `DODEFAULT()` (sem passar a tabela ÔÇö `BusinessBase.Init(pcTabela)` s├│ serve para instanciar `DataAccess`, e esta entidade grava por SQL pr├│prio em transa├º├úo, como o legado), define `this_cTabela = "SIGOPSTS"` / `this_cCampoChave = "cidchaves"`, rep├Áe o estado inicial da sess├úo e `RETURN .T.` (fora de qualquer TRY).
+
+**Decis├Áes registradas no cabe├ºalho** (para as fases seguintes n├úo divergirem): a grava├º├úo do legado ├® **replace-all** (`Delete From SIGOPSTS Where Dopes = ...` ÔåÆ re-insert de todas as linhas com `fUniqueIds()`, pulando status em branco, dentro de transa├º├úo com RollBack) e pertence a este BO; as flags de sess├úo t├¬m **dono ├║nico aqui** (duas c├│pias divergiriam em sil├¬ncio e o Encerrar leria a errada); `fChecaAcesso('SIGOPSTS', ...)` fica no **form** ÔÇö cham├í-la no `Init` do BO tornaria a cria├º├úo do objeto dependente de banco e pendura probe.
+
+**Verifica├º├úo**: `COMPILE` no VFP9 gerou o `.FXP` **sem gerar `.ERR`** ÔÇö compila limpo. Removi o `.FXP` em seguida para as pr├│ximas fases n├úo rodarem p-code velho; o `.prg` ├® o ├║nico artefato que ficou.

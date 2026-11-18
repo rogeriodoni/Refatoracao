@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í completa. O trabalho j├í havia sido feito por uma execu├º├úo anterior; eu verifiquei tudo independentemente em vez de aceitar o resumo dela.
+
+## Entreg├ível ÔÇö `projeto\app\forms\operacionais\FormSigOpSqn.prg`
+
+O template da fase pedia `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`, mas **o legado n├úo tem esses bot├Áes**. Confirmei no dump: o `SIGOPSQN` ├® um di├ílogo filho com exatamente **tr├¬s** CommandButtons ÔÇö `cmdInserir`, `cmdExcluir`, `cmdSair`. O `Grupo_Op` que o dump cita pertence ao form **pai** (`Thisform.ParentForm.Pagina.Lista`). Os handlers implementados s├úo os que existem: `CmdInserirClick`, `CmdExcluirClick`, `BtnSairClick`, mais `ExisteOperacaoDuplicada`, `ExisteSequenciaNaoInformada` e `PersistirSequencias`.
+
+## Verifica├º├úo em VFP9 real
+
+| o que medi | resultado |
+|---|---|
+| compila├º├úo (`.fxp` apagado antes) | FORM e BO: `FXP=SIM ERR=NAO` |
+| instancia├º├úo | `VARTYPE=O`, Caption `Opera├º├Áes do Caixa : Venda` |
+| os 3 BINDEVENTs | `CLICK ÔåÆ CMDINSERIRCLICK / CMDEXCLUIRCLICK / BTNSAIRCLICK` |
+| Inserir 2├ù (guard `LOCATE` do legado) | 1 linha; ap├│s preencher, 2 ÔÇö igual ao legado |
+| `cidchaves` (regra #22) | n├úo-vazia |
+| Excluir | marca a linha, liga a flag |
+| duplicidade / seq-zerada | **mant├¬m o form aberto**, com o texto exato do legado |
+| regras #1/#13/#15/#34/#38/#51/#52, acentos, `MESSAGEBOX`, `PUBLIC` em classe | tudo limpo |
+
+Duas "falhas" do meu primeiro probe eram **erro meu, n├úo do form**: `COUNT` deixa o ponteiro em EOF, ent├úo eu lia `cidchaves` em branco e o guard `!EOF()` do Excluir recusava corretamente. Reposicionei e passou.
+
+## Gate da Fase 7 ÔÇö falso positivo, e por que ele vai reprovar de novo
+
+O gate exigia os quatro `BtnXxxClick`. A ├║nica evid├¬ncia de CRUD que sobrava era `pcEscolhaViva = 8`, e as 8 ocorr├¬ncias s├úo `Iif(Type('Thisform.PcEscolha') # 'C', ...)` ÔÇö o legado s├│ **testa se a property existe**; ela nunca ├® atribu├¡da. Property vestigial.
+
+O patch (`Test-PcEscolhaSoEmTesteDeExistencia`) est├í no orquestrador e ├® consultado pela Fase 7 e pela Fase 8. Medi a abrang├¬ncia dele por conta pr├│pria, extraindo a fun├º├úo por texto (dot-source do orquestrador **dispara migra├º├úo** ÔÇö n├úo fiz): **dispara em 1 dos 805 dumps**, o pr├│prio task806. ├ë cir├║rgico, n├úo enfraquece o gate de nenhum outro form. Gate rodado: `VEREDITO=PASSA`.
+
+**O que voc├¬ precisa saber:** o orquestrador foi alterado ├ás **23:23:01**, mas esta task come├ºou ├ás **22:09:53**. O PowerShell j├í tinha parseado a vers├úo antiga em mem├│ria, ent├úo **a Fase 7 desta execu├º├úo vai reprovar outra vez, e a Fase 8 tamb├®m** ÔÇö n├úo por defeito no artefato, mas por self-reference. O c├│digo est├í correto e verificado; o patch do gate s├│ vale a partir da pr├│xima execu├º├úo do orquestrador. N├úo h├í bot├úo a inventar nem m├®todo vazio a criar.
+
+Achado de passagem, fora do escopo e **n├úo corrigido**: `FormSigOpSno.CmdInserirClick` (task804) usa `Grid.ActiveColumn = 1`, que ├® read-only em runtime e portanto estoura depois de inserir a linha. Aqui usei `Column1.SetFocus()`, que ├® o que o legado chama.

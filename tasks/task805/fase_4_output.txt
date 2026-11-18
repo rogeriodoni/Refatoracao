@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpSpr.prg` (548 ÔåÆ 1142 linhas).
+
+## O que foi entregue
+
+Como este ├® um form **OPERACIONAL FLAT** (sem PageFrame), n├úo h├í `ConfigurarPaginaLista`/`AlternarPagina` ÔÇö o ramo FLAT do gate pede grade + bot├Áes + funil de carga, e ├® isso que o legado tem:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `ConfigurarGrade()` | `grdProdutos` ÔåÆ `grd_4c_Dados` (Top 192 / Left 190 / 420x309, ColumnCount 2, HeaderHeight/RowHeight 17, GridLineColor 238,238,238, edit├ível) |
+| `AplicarFormatoGrade()` **PUBLIC** | fonte ├║nica de `Column.Width` (108/290 = 398 Ôëñ 420) e dos headers "C├│digo"/"Descri├º├úo" (Alignment 2, ForeColor 36,84,155) |
+| `ConfigurarBotoesAcao()` | `cmdEscolha` ÔåÆ `cmg_4c_CmdEscolha` (Inserir/Excluir), `cmdSalva` ÔåÆ `cmg_4c_CmdSalva` (Encerrar, `Cancel=.T.`), + `img_4c_ImgBarra1/2` |
+| `AplicarVisibilidadePorContexto()` **PUBLIC** | `.cmdEscolha.Visible = InList(pcEscolha, [INSERIR],[ALTERAR])` |
+| `CarregarDados()` **PUBLIC** | bloco do `Init`: `Go Top` + `RecordSource`/`ControlSource` + `Refresh` |
+| `GarantirLinhaEmBranco()` **PUBLIC** | `Select ... Where Empty(CPros) Into Cursor LocalBrancos` + `Append Blank` |
+
+Decis├Áes que vale registrar:
+- **Nomes `cmg_4c_`, n├úo `obj_4c_`** como o `mapeamento.json` trazia (o `obj_4c_` vem do gerador n├úo reconhecer `CommandGroup`, e reprova o gate). Corrigi o `mapeamento.json` junto ÔÇö inclusive as Columns, que estavam mapeadas para `Page_4c_1`, e os dois `Header1`, que colidiam em `obj_4c_Header1`.
+- **O bind da grade entrou aqui**, n├úo na Fase 6 como o cabe├ºalho da Fase 3 previa ÔÇö o gate FLAT exige o funil de carga, e o bloco do `Init` legado (posicionar + ligar + linha em branco + repintar) ├® coeso. A Fase 6 fica s├│ com o lookup (`Valid` das duas colunas).
+- **`SetFocus` do legado n├úo foi reproduzido** no `Init`: o form ainda n├úo est├í exibido e `SetFocus` em controle invis├¡vel estoura. O `TabIndex = 1` da grade d├í o mesmo foco inicial.
+- `TornarControlesVisiveis` ganhou lista de exce├º├úo para as `ImgBarra*`, que nascem `Visible = .F.` no SCX.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (`FXP=SIM ERR=NAO`) e instancia├º├úo provada nos dois cen├írios, com o objeto vivo:
+
+- **Sem o cursor do pai** (caminho do harness): `VARTYPE=O`, `RecordSource=[]` sem *Alias is not found*, larguras `108/290` e headers corretos mesmo assim, `CarregarDados()` de fora devolveu `.F.` **sem estourar**, os 4 m├®todos novos confirmados PUBLIC (`PEMSTATUS(...,2) = .F.`), `ImgBarra1/2` continuaram invis├¡veis.
+- **Com `cursor_4c_Produtos`** (2 linhas): bind completo, larguras/headers **preservados depois do bind**, `RECCOUNT` 2 ÔåÆ 3 (linha em branco acrescentada), 2┬¬ chamada idempotente (segue 3), cursor tempor├írio fechado e o cursor do pai **sobreviveu** ao `Release`.
+- Z-order: `CNT_4C_SOMBRA | GRD_4C_DADOS | CMG_4C_CMDESCOLHA | IMG_4C_IMGBARRA1 | CMG_4C_CMDSALVA | IMG_4C_IMGBARRA2` ÔÇö a faixa ├® o primeiro filho e os grupos (Top = -1) desenham por cima dela, como manda a regra #11.
+- Os tr├¬s predicados do gate FLAT: `grade=True botoes=True carga=True`; ramo PAGINADO n├úo dispara; sem TODO/stub.
+
+A evid├¬ncia ficou em `automation\Probe805F4.prg` / `automation\probe805f4.txt`.

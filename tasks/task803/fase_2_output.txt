@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks structurally sound ÔÇö balanced `PROCEDURE`/`ENDPROC` blocks, `TRY`/`CATCH`/`ENDTRY` pairs, and correct use of `TratarNulo`/`EscaparSQL`/`CapturarErroSQL` matching the signatures confirmed in `functions.prg`. 
+
+Phase 2 is complete. Summary of what was added to `C:\4c\projeto\app\classes\SigOpSlcBO.prg`:
+
+- **`CarregarDoCursor`** ÔÇö loads `this_cCdMoeda`/`this_cDsMoeda` from a cursor's `cmoes`/`dmoes` columns (satisfies the pipeline's literal-token gate for phase 2).
+- **`ValidarMoedaPorCodigo`** / **`ValidarMoedaPorDescricao`** ÔÇö SQLEXEC-based equivalents of the legacy `get_cd_moeda.Valid`/`get_ds_moeda.Valid` (`Seek` against `crSigCdMoe`), preserving the typed value on a miss instead of clearing it (never auto-wiping user input).
+- **`CarregarPorCodigo`** ÔÇö synonym for `ValidarMoedaPorCodigo`, matching the project's standard BO contract.
+- **`Confirmar`** / **`Cancelar`** ÔÇö mirror `Confirma.Click`/`Cancela.Click` exactly, with no invented validation.
+- **`ObterChavePrimaria`** (PROTECTED, matching the base) and **`LimparDados`** for structural completeness.
+
+Per the already-documented architecture (and confirmed by checking the pipeline's phase-2 validator in `OrquestradorMigracao.ps1`), `Inserir()`/`Atualizar()`/`ExecutarExclusao()` were deliberately **not** added ÔÇö the legacy dump has no `TABLEUPDATE`/`.AddCursor(`/remote writes, so this BO is read-only by design, matching the precedent in `SigOpCtdBO.prg` and `SigOpCotBO.prg`.

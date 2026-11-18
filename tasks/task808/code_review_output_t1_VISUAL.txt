@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado do pass VISUAL
+
+N├úo aplicado ÔÇö o ├║nico achado (`TITULO-NAO-PROPAGADO`) ├® falso positivo.
+
+Verifiquei `FormSigOpSts.prg`:
+- O form **n├úo tem `pgf_4c_Paginas` pr├│prio** (as ├║nicas ocorr├¬ncias s├úo `THIS.this_oFormPai.pgf_4c_Paginas`, usadas s├│ para calcular posi├º├úo do di├ílogo ao lado da grade do pai). Aplicar o path sugerido (`THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra...`) estouraria `Property PGF_4C_PAGINAS is not found`.
+- O container real ├® `cnt_4c_Cabecalho`, criado direto em `THIS` por `ConfigurarPageFrame()` (linha 458), chamado **depois** de `THIS.Caption` j├í estar montado dinamicamente (linhas 444-445: `"Status das Opera├º├Áes " + ...`).
+- `lbl_4c_Sombra` (linha 671) e `lbl_4c_Titulo` (linha 693) j├í fazem `.Caption = THIS.Caption` dentro do pr├│prio `WITH` de cria├º├úo ÔÇö a propaga├º├úo j├í existe e na ordem correta.
+
+Esse ├® exatamente o mesmo padr├úo do di├ílogo irm├úo `FormSigOpSqn.prg`, revisado nesta mesma sess├úo, e reincide uma li├º├úo j├í catalogada ~50 vezes na mem├│ria (`feedback_titulo_nao_propagado_falso_positivo.md`). N├úo toquei em nenhuma propriedade visual (alinhamento dos bot├Áes Inserir/Excluir/Sair j├í est├í consistente, Top=3 nos tr├¬s; `FontName = "Comic Sans MS"` n├úo foi reportado como problema e n├úo deve ser alterado sem confirma├º├úo do dump legado).
+
+Registrei esta reincid├¬ncia na mem├│ria para refor├ºar o padr├úo. Nenhum arquivo de c├│digo foi alterado.

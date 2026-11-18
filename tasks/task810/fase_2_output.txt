@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da ÔÇö `projeto/app/classes/SigOpTloBO.prg` (334 ÔåÆ 866 linhas, CRLF preservado).
+
+## O que entrou
+
+| M├®todo | Papel |
+|---|---|
+| `CriarCursorLocais()` | cursor de totais com as larguras e o ├¡ndice do `Create Cursor TmpLocal` do pai; `ZAP` se j├í aberto (o `Select TmpLocal / Zap` do legado), cercado por `SET SAFETY OFF` |
+| `CarregarDoCursor(alias)` | **fonte ├║nica** de leitura de uma linha (`Localis`/`Leitura`/`ReLeitura`), cada coluna sob `TYPE(...) != "U"`, guarda de EOF, `PADR(...,10)` na chave |
+| `AgregarLeituras(alias)` | transcri├º├úo literal do 1┬║ `Scan` (Seek ÔåÆ insere local ÔåÆ soma por `tipos` 1/2; `tipos` fora de {1,2} ignorado) |
+| `CalcularTotalLido()` | 2┬║ `Scan`: releitura **substitui** leitura, nunca soma; `lnTetQReadR` fica em 0 como no legado |
+| `CalcularPercentuais(alias)` | `RecCount` com piso 1 + os dois percentuais |
+| `TotalizarLocais(tipo, online)` | corpo do `Init`: modo por `PCOUNT()`, `Go Bottom` s├│ no ramo OFFLINE, `Go Top` ao final |
+| `Buscar()` | redirecionado para a totaliza├º├úo ÔÇö o `SQLEXEC` herdado traria `SigIvTrH` inteira **e** perderia as leituras da sess├úo, que s├│ existem no cursor do pai |
+| `ObterTexto*` (3) | r├│tulos do rodap├® com `Str(x,5)` / `'@Z 9999.99%'` e o gate `CrSigCdPam.PerLocals` (desligado ÔåÆ string vazia) |
+
+## Verifica├º├úo (n├úo ├® "compilou, logo est├í certo")
+
+Smoke test provou que o `vfp9.exe` executa nesta sess├úo; depois `COMPILE` ÔåÆ `FXP=SIM ERR=NAO`; e um probe (`automation\ProbeF2SigOpTlo810.prg`) rodou a totaliza├º├úo com cursores no lugar dos do pai, nos dois modos. Todas as asser├º├Áes bateram: 3 locais (L001 15/0, L002 7/3, L003 0/0 ÔÇö o `tipos=3` entra como local e ├® ignorado), `TotalLido=18`, `Estoque=4`, `Perc=450`, linha corrente = L001, `RECNO` do hist├│rico = 5 (o `Go Bottom`); ONLINE 1 linha / 20 / 1000 com `RECNO` em EOF (sem `Go Bottom`, como o legado); r├│tulos `[]`/`[   18]`/`[ 450.00%]`; cursor ausente devolve `.F.` com mensagem, sem estourar.
+
+## Um ponto para voc├¬ saber
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()` **n├úo** foram sobrescritos ÔÇö a tela n├úo grava (sem `TableUpdate`, sem `.AddCursor`, os dois ├║nicos `Insert Into` v├úo para `TmpLocal`). Mas a exce├º├úo "BO somente-leitura" do gate da Fase 2 **n├úo dispara** aqui: ela s├│ reconhece cursor local declarado no dump *deste* form, e `TmpLocal` ├® criado no `Load` do pai (SIGCDBAL/task348) ÔÇö ├® a 5┬¬ lacuna j├í registrada (mesmo caso de SIGOPETS/task733). O gate passa pelo casamento de substring nos coment├írios, e deixei um bloco de decis├úo ao final da classe com as quatro provas e a linha do pai que serve de confer├¬ncia. A raiz segue no `.ps1` compartilhado: o harvest da prova (3) precisaria ler tamb├®m o dump do form pai.

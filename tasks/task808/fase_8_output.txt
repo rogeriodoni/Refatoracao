@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpSts.prg` est├í completo (2198 linhas, 103,8 KB) e verificado.
+
+## O que foi entregue
+
+**Transporte da linha da grade Ôçä BO** (a "ficha" desta tela ├® uma linha de `cursor_4c_Status` ÔÇö n├úo h├í campo fora da grade):
+
+| M├®todo | Escopo | O que faz |
+|---|---|---|
+| `FormParaBO(par_oTxt)` | **PROTECTED** | linha corrente ÔåÆ properties do BO; a **c├®lula vence o cursor** no `status` (dentro do `Valid` o digitado est├í em `par_oTxt.Value` e o cursor s├│ recebe depois ÔÇö regra #46); `this_lNovoRegistro` espelha o `When` legado |
+| `BOParaForm(par_oTxt)` | **PROTECTED** | properties ÔåÆ cursor + c├®lula + `Refresh`; transcreve `This.Value = ÔÇª / Replace Descs With ÔÇª / This.Refresh / Select LocalStats`; `LEFT()` pela largura do schema (`status char(1)`, `descs char(20)`) |
+| `LimparCampos()` | **PROTECTED** | zera a ficha no funil de carga, sem tocar o contexto do pai |
+| `HabilitarCampos(par_lHabilitar)` | PUBLIC | ponto ├║nico de editabilidade ÔÇö reaplica `Column1.ReadOnly` ap├│s o rebind (regra #41/#40) |
+| `ModoEdicaoAtivo()` | PUBLIC | a condi├º├úo do `cmdSair.Click` legado, em um lugar s├│ |
+| `AjustarBotoesPorModo()` / `CarregarLista()` | PUBLIC | nomes can├┤nicos apontando para a l├│gica real (`AplicarVisibilidadeBotoes` / `CarregarDados`) |
+
+`AbrirLookupStatusStsExec` passou a escrever pelos dois hooks em vez de repetir o `REPLACE`; `VincularGrade` e `AplicarVisibilidadeBotoes` passaram a chamar `HabilitarCampos()`; `BtnSairClick` usa `ModoEdicaoAtivo()`.
+
+## Dois defeitos reais que o probe pegou
+
+1. **`PROTECTED` herdado** ÔÇö `FormBase` declara `FormParaBO`/`BOParaForm`/`LimparCampos` como `PROTECTED` (linhas 276/280/285) e VFP9 n├úo deixa a subclasse alargar escopo. Medido: `PEMSTATUS(oForm,"FormParaBO",2)` = `.T.` e a chamada de fora estoura *"Property FORMPARABO is not found."* Os tr├¬s ficaram `PROTECTED` expl├¡citos, chamados por `THIS.`.
+2. **Par├ómetro l├│gico omitido** ÔÇö `IF VARTYPE(par_lHabilitar) = "L"` fazia `HabilitarCampos()` **sem argumento** travar a c├®lula (`Column1.ReadOnly = .T.` ao abrir em modo edit├ível). Corrigido com `PCOUNT() >= 1`; o probe agora mede `HAB() s/arg ÔåÆ RO1=.F.`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: `FXP=SIM ERR=NAO` (smoke test provou que o VFP executa; `.fxp` apagado antes).
+- **Probe instanciando o form** (subclasse `ProbeF8Sts` para alcan├ºar os PROTECTED, `TRY/CATCH` por chamada): round-trip linhaÔåÆBOÔåÆlinha fecha; truncamento `"XYZ"ÔåÆ"X"` e descs em 20; `When` = `.F.` na linha resolvida e `.T.` na vazia; `LimparCampos` preserva `this_cOperacaoPai`/`this_cEscolha`; guardas sem cursor devolvem `.F.` sem estourar; `CmdInserirClick` reaproveitou a linha em branco (guard `LOCATE` do legado).
+- **Gate Fase 8**: `VALIDADO=True`, `FALTANTES=` vazio. **Completude**: OK no Form e no BO.
+- **Auditorias**: m├®todo-protegido-chamado-de-fora, fun├º├Áes-n├úo-definidas, propriedades-inexistentes, lookup-em-KeyPress ÔÇö todas limpas para este form.
+
+## O que n├úo se aplica (documentado no cabe├ºalho, n├úo inventado)
+
+`BtnSalvarClick`/`BtnConfirmarClick` ÔÇö o SCX n├úo tem bot├úo de gravar; a grava├º├úo mora no `cmdSair.Click`, j├í migrado em `BtnSairClick` (handler nomeado pelo **objeto** do legado). `BtnCancelarClick` ÔÇö n├úo h├í Cancelar nem modo cancel├ível. `BtnBuscarClick` ÔÇö a busca ├® o lookup da c├®lula. `AlternarPagina` ÔÇö o form ├® FLAT, sem PageFrame. O gate dispensa esses nomes pelos ramos *fluxo-├║nico* e *bot├úo de a├º├úo*.
+
+Os harnesses tempor├írios foram removidos de `automation\`.

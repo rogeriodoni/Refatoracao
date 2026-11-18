@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and verified in VFP9.
+
+## What was failing
+
+The Phase 4 gate (`case 4` in `OrquestradorMigracao.ps1`) validates OPERACIONAL/FLAT forms with three predicates. I measured them on the file left by Phase 3:
+
+| predicate | regex | result |
+|---|---|---|
+| `temGrade` | `AddObject("grd_4c_` | Ô£à |
+| `temBotoes` | `AddObject("(cmg_4c_\|cmd_4c_)` | Ô£à |
+| **`temCarga`** | `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî |
+
+The legacy has `BaseClass: grid`, so the DESPACHANTE/EXIBICAO/CAPTURA escape branches were unavailable. **The gate was right** ÔÇö the missing deliverable was the carga funnel, which is where the legacy `Init`'s closing `Select TmpLocal / Go Top ÔÇª Grade.Refresh / Grade.SetFocus` belongs (rule #21: populating a cursor doesn't repaint the bound grid).
+
+## What I delivered
+
+Restructured the grid into a funnel: `ConfigurarGrade()` (structure only ÔÇö no data dependency, per rule #41), `AplicarFormatoGrade()` (single idempotent source for all column properties), `CarregarDados()` (PUBLIC funnel: bind under `USED()`, `GO TOP`, `Refresh`, guarded `SetFocus`), plus `Recarregar()` so re-totalizing and repainting can't drift apart. Named `CarregarDados`, not `CarregarLista` ÔÇö the latter would make `TesteAutomatico.prg` misclassify this dialog as CRUD and demand `BtnIncluirClick` etc. that the legacy lacks.
+
+## A real bug the probes caught
+
+My first version crashed with `Unknown member COLUMN1`. Measuring in VFP9 showed why:
+
+```
+apos CREATEOBJECT      ColumnCount=3
+apos USE IN do alias   ColumnCount=0   <- Column objects destroyed
+apos reabrir o cursor  ColumnCount=0   <- reopening does NOT restore
+apos RecordSource=     ColumnCount=3   <- only the rebind restores
+```
+
+Closing the bound alias collapses `ColumnCount` and destroys the columns. Critically, restoring `ColumnCount` *recreates* them, so it isn't only widths and captions that are lost ÔÇö fonts, `ReadOnly` and colors go too. So `AplicarFormatoGrade` now covers **every** column property (minus `ControlSource`), guards on `ColumnCount`, and the funnel restores a collapsed `ColumnCount` before rebinding.
+
+## Verification (VFP9 actually executed ÔÇö smoke-tested first)
+
+- **Compile**: form and BO clean, with a deliberate-error negative control proving the compiler ran (`.err` absent only means clean when `COMPILE` really executed).
+- **4 scenarios**, error-capture file **empty** in all (no silent CATCH): no caller cursors; with cursors (aggregation `A01 15/12, B02 7/0, C03 0/3`, TotalLido=22, TotalEstoque=4 ÔÇö matches the legacy formula); alias absent ÔåÆ `.F.` without throwing, widths/headers intact; form visible ÔåÆ `SetFocus` path executed without error 1743. Caller's cursors survive `Release` (`Destroy` only closes this dialog's own cursor).
+- Completeness validator's four real regexes: 0 hits. Property/undefined-function/protected-method/lookup audits: no mention of these files.
+
+Two notes worth recording: dialog suppression needs **both** `gb_4c_ModoTeste` *and* a non-empty `gc_4c_ArquivoErroTeste` ÔÇö with only the first, `MsgErro` falls through to a modal `MESSAGEBOX` and hangs a headless probe (this cost me two timed-out runs). And `Show()` on this `WindowType = 1` form blocks, so visibility must come from `Visible = .T.`.
+
+CRLF restored to match project convention, recompiled and re-proven *after* that conversion so the shipped bytes are what was tested. Evidence saved to `tasks/task810/fase4_evidencia_vfp9.txt`; scratch probes cleaned up.

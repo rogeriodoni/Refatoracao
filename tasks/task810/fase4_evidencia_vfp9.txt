@@ -1,0 +1,91 @@
+FASE 4/8 - FormSigOpTlo - EVIDENCIA DE VERIFICACAO EM VFP9
+Data: 2026-11-18
+
+Gate da Fase 4 (ramo FLAT) exige os 3 predicados; o que faltava era temCarga.
+Entregavel: funil de carga (ConfigurarGrade / AplicarFormatoGrade / CarregarDados).
+
+--- COMPILACAO (com controle negativo provando que o COMPILE rodou) ---
+FORM_FXP=SIM
+FORM_ERR=NAO
+BO_FXP=SIM
+BO_ERR=NAO
+CONTROLE_NEGATIVO_ERR=SIM (compilador rodou)
+
+--- PROBE A/B (sem e com os cursores do chamador) ---
+=== CENARIO A: SEM cursor do chamador (harness) ===
+VARTYPE(loForm)=O
+RecordSource=[cursor_4c_Locais]
+ColumnCount=3
+Widths=71/75/75
+Headers=[Local|Leitura|Releitura]
+Grid.Top/Left/W/H=90/204/253/187
+Grid.ReadOnly=.T.
+PEMSTATUS(CarregarDados,2=protected)=.F.
+PEMSTATUS(Recarregar,2=protected)=.F.
+CarregarDados() de fora=.T. (esperado .F. sem estourar)
+cmd_4c_Saida existe=.T.
+
+=== CENARIO B: COM cursor do chamador (OFFLINE) ===
+VARTYPE(loForm)=O
+RecordSource=[cursor_4c_Locais]
+CS1=[cursor_4c_Locais.Localis]
+CS2=[cursor_4c_Locais.Leitura]
+CS3=[cursor_4c_Locais.ReLeitura]
+Widths APOS bind=71/75/75
+Headers APOS bind=[Local|Leitura|Releitura]
+RECCOUNT(cursor_4c_Locais)=3 (esperado 3: A01/B02/C03)
+RECNO apos GO TOP=1
+  linha: Localis=[A01] Leitura=15 ReLeitura=12
+  linha: Localis=[B02] Leitura=7 ReLeitura=0
+  linha: Localis=[C03] Leitura=0 ReLeitura=3
+TotalLido=22 (esperado 22 = A01:12 + B02:7 + C03:3)
+TotalEstoque=4 (esperado 4)
+CarregarDados() 2a vez=.T. (esperado .T.)
+Widths apos 2a=71/75/75
+Recarregar()=.T. (esperado .T.)
+RECCOUNT apos Recarregar=3 (esperado 3, nao 6 - o Zap tem de ter rodado)
+cursor_4c_Historico sobreviveu ao Release=.T. (esperado .T.)
+cursor_4c_Etiqueta sobreviveu ao Release=.T. (esperado .T.)
+
+--- PROBE C/D (alias ausente; form visivel = caminho do SetFocus) ---
+CK1 inicio
+CK2 config.prg OK
+CK3 setup OK
+
+=== CENARIO C: alias cursor_4c_Locais FECHADO ===
+USED(cursor_4c_Locais)=.F.
+CarregarDados()=.F. (esperado .F.)
+Widths=71/75/75 (esperado 71/75/75)
+Headers=[Local|Leitura|Releitura]
+CK4 cenario C OK
+
+=== CENARIO D: form VISIVEL (caminho do SetFocus) ===
+Form.Visible=.T. Grid.Visible=.T. Grid.Enabled=.T. (os tres .T. = o funil entra no ramo do SetFocus)
+CarregarDados()=.T. (esperado .T.)
+Widths=71/75/75
+Recarregar()=.T. (esperado .T.)
+RECCOUNT totais=2 (esperado 2)
+BtnSaidaClick OK
+cursor_4c_Historico sobreviveu=.T. (esperado .T.)
+cursor_4c_Etiqueta sobreviveu=.T. (esperado .T.)
+
+--- gc_4c_ArquivoErroTeste ---
+
+FIM_PROBE
+
+--- DIAGNOSTICO ColumnCount (origem do bug corrigido) ---
+CK1
+=== DIAGNOSTICO ColumnCount ===
+1) apos CREATEOBJECT      : ColumnCount=3 RecordSource=[cursor_4c_Locais] USED=.T.
+2) apos USE IN do alias   : ColumnCount=0 RecordSource=[cursor_4c_Locais]
+3) apos TotalizarLocais   : ColumnCount=0 RecordSource=[cursor_4c_Locais] USED=.T.
+4) apos RecordSource=      : ColumnCount=3
+5) apos ColumnCount=3     : ColumnCount=3 Column1 existe=.T.
+
+--- erros capturados ---
+
+FIM
+
+--- ARQUIVOS DE ERRO (gc_4c_ArquivoErroTeste) ---
+_probe810_erros.txt  : VAZIO (nenhum CATCH disparou)
+_probe810c_erros.txt : VAZIO (nenhum CATCH disparou)

@@ -1,0 +1,11 @@
+gnConnHandle = -1
+GRADE: ColumnCount=2 RecordSource=[] PEMSTATUS(Column1,5)=.T.
+GRADE: Column1.SetFocus = OK
+CASO1 status duplicado   -> ABERTO   esperado=ABERTO   OK
+CASO2 unicos c/alter     -> FECHADO  esperado=FECHADO  OK
+CASO3 sem alteracao      -> FECHADO  esperado=FECHADO  OK
+CASO4 2 em branco        -> ABERTO   esperado=ABERTO   OK
+BINDEVENT Click ligados: Inserir=CMDINSERIRCLICK Excluir=CMDEXCLUIRCLICK Sair=BTNSAIRCLICK (esperado o nome do handler em cada)
+CmdInserirClick (1a) -> 2 para 3 OK houveInc=.T. OK
+CmdInserirClick (2a) -> RECCOUNT=3 OK (reaproveitou)
+CmdExcluirClick -> visiveis=2 de 3 OK houveExc=.T. OK

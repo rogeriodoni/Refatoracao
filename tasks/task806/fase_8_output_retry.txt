@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8 ÔÇö veredito: o artefato j├í estava completo; a reprova├º├úo era artefato do gate, n├úo do c├│digo
+
+**N├úo alterei nenhum arquivo do projeto nesta execu├º├úo** ÔÇö e isso foi deliberado. Segue a medi├º├úo.
+
+### Causa raiz da reprova├º├úo
+
+A Fase 7 (que rodou 23:02ÔÇô23:28) gravou em `automation/OrquestradorMigracao.ps1` ├ás **23:23:01** o helper novo `Test-PcEscolhaSoEmTesteDeExistencia` e o ligou nos `case 7` **e** `case 8`. O processo do orquestrador come├ºou ├ás **22:09** ÔÇö o PowerShell parseia o `.ps1` inteiro na invoca├º├úo, ent├úo ├ás 23:59:59 a valida├º├úo da Fase 8 rodou com o gate **velho em mem├│ria**, sem a dispensa que a pr├│pria task tinha acabado de criar.
+
+Rodei o `case 8` standalone nas duas vers├Áes, contra o arquivo entregue:
+
+| gate | veredito |
+|---|---|
+| disco (com o patch) | `VALIDADO=True`, `FALTANTES=` vazio |
+| HEAD (o que rodou) | `VALIDADO=False`, `FALTANTES=BtnCancelarClick \| CarregarLista` |
+
+Padr├úo j├í documentado no projeto (9┬¬ ocorr├¬ncia): disco `True` + HEAD `False` = **n├úo mexer no form**, provar o entreg├ível por fora. O retry em que estou s├│ exige `Test-Path` do form, que existe.
+
+### Entreg├ível validado por fora
+
+- **Compila├º├úo**: `.FXP` apagados e regerados ÔÇö `SigOpSqnBO.prg` e `FormSigOpSqn.prg` OK, nenhum `.ERR`.
+- **`Test-CompletudeCodigo`**: `True` nos dois (zero TODO/stub/procedure vazia).
+- **`ValidadorSQLSchema`**: 683 tabelas, 6 statements, "PASSOU ÔÇö nenhuma coluna invalida".
+- **Auditorias**: `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` limpas; `VerificarLookupEmKeyPress` ERRO=0 (os 36 avisos s├úo de `Formsigopcgp`/`FormSIGRECPM`, pr├®-existentes).
+- **Cobertura do legado**: os 11 m├®todos da SE├ç├âO 3 do dump t├¬m referente no migrado. As duas aus├¬ncias s├úo decis├Áes documentadas e corretas ÔÇö `Load ÔåÆ =fConfigGeral()` (o cabe├ºalho de `utils\fconfiggeral.prg` pro├¡be uso em c├│digo nosso) e `mctrlbotoes` (a tela desabilita o form pai inteiro; for├ºar `Enabled=.T.` bot├úo a bot├úo atropelaria o `AjustarBotoesPorModo` do pai ÔÇö regra #40).
+- **Alcance do helper novo** (passo 4 do procedimento): dispara em **1 de 805** dumps de `tasks\` ÔÇö s├│ `SigOpSqn`. E ele n├úo cria call site novo na vari├ível larga: s├│ acrescenta um `-not (...)` a uma condi├º├úo que j├í escrevia `$semCrudLegadoF8`/`$semCrudRealF8`.
+
+### Descoberta nova (registrada na mem├│ria)
+
+A Fase 8 anterior grafou os nomes can├┤nicos sem referente com o miolo **elidido** (`Btn...larClick`, `Carregar...sta`) para a dispensa n├úo virar no-op por substring ÔÇö o check ├® `$conteudo -notmatch "<Nome>"` no arquivo inteiro, que um coment├írio satisfaz. O racioc├¡nio ├® bom, mas medi o custo numa c├│pia tempor├íria: **com os nomes por extenso o gate do HEAD tamb├®m passaria**. Ou seja, a elis├úo foi o gatilho ├║nico do retry ÔÇö ela remove a rede de seguran├ºa do substring e amarra o artefato ├á exist├¬ncia do ramo novo no processo em execu├º├úo. Mantive a elis├úo (a regra manda n├úo distorcer o form), mas isso agora est├í escrito para o pr├│ximo retry n├úo repetir a investiga├º├úo.
+
+### Ponto de aten├º├úo para voc├¬
+
+O patch do gate est├í **n├úo commitado** (`M automation/OrquestradorMigracao.ps1`, +162 linhas). Com os nomes elididos, um re-run da task806 a partir de checkout limpo reprova de novo pelo mesmo motivo. Commitar o orquestrador resolve ÔÇö n├úo fiz porque commit ├® sua decis├úo.
+
+Limpei os harnesses tempor├írios que criei; n├úo toquei nos `Compilar*.prg`/`Probe*.prg` deixados por fases anteriores em `automation/`.

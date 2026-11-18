@@ -1,0 +1,13 @@
+VARTYPE=O
+BaseClass=Form W=800 H=400
+tem cmd_4c_Confirma=.T.
+tem cmd_4c_Cancela =.T.
+Confirma: L=650 T=3 W=75 H=75 Cap=[\<Ok] Vis=.T. Pic=OK Themes=.T.
+Cancela : L=725 T=3 W=75 H=75 Cap=[Encerrar] Vis=.T. Cancel=.T. Pic=OK
+direita: Confirma fim=725 / Cancela fim=800 / Form.Width=800
+Grade: ColCount=3 Vis=.F. widths=65/65/175 hdr=[Grupo|Conta|Nome] RecSrc=[]
+CarregarDados() sem TmpCliente=.F.
+CarregarDados() com TmpCliente=.T.
+pos-carga: RecSrc=[TmpCliente] ctrlsrc=[TmpCliente.Grupo|TmpCliente.Conta|TmpCliente.Nome] widths=65/65/175 hdr=[Grupo|Conta|Nome] Vis=.F.
+RECNO apos GO TOP=1 RECCOUNT=2
+AplicarFormatoGrade() de fora=.T.

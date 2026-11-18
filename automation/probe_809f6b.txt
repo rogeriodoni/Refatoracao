@@ -1,0 +1,12 @@
+EXACT OFF: SET(EXACT)=OFF
+   ""  =  " "          -> .F.
+   ""  =  "1"          -> .F.
+   INLIST("","1","2"," ") -> .F.
+   INLIST("","1","2")     -> .F.
+   INLIST("3","1","2"," ") -> .F.
+EXACT ON : SET(EXACT)=ON
+   ""  =  " "          -> .T.
+   ""  =  "1"          -> .F.
+   INLIST("","1","2"," ") -> .T.
+   INLIST("","1","2")     -> .F.
+   INLIST("3","1","2"," ") -> .F.

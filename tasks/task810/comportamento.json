@@ -1,0 +1,60 @@
+{
+  "resumo": {
+    "totalMetodos": 2,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPTLO",
+      "evento": "Init",
+      "linhas": 92,
+      "codigoOriginal": "LParameters lnTipoLeitura, llOnLine\n\nWait Window 'Aguarde! Totalizando Locais...' NoWait\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSelect TmpLocal\nZap\n\nIf Not llOnLine\n\n\tlnTetQLoad  = RecCount('Etiqueta')\n\tlnTetQLoad  = Iif(lnTetQLoad = 0,1,lnTetQLoad)\n\tlnTetQReadL = 0\n\tlnTetQReadR = 0\n\n\tSelect Historico\n\tSet Order To\n\tScan\n\t\tIf !Seek(Historico.Localis,'TmpLocal')\n\t\t\tInsert Into TmpLocal(Localis) Values (Historico.Localis)\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption    = Str,Caption = Str,Caption = Transform",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTLO.Saída",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPTLO.Init",
+      "queryOriginal": "\t\t\tInsert Into TmpLocal(Localis) Values (Historico.Localis)",
+      "tabelas": "TmpLocal",
+      "colunas": "Localis",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpLocal"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

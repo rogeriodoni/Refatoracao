@@ -1719,9 +1719,11 @@ PROCEDURE AbrirFormSigReInf(par_cEmps, par_cDopes, par_nNumes, par_cSerie)
         *-- Erro379: NF opcional (pelo menu continua vazio, como antes);
         *-- permite abrir a NF direto: AbrirFormSigReInf("001", "VENDA", 9364, "1")
         IF VARTYPE(par_cDopes) = "C" AND !EMPTY(par_cDopes)
+            GarantirClasse("FormSigReInf")
             loForm = CREATEOBJECT("FormSigReInf", par_cEmps, par_cDopes, par_nNumes, ;
                 IIF(VARTYPE(par_cSerie) = "C", par_cSerie, ""))
         ELSE
+            GarantirClasse("FormSigReInf")
             loForm = CREATEOBJECT("FormSigReInf")
         ENDIF
 

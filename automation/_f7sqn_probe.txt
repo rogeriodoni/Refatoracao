@@ -1,0 +1,9 @@
+INSTANCIA VARTYPE=O
+CAPTION=[Operações do Caixa : Venda]
+BIND cmd_4c_Inserir ev=(Object) c3=CLICK c4=CMDINSERIRCLICK
+BIND cmd_4c_Excluir ev=(Object) c3=CLICK c4=CMDEXCLUIRCLICK
+BIND cmd_4c_Sair ev=(Object) c3=CLICK c4=BTNSAIRCLICK
+INSERIR 2x (guard LOCATE) linhas=1 esperado=1
+cidchaves VAZIA? NAO-OK
+INSERIR apos preencher linhas=2 esperado=2
+EXCLUIR linhas_vivas=1 HouveExclusao=.T.

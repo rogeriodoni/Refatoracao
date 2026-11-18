@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da e **validada**.
+
+## O que estava reprovando
+
+O arquivo da tentativa anterior estava bem estruturado, mas tinha **zero `AddObject("cnt_4c_...")`** ÔÇö tinha adiado os containers para a Fase 4. O ramo FLAT do gate da Fase 3 (`OrquestradorMigracao.ps1:10205-10327`) exige justamente isso, e com raz├úo: o SCX legado **tem** dois containers (`cntSombra` e `Container1`), ent├úo cri├í-los ├® transcri├º├úo fiel, n├úo inven├º├úo ÔÇö e ├® literalmente o escopo que o prompt da fase pede ("Containers principais").
+
+## Entrega
+
+`projeto\app\forms\operacionais\Formsigoptef.prg` (634 linhas), acrescentando ao que j├í existia:
+
+- **`ConfigurarCabecalho()`** ÔåÆ `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`. ├ë o **primeiro `AddObject` da tela** (regra #11): o `SAIDA` legado fica em `Top = -2, Left = 420`, dentro da faixa, e s├│ aparece se criado depois dela.
+- **`ConfigurarContainerMensagem()`** ÔåÆ `cnt_4c_Container1` + `lbl_4c_Label1` ("Insira ou Passe o Cartao"), geometria literal do dump.
+- **`AtualizarTextosDaTela()`** (p├║blica) ÔÇö transcreve o `IF crSigOpFp.lCartao = "N"` do Init legado; `BOParaForm()` fica como hook `PROTECTED` delegando para ela.
+- **`Destroy()`** com `DODEFAULT()`.
+
+Dois desvios deliberados do literal do dump, ambos comentados no c├│digo: `Width` da faixa e dos labels usa `THIS.Width`/`THIS.Width - 20` em vez de 800/769 ÔÇö o SCX desenhou o container 300px mais largo que a pr├│pria janela (form = 500), artefato de Form Designer j├í catalogado; aplicar o literal recortaria o t├¡tulo. E o `Caption` vem de `THIS.Caption`, n├úo do literal "Cadastro de Testes" que sobrou do template de onde o SCX foi copiado.
+
+## Defeito encontrado pelo probe
+
+A chamada externa `loForm.BOParaForm()` estourava `Property BOPARAFORM is not found` ÔÇö `FormBase` declara o hook como `PROTECTED` e VFP9 n├úo deixa a subclasse alargar escopo. Em `vfp9.exe -T` isso n├úo d├í mensagem: **pendura o processo num Program Error mudo** (foi o que travou a primeira rodada do probe). Corrigido movendo a l├│gica para `AtualizarTextosDaTela()`, nome fora dos tr├¬s hooks protegidos.
+
+## Verifica├º├Áes executadas
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate real da Fase 3 (corpo do `case 3` extra├¡do e executado) | `VALIDADO = True`, ramo FLAT |
+| `Test-CompletudeCodigo` (4 checagens replicadas) | 0 problemas, 0 procedures vazias |
+| Compila├º├úo VFP9 (form + BO) | `FORM_ERR=NAO`, `BO_ERR=NAO` |
+| Instancia├º├úo headless | `VARTYPE=O`, `ControlCount=2`, ambos containers vis├¡veis |
+| Regra `lCartao` | `"N"` ÔåÆ `Insira ou Passe\|o Cartao`; `"S"` ÔåÆ `Digite o Numero\|do Cartao` |
+| Balanceamento de blocos / `RETURN` em TRY | pares fechados; 0 `RETURN` dentro de TRY |
+
+O smoke test obrigat├│rio (`STRTOFILE` + exigir o arquivo) passou **antes** dos probes, ent├úo o `.err` ausente ├® prova real de compila├º├úo limpa, n├úo exit code vazio. Os `.fxp` e todos os scripts tempor├írios foram removidos; `git status` mostra s├│ os dois `.prg` da task.

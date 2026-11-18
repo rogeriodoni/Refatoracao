@@ -1,0 +1,550 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpTlo.SCX
+* Data/Hora: 18/11/2026 07:42:25
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPTLO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPTLO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPTLO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPTLO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPTLO
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTLO.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTLO.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTLO.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTLO.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTLO.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTLO.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Saída
+  Parent: SIGOPTLO
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: leitura
+  Parent: SIGOPTLO
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPTLO
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPTLO
+  Class: label
+  BaseClass: label
+
+Objeto: lb_TotLido
+  Parent: SIGOPTLO
+  Class: label
+  BaseClass: label
+
+Objeto: lb_TotEstoque
+  Parent: SIGOPTLO
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 361
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Total por Local"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGOPTLO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 187
+  Left = 204
+  Panel = 1
+  ReadOnly = .T.
+  RecordSource = "TmpLocal"
+  RowHeight = 17
+  ScrollBars = 2
+  Top = 90
+  Width = 253
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "TmpLocal.Localis"
+  Column1.Width = 71
+  Column1.Movable = .F.
+  Column1.Resizable = .T.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "TmpLocal.Leitura"
+  Column2.Width = 75
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "TmpLocal.ReLeitura"
+  Column3.Width = 75
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Local"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpLocal.Localis"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Leitura"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpLocal.Leitura"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Releitura"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpLocal.ReLeitura"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Saída
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Saída"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Saída"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.leitura
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = ""
+  Height = 17
+  Left = 310
+  Top = 327
+  Width = 2
+  ForeColor = 90,90,90
+  Name = "leitura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Lido :"
+  Height = 15
+  Left = 227
+  Top = 282
+  Width = 28
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Estoque :"
+  Height = 15
+  Left = 205
+  Top = 299
+  Width = 48
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.lb_TotLido
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = ""
+  Height = 17
+  Left = 263
+  Top = 282
+  Width = 2
+  ForeColor = 90,90,90
+  Name = "lb_TotLido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTLO.lb_TotEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = ""
+  Height = 17
+  Left = 263
+  Top = 300
+  Width = 2
+  ForeColor = 90,90,90
+  Name = "lb_TotEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPTLO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lnTipoLeitura, llOnLine
+
+Wait Window 'Aguarde! Totalizando Locais...' NoWait
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Select TmpLocal
+Zap
+
+If Not llOnLine
+
+	lnTetQLoad  = RecCount('Etiqueta')
+	lnTetQLoad  = Iif(lnTetQLoad = 0,1,lnTetQLoad)
+	lnTetQReadL = 0
+	lnTetQReadR = 0
+
+	Select Historico
+	Set Order To
+	Scan
+		If !Seek(Historico.Localis,'TmpLocal')
+			Insert Into TmpLocal(Localis) Values (Historico.Localis)
+		EndIf
+		If Historico.Tipos = 1
+			Replace TmpLocal.Leitura With TmpLocal.Leitura + Historico.Qtds
+		Else
+			If Historico.Tipos = 2
+				Replace TmpLocal.ReLeitura With TmpLocal.ReLeitura + Historico.Qtds
+			EndIf
+		EndIf
+	EndScan
+
+	Select TmpLocal
+	Scan
+		If TmpLocal.ReLeitura > 0
+			lnTetQReadL = lnTetQReadL + TmpLocal.ReLeitura
+		Else
+			lnTetQReadL = lnTetQReadL + TmpLocal.Leitura
+		EndIf
+	EndScan
+
+	Select Historico
+	Go Bottom
+
+Else
+
+	lnTetQLoad  = RecCount('csEtiqueta')
+	lnTetQLoad  = Iif(lnTetQLoad = 0,1,lnTetQLoad)
+	lnTetQReadL = 0
+	lnTetQReadR = 0
+
+	Select csHistorico
+	Set Order To
+	Scan
+		If !Seek(csHistorico.Localis,'TmpLocal')
+			Insert Into TmpLocal(Localis) Values (csHistorico.Localis)
+		EndIf
+		If csHistorico.Tipos = 1
+			Replace TmpLocal.Leitura With TmpLocal.Leitura + csHistorico.Qtds
+		Else
+			If csHistorico.Tipos = 2
+				Replace TmpLocal.ReLeitura With TmpLocal.ReLeitura + csHistorico.Qtds
+			EndIf
+		EndIf
+	EndScan
+
+	Select TmpLocal
+	Scan
+		If TmpLocal.ReLeitura > 0
+			lnTetQReadL = lnTetQReadL + TmpLocal.ReLeitura
+		Else
+			lnTetQReadL = lnTetQReadL + TmpLocal.Leitura
+		EndIf
+	EndScan
+
+EndIf
+
+Select TmpLocal
+Go Top
+
+lnPercLeit  = (lnTetQReadL / lnTetQLoad * 100)
+lnPercRLeit = (lnTetQReadR / lnTetQLoad * 100)
+
+If CrSigCdPam.PerLocals
+	ThisForm.lb_TotLIdo.Caption    = Str(lnTetQReadL,5) 
+	ThisForm.lb_TotEstoque.Caption = Str(lnTetQLoad,5)
+	ThisForm.Leitura.Caption = Transform(lnPercLeit,'@Z 9999.99%')
+EndIf
+
+Wait Clear
+
+ThisForm.Grade.Refresh
+ThisForm.Grade.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTLO.Saída
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 2
+================================================================================

@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da.
+
+## O que foi entregue
+
+**Campos restantes:** nenhum faltava. Conferi os 18 objetos do `layout.json` contra os `AddObject` do form ÔÇö cabe├ºalho, grade, os 3 CommandGroup, 3 ImgBarra, `getDias`/`lblDias` e `cnpProcessando` j├í tinham sido criados nas fases 3-5. O trabalho real desta fase eram os **lookups**.
+
+**Lookups (os 2 `Valid` de `grdProdutos.Column1/2.Text1` do legado):**
+
+- `TextBoxCelulaSpr_4c` em `classes/textboxgridlookup.PRG` ÔÇö c├®lula com `When`/`Valid`/`KeyPress`/`DblClick` embutidos, dois pap├®is (`CODIGO`/`DESCRICAO`), delegando a m├®todos PUBLIC do form. Valida├º├úo de c├®lula vai no `Valid` do TextBox da coluna, n├úo em `AfterRowColChange` (regra #46).
+- `InstalarCelulasLookup` ÔÇö `AddObject` + `CurrentControl` + `Sparse = .F.` + `ReadOnly` (regra #18); idempotente e chamado no fim de `AplicarFormatoGrade`, que j├í roda na montagem **e** na recarga, porque o rebind do `RecordSource` derruba `CurrentControl`/`Sparse` junto com `Width`/`Caption`.
+- `ResolverCelulaSpr` ÔÇö `FormBuscaAuxiliar` contra `SigCdPro` por `CPros` ou `DPros`, `Show()` s├│ sob `this_lAchouRegistro` e atribui├º├úo s├│ sob `this_lSelecionou` (regra #37), duplicidade "Produto J├í Selecionado", `PosicionarProximaLinha`, `KEYBOARD "{DNARROW}"` no Enter.
+- `MaxLength` 14/65 vindos do schema (`cpros char(14)`, `dpros char(65)`), n├úo do `Width`.
+
+## Duas diverg├¬ncias conscientes do legado (ambas comentadas no c├│digo)
+
+1. **Atribui├º├úo sob guarda de sele├º├úo.** O legado l├¬ `crListaRemota` mesmo quando o usu├írio cancela o picker; aqui o valor s├│ ├® atribu├¡do sob `this_lSelecionou`, sen├úo cancelar **zeraria** o c├│digo rec├®m-digitado (regras #37/#50).
+2. **Duplicidade usa o c├│digo resolvido nas duas c├®lulas.** No legado, o `Valid` da descri├º├úo faz `Where CPros = This.Value` com `This.Value` contendo a *descri├º├úo* ÔÇö compara c├│digo com descri├º├úo, nunca casa, e a checagem fica morta nesse caminho. Transcrever literalmente reproduziria o defeito (estilo regra #28); como as duas c├®lulas resolvem o mesmo par, usei o c├│digo resolvido.
+
+## Verifica├º├úo
+
+- VFP9 smoke test passou primeiro (prova que o processo executa, n├úo s├│ compila); `COMPILE` dos dois arquivos: `.FXP` gerado, `.err` ausente.
+- Probe de runtime instanciando o form: **69/69 asser├º├Áes** (instala├º├úo das c├®lulas, `MaxLength`, pap├®is, sobreviv├¬ncia ao rebind, `When` das duas c├®lulas, duplicidade com reposi├º├úo do `RECNO`, limpeza da c├®lula irm├ú, `PosicionarProximaLinha` nos dois ramos) + segundo probe com **14/14** nos eventos nativos `When()`/`Valid()` da classe.
+- `Test-CompletudeCodigo`: OK nos 3 arquivos. `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFormBuscaAuxiliar`, `VerificarLookupEmKeyPress`: nenhum achado nos meus arquivos.
+- Gate da Fase 6 rodado standalone: **APROVA** (ramo FLAT).
+
+Duas coisas que vale voc├¬ saber:
+
+- **O gate passa por um detalhe fr├ígil.** `$temBindEvent` exige a string `BINDEVENT` no arquivo, e a ├║nica ocorr├¬ncia ├® um **coment├írio** explicando por que BINDEVENT *n├úo* ├® usado em `When`/`Valid` de `Column.Text1` (regra #46). N├úo h├í BINDEVENT leg├¡timo a adicionar nesta fase ÔÇö `getDias` n├úo tem `Valid` no dump e os Click dos bot├Áes s├úo fase 7. N├úo fabriquei um s├│ para satisfazer o regex; o gate e a regra #46 est├úo em tens├úo aqui.
+- Normalizei `textboxgridlookup.PRG` inteiro para CRLF: meu append tinha entrado em LF num arquivo CRLF. O `git diff --ignore-cr-at-eol` mostra s├│ inser├º├Áes (inclui o bloco `TextBoxCelulaSno_4c`, que j├í estava no working tree n├úo-commitado da task irm├ú ÔÇö nada foi perdido).

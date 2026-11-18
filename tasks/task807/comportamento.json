@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPSTC",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "Lparameters poForm\n\nThisForm.Grid1.RecordSource = []\n\nThisform.poForm = poForm\nThisform.DataSessionId = poForm.DataSessionId\n\nlcSelect = [Select a.*, b.*, b.tDtEnvs As Envios From SigFiSit a Inner Join SigFiSii b ] + ;\n           [On a.cArqMovs = b.cArqMovs Where a.cArqMovs = '] + ThisForm.poForm.pcSelFile + [']\n\nThisForm.poForm.poDataMgr.SqlExecute(lcSelect, [crTmpLgSit])\n\nThisForm.Text1.Value = crTmpLgSit.cArqMovs \nThisForm.Text2.Value = crTmpLgSit.cNumLotes\nThisForm.Text3.Value = crTmpLgSit.c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Grid1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.Edit1.Value = crTmpLgSit.cRetornos\n\nThisForm.Edit1.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Edit1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Text2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Text3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPSTC.Text4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPSTC.Init",
+      "queryOriginal": "lcSelect = [Select a.*, b.*, b.tDtEnvs As Envios From SigFiSit a Inner Join SigFiSii b ] + ; [On a.cArqMovs = b.cArqMovs Where a.cArqMovs = '] + ThisForm.poForm.pcSelFile + [']",
+      "tabelas": "SigFiSit,SigFiSii",
+      "colunas": "tDtEnvs,cArqMovs,pcSelFile",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigFiSit", "SigFiSii"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

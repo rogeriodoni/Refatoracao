@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All methods are in place and the structure matches the sibling dialog forms. Phase 4 is complete.
+
+## Summary
+
+Completed Fase 4/8 for `FormSigOpSts` (Status por Opera├º├Áes) ÔÇö this is a FLAT OPERACIONAL dialog, not a CRUD Page1/Page2 form, so I followed the architecture the file's own Fase 3 header already committed to (and mirrored its sibling `FormSigOpSqn.prg`) rather than the generic CRUD template text.
+
+**`FormSigOpSts.prg`** ÔÇö added:
+- `ConfigurarGrade()` ÔÇö `grd_4c_Dados` (2 columns: Status char(1), Descri├º├úo char(20) read-only), transcribed from the dump
+- `ConfigurarBotoes()` ÔÇö `shp_4c_Separador` + `cmd_4c_Inserir`/`cmd_4c_Excluir`/`cmd_4c_Sair`, positions/pictures from the dump
+- `AplicarVisibilidadeBotoes()` + `PossuiAcessoOperacao()` ÔÇö transcribes the legacy `fChecaAcesso`/`pcEscolha` visibility logic and the Shape resize
+- `VincularGrade()` + `CarregarDados()` ÔÇö binds the grid to `cursor_4c_Status` and reloads it
+- Wired all of this into `InicializarForm()` in the correct order (regra #11 ÔÇö buttons created after the header band; visibility applied after `TornarControlesVisiveis`)
+
+**`SigOpStsBO.prg`** ÔÇö added `ListarStatusOperacao()`, the SQL query method the grid needs (SQLEXEC into temp cursor ÔåÆ `cursor_4c_Status` READWRITE, since Column1 must stay editable for Fase 6/7).
+
+Both files compiled clean in VFP9 (no `.err` generated). Fase 6 (lookup) and Fase 7 (button click handlers) remain for later phases, as documented in the header.

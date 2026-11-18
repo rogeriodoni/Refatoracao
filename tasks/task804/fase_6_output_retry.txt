@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e **aprovada no gate**.
+
+## O que reprovava
+
+Rodei o gate da Fase 6 standalone (fun├º├Áes do orquestrador via AST + corpo do `case 6`, sem dot-source). De 14 predicados, **um s├│** era falso:
+
+```
+semPageFrame    = True      temMetodoLookup = True
+temCamposFlat   = True      temBindEvent    = False   <-- ├║nico
+```
+
+O ramo *layout flat* exige `BINDEVENT`, e a tentativa anterior n├úo tinha **nenhum** ÔÇö ela implementou os lookups corretamente na classe `TextBoxCelulaSno_4c` (regra #46: `When`/`Valid` de c├®lula de Column n├úo aceitam BINDEVENT) e deixou explicitamente para "a pr├│xima fase" o que de fato precisa de BINDEVENT.
+
+## O que acrescentei em `FormSigOpSno.prg`
+
+**`ConfigurarBINDEVENTs()`** ÔÇö 21 liga├º├Áes, chamado uma ├║nica vez no `InicializarForm`, depois de criar as grades e **antes** de `CarregarDados` (religar ap├│s a carga duplicaria o handler e o toggle se anularia).
+
+1. **CheckBox das colunas O/P/C/S/T** (Columns 3/4/5/6/9) ÔÇö 4 eventos cada. Transcritos do dump: nos cinco ├® o **`MouseDown`** que alterna (n├úo o `MouseUp`, ao contr├írio do template gen├®rico do CLAUDE.md); `MouseUp`/`Click` s├│ suprimem o toggle nativo com `NODEFAULT`; `KeyPress` alterna em 13/32. Funil ├║nico `AlternarMarcaSubN(par_cCampo)` com `REPLACE (expr) WITH` ÔÇö as 5 colunas s├úo `numeric(1,0) NOT NULL` no schema, ent├úo o valor alternado ├® num├®rico. Sem guard de modo, igual ao legado (quem decide persistir ├® o Encerrar).
+2. **`GradeSubNAfterRowColChange`** ÔÇö mestre-detalhe (uso leg├¡timo do evento, regra #46), com o `Set Order To` vazio antes do `Set Order To cnivels` que o legado usa para derrubar o `SET KEY` anterior. Chamado tamb├®m no fim de `CarregarDados`, como o `Init` legado faz.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: smoke test do VFP9 primeiro (ele executou nesta sess├úo), depois `COMPILE` real ÔåÆ `FXP=SIM ERR=NAO`.
+- **Instancia├º├úo A/B**: duas c├│pias renomeadas, com e sem as chamadas novas ÔÇö ambas `VARTYPE = "O"`, provando que o bloco n├úo quebra o `Init`.
+- **Comportamento** (probe dentro da data session do form ÔÇö `DataSession=2`, sen├úo os cursores do probe s├úo invis├¡veis): 4 eventos ligados por Check1 e 1 no grid; todos os alvos de BINDEVENT s├úo PUBLIC (`PEMSTATUS(...,2) = .F.`); `obrigs 0ÔåÆ1` por MouseDown, `ckatcta 1ÔåÆ0` por KeyPress(32), `this_lHouveAlt = .T.`; tecla 65 **n├úo** alterna; AfterRowColChange cria a linha com `cidchaves` preenchida, escopa o detalhe (`GO TOP` cai em RECEBIMENTO), restaura o alias mestre e **n├úo duplica** na segunda chamada.
+- **Auditorias**: `Test-CompletudeCodigo` OK (sem TODO/stub), `VerificarMetodoProtegidoChamadoDeFora` OK, `VerificarFuncoesNaoDefinidas` OK (zero ├│rf├ús ÔÇö `fUniqueIds` resolve), `VerificarLookupEmKeyPress` ERRO=0.
+- Arquivo mantido em LF; tempor├írio `automation/_tmp_bloco_f6_task804.prg` removido.
+
+Uma ressalva de escopo: o `Click` dos bot├Áes Inserir/Excluir/Encerrar continua fora desta fase ÔÇö ├® entrega da Fase 7/8 e o gate da Fase 6 n├úo o exige.

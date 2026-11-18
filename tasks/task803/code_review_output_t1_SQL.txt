@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os dois achados do pass SQL e s├úo **falsos positivos** ÔÇö n├úo fiz altera├º├Áes nos arquivos.
+
+As duas condi├º├Áes apontadas (`WHERE cmoes = ...` em `ValidarMoedaPorCodigo` e `WHERE dmoes = ...` em `ValidarMoedaPorDescricao`, no `SigOpSlcBO.prg`) s├úo tradu├º├úo fiel dos dois `Seek()` do legado, que o pr├│prio bloco de refer├¬ncia do pass j├í cita como "c├│digo original":
+
+```
+If !IsEmpty( This.Value ) And !Seek( This.Value, 'crSigCdMoe', 'CMoes' )
+If !IsEmpty( This.Value ) And !Seek( This.Value, 'crSigCdMoe', 'DMoes' )
+```
+
+`Seek(valor, 'crSigCdMoe', 'CMoes'/'DMoes')` ├® uma busca client-side num cursor global pr├®-carregado, indexado pelas tags `CMoes`/`DMoes` ÔÇö o equivalente direto, no sistema novo, ├® `SQLEXEC` com `WHERE cmoes = ...` / `WHERE dmoes = ...`. N├úo ├® filtro inventado.
+
+As colunas que o pass diz serem do "WHERE original" (`TIPOS`, `NKEYCODE`) n├úo t├¬m nenhuma rela├º├úo com essa consulta: `Tipos` vem de um `SCAN` totalmente diferente (`Select TmpBaixa / Scan For Tipos = 'X'`, usado s├│ para achar a moeda *default*, sem SQL contra o SQL Server), e `NKeyCode` n├úo existe em nenhum dos dois arquivos (grep deu zero). ├ë o mesmo padr├úo de falso positivo j├í catalogado na mem├│ria do projeto (`feedback_sql_filtro_inventado_locate_cursor_local.md`, itens 13a-bis/14a/15a ÔÇö mesma coluna `CMOES` contra `SigCdCot` em outros dois forms), onde o detector do pass SQL compara o `WHERE` do SQLEXEC migrado contra o `WHERE` de uma query completamente diferente do mesmo legado, em vez de reconhecer o `Seek()` equivalente.
+
+Remover esses `WHERE` quebraria as duas fun├º├Áes de valida├º├úo de moeda (sempre devolveriam vazio ou uma linha arbitr├íria). Registrei esta ocorr├¬ncia (3┬¬ para `CMOES`, 1┬¬ para `DMOES`) na mem├│ria j├í existente sobre esse padr├úo de falso positivo, para refer├¬ncia futura.

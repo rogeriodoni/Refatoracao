@@ -1,0 +1,11 @@
+=== PROBE Fase 6c - o delegate de When DISPARA? ===
+[1] form VARTYPE=O
+[2] Digitos vazio   : When() -> CONFIRM=OFF   (esperado OFF = delegate DISPAROU)
+[3] Digitos         : LostFocus() -> CONFIRM=ON   (esperado ON)
+[4] Digitos '1234'  : When() -> CONFIRM=ON   (esperado ON - o IF do legado nao entra)
+[5] Text1           : When() -> CONFIRM=OFF   (esperado OFF)
+[6] Text1           : LostFocus() -> CONFIRM=ON   (esperado ON)
+[7] CodSeg vazio    : When() -> CONFIRM=OFF   (esperado OFF)
+[8] Parcela '1'     : When() -> CONFIRM=ON   (esperado ON - ramo do ELSE, que enfileira TAB)
+[9] Parcela vazio   : When() -> CONFIRM=OFF   (esperado OFF - ramo do IF)
+=== FIM ===

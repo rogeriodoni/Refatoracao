@@ -1,0 +1,29 @@
+CHECKPOINT 1 - script vivo
+CHECKPOINT 2 - config.prg OK
+CHECKPOINT 3 - SET PROCEDURE OK
+CHECKPOINT 4 - gnConnHandle = 1
+VARTYPE(loc_oForm) = [O]
+Caption = [Operações do Caixa : ]
+Form WxH = 618x365
+--- GRADE
+  grd_4c_Dados existe = SIM
+  Top/Left/W/H = 110/147/206/221
+  ColumnCount = 2  Visible = .T.  RecordMark = .F.  DeleteMark = .F.
+  RecordSource = [cursor_4c_Sequencias]
+  Col1 CS=[cursor_4c_Sequencias.cnivels] W=150 Hdr=[Operação] RO=.F. MaxLen=20
+  Col2 CS=[cursor_4c_Sequencias.seqs] W=25 Hdr=[Seq] RO=.F. Mask=[9]
+--- CURSOR DA GRADE
+  cursor_4c_Sequencias RECCOUNT = 0  Buffering = 1  ReadOnly = .F.
+  campos do cursor: cdopes(C20) cidchaves(C20) cnivels(C20) seqs(N4)
+--- BOTOES / SHAPE
+  Inserir  L=390 T=3 WxH=80x100 Vis=.T. Ena=.T. Pic=OK
+  Excluir  L=465 Vis=.T. Pic=OK
+  Sair     L=540 Vis=.T. Cancel=.T. Pic=OK
+  Shape    L=385 W=256 T=12 H=110
+--- CABECALHO (fase 3)
+  cnt_4c_Cabecalho T/H = 0/80  Titulo=[Operações do Caixa :]
+--- CarregarDados chamado DE FORA (metodo PUBLIC)
+  retorno = .T.  RECCOUNT depois = 0
+--- ARQUIVO DE ERRO DE TESTE
+  (vazio - nenhum MsgErro/MsgAviso disparado)
+FIM

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. Phase 4/8 is complete.
+
+**Summary of what was built:**
+
+- **`SigOpSnoBO.prg`** ÔÇö added `ListarSubNiveis(par_cOperacaoPai, par_lModoInverso)` and `ListarSubSubNiveis(par_cOperacaoPai)`, both transcribed from the legacy `Init`'s SQL (JOIN with `SigCdOpe` for `ndopes` in both modes, filtering by `cnivels` in inverse mode vs `cdopes` in direct mode), populating READWRITE cursors (`cursor_4c_SubNiveis` / `cursor_4c_SubSubNiveis`) since the grid columns include editable checkboxes/textboxes.
+
+- **`FormSigOpSno.prg`**:
+  - `ConfigurarGradeSubN()` / `ConfigurarGradeSubS()` ÔÇö structural setup of both grids (9 and 1 columns) transcribed field-by-field from the SCX dump, including the 5 grid-cell CheckBoxes (`AddObject` + `CurrentControl` + `Sparse=.F.`, since the dump only states `CurrentControl` explicitly for one column but all 5 have `Check1` children).
+  - `VincularGradeSubN()` / `VincularGradeSubS()` ÔÇö binds `RecordSource`/`ControlSource` (guarded by `USED()`) and reapplies `Width`/`Header.Caption`/`CurrentControl` afterward (RecordSource resets them).
+  - `ConfigurarBotoes()` ÔÇö creates `cmd_4c_Inserir`/`cmd_4c_Excluir`/`cmd_4c_Sair` + `shp_4c_Separador`, transcribing the legacy's visibility/enabled logic (which differs between direct and inverse mode) and the separator's position/width formula ÔÇö no Click handlers yet (deferred to a later phase, per this codebase's established convention of not stubbing events early).
+  - `CarregarDados()` (PUBLIC) ÔÇö the single loading funnel, calling the BO and repainting both grids, satisfying the orchestrator's "real data load" requirement for this phase.
+
+Both files compiled cleanly in VFP9 with zero `.err` output. No Click/validation logic was added ÔÇö that's scoped for later phases, consistent with the task's phase boundaries.

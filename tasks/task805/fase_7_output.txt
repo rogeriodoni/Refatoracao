@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 conclu├¡da em `projeto\app\forms\operacionais\FormSigOpSpr.prg` (2133 ÔåÆ 2490 linhas).
+
+## O que foi portado
+
+O legado SIGOPSPR ├® um **di├ílogo FILHO** (`Do Form SigOpSpr With ThisForm`, no SIGCDBAL) que herda de `form` puro ÔÇö **n├úo tem barra CRUD**: n├úo h├í `frmcadastro`, n├úo h├í `Grupo_Op`, e os bot├Áes s├úo `btnInserir`/`btnExcluir` (linha de grade), `btnSair` e os tr├¬s de lote. Portanto n├úo existem `BtnAlterarClick`/`BtnVisualizarClick` para portar ÔÇö invent├í-los violaria o PILAR 1 e a regra de completude. O gate da Fase 7 confirma a dispensa (medido, sa├¡da abaixo).
+
+| Legado | Migrado |
+|---|---|
+| `btnInserir.Click` | `BtnInserirClick` ÔÇö `Go Top` + `PosicionarProximaLinha` (reusa o bloco da fase 6, mantendo o `APPEND BLANK` num lugar ├║nico) + foco/refresh |
+| `btnExcluir.Click` | `BtnExcluirClick` ÔÇö `DELETE` + `SKIP`/`SKIP -1` na linha corrente + foco/refresh |
+| `btnSair.Click` | `BtnEncerrarClick` ÔÇö descarta linhas em branco, reabilita o form pai, `Release()` **fora do TRY** (├® a ├║nica sa├¡da: sem TitleBar/ControlBox) |
+| `Delete From crProdutos Where Empty(CPros)` | `RemoverLinhasEmBranco` (PUBLIC ÔÇö o Click de `cmdProcessar`, fase 8, repete a mesma linha) |
+| cauda comum `Column1.SetFocus` + `Refresh` | `FocarGradeProdutos` (SetFocus guardado por `Visible`/`Enabled`) |
+| ÔÇö | `ConfigurarEventosBotoes` ÔÇö `BINDEVENT` em `Buttons(N)`, chamado no `InicializarForm` depois de todos os `AddObject` |
+
+Decis├Áes que vale registrar: os tr├¬s handlers s├úo PUBLIC (alvo de BINDEVENT falha em sil├¬ncio com PROTECTED); o `BINDEVENT` ├® por `Buttons(N)` e n├úo pelo grupo, porque no legado cada bot├úo tem seu pr├│prio `.Click` (o despacho por `.Value` fica para `cmdProcessar`, que tem um Click ├║nico); `RemoverLinhasEmBranco` usa `SELECT (alias)` + `DELETE FOR` porque o alias vem de vari├ível e SQL do VFP9 n├úo aceita name expression; e as properties `lhouveexcl`/`lhouveins` do ClassInfo do SCX n├úo s├úo atribu├¡das nem lidas por m├®todo algum do dump ÔÇö e o chamador n├úo consulta nada do di├ílogo depois de fechar ÔÇö, ent├úo n├úo h├í comportamento delas a portar.
+
+## Verifica├º├úo executada
+
+- **Compila├º├úo**: limpa, `.FXP` gerado, sem `.ERR` (`automation\CompilarF7SigOpSpr805.prg`).
+- **Gate real da Fase 7** (recortado do `OrquestradorMigracao.ps1`, sem rodar migra├º├úo ÔÇö `automation\VerificarGateFase7Task805.ps1`): `VEREDITO=PASSA`, via ramo "legado sem CRUD" com 3 handlers (`frmcadastro=False`, `Grupo_Op=False`, nome CRUD=`False`, `pcEscolhaViva=0`).
+- **Completude** (regexes de TODO / procedure vazia / pend├¬ncia): `COMPLETUDE=OK`.
+- **Probe headless** (`automation\ProbeF7SigOpSpr805.prg`) ÔÇö os 16 checkpoints bateram com o esperado, e o `_dialogs.txt` saiu **vazio** (nenhum `MsgErro` suprimido):
+
+```
+[5] CREATEOBJECT VARTYPE=O        [6] pos-Init RECCOUNT=3   [7] PaiEnabled=.F.
+[8..10] binds em cada Buttons(N)=1
+[11] Inserir com branco existente: RECCOUNT=3, CPros=[]   (ramo Locate)
+[12] Inserir sem branco livre:     RECCOUNT=4             (ramo Append Blank)
+[13] pos-Excluir visiveis=3        [15] pos-RemoverLinhasEmBranco visiveis=3
+[16] pos-Encerrar PaiEnabled=.T.
+```
+
+Ou seja, os handlers de fato **mexem no cursor do pai**, n├úo apenas retornam `.T.`. Blocos balanceados (35 PROC/ENDPROC, 7 TRY/ENDTRY, 26 WITH/ENDWITH), nenhum `RETURN` dentro de TRY/CATCH e zero `MESSAGEBOX`.
+
+Fica para a Fase 8 o Click de `cmg_4c_CmdProcessar` (os 3 bot├Áes de lote, com `Do Case This.Value`), que j├í tem `ObterProdutosEmLote` no BO e vai reusar `RemoverLinhasEmBranco`.

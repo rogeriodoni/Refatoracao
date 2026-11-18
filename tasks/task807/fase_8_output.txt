@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 executada e aprovada no gate.
+
+## O que a fase 8 entregou
+
+**O form j├í estava funcionalmente completo ao fim da Fase 7** ÔÇö confirmei isso m├®todo a m├®todo contra a SE├ç├âO 3 do dump, que tem exatamente **9 m├®todos**, todos com referente no migrado (Init, `Command2.Click` ÔåÆ `BtnEncerrarClick`, `AfterRowColChange` ÔåÆ `GradeAfterRowColChange`, e os 5 `When ÔåÆ Return(.F.)` ÔåÆ `.ReadOnly = .T.` + `.TabStop = .F.`).
+
+O ├║nico ajuste de c├│digo foi de **nome**: `CarregarDados` ÔåÆ **`CarregarLista`** (14 ocorr├¬ncias, incluindo coment├írios). Medi o gate da Fase 8 standalone antes de mexer em nada:
+
+- o ramo **VISUALIZADOR** reconhece este legado (sem CRUD, sem bot├úo de gravar, todo campo somente-leitura) e dispensa `BtnCancelarClick`/`FormParaBO`/`BOParaForm`, mas **mant├®m `CarregarLista`** ÔÇö porque esta tela *tem* grade e popul├í-la ├® o trecho final do Init legado;
+- `FALTANTES=CarregarLista` era o ├║nico item. Renomear ├® honesto aqui (o m├®todo ├® o funil que popula a grade, e o PILAR 3 manda nome diferente do legado de qualquer forma); nenhum outro arquivo do projeto chamava `CarregarDados` deste form.
+
+Mais o bloco de cabe├ºalho `FASE 8/8` documentando o invent├írio, por que os tr├¬s nomes can├┤nicos n├úo t├¬m referente, e as decis├Áes de integra├º├úo (nenhum item em `menu.prg` ÔÇö ├® di├ílogo filho que depende de `poForm.pcSelFile`; nenhum `SET PROCEDURE` em `config.prg` ÔÇö carga sob demanda).
+
+## Verifica├º├úo (prova por arquivo de sa├¡da, n├úo por exit code)
+
+Smoke test do VFP9 **passou** nesta sess├úo, ent├úo compila├º├úo e runtime foram provados de verdade:
+
+- **Compila├º├úo** (`automation\CompilarF8SigOpStc807.prg`): `FormSIGOPSTC.FXP` e `SIGOPSTCBO.FXP` gerados, **nenhum `.ERR`** ÔÇö com controle negativo na mesma rodada (c├│pia do form com `PUBLIC PROCEDURE` colado no fim gerou `.ERR` apontando s├│ as 2 linhas acrescentadas, provando que o detector n├úo est├í cego).
+- **Runtime** (`automation\ProbeF8SigOpStc807.prg`): instancia com e sem form pai; os 7 m├®todos chamados de fora s├úo PUBLIC; os **2 BINDEVENT est├úo registrados** (AEVENTS: `AFTERROWCOLCHANGE ÔåÆ GRADEAFTERROWCOLCHANGE`, `CLICK ÔåÆ BTNENCERRARCLICK`); `CarregarLista` liga a grade (RecordSource + 2 ControlSource + headers e larguras 65/95 preservados ap├│s o rebind), liga o Edit1 por ControlSource e espelha os 4 Text; trocar de linha + `GradeAfterRowColChange` troca o Edit1 (1┬¬ ÔåÆ 2┬¬ tentativa); `BtnEncerrarClick` libera o form e o Destroy fecha o cursor; zero MsgErro/MsgAviso no caminho.
+- **Est├ítico, tudo zero**: acento literal, `this_X .Value`, RETURN em TRY, MESSAGEBOX, ISEMPTY/MostrarAviso/`.Self`/`Controls("nome")`, TTOD/TABLEREVERT/EVALUATE-que-atribui, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, m├®todo PROTECTED chamado de fora, lookup em KeyPress, Format/InputMask, `ValidadorSQLSchema` (683 tabelas) e `Test-CompletudeCodigo` nos dois arquivos. CRLF preservado (1608/1608 linhas), 0 bytes fora de ASCII.
+
+## Duas ressalvas honestas
+
+1. `SigFiSit`/`SigFiSii` est├úo **vazias** em DB_MBAHIA (COUNT(*) = 0, j├í registrado). A consulta real n├úo exibe nada, ent├úo o probe injeta um BO de teste que troca s├│ a *origem* das linhas e delega ao `CarregarDoCursor` real ÔÇö a exibi├º├úo por consulta real segue **n├úo provada** por falta de dado, n├úo por c├│digo.
+2. O gate est├í satisfeito e tudo acima passou, mas isto ├® verifica├º├úo headless: **n├úo houve inspe├º├úo visual da tela aberta**.

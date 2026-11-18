@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked this finding against the actual code and legacy dump ÔÇö and it's a false positive, consistent with a pattern already seen 5 times before on this same branch today.
+
+**What's flagged:** `SigOpStsBO.prg:741`, inside `Atualizar()`:
+```foxpro
+" WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+```
+
+**Why it's not an invented filter:**
+- `cidchaves` is the real PK of `SIGOPSTS` (`this_cCampoChave = "cidchaves"` in `Init()`, PK generated via `fUniqueIds()` in `Inserir()`/`MontarLoteGravacao()` ÔÇö per CLAUDE.md regra #22).
+- The "WHERE original usa: LNI, DOPES, STATUS, TOTA" reference the detector cited comes from two *different* queries in the same file (`ListarStatusOperacao`'s `dopes`/`status` join, and `ExisteStatusDuplicado`'s `GROUP BY status` into `Totais`/`TT`) ÔÇö not from any WHERE clause related to a per-row UPDATE. "LNI" isn't even a column; it's `lnI`, a loop variable from an unrelated part of the legacy dump (`For lnI=1 to .Grupo_Op.ButtonCount`), picked up by a crude keyword scan.
+- The legacy screen never issues a textual `UPDATE ... WHERE` against `SIGOPSTS` at all ÔÇö it persists via replace-all (`Delete` + `Insert` per line inside `GravarStatus`/`MontarLoteGravacao`, already transcribed correctly). `Atualizar()` is just the generic CRUD-by-PK override required by `BusinessBase` architecture, so there's no legacy WHERE text to compare it against.
+- Removing the clause would make the UPDATE hit **every row** in `SIGOPSTS`, which is a correctness regression, not a fix.
+
+This is the exact "caso 1 puro" pattern already recorded in memory (`feedback_sql_filtro_inventado_pk_load_e_nome_truncado.md`, reincid├¬ncias 5 and 6 ÔÇö the 6th entry is literally this same file/line from earlier today). No files changed.

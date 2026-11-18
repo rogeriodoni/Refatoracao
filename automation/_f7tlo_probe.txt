@@ -1,0 +1,27 @@
+CHECKPOINT 1 - script vivo
+CHECKPOINT 2 - dependencias OK
+
+=== CENARIO A: sem cursores do chamador, perlocals ausente ===
+VARTYPE(loForm)=O
+lbl_4c_Label1 existe=.T. Caption=[Lido :] L/T/W/H=227/282/28/15
+lbl_4c_Label2 Caption=[Estoque :] L/T/W/H=205/299/48/15
+PerLocals do BO=.F.
+TotLido Caption=[] (esperado vazio)
+TotEstoque Caption=[] (esperado vazio)
+Leitura Caption=[] (esperado vazio)
+AtualizarTotais PROTECTED(2)=.F. (esperado .F.)
+AtualizarTotais() de fora=.T.
+cmd_4c_Saida existe=.T. BtnSaidaClick existe=.T.
+
+=== CENARIO B: cursores do chamador, perlocals = .T. ===
+VARTYPE(loForm)=O
+PerLocals do BO=.T.
+TotalLido=18 TotalEstoque=4 Perc=450
+TotLido    Caption=[   18] Width=32 textoPx=21 CABE=SIM
+TotEstoque Caption=[    4] Width=32 textoPx=18 CABE=SIM
+Leitura    Caption=[ 450,00%] Width=53 textoPx=48 CABE=SIM
+SCX usava Width=2: CABERIA=NAO
+Recarregar()=.T. TotLido apos=[   18]
+RECCOUNT(cursor_4c_Locais)=2 (esperado 2)
+
+FIM DO PROBE

@@ -1719,3 +1719,346 @@ DEFINE CLASS TextBoxGruCadOperacao_4c AS TextBox
         ENDIF
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaSno_4c - celulas de lookup das grades do FormSigOpSno
+* (SIGOPSNO - Sub-Niveis da Operacao).
+*
+* Quatro papeis, um por celula editavel do dump (this_cCelula identifica qual):
+*   OPERACAO - GradeSubN.Column1.Text1 (cnivels): When restringe a edicao a
+*     linhas novas (cdopes = operacao pai E cnivels vazio); Valid faz
+*     fwBuscaExt contra SigCdOpe (Dopes/nDopes); LostFocus foca cmd_4c_Sair
+*     quando o campo fica vazio (comportamento do legado).
+*   OBS      - GradeSubN.Column7.Text1 (codobs numeric(3,0)): Valid faz
+*     fwBuscaExt contra SigCdObs (Codigos/Observas).
+*   TPFAT    - GradeSubN.Column8.Text1 (tpfats char(3)): Valid faz fwBuscaExt
+*     contra SigCdTif (Codigos/Descricaos).
+*   SUBSUB   - GradeSubS.Column1.Text1 (dopess): When so libera a celula
+*     quando a linha mestre de GradeSubN ja tem cnivels preenchido; Valid
+*     restringe a busca as operacoes que usam o sub-nivel corrente como
+*     filho (fwBuscaInt local no legado, FormBuscaAuxiliar + par_cFiltro no
+*     migrado); LostFocus garante uma linha vazia em SigOpOss para o usuario
+*     continuar incluindo sem precisar clicar em Inserir de novo.
+*
+* BINDEVENT em When/Valid/LostFocus de Column.Text1 NAO eh confiavel (regra
+* #46/CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC
+* do form (CelulaSnoEditavel/ValidarCelulaSnoExec/CelulaSnoLostFocusExec),
+* que recebem o proprio TextBox porque dentro do Valid o valor digitado esta
+* em THIS.Value e ainda nao chegou ao cursor da grade.
+*
+* F4/F5/duplo clique abrem o picker direto (afordancia do sistema novo, como
+* os demais lookups de grade deste arquivo) - guard de tecla obrigatorio
+* (regra #47), senao o picker subiria a cada tecla digitada.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaSno_4c AS TextBox
+    FontName     = "Tahoma"
+    FontSize     = 8
+    BorderStyle  = 0
+    Margin       = 0
+    ForeColor    = RGB(0, 0, 0)
+    BackColor    = RGB(255, 255, 255)
+    this_cCelula = ""        && OPERACAO / OBS / TPFAT / SUBSUB
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaSnoEditavel", 5)
+            RETURN THISFORM.CelulaSnoEditavel(THIS.this_cCelula, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCelulaSnoExec", 5)
+            RETURN THISFORM.ValidarCelulaSnoExec(THIS.this_cCelula, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "CelulaSnoLostFocusExec", 5)
+            THISFORM.CelulaSnoLostFocusExec(THIS.this_cCelula, THIS)
+        ENDIF
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupCelulaSno", 5)
+                THISFORM.AbrirLookupCelulaSno(THIS.this_cCelula, THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupCelulaSno", 5)
+            THISFORM.AbrirLookupCelulaSno(THIS.this_cCelula, THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaSpr_4c - celulas de lookup da grade do FormSigOpSpr
+* (SIGOPSPR - Selecionar Produtos).
+*
+* Dois papeis, um por celula editavel do dump (this_cCelula identifica qual):
+*   CODIGO    - grdProdutos.Column1.Text1 (CPros char(14)): When libera a
+*     edicao somente quando o form PAI esta em INSERIR/ALTERAR; Valid faz
+*     fwBuscaExt contra SigCdPro buscando por CPros (colunas do picker na
+*     ordem CPros/DPros, como o mAddColuna do legado).
+*   DESCRICAO - grdProdutos.Column2.Text1 (DPros char(65)): When exige, ALEM
+*     do modo de edicao, que o codigo da linha corrente esteja VAZIO (o
+*     legado le Column1.Text1.Value); Valid faz fwBuscaExt contra a MESMA
+*     SigCdPro, mas buscando por DPros e com as colunas do picker na ordem
+*     inversa (DPros/CPros), tambem como no legado.
+*
+* As duas celulas resolvem para o MESMO par codigo+descricao e preenchem as
+* duas colunas da grade - no legado os dois Valid terminam atribuindo
+* Column1.Text1.Value = crListaRemota.CPros e Column2.Text1.Value =
+* crListaRemota.DPros, nao importa por qual lado a busca comecou.
+*
+* BINDEVENT em When/Valid de Column.Text1 NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (CelulaSprEditavel/ValidarCelulaSprExec/AbrirLookupCelulaSpr), que
+* recebem o proprio TextBox porque dentro do Valid o valor digitado esta em
+* THIS.Value e ainda NAO chegou ao cursor da grade (regra #46).
+*
+* F4/F5/duplo clique abrem o picker direto (afordancia do sistema novo, como
+* os demais lookups de grade deste arquivo) - guard de tecla obrigatorio
+* (regra #47), senao o picker subiria a cada tecla digitada.
+*
+* Geometria/decoracao transcritas do dump (Column1.Text1 e Column2.Text1:
+* FontName="Tahoma", BorderStyle=0, Margin=0, ForeColor=0,0,0,
+* BackColor=255,255,255). MaxLength vem da LARGURA DA COLUNA no schema
+* (regra #19), nunca do Width em pixels - quem define eh o form, porque as
+* duas celulas compartilham esta classe.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaSpr_4c AS TextBox
+    FontName     = "Tahoma"
+    FontSize     = 8
+    BorderStyle  = 0
+    Margin       = 0
+    ForeColor    = RGB(0, 0, 0)
+    BackColor    = RGB(255, 255, 255)
+    this_cCelula = ""        && CODIGO / DESCRICAO
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaSprEditavel", 5)
+            RETURN THISFORM.CelulaSprEditavel(THIS.this_cCelula, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCelulaSprExec", 5)
+            RETURN THISFORM.ValidarCelulaSprExec(THIS.this_cCelula, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupCelulaSpr", 5)
+                THISFORM.AbrirLookupCelulaSpr(THIS.this_cCelula, THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupCelulaSpr", 5)
+            THISFORM.AbrirLookupCelulaSpr(THIS.this_cCelula, THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxNivelSqn_4c - celula "Operacao" (Column1/cnivels) da grade de
+* sequencias do FormSigOpSqn (SIGOPSQN.GradeSubN.Column1.Text1).
+*
+* Legado:
+*   When      -> ThisForm.antvalue = This.Value (snapshot do valor anterior)
+*   Valid     -> com o valor alterado e nao vazio, Seek(This.Value, 'TmpOper',
+*                'Dopes'); nao achando, abre fwBuscaSel contra TmpOper
+*                (universo = SigCdOpe.Dopes filtrado por CupFis IN (1,3),
+*                carregado 1x no Init - ver SigOpSqnBO.ListarOperacoesCupFis)
+*   LostFocus -> If IsEmpty(This.Value) / Thisform.cmdSair.SetFocus
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (GuardarValorAnteriorNivel/ValidarNivelGradeExec/NivelGradeLostFocus),
+* que recebem o proprio TextBox porque dentro do Valid o valor digitado esta
+* em THIS.Value e ainda NAO chegou ao cursor da grade.
+*
+* Geometria/decoracao transcritas do dump (Column1.Text1): FontName/FontSize
+* "Tahoma"/8, BorderStyle=0, Margin=0, ForeColor=0,0,0, BackColor=255,255,255.
+* MaxLength = 20 (SigMvCxs.cnivels char(20), regra #19 - pela largura da
+* COLUNA no schema, nunca pelo Width em pixels) eh atribuido pelo form, que
+* conhece o schema.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxNivelSqn_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GuardarValorAnteriorNivel", 5)
+            THISFORM.GuardarValorAnteriorNivel(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarNivelGradeExec", 5)
+            RETURN THISFORM.ValidarNivelGradeExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "NivelGradeLostFocus", 5)
+            THISFORM.NivelGradeLostFocus(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxSeqSqn_4c - celula "Seq" (Column2/seqs) da grade de sequencias do
+* FormSigOpSqn (SIGOPSQN.GradeSubN.Column2.Text1).
+*
+* Legado:
+*   When  -> ThisForm.AntValue2 = This.Value (snapshot do valor anterior)
+*   Valid -> com o valor alterado, exige Between(This.Value,1,8); fora da
+*            faixa, MessageBox('Informe Sequencia entre 1 - 8') + Return .f.
+*            (mantem o foco na celula)
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (GuardarValorAnteriorSeq/ValidarSeqGradeExec), que recebem o proprio
+* TextBox porque dentro do Valid o valor digitado esta em THIS.Value e ainda
+* NAO chegou ao cursor da grade.
+*
+* Geometria/decoracao transcritas do dump (Column2.Text1): FontName/FontSize
+* "Tahoma"/8, BorderStyle=0, InputMask="9", Margin=0, MaxLength=1,
+* ForeColor=0,0,0, BackColor=255,255,255 - todas atribuidas pelo form junto
+* com o AddObject, por paridade com o restante do arquivo.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxSeqSqn_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GuardarValorAnteriorSeq", 5)
+            THISFORM.GuardarValorAnteriorSeq(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarSeqGradeExec", 5)
+            RETURN THISFORM.ValidarSeqGradeExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxStatusSts_4c - celula "Status" (Column1/status) da grade de status
+* por operacao do FormSigOpSts (SIGOPSTS.GradeSubN.Column1.Text1).
+*
+* Legado:
+*   When      -> Return( Empty( LocalStats.status ) )
+*                (so a linha AINDA SEM status aceita digitacao - a linha ja
+*                 resolvida fica travada; para trocar, o usuario exclui a
+*                 linha e insere outra)
+*   Valid     -> lcDopes = crSigCdOpe.Dopes
+*                If Not IsEmpty(This.Value)
+*                    xBrox = CreateObject('fwbuscaext', <conn>, 'SigStats',
+*                        'CrListaRemota', 'Cods', This.Value, 'Selecao', .t.,
+*                        'Cods')
+*                    If Not xBrox.plAchouRegistro
+*                        xBrox.mAddColuna('Cods',  '', 'Codigo',    .t.)
+*                        xBrox.mAddColuna('Descs', '', 'Descricao', .t.)
+*                        xBrox.Show()
+*                    EndIf
+*                    This.Value = CrListaRemota.Cods
+*                    Replace Descs With CrListaRemota.Descs in LocalStats
+*                    This.Refresh
+*                EndIf
+*                Select LocalStats
+*                Return .t.
+*   LostFocus -> If IsEmpty(This.Value) / Thisform.cmdSair.SetFocus
+*
+* O "plAchouRegistro" do fwbuscaext legado eh exatamente o contrato
+* this_lAchouRegistro do FormBuscaAuxiliar (regra #37): o Init ja tenta o
+* match exato e, achando 1 registro, resolve o valor sem abrir o Show().
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (CelulaStatusEditavel / ValidarStatusGradeExec /
+* StatusGradeLostFocus / AbrirLookupStatusSts), que recebem o proprio
+* TextBox porque dentro do Valid o valor digitado esta em THIS.Value e ainda
+* NAO chegou ao cursor da grade (regra #46).
+*
+* F4/F5/duplo clique abrem o picker direto (afordancia do sistema novo, como
+* os demais lookups de grade deste arquivo) - guard de tecla obrigatorio
+* (regra #47), senao o picker subiria a cada tecla digitada.
+*
+* Geometria/decoracao transcritas do dump (Column1.Text1): FontName/FontSize
+* "Tahoma"/8, BorderStyle=0, Margin=0, ForeColor=0,0,0, BackColor=255,255,255.
+* MaxLength = 1 (SigStats.cods / SIGOPSTS.status char(1), regra #19 - pela
+* largura da COLUNA no schema, nunca pelo Width em pixels) eh atribuido pelo
+* form, que conhece o schema.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxStatusSts_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaStatusEditavel", 5)
+            RETURN THISFORM.CelulaStatusEditavel(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarStatusGradeExec", 5)
+            RETURN THISFORM.ValidarStatusGradeExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "StatusGradeLostFocus", 5)
+            THISFORM.StatusGradeLostFocus(THIS)
+        ENDIF
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupStatusSts", 5)
+                THISFORM.AbrirLookupStatusSts(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupStatusSts", 5)
+            THISFORM.AbrirLookupStatusSts(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE

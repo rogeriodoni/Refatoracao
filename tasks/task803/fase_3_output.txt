@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balance correctly: 7 PROCEDURE/ENDPROC, 3 WITH/ENDWITH, 15 IF/ENDIF, 2 FOR/ENDFOR, 1 TRY/ENDTRY, 1 DEFINE CLASS/ENDDEFINE.
+
+Fase 3/8 complete. Created `C:\4c\projeto\app\forms\operacionais\FormSigOpSlc.prg`:
+
+- `DEFINE CLASS FormSigOpSlc AS FormBase` with visual properties transcribed from the SCX (800x400, TitleBar=0, Closable/MaxButton/MinButton/Movable=.F., WindowType=1, DataSession=1) and state properties mirroring the legacy `Init` params (`this_oFormPai`, `this_lExibirConta` forced `.F.` per rule #17, `this_lExibirMoeda`).
+- `Init(par_lGetConta, par_lGetMoeda, par_oFormPai)` matching the legacy `LParameters _GetConta, _GetMoeda, _Parent`.
+- `ValidarParametros()` ÔÇö precondition guard requiring a parent form, with test-harness bypass.
+- `InicializarForm()` ÔÇö creates `SigOpSlcBO`, applies decoration and header, calls `TornarControlesVisiveis()`.
+- `ConfigurarDecoracao()` (Picture = new_background.jpg) and `ConfigurarCabecalho()` (cntSombra faixa + two labels, created first per rule #11 since the Cancela/Confirma buttons from a later phase sit at Top=3, inside the header band).
+- `TornarControlesVisiveis()` and `Destroy()`.
+
+This is a flat OPERACIONAL dialog (no PageFrame) ÔÇö confirmed correct per the form's own analysis (no Page1/Page2 in the legacy SCX, just absolute-positioned controls) and consistent with sibling dialogs like `FormSigOpCot.prg`. Grid/fields, lookups, and button click handlers are left for fases 4ÔÇô8 as noted in the file's header comment.

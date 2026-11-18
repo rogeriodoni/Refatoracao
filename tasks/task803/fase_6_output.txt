@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The structure is correct ÔÇö methods are properly closed and the file flows into `ConfigurarBlocoContaGrupo` unchanged. The Phase 6 implementation is complete and consistent with the established codebase patterns.
+
+**Summary of changes to `FormSigOpSlc.prg`:**
+
+- Added `this_lEmLookup` reentrancy-guard property.
+- Bound `txt_4c__cd_moeda`/`txt_4c__ds_moeda` on `"LostFocus"` (not `"Valid"` or blind `"KeyPress"`, per rule #47) and `txt_4c__ds_moeda` on `"When"` (established pattern from `FormSigOpBcb.prg`/`FormSigOpCcl.prg`).
+- `DsMoedaWhen()` reproduces the legacy `get_ds_moeda.When: Return IsEmpty(get_cd_moeda.Value)`.
+- `CdMoedaLostFocus`/`DsMoedaLostFocus` (thin wrappers with the reentrancy guard) delegate to `*Exec` methods that call `SigOpSlcBO.ValidarMoedaPorCodigo`/`ValidarMoedaPorDescricao`; on empty input, clear both fields per legacy `Valid`; on no match, open the picker without erasing what the user typed (rule #50).
+- `AbrirBuscaMoeda()` opens `FormBuscaAuxiliar` using the same Pattern A already used for `SigCdMoe` in `Formccr.prg` (handle as 1st arg, `this_lAchouRegistro` guard before `Show()`, `this_lSelecionou` guard on assignment).
+- Updated the file's header doc to mark Phase 6 as done instead of pending.
+
+No stubs, no TODOs ÔÇö every method has full logic. Next up is Phase 7 (Cancela/Confirma click handlers).

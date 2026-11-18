@@ -1,0 +1,40 @@
+CHECKPOINT 1 - vivo 18/11/2026 02:45:52
+CHECKPOINT 2 - dependencias OK
+(a1) SEM form pai   VARTYPE(form) = [O]  esperado [O]
+(a2) COM form pai   VARTYPE(form) = [O]  Caption = [Status das Operações Venda Balcao]
+(b) CELULA instalada na Column1
+    existe txt_4c_Status = SIM  (esperado SIM)
+    classe        = [Textboxstatussts_4c]  esperado [TextBoxStatusSts_4c]
+    CurrentControl= [TXT_4C_STATUS]  esperado [txt_4c_Status]
+    Sparse        = .F.  esperado .F.
+    MaxLength     = 1  esperado 1 (SigStats.cods char(1))
+    Col1.ReadOnly = .F.  Col2.ReadOnly = .T.  esperado .F. / .T. (When=.F. do legado)
+(c) ESCOPO (protected=SIM reprova)
+    CelulaStatusEditavel       existe=SIM protected=NAO
+    ValidarStatusGradeExec     existe=SIM protected=NAO
+    AbrirLookupStatusSts       existe=SIM protected=NAO
+    AbrirLookupStatusStsExec   existe=SIM protected=NAO
+    StatusGradeLostFocus       existe=SIM protected=NAO
+    CarregarDados              existe=SIM protected=NAO
+(d) CarregarDados retorno = .T.  BO injetado = [Stsbofakef6]
+    USED(cursor_4c_Status) = .T.  RECCOUNT = 2  esperado 2
+    RecordSource = [cursor_4c_Status]  ColumnCount = 2
+    Col1.ControlSource = [cursor_4c_Status.status]  Header = [Status]  Width = 40
+    Col2.ControlSource = [cursor_4c_Status.descs]  Header = [Descrição]  Width = 235
+    POS-REBIND CurrentControl = [TXT_4C_STATUS]  Sparse = .F.  (esperado [txt_4c_Status] / .F.)
+(e) When por linha (CelulaStatusEditavel)
+    linha 1 status=[A]  editavel = .F.  esperado .F.
+    linha 2 status=[ ]  editavel = .T.  esperado .T.
+    EOF                 editavel = .F.  esperado .F.
+    CONFERE When = SIM
+(f) Valid / funil do lookup
+    (f1) celula VAZIA  Valid = .T.  arquivo de erro = VAZIO  (esperado .T. / VAZIO - nenhum dialogo)
+    (f2) flag LIGADA   arquivo de erro = VAZIO  valor da celula = [Z]  (esperado VAZIO / [Z] - picker NAO foi aberto)
+    (f3) celula [Z]    Valid = .T.  arquivo de erro = GRAVOU  (esperado .T. / GRAVOU - funil alcancado e falha REPORTADA)
+    flag solta depois do CATCH = .F.  esperado .F.
+    cursor_4c_Busca fechado = .T.  esperado .T.
+    (f4) LostFocus vazio: sem excecao
+--- ARQUIVO DE ERRO DE TESTE
+[18/11/2026 02:45:52] Erro em AbrirLookupStatusSts: Erro ao buscar o status:Connection handle is invalid.Linha: 114Procedure: init
+
+FIM

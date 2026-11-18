@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado da revis├úo
+
+Verifiquei os 13 achados contra o c├│digo real (grep + leitura direta, n├úo os trechos truncados do relat├│rio) e **nenhum ├® um defeito real** ÔÇö todos batem com fam├¡lias de falso-positivo j├í catalogadas na mem├│ria do projeto:
+
+**8 ├ù METODO-INEXISTENTE** ÔÇö todos falsos:
+- `LerCampoDaTela`, `ValidarParcela`, `ValidarCartao`, `MontarRetornoTef`: definidos como `FUNCTION`/`ENDFUNC` (n├úo `PROCEDURE`) dentro da pr├│pria classe, com corpo real e chamados via `THIS.` ÔÇö o detector s├│ reconhece `PROCEDURE`.
+- `this_cIdent`, `Caption`, `this_lPermiteEsc`: s├úo **properties**, usadas em 30+ sites sempre sem par├¬nteses ÔÇö nunca chamadas como m├®todo.
+- `Controls()`: usado como `par_oContainer.Controls(loc_nI)` com ├¡ndice **num├®rico** (regra #34), uso correto.
+
+**1 ├ù NULL-CURSOR** ÔÇö falso: `cursor_4c_RespostaSiTef` ├® criado por `CREATE CURSOR` vazio e populado s├│ por `INSERT INTO ... VALUES` com literais/concatena├º├úo VFP ÔÇö nunca `APPEND FROM`/SQLEXEC de SQL Server, ent├úo n├úo h├í origem de NULL. (Cheguei a aplicar `SET NULL ON/OFF` especulativamente e revertei ao confirmar que n├úo corresponde a risco real, para n├úo deixar ru├¡do sem fun├º├úo.)
+
+**4 ├ù LAYOUT-POSITION** ÔÇö falsos por colis├úo de nome gen├®rico: os dois pares `Label1` (um filho de `cnt_4c_Container1`, outro direto no Form) j├í est├úo **exatos** nos seus respectivos `lbl_4c_Label1` (Top13/Left4 e Top176/Left355). O achado comparou ambos contra `lbl_4c_Label10`, um label completamente diferente ("2 - Administradora", Top225/Left194) ÔÇö mesmo mecanismo j├í visto em dezenas de outros forms.
+
+Nenhuma altera├º├úo foi aplicada ao `Formsigoptef.prg`/`sigoptefBO.prg` ÔÇö o arquivo permanece id├¬ntico ao original. Documentei esta reincid├¬ncia na mem├│ria do projeto para acelerar revis├Áes futuras.

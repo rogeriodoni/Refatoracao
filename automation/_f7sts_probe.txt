@@ -1,0 +1,15 @@
+CREATEOBJECT SigOpStsBO = O
+PROTECTED ExisteStatusDuplicado = NAO(ok)
+PROTECTED GravarStatus          = NAO(ok)
+PROTECTED ListarStatusOperacao  = NAO(ok)
+1) sem duplicidade -> .F.(ok) status=[]
+2) Inserir (1a vez) -> RECCOUNT=3 (esperado 3)
+3) Inserir (2a vez) -> RECCOUNT=3 (esperado 3 - reaproveitou) FOUND=SIM
+4) 1 linha em branco -> .F.(ok)
+5) status F repetido -> .T.(ok) status=[F] (esperado F)
+6) repetida EXCLUIDA -> .F.(ok)
+7) 2 linhas em branco -> .T.(ok) status=[] (esperado vazio)
+8) totais fechado=SIM(ok) alias restaurado=SIM(ok)
+9) GravarStatus sem operacao -> .F.(ok) erroExibido=SIM(ok)
+10) GravarStatus sem conexao -> .F.(ok) erroExibido=SIM(ok)
+11) flags apos falha -> Inc=.T.(ok) Exc=.T.(ok)

@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both fixes are in place and correct.
+
+## Summary
+
+Of the 10 reported findings, 2 were genuine bugs and have been fixed; the other 8 were false positives (confirmed by reading the actual code):
+
+**Fixed:**
+1. **`TornarControlesVisiveis`** ÔÇö had a typo (`loc_oControl` instead of `loc_oControle`) plus a call to `THIS.TornarControlesVisiveis(loc_oControl)`, a procedure with no `LPARAMETERS`. Since `Image` controls (ImgBarra1/2/3) aren't containers and never have sub-controls, this dead/broken recursive branch was removed ÔÇö it was referencing an undeclared variable, which would throw a runtime error on every form init (caught by the outer `TRY`, silently failing `InicializarForm` every time the form opened).
+2. **GRID-WITH in `CarregarDados`** ÔÇö the `WITH THIS.grd_4c_Dados` block set `.RecordSource`/`.ColumnCount` and accessed `.Column1`/`.Column2` in the same block. Moved `ColumnCount`/`RecordSource` outside the `WITH`, keeping the `.ColumnN.ControlSource` assignments in their own block, per the rule's prescribed fix.
+
+**False positives (verified, left untouched):**
+- `MADDCOLUNA-PARAMS` ÔÇö the two `mAddColuna` calls already pass exactly 3 params each.
+- `THIS.Value()`, `THIS.Caption()`, `THIS.Width()` ÔÇö none of these calls exist anywhere in the file.
+- `THIS.ResolverCelulaSpr()` ÔÇö it's defined (`PROTECTED FUNCTION ResolverCelulaSpr`, line ~1757) and correctly called only from other methods of the same class, which is legal for a PROTECTED method.
+- `THIS.Controls()` ÔÇö native VFP9 array property access, not a custom method.
+- `WITH .grdProdutos` ÔÇö that object name doesn't exist in this file (it's `grd_4c_Dados`); only appears in legacy-reference comments.
+- `CONTAINER-VISIVEL` for `CNT_4C_SOMBRA` ÔÇö it's the header container, explicitly and intentionally set `Visible = .T.` in `ConfigurarCabecalho` before `TornarControlesVisiveis` runs; forcing it to `.T.` again is a no-op, not a bug.
+- `LAYOUT-POSITION` for `cnpProcessando`/`Top=500` ÔÇö explicitly documented: the legacy Init overrides the SCX design-time `Top=300` with `Top=500` at runtime, and the migrated code correctly transcribes the runtime value, not the dump value.
