@@ -544,6 +544,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (getFPags)
+            .DisabledBackColor = RGB(255,255,255)
+            .DisabledForeColor = RGB(0,0,128)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- txt_4c_DPags: descricao da condicao (display only, vem de SigOpFp.Descrs)
@@ -558,6 +562,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (getDPags)
+            .DisabledBackColor = RGB(255,255,255)
+            .DisabledForeColor = RGB(0,0,128)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Shape7: separador entre Condicao e Cabecalho (top=201+29=230)
@@ -621,6 +629,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text1)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label3", "Label")
@@ -650,6 +662,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text2)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Vencimento (Label4 + Text3 x Text4)
@@ -680,6 +696,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text3)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label5", "Label")
@@ -709,6 +729,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text4)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Data Documento (Label6 + Text5 x Text6)
@@ -739,6 +763,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text5)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label7", "Label")
@@ -768,6 +796,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text6)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Nro do Documento (Label8 + Text7 x Text8)
@@ -798,6 +830,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text7)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label9", "Label")
@@ -827,6 +863,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text8)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Valor do Documento (Label10 + Text9 x Text10)
@@ -857,6 +897,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text9)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label11", "Label")
@@ -886,6 +930,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text10)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Shape6: separador Cabecalho / Texto Responsabilidade (top=275+29=304)
@@ -948,6 +996,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text11)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPg2.AddObject("lbl_4c_Label13", "Label")
@@ -977,6 +1029,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text12)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Nro Colunas (Label31 + Text13)
@@ -1007,6 +1063,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text13)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Nro Linhas (Label30 + Text14)
@@ -1037,6 +1097,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text14)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Shape3: separador Texto / Sacado (top=349+29=378)
@@ -1099,6 +1163,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text15)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label15", "Label")
         WITH loc_oPg2.lbl_4c_Label15
@@ -1126,6 +1194,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text16)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- C.G.C./C.P.F. (Label16 + Text17 x Text18)
@@ -1155,6 +1227,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text17)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label17", "Label")
         WITH loc_oPg2.lbl_4c_Label17
@@ -1182,6 +1258,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text18)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Endereco (Label18 + Text19 x Text20)
@@ -1211,6 +1291,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text19)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label37", "Label")
         WITH loc_oPg2.lbl_4c_Label37
@@ -1238,6 +1322,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text20)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Bairro (Label20 + Text21 x Text22)
@@ -1267,6 +1355,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text21)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label21", "Label")
         WITH loc_oPg2.lbl_4c_Label21
@@ -1294,6 +1386,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text22)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Cidade (Label22 + Text23 x Text24)
@@ -1323,6 +1419,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text23)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label23", "Label")
         WITH loc_oPg2.lbl_4c_Label23
@@ -1350,6 +1450,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text24)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- U.F. (Label24 + Text25 x Text26) top=389+29=418 / 403+29=432
@@ -1379,6 +1483,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text25)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label25", "Label")
         WITH loc_oPg2.lbl_4c_Label25
@@ -1406,6 +1514,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text26)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- C.E.P. (Label26 + Text27 x Text28)
@@ -1435,6 +1547,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text27)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         loc_oPg2.AddObject("lbl_4c_Label27", "Label")
         WITH loc_oPg2.lbl_4c_Label27
@@ -1462,6 +1578,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text28)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Shape4: separador Sacado / Impressora (top=456+29=485)
@@ -1522,6 +1642,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text29)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Fonte Padrao (Label34 + Text30) top=494+29=523 / 508+29=537
@@ -1550,6 +1674,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text30)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Tamanho Fonte (Label35 + Text31)
@@ -1579,6 +1707,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text31)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- Tamanho Folha (Label38 + Text40) top=460+29=489 / 473+29=502
@@ -1607,6 +1739,10 @@ DEFINE CLASS FormCfb AS FormBase
             .FontSize = 8
             .Enabled  = .F.
             .Visible  = .T.
+            .SpecialEffect = 1   && transcrito do dump (Text40)
+            .Margin = 0
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *-- BINDEVENT: validacao de impressora, fonte e tamanho de folha ao sair do campo
