@@ -1108,6 +1108,18 @@ Sweep 2026-10-20: **267 sites em 77 arquivos**, so **2** com guard. Nenhum gate 
 
 Auto-fix: CorretorAutomatico **#219** (envolve `TABLEREVERT` cru no guard; nas DUAS listas, inclusive modo SEGURO) + **#91** corrigido na origem. Skill: secao **247**. Origem: Erro230 (`FormDup`/`DupBO` - Series de Duplicatas nao abria).
 
+### 53. Menu de SUBMENU sem `ON BAR` e form de layout de impressao com `ControlSource` espelhado
+Origem: "Ferramentas > Configuracoes nao abre" (2026-11-23). Seis defeitos encadeados, todos compilando limpo:
+
+1. **Item pai de submenu sem `ON BAR`**: o legado guarda a arvore em `SIGCDPRG` (`DescricaoS = "Menu - Ferramentas - Configuracao - Nota Fiscal"`). O no intermediario virou `DEFINE BAR` sem `ON BAR ... ACTIVATE POPUP` nem `ON SELECTION` - clicar nao fazia nada, e tres forms filhos migrados (`FormSigOpCbl`, `FormFis`, `FormNfl`) nunca tiveram `Abrir*`. Filho nao migrado fica visivel com `SKIP FOR .T.`.
+2. **`ControlSource` do dump, coluna conferida no banco**: forms de layout de impressao tem centenas de pares `l<campo>`/`c<campo>` (LINHA/COLUNA). O FormNfl tinha ~75 ligacoes erradas: coluna inexistente (`lcodpro`, real `ccodpro` -> `Variable 'LCODPRO' is not found` e a tela nao abre), coluna existente de OUTRO campo (Adendo -> `ltipi`) e tabela errada (`crSigCnFNf.loploc`, real `crSigCnFN2`). Diagnostico: cada `crX.col` contra o `INFORMATION_SCHEMA` + parear controle a controle com o dump por geometria, escopado a um metodo e uma pagina (regra #39). Combo `RowSourceType = 1` com coluna `int` grava o INDICE: lista EXATA do dump.
+3. **`PageFrame.Refresh` so atualiza a aba ATIVA**: depois de recarregar cursores ligados, `Refresh` em cada `Pages(i)`; e fechar o alias antes do `SQLEXEC` (regra #52), senao *Table buffer ... uncommitted changes* deixa o registro anterior na tela.
+4. **UPDATE generico pelo cursor (`FOR FCOUNT()`) apaga a chave**: no Incluir o cursor nasce do `APPEND BLANK`; campo editado fora dele (a Serie) era regravado em branco logo apos o INSERT. Sincronizar com `REPLACE ... IN cursor` antes.
+5. **Formatador de grade antes das `Column.Width`** (reforco da #35c): reatribuir `FontName`/`FontSize` recalcula as larguras.
+6. **Botao Encerrar SOLTO no form**: `Left` do dump, nunca o canonico 5 (que eh relativo a `cnt_4c_Saida`, regra #10). Era residuo do Pattern #182 anterior ao Erro501 (regra #44) - 10 forms corrigidos, `FormSigPdMp3`/`Formsigprnfe` pendentes sem par no dump. WARNING: CorretorAutomatico **#223**.
+
+**Testar gravando**: valor em cada familia corrigida -> conferir o CURSOR (ligacao) -> Confirmar -> ler o BANCO (coluna) -> Visualizar OUTRO registro (refresh). Skill: secao **251**.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

@@ -294,7 +294,7 @@ DEFINE CLASS FormFPP AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 4
-            .Left = 5
+            .Left            = 585   && legado: Encerrar solto no form (nao em cnt_4c_Saida); Left=5 era residuo do Pattern #182 pre-Erro501
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"

@@ -16571,6 +16571,41 @@ function Avisar-SqlExecSobreAliasDeGrid {
     return $Linhas
 }
 
+function Avisar-EncerrarSoltoNoFormEmLeft5 {
+    # Pattern #223 (2026-11-23, FormFis) - WARNING-only.
+    #
+    # Antes do Erro501 (2026-10-07) o Pattern #182 aplicava o canonico
+    # "cmd_4c_Encerrar.Left = 5" a QUALQUER WITH ...cmd_4c_Encerrar - inclusive
+    # "WITH THIS.cmd_4c_Encerrar", botao direto no FORM (dialogos OPERACIONAIS),
+    # cujo Left eh relativo ao form. O #182 foi restringido a cnt_4c_Saida, mas
+    # o RESIDUO ficou: o Encerrar vai parar no canto esquerdo, por cima do
+    # titulo da faixa (FormFis: legado cancela.Left = 724).
+    #
+    # NAO eh auto-fix: o Left certo vem do dump do legado (encontrados 367, 575,
+    # 585, 660, 673, 701, 723, 725, 998). Sweep 2026-11-23: 12 sites, 10
+    # corrigidos transcrevendo o dump; FormSigPdMp3 e Formsigprnfe ficaram sem
+    # par no dump (revisar a mao).
+    param([string[]]$Linhas, [string]$Arquivo)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -notmatch '(?i)^\s*WITH\s+THIS\.cmd_4c_Encerrar\s*$') { continue }
+        for ($k = $i + 1; $k -lt [Math]::Min($Linhas.Count, $i + 12); $k++) {
+            if ($Linhas[$k] -match '(?i)^\s*ENDWITH\b') { break }
+            if ($Linhas[$k] -match '(?i)^\s*\.Left\s*=\s*5\s*$') {
+                Write-Host "[Pattern #223 WARN] linha $($k + 1): cmd_4c_Encerrar direto no form com Left = 5 (residuo do #182)" -ForegroundColor Yellow
+                Add-Correcao -Tipo "WARN-223-ENCERRAR-SOLTO-LEFT5" -Linha ($k + 1) -Original ($Linhas[$k].Trim()) `
+                    -Corrigido "(nao mutado - transcrever o Left do botao Encerrar no dump do legado)" `
+                    -Descricao ("Pattern #223 WARNING: WITH THIS.cmd_4c_Encerrar (botao filho direto do FORM, fora de " + "cnt_4c_Saida) com .Left = 5. O canonico Left=5 do CLAUDE.md #10 eh RELATIVO a cnt_4c_Saida; " + "aplicado a botao solto, joga o Encerrar no canto esquerdo, por cima do titulo. Era residuo do " + "Pattern #182 anterior ao Erro501. CONSERTO: Left do botao Encerrar/Sair/cancela no dump do " + "SCX (mesmo Top). Ref: FormFis (legado cancela.Left = 724).")
+                break
+            }
+        }
+    }
+
+    return $Linhas
+}
+
 function Avisar-GradeEditavelSemLiberarColuna {
     # Pattern #212 (Erro179, 2026-09-30, Formgpd) - WARNING, so com o DUMP confirmando.
     #
@@ -17392,6 +17427,8 @@ function Invoke-CorrecaoAutomatica {
     # #218 so na lista de forms/BO: a base (modo SEGURO) ja eh PUBLIC nos
     # metodos que os forms chamam; o pattern age no *BO.prg e avisa no form.
     $linhas = Corrigir-MetodoProtegidoChamadoDeFora -Linhas $linhas -Arquivo $Arquivo
+    # #223 WARNING: Encerrar solto no form com Left = 5 (residuo do #182 pre-Erro501)
+    $linhas = Avisar-EncerrarSoltoNoFormEmLeft5 -Linhas $linhas -Arquivo $Arquivo
 
     }
 
