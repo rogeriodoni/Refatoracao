@@ -97,6 +97,9 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
         IF VARTYPE(par_cTitulo) = "C" AND !EMPTY(par_cTitulo)
             THIS.this_cTitulo = par_cTitulo
             THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = par_cTitulo
+            *-- a sombra tem de acompanhar o titulo: sem isto ficava "Procura" por
+            *-- tras e o cabecalho mostrava texto sobreposto ("Seriesra", erro382)
+            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = par_cTitulo
         ENDIF
 
         * Monta clausula WHERE com filtro adicional
@@ -422,6 +425,9 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
             IF VARTYPE(THIS.cnt_4c_Cabecalho) = "O"
                 IF VARTYPE(THIS.cnt_4c_Cabecalho.lbl_4c_Titulo) = "O"
                     THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = par_cTitulo
+                ENDIF
+                IF VARTYPE(THIS.cnt_4c_Cabecalho.lbl_4c_Sombra) = "O"
+                    THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = par_cTitulo
                 ENDIF
             ENDIF
         ENDIF

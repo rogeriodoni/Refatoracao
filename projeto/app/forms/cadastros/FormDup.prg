@@ -355,7 +355,14 @@ DEFINE CLASS FormDup AS FormBase
             *--   Grade.Top=121  Left=12  Width=940  Height=470  FontName="Tahoma"
             *-- A migracao usou os valores da CLASSE BASE e perdeu o override.
             *-- Top = 121 + 29 (compensacao do PageFrame sem abas) = 150.
-            IF !USED("cursor_4c_Dados")
+            *-- DataSession compartilhada: o alias pode ter sido deixado aberto por
+            *-- OUTRO form (FormCfb/FormUSA: FPags/cidchaves). Checar so USED()
+            *-- reaproveitava esse cursor e a grade estourava "Variable 'SERIES'
+            *-- is not found" (erro381). Conferir a ESTRUTURA, nao so o nome.
+            IF !USED("cursor_4c_Dados") OR TYPE("cursor_4c_Dados.series") = "U"
+                IF USED("cursor_4c_Dados")
+                    USE IN cursor_4c_Dados
+                ENDIF
                 CREATE CURSOR cursor_4c_Dados (series C(3))
             ENDIF
             loc_oPagina.AddObject("grd_4c_Lista", "Grid")

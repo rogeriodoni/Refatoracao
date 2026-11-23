@@ -2217,23 +2217,15 @@ DEFINE CLASS FormNfl AS FormBase
         loc_lResultado = .T.
         TRY
             loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Series.Value)
-            IF loc_cVal == THIS.this_cUltimoSeriesValidado
-                loc_lResultado = loc_lResultado
-            ENDIF
-            IF EMPTY(loc_cVal) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
-                loc_lResultado = .T.
-            ELSE
-                loc_nRes = SQLEXEC(gnConnHandle, ;
-                    "SELECT cods FROM SigCdSer WHERE cods = " + EscaparSQL(loc_cVal), ;
-                    "cursor_4c_ValidSer")
-                IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_ValidSer") = 0
-                    THIS.AbrirLookupSeries()
-                ELSE
-                    THIS.this_cUltimoSeriesValidado = loc_cVal
-                ENDIF
-                IF USED("cursor_4c_ValidSer")
-                    USE IN cursor_4c_ValidSer
-                ENDIF
+            *-- Sem a consulta propria: o FormBuscaAuxiliar ja faz o match exato e
+            *-- so mostra a lista quando nao achou (regra #37). Guarda de
+            *-- reentrancia: o picker eh modal e o LostFocus redispara (regra #47).
+            IF !EMPTY(loc_cVal) AND !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI) ;
+                    AND !(loc_cVal == THIS.this_cUltimoSeriesValidado) AND !THIS.this_lEmLookup
+                THIS.this_lEmLookup = .T.
+                THIS.AbrirLookupSeries()
+                THIS.this_lEmLookup = .F.
+                THIS.this_cUltimoSeriesValidado = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Series.Value)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.SeriesDadosValid")
@@ -2254,52 +2246,66 @@ DEFINE CLASS FormNfl AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupSeries()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
-        loc_lProsseguir = .T.
+    *--------------------------------------------------------------------------
+    * ExecutarLookupNfl - lookup canonico (regras #36/#37/#47), espelho do
+    * fwBuscaExt do legado:
+    *   loLista = CreateObject('fwBuscaExt', pnIdConn, <tabela>, 'crListaRemota', <campo>, This.Value, <titulo>, .T.)
+    *   If Not loLista.plAchouRegistro -> mAddColuna + Show
+    *   If Lastkey() = 27 -> This.Value = '' Else This.Value = crListaRemota.<campo>
+    * Antes: CREATEOBJECT("FormBuscaAuxiliar") SEM argumentos + DefinirCursor/
+    * Mostrar - o Init saia cedo (sem handle), a lista vinha VAZIA, o titulo da
+    * sombra ficava o padrao (sobreposto) e o valor nunca voltava; como o
+    * chamador eh LostFocus, o foco voltando reabria o picker sem parar (erro382).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarLookupNfl(par_oCtrl, par_cTabela, par_cCampo, par_cCampoDesc, par_cMascCod, par_cTitulo, par_cTituloDesc)
+        LOCAL loc_oBusca, loc_cCursor, loc_lEmLookupAnt
+        IF VARTYPE(par_oCtrl) != "O"
+            RETURN .F.
+        ENDIF
+        IF PEMSTATUS(par_oCtrl, "Enabled", 5) AND !par_oCtrl.Enabled
+            RETURN .F.
+        ENDIF
+        *-- reentrancia: quem chama de LostFocus liga this_lEmLookup (regra #47);
+        *-- aqui so preservamos o estado, para compor com os wrappers existentes
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        loc_cCursor = "cursor_4c_ListaRemota"
+        loc_oBusca  = .NULL.
         TRY
-            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.txt_4c_Series
-            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                loc_cVal = ALLTRIM(loc_oCtrl.Value)
-                IF !EMPTY(loc_cVal)
-                    loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, par_cTabela, loc_cCursor, ;
+                par_cCampo, ALLTRIM(TRANSFORM(par_oCtrl.Value)), par_cTitulo, .T.)
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna(par_cCampo, par_cMascCod, "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna(par_cCampoDesc, "", par_cTituloDesc)
+                    loc_oBusca.Show()
+                ENDIF
+                IF loc_oBusca.this_lSelecionou AND USED(loc_cCursor)
+                    SELECT (loc_cCursor)
+                    par_oCtrl.Value = ALLTRIM(EVALUATE(loc_cCursor + "." + par_cCampo))
                 ELSE
-                    loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
-                ENDIF
-                SET NULL ON
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSer")
-                IF !USED("cursor_4c_BuscaSer") OR RECCOUNT("cursor_4c_BuscaSer") = 0
-                    IF USED("cursor_4c_BuscaSer")
-                        USE IN cursor_4c_BuscaSer
-                    ENDIF
-                    SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSer")
-                ENDIF
-                IF !USED("cursor_4c_BuscaSer")
-                    CREATE CURSOR cursor_4c_BuscaSer (cods c(3), descs c(50))
-                ENDIF
-                SET NULL OFF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSer"
-                    loc_oBusca.DefinirCursor("cursor_4c_BuscaSer", "cods", "descs", "S" + CHR(233) + "ries")
-                    loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Mostrar()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSer")
-                        SELECT cursor_4c_BuscaSer
-                        loc_oCtrl.Value = ALLTRIM(cods)
+                    *-- legado: so o ESC limpa (If Lastkey() = 27 -> This.Value = '');
+                    *-- fechar sem escolher mantem o digitado (regras #37/#50)
+                    IF LASTKEY() = 27
+                        par_oCtrl.Value = ""
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_BuscaSer")
-                    USE IN cursor_4c_BuscaSer
-                ENDIF
+                par_oCtrl.Refresh()
+                loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupSeries")
+            MsgErro(loc_oErro.Message, "FormNfl.ExecutarLookupNfl")
         ENDTRY
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+        RETURN .T.
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupSeries()
+        *-- Legado: fwBuscaExt('SigCdSer', 'crListaRemota', 'cods', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.pgf_4c_Paginas.Page2.txt_4c_Series, "SigCdSer", "cods", "descs", "", "S" + CHR(233) + "ries", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2316,45 +2322,8 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupNomedest()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
-        TRY
-            loc_oCtrl = THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_nomedest
-            loc_cVal  = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
-            ELSE
-                loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSerCp")
-            IF !USED("cursor_4c_BuscaSerCp") OR RECCOUNT("cursor_4c_BuscaSerCp") = 0
-                IF USED("cursor_4c_BuscaSerCp")
-                    USE IN cursor_4c_BuscaSerCp
-                ENDIF
-                SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSerCp")
-            ENDIF
-            IF !USED("cursor_4c_BuscaSerCp")
-                CREATE CURSOR cursor_4c_BuscaSerCp (cods c(3), descs c(50))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSerCp"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaSerCp", "cods", "descs", "S" + CHR(233) + "rie Destino")
-                loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSerCp")
-                    SELECT cursor_4c_BuscaSerCp
-                    loc_oCtrl.Value = ALLTRIM(cods)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaSerCp")
-                USE IN cursor_4c_BuscaSerCp
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupNomedest")
-        ENDTRY
+        *-- Legado: fwBuscaExt('SigCdSer', 'crListaRemota', 'cods', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_nomedest, "SigCdSer", "cods", "descs", "", "S" + CHR(233) + "ries", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2371,45 +2340,8 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupEmpDest()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
-        TRY
-            loc_oCtrl = THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_empDest
-            loc_cVal  = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
-            ELSE
-                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpDest")
-            IF !USED("cursor_4c_BuscaEmpDest") OR RECCOUNT("cursor_4c_BuscaEmpDest") = 0
-                IF USED("cursor_4c_BuscaEmpDest")
-                    USE IN cursor_4c_BuscaEmpDest
-                ENDIF
-                SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpDest")
-            ENDIF
-            IF !USED("cursor_4c_BuscaEmpDest")
-                CREATE CURSOR cursor_4c_BuscaEmpDest (CEmps c(2), Razas c(60))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpDest"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpDest", "CEmps", "Razas", "Empresa Destino")
-                loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpDest")
-                    SELECT cursor_4c_BuscaEmpDest
-                    loc_oCtrl.Value = ALLTRIM(CEmps)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaEmpDest")
-                USE IN cursor_4c_BuscaEmpDest
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupEmpDest")
-        ENDTRY
+        *-- Legado: fwBuscaExt('SigCdEmp', 'crListaRemota', 'CEmps', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_empDest, "SigCdEmp", "CEmps", "Razas", "XXXXXX", "Empresas", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2472,51 +2404,8 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupEmpPad()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10.txt_4c_EmpPad
-            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                loc_cVal = ALLTRIM(loc_oCtrl.Value)
-                IF !EMPTY(loc_cVal)
-                    loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
-                ELSE
-                    loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
-                ENDIF
-                SET NULL ON
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpPad")
-                IF !USED("cursor_4c_BuscaEmpPad") OR RECCOUNT("cursor_4c_BuscaEmpPad") = 0
-                    IF USED("cursor_4c_BuscaEmpPad")
-                        USE IN cursor_4c_BuscaEmpPad
-                    ENDIF
-                    SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpPad")
-                ENDIF
-                IF !USED("cursor_4c_BuscaEmpPad")
-                    CREATE CURSOR cursor_4c_BuscaEmpPad (CEmps c(2), Razas c(60))
-                ENDIF
-                SET NULL OFF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpPad"
-                    loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpPad", "CEmps", "Razas", "Empresa Padr" + CHR(227) + "o")
-                    loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                    loc_oBusca.Mostrar()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpPad")
-                        SELECT cursor_4c_BuscaEmpPad
-                        loc_oCtrl.Value = ALLTRIM(CEmps)
-                    ENDIF
-                ENDIF
-                IF USED("cursor_4c_BuscaEmpPad")
-                    USE IN cursor_4c_BuscaEmpPad
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupEmpPad")
-        ENDTRY
+        *-- Legado: fwBuscaExt('SigCdEmp', 'crListaRemota', 'CEmps', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10.txt_4c_EmpPad, "SigCdEmp", "CEmps", "Razas", "XXXXXX", "Empresas", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2579,101 +2468,14 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupUnPesos()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6.txt_4c_UnPesos
-            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                loc_cVal = ALLTRIM(loc_oCtrl.Value)
-                IF !EMPTY(loc_cVal)
-                    loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni WHERE UPPER(CUnis) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CUnis"
-                ELSE
-                    loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis"
-                ENDIF
-                SET NULL ON
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaUni")
-                IF !USED("cursor_4c_BuscaUni") OR RECCOUNT("cursor_4c_BuscaUni") = 0
-                    IF USED("cursor_4c_BuscaUni")
-                        USE IN cursor_4c_BuscaUni
-                    ENDIF
-                    SQLEXEC(gnConnHandle, "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis", "cursor_4c_BuscaUni")
-                ENDIF
-                IF !USED("cursor_4c_BuscaUni")
-                    CREATE CURSOR cursor_4c_BuscaUni (CUnis c(6), DUnis c(30))
-                ENDIF
-                SET NULL OFF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
-                    loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", "Unidades de Medida")
-                    loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Mostrar()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
-                        SELECT cursor_4c_BuscaUni
-                        loc_oCtrl.Value = ALLTRIM(CUnis)
-                    ENDIF
-                ENDIF
-                IF USED("cursor_4c_BuscaUni")
-                    USE IN cursor_4c_BuscaUni
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupUnPesos")
-        ENDTRY
+        *-- Legado: fwBuscaExt('SigCdUni', 'crListaRemota', 'CUnis', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6.txt_4c_UnPesos, "SigCdUni", "CUnis", "DUnis", "", "Sele" + CHR(231) + CHR(227) + "o", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupClsFis(par_cNomeCampo)
-        LOCAL loc_oRdp, loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            loc_oRdp  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
-            loc_oCtrl = THIS.ObterControle(loc_oRdp, par_cNomeCampo)
-            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                loc_cVal = ALLTRIM(loc_oCtrl.Value)
-                IF !EMPTY(loc_cVal)
-                    loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf WHERE UPPER(codigos) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY codigos"
-                ELSE
-                    loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos"
-                ENDIF
-                SET NULL ON
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaClf")
-                IF !USED("cursor_4c_BuscaClf") OR RECCOUNT("cursor_4c_BuscaClf") = 0
-                    IF USED("cursor_4c_BuscaClf")
-                        USE IN cursor_4c_BuscaClf
-                    ENDIF
-                    SQLEXEC(gnConnHandle, "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos", "cursor_4c_BuscaClf")
-                ENDIF
-                IF !USED("cursor_4c_BuscaClf")
-                    CREATE CURSOR cursor_4c_BuscaClf (codigos c(10), descricaos c(60))
-                ENDIF
-                SET NULL OFF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaClf"
-                    loc_oBusca.DefinirCursor("cursor_4c_BuscaClf", "codigos", "descricaos", "Classifica" + CHR(231) + CHR(227) + "o Fiscal")
-                    loc_oBusca.mAddColuna("codigos",    "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Mostrar()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaClf")
-                        SELECT cursor_4c_BuscaClf
-                        loc_oCtrl.Value = ALLTRIM(codigos)
-                    ENDIF
-                ENDIF
-                IF USED("cursor_4c_BuscaClf")
-                    USE IN cursor_4c_BuscaClf
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupClsFis")
-        ENDTRY
+        *-- Legado: fwBuscaExt('SigCdClf', 'crListaRemota', 'codigos', This.Value, ...) - ver ExecutarLookupNfl
+        THIS.ExecutarLookupNfl(THIS.ObterControle(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7, par_cNomeCampo), "SigCdClf", "codigos", "descricaos", "", "Sele" + CHR(231) + CHR(227) + "o", "Descri" + CHR(231) + CHR(227) + "o")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -7047,7 +6849,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text3)
             .Visible       = .T.
         ENDWITH
 
@@ -7076,7 +6878,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text25)
             .Visible       = .T.
         ENDWITH
 
@@ -7105,7 +6907,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text26)
             .Visible       = .T.
         ENDWITH
 
@@ -7134,7 +6936,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text27)
             .Visible       = .T.
         ENDWITH
 
@@ -7163,7 +6965,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text28)
             .Visible       = .T.
         ENDWITH
 
@@ -7192,7 +6994,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "99"   && legado (Text29)
             .Visible       = .T.
         ENDWITH
 
@@ -7250,7 +7052,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "999"   && legado (Text7)
             .Visible       = .T.
         ENDWITH
 
@@ -7279,7 +7081,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize      = 8
             .SpecialEffect = 1
             .Format        = "K"
-            .InputMask     = "999.99"
+            .InputMask     = "999"   && legado (Text5)
             .Visible       = .T.
         ENDWITH
 
@@ -7951,7 +7753,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "99"   && legado (Text25)
             .Visible = .T.
         ENDWITH
 
@@ -8116,7 +7918,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999.99"   && legado (Text21)
             .Visible = .T.
         ENDWITH
 
@@ -8144,7 +7946,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999.99"   && legado (Text22)
             .Visible = .T.
         ENDWITH
     ENDPROC
@@ -9080,7 +8882,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = ""   && legado (Text31)
             .Visible = .T.
         ENDWITH
     ENDPROC
@@ -9903,7 +9705,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "999"   && legado (Text6)
             .Visible = .T.
         ENDWITH
 
@@ -9931,7 +9733,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "999"   && legado (Text10)
             .Visible = .T.
         ENDWITH
 
@@ -10594,7 +10396,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text7)
             .Visible = .T.
         ENDWITH
 
@@ -10623,7 +10425,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "999"   && legado (Text8)
             .Visible = .T.
         ENDWITH
 
@@ -10853,7 +10655,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999.99"   && legado (Text1)
             .Visible = .T.
         ENDWITH
 
@@ -10882,7 +10684,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "99999.99"   && legado (Text2)
             .Visible = .T.
         ENDWITH
 
@@ -10969,7 +10771,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text4)
             .Visible = .T.
         ENDWITH
 
@@ -10997,7 +10799,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text5)
             .Visible = .T.
         ENDWITH
 
@@ -11026,7 +10828,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text6)
             .Visible = .T.
         ENDWITH
 
@@ -11054,7 +10856,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text7)
             .Visible = .T.
         ENDWITH
 
@@ -11083,7 +10885,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text8)
             .Visible = .T.
         ENDWITH
 
@@ -11111,7 +10913,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text9)
             .Visible = .T.
         ENDWITH
 
@@ -11140,7 +10942,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text10)
             .Visible = .T.
         ENDWITH
 
@@ -11168,7 +10970,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text11)
             .Visible = .T.
         ENDWITH
 
@@ -11197,7 +10999,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text12)
             .Visible = .T.
         ENDWITH
 
@@ -11225,7 +11027,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "9999"   && legado (Text13)
             .Visible = .T.
         ENDWITH
 
@@ -11254,7 +11056,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = ""
+            .InputMask = "99"   && legado (getNvias)
             .Visible = .T.
         ENDWITH
 
@@ -11283,7 +11085,7 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .SpecialEffect = 1
             .Format = "K"
-            .InputMask = "999.99"
+            .InputMask = "999.999"   && legado (Text14)
             .Visible = .T.
         ENDWITH
     ENDPROC

@@ -2659,6 +2659,11 @@ DEFINE CLASS FormCfb AS FormBase
     * Destroy - Libera recursos
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
+        *-- DataSession compartilhada: deixar cursor_4c_Dados aberto fazia o
+        *-- proximo form que usa o mesmo alias herdar FPags/Descrs (erro381).
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
         IF VARTYPE(THIS.this_oBusinessObject) = "O"
             THIS.this_oBusinessObject = .NULL.
         ENDIF

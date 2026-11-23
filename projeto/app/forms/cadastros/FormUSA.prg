@@ -1258,6 +1258,10 @@ DEFINE CLASS FormUSA AS FormBase
     * Destroy
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
+        *-- DataSession compartilhada: nao deixar cursor_4c_Dados para o proximo form (erro381)
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
         THIS.this_oBusinessObject = .NULL.
         DODEFAULT()
     ENDPROC
