@@ -737,13 +737,16 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 252
             .Left      = 264
             .Width     = 66
-            .Height    = 18
-            .InputMask = "999.99"
+            .Height    = 23   && legado get_descos (pgDados): Height da classe fwget
+            .InputMask = "9999.99"   && legado get_descos
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_descos)
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
