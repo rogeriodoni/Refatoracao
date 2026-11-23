@@ -1120,6 +1120,15 @@ Origem: "Ferramentas > Configuracoes nao abre" (2026-11-23). Seis defeitos encad
 
 **Testar gravando**: valor em cada familia corrigida -> conferir o CURSOR (ligacao) -> Confirmar -> ler o BANCO (coluna) -> Visualizar OUTRO registro (refresh). Skill: secao **251**.
 
+### 54. TextBox de 18px: `Margin` e `SpecialEffect = 1` vem JUNTO com o `Height` - sem eles o texto CORTA
+O legado desenha caixa pequena com `Height = 18` + `Margin = 0` (ou 1) + `SpecialEffect = 1` (borda plana). O migrador copia so o `Height`: com a borda 3D e a margem padrao de 2px o texto Tahoma 8 sai cortado embaixo (`1.00` vira meia linha). Compila limpo, nenhum gate pega - so a tela mostra.
+
+Segunda forma: o SCX **nao declara** `Height` (herda da classe) e o migrador **inventa** 18. Vale a altura da CLASSE do framework: `fwget` e `fweditdata` = **23** (classe na listagem `Objeto:/Class:` do dump; propriedades em `docs/FRAMEWORK_class_codigo_fonte.txt`).
+
+Transcrever do dump, junto: `Format` (`"K"`/`"!K"`), `ForeColor`, `DisabledBackColor`/`DisabledForeColor` e, em indicador colorido, `BorderStyle = 1` + `BorderColor`. Ao parear por posicao o deslocamento varia por form/container (+29, +70, +151): sem par unico, parear pelo nome normalizado (`txt_4c__codigos` <-> `get_codigos`) com a mesma `Width`; e analisar o WITH que termina NO nome da caixa (forms que criam tudo antes dos WITH - Formacu - enganam quem le as linhas seguintes ao `AddObject`).
+
+WARNING: CorretorAutomatico **#224**. Sweep 2026-11-23: 65 sites em 6 forms, todos corrigidos pelo dump; acervo em 0. Skill: secao **252**. Origem: erro380 (`FormCfb`).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

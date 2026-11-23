@@ -16606,6 +16606,49 @@ function Avisar-EncerrarSoltoNoFormEmLeft5 {
     return $Linhas
 }
 
+function Avisar-TextBoxBaixaSemMargem {
+    # Pattern #224 (2026-11-23, erro380/FormCfb) - WARNING-only.
+    #
+    # TextBox com Height <= 18 so mostra o texto inteiro com Margin = 0 (ou 1)
+    # e SpecialEffect = 1 (borda plana) - eh assim que o legado desenha as caixas
+    # de 18px. Com a borda 3D e a margem padrao de 2px o texto sai CORTADO
+    # embaixo ("1.00" vira meia linha). O migrador copia o Height do SCX e
+    # descarta Margin/SpecialEffect; ou inventa Height = 18 quando o SCX nao
+    # declara nada e a classe (fwget/fweditdata) da 23.
+    #
+    # NAO eh auto-fix: o valor certo vem do dump (Margin 0 ou 1, SpecialEffect,
+    # ou Height da classe). Calibracao 2026-11-23: 65 sites em 6 forms; 55
+    # corrigidos transcrevendo o dump, 9 restantes (Formacu, Formsigopind,
+    # FormTbv txt_4c__descos).
+    param([string[]]$Linhas, [string]$Arquivo)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -notmatch '(?i)AddObject\(\s*"(txt_4c_\w+)"\s*,\s*"TextBox"\s*\)') { continue }
+        $nome = $Matches[1]
+        # o bloco analisado eh o do WITH que termina NESTE nome - ha forms que criam
+        # todos os objetos em sequencia e so depois abrem os WITH (Formacu); ler as
+        # linhas seguintes ao AddObject pegaria o WITH do Label vizinho.
+        $w = -1
+        for ($k = $i + 1; $k -lt [Math]::Min($Linhas.Count, $i + 600); $k++) {
+            if ($Linhas[$k] -match ('(?i)^\s*WITH\s+\S*\.' + [regex]::Escape($nome) + '\s*$')) { $w = $k; break } }
+        if ($w -lt 0) { continue }
+        $blk = @(); $k = $w + 1
+        while ($k -lt $Linhas.Count -and $k -lt $w + 45 -and $Linhas[$k] -notmatch '(?i)^\s*ENDWITH\b') { $blk += $Linhas[$k]; $k++ }
+        $b = $blk -join "`n"
+        $mh = [regex]::Match($b, '(?im)^\s*\.Height\s*=\s*(\d+)\s*(&&.*)?$')
+        if (-not $mh.Success -or [int]$mh.Groups[1].Value -gt 18) { continue }
+        if ($b -match '(?im)^\s*\.Margin\s*=' -or $b -match '(?im)^\s*\.SpecialEffect\s*=\s*1\b') { continue }
+        Write-Host "[Pattern #224 WARN] linha $($i + 1): $nome com Height = $($mh.Groups[1].Value) sem Margin/SpecialEffect=1 - texto corta" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-224-TEXTBOX-BAIXA-SEM-MARGEM" -Linha ($i + 1) -Original ($Linhas[$i].Trim()) `
+            -Corrigido "(nao mutado - transcrever Margin/SpecialEffect/Height do dump)" `
+            -Descricao ("Pattern #224 WARNING: $nome tem .Height = $($mh.Groups[1].Value) sem .Margin e sem .SpecialEffect = 1. " + "Com a borda 3D e a margem padrao (2px) o texto nao cabe e sai cortado embaixo. O legado desenha caixas " + "de 18px com Margin = 0/1 + SpecialEffect = 1; se o SCX nao declara Height, vale o da classe " + "(fwget/fweditdata = 23). CONSERTO: transcrever do dump. Ref: FormCfb (erro380).")
+    }
+
+    return $Linhas
+}
+
 function Avisar-GradeEditavelSemLiberarColuna {
     # Pattern #212 (Erro179, 2026-09-30, Formgpd) - WARNING, so com o DUMP confirmando.
     #
@@ -17429,6 +17472,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-MetodoProtegidoChamadoDeFora -Linhas $linhas -Arquivo $Arquivo
     # #223 WARNING: Encerrar solto no form com Left = 5 (residuo do #182 pre-Erro501)
     $linhas = Avisar-EncerrarSoltoNoFormEmLeft5 -Linhas $linhas -Arquivo $Arquivo
+    # #224 WARNING: TextBox Height <= 18 sem Margin/SpecialEffect=1 (texto corta)
+    $linhas = Avisar-TextBoxBaixaSemMargem -Linhas $linhas -Arquivo $Arquivo
 
     }
 

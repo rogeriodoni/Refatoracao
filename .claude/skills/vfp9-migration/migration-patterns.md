@@ -14630,3 +14630,52 @@ par no dump.
 Testar gravando: Incluir com um valor em cada familia corrigida, conferir o
 CURSOR (prova a ligacao), Confirmar, ler o BANCO (prova a coluna), e
 Visualizar OUTRO registro antes de voltar (prova o refresh).
+
+## 252. TextBox de 18px precisa de `Margin` e `SpecialEffect = 1` do legado - senao o texto sai CORTADO
+
+Origem: erro380 (2026-11-23, `FormCfb` - "os campos texto estao cortando as
+letras"). Compila limpo, nao da erro: so a tela mostra meia linha de texto.
+
+O legado desenha as caixas pequenas com tres propriedades juntas:
+
+```
+Text1:  Height = 18   Margin = 0   SpecialEffect = 1     (borda plana)
+```
+
+O migrador copia o `Height` e descarta as outras duas. Com a borda 3D
+(`SpecialEffect = 0`, default) e a margem padrao de 2px, o texto de Tahoma 8
+nao cabe em 18px.
+
+```foxpro
+* ERRADO (FormCfb, como saiu da migracao)
+.Height    = 18
+.InputMask = "999.99"
+* CERTO - transcrito do dump
+.Height        = 18
+.InputMask     = "999.99"
+.SpecialEffect = 1
+.Margin        = 0
+.Format        = "K"
+```
+
+**Segunda forma do mesmo defeito**: o SCX NAO declara `Height` (a caixa
+herda da classe) e o migrador INVENTA 18. A altura vem da classe do
+framework - `fwget` e `fweditdata` declaram `Height = 23` (FormSigOpBlo,
+FormTbv). Conferir a classe na listagem `Objeto: / Class:` do dump e as
+propriedades dela em `docs/FRAMEWORK_class_codigo_fonte.txt`.
+
+Vao junto, e tambem se perdem: `Format` (`"K"`/`"!K"`), `ForeColor`,
+`DisabledBackColor`/`DisabledForeColor` (caixa desabilitada branca com texto
+azul-marinho no legado, cinza no migrado) e, em indicador colorido,
+`BorderStyle = 1` + `BorderColor` (Formsigopind).
+
+**Ao parear migrado x legado por posicao**: o deslocamento muda por form e
+por container (+29, +70, +151...); quando a geometria nao der par unico,
+parear pelo nome normalizado (`txt_4c__codigos` <-> `get_codigos`) exigindo a
+mesma `Width`. E analisar o WITH que TERMINA no nome da caixa: ha forms que
+criam todos os objetos em sequencia e so depois abrem os WITH (Formacu) - ler
+as linhas seguintes ao `AddObject` pega o Label vizinho e da falso positivo.
+
+WARNING: CorretorAutomatico **#224**. Sweep 2026-11-23: 65 sites em 6 forms
+(FormCfb 34, FormSigOpCbl 31, FormTbv 15, FormSigOpBlo 5, Formsigopind 4,
+Formmtz 1), todos corrigidos pelo dump; acervo em 0.
