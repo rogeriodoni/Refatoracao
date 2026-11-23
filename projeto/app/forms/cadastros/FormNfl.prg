@@ -147,7 +147,12 @@ DEFINE CLASS FormNfl AS FormBase
                             lopnvd n(9,2), copnvd n(9,2), ;
                             lopcvd n(9,2), copcvd n(9,2), ;
                             lopnrp n(9,2), copnrp n(9,2), ;
-                            tipos c(20) ;
+                            tipos c(20), ;
+                            ccodpro n(5,2), cdespro n(5,2), cclfis n(5,2), cstrib n(5,2), cunid n(5,2), cqtde n(5,2), ;
+                            cvluni n(5,2), caicm n(5,2), caipi n(5,2), oorig n(2,0), oaden n(2,0), cobsi n(5,2), ;
+                            tamcolobsi n(3,0), tamlinobsi n(3,0), ldesconto n(5,2), loutras n(5,2), ctprod n(5,2), ;
+                            l2nf n(5,2), c2nf n(5,2), ltnotar n(5,2), ctnotar n(5,2), lobs n(5,2), cobs n(5,2), ;
+                            ldtemif n(5,2), cdtemif n(5,2), ltnotaf n(5,2), ctnotaf n(5,2) ;
                         )
                         APPEND BLANK IN crSigCnFNf
                     ENDIF
@@ -180,7 +185,15 @@ DEFINE CLASS FormNfl AS FormBase
                             lclas9 n(9,2), cclas9 n(9,2), impclas9 c(10), impc9 l, ;
                             lclas10 n(9,2), cclas10 n(9,2), impclas10 c(10), impc10 l, ;
                             lclas11 n(9,2), cclas11 n(9,2), impclas11 c(10), impc11 l, ;
-                            lclas12 n(9,2), cclas12 n(9,2), impclas12 c(10), impc12 l ;
+                            lclas12 n(9,2), cclas12 n(9,2), impclas12 c(10), impc12 l, ;
+                            ccfoppro n(9,2), cpesomet n(9,2), lbipi n(9,2), cbipi n(9,2), totfsize n(2,0), ;
+                            lbicmss n(9,2), cbicmss n(9,2), lvicmss n(9,2), cvicmss n(9,2), cunipesos c(3), ;
+                            liniped n(9,2), ciniped n(9,2), liniped2 n(9,2), ciniped2 n(9,2), vseqnota l, ;
+                            loploc n(9,2), coploc n(9,2), lopcvd n(9,2), copcvd n(9,2), lopnvd n(9,2), copnvd n(9,2), ;
+                            lopcrp n(9,2), copcrp n(9,2), lopnrp n(9,2), copnrp n(9,2), nvias n(10,0), nftgdi1s n(9,3), ;
+                            a2nf n(10,0), atnotar n(10,0), aselo n(10,0), anfselo n(10,0), aobs n(10,0), ainiped n(10,0), ainiped2 n(10,0), ;
+                            aclas1 n(10,0), aclas2 n(10,0), aclas3 n(10,0), aclas4 n(10,0), aclas5 n(10,0), aclas6 n(10,0), ;
+                            aclas7 n(10,0), aclas8 n(10,0), aclas9 n(10,0), aclas10 n(10,0), aclas11 n(10,0), aclas12 n(10,0) ;
                         )
                         APPEND BLANK IN crSigCnFN2
                     ENDIF
@@ -237,7 +250,7 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Cabecalho (faixa escura com titulo shadow + titulo principal)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top       = 2
+            .Top       = 29   && era 2: com pgf_4c_Paginas.Top = -29 a faixa e os botoes ficavam cortados no topo (regra #11)
             .Left      = 0
             .Width     = THIS.Width
             .Height    = 80
@@ -246,12 +259,13 @@ DEFINE CLASS FormNfl AS FormBase
             .AddObject("lbl_4c_Sombra", "Label")
             WITH .lbl_4c_Sombra
                 .Caption   = "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal"
-                .Top       = 35
-                .Left      = 22
+                .Top       = 15
+                .Left      = 10
                 .Width     = THIS.Width
                 .Height    = 28
                 .FontName  = "Tahoma"
                 .FontSize  = 16
+                .FontBold  = .T.
                 .ForeColor = RGB(0, 0, 0)
                 .BackStyle = 0
                 .Visible   = .T.
@@ -259,12 +273,13 @@ DEFINE CLASS FormNfl AS FormBase
             .AddObject("lbl_4c_Titulo", "Label")
             WITH .lbl_4c_Titulo
                 .Caption   = "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal"
-                .Top       = 33
-                .Left      = 20
+                .Top       = 18
+                .Left      = 10
                 .Width     = THIS.Width
                 .Height    = 28
                 .FontName  = "Tahoma"
                 .FontSize  = 16
+                .FontBold  = .T.
                 .ForeColor = RGB(255, 255, 255)
                 .BackStyle = 0
                 .Visible   = .T.
@@ -274,7 +289,7 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Container CRUD (Left=542 canonico)
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 0
+            .Top         = 29   && legado Grupo_op Top=-1 (+29 de compensacao)
             .Left        = 542
             .Width       = 375
             .Height      = 85
@@ -336,18 +351,22 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Botao Copia (especifico SIGCDNFL, entre CRUD e ExpXML)
         loc_oPagina.AddObject("cmd_4c_Copia", "CommandButton")
         WITH loc_oPagina.cmd_4c_Copia
-            .Top     = 5
+            *-- legado Pagina.Lista.Copia: Top=4 (+29), Left=471, 75x75, geral_subnivel_60.jpg, "Copiar"
+            .Top     = 33
             .Left    = 471
-            .Width   = 70
-            .Height  = 70
-            .Caption = "Copia"
+            .Width   = 75
+            .Height  = 75
+            .Caption = "Copiar"
+            .ToolTipText = "Copiar"
+            .Picture = gc_4c_CaminhoIcones + "geral_subnivel_60.jpg"
+            .PicturePosition = 13
             .Visible = .T.
         ENDWITH
 
         *-- Container Saida (canonico Left=917, Width=90)
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
         WITH loc_oPagina.cnt_4c_Saida
-            .Top         = 0
+            .Top         = 29
             .Left        = 917
             .Width       = 90
             .Height      = 85
@@ -373,7 +392,11 @@ DEFINE CLASS FormNfl AS FormBase
             .Left    = 682
             .Width   = 120
             .Height  = 45
-            .Caption = "Exportar XML"
+            .Caption = "Exporta XML"
+            .FontSize = 7
+            .Picture = gc_4c_CaminhoIcones + "exportar_48.png"
+            .PicturePosition = 1
+            .ToolTipText = "Exporta Configura" + CHR(231) + CHR(227) + "o Para Um Arquivo XML"
             .Visible = .T.
         ENDWITH
 
@@ -383,7 +406,11 @@ DEFINE CLASS FormNfl AS FormBase
             .Left    = 804
             .Width   = 120
             .Height  = 45
-            .Caption = "Importar XML"
+            .Caption = "Importa XML"
+            .FontSize = 7
+            .Picture = gc_4c_CaminhoIcones + "importar_48.png"
+            .PicturePosition = 1
+            .ToolTipText = "Importa Configura" + CHR(231) + CHR(227) + "o De Um Arquivo XML"
             .Visible = .T.
         ENDWITH
 
@@ -396,33 +423,17 @@ DEFINE CLASS FormNfl AS FormBase
             .Height       = 511
             .FontName     = "Tahoma"
             .FontSize     = 8
-            .ColumnCount  = 4
+            .RowHeight    = 16
+            .ColumnCount  = 2
             .RecordSource = ""
             .ReadOnly     = .T.
             .GridLines    = 2
             .RecordMark   = .F.
             .DeleteMark   = .F.
             .Visible      = .T.
-            WITH .Column1
-                .Width           = 55
-                .ReadOnly        = .T.
-                .Header1.Caption = "Empr."
-            ENDWITH
-            WITH .Column2
-                .Width           = 220
-                .ReadOnly        = .T.
-                .Header1.Caption = "Empresa"
-            ENDWITH
-            WITH .Column3
-                .Width           = 55
-                .ReadOnly        = .T.
-                .Header1.Caption = "S" + CHR(233) + "rie"
-            ENDWITH
-            WITH .Column4
-                .Width           = 641
-                .ReadOnly        = .T.
-                .Header1.Caption = "Chave"
-            ENDWITH
+            *-- colunas/larguras definitivas em VincularGradeLista (pColuna do legado)
+            .Column1.Header1.Caption = "Series"
+            .Column2.Header1.Caption = "Emps"
         ENDWITH
         THIS.FormatarGridLista(loc_oPagina.grd_4c_Lista)
 
@@ -851,19 +862,8 @@ DEFINE CLASS FormNfl AS FormBase
                 loc_lResultado = .T.
             ELSE
                 loc_lResultado = THIS.this_oBusinessObject.Buscar("")
-                IF loc_lResultado AND VARTYPE(THIS.pgf_4c_Paginas) = "O"
-                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 4
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.emps"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.ControlSource = "cursor_4c_Dados.Razas"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.ControlSource = "cursor_4c_Dados.series"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.ControlSource = "cursor_4c_Dados.cidchaves"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "Empr."
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Header1.Caption = "Empresa"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.Header1.Caption = "S" + CHR(233) + "rie"
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.Header1.Caption = "Chave"
-                    ENDIF
+                IF loc_lResultado
+                    THIS.VincularGradeLista()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -885,6 +885,9 @@ DEFINE CLASS FormNfl AS FormBase
                     THIS.this_cModoAtual = "LISTA"
                     THIS.AjustarBotoesPorModo("LISTA")
                     THIS.CarregarLista()
+                ELSE
+                    *-- Refresh em pagina oculta nao pinta: repetir DEPOIS do ActivePage (regra #21)
+                    THIS.pgf_4c_Paginas.Page2.Refresh()
                 ENDIF
                 loc_lResultado = .T.
             ENDIF
@@ -1225,22 +1228,42 @@ DEFINE CLASS FormNfl AS FormBase
         TRY
             loc_cFiltro    = INPUTBOX("Informe s" + CHR(233) + "rie ou empresa:", "Buscar", "")
             loc_lResultado = THIS.this_oBusinessObject.Buscar(ALLTRIM(loc_cFiltro))
-            IF loc_lResultado AND PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 4
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.emps"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.ControlSource = "cursor_4c_Dados.Razas"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.ControlSource = "cursor_4c_Dados.series"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.ControlSource = "cursor_4c_Dados.cidchaves"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "Empr."
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Header1.Caption = "Empresa"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.Header1.Caption = "S" + CHR(233) + "rie"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.Header1.Caption = "Chave"
+            IF loc_lResultado
+                THIS.VincularGradeLista()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.BtnBuscarClick")
         ENDTRY
         RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VincularGradeLista - grade da Lista espelha o pColuna do Init legado:
+    *   .pColuna('Series', '', '', 'Series', 80, .T.)
+    *   .pColuna('Emps',   '', '', 'Emps',   80, .T.)
+    * (regra #35b). Width DEPOIS do RecordSource, senao volta a 90 (regra #41).
+    *--------------------------------------------------------------------------
+    PROCEDURE VincularGradeLista()
+        IF VARTYPE(THIS.pgf_4c_Paginas) != "O" OR !USED("cursor_4c_Dados")
+            RETURN .F.
+        ENDIF
+        IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
+            RETURN .F.
+        ENDIF
+        WITH THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
+            .ColumnCount           = 2
+            .RecordSource          = "cursor_4c_Dados"
+            .Column1.ControlSource = "cursor_4c_Dados.series"
+            .Column2.ControlSource = "cursor_4c_Dados.emps"
+            .Column1.Header1.Caption = "Series"
+            .Column2.Header1.Caption = "Emps"
+        ENDWITH
+        *-- FormatarGridLista reatribui FontName/FontSize da grade, o que recalcula
+        *-- as larguras (regra #35c): tem de vir ANTES das Width.
+        THIS.FormatarGridLista(THIS.pgf_4c_Paginas.Page1.grd_4c_Lista)
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Width = 80
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Width = 80
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2896,6 +2919,13 @@ DEFINE CLASS FormNfl AS FormBase
             ENDIF
         ENDIF
 
+        *-- SalvarSigCnFNf grava TODOS os campos de crSigCnFNf por UPDATE generico.
+        *-- txt_4c_Series nao eh ligado ao cursor: sem isto o UPDATE seguinte ao
+        *-- INSERT regravava series = '' e a configuracao sumia da Lista.
+        IF USED("crSigCnFNf") AND RECCOUNT("crSigCnFNf") > 0
+            REPLACE emps WITH loc_oBO.this_cEmps, series WITH loc_oBO.this_cSeries IN crSigCnFNf
+        ENDIF
+
         *-- Campos de crSigCnFN2 (Empresa, Destinatario, Impostos adicionais, Classes extras)
         IF USED("crSigCnFN2") AND RECCOUNT("crSigCnFN2") > 0
             SELECT crSigCnFN2
@@ -2936,7 +2966,7 @@ DEFINE CLASS FormNfl AS FormBase
             loc_oBO.this_nCempfone     = cempfone
             loc_oBO.this_nNvias        = nvias
             loc_oBO.this_nNtpmargems   = ntpmargems
-            loc_oBO.this_lVseqnota     = (vseqnota = 1)
+            loc_oBO.this_lVseqnota     = ConverterParaLogico(vseqnota)   && bit: chega Logico ou Numerico (regra #13)
             loc_oBO.this_cContsac      = ALLTRIM(contsac)
             loc_oBO.this_nLsac         = lsac
             loc_oBO.this_nCsac         = csac
@@ -2986,11 +3016,11 @@ DEFINE CLASS FormNfl AS FormBase
             loc_oBO.this_nLclas10      = lclas10
             loc_oBO.this_nLclas11      = lclas11
             loc_oBO.this_nLclas12      = lclas12
-            loc_oBO.this_lImpc8        = (impc8 = 1)
-            loc_oBO.this_lImpc9        = (impc9 = 1)
-            loc_oBO.this_lImpc10       = (impc10 = 1)
-            loc_oBO.this_lImpc11       = (impc11 = 1)
-            loc_oBO.this_lImpc12       = (impc12 = 1)
+            loc_oBO.this_lImpc8        = ConverterParaLogico(impc8)   && bit: chega Logico ou Numerico (regra #13)
+            loc_oBO.this_lImpc9        = ConverterParaLogico(impc9)   && bit: chega Logico ou Numerico (regra #13)
+            loc_oBO.this_lImpc10       = ConverterParaLogico(impc10)   && bit: chega Logico ou Numerico (regra #13)
+            loc_oBO.this_lImpc11       = ConverterParaLogico(impc11)   && bit: chega Logico ou Numerico (regra #13)
+            loc_oBO.this_lImpc12       = ConverterParaLogico(impc12)   && bit: chega Logico ou Numerico (regra #13)
             loc_oBO.this_cImpclas8     = ALLTRIM(impclas8)
             loc_oBO.this_cImpclas9     = ALLTRIM(impclas9)
             loc_oBO.this_cImpclas10    = ALLTRIM(impclas10)
@@ -3011,20 +3041,10 @@ DEFINE CLASS FormNfl AS FormBase
             loc_oBO.this_nCiniped2     = ciniped2
         ENDIF
 
-        *-- Campos editados via crSigCnFNf que tem contraparte em SigCnFN2
-        *   (desdobramento posicoes e vseqnota)
-        IF USED("crSigCnFNf") AND FCOUNT("crSigCnFNf") > 3 AND RECCOUNT("crSigCnFNf") > 0
-            SELECT crSigCnFNf
-            loc_oBO.this_lVseqnota = (vseqnota = 1)
-            loc_oBO.this_nLopcvd   = lopcvd
-            loc_oBO.this_nCopcvd   = copcvd
-            loc_oBO.this_nLoploc   = loploc
-            loc_oBO.this_nCoploc   = coploc
-            loc_oBO.this_nLopnvd   = lopnvd
-            loc_oBO.this_nCopnvd   = copnvd
-            loc_oBO.this_nLopnrp   = lopnrp
-            loc_oBO.this_nCopnrp   = copnrp
-        ENDIF
+        *-- vseqnota e as posicoes de vendedor/responsavel (lop*/cop*) sao de
+        *-- SigCnFN2 (legado: aba Outros ligada a crSigCnFN2) e ja foram lidas
+        *-- acima. Le-las de crSigCnFNf, onde lop*/cop* NAO existem, estourava
+        *-- "Variable LOPCVD is not found" ao gravar.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -3037,6 +3057,21 @@ DEFINE CLASS FormNfl AS FormBase
             loc_cChave = ALLTRIM(loc_oBO.this_cCidchaves)
 
             IF !EMPTY(loc_cChave)
+                *-- Recarga sobre alias aberto com buffer sujo falha ("Table buffer
+                *-- ... contains uncommitted changes") e a tela ficava com os dados
+                *-- do registro anterior. Fechar antes (guard de buffering, regra #52).
+                IF USED("crSigCnFNf")
+                    IF CURSORGETPROP("Buffering", "crSigCnFNf") > 1
+                        TABLEREVERT(.T., "crSigCnFNf")
+                    ENDIF
+                    USE IN crSigCnFNf
+                ENDIF
+                IF USED("crSigCnFN2")
+                    IF CURSORGETPROP("Buffering", "crSigCnFN2") > 1
+                        TABLEREVERT(.T., "crSigCnFN2")
+                    ENDIF
+                    USE IN crSigCnFN2
+                ENDIF
                 IF SQLEXEC(gnConnHandle, ;
                     "SELECT * FROM SigCnFNf WHERE cidchaves = " + EscaparSQL(loc_cChave), ;
                     "crSigCnFNf") <= 0
@@ -3056,6 +3091,16 @@ DEFINE CLASS FormNfl AS FormBase
                 IF PEMSTATUS(loc_oPag2.pgf_4c_Abas.Page10, "txt_4c_EmpPad", 5)
                     loc_oPag2.pgf_4c_Abas.Page10.txt_4c_EmpPad.Value = ALLTRIM(loc_oBO.this_cEmps)
                 ENDIF
+            ENDIF
+            *-- Os controles das 10 abas sao ligados por ControlSource: depois de
+            *-- recarregar os cursores eles so releem com Refresh (regra #21).
+            *-- PageFrame.Refresh so atualiza a aba ATIVA: percorrer as 10 abas.
+            loc_oPag2.Refresh()
+            IF VARTYPE(loc_oPag2.pgf_4c_Abas) = "O"
+                LOCAL loc_nAba
+                FOR loc_nAba = 1 TO loc_oPag2.pgf_4c_Abas.PageCount
+                    loc_oPag2.pgf_4c_Abas.Pages(loc_nAba).Refresh()
+                ENDFOR
             ENDIF
             loc_lResultado = .T.
         CATCH TO loc_oErro
@@ -6483,7 +6528,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdCodL", "TextBox")
         WITH loc_oAba.txt_4c_ProdCodL
-            .ControlSource = "crSigCnFNf.lcodpro"
+            .ControlSource = "crSigCnFNf.ccodpro"
             .Top           = 62
             .Left          = 32
             .Width         = 38
@@ -6512,7 +6557,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdDescL", "TextBox")
         WITH loc_oAba.txt_4c_ProdDescL
-            .ControlSource = "crSigCnFNf.ldescpro"
+            .ControlSource = "crSigCnFNf.cdespro"
             .Top           = 62
             .Left          = 75
             .Width         = 38
@@ -6570,7 +6615,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdTipoL", "TextBox")
         WITH loc_oAba.txt_4c_ProdTipoL
-            .ControlSource = "crSigCnFNf.ltprod"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top           = 62
             .Left          = 161
             .Width         = 38
@@ -6599,7 +6644,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdMetalL", "TextBox")
         WITH loc_oAba.txt_4c_ProdMetalL
-            .ControlSource = "crSigCnFNf.cmarca"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top           = 62
             .Left          = 204
             .Width         = 38
@@ -6628,7 +6673,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdTeorL", "TextBox")
         WITH loc_oAba.txt_4c_ProdTeorL
-            .ControlSource = "crSigCnFNf.cticm"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top           = 62
             .Left          = 247
             .Width         = 41
@@ -6657,7 +6702,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdClFisL", "TextBox")
         WITH loc_oAba.txt_4c_ProdClFisL
-            .ControlSource = "crSigCnFNf.lcclas1"
+            .ControlSource = "crSigCnFNf.cclfis"
             .Top           = 62
             .Left          = 293
             .Width         = 38
@@ -6686,7 +6731,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdSitTribL", "TextBox")
         WITH loc_oAba.txt_4c_ProdSitTribL
-            .ControlSource = "crSigCnFNf.lstrib"
+            .ControlSource = "crSigCnFNf.cstrib"
             .Top           = 62
             .Left          = 336
             .Width         = 38
@@ -6744,7 +6789,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdUnidL", "TextBox")
         WITH loc_oAba.txt_4c_ProdUnidL
-            .ControlSource = "crSigCnFNf.lunid"
+            .ControlSource = "crSigCnFNf.cunid"
             .Top           = 62
             .Left          = 422
             .Width         = 38
@@ -6773,7 +6818,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdQtdeL", "TextBox")
         WITH loc_oAba.txt_4c_ProdQtdeL
-            .ControlSource = "crSigCnFNf.lqtde"
+            .ControlSource = "crSigCnFNf.cqtde"
             .Top           = 62
             .Left          = 466
             .Width         = 38
@@ -6802,7 +6847,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdVlUnitL", "TextBox")
         WITH loc_oAba.txt_4c_ProdVlUnitL
-            .ControlSource = "crSigCnFNf.lvluni"
+            .ControlSource = "crSigCnFNf.cvluni"
             .Top           = 97
             .Left          = 32
             .Width         = 38
@@ -6831,7 +6876,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdVlTotL", "TextBox")
         WITH loc_oAba.txt_4c_ProdVlTotL
-            .ControlSource = "crSigCnFNf.lvltot"
+            .ControlSource = "crSigCnFNf.cvltot"
             .Top           = 97
             .Left          = 75
             .Width         = 38
@@ -6860,7 +6905,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdAlICMSL", "TextBox")
         WITH loc_oAba.txt_4c_ProdAlICMSL
-            .ControlSource = "crSigCnFNf.lbicm"
+            .ControlSource = "crSigCnFNf.caicm"
             .Top           = 97
             .Left          = 118
             .Width         = 38
@@ -6889,7 +6934,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdAlIPIL", "TextBox")
         WITH loc_oAba.txt_4c_ProdAlIPIL
-            .ControlSource = "crSigCnFNf.ltipi"
+            .ControlSource = "crSigCnFNf.caipi"
             .Top           = 97
             .Left          = 161
             .Width         = 38
@@ -6947,7 +6992,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdCFOPL", "TextBox")
         WITH loc_oAba.txt_4c_ProdCFOPL
-            .ControlSource = "crSigCnFNf.lcfop"
+            .ControlSource = "crSigCnFN2.ccfoppro"
             .Top           = 97
             .Left          = 248
             .Width         = 41
@@ -6976,7 +7021,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ProdPesoMetL", "TextBox")
         WITH loc_oAba.txt_4c_ProdPesoMetL
-            .ControlSource = "crSigCnFNf.cpbru"
+            .ControlSource = "crSigCnFN2.cpesomet"
             .Top           = 97
             .Left          = 293
             .Width         = 41
@@ -7067,7 +7112,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_DescOrigL", "TextBox")
         WITH loc_oAba.txt_4c_DescOrigL
-            .ControlSource = "crSigCnFNf.ldescpro"
+            .ControlSource = "crSigCnFNf.oorig"
             .Top           = 159
             .Left          = 143
             .Width         = 27
@@ -7096,7 +7141,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_AdendoL", "TextBox")
         WITH loc_oAba.txt_4c_AdendoL
-            .ControlSource = "crSigCnFNf.ltipi"
+            .ControlSource = "crSigCnFNf.oaden"
             .Top           = 177
             .Left          = 143
             .Width         = 27
@@ -7212,7 +7257,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ColObsL", "TextBox")
         WITH loc_oAba.txt_4c_ColObsL
-            .ControlSource = "crSigCnFNf.tamcolobs"
+            .ControlSource = "crSigCnFNf.cobsi"
             .Top           = 149
             .Left          = 207
             .Width         = 41
@@ -7241,7 +7286,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoColsL", "TextBox")
         WITH loc_oAba.txt_4c_NoColsL
-            .ControlSource = "crSigCnFNf.nldser"
+            .ControlSource = "crSigCnFNf.tamcolobsi"
             .Top           = 149
             .Left          = 279
             .Width         = 41
@@ -7270,7 +7315,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoLinsL", "TextBox")
         WITH loc_oAba.txt_4c_NoLinsL
-            .ControlSource = "crSigCnFNf.ncdser"
+            .ControlSource = "crSigCnFNf.tamlinobsi"
             .Top           = 149
             .Left          = 348
             .Width         = 41
@@ -7356,7 +7401,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_DescAcrL", "TextBox")
         WITH loc_oAba.txt_4c_DescAcrL
-            .ControlSource = "crSigCnFNf.cdesconto"
+            .ControlSource = "crSigCnFNf.ldesconto"
             .Top           = 205
             .Left          = 250
             .Width         = 41
@@ -7657,7 +7702,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_OutDespL", "TextBox")
         WITH loc_oAba.txt_4c_OutDespL
-            .ControlSource = "crSigCnFNf.coutras"
+            .ControlSource = "crSigCnFNf.loutras"
             .Top = 65
             .Left = 255
             .Width = 41
@@ -7714,7 +7759,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ValProdL", "TextBox")
         WITH loc_oAba.txt_4c_ValProdL
-            .ControlSource = "crSigCnFNf.lvltot"
+            .ControlSource = "crSigCnFNf.ltprod"
             .Top = 101
             .Left = 39
             .Width = 41
@@ -7742,7 +7787,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ValProdC", "TextBox")
         WITH loc_oAba.txt_4c_ValProdC
-            .ControlSource = "crSigCnFNf.cvltot"
+            .ControlSource = "crSigCnFNf.ctprod"
             .Top = 101
             .Left = 88
             .Width = 41
@@ -7771,7 +7816,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_BcIPIL", "TextBox")
         WITH loc_oAba.txt_4c_BcIPIL
-            .ControlSource = "crSigCnFNf.lbicm"
+            .ControlSource = "crSigCnFN2.lbipi"
             .Top = 101
             .Left = 147
             .Width = 41
@@ -7799,7 +7844,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_BcIPIC", "TextBox")
         WITH loc_oAba.txt_4c_BcIPIC
-            .ControlSource = "crSigCnFNf.cbicm"
+            .ControlSource = "crSigCnFN2.cbipi"
             .Top = 101
             .Left = 196
             .Width = 41
@@ -7828,7 +7873,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_VlTIPIL", "TextBox")
         WITH loc_oAba.txt_4c_VlTIPIL
-            .ControlSource = "crSigCnFNf.ctipi"
+            .ControlSource = "crSigCnFNf.ltipi"
             .Top = 101
             .Left = 255
             .Width = 41
@@ -7942,7 +7987,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FonteL", "TextBox")
         WITH loc_oAba.txt_4c_FonteL
-            .ControlSource = "crSigCnFNf.ltpfrete"
+            .ControlSource = "crSigCnFN2.totfsize"
             .Top = 101
             .Left = 461
             .Width = 23
@@ -7971,7 +8016,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_BcSTL", "TextBox")
         WITH loc_oAba.txt_4c_BcSTL
-            .ControlSource = "crSigCnFNf.lbicm"
+            .ControlSource = "crSigCnFN2.lbicmss"
             .Top = 137
             .Left = 39
             .Width = 41
@@ -7999,7 +8044,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_BcSTC", "TextBox")
         WITH loc_oAba.txt_4c_BcSTC
-            .ControlSource = "crSigCnFNf.cbicm"
+            .ControlSource = "crSigCnFN2.cbicmss"
             .Top = 137
             .Left = 88
             .Width = 41
@@ -8028,7 +8073,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ValSTL", "TextBox")
         WITH loc_oAba.txt_4c_ValSTL
-            .ControlSource = "crSigCnFNf.lticm"
+            .ControlSource = "crSigCnFN2.lvicmss"
             .Top = 137
             .Left = 147
             .Width = 41
@@ -8056,7 +8101,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ValSTC", "TextBox")
         WITH loc_oAba.txt_4c_ValSTC
-            .ControlSource = "crSigCnFNf.cticm"
+            .ControlSource = "crSigCnFN2.cvicmss"
             .Top = 137
             .Left = 196
             .Width = 41
@@ -9071,7 +9116,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_UnPesos", "TextBox")
         WITH loc_oAba.txt_4c_UnPesos
-            .ControlSource = "crSigCnFNf.pesovols"
+            .ControlSource = "crSigCnFN2.cunipesos"
             .Top = 219
             .Left = 66
             .Width = 41
@@ -9117,24 +9162,33 @@ DEFINE CLASS FormNfl AS FormBase
             .Value       = 1
             .Visible     = .T.
         ENDWITH
+        *-- Legado Get_Class: Option1 "Letras" (0,0,42) / Option2 "Numeros" (61,0,55),
+        *-- ligado a crSigCnFNf.Letras (regra #45: legenda/ordem/coluna do dump)
         WITH loc_oAba.obj_4c_ClsFisTp.Buttons(1)
-            .Caption = "Impressa"
-            .Left    = 2
-            .Top = 2
-            .AutoSize = .T.
-            .BackStyle = 0
-            .ForeColor = RGB(90,90,90)
-        ENDWITH
-        WITH loc_oAba.obj_4c_ClsFisTp.Buttons(2)
-            .Caption = "Calculada"
-            .Left    = 60
-            .Top = 2
-            .AutoSize = .T.
+            .Caption = "Letras"
+            .Left    = 0
+            .Top     = 0
+            .Width   = 42
+            .Height  = 13
+            .AutoSize = .F.
             .BackStyle = 0
             .FontName = "Tahoma"
             .FontSize = 7
             .ForeColor = RGB(90,90,90)
         ENDWITH
+        WITH loc_oAba.obj_4c_ClsFisTp.Buttons(2)
+            .Caption = "N" + CHR(250) + "meros"
+            .Left    = 61
+            .Top     = 0
+            .Width   = 55
+            .Height  = 13
+            .AutoSize = .F.
+            .BackStyle = 0
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .ForeColor = RGB(90,90,90)
+        ENDWITH
+        loc_oAba.obj_4c_ClsFisTp.ControlSource = "crSigCnFNf.letras"
 
         *-- Shape bloco Codigos 1-7 (top=39, left=17)
         loc_oAba.AddObject("shp_4c_CodBl1", "Shape")
@@ -9188,7 +9242,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("lbl_4c_LblAngulo1", "Label")
         WITH loc_oAba.lbl_4c_LblAngulo1
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 42
             .Left = 177
             .FontName = "Tahoma"
@@ -9272,7 +9326,9 @@ DEFINE CLASS FormNfl AS FormBase
                 .FontSize = 8
                 .Visible = .T.
                 .RowSourceType = 1
-                .RowSource = "0,90,180,270"
+                .RowSource = "0,90,270"
+                .Style = 2
+                .ControlSource = "crSigCnFN2.aclas" + loc_cFat   && legado: RowSource "0,90,270" + coluna int (grava o indice)
             ENDWITH
 
             loc_oAba.AddObject("txt_4c_CodImp" + loc_cFat, "TextBox")
@@ -9359,7 +9415,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("lbl_4c_LblAngulo2", "Label")
         WITH loc_oAba.lbl_4c_LblAngulo2
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 42
             .Left = 533
             .FontName = "Tahoma"
@@ -9442,7 +9498,9 @@ DEFINE CLASS FormNfl AS FormBase
                 .FontSize = 8
                 .Visible = .T.
                 .RowSourceType = 1
-                .RowSource = "0,90,180,270"
+                .RowSource = "0,90,270"
+                .Style = 2
+                .ControlSource = "crSigCnFN2.aclas" + loc_cFatB   && legado: RowSource "0,90,270" + coluna int (grava o indice)
             ENDWITH
 
             loc_oAba.AddObject("txt_4c_CodImpB" + loc_cFatB, "TextBox")
@@ -9496,7 +9554,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoNFL", "TextBox")
         WITH loc_oAba.txt_4c_NoNFL
-            .ControlSource = "crSigCnFNf.lnfsai"
+            .ControlSource = "crSigCnFNf.l2nf"
             .Top = 213
             .Left = 36
             .Width = 41
@@ -9524,7 +9582,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoNFC", "TextBox")
         WITH loc_oAba.txt_4c_NoNFC
-            .ControlSource = "crSigCnFNf.cnfsai"
+            .ControlSource = "crSigCnFNf.c2nf"
             .Top = 213
             .Left = 85
             .Width = 41
@@ -9548,12 +9606,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.a2nf"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngNF", "Label")
         WITH loc_oAba.lbl_4c_LblAngNF
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 202
             .Left = 134
             .FontName = "Tahoma"
@@ -9580,7 +9640,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_VlNotaRL", "TextBox")
         WITH loc_oAba.txt_4c_VlNotaRL
-            .ControlSource = "crSigCnFNf.ltnota"
+            .ControlSource = "crSigCnFNf.ltnotar"
             .Top = 213
             .Left = 186
             .Width = 41
@@ -9608,7 +9668,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_VlNotaRC", "TextBox")
         WITH loc_oAba.txt_4c_VlNotaRC
-            .ControlSource = "crSigCnFNf.ctnota"
+            .ControlSource = "crSigCnFNf.ctnotar"
             .Top = 213
             .Left = 235
             .Width = 41
@@ -9631,12 +9691,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.atnotar"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngVlNota", "Label")
         WITH loc_oAba.lbl_4c_LblAngVlNota
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 202
             .Left = 286
             .FontName = "Tahoma"
@@ -9663,7 +9725,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoSeloL", "TextBox")
         WITH loc_oAba.txt_4c_NoSeloL
-            .ControlSource = "crSigCnFNf.lcnfselo"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top = 213
             .Left = 343
             .Width = 41
@@ -9691,7 +9753,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NoSeloC", "TextBox")
         WITH loc_oAba.txt_4c_NoSeloC
-            .ControlSource = "crSigCnFNf.lcselo"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top = 213
             .Left = 392
             .Width = 41
@@ -9714,12 +9776,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.aselo"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngSelo", "Label")
         WITH loc_oAba.lbl_4c_LblAngSelo
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 202
             .Left = 440
             .FontName = "Tahoma"
@@ -9746,7 +9810,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NFSeloL", "TextBox")
         WITH loc_oAba.txt_4c_NFSeloL
-            .ControlSource = "crSigCnFNf.lnfsai"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top = 213
             .Left = 499
             .Width = 41
@@ -9774,7 +9838,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NFSeloC", "TextBox")
         WITH loc_oAba.txt_4c_NFSeloC
-            .ControlSource = "crSigCnFNf.cnfsai"
+            *-- legado nao liga este controle (sem ControlSource no SCX)
             .Top = 213
             .Left = 548
             .Width = 41
@@ -9797,12 +9861,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.anfselo"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngNFSelo", "Label")
         WITH loc_oAba.lbl_4c_LblAngNFSelo
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 202
             .Left = 603
             .FontName = "Tahoma"
@@ -9838,7 +9904,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ObsL", "TextBox")
         WITH loc_oAba.txt_4c_ObsL
-            .ControlSource = "crSigCnFNf.tamlinobs"
+            .ControlSource = "crSigCnFNf.lobs"
             .Top = 254
             .Left = 44
             .Width = 41
@@ -9866,7 +9932,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ObsC", "TextBox")
         WITH loc_oAba.txt_4c_ObsC
-            .ControlSource = "crSigCnFNf.tamcolobs"
+            .ControlSource = "crSigCnFNf.cobs"
             .Top = 254
             .Left = 93
             .Width = 41
@@ -9894,7 +9960,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ObsNoCol", "TextBox")
         WITH loc_oAba.txt_4c_ObsNoCol
-            .ControlSource = "crSigCnFNf.nldser"
+            .ControlSource = "crSigCnFNf.tamcolobs"
             .Top = 254
             .Left = 194
             .Width = 41
@@ -9922,7 +9988,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_ObsNoLin", "TextBox")
         WITH loc_oAba.txt_4c_ObsNoLin
-            .ControlSource = "crSigCnFNf.ncdser"
+            .ControlSource = "crSigCnFNf.tamlinobs"
             .Top = 254
             .Left = 256
             .Width = 41
@@ -9946,12 +10012,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.aobs"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngObs", "Label")
         WITH loc_oAba.lbl_4c_LblAngObs
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 243
             .Left = 143
             .FontName = "Tahoma"
@@ -9978,7 +10046,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NPedSubL1", "TextBox")
         WITH loc_oAba.txt_4c_NPedSubL1
-            .ControlSource = "crSigCnFNf.ldupnum"
+            .ControlSource = "crSigCnFN2.liniped"
             .Top = 254
             .Left = 332
             .Width = 41
@@ -10006,7 +10074,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NPedSubC1", "TextBox")
         WITH loc_oAba.txt_4c_NPedSubC1
-            .ControlSource = "crSigCnFNf.cdupnum"
+            .ControlSource = "crSigCnFN2.ciniped"
             .Top = 254
             .Left = 381
             .Width = 41
@@ -10016,6 +10084,35 @@ DEFINE CLASS FormNfl AS FormBase
             .SpecialEffect = 1
             .Format = "K"
             .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Angulo do 1o "No Pedidos (SubNivel)" - Combo12/Label32 do legado (faltavam)
+        loc_oAba.AddObject("cbo_4c_AngNPed1", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngNPed1
+            .Top = 254
+            .Left = 435
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.ainiped"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngNPed1", "Label")
+        WITH loc_oAba.lbl_4c_LblAngNPed1
+            .Caption = CHR(194) + "ngulo"
+            .Top = 243
+            .Left = 440
+            .Width = 31
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
             .Visible = .T.
         ENDWITH
 
@@ -10034,7 +10131,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NPedSubL2", "TextBox")
         WITH loc_oAba.txt_4c_NPedSubL2
-            .ControlSource = "crSigCnFNf.ldupnum"
+            .ControlSource = "crSigCnFN2.liniped2"
             .Top = 254
             .Left = 499
             .Width = 41
@@ -10062,7 +10159,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NPedSubC2", "TextBox")
         WITH loc_oAba.txt_4c_NPedSubC2
-            .ControlSource = "crSigCnFNf.cdupnum"
+            .ControlSource = "crSigCnFN2.ciniped2"
             .Top = 254
             .Left = 548
             .Width = 41
@@ -10085,12 +10182,14 @@ DEFINE CLASS FormNfl AS FormBase
             .FontSize = 8
             .Visible = .T.
             .RowSourceType = 1
-            .RowSource = "0,90,180,270"
+            .RowSource = "0,90,270"
+            .Style = 2
+            .ControlSource = "crSigCnFN2.ainiped2"   && legado: RowSource "0,90,270" + coluna int (grava o indice)
         ENDWITH
 
         loc_oAba.AddObject("lbl_4c_LblAngNPed2", "Label")
         WITH loc_oAba.lbl_4c_LblAngNPed2
-            .Caption = CHR(226) + "ngulo"
+            .Caption = CHR(194) + "ngulo"
             .Top = 243
             .Left = 603
             .FontName = "Tahoma"
@@ -10123,7 +10222,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FatDtEmiL", "TextBox")
         WITH loc_oAba.txt_4c_FatDtEmiL
-            .ControlSource = "crSigCnFNf.ldtemi"
+            .ControlSource = "crSigCnFNf.ldtemif"
             .Top = 43
             .Left = 99
             .Width = 41
@@ -10151,7 +10250,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FatDtEmiC", "TextBox")
         WITH loc_oAba.txt_4c_FatDtEmiC
-            .ControlSource = "crSigCnFNf.cdtemi"
+            .ControlSource = "crSigCnFNf.cdtemif"
             .Top = 43
             .Left = 148
             .Width = 41
@@ -10351,7 +10450,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FatVlNotaL", "TextBox")
         WITH loc_oAba.txt_4c_FatVlNotaL
-            .ControlSource = "crSigCnFNf.ltnota"
+            .ControlSource = "crSigCnFNf.ltnotaf"
             .Top = 115
             .Left = 99
             .Width = 41
@@ -10379,7 +10478,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FatVlNotaC", "TextBox")
         WITH loc_oAba.txt_4c_FatVlNotaC
-            .ControlSource = "crSigCnFNf.ctnota"
+            .ControlSource = "crSigCnFNf.ctnotaf"
             .Top = 115
             .Left = 148
             .Width = 41
@@ -10585,7 +10684,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_SrvNoCols", "TextBox")
         WITH loc_oAba.txt_4c_SrvNoCols
-            .ControlSource = "crSigCnFNf.nldser"
+            .ControlSource = "crSigCnFNf.ncdser"
             .Top = 43
             .Left = 214
             .Width = 41
@@ -10614,7 +10713,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_SrvNoLins", "TextBox")
         WITH loc_oAba.txt_4c_SrvNoLins
-            .ControlSource = "crSigCnFNf.ncdser"
+            .ControlSource = "crSigCnFNf.nldser"
             .Top = 43
             .Left = 273
             .Width = 41
@@ -10931,7 +11030,7 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Validar Sequencia de Notas (top=162)
         loc_oAba.AddObject("chk_4c_ValidSeqNota", "CheckBox")
         WITH loc_oAba.chk_4c_ValidSeqNota
-            .ControlSource = "crSigCnFNf.vseqnota"
+            .ControlSource = "crSigCnFN2.vseqnota"
             .Caption = "Validar Sequ" + CHR(234) + "ncia de Notas :"
             .Top = 162
             .Left = 88
@@ -10960,7 +11059,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_LocL", "TextBox")
         WITH loc_oAba.txt_4c_LocL
-            .ControlSource = "crSigCnFNf.loploc"
+            .ControlSource = "crSigCnFN2.loploc"
             .Top = 65
             .Left = 405
             .Width = 41
@@ -10988,7 +11087,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_LocC", "TextBox")
         WITH loc_oAba.txt_4c_LocC
-            .ControlSource = "crSigCnFNf.coploc"
+            .ControlSource = "crSigCnFN2.coploc"
             .Top = 65
             .Left = 454
             .Width = 41
@@ -11017,7 +11116,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_VendL", "TextBox")
         WITH loc_oAba.txt_4c_VendL
-            .ControlSource = "crSigCnFNf.lopnvd"
+            .ControlSource = "crSigCnFN2.lopcvd"
             .Top = 97
             .Left = 405
             .Width = 41
@@ -11045,7 +11144,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_VendC", "TextBox")
         WITH loc_oAba.txt_4c_VendC
-            .ControlSource = "crSigCnFNf.copnvd"
+            .ControlSource = "crSigCnFN2.copcvd"
             .Top = 97
             .Left = 454
             .Width = 41
@@ -11074,7 +11173,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NomeVendL", "TextBox")
         WITH loc_oAba.txt_4c_NomeVendL
-            .ControlSource = "crSigCnFNf.lopcvd"
+            .ControlSource = "crSigCnFN2.lopnvd"
             .Top = 97
             .Left = 507
             .Width = 41
@@ -11102,7 +11201,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NomeVendC", "TextBox")
         WITH loc_oAba.txt_4c_NomeVendC
-            .ControlSource = "crSigCnFNf.copcvd"
+            .ControlSource = "crSigCnFN2.copnvd"
             .Top = 97
             .Left = 556
             .Width = 41
@@ -11131,7 +11230,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_RespL", "TextBox")
         WITH loc_oAba.txt_4c_RespL
-            .ControlSource = "crSigCnFNf.lopnrp"
+            .ControlSource = "crSigCnFN2.lopcrp"
             .Top = 129
             .Left = 405
             .Width = 41
@@ -11159,7 +11258,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_RespC", "TextBox")
         WITH loc_oAba.txt_4c_RespC
-            .ControlSource = "crSigCnFNf.copnrp"
+            .ControlSource = "crSigCnFN2.copcrp"
             .Top = 129
             .Left = 454
             .Width = 41
@@ -11188,7 +11287,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NomeRespL", "TextBox")
         WITH loc_oAba.txt_4c_NomeRespL
-            .ControlSource = "crSigCnFNf.lopcvd"
+            .ControlSource = "crSigCnFN2.lopnrp"
             .Top = 129
             .Left = 507
             .Width = 41
@@ -11216,7 +11315,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NomeRespC", "TextBox")
         WITH loc_oAba.txt_4c_NomeRespC
-            .ControlSource = "crSigCnFNf.copcvd"
+            .ControlSource = "crSigCnFN2.copnrp"
             .Top = 129
             .Left = 556
             .Width = 41
@@ -11245,7 +11344,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_NVias", "TextBox")
         WITH loc_oAba.txt_4c_NVias
-            .ControlSource = "crSigCnFNf.tipos"
+            .ControlSource = "crSigCnFN2.nvias"
             .Top = 184
             .Left = 243
             .Width = 31
@@ -11274,7 +11373,7 @@ DEFINE CLASS FormNfl AS FormBase
 
         loc_oAba.AddObject("txt_4c_FatPropLin", "TextBox")
         WITH loc_oAba.txt_4c_FatPropLin
-            .ControlSource = "crSigCnFNf.tamanhos"
+            .ControlSource = "crSigCnFN2.nftgdi1s"
             .Top = 203
             .Left = 243
             .Width = 66

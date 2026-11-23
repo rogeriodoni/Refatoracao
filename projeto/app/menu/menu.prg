@@ -1518,6 +1518,44 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 13 OF popFerramentas PROMPT "\-"
     DEFINE BAR 14 OF popFerramentas PROMPT "Configura" + CHR(231) + CHR(227) + "o PAF-ECF" ;
            MESSAGE "Configura" + CHR(231) + CHR(227) + "o do Programa Aplicativo Fiscal - Emissor de Cupom Fiscal"
+    *-- "Configuracoes" eh SUBMENU no legado (SIGCDPRG: "Menu - Ferramentas -
+    *-- Configuracao - ..."), na ordem de DescricaoS. Sem o ON BAR o item era
+    *-- um rotulo morto: clicar nao fazia nada. Itens sem tela migrada ficam
+    *-- visiveis e desabilitados (SKIP FOR .T.) para a ausencia ser explicita.
+    ON BAR 1 OF popFerramentas ACTIVATE POPUP popFerrConfig
+
+    DEFINE POPUP popFerrConfig MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popFerrConfig PROMPT "Boleto Banc" + CHR(225) + "rio" ;
+           MESSAGE "Configura" + CHR(231) + CHR(227) + "o de Boletos Banc" + CHR(225) + "rios (SIGOPCBL)"
+    DEFINE BAR 2 OF popFerrConfig PROMPT "Boletos Banc" + CHR(225) + "rios (Cond. de Pagto)" ;
+           MESSAGE "Configura" + CHR(231) + CHR(227) + "o de Boletos Banc" + CHR(225) + "rios por Condi" + CHR(231) + CHR(227) + "o de Pagamento (SIGCDCFB)"
+    DEFINE BAR 3 OF popFerrConfig PROMPT "Configura" + CHR(231) + CHR(227) + "o Cheque Matricial" ;
+           SKIP FOR .T. ;
+           MESSAGE "Tela ainda n" + CHR(227) + "o migrada (SIGCDCHMC)"
+    DEFINE BAR 4 OF popFerrConfig PROMPT "Duplicata" ;
+           MESSAGE "S" + CHR(233) + "ries de Duplicatas (SIGCDDUP)"
+    DEFINE BAR 5 OF popFerrConfig PROMPT "Impressora Fiscal" ;
+           MESSAGE "Cadastro da Impressora Fiscal (SIGCDFIS)"
+    DEFINE BAR 6 OF popFerrConfig PROMPT "Impressoras" ;
+           MESSAGE "Cadastro de Impressoras (SIGCDIMP)"
+    DEFINE BAR 7 OF popFerrConfig PROMPT "Nota Fiscal" ;
+           MESSAGE "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal (SIGCDNFL)"
+    DEFINE BAR 8 OF popFerrConfig PROMPT "Par" + CHR(226) + "metros do Sistema" ;
+           SKIP FOR .T. ;
+           MESSAGE "Tela ainda n" + CHR(227) + "o migrada (SIGPARAM)"
+    DEFINE BAR 9 OF popFerrConfig PROMPT "Tipos de Etiquetas de Produto" ;
+           MESSAGE "Tipos de Etiquetas de Produto (SIGCDTPE)"
+    DEFINE BAR 10 OF popFerrConfig PROMPT "Usu" + CHR(225) + "rios Autom" + CHR(225) + "ticos (Opera" + CHR(231) + CHR(245) + "es)" ;
+           MESSAGE "Usu" + CHR(225) + "rios Autom" + CHR(225) + "ticos (SIGCDUSA)"
+    ON SELECTION BAR 1  OF popFerrConfig DO AbrirFormSigOpCbl
+    ON SELECTION BAR 2  OF popFerrConfig DO AbrirFormCfb
+    ON SELECTION BAR 4  OF popFerrConfig DO AbrirFormDup
+    ON SELECTION BAR 5  OF popFerrConfig DO AbrirFormFis
+    ON SELECTION BAR 6  OF popFerrConfig DO AbrirFormImp
+    ON SELECTION BAR 7  OF popFerrConfig DO AbrirFormNfl
+    ON SELECTION BAR 9  OF popFerrConfig DO AbrirFormTpe
+    ON SELECTION BAR 10 OF popFerrConfig DO AbrirFormUSA
+
     ON SELECTION BAR 3  OF popFerramentas DO AbrirFormSIGBLCTA
     ON SELECTION BAR 4  OF popFerramentas DO AbrirFormSIGPGCNB
     ON SELECTION BAR 6  OF popFerramentas DO TestarConexaoBD
@@ -9298,6 +9336,59 @@ PROCEDURE AbrirFormIct()
 
     IF VARTYPE(loc_oForm) = "O"
         loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpCbl - Ferramentas > Configuracoes > Boleto Bancario (SIGOPCBL)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpCbl()
+    AbrirFormConfiguracao("FormSigOpCbl", "Configura" + CHR(231) + CHR(227) + "o de Boletos Banc" + CHR(225) + "rios")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormFis - Ferramentas > Configuracoes > Impressora Fiscal (SIGCDFIS)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormFis()
+    AbrirFormConfiguracao("FormFis", "Impressora Fiscal")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormNfl - Ferramentas > Configuracoes > Nota Fiscal (SIGCDNFL)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormNfl()
+    AbrirFormConfiguracao("FormNfl", "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormConfiguracao - abertura comum dos itens do submenu Configuracoes.
+* TRY cobre so a CRIACAO; Show() fora dele (CLAUDE.md #29).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormConfiguracao(par_cClasse, par_cDescricao)
+    LOCAL loForm, loException, lcMensagem
+    loForm = .NULL.
+
+    TRY
+        GarantirClasse(par_cClasse)
+        loForm = CREATEOBJECT(par_cClasse)
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio " + par_cClasse + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de " + par_cDescricao + ":" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message   + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
     ENDIF
 ENDPROC
 
