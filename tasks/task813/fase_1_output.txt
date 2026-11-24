@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\SigOpTotBO.prg` com `DEFINE CLASS SigOpTotBO AS BusinessBase`, contendo:
+
+- Propriedades de contexto (`this_oParentForm`, `this_nDataSessionId`, `this_cCidQuery3`)
+- Nomes dos cursores de trabalho usados pelo dialogo (crSigCdOpe, TprMvCab, crSigOpCdc/Cdd, crTpmMvItn/Its/Itn3, crTmpUni, CrSigTempD, xValIte, xValServ, csCompo, ProEesti, ProTam)
+- Propriedades dos totais exibidos nos Get_* (TotQtde/QOper/TotPeso/POper/TotPesoC/TotPes/MtCub)
+- Propriedades de Compensa├º├úo (edit├ível, com valor anterior para rollback)
+- Flags de se├º├úo (TemComponentes/TemServicos) e r├│tulo din├ómico do total de peso
+- `Init()` chamando `DODEFAULT()`, zerando `this_cTabela`/`this_cCampoChave` (este BO n├úo tem entidade ├║nica ÔÇö ├® um dialogo de totaliza├º├úo sobre cursores do form pai, mesmo padr├úo do `SigPrGl2BO`), gerando `this_cCidQuery3` via `fUniqueIds()` e inicializando os demais defaults ÔÇö tudo dentro de TRY/CATCH com RETURN fora do bloco.
+
+Pr├│xima fase (2/8) vai completar o BO com `CarregarDoCursor`/`CalcTotais`/m├®todos de processamento de componentes, lendo este arquivo e usando Edit.

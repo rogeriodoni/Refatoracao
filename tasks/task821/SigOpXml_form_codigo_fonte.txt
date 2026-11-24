@@ -1,0 +1,3612 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpXml.SCX
+* Data/Hora: 19/11/2026 15:00:31
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPXML
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPXML
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPXML.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPXML.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: pgCopias
+  Parent: SIGOPXML
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: Shape1
+  Parent: SIGOPXML.pgCopias.pgExportar
+  Class: shape
+  BaseClass: shape
+
+Objeto: getArqXML
+  Parent: SIGOPXML.pgCopias.pgExportar
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGOPXML.pgCopias.pgExportar
+  Class: label
+  BaseClass: label
+
+Objeto: getOperacao
+  Parent: SIGOPXML.pgCopias.pgExportar
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblTitulo
+  Parent: SIGOPXML.pgCopias.pgExportar
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: shape
+  BaseClass: shape
+
+Objeto: getArqXML
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnGetArqO
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label3
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: label
+  BaseClass: label
+
+Objeto: getOperacao
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblTitulo
+  Parent: SIGOPXML.pgCopias.pgImportar
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBotoes
+  Parent: SIGOPXML
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 245
+  Width = 700
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Transferência XML"
+  ControlBox = .F.
+  FontName = "Courier New"
+  MaxButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  arqxml = .F.
+  automatica = .F.
+  Name = "SIGOPXML"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  ActivePage = 1
+  Top = 79
+  Left = 0
+  Width = 708
+  Height = 167
+  Name = "pgCopias"
+  Page1.FontBold = .T.
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Exportar XML"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "pgExportar"
+  Page2.FontBold = .T.
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Importar XML"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 90,90,90
+  Page2.Name = "pgImportar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgExportar.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 5
+  Height = 60
+  Width = 688
+  BackStyle = 0
+  BorderStyle = 6
+  BorderWidth = 1
+  Curvature = 12
+  BorderColor = 192,192,192
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgExportar.getArqXML
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 101
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = "Arquivo Que Será Gravado Com a Operação"
+  Top = 41
+  Width = 588
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getArqXML"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgExportar.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Arquivo XML :"
+  Height = 15
+  Left = 10
+  Top = 44
+  Width = 78
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgExportar.getOperacao
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 101
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = "Operação Que Será Gravada"
+  Top = 16
+  Width = 190
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgExportar.lblTitulo
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Título :"
+  Height = 16
+  Left = 24
+  Top = 19
+  Width = 76
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 5
+  Height = 60
+  Width = 688
+  BackStyle = 0
+  BorderStyle = 6
+  BorderWidth = 1
+  Curvature = 12
+  BorderColor = 192,192,192
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.getArqXML
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 104
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Arquivo XML a Ser Importado"
+  Top = 41
+  Width = 560
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getArqXML"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.btnGetArqO
+------------------------------------------------------------
+  Top = 39
+  Left = 665
+  Height = 26
+  Width = 26
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  Picture = ..\framework\imagens\geral_arquivo_26.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Seleciona o Arquivo Que Será Processado"
+  SpecialEffect = 2
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnGetArqO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Arquivo XML :"
+  Height = 15
+  Left = 12
+  Top = 44
+  Width = 78
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.getOperacao
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 22
+  Left = 104
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = "Operação Que Será Gravada"
+  Top = 16
+  Width = 190
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.pgCopias.pgImportar.lblTitulo
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Título :"
+  Height = 16
+  Left = 26
+  Top = 19
+  Width = 76
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPXML.cmdBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 545
+  Top = -2
+  Width = 160
+  Name = "cmdBotoes"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_32.jpg
+  Command1.Caption = "\<Processar"
+  Command1.ToolTipText = "Processa o Arquivo XML"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnProcessar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_26.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "<Esc>Sair"
+  Command2.ToolTipText = "Sair da Rotina"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 1, 10, 7, 16, 13, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPXML
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE checacampos
+------------------------------------------------------------
+PROCEDURE checacampos
+Lparameters pCpo, pTab, pKey
+
+Local lcRet
+
+lcRet = pCpo
+
+If Not Empty(pCpo) 
+	ThisForm.poDataMgr.CursorQuery(pTab, [LocalBus], pKey, pCpo)
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - ] + pTab + [)])
+		lcRet = Iif(Type([pCpo]) = [N], 0, [])
+	EndIf
+
+	If Not Empty(lcRet)
+		Go Top In LocalBus
+		If Eof([LocalBus])
+			lcRet = Iif(Type([pCpo]) = [N], 0, [])
+		EndIf
+		Use In LocalBus
+	EndIf
+EndIf
+
+Return lcRet
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportacfgnf
+------------------------------------------------------------
+PROCEDURE exportacfgnf
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 10)
+
+ThisForm.poDataMgr.CursorQuery([SigCnFnf], [XMLCfgnf], [Series], lcKey)
+If Not Used([XMLCfgnf])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCfgnf)])
+	Return .f.
+Else
+	Select XMLCfgnf
+	Go Top In XMLCfgnf
+	If Eof([XMLCfgnf])
+		=MessageBox([A Serie Não Foi Encontrada!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On series Tag series
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([series], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLCfgnf])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLCfgnf
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportacfo
+------------------------------------------------------------
+PROCEDURE exportacfo
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 10)
+
+ThisForm.poDataMgr.CursorQuery([SigCdCfo], [XMLCfo], [Codigos], lcKey)
+If Not Used([XMLCfo])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCfo)])
+	Return .f.
+Else
+	Select XMLCfo
+	Go Top In XMLCfo
+	If Eof([XMLCfo])
+		=MessageBox([O CFOP Não Foi Encontrado!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On Codigos Tag Codigos
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([Cfop], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLCfo])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLCfo
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportafpag
+------------------------------------------------------------
+PROCEDURE exportafpag
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 12)
+
+ThisForm.poDataMgr.CursorQuery([SigOpFp], [XMLFPag], [FPags], lcKey)
+If Not Used([XMLFPag])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPag)])
+	Return .f.
+Else
+	Select XMLFPag
+	Go Top In XMLFPag
+	If Eof([XMLFPag])
+		=MessageBox([A Condição de Pagamento não foi encontrada!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On FPags Tag FPags
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFpI], [XMLFPagI], [FPags], lcKey)
+If Not Used([XMLFPagI])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPagI)])
+	Return .f.
+Else
+	Select XMLFPagI
+	Go Top In XMLFPagI
+	Index On FPags Tag FPags
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFpP], [XMLFPagP], [FPags], lcKey)
+If Not Used([XMLFPagP])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPagP)])
+	Return .f.
+Else
+	Select XMLFPagP
+	Go Top In XMLFPagP
+	Index On FPags Tag FPags
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFpB], [XMLFPagB], [FPags], lcKey)
+If Not Used([XMLFPagB])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPagB)])
+	Return .f.
+Else
+	Select XMLFPagB
+	Go Top In XMLFPagB
+	Index On FPags Tag FPags
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([CondPag], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLFPag])
+	.AddTableSchema([XMLFPagI])
+	.AddTableSchema([XMLFPagP])
+	.AddTableSchema([XMLFPagB])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLFPag
+	Use In XMLFPagI
+	Use In XMLFPagP
+	Use In XMLFPagB
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportafti
+------------------------------------------------------------
+PROCEDURE exportafti
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 2)
+
+ThisForm.poDataMgr.CursorQuery([SigPrFti], [XMLPrFti], [Cods], lcKey)
+If Not Used([XMLPrFti])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLPrFti)])
+	Return .f.
+Else
+	Select XMLPrFti
+	Go Top In XMLPrFti
+	If Eof([XMLPrFti])
+		=MessageBox([O Feitio Não Foi Encontrado!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On Cods Tag Cods
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigPrFto], [XMLPrFto], [Cods], lcKey)
+If Not Used([XMLPrFto])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLPrFto)])
+	Return .f.
+Else
+	Select XMLPrFto
+	Go Top In XMLPrFto
+	Index On Cods Tag Cods
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([Feitio], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLPrFti])
+	.AddTableSchema([XMLPrFto])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLPrFti
+	Use In XMLPrFto
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportagope
+------------------------------------------------------------
+PROCEDURE exportagope
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)
+
+ThisForm.poDataMgr.CursorQuery([SigCdGpe], [XMLGOpe], [Dgopes], lcKey)
+If Not Used([XMLGOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGOpe)])
+	Return .f.
+Else
+	Select XMLGOpe
+	Go Top In XMLGOpe
+	If Eof([XMLGOpe])
+		=MessageBox([A Operação Não Foi Encontrada!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On Dgopes Tag Dgopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdGpo], [XMLGOpeo], [Dgopes], lcKey)
+If Not Used([XMLGOpeo])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGOpeo)])
+	Return .f.
+Else
+	Select XMLGOpeo
+	Go Top In XMLGOpeo
+	Index On Dgopes Tag Dgopes
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([Operacao], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLGOpe])
+	.AddTableSchema([XMLGOpeo])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLGOpe
+	Use In XMLGOpeo
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportagru
+------------------------------------------------------------
+PROCEDURE exportagru
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 3)
+
+ThisForm.poDataMgr.CursorQuery([SigCdGrp], [XMLGru], [CGrus], lcKey)
+If Not Used([XMLGru])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGru)])
+	Return .f.
+Else
+	Select XMLGru
+	Go Top In XMLGru
+	If Eof([XMLGru])
+		=MessageBox([O Grupo Não Foi Encontrado!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On CGrus Tag CGrus
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdPsg], [XMLSGru], [CGrus], lcKey)
+If Not Used([XMLSGru])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLSGru)])
+	Return .f.
+Else
+	Select XMLSGru
+	Go Top In XMLSGru
+	Index On CGruCods Tag CGruCods
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdGgc], [XMLGruGc], [CGrus], lcKey)
+If Not Used([XMLGruGc])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGruGc)])
+	Return .f.
+Else
+	Select XMLGruGc
+	Go Top In XMLGruGc
+	Index On CGrus Tag CGrus
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdPrd], [XMLProD], [CGrus], lcKey)
+If Not Used([XMLProD])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLProD)])
+	Return .f.
+Else
+	Select XMLProD
+	Go Top In XMLProD
+	Index On CGrus Tag CGrus
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([Operacao], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLGru])
+	.AddTableSchema([XMLSGru])
+	.AddTableSchema([XMLGruGc])
+*	.AddTableSchema([XMLGPrCe])
+	.AddTableSchema([XMLProD])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLGru
+	Use In XMLSGru
+	Use In XMLGruGc
+*	Use In XMLGPrCe
+	Use In XMLProD
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportaope
+------------------------------------------------------------
+PROCEDURE exportaope
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)
+
+ThisForm.poDataMgr.CursorQuery([SigCdOpe], [XMLOpe], [Dopes], lcKey)
+If Not Used([XMLOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpe)])
+	Return .f.
+Else
+	Select XMLOpe
+	Go Top In XMLOpe
+	If Eof([XMLOpe])
+		=MessageBox([A Operação Não Foi Encontrada!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpCdc], [XMLDcOpe], [Dopes], lcKey)
+If Not Used([XMLDcOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLDcOpe)])
+	Return .f.
+Else
+	Select XMLDcOpe
+	Go Top In XMLDcOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpCdd], [XMLOpe2], [Dopes], lcKey)
+If Not Used([XMLOpe2])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpe2)])
+	Return .f.
+Else
+	Select XMLOpe2
+	Go Top In XMLOpe2
+	Index On Dopes Tag Dopes
+	Replace All ConfigGers With Substr(ConfigGers, 1, 161) + Space(30) + Substr(ConfigGers, 191, 59) In XMLOpe2
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpCdi], [XMLIvOpe], [Dopes], lcKey)
+If Not Used([XMLIvOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLIvOpe)])
+	Return .f.
+Else
+	Select XMLIvOpe
+	Go Top In XMLIvOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpCsn], [XMLSnOpe], [CDopes], lcKey)
+If Not Used([XMLSnOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLSnOpe)])
+	Return .f.
+Else
+	Select XMLSnOpe
+	Go Top In XMLSnOpe
+	Index On CDopes Tag CDopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpCrr], [XMLCrOpe], [Dopes], lcKey)
+If Not Used([XMLCrOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCrOpe)])
+	Return .f.
+Else
+	Select XMLCrOpe
+	Go Top In XMLCrOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpDup], [XMLDpOpe], [Dopes], lcKey)
+If Not Used([XMLDpOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLDpOpe)])
+	Return .f.
+Else
+	Select XMLDpOpe
+	Go Top In XMLDpOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigMvCxs], [XMLSqOpe], [CDopes], lcKey)
+If Not Used([XMLSqOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLSqOpe)])
+	Return .f.
+Else
+	Select XMLSqOpe
+	Go Top In XMLSqOpe
+	Index On CDopes Tag CDopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCcCPe], [XMLCcOpe], [Dopes], lcKey)
+If Not Used([XMLCcOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCcOpe)])
+	Return .f.
+Else
+	Select XMLCcOpe
+	Go Top In XMLCcOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdMop], [XMLMuOpe], [CDopes], lcKey)
+If Not Used([XMLMuOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLMuOpe)])
+	Return .f.
+Else
+	Select XMLMuOpe
+	Go Top In XMLMuOpe
+	Index On CDopes Tag CDopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFpO], [XMLFPagO], [Dopes], lcKey)
+If Not Used([XMLFPagO])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPagO)])
+	Return .f.
+Else
+	Select XMLFPagO
+	Go Top In XMLFPagO
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpTrf], [XMLOpTrf], [Dopes], lcKey)
+If Not Used([XMLOpTrf])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpTrf)])
+	Return .f.
+Else
+	Select XMLOpTrf
+	Go Top In XMLOpTrf
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpTdo], [XMLTabDO], [Dopes], lcKey)
+If Not Used([XMLTabDO])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLTabDO)])
+	Return .f.
+Else
+	Select XMLTabDO
+	Go Top In XMLTabDO
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFrt], [XMLOFrt], [Dopes], lcKey)
+If Not Used([XMLOFrt])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOFrt)])
+	Return .f.
+Else
+	Select XMLOFrt
+	Go Top In XMLOFrt
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpLso], [XMLLsOpe], [Dopes], lcKey)
+If Not Used([XMLLsOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLLsOpe)])
+	Return .f.
+Else
+	Select XMLLsOpe
+	Go Top In XMLLsOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdGcp], [XMLGcOpe], [Dopes], lcKey)
+If Not Used([XMLGcOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGcOpe)])
+	Return .f.
+Else
+	Select XMLGcOpe
+	Go Top In XMLGcOpe
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpOss], [XMLOpOss], [CDopes], lcKey)
+If Not Used([XMLOpOss])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpOss)])
+	Return .f.
+Else
+	Select XMLOpOss
+	Go Top In XMLOpOss
+	Index On CDopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdOop], [XMLCdOop], [Dopes], lcKey)
+If Not Used([XMLCdOop])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCdOop)])
+	Return .f.
+Else
+	Select XMLCdOop
+	Go Top In XMLCdOop
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdPaf], [XMLCdPaf], [Dopes], lcKey)
+If Not Used([XMLCdPaf])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCdPaf)])
+	Return .f.
+Else
+	Select XMLCdPaf
+	Go Top In XMLCdPaf
+	Index On Dopes Tag Dopes
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigOpFin], [XMLOpFin], [Dopes], lcKey)
+If Not Used([XMLOpFin])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpFin)])
+	Return .f.
+Else
+	Select XMLOpFin
+	Go Top In XMLOpFin
+	Index On Dopes Tag Dopes
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([Operacao], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLOpe])
+	.AddTableSchema([XMLDcOpe])
+	.AddTableSchema([XMLOpe2])
+	.AddTableSchema([XMLSnOpe])
+	.AddTableSchema([XMLIvOpe])
+	.AddTableSchema([XMLCrOpe])
+	.AddTableSchema([XMLDpOpe])
+	.AddTableSchema([XMLSqOpe])
+	.AddTableSchema([XMLCcOpe])
+	.AddTableSchema([XMLMuOpe])
+	.AddTableSchema([XMLFPagO])
+	.AddTableSchema([XMLOpTrf])
+	.AddTableSchema([XMLTabDO])
+	.AddTableSchema([XMLOFrt])
+	.AddTableSchema([XMLLsOpe])
+	.AddTableSchema([XMLGcOpe])
+	.AddTableSchema([XMLOpOss])
+	.AddTableSchema([XMLCdOop])
+	.AddTableSchema([XMLCdPaf])
+	.AddTableSchema([XMLOpFin])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLOpe
+	Use In XMLDcOpe
+	Use In XMLOpe2
+	Use In XMLIvOpe
+	Use In XMLSnOpe
+	Use In XMLCrOpe
+	Use In XMLDpOpe
+	Use In XMLSqOpe
+	Use In XMLCcOpe
+	Use In XMLMuOpe
+	Use In XMLFPagO
+	Use In XMLOpTrf
+	Use In XMLTabDO
+	Use In XMLOFrt
+	Use In XMLLsOpe
+	Use In XMLGcOpe
+	Use In XMLOpOss
+	Use In XMLCdOop
+	Use In XMLCdPaf
+	Use In XMLOpFin
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportaopp
+------------------------------------------------------------
+PROCEDURE exportaopp
+Local loXml, lcArq, lcKey
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+lcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)
+
+ThisForm.poDataMgr.CursorQuery([SigCdOpd], [XMLopp], [dopps], lcKey)
+If Not Used([XMLopp])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLopp)])
+	Return .f.
+Else
+	Select XMLopp
+	Go Top In XMLopp
+	If Eof([XMLopp])
+		=MessageBox([A Operação Não Foi Encontrada!!!], 16, [Atenção!!!])
+		Return .f.
+	EndIf
+	Index On dopps Tag dopps
+EndIf
+
+With loXml
+	.RespectCursorCP = .t.
+	.RespectNesting  = .t.
+	.UTF8Encoded     = .t. 	
+	.FormattedOutput = .t.
+	.XMLName         = Strconv([dopps], 12)
+
+	* Adiciona as Tabelas a Serem Enviadas Para o XML
+	.AddTableSchema([XMLopp])
+
+	* Gera a String com o XML
+	.ToXML([lcStr])
+
+	* Grava a String com o XML Em Um Arquivo
+	=StrToFile(lcStr, lcArq, 0)
+
+	Use In XMLopp
+
+	loXml = Null
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportar
+------------------------------------------------------------
+PROCEDURE exportar
+Local llRet, lcFrm
+
+llRet = .t.
+lcFrm = Alltrim(Upper(ThisForm.ParentForm.Name))
+
+Do Case
+	Case (lcFrm = [SIGCDOPE])
+		llRet = ThisForm.ExportaOpe()
+
+	Case (lcFrm = [SIGCDCFO])
+		llRet = ThisForm.ExportaCfo()
+
+	Case (lcFrm = [SIGCDGPD])
+		llRet = ThisForm.ExportaGru()
+		
+	Case (lcFrm = [SIGCDPAG])
+		llRet = ThisForm.ExportaFPag()		
+
+	Case (lcFrm = [SIGCDGPE])
+		llRet = Thisform.ExportaGope()
+	
+	Case (lcFrm = [SIGCNFNF])
+		llRet = Thisform.ExportaCfgnf()
+
+	Case (lcFrm = [SIGCDOPD])
+		llRet = Thisform.ExportaOpp()		
+
+	Case (lcFrm = [SIGCDFTI])
+		llRet = Thisform.ExportaFti()		
+	
+	Otherwise
+		=MessageBox([O Programa Não Está Adaptado Para Exportar Dados] + Chr(13) + ;
+					[Do Formulário ] + lcFrm + [!!!], 0+16, [Atenção!!!])
+		llRet = .f.
+EndCase
+
+Return llRet
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importacfgnf
+------------------------------------------------------------
+PROCEDURE importacfgnf
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 10)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLCfgnf])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+ELSE
+	lcKey = lcKey + XMLCfgnf.emps
+	lcemps = XMLCfgnf.emps
+	If Empty(lcKey)
+		lcKey = Padr(XMLCfgnf.series, 3)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCnFnf], [LocalCfgnf], [series+emps], lcKey)
+If Not Used([LocalCfgnf])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalCfgnf)])
+	llOks = .f.
+Else
+	Select LocalCfgnf
+	Go Top In LocalCfgnf
+	If Not Eof([LocalCfgnf])
+		=MessageBox([A Serie "] + Alltrim(lcKey) + [" para a Empresa "]+ lcemps + [" Já Está Cadastrada No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigCnFnf
+	
+	Select XMLCfgnf
+	Go Top In XMLCfgnf
+	If Not Eof([XMLCfgnf])
+		Scatter MemVar Memo
+*!*			m.Codigos	= lcKey
+*!*			m.SitTribs	= ThisForm.ChecaCampos(m.SitTribs, [SigCdIcm], [Codigos])
+*!*			m.CfoSts	= ThisForm.ChecaCampos(m.CfoSts,   [SigCdCfo],   [Codigos])
+*!*			m.CodDests  = ThisForm.ChecaCampos(m.CodDests, [SigCdCfo],   [Codigos])
+		m.series = ThisForm.pgCopias.pgImportar.getOperacao.Value
+		m.cIdChaves = fUniqueIds()
+
+		Select crSigCnFnf
+		Append Blank In crSigCnFnf
+		lnFim = AFields(laCpo, [XMLCfgnf])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigCnFnf.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigCnFnf
+			EndIf
+		Next
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCnFnf])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCnFnf)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importacfo
+------------------------------------------------------------
+PROCEDURE importacfo
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 10)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLCfo])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLCfo.Codigos, 10)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCdCfo], [LocalCfo], [Codigos], lcKey)
+If Not Used([LocalCfo])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalCfo)])
+	llOks = .f.
+Else
+	Select LocalCfo
+	Go Top In LocalCfo
+	If Not Eof([LocalCfo])
+		=MessageBox([O CFOP "] + Alltrim(lcKey) + [" Já Está Cadastrado No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigCdCfo
+	
+	Select XMLCfo
+	Go Top In XMLCfo
+	If Not Eof([XMLCfo])
+		Scatter MemVar Memo
+		m.Codigos	= lcKey
+		m.SitTribs	= ThisForm.ChecaCampos(m.SitTribs, [SigCdIcm], [Codigos])
+		m.CfoSts	= ThisForm.ChecaCampos(m.CfoSts,   [SigCdCfo],   [Codigos])
+		m.CodDests  = ThisForm.ChecaCampos(m.CodDests, [SigCdCfo],   [Codigos])
+
+		Select crSigCdCfo
+		Append Blank In crSigCdCfo
+		lnFim = AFields(laCpo, [XMLCfo])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigCdCfo.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigCdCfo
+			EndIf
+		Next
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdCfo])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdCfo)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importafpag
+------------------------------------------------------------
+PROCEDURE importafpag
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 12)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLFPag])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLFPag.FPags, 12)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigOpFp], [LocalFPag], [FPags], lcKey)
+If Not Used([LocalFPag])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalFPag)])
+	llOks = .f.
+Else
+	Select LocalFPag
+	Go Top In LocalFPag
+	If Not Eof([LocalFPag])
+		=MessageBox([A Condição de Pagamento "] + Alltrim(lcKey) + [" Já Está Cadastrado No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigFPag
+	Zap In crSigFPagI
+	Zap In crSigFPagP
+	Zap In crSigFPagB
+	
+	Select XMLFPag
+	Go Top In XMLFPag
+	If Not Eof([XMLFPag])
+		Scatter MemVar Memo
+		m.FPags 	 = lcKey
+		m.DataTrans  = Ctot([])
+		m.GrupoDs	 = ThisForm.ChecaCampos(m.GrupoDs,    [SigCdGcr],  [Codigos])
+		m.ContaDs	 = ThisForm.ChecaCampos(m.ContaDs,    [SigCdCli],   [IClis])
+		m.Formas	 = ThisForm.ChecaCampos(m.Formas,	  [SigCdFrm],  [Formas]) 
+		m.MoeFpgs    = ThisForm.ChecaCampos(m.MoeFpgs,    [SigCdMoe],   [CMoes]) 
+		m.GrupoBs    = ThisForm.ChecaCampos(m.GrupoBs,	  [SigCdGcr],  [Codigos])
+		m.ContaBs    = ThisForm.ChecaCampos(m.ContaBs,    [SigCdCli],   [IClis])
+		m.GrupoTs	 = ThisForm.ChecaCampos(m.GrupoTs,    [SigCdGcr],  [Codigos])
+		m.ContaTs	 = ThisForm.ChecaCampos(m.ContaTs,	  [SigCdCli],   [IClis])
+		
+		Select crSigFPag
+		Append Blank In crSigFPag
+		lnFim = AFields(laCpo, [XMLFPag])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigFPag.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigFPag
+			EndIf
+		Next
+	EndIf
+
+	If llOks
+		Select XMLFPagI
+		Scan
+			Scatter MemVar Memo
+			m.FPags 	= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigFPagI
+			Append Blank In crSigFPagI
+			lnFim = AFields(laCpo, [XMLFPagI])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigFPagI.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigFPagI
+				EndIf
+			Next
+		EndScan
+	EndIf
+	
+	If llOks
+		Select XMLFPagP
+		Scan
+			Scatter MemVar Memo
+			m.CGrus 	= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigFPagP
+			Append Blank In crSigFPagP
+			lnFim = AFields(laCpo, [XMLFPagP])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigFPagP.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigFPagP
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLFPagB 
+		Scan
+			Scatter MemVar Memo
+			m.CGrus 	= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigFPagB
+			Append Blank In crSigFPagB
+			lnFim = AFields(laCpo, [XMLFPagB])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigFPagB.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigFPagB
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	Suspend
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigFPag])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigFPag)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigFPagI])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigFPagI)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigFPagP])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigFPagP)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigFPagB])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigFPagB)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importafti
+------------------------------------------------------------
+PROCEDURE importafti
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 2)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLPrFti])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLPrFti.Cods, 2)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigPrFti], [LocalFti], [Cods], lcKey)
+If Not Used([LocalFti])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalFti)])
+	llOks = .f.
+Else
+	Select LocalFti
+	Go Top In LocalFti
+	If Not Eof([LocalFti])
+		=MessageBox([O Feitio "] + Alltrim(lcKey) + [" Já Está Cadastrado No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigPrFti
+	Zap In crSigPrFto
+	
+	Select XMLPrFti
+	Go Top In XMLPrFti
+	If Not Eof([XMLPrFti])
+		Scatter MemVar Memo
+		m.Cods 	 	 = lcKey
+		m.Moedas	 = ThisForm.ChecaCampos(m.Moedas,     [SigCdMoe], [CMoes])
+		m.Mcustos    = ThisForm.ChecaCampos(m.Mcustos,    [SigCdMoe], [CMoes])
+		m.Usuars	 = ThisForm.ChecaCampos(m.Usuars,     [SigCdUsu], [Usuarios])
+
+		Select crSigPrFti
+		Append Blank In crSigPrFti
+		lnFim = AFields(laCpo, [XMLPrFti])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigPrFti.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigPrFti
+			EndIf
+		Next
+	EndIf
+
+	If llOks
+		Select XMLPrFto
+		Scan
+			Scatter MemVar Memo
+			m.Cods 	    = lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigPrFto
+			Append Blank In crSigprFto
+			lnFim = AFields(laCpo, [XMLPrFto])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigPrfto.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigPrFto
+				EndIf
+			Next
+		EndScan
+	EndIf
+	
+	If llOks And Not ThisForm.poDataMgr.Update([crSigPrFti])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrFti)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigPrFto])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrFto)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importagope
+------------------------------------------------------------
+PROCEDURE importagope
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLGOpe])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLGOpe.Dgopes, 20)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCdGpe], [LocalGOpe], [Dgopes], lcKey)
+If Not Used([LocalGOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalGOpe)])
+	llOks = .f.
+Else
+	Select LocalGOpe
+	Go Top In LocalGOpe
+	If Not Eof([LocalGOpe])
+		=MessageBox([A Operação "] + Alltrim(lcKey) + [" Já Está Cadastrada No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	lnNdp = fGerUniqueKey([SigCdGpe])	
+
+	ThisForm.poDataMgr.CursorQuery([SigCdGpe], [LocalBus], [Ngopes], lnNdp)
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus)])
+		llOks = .f.
+	Else
+		Select LocalBus
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=MessageBox([O Número da Operação "] + Alltrim(Str(lnNdp, 10)) + [" Gerado Está Inconsistente!!!], 16, [Atenção!!!])
+			ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+			ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+			llOks = .f.
+		EndIf
+	EndIf
+
+	If llOks
+		Zap In crSigCdGpe
+		Zap In crSigCdGpo
+		
+		Select XMLGOpe
+		Go Top In XMLGOpe
+		If Not Eof([XMLGOpe])
+			Scatter MemVar Memo
+			Select crSigCdGpe
+			APPEND BLANK
+			GATHER MEMVAR MEMO
+			replace ngopes with lnNdp
+			replace dgopes WITH lcKey
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLGOpeo
+		Go Top In XMLGOpeo
+		SCAN
+			Scatter MemVar Memo
+			Select crSigCdGpo
+			APPEND BLANK
+			GATHER MEMVAR MEMO
+			replace cIdChaves WITH  fUniqueIds()
+			replace dgopes WITH lcKey
+			SELECT XMlGopeo
+		ENDSCAN
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdGpe])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGpe)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdGpo])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGpo)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importagru
+------------------------------------------------------------
+PROCEDURE importagru
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 3)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLGru])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLGru.CGrus, 3)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCdGrp], [LocalGru], [CGrus], lcKey)
+If Not Used([LocalGru])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalGru)])
+	llOks = .f.
+Else
+	Select LocalGru
+	Go Top In LocalGru
+	If Not Eof([LocalGru])
+		=MessageBox([O Grupo "] + Alltrim(lcKey) + [" Já Está Cadastrado No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigCdGrp
+	Zap In crSigCdPsg
+	Zap In crSigCdGgc
+	Zap In crSigCdPrd
+	
+	Select XMLGru
+	Go Top In XMLGru
+	If Not Eof([XMLGru])
+		Scatter MemVar Memo
+		m.CGrus 	 = lcKey
+		m.DataTrans  = Ctot([])
+		m.Mercs		 = ThisForm.ChecaCampos(m.Mercs, [SigCdGpr], [Codigos])
+		If Empty(m.Mercs)
+			=MessageBox([O Grande Grupo No Arquivo Não Está Configurado Corretamente!!!], 0+16, [Atenção!!!])
+			Return .f.
+		EndIf		
+		m.CUniPs	 = ThisForm.ChecaCampos(m.CUniPs,     [SigCdUni], [CUnis])
+		m.MoeCusts	 = ThisForm.ChecaCampos(m.MoeCusts,   [SigCdMoe], [CMoes])
+		m.ClFiscals	 = ThisForm.ChecaCampos(m.ClFiscals,  [SigCdClf], [Codigos])
+		m.OrigMercs  = ThisForm.ChecaCampos(m.OrigMercs,  [SigCdOrg], [Codigos])
+		m.SitTrIcms  = ThisForm.ChecaCampos(m.SitTrIcms,  [SigCdIcm], [Codigos])
+		m.TpTribs	 = ThisForm.ChecaCampos(m.TpTribs,    [SigPrTri], [Tipos])
+		m.GruEstPs	 = ThisForm.ChecaCampos(m.GruEstPs,   [SigCdGcr], [Codigos])
+		m.GruCmvs    = ThisForm.ChecaCampos(m.GruCmvs,    [SigCdGcr], [Codigos])
+		m.ConEstPs	 = ThisForm.ChecaCampos(m.ConEstPs,   [SigCdCli], [IClis])
+		m.ConCmvs	 = ThisForm.ChecaCampos(m.ConCmvs,    [SigCdCli], [IClis])
+
+		Select crSigCdGrp
+		Append Blank In crSigCdGrp
+		lnFim = AFields(laCpo, [XMLGru])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigCdGrp.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigCdGrp
+			EndIf
+		Next
+	EndIf
+
+	If llOks
+		Select XMLSGru
+		Scan
+			Scatter MemVar Memo
+			m.CGrus 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.CGruCods 	= m.CGrus + m.Codigos
+
+			Select crSigCdPsg
+			Append Blank In crSigCdPsg
+			lnFim = AFields(laCpo, [XMLSGru])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCdPsg.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdPsg
+				EndIf
+			Next
+		EndScan
+	EndIf
+	
+	If llOks
+		Select XMLGruGc
+		Scan
+			Scatter MemVar Memo
+			m.CGrus 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.Grupos	= ThisForm.ChecaCampos(m.Grupos, [SigCdGcr], [Codigos])
+
+			Select crSigCdGgc
+			Append Blank In crSigCdGgc
+			lnFim = AFields(laCpo, [XMLGruGc])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCdGgc.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdGgc
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLProD
+		Scan
+			Scatter MemVar Memo
+			m.CGrus 	= lcKey
+			m.Mercs		= ThisForm.ChecaCampos(m.Mercs, [SigCdGpr], [Codigos])
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigCdPrd
+			Append Blank In crSigCdPrd
+			lnFim = AFields(laCpo, [XMLProD])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCdPrd.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdPrd
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdGrp])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGrp)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdPsg])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdPsg)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdGgc])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGgc)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdPrd])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdPrd)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importaope
+------------------------------------------------------------
+PROCEDURE importaope
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLOpe])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+Else
+	If Empty(lcKey)
+		lcKey = Padr(XMLOpe.Dopes, 20)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCdOpe], [LocalOpe], [Dopes], lcKey)
+If Not Used([LocalOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalOpe)])
+	llOks = .f.
+Else
+	Select LocalOpe
+	Go Top In LocalOpe
+	If Not Eof([LocalOpe])
+		=MessageBox([A Operação "] + Alltrim(lcKey) + [" Já Está Cadastrada No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	lnNdp = fGerUniqueKey([SigCdOpe])	
+	lcPrg = Padl(lnNdp, 8, [0])
+
+	ThisForm.poDataMgr.CursorQuery([SigCdOpe], [LocalBus], [NDopes], lnNdp)
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus)])
+		llOks = .f.
+	Else
+		Select LocalBus
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=MessageBox([O Número da Operação "] + Alltrim(Str(lnNdp, 10)) + [" Gerado Está Inconsistente!!!], 16, [Atenção!!!])
+			ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+			ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+			llOks = .f.
+		EndIf
+	EndIf
+
+	If llOks
+		Zap In crSigCdOpe
+		Zap In crSigOpCdc
+		Zap In crSigOpCdd
+		Zap In crSigOpCdi
+		Zap In crSigOpCsn
+		Zap In crSigOpCrr
+		Zap In crSigOpDup
+		Zap In crSigMvCxs
+		Zap In crSigCcCPe
+		Zap In crSigCdMop
+		Zap In crSigOpFpO
+		Zap In crSigOpTrf
+		Zap In crSigCdPrg
+		Zap In crSigOpTdo
+		Zap In crSigOpFrt
+		Zap In crSigOpLso
+		Zap In crSigCdGcp
+		Zap In crSigOpOss
+		Zap In crSigCdOop
+		Zap In crSigCdPaf
+		Zap In crSigOpFin
+		
+		Select XMLOpe
+		Go Top In XMLOpe
+		If Not Eof([XMLOpe])
+			Scatter MemVar Memo
+			m.Dopes      = lcKey
+			m.NDopes     = lnNdp
+			m.Programas  = lcPrg
+			m.DataTrans  = Ctot([])
+			m.CMoes 	 = ThisForm.ChecaCampos(m.CMoes,      [SigCdMoe], [CMoes])
+			m.ConDests	 = ThisForm.ChecaCampos(m.ConDests,   [SigCdCli], [IClis])
+			m.ConOrigs	 = ThisForm.ChecaCampos(m.ConOrigs,   [SigCdCli], [IClis])
+			m.Contas	 = ThisForm.ChecaCampos(m.Contas,     [SigCdCli], [IClis])
+			m.ConEmiss   = ThisForm.ChecaCampos(m.ConEmiss,   [SigCdCli], [IClis])
+			m.EmpPads    = ThisForm.ChecaCampos(m.EmpPads,    [SigCdEmp], [Cemps])
+			m.EmpLancs   = ThisForm.ChecaCampos(m.EmpLancs,   [SigCdEmp], [Cemps])
+			m.EmpBxs	 = ThisForm.ChecaCampos(m.EmpBxs,     [SigCdEmp], [Cemps])
+			m.GruDests	 = ThisForm.ChecaCampos(m.GruDests,   [SigCdGcr], [Codigos])
+			m.GruOrigs	 = ThisForm.ChecaCampos(m.GruOrigs,   [SigCdGcr], [Codigos])
+			m.Grupos	 = ThisForm.ChecaCampos(m.Grupos,     [SigCdGcr], [Codigos])
+			m.GruCadDs	 = ThisForm.ChecaCampos(m.GruCadDs,   [SigCdGcr], [Codigos])
+			m.GruCadOs	 = ThisForm.ChecaCampos(m.GruCadOs,   [SigCdGcr], [Codigos])
+			m.GrEmiss	 = ThisForm.ChecaCampos(m.GrEmiss,    [SigCdGcr], [Codigos])
+			m.Nivels	 = ThisForm.ChecaCampos(m.Nivels,     [SigCdOpe], [Dopes])
+			m.NopCrs	 = ThisForm.ChecaCampos(m.NopCrs,     [SigCdOpe], [Dopes])
+			m.DopEeTrfs	 = ThisForm.ChecaCampos(m.DopEeTrfs,  [SigCdOpe], [Dopes])
+			m.DopEsTrfs	 = ThisForm.ChecaCampos(m.DopEsTrfs,  [SigCdOpe], [Dopes])
+			m.DopCreds	 = ThisForm.ChecaCampos(m.DopCreds,   [SigCdOpe], [Dopes])
+			m.DopCs		 = ThisForm.ChecaCampos(m.DopCs,      [SigOpOpe], [Dopes])
+			m.TabDps	 = ThisForm.ChecaCampos(m.TabDps,     [SigOpTdz], [Codigos])
+			m.Especies	 = ThisForm.ChecaCampos(m.Especies,   [SigCdEsp], [Especies])
+			m.Series	 = ThisForm.ChecaCampos(m.Series,     [SigCdSer], [Cods])
+			m.Cfos		 = ThisForm.ChecaCampos(m.Cfos,       [SigCdCfo], [Codigos])
+			m.OperChqEs	 = ThisForm.ChecaCampos(m.OperChqEs,  [SigCdOpt], [Operacaos])
+			m.OperChqSs	 = ThisForm.ChecaCampos(m.OperChqSs,  [SigCdOpt], [Operacaos])
+			m.CodProPads = ThisForm.ChecaCampos(m.CodProPads, [SigCdPro], [CPros])
+			m.CodConPads = ThisForm.ChecaCampos(m.CodConPads, [SigCdPro], [CPros])
+			m.FpagOpCrs  = ThisForm.ChecaCampos(m.FpagOpCrs,  [SigOpFp],  [FPags])
+			m.LPrecoPads = ThisForm.ChecaCampos(m.LPrecoPads, [SigCdLpc], [LPrecos])
+			m.ObsPads    = ThisForm.ChecaCampos(m.ObsPads,    [SigCdObs], [Codigos])
+			m.ObsInis	 = ThisForm.ChecaCampos(m.ObsInis,    [SigCdObs], [Codigos])
+			m.ObsFins	 = ThisForm.ChecaCampos(m.ObsFins,    [SigCdObs], [Codigos])
+			m.Ccentrals	 = ThisForm.ChecaCampos(m.Ccentrals,  [SigCcCPe], [Codigos])
+
+			Select crSigCdOpe
+			Append Blank In crSigCdOpe
+			lnFim = AFields(laCpo, [XMLOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCdOpe.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdOpe
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLDcOpe
+		Go Top In XMLDcOpe
+		If Not Eof([XMLDcOpe])
+			Scatter MemVar Memo
+			m.Dopes		= lcKey
+			m.DopENfs	= ThisForm.ChecaCampos(m.DopENfs,  [SigCdOpe], [Dopes])
+			m.EmpOpcrs	= ThisForm.ChecaCampos(m.EmpOpcrs, [SigCdEmp], [Cemps])
+			m.CfoIncs	= ThisForm.ChecaCampos(m.CfoIncs,  [SigCdCfo], [Codigos])
+			m.CUnis		= ThisForm.ChecaCampos(m.CUnis,    [SigCdUni], [CUnis])
+			m.TpFatPs	= ThisForm.ChecaCampos(m.TpFatPs,  [SigCdTif], [Codigos])
+
+			Select crSigOpCdc
+			Append Blank In crSigOpCdc
+			lnFim = AFields(laCpo, [XMLDcOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpCdc.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpCdc
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLOpe2
+		Go Top In XMLOpe2
+		If Not Eof([XMLOpe2])
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.EmpPrcs	= ThisForm.ChecaCampos(m.EmpPrcs,  [SigCdEmp],  [Cemps])
+			m.CodStss	= ThisForm.ChecaCampos(m.CodStss,  [SigCdSts],  [Cods])
+			m.ContaOds	= ThisForm.ChecaCampos(m.ContaOds, [SigCdCli],  [IClis])
+			m.CodBcrts	= ThisForm.ChecaCampos(m.CodBcrts, [SigCdCrt], [Cods])
+			m.Mercs		= ThisForm.ChecaCampos(m.Mercs,    [SigCdGpr], [Codigos])
+
+			Select crSigOpCdd
+			Append Blank In crSigOpCdd
+			lnFim = AFields(laCpo, [XMLOpe2])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpCdd.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpCdd
+				EndIf
+			Next
+		EndIf
+	EndIf
+	
+	If llOks
+		Select XMLIvOpe
+		Scan
+			Scatter MemVar Memo
+			m.Dopes    = lcKey
+			m.SubGBris = ThisForm.ChecaCampos(m.SubGBris, [SigCdPsg], [Codigos])
+
+			Select crSigOpCdi
+			Append Blank In crSigOpCdi
+			lnFim = AFields(laCpo, [XMLIvOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpCdi.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpCdi
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLSnOpe
+		Scan
+			Scatter MemVar Memo
+			m.CDopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.CNivels	= ThisForm.ChecaCampos(m.CNivels, [SigCdOpe], [Dopes])
+
+			Select crSigOpCsn
+			Append Blank In crSigOpCsn
+			lnFim = AFields(laCpo, [XMLSnOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpCsn.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpCsn
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLCrOpe
+		Scan
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigOpCrr
+			Append Blank In crSigOpCrr
+			lnFim = AFields(laCpo, [XMLCrOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpCrr.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpCrr
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLDpOpe
+		Scan
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigOpDup
+			Append Blank In crSigOpDup
+			lnFim = AFields(laCpo, [XMLDpOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpDup.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpDup
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLSqOpe
+		Scan
+			Scatter MemVar Memo
+			m.CDopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.CNivels	= ThisForm.ChecaCampos(m.CNivels, [SigCdOpe], [Dopes])
+
+			Select crSigMvCxs
+			Append Blank In crSigMvCxs
+			lnFim = AFields(laCpo, [XMLSqOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigMvCxs.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigMvCxs
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLCCOpe
+		Scan
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.Grupos    = ThisForm.ChecaCampos(m.Grupos,  [SigCdGcr], [Codigos])
+			m.GruCads   = ThisForm.ChecaCampos(m.GruCads, [SigCdGcr], [Codigos])
+
+			Select crSigCcCPe
+			Append Blank In crSigCcCPe
+			lnFim = AFields(laCpo, [XMLCCOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCcCPe.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCcCPe
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLMuOpe
+		Scan
+			Scatter MemVar Memo
+			m.CDopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.CNivels	= ThisForm.ChecaCampos(m.CNivels, [SigCdOpe], [Dopes])
+
+			Select crSigCdMop
+			Append Blank In crSigCdMop
+			lnFim = AFields(laCpo, [XMLMuOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigCdMop.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdMop
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLFPagO
+		Scan
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.Fpags  	= ThisForm.ChecaCampos(m.Fpags,  [SigOpFp], [FPags])
+			m.FpagSs  	= ThisForm.ChecaCampos(m.FpagSs, [SigOpFp], [FPags])
+
+			Select crSigOpFpO
+			Append Blank In crSigOpFpO
+			lnFim = AFields(laCpo, [XMLFPagO])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpFpO.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpFpO
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLOpTrf
+		Scan
+			Scatter MemVar Memo
+			m.Dopes 	= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.DopeDs  	= ThisForm.ChecaCampos(m.DopeDs, [SigCdOpe], [Dopes])
+			m.CPros     = ThisForm.ChecaCampos(m.CPros,  [SigCdPro], [CPros])
+
+			Select crSigOpTrf
+			Append Blank In crSigOpTrf
+			lnFim = AFields(laCpo, [XMLOpTrf])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+				
+				If Not IsNull(lvIns) And (Type([crSigOpTrf.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpTrf
+				EndIf
+			Next
+		EndScan
+	EndIf
+
+	If llOks
+		Select XMLTabDO
+		Go Top In XMLTabDO
+		If Not Eof([XMLTabDO])
+			Scatter MemVar Memo
+			m.Dopes		= lcKey
+			m.cIdChaves = fUniqueIds()
+			m.TabDs 	= ThisForm.ChecaCampos(m.TabDs, [SigOpTdz], [Codigos])
+
+			Select crSigOpTdo
+			Append Blank In crSigOpTdo
+			lnFim = AFields(laCpo, [XMLTabDO])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpTdo.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpTdo
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLOfrt
+		Go Top In XMLOfrt
+		If Not Eof([XMLOfrt])
+			Scatter MemVar Memo
+			m.Dopes		= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigOpFrt
+			Append Blank In crSigOpFrt
+			lnFim = AFields(laCpo, [XMLOfrt])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpFrt.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpFrt
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLLsOpe
+		Go Top In XMLLsOpe
+		If Not Eof([XMLLsOpe])
+			Scatter MemVar Memo
+			m.Dopes		= lcKey
+			m.cIdChaves = fUniqueIds()
+
+			Select crSigOpLso
+			Append Blank In crSigOpLso
+			lnFim = AFields(laCpo, [XMLLsOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpLso.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpLso
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLGcOpe
+		Go Top In XMLGcOpe
+		If Not Eof([XMLGcOpe])
+			Scatter MemVar Memo
+			m.Dopes		 = lcKey
+			m.cIdChaves  = fUniqueIds()
+			m.Grupos	 = ThisForm.ChecaCampos(m.Grupos, [SigCdGcr], [Codigos])
+			m.Contas	 = ThisForm.ChecaCampos(m.Contas, [SigCdCli],  [IClis])
+
+			Select crSigCdGcp
+			Append Blank In crSigCdGcp
+			lnFim = AFields(laCpo, [XMLGcOpe])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigCdGcp.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdGcp
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLOpOss
+		Go Top In XMLOpOss
+		If Not Eof([XMLOpOss])
+			Scatter MemVar Memo
+			m.CDopes	 = lcKey
+			m.cIdChaves  = fUniqueIds()
+
+			Select crSigOpOss
+			Append Blank In crSigOpOss
+			lnFim = AFields(laCpo, [XMLOpOss])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpOss.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpOss
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLCdOop
+		Go Top In XMLCdOop
+		If Not Eof([XMLCdOop])
+			Scatter MemVar Memo
+			m.Dopes	 = lcKey
+			m.cIdChaves  = fUniqueIds()
+
+			Select crSigCdOop
+			Append Blank In crSigCdOop
+			lnFim = AFields(laCpo, [XMLCdOop])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigCdOop.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdOop
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLCdPaf
+		Go Top In XMLCdPaf
+		If Not Eof([XMLCdPaf])
+			Scatter MemVar Memo
+			m.Dopes	 = lcKey
+			m.cIdChaves  = fUniqueIds()
+
+			Select crSigCdPaf
+			Append Blank In crSigCdPaf
+			lnFim = AFields(laCpo, [XMLCdPaf])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigCdPaf.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigCdPaf
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	If llOks
+		Select XMLOpFin
+		Go Top In XMLOpFin
+		If Not Eof([XMLOpFin])
+			Scatter MemVar Memo
+			m.Dopes	 = lcKey
+			m.cIdChaves  = fUniqueIds()
+
+			Select crSigOpFin
+			Append Blank In crSigOpFin
+			lnFim = AFields(laCpo, [XMLOpFin])
+			For I = 1 To lnFim
+				lcNom = Alltrim(laCpo(I, 1))
+				lvIns = m.&lcNom.
+							
+				If Not IsNull(lvIns) And (Type([crSigOpFin.&lcNom.]) = Type([lvIns]))
+					Replace &lcNom. With lvIns In crSigOpFin
+				EndIf
+			Next
+		EndIf
+	EndIf
+
+	
+	If llOks
+		ThisForm.Programa
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdOpe])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdOpe)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpCdc])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpCdc)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpCdi])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpCdi)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpCrr])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpCrr)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpDup])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpDup)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpCsn])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpCsn)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigMvCxs])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvCxs)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCcCPe])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCcCPe)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdMop])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdMop)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpCdd])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpCdd)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdPrg])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdPrg)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpFpO])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpFpO)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpTrf])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpTrf)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpTdo])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpTdo)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpFrt])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpFrt)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpLso])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpLso)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdGcp])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGcp)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpOss])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpOss)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdOop])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdOop)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdPaf])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdPaf)])
+		llOks = .f.
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigOpFin])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigOpFin)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importaopp
+------------------------------------------------------------
+PROCEDURE importaopp
+Local loXml, lcArq, lcKey, llOks
+
+loXml = CreateObject([XMLAdapter])
+lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+lcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)
+
+* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória
+loXml.LoadXML(lcArq, .t.)
+
+If (loXml.Tables.Count < 1)
+	=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores
+For I = 1 To loXml.Tables.Count
+	loXml.Tables(I).ToCursor()
+Next
+
+If Not Used([XMLopp])
+	=MessageBox([O Arquivo XML Não é Válido Para Essa Importação!!!], 0+16, [Atenção!!!])
+	Return .f.
+ELSE
+	If Empty(lcKey)
+		lcKey = Padr(XMLopp.dopps, 20)
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = lcKey
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+	EndIf
+EndIf
+
+llOks = .t.
+
+ThisForm.poDataMgr.CursorQuery([SigCdOpd], [Localopp], [dopps], lcKey)
+If Not Used([Localopp])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - Localopp)])
+	llOks = .f.
+Else
+	Select Localopp
+	Go Top In Localopp
+	If Not Eof([Localopp])
+		=MessageBox([A Dopps "] + Alltrim(lcKey) +  [" Já Está Cadastrada No Sistema!!!], 16, [Atenção!!!])
+		ThisForm.pgCopias.pgImportar.getOperacao.Value = []
+		ThisForm.pgCopias.pgImportar.getOperacao.Refresh
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Zap In crSigCdMpd
+	
+	Select XMLopp
+	Go Top In XMLopp
+	If Not Eof([XMLopp])
+		Scatter MemVar Memo
+		m.dopps = ThisForm.pgCopias.pgImportar.getOperacao.Value
+		m.ndopps = fGerUniqueKey('SIGCDOPD')
+		m.cIdChaves = fUniqueIds()
+
+		Select crSigCdMpd
+		Append Blank In crSigCdMpd
+		lnFim = AFields(laCpo, [XMLopp])
+		For I = 1 To lnFim
+			lcNom = Alltrim(laCpo(I, 1))
+			lvIns = m.&lcNom.
+			
+			If Not IsNull(lvIns) And (Type([crSigCdMpd.&lcNom.]) = Type([lvIns]))
+				Replace &lcNom. With lvIns In crSigCdMpd
+			EndIf
+		Next
+	EndIf
+
+	If llOks And Not ThisForm.poDataMgr.Update([crSigCdMpd])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdMpd)])
+		llOks = .f.
+	EndIf
+
+	If llOks And (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndIf
+
+loXml = Null
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE importar
+------------------------------------------------------------
+PROCEDURE importar
+Local llRet, lcFrm
+
+llRet = .t.
+lcFrm = Alltrim(Upper(ThisForm.ParentForm.Name))
+
+Do Case
+	Case (lcFrm = [SIGCDOPE])
+		llRet = ThisForm.ImportaOpe()
+
+	Case (lcFrm = [SIGCDCFO])
+		llRet = ThisForm.ImportaCfo()
+
+	Case (lcFrm = [SIGCDGPD])
+		llRet = ThisForm.ImportaGru()
+		
+	Case (lcFrm = [SIGCDPAG])
+		llRet = ThisForm.ImportaFPag()		
+
+	Case (lcFrm = [SIGCDGPE])
+		llRet = Thisform.ImportaGope()
+		
+	Case (lcFrm = [SIGCNFNF])
+		llRet = Thisform.ImportaCfgnf()
+
+	Case (lcFrm = [SIGCDOPD])
+		llRet = Thisform.ImportaOpp()
+
+	Case (lcFrm = [SIGCDFTI])
+		llRet = Thisform.ImportaFti()
+
+	Otherwise
+		=MessageBox([O Programa Não Está Adaptado Para Importar Dados] + Chr(13) + ;
+					[Para o Formulário ] + lcFrm + [!!!], 0+16, [Atenção!!!])
+		llRet = .f.
+EndCase
+
+Return llRet
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processar
+------------------------------------------------------------
+PROCEDURE processar
+Local llOks
+
+If ThisForm.Automatica Or ThisForm.PgCopias.pgExportar.Enabled 
+	lcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)
+	If Not ThisForm.Automatica And Empty(lcArq)
+		=MessageBox([O Nome do Arquivo a Ser Gerado Não Pode Estar Em Branco!!!], 0+16, [Atenção!!!])
+		Return .f.
+	EndIf
+
+	=StrToFile([], lcArq, 0)
+	If Not ThisForm.Automatica And Not File(lcArq)
+		=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])
+		Return .f.
+	EndIf
+	
+	llOks = ThisForm.Exportar()
+	
+	If Not ThisForm.Automatica
+		If llOks
+			=MessageBox([O Arquivo Foi Gerado Corretamente!!!], 0+64, [Geração Concluída])
+			Release Windows
+		Else
+			=MessageBox([O Arquivo Não Pode Ser Gerado!!!], 0+16, [Geração Concluída])
+		EndIf
+	EndIf
+Else
+	lcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)
+	If Empty(lcArq)
+		=MessageBox([O Nome do Arquivo a Ser Importado Não Pode Estar Em Branco!!!], 0+16, [Atenção!!!])
+		Return .f.
+	EndIf
+
+	If Not File(lcArq)
+		=MessageBox([O Arquivo Não Pode Ser Encontrado!!!], 0+16, [Atenção!!!])
+		Return .f.
+	EndIf
+
+	If Used([XMLOpe])
+		Use In XMLOpe
+	EndIf
+	If Used([XMLDcOpe])
+		Use In XMLDcOpe
+	EndIf
+	If Used([XMLOpe2])
+		Use In XMLOpe2
+	EndIf
+	If Used([XMLIvOpe])
+		Use In XMLIvOpe
+	EndIf
+	If Used([XMLSnOpe])
+		Use In XMLSnOpe
+	EndIf
+	If Used([XMLCrOpe])
+		Use In XMLCrOpe
+	EndIf
+	If Used([XMLDpOpe])
+		Use In XMLDpOpe
+	EndIf
+	If Used([XMLSqOpe])
+		Use In XMLSqOpe
+	EndIf
+	If Used([XMLCcOpe])
+		Use In XMLCcOpe
+	EndIf
+	If Used([XMLMuOpe])
+		Use In XMLMuOpe
+	EndIf
+	If Used([XMLFPagO])
+		Use In XMLFPagO
+	EndIf
+	If Used([XMLOpTrf])
+		Use In XMLOpTrf
+	EndIf
+	If Used([XMLTabDO])
+		Use In XMLTabDO
+	EndIf
+	If Used([XMLOFrt])
+		Use In XMLOFrt
+	EndIf
+	If Used([XMLLsOpe])
+		Use In XMLLsOpe
+	EndIf
+	If Used([XMLGcOpe])
+		Use In XMLGcOpe
+	EndIf
+	If Used([XMLCfo])
+		Use In XMLCfo
+	EndIf
+	If Used([XMLGru])
+		Use In XMLGru
+	EndIf
+	If Used([XMLSGru])
+		Use In XMLSGru
+	EndIf
+	If Used([XMLGruGc])
+		Use In XMLGruGc
+	EndIf
+	If Used([XMLProD])
+		Use In XMLProD
+	EndIf
+	If Used([XMLFPag])
+		Use In XMLFPag
+	EndIf
+	If Used([XMLFPagI])
+		Use In XMLFPagI
+	Endif		
+	If Used([XMLFPagP])
+		Use In XMLFPagP
+	EndIf
+	If Used([XMLFPagB])
+		Use In XMLFPagB
+	EndIf 
+	If Used([XMLGope])
+		Use In XMLGope
+	EndIf 
+	If Used([XMLGopeo])
+		Use In XMLGopeo
+	EndIf
+	If Used([XMLOpOss])
+		Use In XMLOpOss
+	EndIf 	
+	If Used([XMLCdOop])
+		Use In XMLCdOop
+	EndIf
+	If Used([XMLCdPaf])
+		Use In XMLCdPaf
+	EndIf
+	If Used([XMLOpFin])
+		Use In XMLOpFin
+	EndIf
+	If Used([XMLPrFti])
+		Use In XMLPrFti
+	EndIf
+	If Used([XMLPrFto])
+		Use In XMLPrFto
+	EndIf
+
+	llOks = ThisForm.Importar()
+
+	If llOks
+		=MessageBox([O Arquivo Foi Importado Corretamente!!!], 0+64, [Importação Concluída])
+		Release Windows
+	Else
+		=MessageBox([O Arquivo Não Pode Ser Importado!!!], 0+16, [Importação Concluída])
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE programa
+------------------------------------------------------------
+PROCEDURE programa
+Local _Prog
+
+_Prog = Padr(Padl(crSigCdOpe.NDopes, 8, [0]), 15)
+
+If !IsEmpty(crSigCdOpe.SubMenus)
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper(Allt(crSigCdOpe.SubMenus))
+	lcSubMenus = '_' + Upper(Left(crSigCdOpe.SubMenus,14))
+	m.lcBarraForm = Space(50)
+
+	If (InList(Upper(Alltrim(crSigCdOpe.menus)),'SISTEMA','CAIXA') Or Upper(Alltrim(crSigCdOpe.menus))=='ESTOQUE')
+		m.lcBarraForm = ([SigMvExp WITH "]+Upper(Alltrim(crSigCdOpe.dopes))+[","E"])
+	EndIf 
+	If !ThisForm.podatamgr.ChkRegister('SigCdPrg','Programas',lcSubMenus)
+		Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves, BarraForms ) ;
+					  values ( _Desc, '', lcSubMenus, fUniqueIds(),Space(50) )
+	EndIf
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper(Allt(crSigCdOpe.SubMenus)) + ' - ' + Proper(Allt(crSigCdOpe.Dopes))
+Else
+	lcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')
+	_Desc = lcOperacao + Proper( Allt( crSigCdOpe.Dopes ) )
+EndIf
+m.lcBarraForm = Space(50)
+
+If (InList(Upper(Alltrim(crSigCdOpe.menus)),'SISTEMA','CAIXA') Or Upper(Alltrim(crSigCdOpe.menus))=='ESTOQUE')
+	m.lcBarraForm = ([SigMvExp WITH "]+Upper(Alltrim(crSigCdOpe.dopes))+[","E"])
+EndIf 
+
+DECLARE laProgs[2,2]
+
+laProgs[1,1]="Programas"
+laProgs[1,2]=_Prog
+laProgs[2,1]="Parametros"
+laProgs[2,2]=Space(10)
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves, BarraForms, BarraPict  ) ;
+			    	values ( _Desc, '', _Prog, fUniqueIds(), m.lcBarraForm, crSigCdOpe.cArqIcones )
+Else
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+[', BarraForms = ']+m.lcBarraForm+[',BarraPict=']+crSigCdOpe.cArqIcones+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = ']+Space(10)+[']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+DECLARE laProgs[2,2]
+
+laProgs[1,1]="Programas"
+laProgs[1,2]=_Prog
+laProgs[2,1]="Parametros"
+laProgs[2,2]='INSERIR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Inserir]', 'INSERIR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Inserir ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'INSERIR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='ALTERAR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Alterar]', 'ALTERAR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Alterar ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'ALTERAR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='EXCLUIR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Excluir]', 'EXCLUIR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Excluir ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'EXCLUIR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='LISTAR'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Listar]', 'LISTAR', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Listar ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'LISTAR']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='COTACAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Cotação]', 'COTACAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Cotacao ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'COTACAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+Endif
+
+laProgs[2,2]='FORMAPAG'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Altera Forma de Pagamento]', 'FORMAPAG', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Forma Pagamento ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'FORMAPAG']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='COMISSAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Comissão]', 'COMISSAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Comissao ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'COMISSAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='ALTPRECO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Altera Preço]', 'ALTPRECO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Altera Preco ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'ALTPRECO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='CANCITEM'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Cancela Item]', 'CANCITEM', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Cancela Item ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'CANCITEM']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='SERVICOS'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Servicos]', 'SERVICOS', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Serviços ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'SERVICOS']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='QUITACAO'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Quitação]', 'QUITACAO', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Quitação ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'QUITACAO']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='SUBNIVEL'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [SubNivel]', 'SUBNIVEL', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [SubNivel ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'SUBNIVEL']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+laProgs[2,2]='DADOSCOMPL'
+
+If !ThisForm.podatamgr.ChkRegister('SigCdPrg',@laProgs)
+	Insert Into crSigCdPrg ( Descricaos, Parametros, Programas, pkChaves  ) ;
+				values ( _Desc + ' [Dados Complementares]', 'DADOSCOMPL', _Prog, fUniqueIds() )
+ELSE
+	lcUpdate = [Update SigCdPrg Set Descricaos = ']+_Desc+' - [Dados complementares ]'+[' Where Programas=']+_Prog+[' ]+;
+				[And Parametros = 'DADOSCOMPL']
+	ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+EndIf
+
+lcTransacao = crSigCdOpe.Dopes
+fGravarLog( 'C', Thisform.Name, 'IMPORTAXML', lcTransacao )
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pFrm, pKey, pTip, pLbl, pWid, pAut, pCon
+* Parâmetros: pFrm - Formulário Que Realizou a Chamada			
+*			  pKey - Chave de Procura							
+*			  pTip - Tipo de Processo: [E]xportar ou [I]mportar	
+*			  pLbl - Título do Campo de Digitação de Dados		
+*			  pWid - Quantidade Máxima de Caracteres da Chave	
+*			  pAut - Informa se é uma Geração Automática de Bkp.
+*			  pCon - Conexão Quando Passada					    
+Local lcLbl, lnWid
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+If (Type([pKey])<>[C])
+	=MessageBox([O Segundo Parâmetro Passado Não é Válido!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+If (Type([pTip])<>[C]) Or Not InList(pTip, [E], [I])
+	=MessageBox([O Tipo Passado Não é Válido!!! Use "E" ou "I"!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+lcLbl = Iif(Type([pLbl])=[C], pLbl, [Chave])
+lnWid = Iif(Type([pWid])=[N], pWid, 20)
+
+With ThisForm
+	.ParentForm 	= pFrm
+	.DataSessionId 	= pFrm.DataSessionId
+	.Automatica 	= pAut And (pTip = [E]) And (Alltrim(Upper(.ParentForm.Name)) = [SIGCDOPE])
+	If .Automatica
+		.poDataMgr 	= pCon
+	Else
+		.poDataMgr 	= pFrm.poDataMgr
+	EndIf
+
+	If .Automatica And (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.Addcursor([SigOpBkp], [pkChaves], [crSigOpBkp])
+		EndWith
+	EndIf
+
+	.pgCopias.pgExportar.lblTitulo.Caption = Alltrim(lcLbl + [ :])
+	.pgCopias.pgImportar.lblTitulo.Caption = Alltrim(lcLbl + [ :])
+
+	lcArq = Chrtran(Alltrim(pKey), [ "'!@#$%¨&*()-+=´`{}~^/?;:.>,<|\], [________________________________])
+	
+	.ArqXML = [C:\] + lcArq + [.XML]
+
+	If .Automatica
+		ltDat = .poDataMgr.GetDatetime()
+		lcUsu = Alltrim(Chrtran(Alltrim(goSistema.Usuario), [ "'!@#$%¨&*()-+=´`{}~^/?;:.>,<|\], [________________________________]))
+		lcDat = Alltrim(Chrtran(Ttoc(ltDat), [ :/], [___]))
+		
+		.ArqXML = Sys(2023) + [\] + lcArq + [-] + lcUsu + [-] + lcDat + [.XML]
+
+		Zap In crSigOpBkp
+
+		Insert Into crSigOpBkp (Usuars, DtAlts, Dopes, Redes, pkChaves) ;
+					    Values (goSistema.Usuario, ltDat, pKey, Sys(0), fUniqueIds())
+	EndIf
+	
+	.pgCopias.pgExportar.getOperacao.Value = pKey
+	.pgCopias.pgExportar.getOperacao.Width = (lnWid * 7) + 10
+	.pgCopias.pgExportar.getArqXML.Value   = .ArqXML
+	.pgCopias.pgExportar.Enabled 		   = (pTip = [E])
+
+	.pgCopias.pgImportar.getOperacao.Value = pKey
+	.pgCopias.pgImportar.getOperacao.Width = (lnWid * 7) + 10
+	.pgCopias.pgImportar.getArqXML.Value   = []
+	.pgCopias.pgImportar.Enabled		   = (pTip = [I])
+
+	.pgCopias.ActivePage = Iif(pTip = [E], .pgCopias.pgExportar.PageOrder, .pgCopias.pgImportar.PageOrder)
+	
+	If .Automatica
+		.Processar()
+
+		lcNom = Alltrim(.pgCopias.pgExportar.getArqXML.Value)
+		If File(lcNom)
+			lcArq = FileToStr(lcNom)
+
+			Replace Xmls With lcArq In crSigOpBkp 
+			
+			.poDataMgr.Update([crSigOpBkp])
+			* Nota: o Commit Será Dado na Conexão do Form Que Acionou a Rotina 
+
+			Delete File lcNom
+		EndIf
+
+		If (.poDataMgr.Commit() < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+			.poDataMgr.RollBack()
+			.Release
+			Return .f.
+		EndIf
+
+		.Release
+		Return .f.
+	EndIf
+EndWith	
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.pgCopias.pgExportar.getArqXML
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseEnter
+------------------------------------------------------------
+PROCEDURE MouseEnter
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(254,253,218)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseLeave
+------------------------------------------------------------
+PROCEDURE MouseLeave
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(255,255,255)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.pgCopias.pgExportar.getOperacao
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseEnter
+------------------------------------------------------------
+PROCEDURE MouseEnter
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(254,253,218)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseLeave
+------------------------------------------------------------
+PROCEDURE MouseLeave
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(255,255,255)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.pgCopias.pgImportar.getArqXML
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseEnter
+------------------------------------------------------------
+PROCEDURE MouseEnter
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(254,253,218)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseLeave
+------------------------------------------------------------
+PROCEDURE MouseLeave
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(255,255,255)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcArq, lcNew
+
+lcArq = ThisForm.pgCopias.pgImportar.getArqXML.Value
+
+If Not Empty(lcArq) And Not File(lcArq)
+	=MessageBox([O Arquivo Não Foi Encontrado!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.pgCopias.pgImportar.btnGetArqO
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq, lcNew
+
+lcArq = GetFile([XML], [Arquivo XML:], [Abrir], 0, [Selecione o Arquivo XML])
+
+If Not Empty(lcArq)
+	ThisForm.pgCopias.pgImportar.getArqXML.Value = lcArq
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.pgCopias.pgImportar.getOperacao
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseEnter
+------------------------------------------------------------
+PROCEDURE MouseEnter
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(254,253,218)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseLeave
+------------------------------------------------------------
+PROCEDURE MouseLeave
+Lparameters nButton, nShift, nXCoord, nYCoord
+
+This.BackColor = Rgb(255,255,255)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPXML.cmdBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnProcessar.Click
+------------------------------------------------------------
+PROCEDURE btnProcessar.Click
+ThisForm.Processar
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPXML
+RESERVED3 (ClassInfo): arqxml
+automatica
+parentform
+podatamgr
+*checacampos 
+*exportacfgnf 
+*exportacfo 
+*exportafpag 
+*exportafti 
+*exportagope 
+*exportagru 
+*exportaope 
+*exportaopp 
+*exportar 
+*importacfgnf 
+*importacfo 
+*importafpag 
+*importafti 
+*importagope 
+*importagru 
+*importaope 
+*importaopp 
+*importar 
+*processar 
+*programa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 35
+================================================================================

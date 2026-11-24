@@ -1,0 +1,1904 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpTot.SCX
+* Data/Hora: 18/11/2026 19:15:09
+* Total de registros: 58
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPTOT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPTOT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPTOT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPTOT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade_ProdutoTam
+  Parent: SIGOPTOT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_ProdutoTam.Produto
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_ProdutoTam.Produto
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_ProdutoTam.total
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_ProdutoTam.total
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grade_total
+  Parent: SIGOPTOT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.grade_total.moeda
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.grade_total.moeda
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.grade_total.total
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.grade_total.total
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TotQtde
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TotPeso
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_QOper
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_POper
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GrdTCompo
+  Parent: SIGOPTOT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.GrdTCompo.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.GrdTCompo.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.GrdTCompo.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.GrdTCompo.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.GrdTCompo.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.GrdTCompo.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.GrdTCompo.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.GrdTCompo.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade_Serv
+  Parent: SIGOPTOT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_Serv.moeda
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_Serv.moeda
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_Serv.total
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_Serv.total
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TotPesoC
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label4
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Compensacao
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container1
+  Parent: SIGOPTOT
+  Class: container
+  BaseClass: container
+
+Objeto: Label5
+  Parent: SIGOPTOT.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: GradeCol
+  Parent: SIGOPTOT.Container1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.Container1.GradeCol.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Container1.GradeCol.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.Container1.GradeCol.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Container1.GradeCol.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: Get_mtcub
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: OK
+  Parent: SIGOPTOT
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: lblTotPes
+  Parent: SIGOPTOT
+  Class: label
+  BaseClass: label
+
+Objeto: getTotPes
+  Parent: SIGOPTOT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade_Produto
+  Parent: SIGOPTOT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_Produto.Produto
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_Produto.Produto
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOT.Grade_Produto.total
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOT.Grade_Produto.total
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1127
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Total Itens"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .T.
+  Visible = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGOPTOT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1136
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_ProdutoTam
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 322
+  Left = 216
+  ReadOnly = .T.
+  RecordSource = ""
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 3
+  Top = 84
+  Width = 227
+  GridLineColor = 238,238,238
+  Name = "Grade_ProdutoTam"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 150
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Produto"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 45
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_ProdutoTam.Produto.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto + Tam"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_ProdutoTam.Produto.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_ProdutoTam.total.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_ProdutoTam.total.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.grade_total
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 322
+  Left = 5
+  ReadOnly = .T.
+  RecordSource = ""
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 84
+  Width = 208
+  GridLineColor = 238,238,238
+  Name = "grade_total"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 40
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "moeda"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 135
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.grade_total.moeda.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moeda"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.grade_total.moeda.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.grade_total.total.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total dos Produtos"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.grade_total.total.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total Quantidade :"
+  Height = 15
+  Left = 163
+  Top = 463
+  Width = 105
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_TotQtde
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "999,999.999"
+  Height = 23
+  Left = 275
+  ReadOnly = .T.
+  TabIndex = 8
+  ToolTipText = "Total em Quantidade"
+  Top = 459
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "Get_TotQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total do Peso :"
+  Height = 15
+  Left = 184
+  Top = 488
+  Width = 84
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_TotPeso
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "999,999.99"
+  Height = 23
+  Left = 275
+  ReadOnly = .T.
+  TabIndex = 11
+  ToolTipText = "Total em Peso"
+  Top = 484
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "Get_TotPeso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_QOper
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  Left = 366
+  ReadOnly = .T.
+  TabIndex = 9
+  Top = 459
+  Width = 17
+  DisabledBackColor = 255,255,255
+  Name = "Get_QOper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_POper
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 23
+  Left = 366
+  ReadOnly = .T.
+  TabIndex = 12
+  Top = 484
+  Width = 17
+  DisabledBackColor = 255,255,255
+  Name = "Get_POper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 322
+  Left = 686
+  ReadOnly = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 84
+  Visible = .F.
+  Width = 330
+  GridLineColor = 238,238,238
+  Name = "GrdTCompo"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .F.
+  Column2.InputMask = "99,999,999.999"
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 30
+  Column3.ReadOnly = .T.
+  Column3.Visible = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Width = 60
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .F.
+  Column4.InputMask = "999999"
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Componente"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unid."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Consumo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.GrdTCompo.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999999"
+  Margin = 0
+  MaxLength = 6
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Serv
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 322
+  Left = 226
+  ReadOnly = .T.
+  RecordSource = ""
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 3
+  Top = 84
+  Width = 208
+  GridLineColor = 238,238,238
+  Name = "Grade_Serv"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 40
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "moeda"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 135
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Serv.moeda.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moeda"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Serv.moeda.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Serv.total.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total dos Serviços"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Serv.total.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total do Peso C :"
+  Height = 15
+  Left = 174
+  Top = 538
+  Width = 94
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_TotPesoC
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "999,999.99"
+  Height = 23
+  Left = 275
+  ReadOnly = .T.
+  TabIndex = 16
+  ToolTipText = "Total do Peso em Compensação"
+  Top = 534
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "Get_TotPesoC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Peso Unitário C :"
+  Height = 15
+  Left = 175
+  Top = 513
+  Width = 93
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_Compensacao
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "999,999.99"
+  Height = 23
+  Left = 275
+  TabIndex = 14
+  ToolTipText = "Peso Unitário em Compensação"
+  Top = 509
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "Get_Compensacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1
+------------------------------------------------------------
+  Top = 408
+  Left = 500
+  Width = 206
+  Height = 189
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 17
+  BackColor = 188,201,254
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.Label5
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Cálculo COL"
+  Height = 19
+  Left = 4
+  Top = 3
+  Width = 191
+  ForeColor = 90,90,90
+  BackColor = 188,201,254
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.GradeCol
+------------------------------------------------------------
+  ColumnCount = 2
+  FontBold = .T.
+  FontName = "Tahoma"
+  ChildOrder = ""
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 164
+  Left = 4
+  ReadOnly = .T.
+  RecordSource = ""
+  ScrollBars = 2
+  Top = 21
+  Width = 191
+  GridLineColor = 238,238,238
+  Name = "GradeCol"
+  Column1.FontBold = .T.
+  Column1.FontName = "Tahoma"
+  Column1.ControlSource = ""
+  Column1.Width = 45
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.FontName = "Tahoma"
+  Column2.ControlSource = ""
+  Column2.Width = 112
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.GradeCol.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.GradeCol.Column1.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.GradeCol.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Col  (%)"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Container1.GradeCol.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "TT Metro Cúbico :"
+  Height = 15
+  Left = 169
+  Top = 438
+  Visible = .F.
+  Width = 99
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Get_mtcub
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  Height = 23
+  InputMask = "999,999.999"
+  Left = 275
+  ReadOnly = .T.
+  TabIndex = 6
+  ToolTipText = "Total em Metros Cúbicos"
+  Top = 434
+  Visible = .F.
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "Get_mtcub"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.OK
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 1045
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 1
+  Themes = .F.
+  Name = "OK"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Retornar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 4
+  Command1.ToolTipText = "[Esc] Voltar Para a Tela Principal da Operação"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.lblTotPes
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Total do Peso :"
+  Height = 15
+  Left = 87
+  Top = 563
+  Width = 181
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "lblTotPes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.getTotPes
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "999,999.99"
+  Height = 23
+  Left = 275
+  ReadOnly = .T.
+  TabIndex = 16
+  ToolTipText = "Total do Peso em Compensação"
+  Top = 559
+  Width = 88
+  DisabledBackColor = 255,255,255
+  Name = "getTotPes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Produto
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 322
+  Left = 446
+  ReadOnly = .T.
+  RecordSource = ""
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 3
+  Top = 84
+  Width = 237
+  GridLineColor = 238,238,238
+  Name = "Grade_Produto"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 125
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Produto"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "999,999,999.99"
+  Column2.Name = "total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Produto.Produto.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Produto.Produto.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Produto.total.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOT.Grade_Produto.total.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 1, 9, 6, 14, 12, 35, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Courier New, 1, 9, 7, 16, 12, 11, 4, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPTOT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE calctotais
+------------------------------------------------------------
+PROCEDURE calctotais
+lnTotQtde  = 0
+lnTotPeso  = 0
+lnTotPesoC = 0
+lnTotPes   = 0
+
+select xvalite
+zap
+set order to moeda
+select crTpmMvItn
+scan
+	If IsEmpty(Cpros)
+		Loop
+	EndIf
+	lnMulti = Iif(crSigCdOpe.opers=3,Iif(crTpmMvItn.Opers=[E],-1,1),Iif(crTpmMvItn.Opers=[E],1,-1))
+
+	lnTotPes = lnTotPes + crTpmMvItn.TPesos
+
+	If crSigCdOpe.PesoVts = 1
+		_MoePeso = Iif( IsEmpty( crSigCdOpe.Cmoes ), crTpmMvItn.MoeFats, crSigCdOpe.Cmoes )
+		Select xValIte
+		If !Seek( _MoePeso )
+			Insert into xValite ( Moeda ) Values ( _MoePeso )
+		Endif
+		Replace Total With Total + ( lnMulti * crTpmMvItn.TPesos )
+	Endif
+
+	If crSigCdOpe.PrecoVts = 1
+		*_MoePreco = Iif( IsEmpty( crSigCdOpe.Cmoes ), crTpmMvItn.Moedas, crSigCdOpe.Cmoes )
+		_MoePreco = Iif( Not IsEmpty( crTpmMvItn.Moedas ), crTpmMvItn.Moedas, crSigCdOpe.Cmoes )
+		Select xValIte
+		If !Seek( _MoePreco )
+			Insert into xValite ( Moeda ) Values ( _MoePreco )
+		Endif
+		Replace Total With Total + ( lnMulti * crTpmMvItn.Totas )
+	EndIf
+	
+	=ThisForm.podatamgr.cursorquery('SigCdUni','CrTmpUni','Cunis',crTpmMvItn.Cunis)
+
+	If InList(CrSigCdOpe.ChkQtds,6,7)
+		_ChkQtds  = CrSigCdOpe.ChkQtds
+		lnTotQtde = lnTotQtde + ( Iif( (_ChkQtds=6 And crTpmMvItn.Opers='S') Or (_ChkQtds=7 And crTpmMvItn.Opers='E') , 1, 0) * crTpmMvItn.Qtds )
+	Else
+		lnTotQtde = lnTotQtde + ( lnMulti * crTpmMvItn.Qtds )
+	Endif
+	lnQtde 	 = crTpmMvItn.Qtds
+
+	Select crTpmMvIts
+	Set Order To
+	Set Order to CItens
+	If Seek(crTpmMvItn.CItens)
+		Scan While CItens = crTpmMvItn.CItens
+			If InList(CrSigCdOpe.ChkQtds,6,7)
+				_ChkQtds  = CrSigCdOpe.ChkQtds
+				lnTotPeso = lnTotpeso + ( Iif( (_ChkQtds=6 And crTpmMvItn.Opers='E') Or (_ChkQtds=7 And crTpmMvItn.Opers='S') , 1, 0) * crTpmMvIts.Pesos * crTpmMvIts.Qtds  )
+			Else
+				lnTotPeso = lnTotPeso + ( lnMulti * crTpmMvIts.Pesos * crTpmMvIts.Qtds )
+			Endif
+		EndScan
+	Else
+		If InList(CrSigCdOpe.ChkQtds,6,7)
+			_ChkQtds  = CrSigCdOpe.ChkQtds
+			lnTotPeso = lnTotpeso + ( Iif( (_ChkQtds=6 And crTpmMvItn.Opers='E') Or (_ChkQtds=7 And crTpmMvItn.Opers='S') , 1, 0) * ;
+						Round(Iif(Empty(crTpmMvItn.Codbarras) And CrtmpUni.Cestos='2',lnQtde,1) * crTpmMvItn.Pesos,2) )
+		Else
+			lnTotPeso = lnTotPeso +  ( lnMulti * ;
+						Round(Iif(Empty(crTpmMvItn.Codbarras) And CrtmpUni.Cestos='2',lnQtde,1) * crTpmMvItn.Pesos,2) )
+		Endif
+	Endif
+
+	If InList(Thisform.ParentForm.Op_Escolha,'INSERIR','ALTERAR')
+		lnPeso = crTpmMvItn.Pesos + TprMvCab.VCompensas - iif(Thisform.ParentForm.Op_Escolha='ALTERAR',TprMvCab.VCompensa2,0)
+		lnTotPesoC = lnTotPesoC + lnMulti * Round(iif(Empty(crTpmMvItn.Codbarras) And crTmpUni.CEstos='2',crTpmMvItn.Qtds,1) * lnPeso,2)
+	Else
+		lnTotPesoC = lnTotPeso
+	EndIf
+EndScan
+
+With ThisForm
+	.Get_QOper.Value    = Iif(lnTotQtde = 0,' ',Iif(lnTotQtde > 0,'E','S'))
+	.get_TotQtde.Value  = Abs(lnTotQtde)
+	.Get_POper.Value    = Iif(lnTotPeso = 0,' ',Iif(lnTotQtde > 0,'E','S'))
+	.Get_TotPeso.Value  = Abs(lnTotPeso)
+	.Get_TotPesoC.Value = Abs(lnTotPesoC)
+	.getTotPes.Value	= Abs(lnTotPes)
+EndWith
+
+lnvn  = 0
+lnEtq = 0
+lnCol = 0
+
+select xvalite
+Delete For total = 0
+
+If CrSigOpCdd.MtCubs <> 0
+	ThisForm.Get_mtCub.Value = ThisForm.ParentForm.ParentForm.VerifMtCub(.t.)
+	ThisForm.Label5.Visible = .t.
+	ThisForm.Get_mtCub.Visible = .t.
+Endif
+
+Select xValIte
+Go Top
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+ =fConfigGeral()
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pform,datses
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Local lnTotQtde, lnTotPeso, lnQtde
+
+lcCidQuery3 = fUniqueIds()
+
+Set Datasession To DatSes
+Thisform.parentform = pform
+
+lcQueryTmpd  = [Select * From SigTempD Where CidQuerys = ?CidQuery3 ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDataMgr
+		.Addcursor('SigTempD','CidQuerys','CrSigTempD','','',lcQuerytmpd)
+	Endwith
+EndWith
+
+
+ThisForm.Get_Compensacao.ControlSource = 'TprMvCab.VCompensas'
+ThisForm.Get_Compensacao.Refresh
+ThisForm.lblTotPes.Caption = Iif(Not Empty(crSigOpCdc.DocQtd2s),'Total '+alltrim(crSigOpCdc.DocQtd2s),'Total Peso') + [ :]
+
+llTemCompo = .f.
+llTemServ  = .f.
+
+If Not Used([crSigCdOpe])
+	lcQuery = [Select * ] + ;
+			    [From SigCdOpe ] + ;
+			    [Where Dopes = '] + TprMvCab.Dopes + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdOpe]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpe)])
+		Return 0
+	EndIf
+EndIf
+
+If crSigCdOpe.TotCompos = 1
+
+	Select CrSigTempD
+	Zap
+	Select Cpros,Sum(Qtds) as Qtds From crTpmMvItn Group by Cpros Into cursor wEesti
+	
+	Select wEesti
+	Scan
+		Select CrSigTempD
+		Append Blank
+		Replace Cpros      With wEesti.Cpros,;
+				CidQuerys  With lcCidQuery3,;
+				Qtds       With wEesti.Qtds,;
+				CidChaves  With fUniqueIds()
+	EndScan
+	If !ThisForm.Podatamgr.UpDate('CrSigTempD')
+		=ThisForm.Podatamgr.RollBack()
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Thisform.release
+		Return .f.
+	EndIf
+	If ThisForm.PoDataMgr.commit() < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Thisform.release
+		Return .f.
+	Endif
+		
+	lcQuery = [Select b.Mats as Codigos, sum(a.Qtds * b.Qtds) as Qtds, b.UniCompos, Sum(a.Qtds * b.QtsCons) as QtsCons From SigTempD a, SigPrCpo b ]+;
+			  [Where a.CidQuerys = ?lcCidQuery3 And a.cpros = b.cpros Group by b.mats, b.unicompos]
+
+	If ThisForm.PoDatamgr.SqlExecute(lcQuery,'CsCompo') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Thisform.release
+		Return .f.
+	EndIf
+
+	lcDelete = [Delete From SigTempD Where CidQuerys = ?lcCidQuery3 ]
+	If ThisForm.Podatamgr.SqlExecute(lcDelete,'') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		ThisForm.release
+		Return .f.
+	EndIf
+	
+	Select CsCompo
+	Go Top
+	If Not Eof('csCompo')
+		With Thisform.GrdTCompo
+			.RecordSource = 'csCompo'
+			.Visible = .T.
+			.Enabled = .T.
+			.Column1.ControlSource = 'csCompo.Codigos'
+			.Column2.ControlSource = 'csCompo.Qtds'
+			.Column3.ControlSource = 'csCompo.UniCompos'
+			.Column4.ControlSource = 'csCompo.QtsCons'
+		EndWith
+		llTemCompo = .t.
+	EndIf
+EndIf
+
+Thisform.CalcTotais()
+
+With Thisform.Grade_Total
+	.Visible = .t.
+	.Recordsource = 'xValIte'
+	.ChildOrder = 'Moeda'
+	.Moeda.ControlSource = 'xValIte.Moeda'
+	.Total.ControlSource = 'xValIte.Total'
+	.Refresh
+EndWith
+
+Select crTpmMvItn
+Select Cpros, Sum(Qtds) as Qtds From crTpmMvItn Where Not Empty(Cpros) Group by Cpros Into cursor ProEesti ReadWrite 
+
+Select ProEesti
+Go Top 
+
+With ThisForm.Grade_Produto
+	.Visible = .t.
+	.Recordsource = 'ProEesti'
+	.Produto.ControlSource = 'ProEesti.Cpros'
+	.Total.ControlSource = 'ProEesti.Qtds'
+	.Refresh
+EndWith
+
+*** Mena - 20/10/2017 - mostra total de produtos por tamanho
+Select Cpros+'-'+ALLTRIM(codtams) as cpros, Sum(Qtds) as Qtds From crTpmMvIts Where Not Empty(Cpros) Group by Cpros,Codtams Into cursor ProTam ReadWrite 
+Select ProTam
+Go Top 
+With ThisForm.grade_ProdutoTam
+	.Visible = .t.
+	.Recordsource = 'ProTam'
+	.Produto.ControlSource = 'ProTam.Cpros'
+	.Total.ControlSource = 'ProTam.Qtds'
+	.Refresh
+EndWith
+***************************************************************
+
+If CrSigCdOpe.HabServs = 1
+	Select xvalite
+	=AFields(v01)
+	Create Cursor xValServ From Array v01
+	Select xValServ
+	Index On Moeda Tag Moeda
+
+	Select crTpmMvItn3
+	Set Order To
+	Scan
+		If IsEmpty(Cpros)
+			Loop
+		Endif
+		_MoePreco = Iif( IsEmpty( crSigCdOpe.Cmoes ), crTpmMvItn3.Moedas, crSigCdOpe.Cmoes )
+		Select xValServ
+		If !Seek( _MoePreco )
+			Insert into xValServ ( Moeda ) Values ( _MoePreco )
+		Endif
+		Replace Total With Total + crTpmMvItn3.Totas
+	Endscan
+	select xvalServ
+	Delete For total=0
+	Goto top
+
+	With Thisform.Grade_Serv
+		.Visible = .t.
+		.Recordsource = 'xValServ'
+		.ChildOrder = 'Moeda'
+		.Moeda.ControlSource = 'xValServ.Moeda'
+		.Total.ControlSource = 'xValServ.Total'
+		.Refresh
+	EndWith
+	llTemServ = .t.
+EndIf
+
+*** Mena - 20/10/2017 - a grade de produto+tamanho estã na mesma posicao do servico ***
+If Not llTemServ
+	ThisForm.Grade_Serv.Visible = .f.
+	ThisForm.Grade_ProdutoTam.Visible = .T.
+ELSE
+	ThisForm.Grade_Serv.Visible = .T.
+	ThisForm.Grade_ProdutoTam.Visible = .F.
+EndIf
+
+If Not llTemCompo
+	ThisForm.GrdTCompo.Visible = .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_ProdutoTam.Produto.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_ProdutoTam.total.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.grade_total.moeda.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.grade_total.total.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_TotQtde
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_TotPeso
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_QOper
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_POper
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_Serv.moeda.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_Serv.total.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_TotPesoC
+* Classe: textbox (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_Compensacao
+* Classe: textbox (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntValue = This.Value
+
+Return InList(ThisForm.ParentForm.Op_Escolha, [INSERIR], [ALTERAR])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Value < 0)
+	=MessageBox([Valor de Compensação Inválido], 48, [Atenção!!!])
+	This.Value = This.AntValue
+	Return 0
+Else
+	This.Refresh
+	Thisform.CalcTotais()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Container1.GradeCol.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Container1.GradeCol.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Get_mtcub
+* Classe: textbox (Base: textbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.OK
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.ParentForm.Enabled = .t.
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.getTotPes
+* Classe: textbox (Base: textbox)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_Produto.Produto.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 55
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOT.Grade_Produto.total.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 57
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPTOT
+RESERVED3 (ClassInfo): antvalue
+parentform
+podatamgr
+*calctotais 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

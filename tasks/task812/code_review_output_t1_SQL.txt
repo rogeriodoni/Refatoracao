@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei os dois achados contra o dump completo do legado (`tasks\task812\SIGOPTOR_form_codigo_fonte.txt`) e **nenhum dos dois ├® uma inven├º├úo** ÔÇö s├úo falsos positivos do pass SQL. Nenhuma altera├º├úo foi feita nos arquivos.
+
+- **CBLOCOS** (`CarregarTotalGeral`): o bloco de refer├¬ncia colado no prompt cortou a query do legado logo antes da cl├íusula `where` real. No dump completo (linhas 1065-1067):
+  ```
+  Select Citens, Dpros, Sum(tota1s+tota2s+tota3s) as Tota1s from crSigMvOrc
+      where Inlist(cBlocos,[SUBTOTAIS],[TAXA],[TOTAL],[IMPOSTO],[TOTALGERAL]) Group By Citens, Dpros
+  ```
+  O filtro `cBlocos` est├í no legado, literal. O BO migrado transcreveu certo.
+
+- **NDOPES** (`CarregarModoItensSubnivel`): o legado (linha 1098) n├úo escreve SQL textual ali ÔÇö chama um helper: `poDataMgr.cursorquery('SigCdOpe','TmpOpe','ndopes',nDope,[Dopes])`. Essa assinatura (tabela, cursor, campo, valor, colunas) monta exatamente `SELECT Dopes FROM SigCdOpe WHERE ndopes = nDope`, que ├® o que o BO migrado escreveu como SQLEXEC textual. A lista "WHERE original usa" citada pelo pass vinha de uma 3┬¬ query (os JOINs SigMvItn/SigMvCab/SigMvOrc/SigCdUni), n├úo da query do SigCdOpe ÔÇö por isso o detector n├úo achou `ndopes` ali.
+
+Esse ├® um padr├úo j├í catalogado em mem├│ria (`SqlFiltroPKTrunc` e fam├¡lia) ÔÇö bloco de refer├¬ncia truncado ou vindo de outra query no mesmo arquivo. Atualizei essa mem├│ria com esta reincid├¬ncia (query cortada antes do `where`, e helper gen├®rico `cursorquery` que recebe nome de coluna como par├ómetro em vez de texto SQL).

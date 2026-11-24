@@ -1,0 +1,1026 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopvci.SCX
+* Data/Hora: 19/11/2026 01:26:01
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPVCI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPVCI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPVCI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPVCI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup1
+  Parent: SIGOPVCI
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Edit1
+  Parent: SIGOPVCI
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Label2
+  Parent: SIGOPVCI
+  Class: label
+  BaseClass: label
+
+Objeto: Text1
+  Parent: SIGOPVCI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGOPVCI
+  Class: label
+  BaseClass: label
+
+Objeto: Text2
+  Parent: SIGOPVCI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntAguarde
+  Parent: SIGOPVCI
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGOPVCI.cntAguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGOPVCI.cntAguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Check1
+  Parent: SIGOPVCI
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Label1
+  Parent: SIGOPVCI
+  Class: label
+  BaseClass: label
+
+Objeto: Optiongroup1
+  Parent: SIGOPVCI
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label4
+  Parent: SIGOPVCI
+  Class: label
+  BaseClass: label
+
+Objeto: Text3
+  Parent: SIGOPVCI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGOPVCI
+  Class: label
+  BaseClass: label
+
+Objeto: Text4
+  Parent: SIGOPVCI
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI
+------------------------------------------------------------
+  DataSession = 2
+  Height = 500
+  Width = 800
+  ShowWindow = 0
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Vizualização de Cupom Impresso"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPVCI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 7
+  BorderColor = 136,189,188
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_procura_60.jpg
+  Command1.Caption = "\<Consultar"
+  Command1.TabIndex = 1
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CmdInserir"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.TabIndex = 2
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "CmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Edit1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 283
+  Left = 215
+  ReadOnly = .T.
+  TabIndex = 9
+  Top = 186
+  Width = 370
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "Edit1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cupom :"
+  Height = 15
+  Left = 225
+  Top = 119
+  Width = 47
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999999"
+  Left = 274
+  TabIndex = 2
+  Top = 116
+  Width = 60
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "a"
+  Height = 15
+  Left = 352
+  Top = 119
+  Width = 9
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Text2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999999"
+  Left = 367
+  TabIndex = 3
+  Top = 116
+  Width = 60
+  Name = "Text2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntAguarde
+------------------------------------------------------------
+  Top = 225
+  Left = 280
+  Width = 239
+  Height = 49
+  BorderWidth = 5
+  SpecialEffect = 0
+  TabIndex = 8
+  BackColor = 255,255,255
+  Name = "cntAguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntAguarde.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 18
+  Left = 87
+  Top = 7
+  Width = 70
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.cntAguarde.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  FontCondense = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Processando Dados..."
+  Height = 18
+  Left = 46
+  Top = 24
+  Width = 141
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Check1
+------------------------------------------------------------
+  Top = 168
+  Left = 274
+  Height = 15
+  Width = 194
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Geração de Cupons em Arquivo"
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo :"
+  Height = 15
+  Left = 240
+  Top = 96
+  Width = 32
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 26
+  Left = 271
+  Top = 90
+  Width = 180
+  TabIndex = 1
+  Name = "Optiongroup1"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = " Cupom"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = " Data"
+  Option2.Height = 17
+  Option2.Left = 84
+  Option2.Top = 4
+  Option2.Width = 61
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data :"
+  Height = 15
+  Left = 237
+  Top = 144
+  Width = 35
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Text3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999999"
+  Left = 274
+  TabIndex = 4
+  Top = 141
+  Width = 75
+  Name = "Text3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "a"
+  Height = 15
+  Left = 352
+  Top = 144
+  Width = 9
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVCI.Text4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999999"
+  Left = 367
+  TabIndex = 5
+  Top = 141
+  Width = 75
+  Name = "Text4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPVCI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters poFormulario
+LOCAL lcPor
+ThisForm.poFormulario = poFormulario 
+
+=fConfigGeral()
+
+With Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+Endwith	
+
+=fLerFiscal()
+
+lcFile = GetEnv("SystemRoot") + '\system32\BEMAFI32.INI'
+
+If File(lcFile)
+
+	lcConfig = FileToStr(lcFile)
+	lcComs   = StrExtract(lcConfig, 'Porta', Chr(13) + Chr(10), 1, 1)
+	*** mena - 27/02/2015 - se porta = 9 considera USB ***
+	lcPor  = Alltrim(Str(crSigFiFis.portas))
+	lcNewCon = Strtran(lcConfig, 'Porta' + lcComs, IIF(lcPor='9', 'Porta=USB', 'Porta=COM' + lcPor), -1, 1, 1)
+*!*	lcNewCon = Strtran(lcConfig, 'Porta' + lcComs, 'Porta=COM' + Alltrim(Str(crSigFiFis.portas)), -1, 1, 1)
+	StrToFile(lcNewCon, lcFile)
+
+EndIf  
+
+If crSigFiFis.Imps = 'NSWEDA'
+*!*		ThisForm.Width = 468
+*!*		ThisForm.Shape1.Width = 463
+	ThisForm.Edit1.Width = 450
+	ThisForm.CntAguarde.Width = 320
+	ThisForm.CntAguarde.Label1.Left = 132
+	ThisForm.CntAguarde.Label2.Left = 97
+*!*		ThisForm.Commandgroup1.Left = 327
+EndIf 
+
+ThisForm.Text3.Value = Ctod('')
+ThisForm.Text4.Value = Ctod('')
+
+ThisForm.cntAguarde.Visible = .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVCI.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CmdInserir.Click
+------------------------------------------------------------
+PROCEDURE CmdInserir.Click
+
+LOCAL lnNoFabr, lcDir
+PRIVATE lcTp, lcIn, lcFi
+
+lnNoFabr = LeituraFab(ThisForm.poFormulario)
+
+If crSigFiFis.Imps = 'BEMA8501'
+
+
+	Declare Integer Bematech_FI_DownloadMFD In "BemaFI32.dll" String cFile, ;
+															  String cTipo, ;
+															  String cInicio, ;
+															  String cFinal, ;
+															  String cProp
+															  
+	Declare Integer Bematech_FI_FormatoDadosMFD In "BemaFI32.dll" String cFile, ;
+															  String cDest, ;
+															  String cZero, ;
+															  String cTipo, ;
+															  String cInicio, ;
+															  String cFinal, ;
+															  String cProp
+															  
+Endif
+
+If crSigFiFis.Imps = 'DARUMA'
+*** mena - 11/09/2015 - pega pasta padrao para ler os arquivos gerados ***
+	CLEAR DLLS 
+	Declare Integer rGerarEspelhoMFD_ECF_Daruma In "DarumaFramework.dll" String tp, string pnic, string pfim
+	Declare Integer rGerarRelatorio_ECF_Daruma In "DarumaFramework.dll" String szRelatorio, String szTipo, String szInicial, String szFinal
+
+	lcDir = 'C:\'
+	IF FILE('darumaframework.xml')
+		lcXml = FILETOSTR('darumaframework.xml')
+		lcDir = STREXTRACT(lcXml,[<LocalArquivos>],[</LocalArquivos>])
+	ENDIF
+	
+	*!*Declare Integer Daruma_FIMFD_DownloadDaMFD In "Daruma32.dll" String cCOOIni, String cCOOFin 
+EndIf 
+
+ThisForm.Edit1.Value = []
+ThisForm.Edit1.Refresh
+
+If ThisForm.Optiongroup1.Value = 1
+	If Val(ThisForm.Text1.Value) > Val(ThisForm.Text2.Value)
+		MessageBox('Numero Final Maior Que Inicial !!!', 16, '')
+		ThisForm.Text1.SetFocus
+		ThisForm.cntAguarde.Visible = .f.
+		Return
+	EndIf
+	If  Val(ThisForm.Text1.Value) = 0 Or Val(ThisForm.Text2.Value) = 0
+		MessageBox('Faixa Invalida !!!', 16, '')
+		ThisForm.Text1.SetFocus
+		ThisForm.cntAguarde.Visible = .f.
+		Return
+	EndIf
+Else
+	If ThisForm.Text3.Value > ThisForm.Text4.Value
+		MessageBox('Data Final Maior Que Inicial !!!', 16, '')
+		ThisForm.Text3.SetFocus
+		ThisForm.cntAguarde.Visible = .f.
+		Return
+	EndIf
+
+	If  Empty(ThisForm.Text3.Value) Or Empty(ThisForm.Text4.Value) 
+		MessageBox('Faixa Invalida !!!', 16, '')
+		ThisForm.Text3.SetFocus
+		ThisForm.cntAguarde.Visible = .f.
+		Return
+	EndIf
+Endif
+
+ThisForm.cntAguarde.Visible = .T.
+ThisForm.cntAguarde.ZOrder(0)
+Thisform.cntAguarde.Draw
+ThisForm.Refresh
+
+xDAteT = Datetime()
+DO While Datetime() - xDateT < 2
+Enddo
+
+lcDIni = []
+lcDFin = []
+
+If ThisForm.Optiongroup1.Value = 1
+	lcTipo = [2]
+	lcInic = ThisForm.Text1.Value
+	lcFim  = ThisForm.Text2.Value
+Else
+	lcTipo = [1]
+	DO Case 
+	
+		Case crSigFiFis.Imps = 'BEMA8501'
+			lcTipo = [1]
+			lcInic = Transform(Day(ThisForm.Text3.Value), '@L 99') + ;
+			         Transform(Month(ThisForm.Text3.Value), '@L 99') + ;
+			         Right(Transform(Year(ThisForm.Text3.Value), '@L 9999'),2)
+			lcFim  = Transform(Day(ThisForm.Text4.Value), '@L 99') + ;
+			         Transform(Month(ThisForm.Text4.Value), '@L 99') + ;
+			         Right(Transform(Year(ThisForm.Text4.Value), '@L 9999'),2)
+			         
+		Case crSigFiFis.Imps = 'NSWEDA' Or crSigFiFis.Imps = 'DARUMA'
+			ldDtIni  = ThisForm.Text3.Value
+			lcQryIni = [Select Top 1 dtredzs, SeqFinal2 from SigFiRx Where serifab = '] + lnNoFabr + [' And dtredzs < ?ldDtIni Order by DtRedzs Desc]
+			ThisForm.poDataMgr.SqlExecute(lcQryIni, [csTmpRelX])
+			Select csTmpRelX
+			If Eof()
+				lcInic = '000001'
+			Else
+				lcInic = Transform(Val(SeqFinal2)+1,'@L 999999')
+			Endif
+			ldDtIni  = ThisForm.Text4.Value
+			lcQryIni = [Select Top 1 dtredzs, SeqFinal2 from SigFiRx Where serifab = '] + lnNoFabr + [' And dtredzs >= ?ldDtIni]
+			ThisForm.poDataMgr.SqlExecute(lcQryIni, [csTmpRelX])
+			Select csTmpRelX
+			If Eof()
+				lcFim = '999999'
+			Else
+				lcFim = Transform(Val(SeqFinal2),'@L 999999')
+			EndIf
+			
+		Case crSigFiFis.Imps = 'EPSON'
+			lcTipo = [0]
+			lcInic = Strtran(Dtoc(ThisForm.Text3.Value), [/], [])
+			lcFim  = Strtran(Dtoc(ThisForm.Text4.Value), [/], [])
+
+	EndCase
+Endif	
+
+If crSigFiFis.Imps = 'BEMA8501'
+
+	If File([DOWNLOAD.MFD])
+		Erase DOWNLOAD.MFD
+	EndIf
+	
+	If File([DOWNLOAD.TXT])
+		Erase DOWNLOAD.TXT
+	EndIf
+
+	iRetorno = Bematech_FI_DownloadMFD([DOWNLOAD.MFD], lcTipo, lcInic, lcFim, [1]) 
+	iRetorno = Bematech_FI_FormatoDadosMFD([DOWNLOAD.MFD], [DOWNLOAD.TXT], [0], lcTipo, lcInic, lcFim, [1]) 
+
+	If File('DOWNLOAD.TXT')
+		Create Cursor crMfd (Linha C(50))
+		Select crMfd 
+		Append From DOWNLOAD.TXT SDF
+		
+
+		lcCupom = ''
+		Scan 
+			lcCupom = lcCupom + Linha
+		EndScan
+
+		ThisForm.Edit1.Value = lcCupom
+		ThisForm.Edit1.Refresh
+
+		Erase DOWNLOAD.MFD
+		If ThisForm.Check1.Value = 0
+			Erase DOWNLOAD.TXT
+		Else
+			MessageBox('Arquivo DOWNLOAD.TXT Gerado no Diretório do Sistema !', 64, '')
+		Endif
+
+		If Used('crMfd')
+			USE in crMfd
+		EndIf
+
+	Endif
+
+Endif
+
+If crSigFiFis.Imps = 'DARUMA'
+	lcAr = lcDir+'espelho_mfd.TXT'
+	If File(lcAr)
+		delete file &lcAr
+	EndIf 
+
+	lcTp = IIF(thisform.optiongroup1.value=1,'COO','DATAM')
+	
+	lcDti = dtos(thisform.text3.value)
+	lcDti = SUBSTR(lcDti,7,2)+SUBSTR(lcDti,5,2)+SUBSTR(lcDti,1,4)
+	lcDtf = dtos(thisform.text4.value)
+	lcDtf = SUBSTR(lcDtf,7,2)+SUBSTR(lcDtf,5,2)+SUBSTR(lcDtf,1,4)
+
+	lcIn = IIF(lcTipo='2', lcInic,lcDti) 
+	lcFi = IIF(lcTipo='2', lcFim ,lcDtf) 
+	*** mena - 24/02/2015 - ajustado parametro do espelho ***
+	lnRetorno = rGerarRelatorio_ECF_Daruma([ESPELHO],lcTp,lcIn,lcFi)	 
+*!*	lnRetorno = rGerarEspelhoMFD_ECF_Daruma(@lcTp, @lcIn, @lcFi)	&& mena 08/07/2014 ajuste na chamada homologacao 2014
+*!*	lnRetorno = Daruma_FIMFD_DownloadDaMFD(lcInic, lcFim)
+
+	If lnRetorno <> 1
+		MessageBox('Problemas na Leitura do Cupom - Erro:'+ALLTRIM(STR(lnRetorno)), 16, '')
+		Return
+	Endif
+
+	If File(lcAr)
+		Create Cursor crMfd (Linha C(50))
+		Select crMfd 
+		Append From &lcAr SDF
+		
+
+		lcCupom = ''
+		Scan 
+			lcCupom = lcCupom + Linha
+		EndScan
+
+		ThisForm.Edit1.Value = lcCupom
+		ThisForm.Edit1.Refresh
+
+		If ThisForm.Check1.Value = 0
+			DELETE FILE &lcAr
+		Else
+			MessageBox('Arquivo '+lcAr+' Gerado !', 64, '')
+		Endif
+
+		If Used('crMfd')
+			USE in crMfd
+		EndIf
+
+	Endif
+
+EndIf
+
+If crSigFiFis.Imps = 'NSWEDA'
+
+	lnRetorno = LeMFD(lcInic, lcFim, ThisForm.poFormulario)
+
+	If ! File('c:\Retorno.TXT')
+		MessageBox('Problemas na Leitura do Cupom !!!', 16, '')
+		Return
+	Endif
+
+	If File('c:\RETORNO.TXT')
+		Create Cursor crMfd (Linha C(63))
+		Select crMfd 
+		Append From c:\RETORNO.TXT SDF
+		
+
+		lcCupom = ''
+		Scan 
+			lcCupom = lcCupom + Linha
+		EndScan
+
+		ThisForm.Edit1.Value = lcCupom
+		ThisForm.Edit1.Refresh
+
+		If ThisForm.Check1.Value = 0
+			Erase c:\RETORNO.TXT
+		Else
+			MessageBox('Arquivo c:\Retorno.TXT Gerado !', 64, '')
+		Endif
+
+		If Used('crMfd')
+			USE in crMfd
+		EndIf
+
+	Endif
+
+EndIf
+
+If crSigFiFis.Imps = 'EPSON'
+
+	lnReTorno =  VerifPorta()
+	If ! lnRetorno
+		RotStatus(.T.)
+		Return(.F.)
+	Endif
+
+	Declare Integer EPSON_Sys_Log  In "InterfaceEpson.dll" String pszPath,;
+	                                                             Integer dwAction 
+	                                                             
+	lnRetorno = EPSON_Sys_Log([C:\], 1)
+
+	Declare Integer EPSON_Obter_Dados_MF_MFD In "InterfaceEpson.dll" String pszInicio, ;
+																		   String pszFinal,;
+																		   Integer dwTipoEntrada,;
+																		   Integer dwEspelhos,;
+																		   Integer dwAtoCotepe,;			
+																		   Integer dwSintegra,;
+																		   String pszArquivoSaida
+
+	lnRetorno = EPSON_Obter_Dados_MF_MFD(Alltrim(Str(Val(lcInic))), Alltrim(Str(Val(lcFim))), Val(lcTipo), 65535, 0, 0, [C:\\SAIDA])  
+	If lnRetorno = 1
+		RotStatus(.T.)
+		FecharPorta(.t.)
+		Return(.F.)
+	Else
+		If ThisForm.Check1.Value = 1
+			MessageBox([Arquivo C:\SAIDA_ESP.TXT Gerado com sucesso !!!], 64, [])
+		Else
+			Create Cursor crMfd (Linha C(63))
+			Select crMfd 
+			Append From c:\SAIDA_ESP.TXT SDF
+			lcCupom = ''
+			Scan 
+				lcCupom = lcCupom + Linha
+			EndScan
+
+			ThisForm.Edit1.Value = lcCupom
+			ThisForm.Edit1.Refresh
+
+			Erase c:\SAIDA_ESP.TXT
+
+			If Used('crMfd')
+				USE in crMfd
+			EndIf
+		EndIf 
+	Endif
+
+	FecharPorta(.t.)
+		
+
+EndIf
+
+ThisForm.cntAguarde.Visible = .F.
+ThisForm.CntAguarde.Refresh
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CmdExcluir.Click
+------------------------------------------------------------
+PROCEDURE CmdExcluir.Click
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVCI.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Optiongroup1.Value = 1)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Val(This.Value) <> 0
+	This.Value = Transform(Val(This.Value), '@L 999999')
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVCI.Text2
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Optiongroup1.Value = 1)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Val(This.Value) <> 0
+	This.Value = Transform(Val(This.Value), '@L 999999')
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVCI.Text3
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Optiongroup1.Value = 2)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVCI.Text4
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Optiongroup1.Value = 2)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPVCI
+RESERVED3 (ClassInfo): podatamgr
+poformulario
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

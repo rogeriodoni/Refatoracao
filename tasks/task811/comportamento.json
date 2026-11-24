@@ -1,0 +1,70 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPTOP",
+      "evento": "Init",
+      "linhas": 30,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.ParentForm.Enabled  = .F.\n\t\t    \nWith Thisform\n\t.Caption = 'Transportes da Operação ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;\n\t\t\t   Thisform.ParentForm.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Columns",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOP.cmdSair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.ParentForm.Enabled = .T.\nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

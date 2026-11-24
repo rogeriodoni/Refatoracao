@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. O form estava **funcionalmente completo** ÔÇö o que reprovava era o nome do handler.
+
+## Diagn├│stico
+
+O ramo FLAT do gate da Fase 6 exige `OPERACIONAL` + sem PageFrame + `BINDEVENT` + (`AbrirLookup*/AbrirBusca*` **OU** (legado sem lookup **E** `.ControlSource =` **E** `PROCEDURE Validar\w+`)). Medido no arquivo da tentativa anterior: tudo `True`, exceto **`PROCEDURE Validar\w+` = 0** ÔÇö o handler chamava-se `CompensacaoLostFocus`. O dump n├úo tem lookup nenhum (`fwbusca|mAddColuna|sigacess\(` = 0 ocorr├¬ncias), ent├úo ├® o ramo correto; n├úo havia o que inventar.
+
+├ë a **5┬¬ ocorr├¬ncia** do mesmo padr├úo j├í registrado na mem├│ria (task621/625/641/732). O `BINDEVENT` estava certo (`<X>LostFocus` ligado a `"LostFocus"` ÔÇö a regra #47 n├úo se aplica); o argumento para renomear ├® s├│ a conven├º├úo, que o gate cobra.
+
+## O que mudei
+
+1. **`CompensacaoLostFocus` ÔåÆ `ValidarCompensacao`** (nome can├┤nico para o handler que reproduz o `Valid` de campo digit├ível). `Get_Compensacao` ├® o **├║nico** campo digit├ível do dump ÔÇö os outros 21 t├¬m `When ÔåÆ Return .f.` ÔÇö e o ├║nico com `PROCEDURE Valid`.
+2. **Guarda de reentr├óncia** (regra #47): wrapper fino + `ValidarCompensacaoExec()` PROTECTED, porque o corpo tem dois `RETURN` antecipados e exibe `MsgAviso` (modal, redispara o pr├│prio `LostFocus`) ÔÇö set/clear no corpo travaria a flag em `.T.` e mataria a valida├º├úo.
+3. **Regra #49 ÔÇö `Format` vs `InputMask`**: o dump declara `Format = "999,999.99"` em 5 campos e o migrado escrevia `.InputMask`. Corrigi os 5 (2 deles s├úo da Fase 5: `txt_4c_TotQtde`, `txt_4c_TotPeso`). `txt_4c_Mtcub` ficou intacto ÔÇö ali o dump declara `InputMask` de verdade. Importa no `txt_4c_Compensacao`: com m├íscara num├®rica o usu├írio era restringido na digita├º├úo onde o legado n├úo restringe.
+4. **`.AutoSize = .F.` expl├¡cito** nos 3 labels cujo dump declara `AutoSize = .T.` (regra #23), com `Width`/`Height` transcritos.
+5. Tr├¬s coment├írios que descreviam o estado como "Fase 5: primeira metade / entram nas fases seguintes" ÔÇö agora falsos.
+
+## Provas
+
+**Gate** (`case 6` extra├¡do verbatim, sem dot-source do orquestrador): `validado = True`. Controle negativo (c├│pia com o nome antigo): `validado = False` ÔÇö confirma que o nome era o ├║nico item faltando.
+
+**Validadores 05d** (os 4 regex verbatim): 0 marcadores, 0 procedures vazias, 0 pend├¬ncias, 0 stubs. Blocos balanceados. CRLF preservado (1495/1495).
+
+**Runtime no VFP9** (compila sem `.ERR`, `CREATEOBJECT` ÔåÆ `O`):
+- `AEVENTS`: `[LOSTFOCUS -> VALIDARCOMPENSACAO]`
+- `ValidarCompensacao` PUBLIC, `...Exec` PROTECTED
+- `Format`/`InputMask` dos 6 campos batem com o dump
+- caminho v├ílido: cursor `TprMvCab.VCompensas` 1.50 ÔåÆ 2.50, BO recalculou `TotPesoC = 4.50` (= `2.000 + 2.50`, a f├│rmula do legado) e o valor apareceu no controle
+- guarda de reentr├óncia segura e libera
+- recusa de negativo: `.F.` com a mensagem id├¬ntica ao legado
+
+**Uma lacuna que declaro**: o ramo de *rollback* do form (ELSE) foi provado no BO, n├úo end-to-end ÔÇö ele chama `MsgAviso`, que ├® modal e travaria a execu├º├úo headless, e o pr├│prio handler tem guarda `gb_4c_ModoTeste` que impede suprimir o di├ílogo e exercitar o corpo ao mesmo tempo. As linhas de rollback s├úo c├│digo reto depois do `.F.` do BO, que est├í medido.

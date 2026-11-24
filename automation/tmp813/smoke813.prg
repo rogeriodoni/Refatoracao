@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VIVO", "C:\4c\automation\tmp813\smoke813_saida.txt")
+QUIT

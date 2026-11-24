@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigOpZom.prg` foi **modificado** (445 ÔåÆ 489 linhas).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 (`case 4` do `OrquestradorMigracao.ps1`) cai no ramo **DESPACHANTE** para este legado, e como `Get-ContagemBotoesLegado` devolve **1** (o `ButtonCount = 1` do `cmdBtnForm`), esse ramo exige **duas** coisas do migrado:
+
+| Predicado do gate | Antes | Agora |
+|---|---|---|
+| `AddObject("(cmg_4c_\|cmd_4c_)` | **False** ÔÇö era `obj_4c_CmdBtnForm` | True |
+| `PROCEDURE (Cmd\|Btn)\w*Click` | **False** ÔÇö nenhum handler | True |
+
+A tentativa anterior escreveu um coment├írio declarando "SEM TRABALHO PARA ESTE LEGADO" e n├úo entregou nada ÔÇö mas o gate nunca pediu grade; pediu **o bot├úo que o legado tem, com o nome can├┤nico, e o handler do Click dele**.
+
+## O que foi feito
+
+1. **`obj_4c_CmdBtnForm` ÔåÆ `cmg_4c_CmdBtnForm`** (form + `mapeamento.json`). O `obj_4c_` n├úo foi inven├º├úo do migrador: ├® o que o `mapeamento.json` manda, porque o `AnalisadorObjetos` n├úo reconhece `CommandGroup` e cai no prefixo gen├®rico. O can├┤nico do projeto ├® `cmg_4c_`.
+
+2. **`BINDEVENT(...Buttons(1), "Click", THIS, "BtnSairClick")`** ÔÇö no membro **interno**, como no SCX (`PROCEDURE btnSair.Click`), n├úo no grupo, para n├úo disparar duas vezes.
+
+3. **`PROCEDURE BtnSairClick()` com `THIS.Release()`** ÔÇö transcri├º├úo literal do `ThisForm.Release` legado. PUBLIC (regra #3). Nome alinhado ao controle legado e aos nomes que o `TesteBtnEncerrarExiste` aceita.
+
+4. Coment├írios de cabe├ºalho e de `ConfigurarBotaoEncerrar` reescritos (os antigos diziam que o BINDEVENT "fica para fase posterior").
+
+**N├úo** inventei Grid nem 6 bot├Áes CRUD: medido no dump, as 8 `BaseClass` presentes s├úo `form/dataenvironment/container/commandgroup/image/label/shape/timer` ÔÇö zero grid/pageframe/listbox, zero `AddCursor/pColuna/RecordSource/ControlSource`, zero controle de entrada.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: `.fxp` gerado (8.485 bytes), sem `.err`.
+- **Instancia├º├úo real** (`CREATEOBJECT` em modo teste): `INSTANCIOU OK`, `ControlCount=9`, `Btn1.Caption=Encerrar`, `BtnSairClick` existe e **n├úo** ├® PROTECTED, `handlers Click ligados=1`.
+- **Validador de completude** (l├│gica dos 4 checks do `05d`): **0 problemas**.
+- **Gate da Fase 4** replicado: `temLayoutDespachante = True` ÔåÆ **PASSA**.
+- Blocos balanceados (11 `PROCEDURE`/11 `ENDPROC`, 13 `WITH`/13 `ENDWITH`, 7 `TRY`/7 `ENDTRY`), zero `RETURN` dentro de `TRY`, zero `PUBLIC PROCEDURE`, zero acento literal.
+
+Dois pontos para registro: h├í `obj_4c_CmdBtnForm` remanescente em `Formsigopcgb.prg` (outro form, fora do escopo desta task), e artefatos tempor├írios de compila├º├úo/probe foram removidos.

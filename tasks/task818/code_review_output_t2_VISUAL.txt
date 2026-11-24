@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei os 12 achados contra o c├│digo real de `FormSigOpVdi.prg` e todos s├úo falsos positivos j├í catalogados na mem├│ria ÔÇö este ├® exatamente o mesmo relat├│rio revisado anteriormente nesta sess├úo (34┬¬ reincid├¬ncia de GRID-WITH + variante de NAVEGACAO-PAGINA + 2┬¬ reincid├¬ncia de LAYOUT-POSITION/WITH-aninhado, todos datados hoje 2026-11-19).
+
+Confirma├º├úo linha a linha:
+
+**8├ù [GRID-WITH]** (`CarregarDados`, `ConfigurarAbaDetalhamento`, `ConfigurarAbaTotalEmpresa`, `ConfigurarAbaTotalVendedora`): todos os blocos `WITH` seguem a ordem can├┤nica da regra #41/#44 (`ColumnCount -> RecordSource -> ControlSource` no mesmo bloco, colunas j├í existem antes do `ControlSource`). `WITH nunca adia execu├º├úo em VFP9` ÔÇö n├úo h├í "Unknown member COLUMN1" poss├¡vel aqui. O 8┬║ achado ("WITH ENDPROC") nem aponta para um objeto real.
+
+**1├ù [NAVEGACAO-PAGINA]** (`BtnConsultarClick`): carrega dados por outro caminho ÔÇö `Processar()` + `Filtros(1,3)` ANTES do `ActivePage=2`, e `AtualizarPainelDetalheRegistro()` DEPOIS. O detector s├│ reconhece os nomes literais `CarregarHistorico`/`CarregarDados`.
+
+**3├ù [LAYOUT-POSITION]**:
+- `Check1` (grdEmps): `.Check1.Left = 2` j├í est├í expl├¡cito no c├│digo (linha 1507) ÔÇö o "35" citado ├® o default do helper `GarantirCheckBoxColuna`, nunca aplicado a este Check1 espec├¡fico.
+- `optValor1` Top/Left: o grupo j├í tem `.Top=292`/`.Left=76` (linhas 2638-2639), id├¬ntico ao "original". Os valores "migrado 5/5" s├úo `.Buttons(1).Top/.Left`, lidos de dentro do `WITH .Buttons(1)` aninhado ÔÇö bug conhecido do comparador que n├úo respeita o escopo do WITH interno.
+
+Nenhuma altera├º├úo foi necess├íria ÔÇö aplicar as "corre├º├Áes" sugeridas introduziria regress├Áes reais (quebraria grids funcionando e desalinharia o OptionGroup que j├í est├í fiel ao legado). N├úo editei o arquivo.

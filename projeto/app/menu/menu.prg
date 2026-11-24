@@ -1130,6 +1130,18 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 177 OF popMovimentos DO AbrirFormsigopsat
 
+    DEFINE BAR 178 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 179 OF popMovimentos PROMPT "Gera" + CHR(231) + CHR(227) + "o de Arquivos de Vendas" ;
+           MESSAGE "Seleciona opera" + CHR(231) + CHR(245) + "es de venda por per" + CHR(237) + "odo/empresa/adquirente e gera arquivo de concilia" + CHR(231) + CHR(227) + "o (SIGOPVDA)"
+
+    ON SELECTION BAR 179 OF popMovimentos DO AbrirFormSigOpVda
+
+    DEFINE BAR 180 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 181 OF popMovimentos PROMPT "Pesquisa Detalhada" ;
+           MESSAGE "Pesquisa detalhada de vendas por per" + CHR(237) + "odo/moeda/grupo de venda/subgrupo, com totais por Empresa e por Vendedora (SIGOPVDI)"
+
+    ON SELECTION BAR 181 OF popMovimentos DO AbrirFormSigOpVdi
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -13142,6 +13154,81 @@ PROCEDURE AbrirFormsigopsat()
         MostrarErro(lcMensagem, "Erro Detalhado")
         loForm = .NULL.
     ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpVda - Abre o formulario de Geracao de Arquivos de Vendas
+* (SIGOPVDA). Form OPERACIONAL sem CRUD - so filtros de selecao + grade +
+* botoes de acao, todos ja habilitados dentro do proprio Init. Padrao
+* canonico: TRY cobre so a CRIACAO, Show() fica FORA do TRY (CLAUDE.md #29).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpVda()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        GarantirClasse("FormSigOpVda")
+        loForm = CREATEOBJECT("FormSigOpVda")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + CHR(227) + ;
+                       "o de Arquivos de Vendas" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Gera" + CHR(231) + CHR(227) + ;
+                     "o de Arquivos de Vendas:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpVdi - Abre a Pesquisa Detalhada (SIGOPVDI)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpVdi()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        GarantirClasse("FormSigOpVdi")
+        loForm = CREATEOBJECT("FormSigOpVdi")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Pesquisa Detalhada" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Pesquisa Detalhada:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------

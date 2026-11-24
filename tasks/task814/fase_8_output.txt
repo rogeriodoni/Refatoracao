@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpTrf.prg` passou de 2.621 para 3.034 linhas.
+
+## O que foi implementado
+
+**Hooks de transporte e consolida├º├úo** (a ficha desta tela ├® UMA LINHA de `cursor_4c_Itens` ÔÇö n├úo h├í campo fora das duas grades):
+
+| M├®todo | Escopo medido | Papel |
+|---|---|---|
+| `FormParaBO(par_oTxt)` | PROTECTED | linha corrente ÔåÆ properties do BO; a **c├®lula vence o cursor** no `Cpros` (regra #46); `cidchaves` vazio + `lNovoRegistro = .T.` porque esta tela sempre insere com PK nova |
+| `BOParaForm(par_oTxt)` | PROTECTED | BO ÔåÆ **c├│digo para a c├®lula, descri├º├úo para a linha** + Refresh |
+| `LimparCampos()` | PROTECTED | zera a ficha no funil de carga e **rep├Áe** a opera├º├úo de origem no BO |
+| `HabilitarCampos(par_lHabilitar)` | PUBLIC | ponto ├║nico da editabilidade das 2 c├®lulas + 4 bot├Áes de linha; guard por `PCOUNT()` |
+| `AjustarBotoesPorModo()` | PUBLIC | nome can├┤nico apontando para `HabilitarCampos` |
+
+**Ligados a fluxos reais**: `AbrirLookupProdutoTrfGradeExec` usa o par de hooks no lugar do `REPLACE` inline; `CarregarLista` chama `LimparCampos()` na entrada e `HabilitarCampos()` logo ap├│s o rebind (que reseta `Column.ReadOnly` ÔÇö Problema 48 / regras #40 e #41).
+
+**Uma corre├º├úo que fiz no meio do caminho e vale registrar**: a primeira vers├úo do `BOParaForm` gravava `Cpros` **e** `Dpros` no cursor (padr├úo do irm├úo `FormSigOpSts`). Aqui isso mudaria regra de neg├│cio: logo depois roda `RecusarProdutoTrfDuplicado`, que ├® transcri├º├úo literal do `Set Order to Cpros / Seek / Skip` do legado ÔÇö com o c├│digo j├í na linha, o SEEK veria a pr├│pria linha e passaria a recusar com **uma** duplicata pr├®-existente, no lugar das **duas** que o legado exige. Agora cada metade vai para onde o legado manda, e o motivo est├í no cabe├ºalho do m├®todo.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: `FORM_FXP=.T. / FORM_ERR=.F.`
+- **Gate Fase 8** (bloco `case 8` do orquestrador, recortado por AST): `validado = True`, `metodosFaltantes` vazio
+- **Test-CompletudeCodigo**: Form e BO sem TODO/stub/procedure vazia
+- **Probe em VFP9** (`automation\ProbeF8SigOpTrf814.prg`): escopo real medido com `PEMSTATUS(...,2)` confirma PROTECTED/PUBLIC conforme a tabela; c├®lula vence o cursor; `BOParaForm` deixa `Cpros` intacto e grava `Dpros`; `LimparCampos` preserva a origem; cursor em EOF devolve `.F.` sem estourar; `HabilitarCampos()` sem argumento deriva `.T.`
+- `VerificarMetodoProtegidoChamadoDeFora.ps1` e `VerificarPropriedadesInexistentes.ps1`: OK
+
+**O que n├úo fiz, de prop├│sito**: `BtnSalvarClick`/`BtnCancelarClick`/`BtnBuscarClick`/`AlternarPagina` ÔÇö o SCX n├úo tem nenhum deles (a grava├º├úo mora no `cmdSair.Click`, j├í migrado em `BtnSairClick`; a busca s├úo os lookups de c├®lula; n├úo h├í PageFrame). Cada aus├¬ncia est├í justificada no cabe├ºalho, mesmo padr├úo do `FormSigOpSts`. O lote do Encerrar segue com par├ómetros expl├¡citos: o 2┬║ la├ºo do legado varre `xOpe`, onde n├úo existe linha de `xTrf` para transportar.
+
+**Achado lateral, n├úo corrigido**: `automation\ProbeF4SigOpTrf814.prg` falha hoje com *"Class definition TEXTBOXOPERACAOTRF_4C is not found"* ÔÇö ele n├úo carrega `classes\textboxgridlookup.PRG`, que s├│ passou a ser necess├írio na Fase 6. ├ë limita├º├úo do probe antigo, n├úo do form (confirmei rodando-o antes e depois das minhas mudan├ºas); uma linha de `SET PROCEDURE` resolve, se quiser que eu ajuste.

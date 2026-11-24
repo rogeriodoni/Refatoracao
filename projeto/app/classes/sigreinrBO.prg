@@ -494,7 +494,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     IF !EMPTY(crTmpHist.CBars)
                         lnbarra_val = crTmpHist.CBars
                         lcSql = [Select * from SigIvTrE Where Cbars = ] + ;
-                            crTmpHist.CBars + [ And Codigos = ?lnNumBal ]
+                            STR(crTmpHist.CBars, 14) + [ And Codigos = ?lnNumBal ]
                         IF SQLEXEC(gnConnHandle, lcSql, "CrTmpEti") > 0
                             IF EOF("CrTmpEti")
                                 IF SQLEXEC(gnConnHandle, ;
@@ -597,7 +597,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                             SELECT CsRelatorio
                             IF THIS.this_nOptFoto = 1
                                 lcCampoTc = "TcLinhas" + STR(lnTcLinhas, 1)
-                                lcBarra = ALLTRIM(crBarras.cBars) + ", "
+                                lcBarra = ALLTRIM(STR(crBarras.cBars, 14)) + ", "
                                 IF lnTcLinhas < 5
                                     IF LEN(ALLTRIM(&lcCampoTc)) + LEN(lcBarra) > 146
                                         lnTcLinhas = lnTcLinhas + 1
@@ -750,7 +750,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                             m.TcLinhas = ""
                             SELECT crBarras
                             SCAN
-                                lcBarra = ALLTRIM(crBarras.cBars) + ", "
+                                lcBarra = ALLTRIM(STR(crBarras.cBars, 14)) + ", "
                                 IF LEN(m.TcLinhas) + LEN(lcBarra) > 114
                                     SELECT CsRelatorio
                                     APPEND BLANK
@@ -906,7 +906,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     Colecoes c(50), Categoria c(50), pLocals c(10), cbars_old n(10), ;
                     CodTams c(3), Localizas c(10), Obs c(200))
                 INDEX ON CBars TAG CBars
-                INDEX ON Tipos + Contas + CPros + CBars TAG TpProBar
+                INDEX ON Tipos + Contas + CPros + STR(CBars, 14) TAG TpProBar
 
                 THIS.this_nTotalLido = 0
                 THIS.this_nTotalEsto = 0
@@ -960,7 +960,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
 
                             lnbarra_val = CsHistorico.CBars
                             loc_cSQL = [Select Empos,Grupos,Contas From SigOpEtq Where Cbars = ] + ;
-                                CsHistorico.CBars
+                                STR(CsHistorico.CBars, 14)
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpProEtq") < 1
                                 THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + CHR(227) + "o (TmpProEtq)"
                                 loc_lSucesso = .F.
@@ -1303,6 +1303,32 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
             _TipoDif_INV    = THIS.this_nTipoDif
             _lTrataPeso_INV = THIS.this_lTrataPeso
 
+            *-- Variaveis que os FRX legados leem direto nos campos do relatorio
+            *-- (SigReBrf/Blh/Blr/Bla/Be2/Ble/Blo). No legado eram PUBLIC criadas
+            *-- na PROCEDURE processamento do SCX; a migracao calculou os valores
+            *-- em properties do BO mas nunca os publicou, e o REPORT FORM
+            *-- estourava "Variable '_TITULO' is not found." (Erro380).
+            *-- _DProduto e _Leitura sao vazias no legado (sigreinr.scx:1443,1445).
+            *-- _cTelaOrigem: rodape dos FRX SigReBrf/SigReBle. No legado o campo
+            *-- era "this.name" (nome do FORM, valido so dentro de metodo de
+            *-- form) e estourava "THIS can only be used within a method."
+            *-- ao rodar pelo BO (Erro381).
+            PUBLIC _Titulo, _Empresa, _DProduto, _Leitura, _cTelaOrigem
+            PUBLIC _TipoLeitura, _Saldo, _SaldoPs, _TotalnLido, _TotalnEsto
+            PUBLIC ImpCustos
+            _Titulo      = THIS.this_cTitulo
+            _Empresa     = THIS.this_cEmpresa
+            _DProduto    = ""
+            _Leitura     = ""
+            _cTelaOrigem = "SIGREINR"
+            _TipoLeitura = THIS.this_nTipoLeitura
+            _Saldo       = THIS.this_nSaldo
+            _SaldoPs     = THIS.this_nSaldoPs
+            _TotalnLido  = THIS.this_nTotalLido
+            _TotalnEsto  = THIS.this_nTotalEsto
+            *-- legado sigreinr.scx:1447 -> impCustos = this.optgTpCusto.value
+            ImpCustos    = THIS.this_nOptTpCusto
+
             SELECT CsRelatorio
             GO TOP
 
@@ -1397,6 +1423,8 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
         lcApagar = SYS(2023) + "\F*.Jpg"
         ERASE &lcApagar.
         RELEASE _TipoDif_INV, _lTrataPeso_INV
+        RELEASE _Titulo, _Empresa, _DProduto, _Leitura, _cTelaOrigem
+        RELEASE _TipoLeitura, _Saldo, _SaldoPs, _TotalnLido, _TotalnEsto, ImpCustos
 
         RETURN loc_lSucesso
     ENDPROC
@@ -1422,6 +1450,32 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
             PUBLIC _TipoDif_INV, _lTrataPeso_INV
             _TipoDif_INV    = THIS.this_nTipoDif
             _lTrataPeso_INV = THIS.this_lTrataPeso
+
+            *-- Variaveis que os FRX legados leem direto nos campos do relatorio
+            *-- (SigReBrf/Blh/Blr/Bla/Be2/Ble/Blo). No legado eram PUBLIC criadas
+            *-- na PROCEDURE processamento do SCX; a migracao calculou os valores
+            *-- em properties do BO mas nunca os publicou, e o REPORT FORM
+            *-- estourava "Variable '_TITULO' is not found." (Erro380).
+            *-- _DProduto e _Leitura sao vazias no legado (sigreinr.scx:1443,1445).
+            *-- _cTelaOrigem: rodape dos FRX SigReBrf/SigReBle. No legado o campo
+            *-- era "this.name" (nome do FORM, valido so dentro de metodo de
+            *-- form) e estourava "THIS can only be used within a method."
+            *-- ao rodar pelo BO (Erro381).
+            PUBLIC _Titulo, _Empresa, _DProduto, _Leitura, _cTelaOrigem
+            PUBLIC _TipoLeitura, _Saldo, _SaldoPs, _TotalnLido, _TotalnEsto
+            PUBLIC ImpCustos
+            _Titulo      = THIS.this_cTitulo
+            _Empresa     = THIS.this_cEmpresa
+            _DProduto    = ""
+            _Leitura     = ""
+            _cTelaOrigem = "SIGREINR"
+            _TipoLeitura = THIS.this_nTipoLeitura
+            _Saldo       = THIS.this_nSaldo
+            _SaldoPs     = THIS.this_nSaldoPs
+            _TotalnLido  = THIS.this_nTotalLido
+            _TotalnEsto  = THIS.this_nTotalEsto
+            *-- legado sigreinr.scx:1447 -> impCustos = this.optgTpCusto.value
+            ImpCustos    = THIS.this_nOptTpCusto
 
             SELECT CsRelatorio
             GO TOP
@@ -1550,6 +1604,8 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
         lcApagar = SYS(2023) + "\F*.Jpg"
         ERASE &lcApagar.
         RELEASE _TipoDif_INV, _lTrataPeso_INV
+        RELEASE _Titulo, _Empresa, _DProduto, _Leitura, _cTelaOrigem
+        RELEASE _TipoLeitura, _Saldo, _SaldoPs, _TotalnLido, _TotalnEsto, ImpCustos
 
         RETURN loc_lSucesso
     ENDPROC

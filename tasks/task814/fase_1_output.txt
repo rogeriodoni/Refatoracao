@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Created `C:\4c\projeto\app\classes\SigOpTrfBO.prg` for Phase 1/8, following the established pattern from the sibling dialogs in this family (SigOpTopBO/SigOpTorBO/SigOpTotBO):
+
+- **Context properties**: `this_cDopes` (origin operation, from the parent form's `crSigCdOpe.Dopes`) and `this_cTituloDialogo`.
+- **Current-row properties** for the `SigOpTrf` table (`cidchaves` PK, `dopeds`, `cpros`, plus `this_cDpros` for the non-persisted product description looked up for display).
+- **Named work-cursor constants** (`this_cCursorRegras`, `this_cCursorOperacoesDestino`, `this_cCursorOperacoes`, `this_cCursorItens`) mirroring the legacy `crSigOpTrf`/`TmpOpe`/`xOpe`/`xTrf` cursors, to be populated in later phases.
+- **Dialog state** (`this_lDadosAlterados` mirroring `ThisForm.GravaDados`, plus row-count trackers).
+- **Init()** sets `this_cTabela = "SigOpTrf"` / `this_cCampoChave = "cidchaves"` and defaults everything else, wrapped in TRY/CATCH per CLAUDE.md rule #1 (no bare RETURN inside TRY).
+
+A detailed header comment documents the dialog's real behavior (master-detail grids, bulk delete+reinsert on Encerrar, product lookup), so Phase 2 (CarregarDoCursor/Inserir/Atualizar) has the context it needs without re-deriving it from the source dump.
+
+Next: Phase 2 will add `CarregarDoCursor()`, `Inserir()`, and `Atualizar()` to this same file.

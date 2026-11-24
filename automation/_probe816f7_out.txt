@@ -1,0 +1,26 @@
+VARTYPE(loForm)=O
+Caption=[Vizualização de Cupom Impresso]
+ControlCount=15
+BaseClass=[Form]
+BtnConsultarClick existe=.T. protected=.F.
+BtnEncerrarClick existe=.T. protected=.F.
+ValidarFaixaConsulta existe=.T. protected=.F.
+ResolverFaixaMFD existe=.T.
+BO.ResolverSequenciaPorData existe=.T. protected=.F.
+Buttons(1) binds=1
+  B1 evento=[CLICK] metodo=[BTNCONSULTARCLICK]
+Buttons(2) binds=1
+  B2 evento=[CLICK] metodo=[BTNENCERRARCLICK]
+ValidarFaixaConsulta(vazia)=.F.
+ValidarFaixaConsulta(10>5)=.F.
+ValidarFaixaConsulta(5a10)=.T.
+ResolverFaixaMFD(cupom)=.T. tipo=[2] ini=[000005] fim=[000010]
+BtnConsultarClick(1a) OK EmConsulta=.F.
+BtnConsultarClick(2a) OK EmConsulta=.F.
+CarregarCupomDeArquivo=.T.
+  Edit1 len=100 ini=[CUPOM FISCAL LINHA 1     ]
+  BO.this_cConteudoCupom len=100
+  cursor_4c_Mfd aberto depois=.F.
+ObterDiretorioDaruma=[C:\]
+LeituraFab=[] LeMFD=-1 VerifPorta=.F. RotStatus=.T. FecharPorta=.T.
+Release OK

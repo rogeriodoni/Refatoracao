@@ -1,0 +1,2164 @@
+{
+  "resumo": {
+    "totalMetodos": 123,
+    "metodosComSQL": 35,
+    "metodosComValidacao": 70,
+    "totalQueries": 25,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fExecCmds", "Fornecedor] + Chr", "fVerificaPasta", "fBuscarCotacao", "From LocalParcs Where Ttod", "fDtoSQL", "MontaGrade", "fConfigGeral", "fwBuscaExt", "fChecaAcesso", "File", "Filter To"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Lparameters pTip\n\nWith ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1\n\tIf (pTip = [LER])\n\t\tlcStr = ThisForm.pgfPrincipal.pgFiltros.getCfgGrade.Value \n\t\t\n\t\tlnPos = 1 && Posição Inicial de Cada Bloco Correspondente a Uma Coluna da Grade\n\t\tFor lnCnt = 1 To .ColumnCount\n\t\t\tlcBlo = Substr(lcStr, lnPos, 5) \t\t&& Bloco Com 5 Posições: 1 a 3 = Width; \t\n\t\t\t\t\t\t\t\t\t\t\t\t\t&&\t\t\t\t\t\t 4     = Visible\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t&&\t\t\t\t\t\t 5     = Uso Futuro\t\n\t\t\tlnWid = Int(Val(Substr(lcBlo, 1, 3)))\t&& Largura da Coluna\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 84,
+      "codigoOriginal": "Private pdDtA\nLocal lcPro, lcTam\n\nSelect crCursor1\noProg2 = CreateObject([fwProgressBar], [Processando Dados Anteriores...], Reccount([crCursor1]))\noProg2.Top = oProg2.Top + Int(oProg2.Height/2)\noProg2.Rodape.Caption = [Buscando Produtos na Data de Movimentação]\noProg2.Show\nScan\n\toProg2.Update(.t.)\n\n\tlcPro = Nvl(crCursor1.Codigo_Item, [])\n\tlcTam = Nvl(crCursor1.Tamanho, [])\n\tpdDtA = Nvl(crCursor1.Data_Venda, Datetime())\n\t\t\n\tlcQuery = [Select Top 1 ] + ;\n\t\t\t\t\t [p.Mercs as Gde_Grupo, ] + ; \n\t\t\t\t\t ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fExecCmds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Select crGrdGpr\nGo Top In crGrdGpr\nThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh \nLocate For nMarcas = 0\nIf Eof([crGrdGpr]) && Se Não Tiver Nenhum Grupo NÃO Selecionado Ignora o Filtro\n\tReturn .t.\nEndIf\n\nSelect Codigos ;\n  From crGrdGpr ;\n Where nMarcas = 0 ;\n  Into Cursor crNaoMarcados\n\nSelect crNaoMarcados\nScan\n\tDelete From crCursor1 Where Gde_Grupo = crNaoMarcados.Codigos\nEndScan\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Select crGrdGru\nGo Top In crGrdGru\nThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \nLocate For nMarcas = 0\nIf Eof([crGrdGru]) && Se Não Tiver Nenhum Grupo NÃO Selecionado Ignora o Filtro\n\tReturn .t.\nEndIf\n\nSelect Codigos ;\n  From crGrdGru ;\n Where nMarcas = 0 ;\n  Into Cursor crNaoMarcados\n\nSelect crNaoMarcados\nScan\n\tDelete From crCursor1 Where Grupo = crNaoMarcados.Codigos\nEndScan\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Lparameters pPag, pOrd\n\nIf (pPag = 1) && Detalhamento dos Produtos\n\tSelect crPgRes01\n\tlcOrd = Str(pOrd, 1)\n\tSet Order To Ordem&lcOrd.\n\tGo Top In crPgRes01\n\tThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "LParameters pVal, pTip\nLocal lcTip, lcRet\n\nlcTip = Iif(Type([pTip])=[C], pTip, [N])\n\nDo Case\n\tCase (lcTip = [C])\n\t\tlcRet = Strtran(Strtran(Strtran(Nvl(pVal, []), Chr(9), []), Chr(10), []), Chr(13), [])\n\n\tCase (lcTip = [N])\n\t\tlcRet = Alltrim(Transform(Nvl(pVal, 0), [999,999,999,999.99]))\n\nEndCase\n\nReturn lcRet + Chr(9)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 143,
+      "codigoOriginal": "Local lcArq, lnPgn\n\nlcArq = GetFile([TXT], [Nome do Arquivo], [OK], 0, [Gerar Arquivo Separado Por Tabulações])\n\nIf Not Empty(lcArq)\n\t=StrToFile([], lcArq)\n\n\tlnPgn = ThisForm.pgfPrincipal.pgDados.pgResults.ActivePage\n\t\n\tIf InList(lnPgn, 1, 2, 3)\n\t\tDo Case\n\t\t\tCase (lnPgn = 1) && Detalhamento dos Produtos\n\t\t\t\tlcStr = [Empresa] + Chr(9) + ;\n\t\t\t\t\t\t[Código] + Chr(9) + ;\n\t\t\t\t\t\t[Data] + Chr(9) + ;\n\t\t\t\t\t\t[Vendedora] + Chr(9) + ;\n\t\t\t\t\t\t[Barra] + Chr(9) + ;\n\t\t\t\t\t\t[Produto] + Chr(9) + ;\n\t\t\t\t\t\t[Descrição do... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Fornecedor] + Chr",
+        "metodosFormChamados": "fLimpa",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "Local lcExl, lcErr, llErr\n\nlcExl = PutFile([Nome da Planilha], [], [XLS])\n\nIf fVerificaPasta(lcExl, 2)\n\tlnPgn = ThisForm.pgfPrincipal.pgDados.pgResults.ActivePage\n\t\n\tDo Case\n\t\tCase (lnPgn = 1) && Detalhamento dos Produtos\n\t\t\tSelect Empresa, Numero, Data_Venda, Codigo_Vendedora, Barras, ;\n\t\t\t\t   Tipo, Codigo_Item, Desc_Item, Equivalente, Cor, Tamanho, ;\n\t\t\t\t   Tam_De, Tam_Para, Custo_Cadastro, ;\n\t\t\t\t   Val_Unitario, Markup, Valor_Diferenca, Perc_Diferenca, ;\n\t\t\t\t   Venda_Cadastro, Total, Parcelas... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fVerificaPasta",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "Local lnCnt, lnCol, lcCol\n\nlnCnt = ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.ColumnCount \n\nDimension laGrd(lnCnt)\nlaGrd(01) = 031\nlaGrd(02) = 150\nlaGrd(03) = 055\nlaGrd(04) = 071\nlaGrd(05) = 080\nlaGrd(06) = 080\nlaGrd(07) = 110\nlaGrd(08) = 296\nlaGrd(09) = 035\nlaGrd(10) = 035\nlaGrd(11) = 100\nlaGrd(12) = 070\nlaGrd(13) = 095\nlaGrd(14) = 095\nlaGrd(15) = 100\nlaGrd(16) = 095\nlaGrd(17) = 100\nlaGrd(18) = 090\nlaGrd(19) = 290\nlaGrd(20) = 150\nlaGrd(21) = 030\nlaGrd(22) = 030\nlaGrd(23) = 220\nla... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Lparameters pCur\n\nIf (Usuar <> [4CONTROL])\n\tlcQuery = [Select e.CEmps as Emps ] + ;\n\t\t\t\t[From SigCdEmp e ] + ;\n\t\t\t   [Where e.CEmps Not In (] + ;\n\t\t\t   \t\t [Select a.Emps From SigCdAce a Where a.Usuarios = '] + Usuar + [')]\n\n\tIf Not fExecCmds(ThisForm.poDataMgr, [LocalEmps], lcQuery)\n\t\tReturn .f.\n\tEndIf\n\n\tSelect LocalEmps\n\tScan\n\t\tDelete From &pCur. Where Empresa = LocalEmps.Emps\n\tEndScan\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fExecCmds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Local lcEmp, lcVir\n\nSelect crSigCdEmp \nLocate For .F.\nGo Top\n\nSelect Cemps ;\n  From crSigCdEmp ;\n Where Imps ;\n  Into Cursor LocalEmps ReadWrite \nGo Top In LocalEmps\n\nlcEmp = []\n\nDo Case\n\tCase Reccount([LocalEmps]) = 1\n\t\tlcEmp = [ And c.Emps = '] + LocalEmps.Cemps + [']\n\n\tCase Reccount([LocalEmps]) > 1\n\t\tlcEmp = [ And c.Emps In (]\n\t\tlcVir = []\n\t\tSelect LocalEmps\n\t\tScan\n\t\t\tlcEmp = lcEmp + lcVir + ['] + LocalEmps.Cemps + [']\n\t\t\tlcVir = [, ]\n\t\tEndScan\n\t\tlcEmp = lcEmp + [)]\nEndCase\n\nReturn lcEmp",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 208,
+      "codigoOriginal": "Local lcTip, lnGrd\n\nWith Thisform.pgfPrincipal.pgFiltros.grdTipo\n\t.RecordSource = [crTpOpe]\n\t.Column1.ControlSource = [crTpOpe.nMarcas]\n\t.Column2.ControlSource = [crTpOpe.cDescricaos]\n\n\tFor I = 1 To .ColumnCount\n\t\tlcCol = Alltrim(Str(I))\n\t\t.Column&lcCol..Movable   = .F.\n\t\t.Column&lcCol..Resizable = .F.\n\t\t.Column&lcCol..ReadOnly  = .T.\n\tNext\n\n\t.Refresh\nEndwith\n\nWith Thisform.pgfPrincipal.pgFiltros.grdOpera\n\t.RecordSource = [CrOpera]\n\t.Column1.ControlSource = [CrOpera.nMarcas]\n\t.Column2.ControlSou... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 225,
+      "codigoOriginal": "Local ldIni, ldFim, lnCnt, lcItn, lcCol, lcDtC, lcKey, lcFil, lcGer\n\nlcMdC = ThisForm.pgfPrincipal.pgFiltros.getCMoes.Value \n\nSelect crPgRes01\nSet Order To [] In crPgRes01\nZap In crPgRes01\n\nSelect crCursor1\nScan\n\tScatter Memvar Memo\n\n\tlnCtC = fBuscarCotacao(lcMdC, m.Data_Venda, ThisForm.poDataMgr)\n\n\tm.Ordem            = [A]\n\tm.Moeda            = Nvl(m.Moeda, lcMdC)\n\tm.Moeda            = Iif(Empty(m.Moeda), lcMdC, m.Moeda)\n\tm.Quantidade       = Nvl(m.Quantidade, 0.00)\n\tm.Val_Unitario     = Nvl(m.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao,fExecCmds,From LocalParcs Where Ttod",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 70,
+      "codigoOriginal": "Local ldIni, ldFim, lnCnt, lcItn, lcCol, lcDtC, lcKey, lcFil, lcGer\n\nSelect crPgRes02\nSet Order To [] In crPgRes02\nZap In crPgRes02\n\nSelect * ;\n  From crPgRes01 ;\n Where Filtro = 3 ;\n  Into Cursor TmpRes01\n\nSelect TmpRes01\nScan\n\tScatter Memvar Memo\n\t\n\tSelect Distinct Empresa, Movimentacao, Numero ;\n\t  From crPgRes01 ;\n\t Where Ordem = [A] And ;\n\t \t   Empresa = m.Empresa ;\n\t  Into Cursor LocalAgr1\n\tlnQtd = Reccount([LocalAgr1])\n\tUse In LocalAgr1\n\t\n\tm.Tkt_Medio = Iif(lnQtd > 0, m.Total / lnQtd, 0)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 72,
+      "codigoOriginal": "Local ldIni, ldFim, lnCnt, lcItn, lcCol, lcDtC, lcKey, lcFil, lcGer\n\nSelect crPgRes03\nSet Order To [] In crPgRes03\nZap In crPgRes03\n\nSelect Empresa, ;\n\t   Codigo_Vendedora, ;\n\t   [A] as Ordem, ;\n\t   Sum(Quantidade) as Quantidade, ;\n\t   Sum(Total) as Total, ;\n\t   Sum(Custo_Cadastro * Quantidade) as Custo_Cadastro, ;\n\t   Sum(Venda_Cadastro * Quantidade) as Venda_Cadastro, ;\n\t   Sum(Val_Unitario   * Quantidade) as Val_Unitario, ;\n\t   Sum(Valor_Diferenca) as Valor_Diferenca, ;\n\t   0000000000000.00 a... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 212,
+      "codigoOriginal": "Private pDtI, pDtF\nLocal lcQuery, ldDtI, ldDtF, lcEmp, lcMoe, lcTpO, lcVir, lcDop\n\nWith ThisForm.pgfPrincipal\n\tldDtI = .pgFiltros.getDcI.Value\n\tldDtF = .pgFiltros.getDcF.Value\n\tlcMoe = .pgFiltros.getCMoes.Value\n\tlcCol = .pgFiltros.getCdGrVda.Value\n\tlcSgr = .pgFiltros.get_cd_sgrupo.Value\n\t\n\tpDtI = fDtoSQL(ldDtI)\n\tpDtF = fDtoSQL(ldDtF, [23:59:59])\n\n\tGo Top In crTpOpe\n\t.pgFiltros.grdTipo.Refresh \nEndWith\n\nIf Used([crCursor1])\n\tuse in crCursor1\nEndIf \n\nSelect crPgRes01\nZap\n\nSelect crPgRes02\nZap\n\nSel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "montaemps",
+        "controlesReferenciados": "get_cd_sgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Init",
+      "linhas": 150,
+      "codigoOriginal": "ThisForm.pgfPrincipal.pgFiltros.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.pgfPrincipal.pgFiltros.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith Thisform\n\t.poDataMgr = Createobject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.goOpCge = Createobject([Relation])\n\t\t.goOpCge.AddProperty([SetPoint], Set([Point]))\n\t\t.goOpCge.AddProperty([SetSepar], Set([Separator]))\n\n\t\t.poObjExt1 = Null\n\t\t.poObjExt2 = Null\n\n\t\t.pgfPrincipal.pgFiltros.getDcI.Value = Date()\n\t\t.pgfPrincipal.p... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade,fExecCmds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crPgRes01 (Ordem c(1), Filtro n(1), Empresa c(3), Movimentacao c(20), Numero n(6), Data_Venda d(8), ;\n\t\t\t\t\t\t Codigo_Vendedora c(10), Item n(10), Tipo c(1), Codigo_Item c(14), Desc_Item c(40), Obs_Item m(4), ;\n\t\t\t\t\t\t Quantidade n(16,2), Val_Unitario n(16,2), Total n(16,2), Total_Geral n(16,2), Moeda c(3), ;\n\t\t\t\t\t\t Operacao c(1), Barras n(14), Gde_Grupo c(3), Grupo c(3), SubGrupo c(30), Custo_Cadastro n(16,2), ;\n\t\t\t\t\t\t Moe_Cus_Cadastro c(3), Markup n(16,2), Venda_Cad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.poSigSyPar.fGravaUserCfg()\n\nIf (Type([ThisForm.poDataMgr])=[O])\n\tThisForm.poDataMgr.Release\nEndIf\n\nSet Point     To ThisForm.goOpCge.SetPoint\nSet Separator To ThisForm.goOpCge.SetSepar\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "fGravaUserCfg",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.cmgFiltros",
+      "evento": "Click",
+      "linhas": 63,
+      "codigoOriginal": "Local loFil, ldIni, ldFim, ldEnd, lcDtC\n\nloFil = ThisForm.pgfPrincipal.pgFiltros\n\nldIni = loFil.getDcI.Value\nIf Empty(ldIni)\n\t=MessageBox([A Data Inicial Não É Válida!!!], 0+16, [Dados Inválidos!!!])\n\tloFil.getDcI.SetFocus\n\tReturn .f.\nEndIf\n\nldFim = loFil.getDcF.Value\nIf IsEmpty(ldFim)\n\t=MessageBox([A Data Final Não É Válida!!!], 0+16, [Dados Inválidos!!!])\n\tloFil.getDcF.SetFocus\n\tReturn .f.\nEndIf\n\nIf (ldIni > ldFim)\n\t=MessageBox([A Data Inicial Não Pode Ser Maior Que a Final!!!], 0+16, [Dados I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.cmgFiltros",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.AcertaColunas([GRAVAR])\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getCfgGrade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDcI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDcF",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.Command1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "UpDate crOpera Set nMarcas = 1 Where crTpOpe.Codigos = crOpera.TipoOps\nGo Top In crOpera\nThisForm.pgfPrincipal.pgFiltros.grdOpera.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.Command2",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "UpDate crOpera Set nMarcas = 0 Where crTpOpe.Codigos = crOpera.TipoOps\nGo Top In crOpera\nThisForm.pgfPrincipal.pgFiltros.grdOpera.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesmarca",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "UpDate crTpOpe Set nMarcas = 0\nUpDate crOpera Set nMarcas = 0\nGo Top In crTpOpe\nThisForm.pgfPrincipal.pgFiltros.grdTipo.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarca",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "UpDate crTpOpe Set nMarcas = 1\nUpDate crOpera Set nMarcas = 1\nGo Top In crTpOpe\nThisForm.pgfPrincipal.pgFiltros.grdTipo.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getCMoes",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdMoe], ;\n\t\t\t\t\t\t   [crListaRemota], [CMoes], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([CMoes], [], [Código])\n\t\tloLista.mAddColuna([DMoes], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = crListaRemota.CMoes\n\tThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getCMoes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDMoes",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdMoe], ;\n\t\t\t\t\t\t   [crListaRemota], [DMoes], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([DMoes], [], [Descrição])\n\t\tloLista.mAddColuna([CMoes], [], [Código])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = crListaRemota.CMoes\n\tThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDMoes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "*!*\tNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\n*!*\tLocal Imps\n\n*!*\tIf InList(nKeyCode, 13, 32)\n*!*\t\tm.Imps = Iif( crSigCdEmp.Imps = 1, 0, 1 )\n\n*!*\t\tSelect crSigCdEmp\n*!*\t\tGather Memvar Fields Imps\n*!*\t\tThisForm.grdEmps.Refresh\n\n*!*\t\tNoDefault\n*!*\tEndIf\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\n*!*\tLocal Imps\n\n*!*\tm.Imps = Iif( crSigCdEmp.Imps = 0, 1, 0 )\n\n*!*\tSelect crSigCdEmp\n*!*\tGather Memvar Fields Imps\n*!*\tThisForm.grdEmps.Refresh\n\n*!*\tNoDefault\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\n*!*\tNoDefault\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdEmps.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.ck_MarcaEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "if( ThisForm.ck_MarcaEmp.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigCdEmp\nElse\n\tReplace all Imps with 0 in crSigCdEmp\nEndif ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nColIndex\nSelect CrOpera\nSet Key To crTpOpe.Codigos\nGo Top\nThis.parent.GrdOpera.Refresh\nSelect crTpOpe",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 9,
+      "codigoOriginal": "LParameters nKeyCode,nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace nMarcas With Iif(crTpOpe.nMarcas = 0, 1, 0) In crTpOpe\n\tUpDate crOpera Set crOpera.nMarcas = crTpOpe.nMarcas Where crTpOpe.Codigos = crOpera.TipoOps\n\tThisForm.pgfPrincipal.pgFiltros.grdTipo.Refresh \n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nThis.KeyPress(13,0)\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDsGrVda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',    '', 'Descrição')\n\t\tloLista.mAddColuna('Colecoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.getCdGrVda.Value = crListaRemota.Colecoes\n\tThis.Parent.getDsGrVda.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getDsGrVda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.getCdGrVda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.getCdGrVda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;\n\t\t\t\t\t\t   'crListaRemota', 'Colecoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Colecoes', '', 'Código')\n\t\tloLista.mAddColuna('Descs',    '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.getCdGrVda.Value = crListaRemota.Colecoes\n\tThis.Parent.getDsGrVda.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace crGrdGpr.nMarcas With Iif(crGrdGpr.nMarcas = 0, 1, 0)\n\tThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh\n\t\n\tUpdate crGrdGru Set nMarcas = crGrdGpr.nMarcas Where Mercs = crGrdGpr.Codigos\n\tSelect crGrdGru\n\tLocate For Mercs = crGrdGpr.Codigos\n\tThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \n\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nThis.KeyPress(13,0)\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesGde",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "UpDate crGrdGpr Set nMarcas = 0 \nUpDate crGrdGru Set nMarcas = 0 \n\nGo Top In crGrdGpr\nGo Top In crGrdGru\n\nThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh \nThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 17,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace crGrdGru.nMarcas With Iif(crGrdGru.nMarcas = 0, 1, 0)\n\n\tSelect * From crGrdGpr Where Codigos = crGrdGru.Mercs Into Cursor crBus\n\tGo Top In crBus\n\tIf (crBus.nMarcas = 0) And (crGrdGru.nMarcas = 1)\n\t\tReplace crGrdGru.nMarcas With 0\n\t\t=MessageBox([O Grande Grupo \"] + crGrdGru.Mercs + [\" Não Foi Selecionado.] + Chr(13) + ;\n\t\t\t\t\t[Para Selecionar Esse Grupo, Ajuste o Grande Grupo!!!], 0+16, [Atenção!!!])\n\tEndIf\n\tUse In crBus\n\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nThis.KeyPress(13,0)\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesGrp",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "UpDate crGrdGru Set nMarcas = 0 \n\nGo Top In crGrdGru\n\nThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.cmdEmps",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update crSigCdEmp Set Imps = (This.Value = 1)\nThis.parent.grdEmps.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.get_ds_sgrupo",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista\n\nWith This.parent\n\tIf Empty(This.Value)\n\t\t.Get_Cd_SGrupo.Value = ''\n\t\t.Get_Cd_SGrupo.Refresh\n\tElse\n\t\tlcCgru = []\n\t\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Descricaos',This.Value,'Sub-Grupos',.T.,.F.,lcCgru)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')\n\t\t\tm.lo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_SGrupo,Get_Ds_SGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.get_ds_sgrupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Empty(This.Parent.Get_cd_sgrupo.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_cd_sgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.get_cd_sgrupo",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local loLista\n\nWith This.parent\n\tIf Empty(This.Value)\n\t\t.Get_Ds_SGrupo.Value = ''\n\t\t.Get_Ds_SGrupo.Refresh\n\tElse\n\t\tlcCgru = []\n\t\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Codigos',This.Value,'Sub-Grupos',.T., .F., lcCgru)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')\n\t\t\tm.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')\n\t\t\tm.loL... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ds_SGrupo,Get_Cd_SGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.GrdOpera.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nThis.KeyPress(13,0)\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.GrdOpera.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton,nShift,nXCoord,nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.GrdOpera.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode,nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace nMarcas With Iif(crOpera.nMarcas = 0, 1, 0) In crOpera\n\tThisForm.pgfPrincipal.pgFiltros.grdOpera.Refresh \n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.GrdOpera.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarGde",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "UpDate crGrdGpr Set nMarcas = 1\nUpDate crGrdGru Set nMarcas = 1\n\nGo Top In crGrdGpr\nGo Top In crGrdGru\n\nThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh \nThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarGrp",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "UpDate crGrdGru Set nMarcas = 1 ;\n Where Mercs In (Select Codigos as Mercs From crGrdGpr Where nMarcas = 1)\n\nGo Top In crGrdGru\n\nThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArq\n\nlcArq = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nWith ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01\n\tClear Resources\n\t.ImgFigJpg.Picture = []\n\t.ImgFigJpg.Visible = .f.\n\n\t* Figura no Campo Memo\n\tIf Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(crPgRes01.Imagem,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t\tIf (StrToFile(lcFoto, lcArq) > ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "lcHea = Alltrim(This.Header1.Caption)\nIf (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna \"] + lcHea + [\" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7.Text1",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf IsNull(ThisForm.poObjExt1)\n\t\tIf goSistema.ConsultaAberta = .t.\n\t\t\t=MessageBox([A Pesquisa Global de Produtos Já Está Aberta.] + Chr(13) + ;\n\t\t\t\t\t\t[Feche Para Poder Executar Uma Nova Pesquisa.], 0+16, [Atenção!!!])\n\t\t\tReturn .f.\n\t\tElse\n\t\t\tDo Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow\n\t\tEndIf\n\tEndIf\n\n\tIf (Type([ThisForm.poObjExt1])=[O])\n\t\tWith ThisForm.poObjExt1\n\t\t\t.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()\n\t\t\t.fld_principal... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_produto_inicial,get_produto_final,cmd_consulta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column32.Text1",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf IsNull(ThisForm.poObjExt1)\n\t\tIf goSistema.ConsultaAberta = .t.\n\t\t\t=MessageBox([A Pesquisa Global de Produtos Já Está Aberta.] + Chr(13) + ;\n\t\t\t\t\t\t[Feche Para Poder Executar Uma Nova Pesquisa.], 0+16, [Atenção!!!])\n\t\t\tReturn .f.\n\t\tElse\n\t\t\tDo Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow\n\t\tEndIf\n\tEndIf\n\n\tIf (Type([ThisForm.poObjExt1])=[O])\n\t\tWith ThisForm.poObjExt1\n\t\t\t.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()\n\t\t\t.fld_principal... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_produto_inicial,get_produto_final,cmd_consulta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getObsItn",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value) And (Lastkey()=13)\n\tThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3.SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect crPgRes01\n\tIf Padr(This.Tag, 10) <> Padr(This.Value, 10)\n\t\tGo Top In crPgRes01\n\t\tLocate For Numero = This.Value\n\tElse\n\t\tContinue\n\tEndIf\n\tThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getDesc_Acres",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.getVdaCadastro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.btnRestaurar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If (MessageBox([Deseja Restaurar as Colunas da Grade (Ocultas e Larguras)?], 4+32+256, [Restaurar Grade]) = 6)\n\tThisForm.GradePadrao()\n\tThisForm.AcertaColunas([GRAVAR])\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GradePadrao,AcertaColunas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.optValor1",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Filtros(1, This.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Filtros",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.btnProduto",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Not Eof([crPgRes01]) And Not Empty(crPgRes01.Codigo_Item) And IsNull(ThisForm.poObjExt2)\n\tDo Form SigCdPro.Scx Name ThisForm.poObjExt2 Linked With [CONGP], crPgRes01.Codigo_Item, .f., .f., .f., !fChecaAcesso([SIGOPCGP], [ALTPROD]) NoShow\n\tThisform.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.SetFocus\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.cmdOperacao",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS cName, cClass\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.cmdOperacao",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If Empty(crPgRes01.Empresa) Or Empty(crPgRes01.Movimentacao) Or Empty(crPgRes01.Numero)\n\t=MessageBox([Selecione Um Registro Válido Na Grade de Itens!!!], 0+48, [Atenção!!!])\n\tThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.SetFocus \nElse\n\tlcQuery = [Select Dopes From SigCdOpe Where Dopes = '] + crPgRes01.Movimentacao + [']\n\tIf Not fExecCmds(ThisForm.poDataMgr, [TmpOpe], lcQuery)\n\t\tReturn .f.\n\tEndIf\n\tSelect TmpOpe\n\tGo Top In TmpOpe\n\tIf Not Eof([TmpOpe])\n\t\tDo Form SigMvExp With crPgRes01... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fExecCmds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.ImgFigJpg",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcArq\n\nlcArq = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nSelect crPgRes01\n\nIf Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(crPgRes01.Imagem,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t=StrToFile(lcFoto, lcArq)\nEndIf\n\nIf File(lcArq)\n\tDo Form SigOpZom With lcArq, ;\n\t\t\t\t\t\t [Produto : ] + Alltrim(crPgRes01.Codigo_Item) + [ - ] + Alltrim(crPgRes01.Desc_Item), ;\n\t\t\t\t\t\t [Gr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.SubNiveis",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Do Form SigMvSbn with Thisform, crPgRes01.Empresa, crPgRes01.Movimentacao, crPgRes01.Numero\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.CmdConta",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "If Empty(crPgRes01.Cod_Cliente)\n\t=Messagebox([É Necessário o Preenchimento Da Conta!!!], 0+48, [Dados Incompletos])\n\tReturn .F.\nElse\n\tDo Form SIGCDCTA With 0, [SIGCDCTA], crPgRes01.Cod_Cliente, .T., [], [], .T.\nEndif\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.btnVisualizar",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select crPgRes01\nSet Filter To \nIndex on SubGrupo + Codigo_Item Tag Ordem1 \n\nSet Filter To (not Empty(Codigo_Item))\nGo Top\nReport Form SigOpPck Preview NoConsole\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Filter To",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.BtnImprimir",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crPgRes01\nSet Filter To \nIndex on SubGrupo + Codigo_Item Tag Ordem1 \n\nSet Filter To (not Empty(Codigo_Item))\nGo Top\nReport Form SigOpPck To Print Prompt NoConsole",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Filter To",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes02.grdDados2",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArq\n\nlcArq = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nWith ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01\n\tClear Resources\n\t.ImgFigJpg.Picture = []\n\t.ImgFigJpg.Visible = .f.\n\n\t* Figura no Campo Memo\n\tIf Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)\n\t\tIf (StrToFile(crPgRes01.Imagem, lcArq) > 0)\n\t\t\t.ImgFigJpg.Picture = (lcArq)\n\t\t\t.ImgFigJpg.Visible = .t.\n\t\tEndIf\n\tEndIf\n\t\n\t.getObsItn.Value = Nvl(crPgRes01.Obs_Item, [])\nEndWith\n* Fim... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes03.grdDados3",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArq\n\nlcArq = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nWith ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01\n\tClear Resources\n\t.ImgFigJpg.Picture = []\n\t.ImgFigJpg.Visible = .f.\n\n\t* Figura no Campo Memo\n\tIf Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)\n\t\tIf (StrToFile(crPgRes01.Imagem, lcArq) > 0)\n\t\t\t.ImgFigJpg.Picture = (lcArq)\n\t\t\t.ImgFigJpg.Visible = .t.\n\t\tEndIf\n\tEndIf\n\t\n\t.getObsItn.Value = Nvl(crPgRes01.Obs_Item, [])\nEndWith\n* Fim... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.cmgRetornar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.pgfPrincipal.ActivePage = 1\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.btnExportar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.GerarTXT()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GerarTXT",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDI.pgfPrincipal.pgDados.btnExcel",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.GerarXLS()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GerarXLS",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "Select Codigos ; From crGrdGpr ; Where nMarcas = 0 ; Into Cursor crNaoMarcados",
+      "tabelas": "crGrdGpr",
+      "colunas": "nMarcas,crNaoMarcados",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "\tDelete From crCursor1 Where Gde_Grupo = crNaoMarcados.Codigos",
+      "tabelas": "crCursor1",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "Select Codigos ; From crGrdGru ; Where nMarcas = 0 ; Into Cursor crNaoMarcados",
+      "tabelas": "crGrdGru",
+      "colunas": "nMarcas,crNaoMarcados",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "\tDelete From crCursor1 Where Grupo = crNaoMarcados.Codigos",
+      "tabelas": "crCursor1",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "\tlcQuery = [Select e.CEmps as Emps ] + ; \t\t\t\t[From SigCdEmp e ] + ; \t\t\t   [Where e.CEmps Not In (] + ; \t\t\t   \t\t [Select a.Emps From SigCdAce a Where a.Usuarios = '] + Usuar + [')]",
+      "tabelas": "SigCdAce",
+      "colunas": "Emps,Usuarios",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "Select Cemps ; From crSigCdEmp ; Where Imps ; Into Cursor LocalEmps ReadWrite",
+      "tabelas": "crSigCdEmp",
+      "colunas": "Imps,LocalEmps,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "Select * ; From crPgRes01 ; Where Filtro = 3 ; Into Cursor TmpRes01",
+      "tabelas": "crPgRes01",
+      "colunas": "Filtro,TmpRes01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.Procedure",
+      "queryOriginal": "\tSelect Distinct Empresa, Movimentacao, Numero ; \t  From crPgRes01 ; \t Where Ordem = [A] And ; \t \t   Empresa = m.Empresa ; \t  Into Cursor LocalAgr1",
+      "tabelas": "crPgRes01",
+      "colunas": "Movimentacao,Ordem,Empresa,LocalAgr1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.Command1.Click",
+      "queryOriginal": "UpDate crOpera Set nMarcas = 1 Where crTpOpe.Codigos = crOpera.TipoOps",
+      "tabelas": "crOpera",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.Command2.Click",
+      "queryOriginal": "UpDate crOpera Set nMarcas = 0 Where crTpOpe.Codigos = crOpera.TipoOps",
+      "tabelas": "crOpera",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesmarca.Click",
+      "queryOriginal": "UpDate crTpOpe Set nMarcas = 0",
+      "tabelas": "crTpOpe",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesmarca.Click",
+      "queryOriginal": "UpDate crOpera Set nMarcas = 0",
+      "tabelas": "crOpera",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarca.Click",
+      "queryOriginal": "UpDate crTpOpe Set nMarcas = 1",
+      "tabelas": "crTpOpe",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarca.Click",
+      "queryOriginal": "UpDate crOpera Set nMarcas = 1",
+      "tabelas": "crOpera",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1.KeyPress",
+      "queryOriginal": "\tUpDate crOpera Set crOpera.nMarcas = crTpOpe.nMarcas Where crTpOpe.Codigos = crOpera.TipoOps",
+      "tabelas": "crOpera",
+      "colunas": "crOpera.nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1.KeyPress",
+      "queryOriginal": "\tUpdate crGrdGru Set nMarcas = crGrdGpr.nMarcas Where Mercs = crGrdGpr.Codigos",
+      "tabelas": "crGrdGru",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesGde.Click",
+      "queryOriginal": "UpDate crGrdGpr Set nMarcas = 0",
+      "tabelas": "crGrdGpr",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesGde.Click",
+      "queryOriginal": "UpDate crGrdGru Set nMarcas = 0",
+      "tabelas": "crGrdGru",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1.KeyPress",
+      "queryOriginal": "\tSelect * From crGrdGpr Where Codigos = crGrdGru.Mercs Into Cursor crBus",
+      "tabelas": "crGrdGpr",
+      "colunas": "Codigos,Mercs,crBus",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnDesGrp.Click",
+      "queryOriginal": "UpDate crGrdGru Set nMarcas = 0",
+      "tabelas": "crGrdGru",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.cmdEmps.Click",
+      "queryOriginal": "Update crSigCdEmp Set Imps = (This.Value = 1)",
+      "tabelas": "crSigCdEmp",
+      "colunas": "Imps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarGde.Click",
+      "queryOriginal": "UpDate crGrdGpr Set nMarcas = 1",
+      "tabelas": "crGrdGpr",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarGde.Click",
+      "queryOriginal": "UpDate crGrdGru Set nMarcas = 1",
+      "tabelas": "crGrdGru",
+      "colunas": "nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgFiltros.btnMarGrp.Click",
+      "queryOriginal": "UpDate crGrdGru Set nMarcas = 1 ; Where Mercs In (Select Codigos as Mercs From crGrdGpr Where nMarcas = 1)",
+      "tabelas": "crGrdGpr,crGrdGru",
+      "colunas": "Codigos,Mercs,Select,From,crGrdGpr,Where,nMarcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPVDI.pgfPrincipal.pgDados.pgResults.pgRes01.cmdOperacao.Valid",
+      "queryOriginal": "\tlcQuery = [Select Dopes From SigCdOpe Where Dopes = '] + crPgRes01.Movimentacao + [']",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,Movimentacao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crGrdGpr", "crCursor1", "crGrdGru", "SigCdAce", "crSigCdEmp", "crPgRes01", "crOpera", "crTpOpe", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\SigOpTopBO.prg` com `DEFINE CLASS SigOpTopBO AS BusinessBase` contendo:
+
+- Propriedades de contexto (`this_cDopes`, lido da linha corrente do form pai SigCdOpe, usado no filtro e no Caption)
+- Propriedades da grade de transportes (`this_cCodigos` CHAR(6) e `this_cEmps` CHAR(3), os dois peda├ºos de `SigCdMei.TipoEmps` CHAR(9) extra├¡dos pela `SELECT DISTINCT Substring(...)` do legado)
+- Estado do di├ílogo (`this_cCursorTransportes`, `this_cTituloDialogo`, `this_nTotalTransportes`)
+- `Init()` com `DODEFAULT()` + `this_cTabela = "SigCdMei"` + `this_cCampoChave = "cidchaves"`, seguindo o padr├úo de di├ílogo filho somente-leitura j├í usado em `SigOpLhiBO.prg`
+
+Decis├Áes registradas em coment├írio no cabe├ºalho: este ├® um di├ílogo modal filho (n├úo CRUD, sem menu pr├│prio), por isso n├úo sobrescrevo `Inserir`/`Atualizar`/`ExecutarExclusao` nesta fase ÔÇö comportamento herdado de `BusinessBase` j├í ├® o correto.
+
+Pronto para a Fase 2 (CarregarDoCursor do contexto SigCdOpe + m├®todo de busca/carga de `cursor_4c_Transportes` via SQLEXEC).

@@ -1,0 +1,5815 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopvdr.SCX
+* Data/Hora: 19/11/2026 14:28:35
+* Total de registros: 116
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPVDR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: pgfPrincipal
+  Parent: SIGOPVDR
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntSombra
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Say1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpOs
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getIdTransp
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmpOs
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCfgGrade
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDIdTransp
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmgFiltros
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getNumi
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getNumf
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCMoes
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say10
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDMoes
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: label
+  BaseClass: label
+
+Objeto: getDcI
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDcF
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdTipo
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnMarGde
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdMercs
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnDesGde
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnMarGrp
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdCGrus
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnDesGrp
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: getDopEcomm
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGOPVDR.pgfPrincipal.pgFiltros
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: pgResults
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: grdDados1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column11
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column12
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column12
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column13
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column13
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column14
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column14
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column16
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column16
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column15
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column15
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column17
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column17
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getObsItn
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getBusca
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDias
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnRestaurar
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnProduto
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdOperacao
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say2
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CmdConta
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: ImgFigJpg
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: image
+  BaseClass: image
+
+Objeto: Say3
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Mensagem
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SubNiveis
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdGeraNova
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdEstoque
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Optiongroup1
+  Parent: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: cmgRetornar
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: btnExportar
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnExcel
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnVideo
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnImpressora
+  Parent: SIGOPVDR.pgfPrincipal.pgDados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 792
+  Height = 479
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 628
+  Width = 1300
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Caption = "Atendimento E-Commerce"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  SizeBox = .F.
+  ZoomBox = .F.
+  Themes = .F.
+  goopcge = .F.
+  poobjext1 = .F.
+  poobjext2 = .F.
+  sigkey = .F.
+  iformat = 
+  lofbc = 
+  Name = "SIGOPVDR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  TabStyle = 0
+  BorderWidth = 0
+  Top = 0
+  Left = -2
+  Width = 1301
+  Height = 630
+  Tabs = .F.
+  TabIndex = 1
+  TabStop = .F.
+  Name = "pgfPrincipal"
+  Page1.FontName = "Verdana"
+  Page1.FontSize = 8
+  Page1.Caption = ""
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.ForeColor = 36,84,155
+  Page1.Name = "pgFiltros"
+  Page2.FontName = "Verdana"
+  Page2.FontSize = 8
+  Page2.Caption = "s"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.ForeColor = 36,84,155
+  Page2.Name = "pgDados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1308
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 519
+  Top = 96
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getEmpOs
+------------------------------------------------------------
+  Left = 570
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 119
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 2
+  Name = "getEmpOs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getIdTransp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 570
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 225
+  Width = 86
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 2
+  Name = "getIdTransp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDEmpOs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 604
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 119
+  Width = 316
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Name = "getDEmpOs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getCfgGrade
+------------------------------------------------------------
+  Height = 23
+  Left = 1
+  SpecialEffect = 1
+  TabIndex = 20
+  Top = 603
+  Visible = .T.
+  Width = 1297
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getCfgGrade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDIdTransp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 659
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 225
+  Width = 261
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Name = "getDIdTransp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Shape1
+------------------------------------------------------------
+  Top = 87
+  Left = 261
+  Height = 166
+  Width = 791
+  BackStyle = 0
+  BorderStyle = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.cmgFiltros
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 1141
+  SpecialEffect = 1
+  Top = -2
+  Width = 161
+  TabIndex = 28
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmgFiltros"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Command1.Caption = "\<Consultar"
+  Command1.ToolTipText = "Consultar Usando os Filtros Informados"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnConsultar"
+  Command2.Top = 5
+  Command2.Left = 81
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Sair"
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getNumi
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 0
+  Value = 0
+  Format = "K"
+  Height = 21
+  InputMask = "999999"
+  Left = 570
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 202
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Themes = .F.
+  Name = "getNumi"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getNumf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 0
+  Value = 0
+  Format = "K"
+  Height = 21
+  InputMask = "999999"
+  Left = 667
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 202
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Themes = .F.
+  Name = "getNumf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Moeda Conversão :"
+  Left = 468
+  Top = 149
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Até :"
+  Height = 15
+  Left = 632
+  Top = 205
+  Width = 26
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Numeração :"
+  Height = 15
+  Left = 501
+  Top = 205
+  Width = 63
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getCMoes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  InputMask = ""
+  Left = 570
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 9
+  ToolTipText = ""
+  Top = 146
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "getCMoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Operação de E-Commerce :"
+  Height = 15
+  Left = 430
+  Top = 178
+  Width = 134
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDMoes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  InputMask = ""
+  Left = 604
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 10
+  ToolTipText = ""
+  Top = 146
+  Width = 316
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 13
+  Name = "getDMoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "até"
+  Height = 15
+  Left = 656
+  Top = 96
+  Width = 18
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDcI
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 570
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Data Inicial de Filtro"
+  Top = 92
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "getDcI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDcF
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 681
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Data Final de Filtro"
+  Top = 92
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "getDcF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say4
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 514
+  Top = 123
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  HeaderHeight = 16
+  Height = 126
+  Left = 259
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 21
+  TabStop = .F.
+  Top = 457
+  Visible = .F.
+  Width = 323
+  ForeColor = 0,0,0
+  BackColor = 255,255,244
+  GridLineColor = 238,238,238
+  ZOrderSet = 39
+  Themes = .F.
+  Name = "grdTipo"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 18
+  Column1.ReadOnly = .T.
+  Column1.Sparse = .F.
+  Column1.Visible = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 282
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .F.
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 255,255,255
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ReadOnly = .T.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo de Operação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.btnMarGde
+------------------------------------------------------------
+  Top = 310
+  Left = 589
+  Height = 45
+  Width = 45
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 23
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 31
+  Themes = .F.
+  Name = "btnMarGde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  HeaderHeight = 16
+  Height = 195
+  Left = 263
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 22
+  TabStop = .F.
+  Top = 259
+  Width = 323
+  ForeColor = 0,0,0
+  GridLineColor = 238,238,238
+  ZOrderSet = 36
+  Themes = .F.
+  Name = "grdMercs"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.Enabled = .T.
+  Column1.Width = 18
+  Column1.Sparse = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Enabled = .T.
+  Column2.Width = 283
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  ForeColor = 0,0,0
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grande Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.btnDesGde
+------------------------------------------------------------
+  Top = 355
+  Left = 589
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 24
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 37
+  Themes = .F.
+  Name = "btnDesGde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.btnMarGrp
+------------------------------------------------------------
+  Top = 310
+  Left = 997
+  Height = 45
+  Width = 45
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 26
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 31
+  Themes = .F.
+  Name = "btnMarGrp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  HeaderHeight = 16
+  Height = 195
+  Left = 672
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 25
+  TabStop = .F.
+  Top = 259
+  Width = 323
+  ForeColor = 0,0,0
+  GridLineColor = 238,238,238
+  ZOrderSet = 36
+  Themes = .F.
+  Name = "grdCGrus"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.Enabled = .T.
+  Column1.Width = 18
+  Column1.Sparse = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Enabled = .T.
+  Column2.Width = 30
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 252
+  Column3.ForeColor = 0,0,0
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  ForeColor = 0,0,0
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Gde"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo de Produto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.btnDesGrp
+------------------------------------------------------------
+  Top = 355
+  Left = 997
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 27
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 37
+  Themes = .F.
+  Name = "btnDesGrp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.getDopEcomm
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 570
+  Margin = 2
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 173
+  Width = 222
+  ForeColor = 0,0,0
+  Name = "getDopEcomm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgFiltros.Say6
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Transportadora :"
+  Left = 480
+  Top = 229
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 1
+  Top = 2
+  Left = -1
+  Width = 1304
+  Height = 600
+  Name = "pgResults"
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Detalhamento dos Produtos"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "pgRes01"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1
+------------------------------------------------------------
+  ColumnCount = 17
+  FontName = "Tahoma"
+  FontSize = 7
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 21
+  Height = 251
+  Left = 4
+  RecordMark = .F.
+  RowHeight = 15
+  ScrollBars = 3
+  TabIndex = 8
+  Top = 320
+  Width = 1292
+  GridLineColor = 238,238,238
+  Name = "grdDados1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 7
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 31
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 7
+  Column2.ColumnOrder = 9
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 7
+  Column3.ColumnOrder = 2
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 7
+  Column4.ColumnOrder = 3
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 7
+  Column5.ColumnOrder = 4
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 7
+  Column6.ColumnOrder = 5
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 7
+  Column7.ColumnOrder = 6
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 7
+  Column8.ColumnOrder = 7
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 7
+  Column9.ColumnOrder = 8
+  Column9.Name = "Column9"
+  Column10.FontName = "Tahoma"
+  Column10.FontSize = 7
+  Column10.ColumnOrder = 11
+  Column10.ControlSource = ""
+  Column10.Width = 100
+  Column10.BackColor = 255,255,240
+  Column10.Name = "Column11"
+  Column11.FontName = "Tahoma"
+  Column11.FontSize = 7
+  Column11.ColumnOrder = 12
+  Column11.Width = 100
+  Column11.Name = "Column12"
+  Column12.FontName = "Tahoma"
+  Column12.FontSize = 7
+  Column12.ColumnOrder = 13
+  Column12.Width = 290
+  Column12.Name = "Column13"
+  Column13.FontName = "Tahoma"
+  Column13.FontSize = 7
+  Column13.ColumnOrder = 14
+  Column13.Width = 150
+  Column13.Name = "Column14"
+  Column14.FontName = "Tahoma"
+  Column14.FontSize = 7
+  Column14.Alignment = 2
+  Column14.ColumnOrder = 16
+  Column14.Width = 25
+  Column14.Name = "Column16"
+  Column15.FontName = "Tahoma"
+  Column15.FontSize = 7
+  Column15.ColumnOrder = 15
+  Column15.Width = 100
+  Column15.Name = "Column15"
+  Column16.FontBold = .T.
+  Column16.FontName = "Tahoma"
+  Column16.FontSize = 7
+  Column16.FontUnderline = .T.
+  Column16.Alignment = 2
+  Column16.ColumnOrder = 10
+  Column16.ControlSource = ""
+  Column16.Width = 35
+  Column16.DynamicInputMask = ""
+  Column16.ForeColor = 0,0,255
+  Column16.MousePointer = 99
+  Column16.MouseIcon = ..\vbmp\h_point.cur
+  Column16.Name = "Column10"
+  Column17.FontName = "Tahoma"
+  Column17.FontSize = 7
+  Column17.Name = "Column17"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Emp"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Movimentação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column4.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column5.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Pedido Web"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column6.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Barra"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Produto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  FontUnderline = .T.
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,255
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column8.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Descrição do Produto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column9.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Cor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column11.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Valor Unitário"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column11.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,240
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column12.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Cliente"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column12.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column13.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Nome do Cliente"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column13.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column14.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "CPF / CNPJ"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column14.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column16.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "O"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column16.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column15.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column15.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column10.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Tam"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column10.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column17.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 7
+  Alignment = 2
+  Caption = "Cod. Pai"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column17.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getObsItn
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Enabled = .T.
+  Height = 110
+  Left = 5
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 20
+  Width = 312
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  NullDisplay = "  "
+  Themes = .T.
+  Name = "getObsItn"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 5
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Para Procurar um Código Digite Aqui e Pressione [ENTER]"
+  Top = 292
+  Width = 82
+  ForeColor = 0,0,0
+  BackColor = 255,255,240
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "getBusca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getDias
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 98
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 292
+  Width = 82
+  ForeColor = 0,0,0
+  BackColor = 255,255,240
+  ZOrderSet = 2
+  Name = "getDias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.btnRestaurar
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 162
+  Left = 1041
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_pn_btn_60.jpg
+  Caption = "Restaurar Grade"
+  MousePointer = 15
+  TabIndex = 20
+  ToolTipText = "Restaura as Colunas da Grade Para o Padrão Original"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btnRestaurar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.btnProduto
+------------------------------------------------------------
+  Top = 85
+  Left = 1118
+  Height = 75
+  Width = 74
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_palete_60.jpg
+  Caption = "Cadastro"
+  Enabled = .T.
+  ToolTipText = "Cadastro do Produto"
+  Visible = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnProduto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.cmdOperacao
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 100
+  Left = 1041
+  Top = 84
+  Width = 75
+  TabIndex = 6
+  Themes = .F.
+  Name = "cmdOperacao"
+  Command1.Top = 0
+  Command1.Left = 0
+  Command1.Height = 76
+  Command1.Width = 76
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Command1.Caption = "Movimento"
+  Command1.ToolTipText = "Movimentação"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Say2
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Buscar Código"
+  Left = 5
+  Top = 276
+  Width = 70
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.CmdConta
+------------------------------------------------------------
+  Top = 162
+  Left = 1117
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_contatos_60.jpg
+  Caption = "Conta"
+  Enabled = .T.
+  ToolTipText = "Cadastro do Produto"
+  Visible = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.ImgFigJpg
+------------------------------------------------------------
+  Anchor = 0
+  Stretch = 1
+  Enabled = .T.
+  Height = 292
+  Left = 324
+  Top = 2
+  Visible = .F.
+  Width = 695
+  ZOrderSet = 10
+  ToolTipText = "Imagem do Produto (Clique Duplo Para Zoom)"
+  Name = "ImgFigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Observação do Ítem"
+  Height = 15
+  Left = 6
+  Top = 4
+  Width = 100
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Say1
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Dias em Aberto"
+  Left = 98
+  Top = 276
+  Width = 75
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Mensagem
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 15
+  Caption = "* Atrasado *"
+  Left = 184
+  Top = 291
+  Visible = .F.
+  Width = 130
+  TabIndex = 5
+  ForeColor = 255,0,0
+  Name = "Mensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.SubNiveis
+------------------------------------------------------------
+  Top = 162
+  Left = 1193
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_subnivel_60.jpg
+  Caption = "\<Subníveis"
+  MousePointer = 15
+  TabIndex = 5
+  ToolTipText = "Subníveis"
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 14
+  Themes = .F.
+  Name = "SubNiveis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.cmdGeraNova
+------------------------------------------------------------
+  Top = 239
+  Left = 1116
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Gerar Nova Solicitação"
+  Enabled = .T.
+  ToolTipText = "Nova Solicitação"
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdGeraNova"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 132
+  Left = 5
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 137
+  Width = 315
+  GridLineColor = 238,238,238
+  Name = "grdEstoque"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 35
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 90
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 90
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 60
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Emp."
+  ForeColor = 90,90,90
+  BackColor = 240,240,240
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Optiongroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 7
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 6
+  Height = 33
+  Left = 373
+  Top = 291
+  Width = 605
+  Name = "Optiongroup1"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Recusado"
+  Option1.Value = 0
+  Option1.Height = 23
+  Option1.Left = 5
+  Option1.SpecialEffect = 1
+  Option1.Style = 1
+  Option1.Top = 5
+  Option1.Width = 73
+  Option1.AutoSize = .F.
+  Option1.BackColor = 255,255,128
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Transferido"
+  Option2.Height = 23
+  Option2.Left = 81
+  Option2.SpecialEffect = 1
+  Option2.Style = 1
+  Option2.Top = 5
+  Option2.Width = 83
+  Option2.AutoSize = .F.
+  Option2.BackColor = 255,128,255
+  Option2.Name = "Option2"
+  Option3.FontName = "Verdana"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Cancelado"
+  Option3.Height = 23
+  Option3.Left = 167
+  Option3.SpecialEffect = 1
+  Option3.Style = 1
+  Option3.Top = 5
+  Option3.Width = 78
+  Option3.AutoSize = .F.
+  Option3.BackColor = 0,255,255
+  Option3.Name = "Option3"
+  Option4.FontName = "Verdana"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Solicitação em Aberto"
+  Option4.Height = 23
+  Option4.Left = 248
+  Option4.SpecialEffect = 1
+  Option4.Style = 1
+  Option4.Top = 5
+  Option4.Width = 143
+  Option4.AutoSize = .F.
+  Option4.BackColor = 192,192,192
+  Option4.Name = "Option4"
+  Option5.FontName = "Verdana"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Em Aberto"
+  Option5.Height = 23
+  Option5.Left = 395
+  Option5.SpecialEffect = 1
+  Option5.Style = 1
+  Option5.Top = 5
+  Option5.Width = 78
+  Option5.AutoSize = .F.
+  Option5.Name = "Option5"
+  Option6.FontName = "Verdana"
+  Option6.FontSize = 8
+  Option6.Caption = "Todos"
+  Option6.Value = 1
+  Option6.Height = 23
+  Option6.Left = 476
+  Option6.SpecialEffect = 1
+  Option6.Style = 1
+  Option6.Top = 5
+  Option6.Width = 52
+  Option6.AutoSize = .F.
+  Option6.Name = "Option6"
+  Option7.FontName = "Verdana"
+  Option7.FontSize = 8
+  Option7.BackStyle = 0
+  Option7.Caption = "Atrasado"
+  Option7.Height = 23
+  Option7.Left = 531
+  Option7.SpecialEffect = 1
+  Option7.Style = 1
+  Option7.Top = 5
+  Option7.Width = 69
+  Option7.AutoSize = .T.
+  Option7.BackColor = 255,0,0
+  Option7.Name = "Option7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.cmgRetornar
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 83
+  Left = 1193
+  SpecialEffect = 1
+  Top = 34
+  Width = 79
+  TabIndex = 29
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmgRetornar"
+  Command1.AutoSize = .F.
+  Command1.Top = 0
+  Command1.Left = 0
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_seta_esq_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Retornar"
+  Command1.ToolTipText = "Retornar aos Filtros"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnRetornar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.btnExportar
+------------------------------------------------------------
+  Top = 34
+  Left = 1044
+  Height = 75
+  Width = 80
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_pasta_60.jpg
+  Caption = "Exporta TXT"
+  Enabled = .F.
+  TabIndex = 2
+  ToolTipText = "Gerar TXT Tabulado PAra Importação em Excel"
+  Visible = .F.
+  PicturePosition = 13
+  Name = "btnExportar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.btnExcel
+------------------------------------------------------------
+  Top = 111
+  Left = 1193
+  Height = 75
+  Width = 75
+  FontItalic = .T.
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_excel_60.jpg
+  Caption = "Exporta XLS"
+  TabIndex = 2
+  ToolTipText = "Gerar Arquivo XLS "
+  PicturePosition = 13
+  Name = "btnExcel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.btnVideo
+------------------------------------------------------------
+  Top = 34
+  Left = 1117
+  Height = 75
+  Width = 75
+  FontSize = 8
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Caption = "Video"
+  TabIndex = 2
+  ToolTipText = "Gerar Arquivo XLS "
+  PicturePosition = 13
+  Name = "btnVideo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVDR.pgfPrincipal.pgDados.btnImpressora
+------------------------------------------------------------
+  Top = 34
+  Left = 1041
+  Height = 75
+  Width = 75
+  FontSize = 8
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Caption = "Impressora"
+  TabIndex = 2
+  ToolTipText = "Gerar Arquivo XLS "
+  PicturePosition = 13
+  Name = "btnImpressora"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Arial, 0, 7, 4, 12, 9, 24, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPVDR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE acertacolunas
+------------------------------------------------------------
+PROCEDURE acertacolunas
+Lparameters pTip
+
+With ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1
+	If (pTip = [LER])
+		lcStr = ThisForm.pgfPrincipal.pgFiltros.getCfgGrade.Value 
+		
+		lnPos = 1 && Posição Inicial de Cada Bloco Correspondente a Uma Coluna da Grade
+		For lnCnt = 1 To .ColumnCount
+			lcBlo = Substr(lcStr, lnPos, 5) 		&& Bloco Com 5 Posições: 1 a 3 = Width; 	
+													&&						 4     = Visible	
+													&&						 5     = Uso Futuro	
+			lnWid = Int(Val(Substr(lcBlo, 1, 3)))	&& Largura da Coluna						
+			llVis = Not (Substr(lcBlo, 4, 1)=[0])	&& Coluna Visible=1 (default); Invisible=0	
+			lcCol = Alltrim(Str(lnCnt))				&& Número da Coluna							
+
+			.Column&lcCol..Width   = Iif(lnWid > 0, lnWid, .Column&lcCol..Width) && Se Não Estiver Gravado Mantém a Largura Original
+			.Column&lcCol..Visible = llVis										 && Se Não Estiver Gravado Mantém Visible			
+
+			lnPos = lnPos + 5 && Incrementa de 5 em 5 Posições a Cada Coluna
+		Next
+	Else && [GRAVAR]
+		lcStr = []
+		For lnCnt = 1 To .ColumnCount
+			lcCol = Alltrim(Str(lnCnt))										&& Número da Coluna	
+			lcStr = lcStr + Padl(.Column&lcCol..Width, 3, [0]) + ;
+							Iif(.Column&lcCol..Visible, [1], [0]) + ;
+							[ ] && Nota: o Branco é Para Uso Futuro
+		Next
+		ThisForm.pgfPrincipal.pgFiltros.getCfgGrade.Value = lcStr
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE buscaantigos
+------------------------------------------------------------
+PROCEDURE buscaantigos
+Private pdDtA
+Local lcPro, lcTam
+
+Select crCursor1
+oProg2 = CreateObject([fwProgressBar], [Processando Dados Anteriores...], Reccount([crCursor1]))
+oProg2.Top = oProg2.Top + Int(oProg2.Height/2)
+oProg2.Rodape.Caption = [Buscando Produtos na Data de Movimentação]
+oProg2.Show
+Scan
+	oProg2.Update(.t.)
+
+	lcPro = Nvl(crCursor1.Codigo_Item, [])
+	lcTam = Nvl(crCursor1.Tamanho, [])
+	pdDtA = Nvl(crCursor1.Data_Venda, Datetime())
+		
+	lcQuery = [Select Top 1 ] + ;
+					 [p.Mercs as Gde_Grupo, ] + ; 
+					 [p.CGrus as Grupo, ] + ; 
+					 [p.SGrus as SubGrupo, ] + ; 
+					 [p.CustoFs as Custo_Cadastro, ] + ; 
+					 [p.MoeCusfs as Moe_Cus_Cadastro, ] + ; 
+					 [p.MarkupA as Markup_Cadastro, ] + ; 
+					 [p.Reffs as Ref_Fornecedor, ] + ;
+					 [p.PVens as Venda_Cadastro, ] + ; 
+					 [p.PVens as Desc_Acres, ] + ; 
+					 [p.PVens as Venda_CadastroR, ] + ; 
+					 [p.Moevs as Moe_Vda_Cadastro, ] + ; 
+					 [p.FigJpgs as Imagem, ] + ;
+					 [p.IFors as Cod_Fornecedor ] + ;
+				[From SigCdPrc p ] + ;
+			   [Where p.CPros = '] + lcPro + [' And ] + ;
+			   		 [p.DataAlts >= ?pdDtA ] + ;
+			   [Order By p.DataAlts Desc]
+
+	If Not fExecCmds(ThisForm.poDataMgr, [crAntigo1], lcQuery)
+		oProg2.Complete
+		Return .f.
+	EndIf
+	
+	Select crAntigo1
+	Go Top In crAntigo1
+	If Not Eof([crAntigo1])
+		Replace Gde_Grupo 		 With crAntigo1.Gde_Grupo, ; 
+				Grupo 			 With crAntigo1.Grupo, ; 
+				SubGrupo 		 With crAntigo1.SubGrupo, ; 
+				Custo_Cadastro 	 With crAntigo1.Custo_Cadastro, ; 
+				Moe_Cus_Cadastro With crAntigo1.Moe_Cus_Cadastro, ; 
+				Markup_Cadastro  With crAntigo1.Markup_Cadastro, ; 
+				Ref_Fornecedor 	 With crAntigo1.Ref_Fornecedor, ; 
+				Venda_Cadastro 	 With crAntigo1.Venda_Cadastro, ; 
+				Desc_Acres 		 With crAntigo1.Desc_Acres, ; 
+				Venda_CadastroR  With crAntigo1.Venda_CadastroR, ; 
+				Moe_Vda_Cadastro With crAntigo1.Moe_Vda_Cadastro, ; 
+				Imagem 			 With crAntigo1.Imagem, ; 
+				Cod_Fornecedor 	 With crAntigo1.Cod_Fornecedor In crCursor1
+
+		lcQuery = [Select Top 1 ] + ;
+						 [t.Percs as Markup_Tamanho, ] + ; 
+						 [t.Valor as Valor_Tamanho, ] + ; 
+						 [t.PesoMs as Peso_Tamanho ] + ;
+					[From SigPrTa2 t ] + ;
+				   [Where t.CPros = '] + lcPro + [' And ] + ;
+				   		 [t.CodTams = '] + lcTam + [' And ] + ;
+				   		 [t.DataAlts >= ?pdDtA ] + ;
+				   [Order By t.DataAlts Desc]
+
+		If Not fExecCmds(ThisForm.poDataMgr, [crAntigo1], lcQuery)
+			oProg2.Complete
+			Return .f.
+		EndIf
+		
+		Select crAntigo1
+		Go Top In crAntigo1
+		If Not Eof([crAntigo1])
+			Replace Markup_Tamanho With crAntigo1.Markup_Tamanho, ;
+					Valor_Tamanho  With crAntigo1.Valor_Tamanho, ;
+					Peso_Tamanho   With crAntigo1.Peso_Tamanho In crCursor1
+		EndIf
+	EndIf
+	Use In crAntigo1
+EndScan
+oProg2.Complete
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregaestoque
+------------------------------------------------------------
+PROCEDURE carregaestoque
+Local lnOldSel
+lnOldSel = Select()
+
+Select crEstoque 
+Zap
+
+Select crPgRes01
+Select distinct Codigo_Item, Tamanho, Empresa, Cor From crPgRes01 Into Cursor crTmpReg Readwrite 
+
+Select crTmpReg
+Go top 
+Scan
+	
+	*--[And CodCors = ']+crPgRes01.Cor+[' ] 
+	
+	lcQuery=[select a.Emps, a.Grupos, a.Estos, a.Sqtds, a.Cpros ] + ;
+			[From sigmvest a ] + ;
+			[Join SigCdEmp b on a.emps = b.cemps ] + ;
+			[Where a.Sqtds > 0 ] + ;
+			[And Cpros = ']+crTmpReg.Codigo_Item+[' ] + ;
+			[And CodTams = ']+Iif(Alltrim(crTmpReg.Tamanho)='0','',crTmpReg.Tamanho)+[' ] + ;
+			[And Emps <> ']+crTmpReg.Empresa+[' ] + ;
+			[And b.nchkecomm <> 1]
+	If ThisForm.podatamgr.SqlExecute(lcQuery,[crTmpEst]) < 1
+		MessageBox([Favor Reiniciar o Processo],0+16,[])
+	EndIf 
+	
+	Select crTmpEst
+	Go Top
+	Scan
+		Scatter memvar
+		
+		Select crEstoque
+		Append Blank 
+		Gather Memvar 
+	EndScan 
+	
+	Select crTmpReg
+EndScan 
+
+
+Select crEstoque
+Go Top
+
+Select(lnOldSel)
+Return .T.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE filgdegrupo
+------------------------------------------------------------
+PROCEDURE filgdegrupo
+Select crGrdGpr
+Go Top In crGrdGpr
+ThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh 
+Locate For nMarcas = 0
+If Eof([crGrdGpr]) && Se Não Tiver Nenhum Grupo NÃO Selecionado Ignora o Filtro
+	Return .t.
+EndIf
+
+Select Codigos ;
+  From crGrdGpr ;
+ Where nMarcas = 0 ;
+  Into Cursor crNaoMarcados
+
+Select crNaoMarcados
+Scan
+	Delete From crCursor1 Where Gde_Grupo = crNaoMarcados.Codigos
+EndScan
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE filgrupo
+------------------------------------------------------------
+PROCEDURE filgrupo
+Select crGrdGru
+Go Top In crGrdGru
+ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+Locate For nMarcas = 0
+If Eof([crGrdGru]) && Se Não Tiver Nenhum Grupo NÃO Selecionado Ignora o Filtro
+	Return .t.
+EndIf
+
+Select Codigos ;
+  From crGrdGru ;
+ Where nMarcas = 0 ;
+  Into Cursor crNaoMarcados
+
+Select crNaoMarcados
+Scan
+	Delete From crCursor1 Where Grupo = crNaoMarcados.Codigos
+EndScan
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE filtros
+------------------------------------------------------------
+PROCEDURE filtros
+Lparameters pPag, pOrd
+
+If (pPag = 1) && Detalhamento dos Produtos
+	Select crPgRes01
+	lcOrd = Str(pOrd, 1)
+	Set Order To Ordem&lcOrd.
+	Go Top In crPgRes01
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE flimpa
+------------------------------------------------------------
+PROCEDURE flimpa
+LParameters pVal, pTip
+Local lcTip, lcRet
+
+lcTip = Iif(Type([pTip])=[C], pTip, [N])
+
+Do Case
+	Case (lcTip = [C])
+		lcRet = Strtran(Strtran(Strtran(Nvl(pVal, []), Chr(9), []), Chr(10), []), Chr(13), [])
+
+	Case (lcTip = [N])
+		lcRet = Alltrim(Transform(Nvl(pVal, 0), [999,999,999,999.99]))
+
+EndCase
+
+Return lcRet + Chr(9)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE geranovasolicitacao
+------------------------------------------------------------
+PROCEDURE geranovasolicitacao
+Parameters pcEmps, pcDopes, pnNumes, pcEmpEst, pcGrpEst, pcCtaEst, pcChave
+
+Local lnOldSel, _Emps, _Dopes, _Numes, lcEmps, lcDopes, lnNumes, lcEdn
+
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+If IsEmpty(crSigCdPaC.SolEcomm)
+	If Not Thisform.Automatico
+		Messagebox([Movimentação de Solicitação de Peça E-Commerce não Informada.],0+48,[Aviso])
+	Endif
+	Return .F.
+Endif
+
+_Dopes = crSigCdPaC.SolEcomm
+
+Thisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],_Dopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdc],[crSigOpCdc],[Dopes],_Dopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],_Dopes)
+Thisform.poDataMgr.CursorQuery([SigOpCdi],[crSigOpCdi],[Dopes],_Dopes)
+
+lcEmps  = pcEmps
+lcDopes = pcDopes
+lnNumes = pnNumes
+lcEdn   = lcEmps + lcDopes + Str(lnNumes,6)
+lcChave = pcChave
+
+lcEmpEst = pcEmpEst
+lcGrpEst = pcGrpEst
+lcCtaEst = pcCtaEst
+
+lnOldSel = Select()
+
+*!*	lcQuery = [Select a.Emps, a.Dopes, a.Numes, a.grupods, a.contads, a.Contaes, a.EmpDopNums, a.Datas, a.PedidoWeb, b.cpros, b.qtds, ] + ;
+*!*		[Isnull(c.CodCors,'') as CodCors, Case When c.CodTams = '0' then '' else Isnull(c.CodTams,'') end as CodTams, ] + ;
+*!*		[d.dpros, d.dpro2s, d.mercs, d.cgrus, d.sgrus, d.colecoes, b.cidchaves ] + ;
+*!*		[from sigmvcab a ] + ;
+*!*		[join SigMvItn b on a.EmpDopNums = b.EmpDopNums ] + ;
+*!*		[left join SigMvIts c on b.EmpDopNums = c.EmpDopNums And b.Cpros = c.Cpros And b.cItens = c.cItens ] + ;
+*!*		[Join SigCdPro d on b.cpros = d.cpros ] + ;
+*!*		[where a.EmpDopNums = ']+lcEdn+[' ] + ;
+*!*		[Order by a.PedidoWeb ]
+
+lcQuery = [Select a.Emps, a.Dopes, a.Numes, a.grupods, a.contads, a.Contaes, a.EmpDopNums, a.Datas, a.PedidoWeb, a.EmpDs ] + ;
+	[from sigmvcab a ] + ;
+	[where a.EmpDopNums = ']+lcEdn+[' ] + ;
+	[Order by a.PedidoWeb ]
+
+If Thisform.poDataMgr.SqlExecute(lcQuery,[crRecolhe])<1
+	Messagebox([Favor reiniciar o Processo!!!],0+48,[Falha na conexão (crRecolhe)])
+	Return .F.
+Endif
+
+Select crRecolhe
+Locate For .F.
+Go Top
+
+Scan
+
+	_Inicio  = 0
+	_Emps 	 = lcEmpEst
+	_EmpDs	 = crRecolhe.EmpDs
+	_Inicio  = fGerUniqueKey( Alltrim( _Dopes ) + _Emps )
+	_IniLet  = Alltrim( fGerMascara( _Inicio ) )
+	_TabD    = Iif( Not Inlist(crSigCdOpe.TabDescs, 1, 2, 4, 5, 6 ), Space( 10 ), crSigCdOpe.Tabdps )
+	_pData   = Datetime()
+	_Pedido  = crRecolhe.PedidoWeb
+	_EDN	 = _Emps + _Dopes + Str(_Inicio,6)
+	
+	_Conta   = crRecolhe.ContaEs
+	_GrupoOs = lcGrpEst
+	_ContaOs = lcCtaEst
+
+	Insert Into crSigMvCab ( Emps, Empds, Dopes, Numes, Usuars, Datars, DataS, Transps, Mascnum, Tabds, ;
+		LPrecos, cidchaves, EmpDopNums, Dgopes, vcompensas, TpFats, PedidoWeb, Contaes, GrupoOs, ContaOs, pStatus ) ;
+		Values ( _Emps, _EmpDs, _Dopes, _Inicio, Usuar, _pData, crRecolhe.DataS, .F., _IniLet, _TabD, '', fUniqueIds(), ;
+		_EDN, '', crSigCdOpe.vcompensas, Iif(crSigCdOpe.edtpfats=1,crSigOpCdc.TpFatPs,' '), _Pedido, _Conta, _GrupoOs, _ContaOs, 'N' )
+
+
+	If crSigCdOpe.cEmpSubns = 5 And crSigOpCdc.CarESubns <> 1
+		Replace crSigMvCab.Empds With crSigMvCab.Emps
+	Endif
+
+	If (Inlist(crSigCdOpe.DigObs, 1, 3)) And !IsEmpty(crSigCdOpe.ObsPads)
+		=Thisform.poDataMgr.CursorQuery('SigCdObs','CrTmpObs','codigos',crSigCdOpe.ObsPads)
+		Select CrTmpObs
+		Go Top
+		If (Reccount() > 0) And ;
+				Not ([#]  $ CrTmpObs.Observas) And ;
+				Not ([$]  $ CrTmpObs.Observas) And ;
+				Not ([%]  $ CrTmpObs.Observas) And ;
+				Not ([@]  $ CrTmpObs.Observas) And ;
+				Not ([!]  $ CrTmpObs.Observas) And ;
+				Not ([^$] $ CrTmpObs.Observas) And ;
+				Not ([^V] $ CrTmpObs.Observas)
+
+			Select crSigMvCab
+			Replace crSigMvCab.Obses  With CrTmpObs.Observas, ;
+					crSigMvCab.CodObs With crSigCdOpe.ObsPads
+		Endif
+	Endif
+
+	If Inlist(crSigCdOpe.Vendes, 1, 2, 4, 5)
+		Replace grvends With Left(crSigCdOpe.grvends,10) In crSigMvCab
+	Endif
+
+	If Inlist( crSigCdOpe.ComisDivs, 1, 3, 4, 5, 6, 7, 8,9,10,11,12 )
+		Replace GrResps With Right(crSigCdOpe.grvends,10) In crSigMvCab
+	Endif
+
+	If Inlist(crSigCdOpe.Vendes, 4, 5)
+		Replace Vends With Iif(crSigOpCdd.LibcSens = 3,'',Usuar) In crSigMvCab
+		If Not Empty(crSigMvCab.Vends)
+			lcQuery = [Select Iclis, Rclis, Cpfs, Senhas From SigCdCli Where Iclis = ']+crSigMvCab.Vends+[']
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'CrTmpCli') < 1)
+				If Not Thisform.Automatico
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrTmpCli 3)')
+				Endif
+				Return 0
+			Endif
+		Endif
+	Endif
+
+	If crSigCdOpe.Destinos = 1
+		Replace grupods With crSigCdOpe.GruDests In crSigMvCab
+		Replace contads With crSigCdOpe.ConDests In crSigMvCab
+	Endif
+
+	If crSigCdOpe.ComisDivs = 8
+		lcSql = [Select Deptos From SigCdUsu Where Usuarios = ']+Usuar+[']
+		Thisform.poDataMgr.SqlExecute(lcSql,'LocalUsu')
+		Replace Resps With LocalUsu.Deptos In crSigMvCab
+	Endif
+
+	If crSigCdOpe.ComisDivs = 12 And Not Empty(crSigOpCdd.CargV2s)
+		lcGrupoCad = Right(crSigCdOpe.GruCadVs,10)
+		lcSql = [Select Iclis From SigCdCli Where CCargs = ']+crSigOpCdd.CargV2s+[' And ]+;
+			[Emps = ']+_Emps+[' ]+;
+			Iif(Not Empty(lcGrupoCad),[And Grupos = ']+lcGrupoCad+[' ],[ ])
+		If Thisform.poDataMgr.SqlExecute(lcSql,'CsGerente') < 1
+			If Not Thisform.Automatico
+				Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão (CsGerente)')
+			Endif
+			Return .F.
+		Endif
+		If Reccount('CsGerente') = 1
+			Replace Resps With CsGerente.Iclis In crSigMvCab
+		Endif
+	Endif
+
+	If crSigCdOpe.TransOns = 1
+		lcCta = crSigMvCab.contads
+		If Inlist(crSigCdOpe.DtEntrs, 1, 4, 6)
+
+			lcCta = Iif(crSigCdOpe.COpers = 1, crSigMvCab.contads, crSigMvCab.contaos)
+
+			If IsEmpty(crSigMvCab.PrazoEnts)
+				ldDat = Date()
+				If crSigOpCdc.NMinEnts = crSigOpCdc.nMaxEnts
+					ldDat = Date() + crSigOpCdc.NMinEnts
+					Replace PrazoEnts With ldDat In crSigMvCab
+				Endif
+			Else
+				ldDat = Iif(Type('crSigMvCab.PrazoEnts')='T', Ttod(crSigMvCab.PrazoEnts), crSigMvCab.PrazoEnts)
+			Endif
+
+			Thisform.poDataMgr.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcCta, 'PrazoEnts')
+			If Used('LocalCli') And Not Eof('LocalCli') And (LocalCli.PrazoEnts > 0)
+				ldDat = ldDat + LocalCli.PrazoEnts
+
+				Replace PrazoEnts With ldDat In crSigMvCab
+			Endif
+		Endif
+	Endif
+
+	*************************************************************************************************************************************************************
+	*---Geração dos Itens do Pedido
+	*************************************************************************************************************************************************************
+	lcOpers = Iif(crSigCdOpe.Opers=1,'E',Iif(crSigCdOpe.Opers=2,'S',Iif(crSigCdOpe.Opers=3,crSigCdOpe.OpePads,'S')))
+	
+	lcQuery = [Select a.cpros, isnull(b.codcors,'') as CodCors, isnull(b.codTams,'') as CodTams, ] + ;
+		[a.qtds, a.Units, a.Pesos, a.PedidoWeb, a.EmpDopNums, c.datas ] + ;
+		[From SigMvItn a ] + ;
+		[Left Join SigMvIts b On a.empdopnums = b.empdopnums and a.cpros = b.Cpros and a.citens = b.citens ] + ;
+		[Join SigMvCab c On a.EmpDopNums = c.EmpDopNums ] + ;
+		[Where c.EmpDopNums = ']+lcEdn+[' ] + ;
+		[And a.cidchaves = ']+lcChave+[']
+		
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpItem') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpItem)')
+		Return 0
+	Endif
+	
+	lnItem 	 = 1
+	Select crTmpItem
+	Go Top
+	Scan
+		
+		lcProd   = Alltrim(crTmpItem.cPros)
+		lnQtds   = crTmpItem.qtds
+		lnDesc   = 0
+		lnValor  = crTmpItem.Units
+		lnPesos  = crTmpItem.Pesos
+		lnBarras = 0
+
+		lcQuery = [Select Dpros, Cunis, Cunips, Moevs, Cpros, CodCors From SigCdPro Where Cpros = '] + lcProd + [']
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crSigCdPro') < 1)
+			If Not Thisform.Automatico
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPro)')
+			Endif
+			Return 0
+		Endif
+
+		*-- Gera Itens
+		Insert Into crSigMvItn (cPros,Dopes,Emps,Numes,Opers,qtds,CItens,Units,Totas,Moedas,DPros,CUnis,cidchaves,DtAlts,EmpDopNums,Pesos,codbarras,PedidoWeb) ;
+			Values (crSigCdPro.cPros,_Dopes,_Emps,_Inicio,lcOpers,lnQtds,lnItem,lnValor,;
+			(lnValor * lnQtds),crSigCdPro.MoeVs,crSigCdPro.DPros,crSigCdPro.CUnis,fUniqueIds(),Date(),_EDN,lnPesos,lnBarras,crTmpItem.PedidoWeb)
+
+		*--Lanca o Barra no SIGMVITS
+		If (Not Empty(crSigCdPro.CodCors) Or Not Empty(crTmpItem.CodTams))
+			Insert Into crSigMvIts (Emps,Dopes,Numes,cPros,CodTams,CodCors,qtds,codbarras,Pesos,cidchaves,EmpDopNums,chksubn,CItens) ;
+				Values (_Emps,_Dopes,_Inicio,crSigCdPro.cPros,crTmpItem.CodTams,crSigCdPro.CodCors,lnQtds,lnBarras,0,fUniqueIds(),_EDN,.F.,lnItem)
+		Endif
+
+		If crSigCdOpe.Estoqs = 1
+
+			pCidC = Dtos(crTmpItem.DataS)+lcOpers+Transform(fGerUniqueKey(Dtos(crTmpItem.DataS)),"@L 999999")+Thisform.Sigkey
+			pSeq  = fGerUniqueKey('HISTBAR')
+
+			Insert Into crSigMvHst (cPros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,Opers,Numes,qtds,Units,Totas,Grupos,;
+				Estos,cidchaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+				Values (crSigCdPro.cPros,crTmpItem.DataS,crTmpItem.DataS,Null,_Dopes,_Emps,_Emps,;
+				lcOpers,_Inicio,lnQtds,lnValor,(lnValor * lnQtds),crSigMvCab.grupoos,;
+				crSigMvCab.contaos,pCidC,_EDN,_Emps + crSigMvCab.grupoos + crSigMvCab.contaos,_EDN,pSeq,0, Usuar, ;
+				lnBarras, crTmpItem.CodTams, crSigCdPro.CodCors)
+
+			=SqlCalcP2( crSigMvHst.Emps, crSigMvHst.Grupos, crSigMvHst.Estos, crSigMvHst.cPros, crSigMvHst.DataS, crSigMvHst.CodCors, crSigMvHst.CodTams, Thisform.poDataMgr )
+			=fRecalculaC( crSigMvHst.Emps, crSigMvHst.cPros, crSigMvHst.DataS, Thisform.poDataMgr )
+
+		Endif
+
+		lnItem = lnItem + 1
+		Select crTmpItem
+	EndScan 
+	
+	If Inlist(crSigCdOpe.DtEntrs, 1, 4, 6)
+		If (crSigCdOpe.Situas > 1) && Adicionar na Entrega: 1-Nenhum; 2-Cor; 3-Componente; 4-Ambos
+			lnSum = 0
+			If Inlist(crSigCdOpe.Situas, 2, 4)
+				lcQuery = [Select Cods, DiasEnts From SigCdCor]
+
+				If (Thisform.poDataMgr.SqlExecute(lcQuery, [LocalCor]) < 1)
+					If Not Thisform.Automatico
+						=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCor)])
+					Endif
+					Return 0
+				Endif
+
+				Select Max(b.DiasEnts) As Dias ;
+					From crSigMvIts a, LocalCor b ;
+					Where a.CodCors = b.Cods ;
+					Into Cursor LocalDias
+
+				Select LocalDias
+				Go Top In LocalDias
+				If Not Eof([LocalDias]) And (LocalDias.Dias > 0)
+					lnSum = lnSum + LocalDias.Dias
+				Endif
+				Use In LocalCor
+				Use In LocalDias
+			Endif
+
+			If Inlist(crSigCdOpe.Situas, 3, 4)
+				lnMax = 0
+				If (lnMax > 0)
+					lnSum = lnSum + lnMax
+				Endif
+			Endif
+
+			*** mena - 07/11/2016 - busca qtde de dias para calculo de prazo de entrega de serviço - montecarlo
+			If Inlist(crSigCdOpe.Situas, 5)
+				lnMax = 0
+				Select crSigMvIts
+				Scan
+					lcQuery = [Select b.DiasPrz From SigCdPro a, SigCdPrz b where a.cpros = ']+crSigMvIts.cPros+['] +;
+						[ and a.CGrus = b.codigos And b.Emps =']+crSigcdemp.Cemps+[']
+
+					If (Thisform.poDataMgr.SqlExecute(lcQuery, [crPrz]) < 1)
+						If Not Thisform.Automatico
+							=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPrz)])
+						Endif
+						Return 0
+					Endif
+
+					Select crPrz
+					Go Top In crPrz
+					If Not Eof([crPrz]) And (crPrz.DiasPrz > lnMax)
+						lnMax = crPrz.DiasPrz
+					Endif
+					Use In crPrz
+				Endscan
+
+				If (lnMax > 0)
+					lnSum = lnMax
+				Endif
+			Endif
+			**********************************************************
+
+			If (lnSum > 0)
+				If Not Inlist(crSigOpCdd.chkUteis, 0, 4) && Dias Úteis
+					llSab = Inlist(crSigOpCdd.chkUteis, 1)
+					llDom = Inlist(crSigOpCdd.chkUteis, 1, 3)
+					llFer = Inlist(crSigOpCdd.chkUteis, 1, 2, 3)
+
+					ldDI1 = Ttod(crSigMvCab.DataS)
+					ldDI2 = Ttod(crSigMvCab.DataS) + lnSum
+					Do While (ldDI1 <= ldDI2)
+						If fChkFeriado(Thisform.poDataMgr, ldDI1, llSab, llDom)
+							lnSum = lnSum + 1
+						Endif
+						ldDI1 = ldDI1 + 1
+						ldDI2 = Ttod(crSigMvCab.DataS) + lnSum
+					Enddo
+				Endif
+
+				ldEnt = Ttod(crSigMvCab.DataS) + lnSum
+
+				If (Ttod(crSigMvCab.PrazoEnts) <> ldEnt)
+					Replace PrazoEnts With ldEnt In crSigMvCab
+				Endif
+			Endif
+		Endif
+	Endif
+
+	lcUpdate = [Update SigMvCab Set pStatus = 'D' Where EmpDopNums = ']+lcEdn+[' ]
+	If (Thisform.poDataMgr.SqlExecute(lcUpdate) < 1)
+		If Not Thisform.Automatico
+			=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update)])
+		Endif
+		Return .F.
+	Endif
+
+	With Thisform.poDataMgr
+		If lnErro1>0
+			lnErro1 = Iif(.Update('crSigMvCab'), 1, -1)
+		Endif
+		If lnErro1>0
+			lnErro1 = Iif(.Update('crSigMvItn'), 1, -1)
+		Endif
+		If lnErro1>0
+			lnErro1 = Iif(.Update('crSigMvIts'), 1, -1)
+		Endif
+
+		If lnErro1>0
+			lnErro1 = Iif(.Update('crSigMvHst'), 1, -1)
+		Endif
+		If lnErro1>0
+			lnErro1 = .Commit()
+		Endif
+		If Not lnErro1>0
+			= .Rollback()
+		Endif
+	Endwith
+
+	Select crRecolhe
+Endscan
+
+Select(lnOldSel)
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gerartxt
+------------------------------------------------------------
+PROCEDURE gerartxt
+Local lcArq, lnPgn
+
+lcArq = GetFile([TXT], [Nome do Arquivo], [OK], 0, [Gerar Arquivo Separado Por Tabulações])
+
+If Not Empty(lcArq)
+	=StrToFile([], lcArq)
+
+	lnPgn = ThisForm.pgfPrincipal.pgDados.pgResults.ActivePage
+	
+	If InList(lnPgn, 1, 2, 3)
+		Do Case
+			Case (lnPgn = 1) && Detalhamento dos Produtos
+				lcStr = [Empresa] + Chr(9) + ;
+						[Código] + Chr(9) + ;
+						[Data] + Chr(9) + ;
+						[Pedido Web] + Chr(9) + ;
+						[Barra] + Chr(9) + ;
+						[Produto] + Chr(9) + ;
+						[Descrição do Produto] + Chr(9) + ;
+						[Cor] + Chr(9) + ;
+						[Tamanho] + Chr(9) + ;
+						[Venda Unitário] + Chr(9) + ;
+						[Cliente] + Chr(9) + ;
+						[Nome do Cliente] + Chr(9) + ;
+						[CPF / CNPJ] + Chr(9) + ;
+						[Quantidade] + Chr(9) + ;
+						[Movimentação] + Chr(9) + ;
+						[Operação] + Chr(9)
+				Select crPgRes01
+		EndCase
+
+		lcStr = lcStr + Chr(13)
+	
+		=StrToFile(lcStr, lcArq, 1)
+		
+		Scan
+			lcStr =  []
+			Do Case
+				Case (lnPgn = 1) && Detalhamento dos Produtos
+					lcStr = lcStr + ;
+							ThisForm.fLimpa(crPgRes01.Empresa, [C]) + ;
+							ThisForm.fLimpa(Str(crPgRes01.Numero, 10), [C]) + ;
+							ThisForm.fLimpa(Dtoc(crPgRes01.Data_Venda), [C]) + ;
+							ThisForm.fLimpa(crPgRes01.PedidoWeb, [C]) + ;
+							ThisForm.fLimpa(Str(crPgRes01.Barras, 14), [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Codigo_Item, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Desc_Item, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Cor, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Tamanho, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Val_Unitario, [N]) + ;
+							ThisForm.fLimpa(crPgRes01.Cod_Cliente, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Nome_Cliente, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.CpfCli, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Quantidade, [N]) + ;
+							ThisForm.fLimpa(crPgRes01.Movimentacao, [C]) + ;
+							ThisForm.fLimpa(crPgRes01.Operacao, [C])	
+			EndCase
+
+			lcStr = lcStr + Chr(13)
+		
+			=StrToFile(lcStr, lcArq, 1)
+		EndScan
+	EndIf
+	
+	=MessageBox([O Arquivo "] + Alltrim(lcArq) + [" Foi Gerado!!!], 0+64, [Geração de Arquivo])
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gerarxls
+------------------------------------------------------------
+PROCEDURE gerarxls
+Local lcExl, lcErr, llErr
+
+lcExl = PutFile([Nome da Planilha], [], [XLS])
+
+If fVerificaPasta(lcExl, 2)
+	lnPgn = ThisForm.pgfPrincipal.pgDados.pgResults.ActivePage
+	
+	Do Case
+		Case (lnPgn = 1) && Detalhamento dos Produtos
+			Select Empresa, Numero, Data_Venda, PedidoWeb, Barras, ;
+				   Codigo_Item, Desc_Item, Cor, Tamanho, Val_Unitario, ;
+				   Cod_Cliente, Nome_Cliente, CpfCli, Quantidade, Movimentacao ;
+			  From crPgRes01 ;
+			 Where Not Movimentacao In ([TOTAL DE ENTRADAS   ], [TOTAL DE SAÍDAS     ]) ;
+			 Order By Empresa, Ordem, Data_Venda, Movimentacao, Numero ;
+			  Into Cursor crExcel
+	EndCase
+
+	Select crExcel
+	Copy To (lcExl) Type Xl5
+	Use In crExcel
+
+	=MessageBox([O Arquivo "] + Alltrim(lcExl) + [" Foi Gerado!!!], 0+64, [Geração de Arquivo])
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gradepadrao
+------------------------------------------------------------
+PROCEDURE gradepadrao
+Local lnCnt, lnCol, lcCol
+
+lnCnt = ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.ColumnCount 
+
+Dimension laGrd(lnCnt)
+laGrd(01) = 031
+laGrd(02) = 150
+laGrd(03) = 055
+laGrd(04) = 071
+laGrd(05) = 150
+laGrd(06) = 080
+laGrd(07) = 110
+laGrd(08) = 296
+laGrd(09) = 035
+laGrd(10) = 035
+laGrd(11) = 100
+laGrd(12) = 100
+laGrd(13) = 290
+laGrd(14) = 150
+laGrd(15) = 100
+laGrd(16) = 025
+
+For lnCol = 1 To lnCnt
+	lcCol = Alltrim(Str(lnCol))
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column&lcCol..Width = laGrd(lnCol)
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column&lcCol..Visible = .t.
+Next
+
+ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE limpaemps
+------------------------------------------------------------
+PROCEDURE limpaemps
+Lparameters pCur
+
+If (Usuar <> [4CONTROL])
+	lcQuery = [Select e.CEmps as Emps ] + ;
+				[From SigCdEmp e ] + ;
+			   [Where e.CEmps Not In (] + ;
+			   		 [Select a.Emps From SigCdAce a Where a.Usuarios = '] + Usuar + [')]
+
+	If Not fExecCmds(ThisForm.poDataMgr, [LocalEmps], lcQuery)
+		Return .f.
+	EndIf
+
+	Select LocalEmps
+	Scan
+		Delete From &pCur. Where Empresa = LocalEmps.Emps
+	EndScan
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrades
+------------------------------------------------------------
+PROCEDURE montagrades
+Local lcTip, lnGrd
+
+With ThisForm.pgfPrincipal.pgFiltros.grdTipo
+	.RecordSource = [crTpOpe]
+	.Column1.ControlSource = [crTpOpe.nMarcas]
+	.Column2.ControlSource = [crTpOpe.cDescricaos]
+	
+	For I = 1 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..ReadOnly  = .t.
+	Next
+	
+	.Refresh
+EndWith
+
+With ThisForm.pgfPrincipal.pgFiltros.grdMercs
+	.RecordSource = [crGrdGpr]
+	.Column1.ControlSource = [crGrdGpr.nMarcas]
+	.Column2.ControlSource = [crGrdGpr.cDescricaos]
+	
+	For I = 1 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..ReadOnly  = .t.
+	Next
+	
+	.Refresh
+EndWith
+
+With ThisForm.pgfPrincipal.pgFiltros.grdCGrus
+	.RecordSource = [crGrdGru]
+	.Column1.ControlSource = [crGrdGru.nMarcas]
+	.Column2.ControlSource = [crGrdGru.Mercs]
+	.Column3.ControlSource = [crGrdGru.cDescricaos]
+	
+	For I = 1 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..ReadOnly  = .t.
+	Next
+	
+	.Refresh
+EndWith
+
+With ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque
+	.RecordSource            = [crEstoque]
+	.Column1.ControlSource   = [crEstoque.Emps]
+	.Column2.ControlSource   = [crEstoque.Grupos]
+	.Column3.ControlSource   = [crEstoque.Estos]
+	.Column4.ControlSource   = [crEstoque.Sqtds]	
+	.Column4.InputMask 	 	 = [999,999,999.99]
+EndWith 
+		  
+With ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1
+	.RecordSource            = [crPgRes01]
+	.Column1.ControlSource   = [crPgRes01.Empresa]
+	.Column2.ControlSource   = [crPgRes01.Movimentacao]
+	.Column3.ControlSource   = [crPgRes01.Numero]
+	.Column4.ControlSource   = [Iif(Empty(crPgRes01.Data_Venda), Space(10), Dtoc(crPgRes01.Data_Venda))]
+	.Column5.ControlSource   = [crPgRes01.Pedidoweb]
+	.Column6.ControlSource   = [crPgRes01.Barras]
+	.Column7.ControlSource   = [crPgRes01.Codigo_Item]
+	.Column8.ControlSource   = [crPgRes01.Desc_Item]
+	.Column9.ControlSource   = [crPgRes01.Cor]
+	.Column10.ControlSource  = [crPgRes01.Tamanho]
+	.Column11.ControlSource  = [crPgRes01.Val_Unitario]
+	.Column12.ControlSource  = [crPgRes01.Cod_Cliente]
+	.Column13.ControlSource  = [crPgRes01.Nome_Cliente]
+	.Column14.ControlSource  = [crPgRes01.CpfCli]
+	.Column15.ControlSource  = [crPgRes01.Quantidade]
+	.Column16.ControlSource  = [crPgRes01.Operacao]
+	.Column17.ControlSource  = [crPgRes01.Conjunts]
+	
+
+	For I = 1 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..ReadOnly  = .t.
+		If InList(I, 11, 15)
+			.Column&lcCol..InputMask = [999,999,999.99]
+		EndIf
+	Next
+
+	.SetAll([DynamicBackColor], [Iif(crPgRes01.pStatus = 'R',Rgb(255,255,128),] + ; && Amarelo  - Recusa
+								[Iif(crPgRes01.pStatus = 'T',Rgb(255,128,255),] + ;	&& Rosa     - Tranferido
+								[Iif(crPgRes01.pStatus = 'C',Rgb(0,255,255),] + ;	&& AZUL 	- Cancelado
+								[Iif(crPgRes01.pStatus = 'N',Rgb(192,192,192),] + ;	&& Cinza 	- Nova Solicitação
+								[Rgb(255,255,255)))))], [Column])					&& Branco	
+	
+	.Column4.DynamicBackColor = [Iif(crPgRes01.Atraso = 1,Rgb(255,0,0),Rgb(255,255,255))]
+	
+	.SetAll([DynamicFontBold], [crPgRes01.Ordem <> 'A'], [Column])
+
+	ThisForm.AcertaColunas([LER])
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montapgres01
+------------------------------------------------------------
+PROCEDURE montapgres01
+Local ldIni, ldFim, lnCnt, lcItn, lcCol, lcDtC, lcKey, lcFil, lcGer
+
+lcMdC = ThisForm.pgfPrincipal.pgFiltros.getCMoes.Value 
+
+Select crPgRes01
+Set Order To [] In crPgRes01
+Zap In crPgRes01
+
+Select crCursor1
+Scan
+	Scatter Memvar Memo
+
+	lnCtC = fBuscarCotacao(lcMdC, m.Data_Venda, ThisForm.poDataMgr)
+
+	m.Ordem            = [A]
+	m.Moeda            = Nvl(m.Moeda, lcMdC)
+	m.Moeda            = Iif(Empty(m.Moeda), lcMdC, m.Moeda)
+	m.Quantidade       = Nvl(m.Quantidade, 0.00)
+	m.Val_Unitario     = Nvl(m.Val_Unitario, 0.00)
+	m.Total            = Nvl(m.Total, 0.00)
+	m.Custo_Cadastro   = Nvl(m.Custo_Cadastro, 0.00)
+	m.Moe_Cus_Cadastro = Nvl(m.Moe_Cus_Cadastro, lcMdC)
+	m.Moe_Cus_Cadastro = Iif(Empty(m.Moe_Cus_Cadastro), lcMdC, m.Moe_Cus_Cadastro)
+	m.Venda_Cadastro   = Nvl(m.Venda_Cadastro, 0.00)
+	m.Moe_Vda_Cadastro = Nvl(m.Moe_Vda_Cadastro, lcMdC)
+	m.Moe_Vda_Cadastro = Iif(Empty(m.Moe_Vda_Cadastro), lcMdC, m.Moe_Vda_Cadastro)
+	m.Valor_Tamanho    = Nvl(m.Valor_Tamanho, 0.00)
+	m.ValorVenda	   = Nvl(m.ValorVenda,0.00)
+	m.dias 			   = Nvl(m.Dias,0)
+	m.Atraso 		   = 0
+	m.pedido 		   = "*"+Alltrim(Left(Alltrim(m.PedidoWeb),13))+"*"  &&fAltBar2de5(Alltrim(Strtran(Alltrim(m.PedidoWeb),'-01',''))) 
+	m.categorias	   = Alltrim(Nvl(m.categoria,[])) + [ ] + Alltrim(Nvl(DescCtg,[]))
+	m.Tamanho          = Nvl(m.Tamanho, [])
+	m.Codigo_Item      = Nvl(m.Codigo_Item, [])
+	m.Numes			   = Nvl(m.Numero,0)
+	m.Conjunts         = Nvl(m.Conjunts, [])
+	m.Locals		   = Nvl(m.Locals, [])
+	m.Etiqs			   = Nvl(m.Etiqs, [])
+	m.IDEntrega		   = Nvl(m.IDEntrega, [])
+	m.ContaDs		   = Nvl(m.ContaDs, [])
+	m.Transp		   = Nvl(m.Transp,[])
+	m.msgpresnte	   = Nvl(m.msgpresnte,[])
+	
+	
+	If m.Etiqs = [S]
+		m.Locals = []	
+	EndIf 
+	
+	If m.Dias <> 0 And crSigCdPac.diaslogist <> 0
+		If m.Dias > crSigCdPac.diaslogist 
+			m.Atraso = 1
+		EndIf 
+	EndIf 
+	
+	If Not Empty(m.Valor_Tamanho)
+		m.Venda_Cadastro = m.Valor_Tamanho
+	EndIf
+	
+	If (lcMdC <> m.Moeda)
+		lnCt1 = fBuscarCotacao(m.Moeda, m.Data_Venda, ThisForm.poDataMgr)
+		m.Val_Unitario = Round((m.Val_Unitario * lnCt1) / lnCtC, 2)
+		m.Total        = Round((m.Total        * lnCt1) / lnCtC, 2)
+	EndIf
+
+	If (lcMdC <> m.Moe_Cus_Cadastro)
+		lnCt1 = fBuscarCotacao(m.Moe_Cus_Cadastro, m.Data_Venda, ThisForm.poDataMgr)
+		m.Custo_Cadastro = Round((m.Custo_Cadastro * lnCt1) / lnCtC, 2)
+	EndIf
+
+	If (lcMdC <> m.Moe_Vda_Cadastro)
+		lnCt1 = fBuscarCotacao(m.Moe_Vda_Cadastro, m.Data_Venda, ThisForm.poDataMgr)
+		m.Venda_Cadastro = Round((m.Venda_Cadastro * lnCt1) / lnCtC, 2)
+	EndIf
+
+	m.Desc_Acres      = 0
+	m.Venda_CadastroR = m.Venda_Cadastro
+
+	m.pstatus		   = Nvl(m.pstatus,[])
+
+	lcQuery = [Select cods, descs From SigStats Where cods = ']+m.pstatus+[']
+	If Not fExecCmds(ThisForm.poDataMgr, [LocalStats], lcQuery)
+		Return .f.
+	EndIf
+	
+	m.Dpstatus		   = Nvl(LocalStats.descs,[])
+	
+	
+	lcEdn = m.Empresa + m.Movimentacao + Str(m.Numero, 6)
+	lcQuery = [Select p.EmpDopNums, p.FPags, p.TParcs, p.Datas, p.Vencs, f.Infos ] + ;
+				[From SigMvPar p, SigOpFp f ] + ;
+			   [Where p.EmpDopNums = '] + lcEdn + [' And ] + ;
+					 [p.FPags = f.FPags]
+
+	If Not fExecCmds(ThisForm.poDataMgr, [LocalParcs], lcQuery)
+		Return .f.
+	EndIf
+	
+	m.Barras          = Iif(IsEmpty(m.Barra_Individual), Nvl(m.Barra_Geral, 0), Nvl(m.Barra_Individual, 0))
+	m.Imagem          = Nvl(m.Imagem, [])
+	m.Tamanho         = Nvl(m.Tamanho, [])
+	m.Cor             = Nvl(m.Cor, [])
+	m.Cod_Fornecedor  = Nvl(m.Cod_Fornecedor, [])
+	m.Nome_Fornecedor = Nvl(m.Nome_Fornecedor, [])
+	m.Obs_Item        = Nvl(m.Obs_Item, [])
+	m.Valor_Diferenca = m.Val_Unitario - m.Venda_Cadastro
+	m.Markup		  = Round(Iif(Empty(m.Custo_Cadastro), 0, m.Val_Unitario / m.Custo_Cadastro), 2)
+	m.Perc_Diferenca  = Round(Iif(Empty(m.Venda_Cadastro), 0, (100 - ((m.Val_Unitario / m.Venda_Cadastro) * 100)) * -1), 2)
+	m.Desc_Item       = Nvl(m.Desc_Item, [])
+	m.Operacao        = Nvl(m.Operacao, [O])
+	m.Gde_Grupo       = Nvl(m.Gde_Grupo, [])
+	m.Grupo           = Nvl(m.Grupo, [])
+	m.SubGrupo        = Alltrim(Nvl(m.SubDescrs, [])) + Iif(Empty(Nvl(m.SubGrupo, [])), [], [ (] + Alltrim(Nvl(m.SubGrupo, [])) + [)])
+	m.Ref_Fornecedor  = Nvl(m.Ref_Fornecedor, [])
+	m.Cod_Cliente	  = Nvl(m.Cod_Cliente, [])
+	m.Nome_Cliente    = Nvl(m.Nome_Cliente, [])
+	m.CpfCli		  = Nvl(m.CpfCli, [])
+	m.Pedidoweb       = Nvl(m.Pedidoweb, [])
+	m.ckPresente      = Nvl(m.ckPresente, [])
+	m.PedidoWeb		  = Alltrim(Strtran(Strtran(Strtran(Strtran(m.PedidoWeb,'MERCADO_LIVRE-MERS-',''),'MERCADO_LIVRE-MER',''),'MAGAZINE_LUIZA-MAGLU-',''),'B2W_NEW_API-B2WLojasAmericanas-',''))
+	lcMovimentacao 	  = Left(Alltrim(m.Obs_Item),30)
+	
+	lcFiltro = [ And a.PedidoWeb = '] + m.Pedidoweb + [' ] 
+	
+	If Not fExecCmds(ThisForm.poDataMgr, [LocalMov2], [select empdopnums from SigMvCab where empdopnums = ']+lcMovimentacao+[' ])
+		Return .f.
+	EndIf
+	If Reccount([LocalMov2])>0
+		lcFiltro = [ And a.empdopnums = '] + Alltrim(lcMovimentacao) + [' ] 
+	EndIf 
+
+	lcQuery = [select a.emps, a.dopes, a.numes, a.pstatus, b.cpros, isnull(c.codtams,'') as codtams, a.ContaOs ] + ;
+				[from sigmvcab a ] + ;
+				[join sigmvitn b on a.empdopnums = b.empdopnums ] + ;
+				[left join sigmvits c on b.empdopnums = c.empdopnums and b.citens = c.citens and b.cpros = c.cpros ] + ;
+				[where a.dopes in(select solecomm from sigcdpac) ] + lcFiltro + ;
+				[And b.Cpros = ']+m.Codigo_Item+[' ] + ;
+				Iif(not Empty(m.Tamanho),[ And c.CodTams = ']+m.Tamanho+[' ],[])
+	
+	If Not fExecCmds(ThisForm.poDataMgr, [LocalRec], lcQuery)
+		Return .f.
+	EndIf
+
+	If Reccount([LocalRec])>0
+		m.Empresa = LocalRec.Emps
+		m.Movimentacao = LocalRec.dopes
+		m.Numero = LocalRec.numes
+		m.ContaOrigem = LocalRec.ContaOs
+	EndIf 
+		
+	Set Point To [,]
+	Set Separator To [.]
+	m.Pct_Dif_Chr = Transform(m.Perc_Diferenca, [999,999,999.99])
+	Set Point     To ThisForm.goOpCge.SetPoint
+	Set Separator To ThisForm.goOpCge.SetSepar
+	
+	Insert Into crPgRes01 From Memvar
+EndScan
+
+lnOldSelect = Select()
+Select crPgRes01 
+*Select Pedidoweb,
+Select(lnOldSelect)
+
+* Calculando o Total Geral de Cada Venda
+Update crPgRes01 Set Total_Geral = 0
+
+Select Empresa, Movimentacao, Numero, Sum(Total * Iif(Operacao = [E], -1, 1)) as Total ;
+  From crPgRes01 ;
+ Group By Empresa, Movimentacao, Numero ; 
+  Into Cursor TmpTotGer
+
+Select TmpTotGer
+Scan
+	Update crPgRes01 ;
+	   Set Total_Geral = TmpTotGer.Total ;
+	 Where Empresa = TmpTotGer.Empresa And ;
+	 	   Movimentacao = TmpTotGer.Movimentacao And ;
+	 	   Numero = TmpTotGer.Numero
+EndScan
+Use In TmpTotGer
+
+Select crPgRes01
+Set Order To Ordem4
+
+=ThisForm.CarregaEstoque()
+
+Go Top In crPgRes01
+
+ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh
+ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdEstoque.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+Local lcQuery, ldDtI, ldDtF, lcEmp, lcMoe, lcTpO, lcVir, lnNuI, lnNuF
+
+With ThisForm.pgfPrincipal
+	ldDtI = .pgFiltros.getDcI.Value
+	ldDtF = .pgFiltros.getDcF.Value
+	lcEmp = .pgFiltros.getEmpOs.Value
+	lcMoe = .pgFiltros.getCMoes.Value
+	lcDop = .pgFiltros.getDopEcomm.Value 
+	lnNuI = .pgFiltros.GetNumI.Value
+	lnNuF = .pgFiltros.GetNumF.Value 
+	lcTra = .pgFiltros.getIdTransp.Value
+	
+	pDtI = fDtoSQL(ldDtI)
+	pDtF = fDtoSQL(ldDtF, [23:59:59])
+
+	Go Top In crTpOpe
+	.pgFiltros.grdTipo.Refresh 
+EndWith
+
+Select CCodigos ;
+  From crTpOpe ;
+ Where nMarcas = 1 ;
+  Into Cursor LocalTpOpe
+
+Select LocalTpOpe
+Go Top In LocalTpOpe
+If (Reccount([LocalTpOpe]) = 1)
+	lcTpO = [o.TipoOps = ] + LocalTpOpe.CCodigos
+Else
+	lcVir = []
+	lcTpO = [o.TipoOps In (]
+	Scan
+		lcTpO = lcTpO + lcVir + LocalTpOpe.CCodigos
+		lcVir = [, ]
+	EndScan
+	lcTpO = lcTpO + [)]
+EndIf
+
+oProg1 = CreateObject([fwProgressBar], [Filtrando os Dados Selecionados...], 6)
+oProg1.Top = oProg1.Top - Int(oProg1.Height/2)
+oProg1.Titulo.FontBold = .t.
+oProg1.Rodape.Caption = [Aguarde os Processamentos...]
+oProg1.Show
+
+This.Refresh 
+
+oProg1.SubTitulo.Caption = [01/06: Seleção de Dados]
+oProg1.Update(.t.)
+
+lcQuery = [Select c.Emps as Empresa, ] + ;
+				 [c.Dopes as Movimentacao, ] + ; 
+				 [c.Numes as Numero, ] + ;
+				 [c.Datas as Data_Venda, ] + ; 
+				 [i.CPros as Codigo_Item, ] + ; 
+				 [i.DPros as Desc_Item, ] + ; 
+				 [p.DPro2s, ] + ; 
+				 [i.Obs as Obs_Item, ] + ; 
+				 [i.Qtds as Quantidade, ] + ; 
+				 [i.Units as Val_Unitario, ] + ; 
+				 [i.Totas as Total, ] + ; 
+				 [i.Moedas as Moeda, ] + ; 
+				 [i.Opers as Operacao, ] + ; 
+				 [i.Codbarras as Barra_Geral, ] + ;
+				 [i.cunis as Unidade, ] + ; 
+	   			 [u.etiqs, ] + ; 
+				 [s.CodBarras as Barra_Individual, ] + ; 
+				 [p.Mercs as Gde_Grupo, ] + ; 
+				 [p.CGrus as Grupo, ] + ; 
+				 [p.SGrus as SubGrupo, ] + ; 
+				 [sg.Descricaos as SubDescrs, ] + ;  
+				 [p.CustoFs as Custo_Cadastro, ] + ; 
+				 [p.MoeCusfs as Moe_Cus_Cadastro, ] + ; 
+				 [p.MarkupA as Markup_Cadastro, ] + ; 
+				 [p.Reffs as Ref_Fornecedor, ] + ;
+				 [p.PVens as Venda_Cadastro, ] + ; 
+				 [p.PVens as Desc_Acres, ] + ; 
+				 [p.PVens as Venda_CadastroR, ] + ; 
+				 [p.Moevs as Moe_Vda_Cadastro, ] + ; 
+				 [p.FigJpgs as Imagem, ] + ;
+				 [s.CodTams as Tamanho, ] + ; 
+				 [s.CodCors as Cor, ] + ; 
+				 [t.Percs as Markup_Tamanho, ] + ; 
+				 [t.Valor as Valor_Tamanho, ] + ; 
+				 [t.PesoMs as Peso_Tamanho, ] + ;
+				 [p.IFors as Cod_Fornecedor, ] + ;
+				 [c2.RClis as Nome_Fornecedor, ] + ;
+				 [x.iclis as Cod_Cliente, ] + ;
+				 [x.RClis as Nome_Cliente, ] + ;
+				 [c.contaos as ContaOrigem, ] + ;
+				 [p.categoria, ] + ;
+				 [p.Locals, ] + ;
+				 [g.Descs as DescCtg, ] + ;
+				 [p.Conjunts, ] + ;
+				 [case when i.Pedidoweb = space(50) then c.pedidoweb else i.Pedidoweb end as PedidoWeb, ] + ;
+				 [c.pStatus, ] + ;
+				 [w.CpfCli, ] + ;	
+				 [c.Valos as ValorVenda, ] + ;
+				 [n.DtPagto, abs(DATEDIFF(day,n.DtPagto,getdate())) as dias, ] + ;
+				 [i.CidChaves as Chave, ] + ;
+				 [i.Ckpresente, ] + ;	
+				 [c.IDEntrega, ] + ;	
+				 [c.MsgPresnte, ] + ;	
+				 [IsNull(t1.razaos,'') as Transp, ] + ;
+				 [999 as TotalPre, ] + ;
+				 [c.ContaDs ] + ;
+				 [From SigMvCab c ] + ;
+				 [Left Join SigCdOpe o On c.Dopes = o.Dopes ] + ; 
+				 [Left Join SigWbPed w On c.PedidoWeb = w.Pedido ] + ; 
+				 [left join SigCdCli x on c.contads = x.iclis ] + ;
+				 [left join sigcdgcr gc on x.grupos = gc.codigos ] + ; 
+				 [left join (select max(datapgt) as DtPagto, Pedido from sigwbpar group by pedido ) n on c.pedidoweb = n.pedido ] + ; 
+				 [Left Join SigMvItn i On c.EmpDopNums = i.EmpDopNums ] + ; 
+				 [Left Join SigMvIts s On i.EmpDopNums = s.EmpDopNums And i.CItens = s.CItens ] + ; 
+				 [Left Join SigPrTam t On s.CPros = t.CPros And s.CodTams = t.CodTams ] + ; 
+				 [Left Join SigCdPro p On i.CPros = p.CPros ] + ; 
+				 [Left Join SigCdCtg g On p.categoria = g.cods ] + ; 
+				 [Left Join SigCdCli c1 On c1.ICLis = c.ContaDs ] + ; 
+				 [Left Join SigCdCli c2 On c2.ICLis = p.IFors ] + ; 
+				 [Left Join SigCdPsg sg On sg.CGruCods = p.CGrus + p.SGrus ] + ; 
+				 [left join sigcduni u on i.cunis = u.cunis ] + ; 
+				 [left join sigprtrp t1 on c.idtransp = t1.itras ] + ;
+		   [Where ] + lcTpO + [ And ] + ;
+		   		 [c.Dopes = ']+lcDop+[' And ] + ;
+				 Iif(Empty(lcEmp), [], [c.Emps = '] + lcEmp + [' And ]) + ;
+				 Iif(Empty(lnNuI), [], [c.Numes >= ] + Str(lnNuI,6) + [ And ]) + ;
+				 Iif(Empty(lnNuF), [], [c.Numes <= ] + Str(lnNuF,6) + [ And ]) + ;
+				 Iif(Empty(lcTra), [], [t1.itras = '] + lcTra + [' And ]) + ;
+				 [c.Datas Between ?pDtI And ?pDtF And ] + ;
+				 [Not p.CPros Is Null And ] + ;
+				 [c.pStatus not In ('V','D','O','C') ]  && And IsNull(w.transacao,0) > 0
+
+If Not fExecCmds(ThisForm.poDataMgr, [crCursor1], lcQuery)
+	oProg1.Complete
+	Return .f.
+EndIf
+
+oProg1.SubTitulo.Caption = [02/06: Seleção de Dados Na Data de Movimentação]
+oProg1.Update(.t.)
+If Not ThisForm.BuscaAntigos()
+	oProg1.Complete
+	Return .f.
+EndIf
+
+* Filtrando Grande Grupo e Grupo de Produtos
+oProg1.SubTitulo.Caption = [03/06: Filtrando Grande Grupo]
+oProg1.Update(.t.)
+ThisForm.FilGdeGrupo()
+
+oProg1.SubTitulo.Caption = [04/06: Filtrando Grupo]
+oProg1.Update(.t.)
+ThisForm.FilGrupo()
+
+*!*	* Limpando as Empresas Que o Usuário Não Tem Acesso
+*!*	oProg1.SubTitulo.Caption = [05/06: Filtrando Empresas]
+*!*	oProg1.Update(.t.)
+*!*	ThisForm.LimpaEmps([crCursor1])
+
+* Preparando Dados da Página 1 - Detalhamento dos Produtos
+oProg1.SubTitulo.Caption = [06/06: Montando Detalhamento dos Produtos]
+oProg1.Update(.t.)
+ThisForm.MontaPgRes01()
+
+Select crPgRes01
+Set Filter To 
+Go Top
+
+ThisForm.Filtros(1, 3)
+
+oProg1.Complete
+
+ThisForm.pgfPrincipal.ActivePage = 2
+
+ThisForm.pgfPrincipal.pgDados.pgResults.ActivePage = 1
+
+ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.AfterRowColChange()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE seltoprint
+------------------------------------------------------------
+PROCEDURE seltoprint
+Dimension laArray(2)
+Set Step On 
+Select crPgRes01
+Select pedidoweb, Nvl(Count(*),0) As qtdP From  crPgRes01 b Where ckPresente <> 0 Group By pedidoweb Into Cursor crPres
+
+Select crPgRes01
+Select pedidoweb, Sum(quantidade) As qtdT From  crPgRes01 b Group By pedidoweb Into Cursor crPg
+
+Select a.*, b.qtdT, Nvl(qtdP,0) as qtdP, Space(60) As endes,Space(10) As nums,Space(25) As compls,Space(40) As bairs, ;
+	Space(30) As cidas,Space(2) As estas, Space(9) As Ceps, 'N' as cGNRE  ;
+	from crPgRes01 a ;
+	join crPg b on a.pedidoweb=b.pedidoweb ;
+	left join crPres c on a.pedidoweb=c.pedidoweb ;
+	Order By a.pedidoweb, a.empresa, a.Ref_Fornecedor ;
+	into Cursor crPg1 Readwrite
+Select crPg1
+Go Top
+
+*** mena - 02/07/2017 - le os dados do cliente ***
+Scan
+	lcQuery = [select endes, nums, compls, bairs, cidas, estas, ceps from sigcdcli where iclis = ']+crPg1.cod_cliente+[']
+	If Thisform.podatamgr.SqlExecute(lcQuery,[crCli]) < 1
+		Messagebox([Favor Reiniciar o Processo],0+16,[])
+	Endif
+
+	Replace endes With crCli.endes In crPg1
+	Replace nums With crCli.nums In crPg1
+	Replace compls With crCli.compls In crPg1
+	Replace cidas With crCli.cidas In crPg1
+	Replace bairs With crCli.bairs In crPg1
+	
+	Replace Ceps With crCli.Ceps In crPg1
+	
+	lcUFD = crCli.estas
+	
+	
+	If Not Empty(crPg1.IDEntrega)
+		laArray(1) = crPg1.ContaDs
+		laArray(2) = []
+	Endif
+
+	If fEndEntrega(@laArray, Thisform.poDataMgr,,crPg1.IDEntrega)
+		lcUFD = Alltrim(laArray(11)) 							&& Estas
+	EndIf
+	
+	If Not Empty(lcUFD)
+		lcQuery = [select estados, chkgnre from sigcdufs where estados = ']+lcUFD+[']
+		If Thisform.podatamgr.SqlExecute(lcQuery,[crEstas]) < 1
+			Messagebox([Favor Reiniciar o Processo],0+16,[])
+		Endif
+		If Reccount([crEstas])>0
+			replace cGNRE With Iif(crEstas.chkgnre = 1,'S','N') In crPg1 	
+		EndIf 
+	EndIf 
+	Replace estas With lcUFD In crPg1
+	Select crPg1
+Endscan
+
+Select crPg1
+Go Top
+
+Select crPg1
+Select Space(10) as Quebra, * from crPg1 ;
+	Where 1=0 ;
+	Into Cursor crPg2 ReadWrite
+
+Select crPg1
+Select distinct pedidoweb, empresa, contaOrigem ;
+	From crPg1 ;
+	Into Cursor crPg3 ReadWrite
+
+Select crPg3
+Select pedidoweb, Count(*) As qtdPedido ;
+	From crPg3 ;
+	group by pedidoweb ;
+	Into Cursor crPg4 ReadWrite
+
+Select crPg4
+Select a.* ;
+	from crPg1 a ;
+	join crPg4 b on a.pedidoweb = b.pedidoweb ;
+	where b.qtdPedido = 1 ;
+	Into cursor crPg5 ReadWrite
+
+Select crPg5
+Scan 
+	Scatter memvar 
+	m.quebra = Alltrim(Iif(Empty(m.pstatus),Chr(254),m.pstatus)) + m.contaOrigem
+	Select crPg2
+	Append Blank 
+	Gather memvar 
+	Select crPg5
+EndScan
+
+
+Select a.* from crPg1 a join crPg4 b on a.pedidoweb = b.pedidoweb where b.qtdPedido <> 1 Into cursor crPg6 ReadWrite
+Select crPg6
+Scan 
+	Scatter memvar 
+	m.quebra = Alltrim(Iif(Empty(m.pstatus),Chr(254),m.pstatus)) + Replicate(Chr(254),9)
+	Select crPg2
+	Append Blank 
+	Gather memvar 
+	Select crPg6
+EndScan
+
+If Used([crPg1])
+	use in crPg1
+EndIf 
+
+If Used([crPg3])
+	use in crPg3
+EndIf 
+
+If Used([crPg4])
+	use in crPg4
+EndIf 
+
+If Used([crPg5])
+	use in crPg5
+EndIf 
+
+If Used([crPg6])
+	use in crPg6
+EndIf 
+
+Select crPg2
+Select * from crPg2 Into cursor crPg1 ReadWrite 
+
+Set Step On 
+Select crPg1
+index on quebra + pedidoweb + empresa + contaOrigem + Codigo_Item Tag EmpCtaOri
+Go Top
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE buscarecolhe
+------------------------------------------------------------
+PROCEDURE buscarecolhe
+Private pdDtA
+Local lcPro, lcTam
+
+Select crCursor1
+oProg2 = CreateObject([fwProgressBar], [Processando Dados Anteriores...], Reccount([crCursor1]))
+oProg2.Top = oProg2.Top + Int(oProg2.Height/2)
+oProg2.Rodape.Caption = [Buscando Produtos na Data de Movimentação]
+oProg2.Show
+Scan
+	oProg2.Update(.t.)
+
+	lcPro = Nvl(crCursor1.Codigo_Item, [])
+	lcTam = Nvl(crCursor1.Tamanho, [])
+	pdDtA = Nvl(crCursor1.Data_Venda, Datetime())
+		
+	lcQuery = [Select Top 1 ] + ;
+					 [p.Mercs as Gde_Grupo, ] + ; 
+					 [p.CGrus as Grupo, ] + ; 
+					 [p.SGrus as SubGrupo, ] + ; 
+					 [p.CustoFs as Custo_Cadastro, ] + ; 
+					 [p.MoeCusfs as Moe_Cus_Cadastro, ] + ; 
+					 [p.MarkupA as Markup_Cadastro, ] + ; 
+					 [p.Reffs as Ref_Fornecedor, ] + ;
+					 [p.PVens as Venda_Cadastro, ] + ; 
+					 [p.PVens as Desc_Acres, ] + ; 
+					 [p.PVens as Venda_CadastroR, ] + ; 
+					 [p.Moevs as Moe_Vda_Cadastro, ] + ; 
+					 [p.FigJpgs as Imagem, ] + ;
+					 [p.IFors as Cod_Fornecedor ] + ;
+				[From SigCdPrc p ] + ;
+			   [Where p.CPros = '] + lcPro + [' And ] + ;
+			   		 [p.DataAlts >= ?pdDtA ] + ;
+			   [Order By p.DataAlts Desc]
+
+	If Not fExecCmds(ThisForm.poDataMgr, [crAntigo1], lcQuery)
+		oProg2.Complete
+		Return .f.
+	EndIf
+	
+	Select crAntigo1
+	Go Top In crAntigo1
+	If Not Eof([crAntigo1])
+		Replace Gde_Grupo 		 With crAntigo1.Gde_Grupo, ; 
+				Grupo 			 With crAntigo1.Grupo, ; 
+				SubGrupo 		 With crAntigo1.SubGrupo, ; 
+				Custo_Cadastro 	 With crAntigo1.Custo_Cadastro, ; 
+				Moe_Cus_Cadastro With crAntigo1.Moe_Cus_Cadastro, ; 
+				Markup_Cadastro  With crAntigo1.Markup_Cadastro, ; 
+				Ref_Fornecedor 	 With crAntigo1.Ref_Fornecedor, ; 
+				Venda_Cadastro 	 With crAntigo1.Venda_Cadastro, ; 
+				Desc_Acres 		 With crAntigo1.Desc_Acres, ; 
+				Venda_CadastroR  With crAntigo1.Venda_CadastroR, ; 
+				Moe_Vda_Cadastro With crAntigo1.Moe_Vda_Cadastro, ; 
+				Imagem 			 With crAntigo1.Imagem, ; 
+				Cod_Fornecedor 	 With crAntigo1.Cod_Fornecedor In crCursor1
+
+		lcQuery = [Select Top 1 ] + ;
+						 [t.Percs as Markup_Tamanho, ] + ; 
+						 [t.Valor as Valor_Tamanho, ] + ; 
+						 [t.PesoMs as Peso_Tamanho ] + ;
+					[From SigPrTa2 t ] + ;
+				   [Where t.CPros = '] + lcPro + [' And ] + ;
+				   		 [t.CodTams = '] + lcTam + [' And ] + ;
+				   		 [t.DataAlts >= ?pdDtA ] + ;
+				   [Order By t.DataAlts Desc]
+
+		If Not fExecCmds(ThisForm.poDataMgr, [crAntigo1], lcQuery)
+			oProg2.Complete
+			Return .f.
+		EndIf
+		
+		Select crAntigo1
+		Go Top In crAntigo1
+		If Not Eof([crAntigo1])
+			Replace Markup_Tamanho With crAntigo1.Markup_Tamanho, ;
+					Valor_Tamanho  With crAntigo1.Valor_Tamanho, ;
+					Peso_Tamanho   With crAntigo1.Peso_Tamanho In crCursor1
+		EndIf
+	EndIf
+	Use In crAntigo1
+EndScan
+oProg2.Complete
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE saveproper
+------------------------------------------------------------
+PROCEDURE saveproper
+*!*	Local lcMen, xMacro, lnCon, lni
+*!*	Amembers(aIni, "FoxBarCode")
+*!*	lnCon = 0
+*!*	For lni = 1 To Alen(aIni)
+*!*		lcMen = ""
+*!*		xMacro = "THIS.loFBC."+aIni[lnI]
+*!*		Do Case
+*!*		Case Type(xMacro)="N"
+*!*			lcMen= " = "+Alltrim(Transform(&xMacro))
+*!*			lnCon = lnCon + 1
+*!*			Dimension This.aIniProper[lnCon]
+*!*			This.aIniProper[lnCon] = "."+aIni[lnI] + lcMen
+*!*		Case Type(xMacro)="L"
+*!*			lnCon = lnCon + 1
+*!*			Dimension This.aIniProper[lnCon]
+*!*			lcMen = " = "+Iif(&xMacro,".T.",".F.")
+*!*			This.aIniProper[lnCon] = "."+aIni[lnI] + lcMen
+*!*		Case Type(xMacro)="C"
+*!*			lnCon = lnCon + 1
+*!*			Dimension This.aIniProper[lnCon]
+*!*			lcMen = " = "+'"'+&xMacro+'"'
+*!*			This.aIniProper[lnCon] = "."+aIni[lnI] + lcMen
+*!*		Endcase
+*!*	Endfor
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With Thisform
+	.poDataMgr = Createobject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		With .poDataMgr
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab')
+			.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn')
+			.AddCursor('SigMvIts', 'cIdChaves', 'crSigMvIts')
+			.AddCursor('SigMvPar', 'cIdChaves', 'crSigMvPar')
+			.AddCursor('SigMvHst', 'cIdChaves', 'crSigMvHst')
+			.AddCursor('SigMvCcr', 'cIdChaves', 'crSigMvCcr')
+		Endwith
+
+		.goOpCge = Createobject([Relation])
+		.goOpCge.AddProperty([SetPoint], Set([Point]))
+		.goOpCge.AddProperty([SetSepar], Set([Separator]))
+
+		.poObjExt1 = Null
+		.poObjExt2 = Null
+
+		.pgfPrincipal.pgFiltros.getDcI.Value = Date()
+		.pgfPrincipal.pgFiltros.getDcF.Value = Date()
+
+		.AddObject([poSigSyPar], [fGravaUserXML])
+		With .poSigSyPar
+			.pGrvXMLCfg	 = Thisform.Name
+			.pGrvXMLDsc  = []
+			.pGrvXMLUsu  = Usuar
+			.pGrvXMLObj  = Thisform.pgfPrincipal.pgFiltros
+			lcIds = Upper(Alltrim(Nvl(.pGrvXMLCfg, [])))
+		Endwith
+
+		.poSigSyPar.mLerCfg()
+
+		.pgfPrincipal.pgFiltros.getCfgGrade.Visible = (Usuar = [4CONTROL])
+
+		* Grade de Tipos de Operações
+		lcQuery = [Select * From SigCdPac]
+		If Not fExecCmds(.poDataMgr, [crSigCdPac], lcQuery)
+			Return .F.
+		Endif
+		Thisform.Sigkey = crSigCdPac.SigKeys
+
+		* Grade de Tipos de Operações
+		lcQuery = [select a.DopEcomm, b.TipoOps from sigcdpac a join sigcdope b on a.DopEcomm = b.dopes]
+		If Not fExecCmds(.poDataMgr, [crPacEcomm], lcQuery)
+			Return .F.
+		Endif
+		Thisform.pgfPrincipal.pgFiltros.getDopEcomm.Value=crPacEcomm.DopEcomm
+
+		* Grade de Tipos de Operações
+		lcQuery = [Select Codigos, Descrs, GerGdmis From SigCdTom]
+
+		If Not fExecCmds(.poDataMgr, [crSigCdTom], lcQuery)
+			Return .F.
+		Endif
+
+		Select 0 As nMarcas, ;
+			Str(a.Codigos,2) As CCodigos, ;
+			Padr(Str(a.Codigos,2) + [-] + a.Descrs, 50) As CDescricaos ;
+			From crSigCdTom a ;
+			Order By 2 ;
+			Into Cursor crTpOpe Readwrite
+		Use In crSigCdTom
+
+		Select crPacEcomm
+		Update crTpOpe Set nMarcas = 1 Where CCodigos =  Str(crPacEcomm.TipoOps,2)
+
+		* Grade de Grande Grupo de Produtos
+		lcQuery = [Select Codigos, Descs From SigCdGpr]
+
+		If Not fExecCmds(.poDataMgr, [crSigCdGpr], lcQuery)
+			Return .F.
+		Endif
+
+		Select 1 As nMarcas, a.Codigos, ;
+			a.Codigos + [-] + a.Descs As CDescricaos ;
+			From crSigCdGpr a ;
+			Order By 2 ;
+			Into Cursor crGrdGpr Readwrite
+		Use In crSigCdGpr
+
+		* Grade de Grupo de Produtos
+		lcQuery = [Select Mercs, CGrus as Codigos, DGrus as Descs From SigCdGrp]
+
+		If Not fExecCmds(.poDataMgr, [crSigCdGrp], lcQuery)
+			Return .F.
+		Endif
+
+		Select 1 As nMarcas, a.Mercs, a.Codigos, ;
+			a.Codigos + [-] + a.Descs As CDescricaos ;
+			From crSigCdGrp a ;
+			Order By 2 ;
+			Into Cursor crGrdGru Readwrite
+		Use In crSigCdGrp
+
+		.MontaGrades()
+
+		=DoDefault()
+
+		lcQuery = [Select Distinct a.Grupo as GruEmps, b.Tipos ] + ;
+			[From SigCdEmp a, SigCdGre b ] + ;
+			[Where a.Grupo = b.Grupo And ] + ;
+			[a.CEmps In (Select g.Emps From SigCdAce g Where g.Usuarios = '] + Usuar + [')]
+
+		If Not fExecCmds(.poDataMgr, [crSigCdGre], lcQuery)
+			Return .F.
+		Endif
+
+		lcQuery = [Select CMoes, DMoes, nOrdRels ] + ;
+			[From SigCdMoe ] + ;
+			[Order By nOrdRels]
+
+		If Not fExecCmds(.poDataMgr, [LocalMoe], lcQuery)
+			Return .F.
+		Endif
+		Go Top In LocalMoe
+		.pgfPrincipal.pgFiltros.getCMoes.Value = LocalMoe.CMoes
+		.pgfPrincipal.pgFiltros.getDMoes.Value = LocalMoe.DMoes
+
+		.pgfPrincipal.pgFiltros.getDcI.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .F.
+	Endif
+Endwith
+* Fim **************************************************************************************
+
+Thisform.pgfPrincipal.pgFiltros.cntSombra.lblSombra.Caption = Thisform.Caption
+Thisform.pgfPrincipal.pgFiltros.cntSombra.lblTitulo.Caption = Thisform.Caption
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crPgRes01 (Ordem c(1), Filtro n(1), Empresa c(3), Movimentacao c(20), Numero n(6), Data_Venda d(8), ;
+						 Codigo_Vendedora c(10), Item n(10), Codigo_Item c(14), Desc_Item c(40), Obs_Item m(4), ;
+						 Quantidade n(16,2), Val_Unitario n(16,2), Total n(16,2), Total_Geral n(16,2), Moeda c(3), ;
+						 Operacao c(1), Barras n(14), Gde_Grupo c(3), Grupo c(3), SubGrupo c(30), Custo_Cadastro n(16,2), ;
+						 Moe_Cus_Cadastro c(3), Markup n(16,2), Venda_Cadastro n(16,2), Moe_Vda_Cadastro c(3), Imagem m(4), ;
+						 Tamanho c(4), Cor c(4), Cod_Cliente c(10), Nome_Cliente c(50), Cod_Fornecedor c(10), ;
+						 Nome_Fornecedor c(50), Tkt_Medio n(16,2), Ref_Fornecedor c(20), Valor_Diferenca n(16,2), ;
+						 Perc_Diferenca n(16,2), Pct_Dif_Chr c(20), Parcelas n(3), Cond_Pagto c(100), ;
+						 Venda_CadastroR n(16,2), Desc_Acres n(16,2), CpfCli c(20), Pedidoweb c(20), ;
+						 pStatus c(1), DpStatus c(50), Dias n(5,0), Chave c(20), Atraso n(1), DPRO2S C(45), ContaOrigem c(10), ;
+						 ValorVenda n(15,2), Pedido c(50), Categorias c(50), Numes n(6), Conjunts c(6), ;
+						 Locals c(10), IDEntrega c(50), Contads c(10), Transp c(40), msgpresnte c(150), ckPresente n(1))
+
+Index On Empresa + Ordem + Dtos(Data_Venda) + Movimentacao + Str(Numero, 6) + Str(Item, 10) For Filtro = 1 Or (Perc_Diferenca > 0 And Filtro <> 3) Tag Ordem1
+Index On Empresa + Ordem + Dtos(Data_Venda) + Movimentacao + Str(Numero, 6) + Str(Item, 10) For Filtro = 2 Or (Perc_Diferenca < 0 And Filtro <> 3) Tag Ordem2
+Index On Empresa + Ordem + Dtos(Data_Venda) + Movimentacao + Str(Numero, 6) + Str(Item, 10) For Filtro <> 1 And Filtro <> 2      Tag Ordem3
+Index On Data_Venda Tag Ordem4
+
+
+Create Cursor crEstoque( Emps c(3), Grupos c(10), Estos c(10), Sqtds n(12,3), Cpros c(14))
+Index on Emps + Grupos + Estos Tag Estoque
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poSigSyPar.fGravaUserCfg()
+
+If (Type([ThisForm.poDataMgr])=[O])
+	ThisForm.poDataMgr.Release
+EndIf
+
+Set Point     To ThisForm.goOpCge.SetPoint
+Set Separator To ThisForm.goOpCge.SetSepar
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getEmpOs
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.PgfPrincipal.pgFiltros.getEmpOs, ThisForm.PgfPrincipal.pgFiltros.getDEmpOs, ThisForm.poDataMgr)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getIdTransp
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigPrTrp], ;
+						   [crListaRemota], [iTras], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([iTras], [], [Código])
+		loLista.mAddColuna([Razaos], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.PgfPrincipal.pgFiltros.getIdTransp.Value = crListaRemota.iTras
+	ThisForm.PgfPrincipal.pgFiltros.getDIdTransp.Value = crListaRemota.Razaos
+	Use In crListaRemota
+Else
+	ThisForm.PgfPrincipal.pgFiltros.getIdTransp.Value = []
+	ThisForm.PgfPrincipal.pgFiltros.getDIdTransp.Value = []
+EndIf
+ThisForm.PgfPrincipal.pgFiltros.getIdTransp.Refresh
+ThisForm.PgfPrincipal.pgFiltros.getDIdTransp.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDEmpOs
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.PgfPrincipal.pgFiltros.getEmpOs, ThisForm.PgfPrincipal.pgFiltros.getDEmpOs, ThisForm.poDataMgr)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.PgfPrincipal.pgFiltros.getEmpOs.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getCfgGrade
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDIdTransp
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.PgfPrincipal.pgFiltros.getEmpOs, ThisForm.PgfPrincipal.pgFiltros.getDEmpOs, ThisForm.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.cmgFiltros
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnConsultar.Click
+------------------------------------------------------------
+PROCEDURE btnConsultar.Click
+Local loFil, ldIni, ldFim, ldEnd, lcDtC
+
+loFil = ThisForm.pgfPrincipal.pgFiltros
+
+ldIni = loFil.getDcI.Value
+If Empty(ldIni)
+	=MessageBox([A Data Inicial Não É Válida!!!], 0+16, [Dados Inválidos!!!])
+	loFil.getDcI.SetFocus
+	Return .f.
+EndIf
+
+ldFim = loFil.getDcF.Value
+If IsEmpty(ldFim)
+	=MessageBox([A Data Final Não É Válida!!!], 0+16, [Dados Inválidos!!!])
+	loFil.getDcF.SetFocus
+	Return .f.
+EndIf
+
+If (ldIni > ldFim)
+	=MessageBox([A Data Inicial Não Pode Ser Maior Que a Final!!!], 0+16, [Dados Inválidos!!!])
+	loFil.getDcF.Value = Ctod([])
+	loFil.getDcF.SetFocus
+	Return .f.
+EndIf
+
+If Empty(ThisForm.pgfPrincipal.pgFiltros.getCMoes.Value)
+	=MessageBox([A Moeda Para Conversão Precisa Ser Informada!!!], 0+16, [Dados Inválidos!!!])
+	loFil.getCMoes.SetFocus
+	Return .f.
+EndIf
+
+Go Top In crTpOpe
+loFil.grdTipo.Refresh 
+
+Select CCodigos ;
+  From crTpOpe ;
+ Where nMarcas = 1 ;
+  Into Cursor LocalGrade
+
+Go Top In LocalGrade
+If Eof([LocalGrade])
+	=MessageBox([Nenhum Tipo de Operação Foi Selecionado!!!], 0+16, [Dados Inválidos!!!])
+	loFil.grdTipo.Column1.SetFocus 
+	Return .f.
+EndIf
+
+Go Top In crGrdGpr
+loFil.grdMercs.Refresh 
+
+Select Codigos ;
+  From crGrdGpr ;
+ Where nMarcas = 1 ;
+  Into Cursor LocalGrade
+
+Go Top In LocalGrade
+If Eof([LocalGrade])
+	=MessageBox([Nenhum Grande Grupo Foi Selecionado!!!], 0+16, [Dados Inválidos!!!])
+	loFil.grdMercs.Column1.SetFocus 
+	Return .f.
+EndIf
+
+ThisForm.Processamento()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.AcertaColunas([GRAVAR])
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getNumi
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.parent.getNumf.Value) And Not Empty(This.Value)
+	This.parent.getNumf.Value = This.Value
+	This.parent.getNumf.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getCMoes
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdMoe], ;
+						   [crListaRemota], [CMoes], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CMoes], [], [Código])
+		loLista.mAddColuna([DMoes], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = crListaRemota.CMoes
+	ThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = []
+	ThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = []
+EndIf
+ThisForm.PgfPrincipal.pgFiltros.getCMoes.Refresh
+ThisForm.PgfPrincipal.pgFiltros.getDMoes.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDMoes
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdMoe], ;
+						   [crListaRemota], [DMoes], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([DMoes], [], [Descrição])
+		loLista.mAddColuna([CMoes], [], [Código])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = crListaRemota.CMoes
+	ThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value = []
+	ThisForm.PgfPrincipal.pgFiltros.getDMoes.Value = []
+EndIf
+ThisForm.PgfPrincipal.pgFiltros.getCMoes.Refresh
+ThisForm.PgfPrincipal.pgFiltros.getDMoes.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.PgfPrincipal.pgFiltros.getCMoes.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDcI
+* Classe: fweditdata (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDcF
+* Classe: fweditdata (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.grdTipo.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode,nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace nMarcas With Iif(crTpOpe.nMarcas = 0, 1, 0) In crTpOpe
+	ThisForm.pgfPrincipal.pgFiltros.grdTipo.Refresh 
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton,nShift,nXCoord,nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton,nShift,nXCoord,nYCoord
+
+This.KeyPress(13,0)
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.btnMarGde
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+UpDate crGrdGpr Set nMarcas = 1
+UpDate crGrdGru Set nMarcas = 1
+
+Go Top In crGrdGpr
+Go Top In crGrdGru
+
+ThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh 
+ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.grdMercs.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace crGrdGpr.nMarcas With Iif(crGrdGpr.nMarcas = 0, 1, 0)
+	ThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh
+	
+	Update crGrdGru Set nMarcas = crGrdGpr.nMarcas Where Mercs = crGrdGpr.Codigos
+	Select crGrdGru
+	Locate For Mercs = crGrdGpr.Codigos
+	ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton,nShift,nXCoord,nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton,nShift,nXCoord,nYCoord
+
+This.KeyPress(13,0)
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.btnDesGde
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+UpDate crGrdGpr Set nMarcas = 0 
+UpDate crGrdGru Set nMarcas = 0 
+
+Go Top In crGrdGpr
+Go Top In crGrdGru
+
+ThisForm.pgfPrincipal.pgFiltros.grdMercs.Refresh 
+ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.btnMarGrp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+UpDate crGrdGru Set nMarcas = 1 ;
+ Where Mercs In (Select Codigos as Mercs From crGrdGpr Where nMarcas = 1)
+
+Go Top In crGrdGru
+
+ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.grdCGrus.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace crGrdGru.nMarcas With Iif(crGrdGru.nMarcas = 0, 1, 0)
+
+	Select * From crGrdGpr Where Codigos = crGrdGru.Mercs Into Cursor crBus
+	Go Top In crBus
+	If (crBus.nMarcas = 0) And (crGrdGru.nMarcas = 1)
+		Replace crGrdGru.nMarcas With 0
+		=MessageBox([O Grande Grupo "] + crGrdGru.Mercs + [" Não Foi Selecionado.] + Chr(13) + ;
+					[Para Selecionar Esse Grupo, Ajuste o Grande Grupo!!!], 0+16, [Atenção!!!])
+	EndIf
+	Use In crBus
+	ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton,nShift,nXCoord,nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton,nShift,nXCoord,nYCoord
+
+This.KeyPress(13,0)
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.btnDesGrp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+UpDate crGrdGru Set nMarcas = 0 
+
+Go Top In crGrdGru
+
+ThisForm.pgfPrincipal.pgFiltros.grdCGrus.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgFiltros.getDopEcomm
+* Classe: textbox (Base: textbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1
+* Classe: grid (Base: grid)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+Local lcArq
+
+lcArq = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+With ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01
+	Clear Resources
+	.ImgFigJpg.Picture = []
+	.ImgFigJpg.Visible = .f.
+
+	* Figura no Campo Memo
+	If Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)
+		lcFoto=Strconv(Strtran(Strtran(Strtran(crPgRes01.Imagem,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+		If (StrToFile(lcFoto, lcArq) > 0)
+			.ImgFigJpg.Picture = (lcArq)
+			.ImgFigJpg.Visible = .t.
+		EndIf
+	EndIf
+	.getObsItn.Value = Nvl(crPgRes01.Obs_Item, [])
+	.getDias.Value   = Nvl(crPgRes01.Dias, 0)
+	
+	If crPgRes01.Dias > crSigCdPac.diaslogist And crSigCdPac.diaslogist <> 0
+		.Mensagem.Visible = .T.
+	Else
+		.Mensagem.Visible = .F.		
+	EndIf 
+	
+	If crPgRes01.pStatus = 'R'
+		This.parent.cmdGeraNova.Enabled = .T. 
+	Else
+		This.parent.cmdGeraNova.Enabled = .F. 	
+	EndIf 
+	
+	Select crEstoque 
+	Set Filter To 
+	
+	Set Filter To Cpros = crPgRes01.Codigo_Item
+	Go Top 
+	This.parent.grdEstoque.Refresh 
+EndWith
+
+Select crPgRes01
+* Fim ********************************************************************************* 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column1.Resize
+------------------------------------------------------------
+PROCEDURE Column1.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column2.Resize
+------------------------------------------------------------
+PROCEDURE Column2.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column3.Resize
+------------------------------------------------------------
+PROCEDURE Column3.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column4.Resize
+------------------------------------------------------------
+PROCEDURE Column4.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column5.Resize
+------------------------------------------------------------
+PROCEDURE Column5.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column6.Resize
+------------------------------------------------------------
+PROCEDURE Column6.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column7.Resize
+------------------------------------------------------------
+PROCEDURE Column7.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column8.Resize
+------------------------------------------------------------
+PROCEDURE Column8.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column9.Resize
+------------------------------------------------------------
+PROCEDURE Column9.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column11.Resize
+------------------------------------------------------------
+PROCEDURE Column11.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column12.Resize
+------------------------------------------------------------
+PROCEDURE Column12.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column13.Resize
+------------------------------------------------------------
+PROCEDURE Column13.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column14.Resize
+------------------------------------------------------------
+PROCEDURE Column14.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column16.Resize
+------------------------------------------------------------
+PROCEDURE Column16.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column15.Resize
+------------------------------------------------------------
+PROCEDURE Column15.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Column10.Resize
+------------------------------------------------------------
+PROCEDURE Column10.Resize
+lcHea = Alltrim(This.Header1.Caption)
+If (This.Width = 0) And (MessageBox([Deseja Ocultar a Coluna "] + lcHea + [" da Grade?], 4+32+256, [Ocultar Colunas]) = 6)
+	This.Visible = .f.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 66
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+If Not Empty(This.Value)
+	If IsNull(ThisForm.poObjExt1)
+		If goSistema.ConsultaAberta = .t.
+			=MessageBox([A Pesquisa Global de Produtos Já Está Aberta.] + Chr(13) + ;
+						[Feche Para Poder Executar Uma Nova Pesquisa.], 0+16, [Atenção!!!])
+			Return .f.
+		Else
+			Do Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow
+		EndIf
+	EndIf
+
+	If (Type([ThisForm.poObjExt1])=[O])
+		With ThisForm.poObjExt1
+			.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.grp_operacao.cmd_consulta.Click()
+		EndWith 
+	EndIf 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getObsItn
+* Classe: fwmemo (Base: editbox)
+* Registro: 87
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getBusca
+* Classe: fwget (Base: textbox)
+* Registro: 88
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 10)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not Empty(This.Value) And (Lastkey()=13)
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Column3.SetFocus
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select crPgRes01
+	If Padr(This.Tag, 10) <> Padr(This.Value, 10)
+		Go Top In crPgRes01
+		Locate For Numero = This.Value
+	Else
+		Continue
+	EndIf
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.getDias
+* Classe: fwget (Base: textbox)
+* Registro: 89
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 10)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.btnRestaurar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 90
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If (MessageBox([Deseja Restaurar as Colunas da Grade (Ocultas e Larguras)?], 4+32+256, [Restaurar Grade]) = 6)
+	ThisForm.GradePadrao()
+	ThisForm.AcertaColunas([GRAVAR])
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.btnProduto
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 91
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Not Eof([crPgRes01]) And Not Empty(crPgRes01.Codigo_Item) And IsNull(ThisForm.poObjExt2)
+	Do Form SigCdPro.Scx Name ThisForm.poObjExt2 Linked With [CONGP], crPgRes01.Codigo_Item, .f., .f., .f., !fChecaAcesso([SIGOPCGP], [ALTPROD]) NoShow
+	Thisform.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.SetFocus
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.cmdOperacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 92
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AddObject
+------------------------------------------------------------
+PROCEDURE AddObject
+LPARAMETERS cName, cClass
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnOperacao.Valid
+------------------------------------------------------------
+PROCEDURE btnOperacao.Valid
+If Empty(crPgRes01.Empresa) Or Empty(crPgRes01.Movimentacao) Or Empty(crPgRes01.Numero)
+	=MessageBox([Selecione Um Registro Válido Na Grade de Itens!!!], 0+48, [Atenção!!!])
+	ThisForm.pgfPrincipal.pgDados.pgResults.pgRes01.grdDados1.SetFocus 
+Else
+	lcQuery = [Select Dopes From SigCdOpe Where Dopes = '] + crPgRes01.Movimentacao + [']
+	If Not fExecCmds(ThisForm.poDataMgr, [TmpOpe], lcQuery)
+		Return .f.
+	EndIf
+	Select TmpOpe
+	Go Top In TmpOpe
+	If Not Eof([TmpOpe])
+		Do Form SigMvExp With crPgRes01.Movimentacao, [C], crPgRes01.Numero, crPgRes01.Empresa, .t.
+		Use In TmpOpe
+	Else
+		lcQuery = [Select Dopps From SigCdOpd Where Dopps = '] + crPgRes01.Movimentacao + [']
+		If Not fExecCmds(ThisForm.poDataMgr, [TmpOpe], lcQuery)
+			Return .f.
+		EndIf
+		Select TmpOpe
+		Go Top In TmpOpe
+		If Not Eof([TmpOpe])
+			Do Form SigMvPdt With crPgRes01.Movimentacao, [C], crPgRes01.Numero, crPgRes01.Empresa, .t.
+		EndIf
+		Use In TmpOpe
+	EndIf 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.CmdConta
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 94
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(crPgRes01.Cod_Cliente)
+	=Messagebox([É Necessário o Preenchimento Da Conta!!!], 0+48, [Dados Incompletos])
+	Return .F.
+Else
+	Do Form SIGCDCTA With 0, [SIGCDCTA], crPgRes01.Cod_Cliente, .T., [], [], .T.
+Endif
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.ImgFigJpg
+* Classe: image (Base: image)
+* Registro: 95
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArq
+
+lcArq = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+Select crPgRes01
+
+If Not Empty(crPgRes01.Imagem) And Not IsNull(crPgRes01.Imagem)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(crPgRes01.Imagem,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+	=StrToFile(lcFoto, lcArq)
+EndIf
+
+If File(lcArq)
+	Do Form SigOpZom With lcArq, ;
+						 [Produto : ] + Alltrim(crPgRes01.Codigo_Item) + [ - ] + Alltrim(crPgRes01.Desc_Item), ;
+						 [Grupo : ]   + crPgRes01.Grupo + [ - SubGrupo : ] + crPgRes01.SubGrupo
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.SubNiveis
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 99
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Form SigMvSbn with Thisform, crPgRes01.Empresa, crPgRes01.Movimentacao, crPgRes01.Numero
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.cmdGeraNova
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 100
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crPgRes01
+If Reccount([crPgRes01]) = 0 
+	Return .F.
+EndIf 
+
+Select crEstoque
+lcEmps = crEstoque.Emps
+lcGrupo = crEstoque.Grupos
+lcEstos = crEstoque.Estos
+
+If Empty(lcEmps) And Empty(lcGrupo) And Empty(lcEstos)
+	MessageBox([Favor selecionar a Origem da Nova Solicitação.],0+64,[Atenção])
+	This.parent.grdEstoque.Column1.SetFocus()
+	Return .F.
+EndIf 
+
+If Empty(crPgRes01.Empresa) Or Empty(crPgRes01.Movimentacao) Or Empty(crPgRes01.Numero)
+	MessageBox([Favor selecionar a Movimentação que será Solicitada para outra Loja.],0+64,[Atenção])
+	This.parent.grdDados1.Column1.SetFocus()
+	Return .F.
+EndIf 
+
+If !ThisForm.GeraNovaSolicitacao(crPgRes01.Empresa, crPgRes01.Movimentacao, crPgRes01.Numero, lcEmps, lcGrupo, lcEstos, crPgRes01.Chave)
+	Return .F.
+EndIf 
+
+ThisForm.Processamento()
+
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.pgResults.pgRes01.Optiongroup1
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 110
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select crPgRes01
+Set Filter To 
+Go Top
+
+Do Case
+Case This.Value = 1
+	Set Filter To crPgRes01.pStatus = 'R'
+Case This.Value = 2
+	Set Filter To crPgRes01.pStatus = 'T'
+Case This.Value = 3
+	Set Filter To crPgRes01.pStatus = 'C'
+Case This.Value = 4
+	Set Filter To crPgRes01.pStatus = 'N'
+Case This.Value = 5
+	Set Filter To Not InList(crPgRes01.pStatus,'R','T','C','N')
+Case This.Value = 6
+
+Case This.Value = 7
+	Set Filter To crPgRes01.Atraso = 1
+EndCase
+
+Select crPgRes01
+Go Top
+
+This.parent.grdDados1.AfterRowColChange()
+This.parent.grdDados1.Refresh 
+
+This.parent.parent.parent.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.cmgRetornar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 111
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnRetornar.Click
+------------------------------------------------------------
+PROCEDURE btnRetornar.Click
+ThisForm.pgfPrincipal.ActivePage = 1
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.btnExportar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 112
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.GerarTXT()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.btnExcel
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 113
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.GerarXLS()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.btnVideo
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 114
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+thisform.seltoprint() 
+
+Report Form SigRevdr Preview NoConsole
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVDR.pgfPrincipal.pgDados.btnImpressora
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 115
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+thisform.seltoprint()
+ 
+Report Form SigRevdr To Printer Prompt NoConsole
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPVDR
+RESERVED3 (ClassInfo): goopcge
+podatamgr
+poobjext1
+poobjext2
+sigkey
+iformat
+lofbc
+*acertacolunas 
+*buscaantigos 
+*carregaestoque 
+*filgdegrupo 
+*filgrupo 
+*filtros 
+*flimpa 
+*geranovasolicitacao 
+*gerartxt 
+*gerarxls 
+*gradepadrao 
+*limpaemps 
+*montagrades 
+*montapgres01 
+*processamento 
+*seltoprint 
+*buscarecolhe 
+*saveproper 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 95
+================================================================================

@@ -1,0 +1,858 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpVld.SCX
+* Data/Hora: 19/11/2026 14:45:30
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPVLD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPVLD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPVLD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPVLD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeVld
+  Parent: SIGOPVLD
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPVLD.GradeVld.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVLD.GradeVld.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVLD.GradeVld.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVLD.GradeVld.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVLD.GradeVld.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVLD.GradeVld.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVLD.GradeVld.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVLD.GradeVld.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPVLD.GradeVld.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPVLD.GradeVld.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGOPVLD
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdExcluir
+  Parent: SIGOPVLD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGOPVLD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGOPVLD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 390
+  Width = 550
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Controle de Movimentações"
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  Movable = .T.
+  ClipControls = .F.
+  TitleBar = 0
+  ForeColor = 36,84,155
+  lhouvealt = .F.
+  _memberdata = <VFPData><memberdata name="lhouvealt" type="property" display="lHouveAlt"/></VFPData>
+  Name = "SIGOPVLD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 243
+  Left = 59
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 108
+  Width = 431
+  GridLineColor = 238,238,238
+  Name = "GradeVld"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 150
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 40
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.BackColor = 255,255,255
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.Width = 45
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.InputMask = "999"
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Dias"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.GradeVld.Column5.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 181
+  Height = 110
+  Width = 257
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 400
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 7
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 475
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 8
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPVLD.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 325
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 9
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPVLD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE validaregistros
+------------------------------------------------------------
+PROCEDURE validaregistros
+Local llRetorno
+llRetorno = .T.
+
+Select crSigOpVld
+Select Count(*) As Qtd, Empresa, Grupos, Contas ;
+	from crSigOpVld ;
+	Where Empty(Empresa) Or Empty(Grupos) Or Empty(Contas) Or Empty(Dias) ;
+	Group By Empresa, Grupos, Contas ;
+	Into Cursor csCount Readwrite
+
+Select csCount
+If Reccount([csCount])>0
+	lnResp = Messagebox('Há Registros sem a Informação da Empresa, Grupo, Conta ou Dias serão Removidos.'+Chr(13)+'Deseja corrigir os dados?',4+32+256,'Atenção')
+	If lnResp = 6
+		llRetorno = .F.
+	Endif
+Endif
+
+Select crSigOpVld
+Delete From crSigOpVld Where Empty(Dias) Or Empty(Empresa) Or Empty(Grupos) Or Empty(Contas) Or Empty(Dopes)
+
+Select crSigOpVld
+Select Count(*) As Qtd, Empresa, Grupos, Contas ;
+	from crSigOpVld ;
+	Where Not Empty(Empresa) And Not Empty(Grupos) And Not Empty(Contas) ;
+	Group By Empresa, Grupos, Contas ;
+	Having Count(*) > 1 ;
+	Into Cursor csDup Readwrite
+
+Select csDup
+If Reccount([csDup])>0
+	=Messagebox('Há Registros Duplicados.'+Chr(13)+'Favor Verificar os Dados?',64,'Atenção')
+	llRetorno = .F.
+Endif
+
+Return llRetorno
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha, plInverte
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.PcEscolha  = pcEscolha
+Thisform.ParentForm.Enabled  = .F.
+
+If plInverte
+	With Thisform
+		.Caption = 'Controle de Movimentações '
+		.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+		.Left    = Thisform.ParentForm.Left + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 14
+
+		.cmdInserir.Visible = .f.
+		.cmdInserir.Enabled = .f.
+		.cmdExcluir.Visible = .f.
+		.cmdExcluir.Enabled = .f.
+		.shape1.Left = .cmdSair.Left - 5
+		.shape1.width = .cmdsair.width + 10
+	EndWith
+	
+	ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+	ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+	lcSql = [Select a.* From SigOpVld a Order by a.Dopes]
+	Thisform.ParentForm.PodataMgr.SqlExecute(lcSql,'CsSigOpVld')
+
+	Select csSigOpVld
+	Goto Top	
+	With Thisform.GradeVld
+		.RecordSource          = 'cSSigOpVld'
+		.Column1.ControlSource = 'cSSigOpVld.Dopes'
+		.Column2.ControlSource = 'cSSigOpVld.Empresa'
+		.Column3.ControlSource = 'cSSigOpVld.Grupos'
+		.Column4.ControlSource = 'cSSigOpVld.Contas'
+		.Column5.ControlSource = 'cSSigOpVld.Dias'
+		.Refresh
+	EndWith
+
+Else
+
+	With Thisform
+		.Caption = 'Controle de Movimentações '
+		*.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+		*.Left    = Thisform.ParentForm.Left + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+				   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+
+		.cmdInserir.Visible = fChecaAcesso('SigOpVld','INSERIR') And ;
+							  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+							  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+		.cmdInserir.Enabled = fChecaAcesso('SigOpVld','INSERIR')	And ;
+							  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+							  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+		.cmdExcluir.Visible = fChecaAcesso('SigOpVld','EXCLUIR') And ;
+							  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+							  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+		.cmdExcluir.Enabled = fChecaAcesso('SigOpVld','EXCLUIR')	And ;
+							  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+							  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+		
+		.shape1.Left = IIF(.cmdInserir.visible, .cmdInserir.Left - 5, IIF(.cmdExcluir.visible , .cmdExcluir.left - 5, .cmdSair.Left - 5))
+		.shape1.width = IIF(.cmdInserir.visible, 3, IIF(.cmdExcluir.visible, 2, 1)) * .cmdsair.width + 16
+	EndWith
+
+	WITH Thisform.ParentForm
+		With .poDatamgr
+	        .ReQuery('crSigOpVld')
+			SELECT crSigOpVld
+			GO top
+		EndWith
+	Endwith	
+
+	Select crSigOpVld
+	Goto Top	
+	With Thisform.GradeVld
+		.RecordSource          = 'crSigOpVld'
+		.Column1.ControlSource = 'crSigOpVld.Dopes'
+		.Column2.ControlSource = 'crSigOpVld.Empresa'
+		.Column3.ControlSource = 'crSigOpVld.Grupos'
+		.Column4.ControlSource = 'crSigOpVld.Contas'
+		.Column5.ControlSource = 'crSigOpVld.Dias'
+		.Refresh
+	EndWith
+EndIf
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.GradeVld.AfterRowColChange()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld
+* Classe: grid (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Select CrSigOpVld
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( IsEmpty( crSigOpVld.Dopes ) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcOperacao, lnRecNo, loBrowse
+
+lcDopes = []&&crSigCdOpe.Dopes
+
+If Not IsEmpty(This.Value)
+
+	If !Thisform.ParentForm.podatamgr.ChkRegister('SigCdOpe', 'Dopes', This.Value)
+		xBrox = CreateObject('fwBuscaExt',Thisform.ParentForm.poDatamgr.pnIdconn,'SigCdOpe','cpSigCdOpe','Dopes',This.Value,'Seleção',.t.,'Dopes')
+
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('Dopes', '', 'Operação', .t.)	
+			xBrox.mAddColuna('nDopes', '9999', ' # ',.f.)
+			xBrox.Show()
+		EndIf 
+		This.Value = Iif( Lastkey() == 27, '', cpSigCdOpe.Dopes )
+		Thisform.GradeVld.column2.text1.Value=Iif( Lastkey() == 27, '',cpSigCdOpe.nDopes)
+		This.Refresh
+	ENDIF
+	
+*!*		lcDopes = This.Value
+*!*		If Not IsEmpty(lcDopes)
+*!*			Select crSigOpVld
+*!*			If Not Eof() And Not Bof()
+*!*				SELECT crSigOpVld
+*!*				lnRecNo = RecNo()
+*!*			Else 
+*!*				lnRecNo = 0
+*!*			EndIf
+*!*			LOCATE FOR Dopes = lcDopes
+*!*			If Not Eof()
+*!*				Skip
+*!*				If crSigOpVld.Dopes = lcDopes
+*!*					This.Value = ''
+*!*					This.Refresh
+*!*					Delete
+*!*					Skip
+*!*					Skip -1
+*!*					MessageBox('Operação já Digitada ... ',48,'')
+*!*				EndIf
+*!*			Endif
+*!*			
+*!*			Select crSigOpVld
+*!*			With Thisform.GradeVld
+*!*				.Column1.Refresh
+*!*				.Column2.Text1.Refresh
+*!*			EndWith
+*!*			This.Refresh
+*!*		EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !fAcessoContab(Usuar,'C',This.Value,This,'')
+	Messagebox('Acesso Negado !!!',48,'')
+	This.Value = ''
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = CrSigOpVld.Grupos
+llRet = Empty(This.Value) or fAcessoContas(Usuar,grupo,'C',This.Value,This,'')
+If !llRet
+	Messagebox('Acesso Negado !!!',48,'')
+	This.Value  = ''
+	This.Refresh
+EndIf
+Return(llRet)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.GradeVld.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpVld
+
+If Not Eof()
+	Thisform.lHouveExcl = .T.
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.GradeVld.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If ( Thisform.lHouveExcl Or Thisform.lHouveIns Or ThisForm.lHouveAlt )
+		
+		If Not ThisForm.ValidaRegistros()
+			Return .F.
+		EndIf 
+				
+		Select crSigOpVld
+		m.lnErro1 = ThisForm.parentform.poDatamgr.pnIdConn
+
+		With Thisform.ParentForm
+			If m.lnErro1>0 
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpVld'),1,-1)
+			EndIf 
+			If m.lnErro1>0 
+				m.lnErro1 = .poDataMgr.Commit()
+			EndIf 
+			If Not m.lnErro1>0 
+				.poDataMgr.RollBack()
+			EndIf 
+		EndWith 
+		If Not m.lnErro1>0 
+			= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+		EndIf 
+	EndIf
+ENDIF
+
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPVLD.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.lHouveIns = .T.
+
+Select crSigOpVld
+Locate for Dopes = Space(20)
+If Eof()
+	Insert Into crSigOpVld (CidChaves) Values (fUniqueIds())
+EndIf
+
+Select crSigOpVld
+Thisform.GradeVld.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPVLD
+RESERVED3 (ClassInfo): antvalue
+lhouvealt
+lhouveexcl
+lhouveins
+parentform
+pcescolha
+podatamgr
+_memberdata XML Metadata for customizable properties
+*validaregistros 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Purely additive ÔÇö no existing code touched. Fase 6 is complete and verified.
+
+## Summary
+
+Implemented the Fase 6 lookup for the `Itras` (Transportadora) grid cell in `FormSigoptrp`:
+
+1. **`classes\textboxgridlookup.PRG`** ÔÇö added `TextBoxTransportadoraTrp_4c` (TextBox subclass), following the project's established pattern (same as `TextBoxOperacaoTrf_4c`/`TextBoxProdutoOpTrf_4c`): `When`/`Valid`/`KeyPress(F4,F5)`/`DblClick` all delegate to PUBLIC methods on `THISFORM`, `MaxLength=10` (matches `SigPrTrp.itras char(10)`).
+
+2. **`forms\operacionais\FormSigoptrp.prg`**:
+   - `AplicarFormatoGrade`: installs the custom TextBox into `Column1` via `AddObject` + `CurrentControl` + `Sparse=.F.` (guarded with `PEMSTATUS` so it survives the `RecordSource` reset in `CarregarLista`).
+   - `GuardarItrasAnterior` ÔÇö legacy `When` (`Thisform.AntValue = This.Value`).
+   - `ValidarItrasGridExec` ÔÇö legacy `Valid` (empty clears the cell; non-empty opens the lookup).
+   - `AbrirLookupItras`/`AbrirLookupItrasExec` ÔÇö funnel + body using `FormBuscaAuxiliar` against `SigPrTrp` (regra #37), writing the resolved description directly into the row of `cursor_4c_Itens` (`REPLACE Razaos ... IN`), matching the legacy's `Replace Razaos with CrListaRemota.Razaos In xOpe`.
+   - Updated the header comments to reflect Fase 6 is done.
+
+Verified via VFP9: both files compile cleanly (no `.err`), and an instantiation probe confirmed the TextBox is correctly installed on `Column1` with the right class/properties, and the `When`/`Valid` handlers behave as expected (snapshot captured, empty value cleared).

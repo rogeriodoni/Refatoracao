@@ -1,0 +1,47 @@
+P0 inicio
+P1 config.prg OK
+P2 SET PROCEDURE OK
+P3 CREATEOBJECT VARTYPE=O
+FORM_CRIADO=SIM
+Caption=[Pesquisa Detalhada]
+BaseClass=[Form]
+Width=1300 Height=700
+PageCount=2 Tabs=.F. ActivePage=1
+DataSessionId=2
+Page1.ControlCount=17
+--- PASSO A: grades/botoes criados ---
+grd_4c_Empresas: ColumnCount=3 Visible=.T. Top=238 Left=71 W=318 H=410
+grd_4c_Tipos: ColumnCount=2 Visible=.T. Top=238 Left=469 W=323 H=196
+grd_4c_GrandeGrupo: ColumnCount=2 Visible=.T. Top=238 Left=880 W=323 H=196
+grd_4c_GrupoProduto: ColumnCount=3 Visible=.T. Top=446 Left=880 W=323 H=196
+grd_4c_Operacoes: ColumnCount=2 Visible=.T. Top=446 Left=470 W=323 H=196
+cmd_4c_BtnMarca: Visible=.T. Themes=.T. Pic=[geral_marcar_26.jpg] DisPic=[geral_marcar_26.jpg] Top=286 Left=796
+cmd_4c_BtnDesmarca: Visible=.T. Themes=.T. Pic=[cadastro_excluir_26.jpg] DisPic=[cadastro_excluir_26.jpg] Top=331 Left=796
+cmd_4c_Command1: Visible=.T. Themes=.T. Pic=[geral_marcar_26.jpg] DisPic=[geral_marcar_26.jpg] Top=489 Left=796
+cmd_4c_Command2: Visible=.T. Themes=.T. Pic=[cadastro_excluir_26.jpg] DisPic=[cadastro_excluir_26.jpg] Top=534 Left=796
+cmd_4c_BtnMarGde: Visible=.T. Themes=.T. Pic=[geral_marcar_26.jpg] DisPic=[geral_marcar_26.jpg] Top=286 Left=1207
+cmd_4c_BtnDesGde: Visible=.T. Themes=.T. Pic=[cadastro_excluir_26.jpg] DisPic=[cadastro_excluir_26.jpg] Top=331 Left=1207
+cmd_4c_BtnMarGrp: Visible=.T. Themes=.T. Pic=[geral_marcar_26.jpg] DisPic=[geral_marcar_26.jpg] Top=489 Left=1207
+cmd_4c_BtnDesGrp: Visible=.T. Themes=.T. Pic=[cadastro_excluir_26.jpg] DisPic=[cadastro_excluir_26.jpg] Top=534 Left=1207
+cmg_4c_Empresas: ButtonCount=2 Visible=.T. B1.Pic=[geral_marcar_26.jpg] B2.Pic=[cadastro_excluir_26.jpg]
+cmg_4c_Filtros: ButtonCount=2 Visible=.T. B1.Pic=[cadastro_procurar_60.jpg] B2.Pic=[cadastro_sair_60.jpg]
+chk_4c_Ck_MarcaEmp: existe=.T. Value=1
+--- PASSO B: bind + CheckBox ---
+datasession corrente=2
+alias corrente antes do CarregarDados=[CURSOR_4C_DECOY] tipo col1=C
+P5 CarregarDados executado
+grd_4c_Empresas: RecordSource=[cursor_4c_Empresas] ColumnCount=3 Col1.ControlSource=[cursor_4c_Empresas.Imps] Col1.Check1=.T. Col1.CurrentControl=[CHECK1] Col1.Sparse=.F. Col1.ReadOnly=.F. Col1.Width=15 Col2.Header=[Cod.] RECCOUNT=2 Check1.Value=0 Check1.VARTYPE=N handlers=0
+grd_4c_Tipos: RecordSource=[cursor_4c_TiposOperacao] ColumnCount=2 Col1.ControlSource=[cursor_4c_TiposOperacao.nMarcas] Col1.Check1=.T. Col1.CurrentControl=[CHECK1] Col1.Sparse=.F. Col1.ReadOnly=.T. Col1.Width=18 Col2.Header=[Tipo de Operação] RECCOUNT=2 Check1.Value=0 Check1.VARTYPE=N handlers=4
+grd_4c_GrandeGrupo: RecordSource=[cursor_4c_GrandeGrupo] ColumnCount=2 Col1.ControlSource=[cursor_4c_GrandeGrupo.nMarcas] Col1.Check1=.T. Col1.CurrentControl=[CHECK1] Col1.Sparse=.F. Col1.ReadOnly=.T. Col1.Width=18 Col2.Header=[Grande Grupo] RECCOUNT=1 Check1.Value=0 Check1.VARTYPE=N handlers=4
+grd_4c_GrupoProduto: RecordSource=[cursor_4c_GrupoProduto] ColumnCount=3 Col1.ControlSource=[cursor_4c_GrupoProduto.nMarcas] Col1.Check1=.T. Col1.CurrentControl=[CHECK1] Col1.Sparse=.F. Col1.ReadOnly=.T. Col1.Width=18 Col2.Header=[Gde] RECCOUNT=1 Check1.Value=0 Check1.VARTYPE=N handlers=4
+grd_4c_Operacoes: RecordSource=[cursor_4c_Operacoes] ColumnCount=2 Col1.ControlSource=[cursor_4c_Operacoes.nMarcas] Col1.Check1=.T. Col1.CurrentControl=[CHECK1] Col1.Sparse=.F. Col1.ReadOnly=.T. Col1.Width=18 Col2.Header=[Operações] RECCOUNT=1 Check1.Value=0 Check1.VARTYPE=N handlers=4
+P6 CarregarDados 2a vez OK (idempotente)
+antes do toggle: nMarcas=0
+depois do toggle: nMarcas=1 | Operacoes.nMarcas=1
+apos BtnMarcaClick: Tipos.nMarcas=1
+apos BtnDesmarcaClick: Tipos.nMarcas=0
+apos CkMarcaEmpClick(1): Empresas.Imps=1
+P7 Release OK
+--- DIALOGOS SUPRIMIDOS ---
+
+P9 FIM

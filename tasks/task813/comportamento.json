@@ -1,0 +1,419 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 20,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPTOT",
+      "evento": "Procedure",
+      "linhas": 102,
+      "codigoOriginal": "lnTotQtde  = 0\nlnTotPeso  = 0\nlnTotPesoC = 0\nlnTotPes   = 0\n\nselect xvalite\nzap\nset order to moeda\nselect crTpmMvItn\nscan\n\tIf IsEmpty(Cpros)\n\t\tLoop\n\tEndIf\n\tlnMulti = Iif(crSigCdOpe.opers=3,Iif(crTpmMvItn.Opers=[E],-1,1),Iif(crTpmMvItn.Opers=[E],1,-1))\n\n\tlnTotPes = lnTotPes + crTpmMvItn.TPesos\n\n\tIf crSigCdOpe.PesoVts = 1\n\t\t_MoePeso = Iif( IsEmpty( crSigCdOpe.Cmoes ), crTpmMvItn.MoeFats, crSigCdOpe.Cmoes )\n\t\tSelect xValIte\n\t\tIf !Seek( _MoePeso )\n\t\t\tInsert into xValite ( Moeda ) Values ( _MoePeso )... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "ChkQtds,Get_QOper,get_TotQtde,Get_POper,Get_TotPeso,Get_TotPesoC,Get_mtCub",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": " =fConfigGeral()\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT",
+      "evento": "Init",
+      "linhas": 185,
+      "codigoOriginal": "LParameters pform,datses\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal lnTotQtde, lnTotPeso, lnQtde\n\nlcCidQuery3 = fUniqueIds()\n\nSet Datasession To DatSes\nThisform.parentform = pform\n\nlcQueryTmpd  = [Select * From SigTempD Where CidQuerys = ?CidQuery3 ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\tWith .poDataMgr\n\t\t.Addcursor('SigTempD','CidQuerys','CrSigTempD','','',lcQuerytmpd)\n\tEndwith\nEndWi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Caption = Iif,SqlExecute,UpDate,RollBack,commit,CalcTotais",
+        "controlesReferenciados": "Get_Compensacao",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_ProdutoTam.Produto.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_ProdutoTam.total.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.grade_total.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.grade_total.total.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_TotQtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_TotPeso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_QOper",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_POper",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_Serv.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_Serv.total.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_TotPesoC",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_Compensacao",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.AntValue = This.Value\n\nReturn InList(ThisForm.ParentForm.Op_Escolha, [INSERIR], [ALTERAR])\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_Compensacao",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If (This.Value < 0)\n\t=MessageBox([Valor de Compensação Inválido], 48, [Atenção!!!])\n\tThis.Value = This.AntValue\n\tReturn 0\nElse\n\tThis.Refresh\n\tThisform.CalcTotais()\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcTotais",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Container1.GradeCol.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Container1.GradeCol.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Get_mtcub",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.OK",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.getTotPes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_Produto.Produto.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTOT.Grade_Produto.total.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPTOT.Procedure",
+      "queryOriginal": "\t\t\tInsert into xValite ( Moeda ) Values ( _MoePeso )... [TRUNCADO]",
+      "tabelas": "xValite",
+      "colunas": "Moeda",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTOT.Init",
+      "queryOriginal": "lcQueryTmpd  = [Select * From SigTempD Where CidQuerys = ?CidQuery3 ]",
+      "tabelas": "SigTempD",
+      "colunas": "CidQuerys",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xValite", "SigTempD"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

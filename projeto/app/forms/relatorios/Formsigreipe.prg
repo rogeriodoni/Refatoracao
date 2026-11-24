@@ -33,6 +33,10 @@ DEFINE CLASS Formsigreipe AS FormBase
     *-- BO de relatorio (sigreipeBO herda RelatorioBase)
     this_oRelatorio    = .NULL.
     this_cMensagemErro = ""
+    *-- Guarda de reentrancia dos handlers de LostFocus (regra #47): os
+    *-- validadores podem exibir dialogo, o foco sai e volta e o proprio
+    *-- LostFocus redispara.
+    this_lEmValidacao  = .F.
 
     *-- Parametros de impressao termica (carregados em CarregarImpressoras)
     this_nTpImp    = 1
@@ -479,6 +483,42 @@ DEFINE CLASS Formsigreipe AS FormBase
                 .Header1.Caption = ""
             ENDWITH
 
+            .Visible = .T.
+        ENDWITH
+
+        *-- Larguras, headers e ControlSource das colunas 2..6 ficam no metodo
+        *-- unico, que tambem eh chamado depois de cada troca de RecordSource.
+        THIS.AplicarColunasGrdOper()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarColunasGrdOper - (re)aplica Width / ControlSource / Header das
+    *   colunas da grade de operacoes.
+    *
+    *   Tem de rodar na criacao E em TODO ponto que reatribui o RecordSource:
+    *   o VFP recalcula Column.Width para o default 90 quando a fonte do grid
+    *   muda (regra #41), e o bind das colunas se perde junto com o alias.
+    *   PUBLIC de proposito - e chamado de ConfigurarGridOperacoes e do
+    *   handler de busca.
+    *--------------------------------------------------------------------------
+    PROCEDURE AplicarColunasGrdOper()
+        LOCAL loc_oGrid
+        loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_GrdOper
+
+        WITH loc_oGrid
+            *-- Column1 (Marcas / CheckBox) ja nasce montada em
+            *-- ConfigurarGridOperacoes; aqui so se repoe o que o rebind derruba.
+            WITH .Column1
+                .Width           = 30
+                .Alignment       = 2
+                .Sparse          = .F.
+                .ControlSource   = "cursor_4c_Operacoes.Marcas"
+                .Header1.Caption = ""
+                IF PEMSTATUS(loc_oGrid.Column1, "Check1", 5)
+                    .CurrentControl = "Check1"
+                ENDIF
+            ENDWITH
+
             *-- Column2: Emps
             WITH .Column2
                 .Width           = 40
@@ -513,8 +553,6 @@ DEFINE CLASS Formsigreipe AS FormBase
                 .ControlSource   = "cursor_4c_Operacoes.DescDests"
                 .Header1.Caption = "Destino"
             ENDWITH
-
-            .Visible = .T.
         ENDWITH
     ENDPROC
 
@@ -694,8 +732,12 @@ DEFINE CLASS Formsigreipe AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c__nm_operacao, "KeyPress",  THIS, "TxtNmOperacaoKeyPress")
-        BINDEVENT(loc_oPagina.txt_4c__nm_operacao, "KeyPress", THIS, "TxtNmOperacaoLostFocus")
+        *-- Regra #47: no legado get_nm_operacao faz o trabalho em Valid
+        *-- (fAcessoMovmto) e em LostFocus (limpa as datas) - os dois rodam ao
+        *-- SAIR do campo. Estavam ligados em "KeyPress", que so dispara em
+        *-- ENTER/TAB: saindo com o mouse nada acontecia. O legado nao tem
+        *-- KeyPress nenhum neste campo.
+        BINDEVENT(loc_oPagina.txt_4c__nm_operacao, "LostFocus", THIS, "TxtNmOperacaoLostFocus")
 
         *-- Rotulo "Periodo :" (lbl_periodo: top=151, left=47)
         loc_oPagina.AddObject("lbl_4c_Lbl_periodo", "Label")
@@ -759,7 +801,11 @@ DEFINE CLASS Formsigreipe AS FormBase
             .Enabled       = .F.
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c__dt_final, "KeyPress", THIS, "TxtDtFinalKeyPress")
+        *-- Regra #47: no legado get_dt_final popula a GRADE no Valid (ao sair
+        *-- do campo) e nao tem KeyPress. Ligado em "KeyPress" a grade so
+        *-- enchia com ENTER/TAB - digitar a data e clicar direto em
+        *-- Visualizar deixava a grade VAZIA (Erro383).
+        BINDEVENT(loc_oPagina.txt_4c__dt_final, "LostFocus", THIS, "TxtDtFinalLostFocus")
 
         *-- Rotulo "Qtd. copias :" (Say8: top=151, left=281, FontName=Verdana)
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
@@ -912,34 +958,51 @@ DEFINE CLASS Formsigreipe AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TxtNmOperacaoKeyPress - ENTER/TAB valida operacao e atualiza estado dos campos
+    * TxtNmOperacaoLostFocus - Valid + LostFocus do legado, ambos ao sair
+    *   Replica: get_nm_operacao.Valid (fAcessoMovmto) + .LostFocus (limpa datas)
     *--------------------------------------------------------------------------
-    PROCEDURE TxtNmOperacaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9)
-            THIS.ValidarNmOperacao()
+    PROCEDURE TxtNmOperacaoLostFocus()
+        LOCAL loc_oPg1, loc_lAnt
+        *-- Guarda de reentrancia (regra #47): ValidarNmOperacao pode exibir
+        *-- dialogo, o foco sai e volta e o proprio LostFocus redispara.
+        *-- save/restore em vez de set/clear para compor sob aninhamento.
+        loc_lAnt = THIS.this_lEmValidacao
+        IF loc_lAnt
+            RETURN
         ENDIF
+        THIS.this_lEmValidacao = .T.
+        TRY
+            loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+            *-- get_nm_operacao.Valid do legado
+            IF !EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
+                THIS.ValidarNmOperacao()
+            ENDIF
+            *-- get_nm_operacao.LostFocus do legado
+            IF EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
+                loc_oPg1.txt_4c__dt_inicial.Value = {}
+                loc_oPg1.txt_4c__dt_final.Value   = {}
+            ENDIF
+        FINALLY
+            THIS.this_lEmValidacao = loc_lAnt
+        ENDTRY
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TxtNmOperacaoLostFocus - Limpa datas se campo Operacao ficou vazio
-    *   Replica: get_nm_operacao.LostFocus do original
+    * TxtDtFinalLostFocus - ao SAIR do campo dispara a consulta e popula a grade
+    *   Replica: get_dt_final.Valid do original
     *--------------------------------------------------------------------------
-    PROCEDURE TxtNmOperacaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg1
-        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
-            loc_oPg1.txt_4c__dt_inicial.Value = {}
-            loc_oPg1.txt_4c__dt_final.Value   = {}
+    PROCEDURE TxtDtFinalLostFocus()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmValidacao
+        IF loc_lAnt
+            RETURN
         ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * TxtDtFinalKeyPress - ENTER/TAB dispara consulta SQL e popula o grid
-    *--------------------------------------------------------------------------
-    PROCEDURE TxtDtFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF INLIST(par_nKeyCode, 13, 9)
+        THIS.this_lEmValidacao = .T.
+        TRY
             THIS.ValidarDtFinal()
-        ENDIF
+        FINALLY
+            THIS.this_lEmValidacao = loc_lAnt
+        ENDTRY
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1166,8 +1229,24 @@ DEFINE CLASS Formsigreipe AS FormBase
     *   Verifica se o codigo de operacao existe em SigMvCab.Dopes
     *--------------------------------------------------------------------------
     PROCEDURE ValidarNmOperacao()
-        LOCAL loc_oPg1, loc_cValor, loc_cSQL, loc_nResult
-        loc_oPg1  = THIS.pgf_4c_Paginas.Page1
+        *-- Legado: get_nm_operacao.Valid chama fAcessoMovmto(Usuar, This.Value, This),
+        *-- funcao global que consulta SigCdOpe e ABRE A LISTA das operacoes quando
+        *-- o que foi digitado nao resolve sozinho. fAcessoMovmto nao foi portada,
+        *-- e a migracao a trocou por um SELECT de igualdade exata em SigMvCab que
+        *-- so sabia dizer "nao encontrada" e AINDA APAGAVA o que o usuario digitou
+        *-- - digitar a inicial nao abria lista nenhuma (Erro384).
+        *--
+        *-- Aqui usa-se o picker canonico do projeto sobre SigCdOpe.Dopes, que eh a
+        *-- mesma tabela do fAcessoMovmto (confirmado: os 39 Dopes de SigCdOpe
+        *-- batem com os de SigMvCab) e o mesmo caminho que o FormCLC adotou.
+        *--
+        *-- Contrato do FormBuscaAuxiliar (regras #36/#37): o Init ja tenta o match
+        *-- exato e resolve sozinho quando acha UM registro - por isso o Show() so
+        *-- roda se this_lAchouRegistro for .F., e o valor so eh atribuido sob
+        *-- this_lSelecionou. Regra #50: NAO exibir aviso nem limpar o campo quando
+        *-- nao casa - a propria lista eh o retorno, e o digitado vira o filtro.
+        LOCAL loc_oPg1, loc_cValor, loc_oBusca
+        loc_oPg1   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value)
 
         IF EMPTY(loc_cValor)
@@ -1176,21 +1255,26 @@ DEFINE CLASS Formsigreipe AS FormBase
         ENDIF
 
         TRY
-            loc_cSQL    = "SELECT TOP 1 Dopes FROM SigMvCab" + ;
-                          " WHERE RTRIM(Dopes) = " + EscaparSQL(loc_cValor)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NmOpVal")
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdOpe", "cursor_4c_BuscaOpe", "Dopes", loc_cValor, ;
+                "Opera" + CHR(231) + CHR(227) + "o")
 
-            IF loc_nResult > 0
-                SELECT cursor_4c_NmOpVal
-                IF EOF()
-                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o '" + loc_cValor + ;
-                        "' n" + CHR(227) + "o encontrada.", "Aviso")
-                    loc_oPg1.txt_4c__nm_operacao.Value = ""
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
                 ENDIF
-            ENDIF
 
-            IF USED("cursor_4c_NmOpVal")
-                USE IN cursor_4c_NmOpVal
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
+                    SELECT cursor_4c_BuscaOpe
+                    loc_oPg1.txt_4c__nm_operacao.Value = ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+                    loc_oPg1.txt_4c__nm_operacao.Refresh()
+                ENDIF
+
+                IF USED("cursor_4c_BuscaOpe")
+                    USE IN cursor_4c_BuscaOpe
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
 
         CATCH TO loc_oErro
@@ -1272,11 +1356,15 @@ DEFINE CLASS Formsigreipe AS FormBase
                 SELECT cursor_4c_Operacoes
                 IF !EOF()
                     GO TOP
-                    loc_oGrid.ColumnCount = 3
+                    *-- NUNCA mexer no ColumnCount aqui. A grade nasce com 6
+                    *-- colunas e o legado (sigreipe.scx:1891) so troca o
+                    *-- RecordSource. O "ColumnCount = 3" que estava aqui
+                    *-- DESTRUIA as colunas 4-6 (Codigo / Origem / Destino) na
+                    *-- primeira busca e religava so 3 ControlSource.
+                    *-- Reatribuir RecordSource zera Column.Width (regra #41),
+                    *-- por isso o bloco de colunas eh reaplicado inteiro.
                     loc_oGrid.RecordSource = "cursor_4c_Operacoes"
-                    loc_oGrid.Column1.ControlSource = "cursor_4c_Operacoes.Marcas"
-                    loc_oGrid.Column2.ControlSource = "cursor_4c_Operacoes.Emps"
-                    loc_oGrid.Column3.ControlSource = "cursor_4c_Operacoes.Dopes"
+                    THIS.AplicarColunasGrdOper()
                 ELSE
                     MsgAviso("Nenhum movimento encontrado nesse per" + ;
                         CHR(237) + "odo.", "Aviso")
@@ -2081,8 +2169,11 @@ DEFINE CLASS Formsigreipe AS FormBase
             REPLACE llImpPais WITH ;
                 IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptPais", 5) AND loc_oPg1.obj_4c_OptPais.Value = 1, .T., .F.) ;
                 IN CsCabecalho
+            *-- .T., .F. - estava .T., .T. nos DOIS ramos do IIF, o que fazia
+            *-- "Imprimir Codigo : Nao" ser ignorado e a etiqueta sempre sair
+            *-- com o codigo. Legado: Replace llImpCodigos With (optCodigo.Value = 1)
             REPLACE llImpCodigos WITH ;
-                IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptCodigo", 5) AND loc_oPg1.obj_4c_OptCodigo.Value = 1, .T., .T.) ;
+                IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptCodigo", 5) AND loc_oPg1.obj_4c_OptCodigo.Value = 1, .T., .F.) ;
                 IN CsCabecalho
 
             loc_nContatos = IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptContatos", 5), loc_oPg1.obj_4c_OptContatos.Value, 2)
@@ -2286,21 +2377,26 @@ DEFINE CLASS Formsigreipe AS FormBase
                 loc_lOk = .T.
             ELSE
                 IF THIS.Processamento() AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                *-- SEM NOCONSOLE: medido no VFP9 - em LABEL FORM a clausula
+                *-- PREVIEW eh incompativel com NOCONSOLE e estoura
+                *-- "PREVIEW clause is not allowed with OFF/NOCONSOLE or
+                *-- TO PRINT/FILE." (Erro383). Em REPORT FORM as duas convivem;
+                *-- em LABEL FORM, nao.
                 DO CASE
                     CASE loc_nColunas = 1
-                        LABEL FORM SigMldDn PREVIEW NOCONSOLE
+                        LABEL FORM SigMldDn PREVIEW
                     CASE loc_nColunas = 2
-                        LABEL FORM SigMld2 PREVIEW NOCONSOLE
+                        LABEL FORM SigMld2 PREVIEW
                     CASE loc_nColunas = 3
-                        LABEL FORM SigMld3 PREVIEW NOCONSOLE
+                        LABEL FORM SigMld3 PREVIEW
                     CASE loc_nColunas = 4
-                        LABEL FORM SigMld4 PREVIEW NOCONSOLE
+                        LABEL FORM SigMld4 PREVIEW
                     CASE loc_nColunas = 5
-                        LABEL FORM SigMld5 PREVIEW NOCONSOLE
+                        LABEL FORM SigMld5 PREVIEW
                     CASE loc_nColunas = 6
-                        LABEL FORM SigMld2C PREVIEW NOCONSOLE
+                        LABEL FORM SigMld2C PREVIEW
                     CASE loc_nColunas = 8
-                        LABEL FORM SigMld2K PREVIEW NOCONSOLE
+                        LABEL FORM SigMld2K PREVIEW
                 ENDCASE
                 loc_lOk = .T.
             ELSE

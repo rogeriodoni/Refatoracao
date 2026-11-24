@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei as 4 ocorr├¬ncias apontadas no `FormSigOpVdi.prg` (├║nico arquivo fornecido neste pass) e nenhuma corresponde a um filtro WHERE realmente inventado:
+
+**Busca por `WHERE` no arquivo inteiro** (7 ocorr├¬ncias totais): nenhuma cont├®m as colunas `IMPS`, `WIDTH` ou `VALUE`. Essas tr├¬s colunas s├│ aparecem em contextos que n├úo s├úo filtro SQL:
+- `IMPS`: s├│ em `SET Imps = ...` (UPDATE) e `REPLACE ALL Imps WITH ...` ÔÇö atribui├º├úo, n├úo filtro.
+- `WIDTH`: s├│ em atribui├º├Áes de propriedade visual (`.Width = 1301`, etc.).
+- `VALUE`: s├│ em `.Value` de controles (`IIF(loc_oPag.cmg_4c_Empresas.Value = 1, ...)`), n├úo ├® cl├íusula WHERE.
+
+**`TIPOOPS`** aparece em WHERE real, nas linhas 1830/1967/1977:
+```foxpro
+WHERE TipoOps = cursor_4c_TiposOperacao.Codigos
+```
+Mas isso **n├úo ├® inventado** ÔÇö ├® exatamente a mesma condi├º├úo do legado, s├│ com os operandos invertidos:
+```foxpro
+UpDate crOpera Set crOpera.nMarcas = crTpOpe.nMarcas Where crTpOpe.Codigos = crOpera.TipoOps
+```
+`crTpOpe.Codigos = crOpera.TipoOps` Ôëí `TipoOps = cursor_4c_TiposOperacao.Codigos`. O extrator de colunas do detector provavelmente n├úo reconheceu `TipoOps` porque ele est├í no lado direito da compara├º├úo, ou com case diferente ÔÇö mas a l├│gica ├® id├¬ntica ├á do legado (regra #44 do CLAUDE.md: patterns automatizados erram o contexto, n├úo a premissa).
+
+**Conclus├úo**: os 4 achados s├úo falsos positivos do detector SQL-FILTRO-INVENTADO (mesma fam├¡lia de falsos positivos j├í documentada: `SQLFILTROoutrat`, `SqlFiltroIifConcat`, `ParentesesIFCur`). Remover a condi├º├úo `WHERE TipoOps = ...` quebraria a cascata de marca├º├úo TipoÔåÆOpera├º├úo que ├® fiel ao legado ÔÇö violaria a regra de n├úo alterar l├│gica de neg├│cio. N├úo fiz nenhuma altera├º├úo no arquivo.

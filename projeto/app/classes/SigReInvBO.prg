@@ -263,13 +263,28 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
             INDEX ON Tipo + CGrus + Moedas TAG TpGruMoe
 
             *-- Define tipo de valor para cabecalho do relatorio
+            *--
+            *-- CsCabecalho (legado SigReInv.scx:1754): cursor de UMA linha que
+            *-- guarda o NOME das colunas de valor a imprimir. O FRX SigReIv1 nao
+            *-- le o valor: ele faz Eval(csCabecalho.Univals) e
+            *-- Eval(csCabecalho.TotVals) para resolver a coluna em tempo de
+            *-- execucao. A migracao transcreveu o TipoVal/TipoRel mas jogou fora
+            *-- o CREATE CURSOR e os 3 INSERT, e o REPORT FORM estourava
+            *-- "Alias 'CSCABECALHO' is not found." (Erro382).
+            IF USED("CsCabecalho")
+                USE IN CsCabecalho
+            ENDIF
+            CREATE CURSOR CsCabecalho (UniVals c(20), TotVals c(20))
+
             DO CASE
                 CASE loc_nImpCusto = 1
                     THIS.this_cTipoVal = "C"
                     THIS.this_cTipoRel = "Custo"
+                    INSERT INTO CsCabecalho (UniVals, TotVals) VALUES ("VlCusto", "TotCusto")
                 CASE loc_nImpMedio = 1
                     THIS.this_cTipoVal = "M"
                     THIS.this_cTipoRel = "Custo M" + CHR(233) + "dio"
+                    INSERT INTO CsCabecalho (UniVals, TotVals) VALUES ("VlMedio", "TotMedio")
                 CASE loc_nImpVenda = 1 OR loc_nImpPEPS = 1 OR loc_nImpUEPS = 1
                     THIS.this_cTipoVal = "V"
                     DO CASE
@@ -280,6 +295,7 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
                         CASE loc_nImpUEPS = 1
                             THIS.this_cTipoRel = "UEPS"
                     ENDCASE
+                    INSERT INTO CsCabecalho (UniVals, TotVals) VALUES ("VlVenda", "TotVenda")
             ENDCASE
 
             *-- Carrega grandes grupos
@@ -1343,6 +1359,12 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
                 VALUES (loc_cTIni + "SERVIR" + CHR(193) + loc_cTFim, ;
                         loc_cTIni + "SERVIU" + loc_cTFim)
 
+            *-- loc_cFrx2 estava DECLARADA e nunca atribuida: LOCAL sem valor eh
+            *-- Logico (.F.) e FILE(.F.) estoura "Function argument value, type,
+            *-- or count is invalid." logo apos mandar o SigReIv1 para a
+            *-- impressora - os termos de abertura/encerramento (SigReIv2/3),
+            *-- que sao exigencia legal do livro, nunca saiam (Erro382).
+            loc_cFrx2 = gc_4c_CaminhoReports + "SigReIv2.frx"
             loc_cFrx3 = gc_4c_CaminhoReports + "SigReIv3.frx"
 
             SELECT TmpTermo

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both stale `.FXP` files removed successfully (the "No such file" errors confirm the `rm` worked).
+
+## Resumo
+
+Fase 8/8 de **FormSigOpZom** (task822) conclu├¡da. O SIGOPZOM ├® um dialogo *Zoom* parametrizado (visualizador de imagem ampliada, sem tabela, sem grid, sem campos edit├íveis) chamado por outros forms via `CREATEOBJECT("FormSigOpZom", pArquivo, pTexto1, pTexto2, pTimer)` ÔÇö n├úo ├® CRUD.
+
+Como nas Fases 4-7, o deliverable padr├úo da Fase 8 (BtnBuscarClick/BtnSalvarClick/BtnCancelarClick/FormParaBO/BOParaForm/HabilitarCampos/LimparCampos/CarregarLista/AjustarBotoesPorModo) n├úo se aplica ÔÇö documentei isso no cabe├ºalho do arquivo com a mesma justificativa estruturada das fases anteriores, cruzando contra `comportamento.json` (confirma que o legado s├│ tem 3 m├®todos: `Init`, `Timer.Procedure`, `cmdBtnForm.Click`, todos j├í cobertos desde a Fase 5).
+
+Verifica├º├Áes feitas:
+- Confirmei que n├úo h├í item de menu no legado para SIGOPZOM (├® sub-dialogo, n├úo feature standalone) ÔÇö **n├úo** adicionei entrada em `menu.prg`, o que seria inventar funcionalidade (violaria o PILAR 1).
+- `indice_classes.txt` j├í tem as depend├¬ncias wireadas (GarantirClasse cobre `FormSigOpZom`/`SigOpZomBO` e os 6 forms que o chamam).
+- Sem TODO/FIXME/stub/frase proibida nos dois arquivos; blocos `DEFINE CLASS/WITH/TRY/PROCEDURE` balanceados.
+- Removi os `.FXP` compilados (estavam desatualizados em rela├º├úo ao `.prg` editado).
+
+A migra├º├úo de FormSigOpZom/SigOpZomBO est├í completa.

@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 entregue em `projeto\app\forms\operacionais\FormSigOpTop.prg` (550 ÔåÆ 883 linhas).
+
+## O que foi feito
+
+Este legado **n├úo tem PageFrame nem bot├Áes CRUD**. Medido no dump: 1 objeto `BaseClass: grid` (GradeSubN), zero `pageframe`, zero controle de entrada (as duas Column s├úo `ReadOnly = .T.`) e 1 CommandButton (cmdSair). Criar `ConfigurarPaginaLista`/`AlternarPagina` + 6 bot├Áes CRUD seria inventar UI que o legado n├úo tem. O gate da Fase 4 prev├¬ isso pelo **ramo FLAT** (`grd_4c_*` + `cmd_4c_*` + m├®todo de carga), que ├® o que entreguei:
+
+| m├®todo | conte├║do |
+|---|---|
+| `ConfigurarGrade()` | `shp_4c_Shape1` + `grd_4c_Dados` ÔÇö s├│ o que n├úo depende de dado (regra #41) |
+| `AplicarFormatoGrade()` | PUBLIC, **fonte ├║nica** de `Column.Width`/`Header1.Caption`/`InputMask` |
+| `ConfigurarBotoes()` | `cmd_4c_Encerrar` + BINDEVENT |
+| `BtnEncerrarClick()` | Click do legado (reabilita o pai + Release) |
+| `CarregarDados()` | PUBLIC, funil: `BO.CarregarTransportes` + bind + `GO TOP` + `Refresh` |
+
+Pontos que custariam retrabalho e foram tratados: **Shape1 criado ANTES da grade** (├® `BackStyle=0`+`BorderStyle=0` e invade o canto da grade ÔÇö criado depois bloquearia o clique sem desenhar nada, regra #30); **`AplicarFormatoGrade` reaplicada depois do `RecordSource`**, que zera largura/caption (Problema 48); **`CarregarDados` PUBLIC e sem par├ómetro**, porque o harness a chama de fora; `Destroy` fecha o cursor (que ├® *deste* di├ílogo, n├úo do chamador) com o guard de `Buffering` (regra #52).
+
+O Click do Encerrar entrou junto com o bot├úo em vez de ficar para a fase de eventos: ├® o ├║nico bot├úo e, sem `TitleBar`/`ControlBox`, deix├í-lo inerte tiraria a sa├¡da pelo mouse.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+Smoke test do VFP9 passou primeiro, ent├úo as provas abaixo v├¬m de arquivo de sa├¡da real:
+
+- **Compila limpo** ÔÇö `FXP=SIM ERR=NAO`.
+- **Instancia** ÔÇö `VARTYPE=O`, 4 controles, grade `100/161/177/229`, Col1 `W=85 "Cod.Transporte"`, Col2 `W=60 "Empresa" Mask=[9999]`, bot├úo `3/425/75/75` fechando exatamente na borda (425+75 = 500 = `Form.Width`).
+- **BINDEVENT registrado** ÔÇö `AEVENTS` devolveu `evt=[CLICK] metodo=[BTNENCERRARCLICK]`.
+- **Com cursor populado (3 linhas)** ÔÇö bind ligado nas duas colunas e larguras/cabe├ºalhos **id├¬nticos depois do bind**; ap├│s `Release`, `USED(cursor)=.F.`.
+- **Sem conex├úo** ÔÇö `CarregarDados()` chamada de fora devolveu `.F.` **sem estourar**.
+- Gate da Fase 4 (os tr├¬s predicados): `temGrade`/`temBotoes`/`temCarga` = True. `Test-CompletudeCodigo`: 0 problemas. `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas`: limpos. Blocos balanceados, nenhum `RETURN` dentro de TRY/CATCH.
+
+## Dois ajustes fora do `.prg` que conv├®m voc├¬ saber
+
+1. **`tasks\task811\mapeamento.json` foi corrigido** (backup em `.bak_fase3`). O gerado apontava para nomes que n├úo existem no form: `cnt_4c_Sombra`/`lbl_4c_LblSombra` (a Fase 3 usou os can├┤nicos `cnt_4c_Cabecalho`/`lbl_4c_Sombra`/`lbl_4c_Titulo` da regra #11), `cmd_4c_CmdSair`, e as `Column` mapeadas como `Page_4c_1` ÔÇö quirk do gerador. Sem isso o `ValidarUIFidelity` acusaria falso positivo em todo objeto desta fase. Note que isso **diverge dos irm├úos** (`FormSigOpSlc`/`FormSigOpOco` mantiveram o mapeamento gerado e nomearam o c├│digo conforme ele) ÔÇö se a prefer├¬ncia for a conven├º├úo da fam├¡lia, o caminho inverso ├® renomear os objetos da Fase 3, e a├¡ eu reverto.
+
+2. A primeira rodada do probe mostrou `CarregarDados` sendo chamada no `Init` **em modo harness**, gravando "Opera├º├úo n├úo informada" no log de erros. O guard do `InicializarForm` passou a cobrir `gb_4c_ModoTeste` al├®m de `gb_4c_ValidandoUI` (padr├úo FormCor); a rodada seguinte fechou com zero erros.

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\Formsigopvci.prg` (655 ÔåÆ 822 linhas).
+
+## O ponto central: o legado **n├úo tem lookup algum**
+
+A varredura do dump (`sigopvci_form_codigo_fonte.txt`, 9 m├®todos com c├│digo) devolve **zero** ocorr├¬ncia de `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, `mAddColuna`, `sigacess()`/`Acesso*()` e `FormBuscaAuxiliar` ÔÇö e nenhum dos 4 TextBox tem `Valid` que abra browse. Os campos s├úo faixa de n├║mero de cupom e faixa de data, digitados ├á m├úo. Criar `AbrirLookup*`/`AbrirBusca*` aqui exigiria **inventar tabela de refer├¬ncia** que o legado n├úo consulta (viola o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"). Pelo mesmo motivo n├úo criei `cnt_4c_BotoesAcao` com Salvar/Cancelar: este form n├úo grava registro e os ├║nicos bot├Áes do legado s├úo Consultar/Encerrar, j├í em `cmg_4c_Botoes` desde a Fase 4.
+
+O gate da Fase 6 tem o ramo **"layout captura"** exatamente para isto, e as provas do lado legado batem: sem lista estrita (0 `BaseClass: grid|pageframe`, 0 `ControlSource`, 0 `AddCursor`), sem API de n├│s, com campo de entrada, n├úo-exibi├º├úo (s├│ `Edit1` ├® ReadOnly).
+
+## O que a fase entregou: os 6 eventos que a Fase 5 deixou explicitamente para c├í
+
+| Legado (linhas 940-1010) | Migrado |
+|---|---|
+| 4x `When` ÔåÆ `Optiongroup1.Value = 1\|2` | `ValidarCriterioBusca()` ÔÇö m├®todo PUBLIC ├║nico de depend├¬ncia, via `.Enabled` |
+| 2x `LostFocus` ÔåÆ `Transform(Val(This.Value),'@L 999999')` | `ValidarNumeroInicial()`/`ValidarNumeroFinal()` ÔåÆ `FormatarNumeroCupom()` |
+
+`When` **n├úo** foi ligado por BINDEVENT: o BINDEVENT descarta o retorno do delegate, ent├úo um `When` ligado assim n├úo bloquearia nada ÔÇö `.Enabled` ├® o que reproduz "campo inalcan├º├ível". O m├®todo ├® chamado no fim de `BOParaForm` (estado inicial) e ligado ao OptionGroup por BINDEVENT (`InteractiveChange` p/ teclado + `Click` p/ mouse; ├® idempotente). `Text3/Text4` n├úo recebem BINDEVENT porque no legado eles t├¬m **s├│** o `When`.
+
+A valida├º├úo de **faixa** (`Text1 > Text2`, faixa vazia) fica fora de prop├│sito: no legado ela mora dentro do `Commandgroup1.CmdInserir.Click`, junto com a leitura da MFD ÔÇö antecip├í-la duplicaria a regra.
+
+## Verifica├º├úo
+
+Compilou limpo no VFP9 (`.fxp` gerado, sem `.err`) e **instanciei o form de verdade** (`ProbeF6Sigopvci816.prg`, evid├¬ncia em `tasks/task816/compilacao_fase6.log`):
+
+- `AEVENTS` confirma os 4 bindings (Optiongroup1: `INTERACTIVECHANGE`+`CLICK`ÔåÆ`VALIDARCRITERIOBUSCA`; Text1ÔåÆ`VALIDARNUMEROINICIAL`; Text2ÔåÆ`VALIDARNUMEROFINAL`; Text3: 0)
+- Habilita├º├úo inicial (Value=1): Text1/2 `.T.`, Text3/4 `.F.` ÔÇö igual ao `When`; trocando para Value=2 inverte
+- Disparando o **evento** (`InteractiveChange()`, `Click()`, `LostFocus()`) o delegate roda pela cadeia do bind
+- `'12'ÔåÆ000012`, `'4567'ÔåÆ004567`, `''ÔåÆ''`, `'0'ÔåÆ'0'` (o legado n├úo mexe quando `Val=0`)
+
+Validador de completude: `[OK] nenhum TODO/stub/procedure vazia`. Checagens pontuais limpas (nenhum `BINDEVENT "KeyPress"`, `.Self`, `Controls("nome")`, `EVALUATE` com `=`, `RETURN` dentro de TRY; os 3 alvos de BINDEVENT s├úo PUBLIC).
+
+Um limite que n├úo consigo cobrir headless: o disparo do `InteractiveChange`/`Click` por **intera├º├úo real** do mouse/teclado ÔÇö provei a dispatch chamando o evento, n├úo clicando. Isso fica para o teste manual.

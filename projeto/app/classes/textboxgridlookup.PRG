@@ -2062,3 +2062,201 @@ DEFINE CLASS TextBoxStatusSts_4c AS TextBox
         ENDIF
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxOperacaoTrf_4c - celula "Operacoes" (Column1) da grade MESTRE
+* (GradeOpe -> grd_4c_Operacoes) do FormSigOpTrf (dialogo "Operacoes
+* Automaticas" do Cadastro de Operacoes do Caixa).
+*
+* Legado (SIGOPTRF.GradeOpe.Column2.Text1 - "Column2" eh renome interno do
+* Form Designer, regra #34):
+*   When  -> Thisform.AntValue = This.Value (snapshot ANTES da edicao)
+*   Valid -> If IsEmpty(This.Value) / Return .f. (nao deixa sair em branco -
+*            cmdInserir insere a linha vazia e foca aqui, o usuario tem de
+*            digitar algo); se o valor mudou, marca GravaDados, confere
+*            contra TmpOpe (Seek) e abre fwBuscaInt quando nao encontra;
+*            depois recusa duplicata em xOpe (Seek+Skip+Delete+MessageBox).
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (GuardarOperacaoTrfAnterior/ValidarOperacaoTrfGridExec), que recebem
+* o proprio TextBox porque dentro do Valid o valor digitado esta em
+* THIS.Value e AINDA NAO chegou ao cursor (regra #46).
+*
+* F4/F5/duplo clique abrem o picker direto contra SigCdOpe (afordancia do
+* sistema novo, como os demais lookups de grade deste arquivo) - guard de
+* tecla obrigatorio (regra #47).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxOperacaoTrf_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GuardarOperacaoTrfAnterior", 5)
+            THISFORM.GuardarOperacaoTrfAnterior(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarOperacaoTrfGridExec", 5)
+            RETURN THISFORM.ValidarOperacaoTrfGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupOperacaoTrfGrade", 5)
+                THISFORM.AbrirLookupOperacaoTrfGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupOperacaoTrfGrade", 5)
+            THISFORM.AbrirLookupOperacaoTrfGrade(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxProdutoOpTrf_4c - celula "Produto" (Column1/col_cpros) da grade de
+* DETALHE (GradePro -> grd_4c_Itens) do FormSigOpTrf.
+*
+* Legado (SIGOPTRF.GradePro.col_cpros.txt_cpros.Valid): se nao vazio, marca
+* GravaDados, confere contra SigCdPro (CursorQuery) e abre fwBuscaExt quando
+* nao encontra; preenche a Descricao (col_dpros) da MESMA linha; confere
+* duplicata do produto (xTrf indexado por Cpros, Seek+Skip) e, achando,
+* limpa a celula e avisa com o codigo da operacao de destino onde o produto
+* ja estava. col_dpros.txt_dpros.When (Return .f.) ja esta coberto pelo
+* Column2.ReadOnly=.T. de AplicarFormatoGrade (regra #46 - efeito
+* estrutural, sem calculo).
+*
+* Produto pode ficar VAZIO (regra de negocio documentada no cabecalho de
+* SigOpTrfBO.prg - operacao de destino sem produto especifico migra tudo),
+* por isso o Valid so age quando o valor nao esta vazio - igual ao legado.
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46) - os
+* eventos moram na classe e delegam para metodos PUBLIC do form
+* (ValidarProdutoTrfGridExec), que recebe o proprio TextBox porque dentro
+* do Valid o valor digitado esta em THIS.Value e AINDA NAO chegou ao cursor.
+*
+* F4/F5/duplo clique abrem o picker direto contra SigCdPro (afordancia do
+* sistema novo, como os demais lookups de grade) - guard de tecla
+* obrigatorio (regra #47).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxProdutoOpTrf_4c AS TextBox
+    FontName    = "Courier New"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    Alignment   = 3
+    Format      = "!"
+    MaxLength   = 10
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarProdutoTrfGridExec", 5)
+            RETURN THISFORM.ValidarProdutoTrfGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupProdutoTrfGrade", 5)
+                THISFORM.AbrirLookupProdutoTrfGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupProdutoTrfGrade", 5)
+            THISFORM.AbrirLookupProdutoTrfGrade(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxTransportadoraTrp_4c - celula "Transportadora" (Column1) da grade
+* unica (GradeOpe -> grd_4c_Dados) do FormSigoptrp (dialogo "Transportadoras"
+* do Cadastro de Operacoes do Caixa).
+*
+* Legado (SIGOPTRP.GradeOpe.Column1.Text1):
+*   When  -> Thisform.AntValue = This.Value (snapshot ANTES da edicao)
+*   Valid -> If Not Empty(This.Value)
+*                loLista = CreateObject('fwbuscaext', <conn>, 'SigPrTrp',
+*                    'CrListaRemota', 'Itras', This.Value, 'Selecao', .t.)
+*                If Not loLista.plAchouRegistro
+*                    loLista.mAddColuna(...) / loLista.Show()
+*                EndIf
+*                This.Value = CrListaRemota.Itras
+*                Replace Razaos with CrListaRemota.Razaos In xOpe
+*                Use In CrListaRemota
+*            Else
+*                This.Value = ''
+*            EndIf
+*            This.Refresh
+*
+* Sem recusa de duplicata (diferente do irmao TextBoxOperacaoTrf_4c) - o
+* legado deste dialogo nao confere Itras repetido entre as linhas de xOpe.
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (regra #46/
+* CLAUDE.md) - os eventos moram na classe e delegam para metodos PUBLIC do
+* form (GuardarItrasAnterior/ValidarItrasGridExec), que recebem o proprio
+* TextBox porque dentro do Valid o valor digitado esta em THIS.Value e AINDA
+* NAO chegou ao cursor (regra #46).
+*
+* F4/F5/duplo clique abrem o picker direto contra SigPrTrp (afordancia do
+* sistema novo, como os demais lookups de grade deste arquivo) - guard de
+* tecla obrigatorio (regra #47). MaxLength = 10 (SigPrTrp.itras char(10)).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxTransportadoraTrp_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    MaxLength   = 10
+    ForeColor   = RGB(90, 90, 90)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GuardarItrasAnterior", 5)
+            THISFORM.GuardarItrasAnterior(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarItrasGridExec", 5)
+            RETURN THISFORM.ValidarItrasGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupItras", 5)
+                THISFORM.AbrirLookupItras(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupItras", 5)
+            THISFORM.AbrirLookupItras(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE

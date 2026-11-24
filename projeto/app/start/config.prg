@@ -301,11 +301,19 @@ PROCEDURE ConfigurarAmbiente(par_lCargaCompleta)
     * isempty.prg pelo PATH e estourava "File 'isempty.prg' does not exist"
     * ao digitar em qualquer campo com When (Erro162_Aba1).
     * A lista TEM de ser montada numa string unica e passada entre parenteses.
+    *
+    * gcCaminhoReports entra no PATH porque os BOs de relatorio transcrevem o
+    * legado com `REPORT FORM <nome>` SEM caminho (26 sites em sigreinrBO,
+    * SigReIr1BO, SigReIivBO e SIGRECNDBO) - essa forma eh obrigatoria quando ha
+    * clausula FOR. Sem reports no PATH o VFP nao acha o FRX e estoura
+    * "File does not exist." ao clicar Visualizar (Erro380). Medido em
+    * 2026-11-18: FILE("SigReBlr.frx") = .F. sem reports no PATH, .T. com.
     loc_cPath = gcCaminhoBase    + "," + ;
                 gcCaminhoClasses + "," + ;
                 gcCaminhoUtils   + "," + ;
                 gcCaminhoForms   + "," + ;
-                gcCaminhoIcones
+                gcCaminhoIcones + "," + ;
+                gcCaminhoReports
     SET PATH TO (loc_cPath)
 
     * =========================================================================

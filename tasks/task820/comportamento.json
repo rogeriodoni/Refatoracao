@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From crSigOpVld Where Empty", "fConfigGeral", "fChecaAcesso", "fwBuscaExt", "fAcessoEmpresa", "fAcessoContab", "fAcessoContas", "for Dopes = Space"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPVLD",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "Local llRetorno\nllRetorno = .T.\n\nSelect crSigOpVld\nSelect Count(*) As Qtd, Empresa, Grupos, Contas ;\n\tfrom crSigOpVld ;\n\tWhere Empty(Empresa) Or Empty(Grupos) Or Empty(Contas) Or Empty(Dias) ;\n\tGroup By Empresa, Grupos, Contas ;\n\tInto Cursor csCount Readwrite\n\nSelect csCount\nIf Reccount([csCount])>0\n\tlnResp = Messagebox('Há Registros sem a Informação da Empresa, Grupo, Conta ou Dias serão Removidos.'+Chr(13)+'Deseja corrigir os dados?',4+32+256,'Atenção')\n\tIf lnResp = 6\n\t\tllRetorno = .F.\n\tEndif\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From crSigOpVld Where Empty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD",
+      "evento": "Init",
+      "linhas": 95,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha, plInverte\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\n\nIf plInverte\n\tWith Thisform\n\t\t.Caption = 'Controle de Movimentações '\n\t\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,SqlExecute,AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSelect CrSigOpVld\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( crSigOpVld.Dopes ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 49,
+      "codigoOriginal": "Local lcOperacao, lnRecNo, loBrowse\n\nlcDopes = []&&crSigCdOpe.Dopes\n\nIf Not IsEmpty(This.Value)\n\n\tIf !Thisform.ParentForm.podatamgr.ChkRegister('SigCdOpe', 'Dopes', This.Value)\n\t\txBrox = CreateObject('fwBuscaExt',Thisform.ParentForm.poDatamgr.pnIdconn,'SigCdOpe','cpSigCdOpe','Dopes',This.Value,'Seleção',.t.,'Dopes')\n\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Dopes', '', 'Operação', .t.)\t\n\t\t\txBrox.mAddColuna('nDopes', '9999', ' # ',.f.)\n\t\t\txBrox.Show()\n\t\tEndIf \n\t\tThis.Value = Iif( Last... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "ChkRegister,Value=Iif",
+        "controlesReferenciados": "ChkRegister('SigCdOpe'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !fAcessoContab(Usuar,'C',This.Value,This,'')\n\tMessagebox('Acesso Negado !!!',48,'')\n\tThis.Value = ''\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "Grupo = CrSigOpVld.Grupos\nllRet = Empty(This.Value) or fAcessoContas(Usuar,grupo,'C',This.Value,This,'')\nIf !llRet\n\tMessagebox('Acesso Negado !!!',48,'')\n\tThis.Value  = ''\n\tThis.Refresh\nEndIf\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.GradeVld.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.cmdExcluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigOpVld\n\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeVld.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.cmdSair",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns Or ThisForm.lHouveAlt )\n\t\t\n\t\tIf Not ThisForm.ValidaRegistros()\n\t\t\tReturn .F.\n\t\tEndIf \n\t\t\t\t\n\t\tSelect crSigOpVld\n\t\tm.lnErro1 = ThisForm.parentform.poDatamgr.pnIdConn\n\n\t\tWith Thisform.ParentForm\n\t\t\tIf m.lnErro1>0 \n\t\t\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpVld'),1,-1)\n\t\t\tEndIf \n\t\t\tIf m.lnErro1>0 \n\t\t\t\tm.lnErro1 = .poDataMgr.Commit()\n\t\t\tEndIf \n\t\t\tIf Not m.lnErro1>0 \n\t\t\t\t.poDataMgr.RollBack... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaRegistros",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVLD.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect crSigOpVld\nLocate for Dopes = Space(20)\nIf Eof()\n\tInsert Into crSigOpVld (CidChaves) Values (fUniqueIds())\nEndIf\n\nSelect crSigOpVld\nThisform.GradeVld.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Dopes = Space",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPVLD.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into crSigOpVld (CidChaves) Values (fUniqueIds())",
+      "tabelas": "crSigOpVld",
+      "colunas": "CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigOpVld"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

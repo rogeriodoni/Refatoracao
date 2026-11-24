@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed this is the known infrastructure issue, not a code defect ÔÇö I did not edit the files.
+
+**Diagnosis**: The failure happens in ETAPA 1B of `TestFormWrapper.prg` ("Conectando ao banco de dados...") ÔÇö a generic pre-flight `SQLSTRINGCONNECT` that runs **before any `CREATEOBJECT`** of `FormSigOpZom`/`SigOpZomBO`. The form/BO code never executes. I ran `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433`, which returned `TcpTestSucceeded = False` ÔÇö the SQL Server is unreachable from this machine right now, consistent with the project memory tracking this exact signature across 27+ prior tasks since 2026-11-05 (one brief reachable window on 2026-11-17).
+
+**Independent code review** (not just trusting memory) of both files against the CLAUDE.md checklist found no defect:
+- RETURN always outside TRY/CATCH in every method of both files.
+- The two BINDEVENT targets (`BtnSairClick`, `TimerFecharAutomatico`) are PUBLIC.
+- The form only calls PUBLIC BO methods (`ValidarArquivoImagem`, `AtualizarEstadoTimer`) ÔÇö no PROTECTED method called from outside (regra #51).
+- Every CATCH calls `MsgErro`.
+- `CommandGroup.Value = 0` is a valid property (verified against `propriedades_baseclasses.txt`), not the regra #33 pitfall.
+- The BO does no SQLEXEC at all ÔÇö it's a parameterized image viewer with no table, by design (documented in its own header).
+
+This matches the established project pattern: editing correct `.prg` code to "satisfy" this gate would be damage, not a fix (per the project's own documented policy). I logged this occurrence (Tentativa 2/10) in the `sqlserver_200_10_inalcancavel_maquina_pipeline` memory.
+
+**Recommendation**: this retry won't converge ÔÇö it's a network/infra outage, not something `.prg` changes can fix. Consider pausing the automatic retry for this task or granting `06_testForm` an exception for error 1526/connectivity until the SQL Server at 192.168.200.10:1433 is reachable again from the pipeline machine.

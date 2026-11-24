@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os dois arquivos (`FormSigOpZom.prg` e `SigOpZomBO.prg`) contra o checklist completo do CLAUDE.md e n├úo encontrei defeito de c├│digo. O erro reportado n├úo ├® um bug de VFP9/migra├º├úo ÔÇö ├® falha de conectividade de infraestrutura:
+
+**Diagn├│stico**
+- A mensagem (`Codigo 1526`, `DBNETLIB ... SQL Server inexistente ou acesso negado`) ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, que ├® um pr├®-flight gen├®rico do harness (`SQLSTRINGCONNECT` incondicional) ÔÇö **antes** de qualquer `CREATEOBJECT` de `FormSigOpZom`/`SigOpZomBO`. O c├│digo do form nunca chega a executar.
+- Confirmei agora mesmo: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` devolveu `TcpTestSucceeded = False` (e `PingSucceeded = False`) ÔÇö a porta 1433 est├í inalcan├º├ível desta m├íquina.
+- Isso ├® um padr├úo j├í documentado em mem├│ria: desde 2026-11-05, 32+ confirma├º├Áes em mais de 15 tasks diferentes, com uma ├║nica janela em que o servidor ficou alcan├º├ível (2026-11-17). Em nenhuma dessas ocorr├¬ncias uma revis├úo de c├│digo achou defeito real.
+
+**Revis├úo espec├¡fica deste form (6┬¬ revis├úo independente, tentativas 1-6 id├¬nticas byte-a-byte)**
+- `RETURN` sempre fora de `TRY/CATCH` Ô£ô
+- `BtnSairClick`/`TimerFecharAutomatico` (├║nicos alvos de `BINDEVENT`) s├úo `PUBLIC` Ô£ô
+- Form s├│ chama m├®todos `PUBLIC` do BO (`ValidarArquivoImagem`/`AtualizarEstadoTimer` ÔÇö regra #51) Ô£ô
+- Todo `CATCH` chama `MsgErro` Ô£ô
+- Verifiquei adicionalmente contra `automation\propriedades_baseclasses.txt`: `CommandGroup` tem `THEMES` e `Image` tem `ENABLED` na lista real de propriedades ÔÇö n├úo ├® a armadilha da regra #33
+- `vbmp\cadastro_sair_60.jpg` existe no disco (regra #25, Picture n├úo inventado)
+- `SigOpZomBO` deliberadamente n├úo faz SQL (visualizador parametrizado sem tabela, documentado no pr├│prio cabe├ºalho)
+
+**N├úo editei nenhum arquivo** ÔÇö alterar c├│digo correto s├│ para "satisfazer" este gate seria dano, n├úo corre├º├úo, como a mem├│ria do projeto j├í estabelece. Recomendo dar exce├º├úo ao gate `06_testForm` para erro 1526/conectividade nesta task, em vez de consumir as 4 tentativas restantes contra uma falha de rede que retry autom├ítico n├úo vai resolver.

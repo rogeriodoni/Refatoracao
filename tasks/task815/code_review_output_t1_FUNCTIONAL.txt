@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I verified all 7 flagged items against the actual file (read in full, plus targeted greps) before touching anything, since this project has a well-documented history of review tooling matching text inside comments instead of live code (CLAUDE.md regra #44 and several memory entries on comment-based false positives). Result: all 7 are false positives ÔÇö no code change needed.
+
+**1-2. [MADDCOLUNA-PARAMS] x2** ÔÇö The real calls at lines 1210-1211 already use 3 params correctly:
+```foxpro
+loc_oBusca.mAddColuna("Itras", "", "Transportadora")
+loc_oBusca.mAddColuna("Razaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+```
+The 4-param form only exists in the doc comment at lines 1166-1167, which accurately quotes the **legacy** Fortyus `fwbuscaext.mAddColuna(...)` call signature (which really did take a 4th `.t.` arg in the old framework) ÔÇö not a call in this file's actual code.
+
+**3. [METODO-INEXISTENTE] THIS.Width()`** ÔÇö grepped `Width\(` across the whole file: zero matches. `Width` is only ever used as a property (`THIS.Width`, `.Width = ...`), never called with parentheses as a method anywhere in this form. There's nothing to implement or remove.
+
+**4. [METODO-INEXISTENTE] THIS.PersistirItens()`** ÔÇö defined at line 1540 as `PROTECTED FUNCTION PersistirItens`, called at line 1473 from `BtnSairClick` ÔÇö a method of the *same class*, which is exactly where a PROTECTED method is allowed to be called from (regra #51 only forbids calling it from *outside* the class/form).
+
+**5. [METODO-INEXISTENTE] THIS.GravarUmaTransportadora()`** ÔÇö defined at line 1611 as `PROTECTED FUNCTION GravarUmaTransportadora(par_cItras)`, called at line 1570 from `PersistirItens`, also same-class. Same situation as #4.
+
+(#4/#5 both likely came from a detector that only recognizes `PROCEDURE <name>` as a valid definition and doesn't match `FUNCTION <name>` ÔÇö both are valid VFP9 method declarations.)
+
+**6-7. [GRID-WITH] x2** ÔÇö grepped every `WITH`/`RecordSource`/`ColumnCount` occurrence. The only block that sets `.RecordSource` and touches `.Column*` inside the same `WITH` is the doc comment at lines 994-999, quoting the **legacy** Init's `With Thisform.GradeOpe ... .RecordSource = 'xOpe' ... .Column1.ControlSource ...`. The actual live code in `CarregarLista` (lines 1049-1055) already does it the correct way per the project's own rule: `ColumnCount`/`RecordSource` are set *outside* the WITH (lines 1049-1050), and the WITH block that follows only touches `.Column1.ControlSource`/`.Column2.ControlSource` ÔÇö exactly the pattern the GRID-WITH rule asks for.
+
+No edits were made ÔÇö mutating the comments or code here would either corrupt accurate documentation of the legacy source or be a no-op on code that's already correct, which would violate the "corrigir APENAS os problemas listados... NAO alterar logica de negocio" rule by introducing changes where there's no real defect. If you'd like, I can still tweak the two comment blocks (1166-1167 doc, 994-999 doc) to reduce future false positives from this kind of scanner ÔÇö just say so and I'll do that as a comment-only, zero-behavior-change edit.

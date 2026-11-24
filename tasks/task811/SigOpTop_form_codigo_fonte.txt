@@ -1,0 +1,367 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpTop.SCX
+* Data/Hora: 18/11/2026 17:19:57
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPTOP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPTOP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPTOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPTOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPTOP
+  Class: shape
+  BaseClass: shape
+
+Objeto: GradeSubN
+  Parent: SIGOPTOP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTOP.GradeSubN.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOP.GradeSubN.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPTOP.GradeSubN.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTOP.GradeSubN.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGOPTOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 350
+  Width = 500
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Transportes"
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  ForeColor = 36,84,155
+  Themes = .F.
+  Name = "SIGOPTOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 224
+  Height = 110
+  Width = 91
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.GradeSubN
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 229
+  Left = 161
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 100
+  Width = 177
+  GridLineColor = 238,238,238
+  Name = "GradeSubN"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 85
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 60
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "9999"
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.GradeSubN.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cod.Transporte"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.GradeSubN.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.GradeSubN.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.GradeSubN.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTOP.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPTOP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.ParentForm.Enabled  = .F.
+		    
+With Thisform
+	.Caption = 'Transportes da Operação ' + AllTrim( Proper( crSigCdOpe.Dopes ) )
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcSql = [Select Distinct Substring(TipoEmps,1,6) as Codigos, Substring(TipoEmps,7,3) as Emps From SigCdMei Where Dopes = ']+CrSigCdOpe.Dopes+[']
+SigCdOpe.PodataMgr.Sqlexecute(lcSql,'CrSigCdMei')
+
+Select CrSigCdMei
+Goto Top	
+With Thisform.GradeSubN
+	.RecordSource          = 'CrSigCdMei'
+	.Column1.ControlSource = 'crSigCdMei.Codigos'
+	.Column2.ControlSource = 'crSigCdMei.Emps'
+	.Refresh
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTOP.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPTOP
+RESERVED3 (ClassInfo): lhouveexcl
+lhouveins
+parentform
+pcescolha
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

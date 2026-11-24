@@ -1,0 +1,830 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpTrf.SCX
+* Data/Hora: 18/11/2026 21:17:55
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPTRF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPTRF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPTRF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPTRF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeOpe
+  Parent: SIGOPTRF
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPTRF.GradeOpe.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPTRF.GradeOpe.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGOPTRF
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdSair
+  Parent: SIGOPTRF
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGOPTRF
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGOPTRF
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command2
+  Parent: SIGOPTRF
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command1
+  Parent: SIGOPTRF
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradePro
+  Parent: SIGOPTRF
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: hdr_cpros
+  Parent: SIGOPTRF.GradePro.col_cpros
+  Class: header
+  BaseClass: header
+
+Objeto: txt_cpros
+  Parent: SIGOPTRF.GradePro.col_cpros
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: hdr_dpros
+  Parent: SIGOPTRF.GradePro.col_dpros
+  Class: header
+  BaseClass: header
+
+Objeto: txt_dpros
+  Parent: SIGOPTRF.GradePro.col_dpros
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 367
+  Width = 530
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Operações Automáticas"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGOPTRF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradeOpe
+------------------------------------------------------------
+  ColumnCount = 1
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Height = 221
+  Left = 5
+  ScrollBars = 2
+  Top = 133
+  Width = 180
+  GridLineColor = 238,238,238
+  Name = "GradeOpe"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 150
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradeOpe.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operações"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradeOpe.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.Shape1
+------------------------------------------------------------
+  Top = 12
+  Left = 432
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 455
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 8
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cmdInserir
+------------------------------------------------------------
+  Top = 91
+  Left = 5
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  ToolTipText = "Inserir"
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.cmdExcluir
+------------------------------------------------------------
+  Top = 91
+  Left = 45
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  ToolTipText = "Inserir"
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.Command2
+------------------------------------------------------------
+  Top = 91
+  Left = 190
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  ToolTipText = "Inserir"
+  Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.Command1
+------------------------------------------------------------
+  Top = 91
+  Left = 230
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  ToolTipText = "Inserir"
+  Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradePro
+------------------------------------------------------------
+  ColumnCount = 2
+  DeleteMark = .F.
+  Height = 220
+  Left = 190
+  RecordMark = .F.
+  RecordSource = ""
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 133
+  Width = 335
+  ZOrderSet = 8
+  Name = "GradePro"
+  Column1.FontName = "Courier New"
+  Column1.Alignment = 3
+  Column1.ControlSource = ""
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "col_cpros"
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 9
+  Column2.ControlSource = ""
+  Column2.Width = 205
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "col_dpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradePro.col_cpros.hdr_cpros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "hdr_cpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradePro.col_cpros.txt_cpros
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  BorderStyle = 0
+  Format = "!"
+  Margin = 0
+  MaxLength = 10
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "txt_cpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradePro.col_dpros.hdr_dpros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "hdr_dpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPTRF.GradePro.col_dpros.txt_dpros
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 9
+  BorderStyle = 0
+  Format = "!"
+  Margin = 0
+  MaxLength = 40
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "txt_dpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPTRF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+
+Thisform.GravaDados = .f.
+
+With Thisform
+	.Caption = 'Operações Automáticas P/ ' + AllTrim(crSigCdOpe.Dopes)
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcOperacao = crSigCdOpe.Dopes
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector')
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigOpTrf','cIdChaves','crSigOpTrf','Dopes',.f.,[Select * From SigOpTrf Where Dopes = '] + crSigCdOpe.Dopes + [' Order by Dopes])
+		.AddCursor('SigCdOpe','Dopes','TmpOpe','Dopes',.f.,[Select Dopes,nDopes From SigCdOpe Where Dopes <> '] + crSigCdOpe.Dopes + [' order by Dopes])
+        .ReQuery('crSigOpTrf')
+        .ReQuery('TmpOpe')
+		SELECT crSigOpTrf
+		GO top
+	EndWith
+Endwith	
+
+Create Cursor xTrf (Dopes c(20), Dopeds c(20), Cpros c(14), Dpros c(60))
+Index on Cpros Tag Cpros
+Index on Dopes + Dopeds Tag Dopes
+Set Order to
+
+Create Cursor xOpe ( Dopes c(20) )
+Index on Dopes Tag Dopes
+Set Order to
+
+SELECT TmpOpe 
+Index on Dopes Tag Dopes
+
+With Thisform.GradeOpe
+	.RecordSource          = 'xOpe'
+	.Column2.ControlSource = 'xOpe.Dopes'
+	.Refresh
+EndWith
+
+With Thisform.GradePro
+	.RecordSource         = 'xTrf'
+	ThisForm.GradePro.col_cpros.ControlSource = 'xTrf.Cpros'
+	ThisForm.GradePro.col_dpros.Controlsource = 'xTrf.Dpros'
+ENDWITH
+
+Select crSigOpTrf
+Scan While Dopes = crSigCdOpe.Dopes
+	Scatter Memvar
+	
+	ThisForm.podatamgr.SqlExecute([Select cPros, dPros from SigCdPro Where Cpros = ?m.cPros],'CrSigCdPro')
+
+	Insert Into xTrf ( Dopes, Dopeds, Cpros, Dpros ) ;
+		Value (m.Dopes, m.Dopeds, m.Cpros, crSigCdPro.Dpros)
+
+	Select xOpe
+	Set Order to Dopes
+	
+	LOCATE FOR Dopes = m.Dopeds
+	IF EOF()
+		Insert Into xOpe ( Dopes ) Value ( m.Dopeds )
+	Endif
+
+EndScan
+
+Select xOpe
+Set Order to
+Go Top
+
+Select xTrf
+Set Order to Dopes
+Go Top
+
+SET KEY TO crSigCdOpe.Dopes+xOpe.Dopes
+Go Top
+ThisForm.GradePro.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.GradeOpe
+* Classe: grid (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+Select xTrf
+Set Order to Dopes
+SET KEY TO crSigCdOpe.Dopes+xOpe.Dopes
+Go Top
+ThisForm.GradePro.Refresh
+Select xOpe
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.GradeOpe.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If IsEmpty(This.Value)
+	Return .f.
+Endif
+
+If Not IsEmpty(This.Value) And Thisform.AntValue # This.Value
+	
+	ThisForm.GravaDados = .t.
+
+	If Not Seek(This.Value, 'TmpOpe', 'Dopes')
+		loBrowse = CreateObject('fwBuscaInt','TmpOpe','Dopes',This.Value,'Operações',.t.)
+		loBrowse.mAddColuna('Dopes', '', 'Operação', .t.)
+		loBrowse.mAddColuna('nDopes', '9999', ' Cod ',.f.)
+		loBrowse.Show		
+		This.Value = Iif( Lastkey() == 27, '', TmpOpe.Dopes )
+		This.Refresh
+	EndIf
+	lcdope = This.Value
+	If !IsEmpty(lcDope)
+		Select xOpe
+		If Not Eof() Or Bof()
+			lnRecNo = RecNo('xope')
+		Else 
+			lnRecNo = 0
+		EndIf
+		Set Order to Dopes
+		Seek (lcDope)
+		If Not Eof()
+			Skip
+			If xOpe.Dopes = lcDope
+				This.Value = ''
+				This.Refresh
+				Delete
+				Skip
+				Skip -1
+				MessageBox('Operação já Digitada ... ',48,'')
+			EndIf
+		Endif
+		Select xOpe
+		Set Order to Dopes
+		If lnRecNo # 0
+			Goto (lnRecNo)
+		Else
+			Goto Bottom
+		EndIf
+		This.Refresh
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Thisform.AntValue = This.Value
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.GravaDados
+
+	SELECT crSigOpTrf
+	DELETE ALL
+
+	Select xTrf
+	SET KEY TO 
+	Set Order To
+	Scan
+		If !IsEmpty(xTrf.Dopes) And !IsEmpty(xTrf.Dopeds) And !IsEmpty(xTrf.Cpros)
+			Scatter memvar
+			Insert Into crSigOpTrf From memvar
+			Replace crSigOpTrf.cIdChaves WITH fUniqueIds()
+		EndIf
+	EndScan
+	
+	If (Reccount([crSigOpTrf]) = 0) 
+		Select xOpe
+		Scan
+			Insert Into crSigOpTrf (Dopes, DopeDs, cIdChaves) ;
+							Values (crSigCdOpe.Dopes, xOpe.Dopes, fUniqueIds())
+		EndScan
+	EndIf
+	
+	m.lnErro1 = ThisForm.poDatamgr.pnIdConn
+
+	With ThisForm
+		If m.lnErro1>0 
+			m.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpTrf'),1,-1)
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDataMgr.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			.poDataMgr.RollBack()
+		EndIf 
+	EndWith 
+	If Not m.lnErro1>0 
+		= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+	EndIf 
+
+EndIf
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.cmdInserir
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Insert Into xOpe (Dopes) Values ( Space(20))
+Select xOpe
+ThisForm.GravaDados = .t.
+Thisform.GradeOpe.Column2.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.cmdExcluir
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xOpe
+If Not Eof()
+	SELECT xTrf
+	DELETE for Dopeds = xOpe.Dopes
+	SELECT xOpe
+	DELETE
+	SKIP
+	IF EOF()
+		GO Bott
+	Endif
+ENDIF
+Thisform.GradeOpe.SetFocus
+ThisForm.GradePro.Refresh
+SELECT xTrf
+SET KEY TO crSigCdOpe.Dopes+xOpe.Dopes
+ThisForm.GravaDados = .t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.Command2
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Insert Into xTrf (Dopes, Dopeds) Values ( crSigCdOpe.Dopes, xOpe.Dopes)
+Select xTrf
+ThisForm.GravaDados = .t.
+ThisForm.GradePro.col_cpros.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.Command1
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xTrf
+If Not Eof()
+	Delete
+Endif
+ThisForm.GravaDados = .t.
+Thisform.GradePro.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.GradePro.col_cpros.txt_cpros
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	ThisForm.GravaDados = .t.
+
+	If !ThisForm.podatamgr.CursorQuery('SigCdPro','crSigCdPro', 'cPros', This.Value)
+		xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdPro','crSigCdPro','cPros',This.Value,'Cadastro de Produtos',.t.,'cPros')
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('CPros', '', 'Código', .t.)
+			xBrox.mAddColuna('DPros', '', 'Descrição', .t.)
+		xBrox.Show()
+		EndIf 
+	Endif
+	This.Value = evaluate('crSigCdPro.CPROS')
+	This.Parent.Parent.col_dpros.txt_dpros.Value = crSigCdPro.Dpros
+	This.Parent.Parent.col_dpros.txt_dpros.Refresh
+
+	cPro = This.Value
+	
+	Select xTrf
+	_Recno = Recno()
+	Set Order to Cpros
+	Seek cPro
+	If !Eof()
+		lcdope = xTrf.Dopeds
+		Skip
+		If Cpros = Cpro
+			This.Value = ''
+			This.Refresh
+			Messagebox('Produto já Digitado na Operação '+lcDope,48,'')
+		Endif
+	Endif
+	Set Order to Dopes
+	Set Key to crSigCdOpe.Dopes + xOpe.Dopes
+	If _Recno # 0
+		go _Recno
+	Endif
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPTRF.GradePro.col_dpros.txt_dpros
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( .f. )
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPTRF
+RESERVED3 (ClassInfo): antvalue
+gravadados
+parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

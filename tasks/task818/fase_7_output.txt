@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+That's fine ÔÇö just extra whitespace, not a syntax error (and the successful VFP9 compile already confirms this). Fase 7 is complete and verified. Let me give a summary of what was implemented.
+
+## Resumo da Fase 7
+
+Implementei a Fase 7 (grades de resultado + eventos) do `FormSigOpVdi`, adaptando o escopo gen├®rico do prompt (que descrevia bot├Áes CRUD Incluir/Alterar/Visualizar/Excluir) para a realidade deste form: ├® um **OPERACIONAL de consulta** ("Pesquisa Detalhada"), sem CRUD algum no legado ÔÇö ent├úo a "Fase 7/8" real, j├í documentada no pr├│prio arquivo desde a Fase 3, ├® a P├ígina de Dados com as 3 grades de resultado e seus bot├Áes de a├º├úo/navega├º├úo/exporta├º├úo.
+
+**O que foi adicionado** (transcrito do dump legado `SigOpVdi_form_codigo_fonte.txt`, inclusive larguras/captions/├¡cones exatos das se├º├Áes de propriedades do SCX):
+- `grd_4c_Dados1/2/3` (35, 10 e 10 colunas) com `ControlSource`/`Width`/`Header`/`InputMask` num├®rico e highlight amarelo+negrito nas linhas de total (`Ordem <> 'A'`)
+- Painel lateral da aba Detalhamento: imagem do produto, observa├º├úo, pre├ºo atual, desconto/acr├®scimo, busca por n├║mero, filtro Positivas/Negativas/Sem Filtro (`optValor1`)
+- Bot├Áes de a├º├úo: Restaurar Grade, Cadastro (produto), Movimento (abre `FormSigMvExp`/`FormSigMvPdt` conforme a opera├º├úo), Subn├¡veis (`FormSigMvSbn`), Conta (`FormCTA`), Visualizar/Imprimir (`FormSigOpPck`)
+- Navega├º├úo/exporta├º├úo: Retornar, Exporta TXT, Exporta XLS (`GerarTXT`/`GerarXLS`/`FLimpa`), persist├¬ncia de layout da grade (`AcertaColunas`/`GradePadrao`)
+- `BtnConsultarClick` completado com as valida├º├Áes de Moeda/Tipo de Opera├º├úo/Grande Grupo que faltavam, e `BtnSairClick` agora persiste a config da grade antes de fechar
+
+**Limita├º├Áes documentadas no c├│digo** (depend├¬ncias fora do escopo desta task, n├úo omitidas silenciosamente): `FormProduto`/`FormCTA`/`FormSigOpPck` j├í migrados n├úo t├¬m API para abrir direto num c├│digo espec├¡fico; `FormSigOpZom` (zoom de imagem) n├úo existe ÔÇö substitu├¡do por abrir o JPG no visualizador padr├úo do Windows.
+
+Form e BO compilam sem erro no VFP9 (validado via compila├º├úo headless).

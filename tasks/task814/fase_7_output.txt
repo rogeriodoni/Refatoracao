@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. `FormSigOpTrf.prg` e `SigOpTrfBO.prg` compilam limpos (`.fxp` gerado, zero `.err`).
+
+## O que entrou
+
+Este form OPERACIONAL n├úo tem barra CRUD (o dump n├úo tem `frmcadastro` nem `Grupo_Op`), ent├úo os "eventos principais" s├úo os **5 bot├Áes reais do legado** ÔÇö n├úo os quatro `BtnXxxClick` de cadastro, que s├│ existiriam inventando bot├Áes:
+
+| m├®todo | legado |
+|---|---|
+| `ConfigurarBINDEVENTs` | liga os 5 Click + `AfterRowColChange` |
+| `GradeOperacoesAfterRowColChange` | `GradeOpe.AfterRowColChange` (SET KEY mestre-detalhe) |
+| `CmdInserirClick` / `CmdExcluirClick` | `cmdInserir` / `cmdExcluir` (grade de opera├º├Áes de destino) |
+| `CmdInserirItemClick` / `CmdExcluirItemClick` | `Command2` / `Command1` (grade de produtos) |
+| `BtnSairClick` + `PersistirRegras` + `GravarUmaRegra` | `cmdSair.Click` (apaga o lote e regrava) |
+| `MarcarDadosAlterados` | `ThisForm.GravaDados = .t.` (fonte ├║nica dos 6 sites) |
+
+Acrescentei `ApagarRegrasDaOrigem()` ao BO (o `DELETE ALL` do legado) ÔÇö ├® SQL, logo PILAR 3 manda no BO; `Excluir()` por `cidchaves` n├úo serve porque este BO n├úo sobrescreve `ExecutarExclusao`.
+
+## Tr├¬s defeitos que a fase evitou
+
+1. **`this_lDadosAlterados` n├úo era declarado.** A Fase 6 j├í o *atribu├¡a*; em VFP9 isso cria a property dinamicamente, mas o Encerrar o **l├¬** ÔÇö numa tela onde o usu├írio n├úo editou c├®lula alguma, estouraria `Property THIS_LDADOSALTERADOS is not found`. Declarado, com a property do *form* como fonte da verdade (a do BO ├® zerada por `NovoRegistro()/Salvar()` a cada linha do lote).
+
+2. **`SET KEY TO` sem ├¡ndice ativo dispara erro 26**, n├úo ├® no-op ÔÇö medido, n├úo suposto: o probe parou em `Table has no index order set.`. Era a sequ├¬ncia que eu havia escrito em `PersistirRegras`; agora vai guardada por `ORDER()`.
+
+3. **O crit├®rio do fallback do legado n├úo ├® "nenhum produto v├ílido".** `Reccount([crSigOpTrf]) = 0` roda *depois* do `DELETE ALL`, e `RECCOUNT` conta registro marcado como exclu├¡do ÔÇö medido: 4 contra 2 vivos. Ou seja, no legado o fallback s├│ dispara na **primeira** grava├º├úo daquela origem. Reproduzi esse crit├®rio, n├úo o que a frase sugere.
+
+Uma ├║nica precau├º├úo acrescentada ao legado, documentada no m├®todo: o `DELETE for Dopeds = xOpe.Dopes` do `cmdExcluir` roda sob o SET KEY ativo; com o ponteiro movido por c├│digo a faixa fica defasada e o DELETE n├úo alcan├ºa nada **em sil├¬ncio**, deixando produtos ├│rf├úos que o Encerrar regravaria. O filtro ├® reafirmado antes do DELETE.
+
+## Verifica├º├úo
+
+- `VerificarMetodoProtegidoChamadoDeFora` e `VerificarFuncoesNaoDefinidas`: OK
+- `ValidadorSQLSchema`: 683 tabelas, 6 statements, nenhuma coluna inv├ílida
+- `automation/ProbeF7SigOpTrfCursores.prg`: 7 premissas de cursor confirmadas (chave posicional, `ALLTRIM` nas partes zerando o filtro, `DELETE FOR`, `SKIP/GO BOTTOM`, `RECCOUNT`, `SCAN`)
+- Gate da Fase 7: 5 handlers `Cmd*/Btn*Click` contra m├¡nimo 2
+
+**N├úo testei a tela aberta** ÔÇö o probe ├® de cursor, sem SQL (o SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina). A grava├º├úo em lote nunca foi exercida contra o banco; `AfterRowColChange` e os `SetFocus` de c├®lula s├│ se provam com o form vis├¡vel. A Fase 8 fica com `BtnCancelarClick` e o par `FormParaBO`/`BOParaForm`.

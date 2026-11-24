@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei as 8 ocorr├¬ncias contra o dump do legado (`tasks/task817/SigOpVda_form_codigo_fonte.txt`). Todas s├úo **falsos positivos** do detector ÔÇö nenhuma altera├º├úo foi feita nos arquivos.
+
+**Confirma├º├úo linha a linha:**
+
+| Coluna acusada | Onde est├í no migrado | Onde est├í no legado | Veredito |
+|---|---|---|---|
+| `EMPS` | `Selecionar()`: `IIF(EMPTY(loc_cEmp),"","AND p.Emps=...")` | linha 1333: `Iif(Empty(lcEmp), [], [p.Emps = '] + lcEmp + [' And ])` | transcri├º├úo literal |
+| `ADQUIRENTE` | `Selecionar()`: `IIF(EMPTY(loc_cAdquirente),...,"AND p.Adquirente=...")` | linha 1334: `Iif(Empty(lcAdq), [], [p.Adquirente = '] + lcAdq + [' And ])` | transcri├º├úo literal |
+| `DATAS` | `p.Datas BETWEEN ... AND ...` | linha 1335: `[p.Datas BetWeen ?pDtI And ?pDtF And ]` | transcri├º├úo literal |
+| `VENCS` | `p.Vencs IS NOT NULL` | linha 1338: `[Not p.Vencs Is Null And ]` | transcri├º├úo literal |
+| `CIDCHAVES` | `UPDATE SigPcOoL ... WHERE cidchaves = ...` | linha 1445: `.AddCursor([SigPcOoL], [cIdChaves], [crSigPcOoL])` | PK bufferizada do cursor legado ÔÇö gera WHERE impl├¡cito no `TableUpdate` |
+| `CODCADS` | `ValidarAdquirs()`: `WHERE TipoCads=... AND codcads=...` | linha 1509: `Select codcads ... From SigCdCad Where TipoCads = 'ADQUIRENTE'` + `Seek(This.Value)` em `crAdquirs` | equivalente a SEEK em ├¡ndice local |
+| `CEMPS` | `ValidarEmpOs()`: `WHERE Cemps=...` | `getEmpOs.Valid` chama `fAcessoEmpresa` (n├úo portada) | substituto can├┤nico do lookup |
+| `RAZAS` | `ValidarDEmpOs()`: `WHERE Razas LIKE...` | `getDEmpOs.Valid` chama `fAcessoEmpresa` (n├úo portada) | substituto can├┤nico do lookup |
+
+O detector "lista de colunas do WHERE original" s├│ capturou os fragmentos SQL est├íticos da query principal (`INFOS, TIPOS, CONTADS, FPAGS, DOPES`) e perdeu os trechos envolvidos em `Iif(Empty(...), [], [...])` ÔÇö exatamente a mesma falha de parsing j├í catalogada na mem├│ria do projeto (variante "OPERAS" em `sigprnfe`). Remover esses filtros teria quebrado o filtro de empresa/adquirente/per├¡odo e a atualiza├º├úo por PK ÔÇö regress├Áes reais, n├úo corre├º├Áes.
+
+Nenhum arquivo foi modificado.

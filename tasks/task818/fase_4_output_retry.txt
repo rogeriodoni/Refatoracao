@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and verified. Summary:
+
+## Why the previous attempt failed the gate
+
+The gate's FLAT branch needs three things; two passed, one didn't:
+
+| predicate | before | now |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£à | Ô£à |
+| `AddObject("cmg_4c_\|cmd_4c_` | Ô£à | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî ÔÇö method was named `CarregarGradesFiltros` | Ô£à |
+
+Renaming it to `CarregarDados` (71 operational forms use that name vs 14 `MontaGrade`) closed the gate. But the gate is static ÔÇö so I instantiated the form, and it **did not open**.
+
+## Blocking defects the gate could not see
+
+Three cascading `Init` failures, each only visible after fixing the one before:
+
+1. **`PageFrame.TabStyle` is read-only at runtime.** The SCX declares it, but assigning it throws `Property TABSTYLE is read-only`, `InicializarForm` returns `.F.`, `CREATEOBJECT` returns `.F.` ÔÇö user clicks the menu and nothing happens. Removed (0 is already the default; `Tabs = .F.` makes it moot).
+2. **`Page.Visible` does not exist.** `loc_oPag.Visible = .T.` at the end of both `ConfigurarPagina*` (phase-3 leftovers) threw `Property VISIBLE is not found`. Removed.
+3. **`Grid.ColumnCount` auto-binds to the *current* work area**, so `Column1.AddObject("Check1","CheckBox")` at config time failed with `Error with CHECK1 - Value : Data type mismatch`. Restructured to the measured-correct order ÔÇö bind first, then install the checkbox ÔÇö inside `CarregarDados`, with an idempotent `GarantirCheckBoxColuna` that carries its own `BINDEVENT`s (a recreated object is a different object).
+
+## Other corrections
+
+- **BO cursors were read-only.** `cursor_4c_Operacoes` and `cursor_4c_Empresas` came straight from `SQLEXEC`; both feed checkbox grids this phase has to make markable. Converted via the project's temp-alias + `READWRITE` template. `Imps` became numeric (`0 AS Imps`, not `CONVERT(bit,0)`), with the dependent `WHERE Imps <> 0` and the two batch handlers (`IIF(...,1,0)` / `REPLACE ... WITH 1`) fixed to match.
+- **Legacy `montagrades` fidelity**: `Column.Movable/Resizable/ReadOnly` were missing. The legacy loops `For I = 1` on the four cascade grids (Column1 locked, toggle only via handlers) but `For I = 2` on `grdEmps` with explicit `Column1.ReadOnly = .F.` ÔÇö reproduced exactly.
+- `obj_4c_CmgFiltros`/`obj_4c_CmdEmps` ÔåÆ `cmg_4c_Filtros`/`cmg_4c_Empresas` (project canon for CommandGroup), and `mapeamento.json` corrected, including the five grids and three result grids that all collided on `grd_4c_Dados`.
+- Standalone buttons got `Themes = .T.` + `DisabledPicture` (deliberate divergence from the SCX literal, per project rule).
+
+## Verification
+
+Compile clean (`.FXP` yes, `.ERR` no) for form and BO. Headless probe: form instantiates (`VARTYPE=O`), all 5 grids and 10 button objects present with icons verified to exist in `vbmp\`; `CarregarDados` binds all 5 grids **with a character-first alias deliberately left current** ÔÇö the exact condition that broke it ÔÇö installs all 5 checkboxes (`CurrentControl=CHECK1`, `Sparse=.F.`, `Value` numeric), is idempotent on a second call, and the toggles work (marking a Tipo cascades to Opera├º├Áes; batch mark/unmark and the Empresas checkbox all write the cursor). `ValidadorSQLSchema` 0 problems; the undefined-function and protected-method auditors clean project-wide; no suppressed dialogs.
+
+Two things worth flagging:
+
+- **I was wrong mid-task about `PageFrame.BorderWidth`.** A project memory says it's read-only, so I removed it alongside `TabStyle` and was about to report 7 other forms as broken by it. Measuring on the real object showed it **is** writable (default 1, legacy 0) ÔÇö dropping it would have introduced a 1px divergence, and the cross-form alarm was false. Restored, and no other form assigns `TabStyle` or `Page.Visible`, so no sweep is needed.
+- **`CarregarFiltrosIniciais` itself is unproven.** It needs SQL Server at 192.168.200.10, unreachable from this machine, so the probe exercises `CarregarDados` against hand-built cursors instead. The BO's cursor-conversion change follows the project's canonical template, but the actual queries have not run.

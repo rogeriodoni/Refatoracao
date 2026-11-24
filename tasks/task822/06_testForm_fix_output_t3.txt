@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado: sem defeito de c├│digo ÔÇö ├® infraestrutura
+
+O erro da etapa 06_testForm **n├úo ├® um bug em `FormSigOpZom.prg`/`SigOpZomBO.prg`**. O log mostra a falha na ETAPA 1B ("Conectando ao banco de dados"), *antes* de qualquer `CREATEOBJECT` do form sendo testado ÔÇö ├® o pre-flight gen├®rico do harness tentando `SQLSTRINGCONNECT` contra 192.168.200.10:1433 e recebendo Erro 1526 (DBNETLIB).
+
+Isso ├® um padr├úo j├í documentado na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): desde 2026-11-05 esse erro j├í ocorreu em 28+ confirma├º├Áes anteriores, em ~17 forms diferentes da fam├¡lia SigOp*, sempre com revis├úo de c├│digo independente confirmando que n├úo h├í defeito.
+
+Fiz a 3┬¬ revis├úo independente deste form/BO espec├¡fico contra o checklist do CLAUDE.md e confirmei:
+- `RETURN` sempre fora de `TRY/CATCH` em todos os m├®todos
+- Os dois alvos de `BINDEVENT` (`BtnSairClick`, `TimerFecharAutomatico`) s├úo `PUBLIC` (regra #3)
+- O Form s├│ chama m├®todos `PUBLIC` do BO (`ValidarArquivoImagem`, `AtualizarEstadoTimer` ÔÇö regra #51)
+- Todo `CATCH` chama `MsgErro` (nenhum silencioso)
+- `Init()` do form chama `DODEFAULT()` (regra #9.4)
+- O BO n├úo faz nenhum `SQLEXEC`/`AddCursor` ÔÇö ├® um visualizador parametrizado sem tabela, por decis├úo de projeto documentada no pr├│prio cabe├ºalho do BO
+
+Confirmei tamb├®m a conectividade diretamente:
+```
+Test-NetConnection -ComputerName 192.168.200.10 -Port 1433 -> TcpTestSucceeded = False
+```
+
+**N├úo editei os arquivos** ÔÇö editar c├│digo correto s├│ para "satisfazer" este gate seria dano, n├úo corre├º├úo (conforme a pr├│pria mem├│ria do padr├úo registra). J├í atualizei a mem├│ria com esta 3┬¬ ocorr├¬ncia (task822, tentativa 3/10).
+
+**Recomenda├º├úo**: pausar o retry autom├ítico desta task ou dar uma exce├º├úo ao gate `06_testForm` especificamente para o erro 1526/conectividade ÔÇö um retry autom├ítico contra uma falha de rede n├úo vai convergir por si s├│, e restam poucas tentativas.

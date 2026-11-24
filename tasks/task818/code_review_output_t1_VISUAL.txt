@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All existing index keys already cover these files, so no index changes are needed.
+
+## Summary
+
+I investigated all 13 flagged problems against the actual source before touching anything, since this project's memory log shows these detector categories (`GRID-WITH`, `LAYOUT-POSITION`, `NAVEGACAO-PAGINA`) are false-positive-prone in dozens of prior passes.
+
+**Fixed (1 real issue, in the BO, not the form):**
+- `[NULL-CURSOR]` on `cursor_4c_Detalhe` ÔÇö confirmed real: `SigMvCab.Datas` (feeds `Data_Venda`) is `NULL`-able in `docs/schema.sql`, and `SigOpVdiBO.MontarResultadoDetalhe` NVL-treats every other field except `Data_Venda` before `INSERT INTO cursor_4c_Detalhe FROM MEMVAR`. Added `SET NULL ON`/`SET NULL OFF` around the `CREATE CURSOR` in `SigOpVdiBO.prg`.
+
+**Not changed (12 confirmed false positives, no edits made to `FormSigOpVdi.prg`):**
+- 8├ù `[GRID-WITH]` ÔÇö every cited block already follows the canonical `ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource` order inside the same `WITH` (regra #41/#44); one citation ("WITH ENDPROC") was a parser artifact pointing at no real object.
+- `[NAVEGACAO-PAGINA]` on `BtnConsultarClick` ÔÇö it does load data, just via `Processar()`+`Filtros()`+`AtualizarPainelDetalheRegistro()` instead of the literal names the detector looks for.
+- `[LAYOUT-POSITION]` on `Check1` ÔÇö the form already sets `.Left = 2` explicitly for that control; the "35" the detector cited is a default from a shared helper used by *other* grids, never assigned here.
+- 2├ù `[LAYOUT-POSITION]` on `optValor1` ÔÇö the OptionGroup already has `.Top=292`/`.Left=76` matching the legacy; the detector read the nested `.Buttons(1)` Top/Left instead.
+
+Since none of the form-file findings were real, I didn't write the form file (I only had excerpts, not the full 3850-line source, so rewriting it would risk corruption for zero benefit). I logged all reincidences into the existing memory files (`feedback_grid_with_falso_positivo_recordsource_column_mesmo_bloco.md`, `feedback_layoutposition_with_aninhado_buttons.md`, `feedback_navegacao_pagina_if_comparacao_lida_como_atribuicao.md`, `feedback_harness_de_auditoria_mede_errado.md`) to keep the pattern catalog current.

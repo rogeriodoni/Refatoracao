@@ -1,0 +1,76 @@
+===============================================================================
+ETIQUETAS PROVISORIAS - SUBSTITUIR PELOS ARQUIVOS DO LEGADO
+Gerado em 18/11/2026 (Erro384)
+===============================================================================
+
+ARQUIVOS AFETADOS (7 pares .lbx/.lbt nesta pasta)
+
+    SigMldDn    SigMld2    SigMld3    SigMld4
+    SigMld5     SigMld2C   SigMld2K
+
+Sao usados pelo Formsigreipe ("Impressao de Etiquetas") nos botoes
+Visualizar / Imprimir / Impr. Direta, via LABEL FORM.
+
+-------------------------------------------------------------------------------
+POR QUE EXISTEM
+-------------------------------------------------------------------------------
+Os arquivos originais do sistema legado NUNCA entraram no acervo. Foram
+procurados em todo o C:\4c e dentro do "4c (1).rar" (86 MB): nao existe um
+unico .lbx/.lbt no repositorio. Sem eles o Visualizar morria em
+
+    File 'c:\4c\projeto\app\start\sigmld2.lbx' does not exist.
+
+Estes arquivos foram GERADOS para destravar o teste da tela.
+
+-------------------------------------------------------------------------------
+O QUE ELES FAZEM
+-------------------------------------------------------------------------------
+Imprimem um bloco de endereco a partir das colunas que o cursor Relacao ja
+traz, respeitando as opcoes da tela:
+
+    linha 1   nome          (ja com "Iniciais em Maiusculo" e "Nome de
+                             Contato" aplicados pelo Processamento)
+    linha 2   logradouro, numero e complemento
+    linha 3   bairro
+    linha 4   cidade/UF e CEP
+    linha 5   pais          - so com "Imprimir Pais"   = Sim e pais preenchido
+    linha 6   codigo        - so com "Imprimir Codigo" = Sim e codigo preenchido
+
+Com isso da para testar o resto da tela: ordenacao (CEP / Alfabetica /
+Data Nasc. x Crescente / Decrescente), Iniciais em Maiusculo, Nome de
+Contato, Imprimir Pais e Imprimir Codigo.
+
+-------------------------------------------------------------------------------
+O QUE ELES **NAO** FAZEM  ***  LEIA ANTES DE IMPRIMIR  ***
+-------------------------------------------------------------------------------
+NAO reproduzem a geometria fisica das etiquetas do legado.
+
+A largura e a altura de cada um foram deduzidas do NOME da opcao na tela
+("2 Colunas", "Pimaco 6181", "A4355"...). Nao ha no acervo nenhuma fonte
+para conferir essas medidas, e nao foi possivel determinar como o formato
+codifica multiplas colunas - nenhum dos 432 relatorios do projeto e
+multi-coluna para servir de referencia. Na pratica as 7 variacoes diferem
+apenas no tamanho da celula, nao no numero de colunas.
+
+    => NAO USAR PARA IMPRIMIR EM PAPEL ADESIVO.
+       O alinhamento vai sair errado, e isso NAO aparece na tela - so no
+       papel, depois de gasto.
+    => Servem para VISUALIZAR e testar a logica da tela.
+
+-------------------------------------------------------------------------------
+COMO SUBSTITUIR PELOS DEFINITIVOS
+-------------------------------------------------------------------------------
+1. Copiar os 7 pares .lbx/.lbt do sistema legado em producao para esta pasta,
+   sobrescrevendo estes. Os nomes tem de ser exatamente os listados acima.
+   O .lbt e o memo do .lbx - sem ele o arquivo nao abre.
+2. Validar:
+   "C:\Program Files (x86)\Microsoft Visual FoxPro 9\vfp9.exe" ^
+       -t C:\4c\automation\VerificarEtiquetasLbx.prg
+   Ler automation\verificaretiquetaslbx.txt - os 3 blocos (presenca,
+   estrutura e execucao com dados reais) devem sair OK.
+3. Apagar este LEIA-ME e o automation\GerarEtiquetasProvisorias.prg.
+
+Regerar estes provisorios (se alguem apagar por engano):
+   "C:\Program Files (x86)\Microsoft Visual FoxPro 9\vfp9.exe" ^
+       -t C:\4c\automation\GerarEtiquetasProvisorias.prg
+===============================================================================

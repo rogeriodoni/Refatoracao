@@ -1,0 +1,588 @@
+{
+  "resumo": {
+    "totalMetodos": 35,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 19,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File", "fVerificaPasta", "fDtoSQL", "fExecCmds", "fConfigGeral", "fAcessoEmpresa", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Zap In csOperacoes\n\nWith ThisForm\n\t.getDtIni.Enabled = .t.\n\t.getDtFin.Enabled = .t.\n\t.cmdSelecionar.Enabled = .t.\n\t.optProcessados.Option1.Enabled = .t.\n\t.optProcessados.Option2.Enabled = .t.\n\t.getArqNoms.Enabled = .t.\n\t.btnNomArqs.Enabled = .t.\n\t.getEmpOs.Enabled = .t.\n\t.getDEmpOs.Enabled = .t.\nEndWith\n\nWith ThisForm.cmdBtnForm\n\t.btnLimpar.Enabled = .f.\n\t.btnCopiar.Enabled = .f. \nEndWith\n\nWith ThisForm.cmdBtnGrade\n\t.btnMarcaTudo.Enabled  = .f.\n\t.btnDesmarcar.Enabled  = .f.\n\t.btnDocumentos.Enabl... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optProcessados,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Procedure",
+      "linhas": 68,
+      "codigoOriginal": "Local lcEmp, llNPr, lcArq, lnOrd, llOks\n\nlcEmp = Padr(ThisForm.getDEmpOs.Value, 3)\nllNPr = (ThisForm.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados\nlcArq = ThisForm.getArqNoms.Value \n\nCreate Cursor crExcel (TIPO_REGISTRO c(3), ADQUIRENTE c(60), LOJA_FILIAL c(15), BANDEIRA c(60), TIPO_TRANSACAO c(15), ;\n\t\t\t\t\t   NRO_PARCELA c(2), QTD_PARCELAS c(2), TID c(40), NSU c(30), AUTORIZACAO c(20), VALOR c(14), ;\n\t\t\t\t\t   CLIENTE c(50), DATA_VENDA c(10), ORIGEM c(10), SEQUENCIA c(20), NOTA_... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Update,Commit,RollBack,LimpaSelecao,Click",
+        "controlesReferenciados": "optProcessados",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Procedure",
+      "linhas": 120,
+      "codigoOriginal": "Private pDtI, pDtF\n\nLocal lcEmp, llNPr, ldDtI, ldDtF, lcArq\n\nZap In csOperacoes\n\nlcEmp = Padr(ThisForm.getEmpOs.Value, 3)\nllNPr = (ThisForm.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados\nldDtI = ThisForm.getDtIni.Value\nldDtF = ThisForm.getDtFin.Value \nlcArq = ThisForm.getArqNoms.Value \nlcAdq = ThisForm.getAdquirs.Value \n\nIf Empty(ldDtI)\n\t=MessageBox([A Data Inicial Não Pode Ficar em Branco!!!], 0+16, [Atenção!!!])\n\tThisForm.getDtIni.SetFocus \n\tReturn .f.\nEndIf\n\nIf Empty(ldDtF)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fVerificaPasta,fDtoSQL,fExecCmds",
+        "metodosFormChamados": "LimpaSelecao",
+        "controlesReferenciados": "optProcessados,Option1,Option2",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csOperacoes (SelImp l(1), TIPO_REGISTRO c(3), ADQUIRENTE c(60), LOJA_FILIAL c(15), ;\n\t\t\t\t\t\t   BANDEIRA c(60), TIPO_TRANSACAO c(15), NRO_PARCELA c(2), QTD_PARCELAS c(2), ;\n\t\t\t\t\t\t   TID c(40), NSU c(30), AUTORIZACAO c(20), VALOR c(14), CLIENTE c(50), ;\n\t\t\t\t\t\t   DATA_VENDA c(10), ORIGEM c(10), SEQUENCIA c(20), NOTA_FISCAL c(20), ;\n\t\t\t\t\t\t   CPF_CNPJ c(20), ESTABELECIMENTO c(20), DATA_VENCIMENTO c(10), ;\n\t\t\t\t\t\t   NUMERO_CARTAO c(30), REFERENCIA1 c(60), Emps c(3), Dopes ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA",
+      "evento": "Init",
+      "linhas": 88,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigPcOoL], [cIdChaves], [crSigPcOoL])\n\t\tEndWith\n\n\t\t.getDtIni.Enabled      = .t.\n\t\t.getDtFin.Enabled      = .t.\n\t\t.getEmpOs.Enabled      = .t.\n\t\t.getDEmpOs.Enabled     = .t.\n\t\t.getArqNoms.Enabled    = .t.\n\t\t.btnNomArqs.Enabled    = .t.\n\t\t.cmdSelecionar.Enabled... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fExecCmds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optProcessados,Option1,Option2",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cmdBtnGrade",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Do Case\n   Case This.Value = 1 And This.btnMarcaTudo.Enabled\n\t\t* Marca Tudo\n\t\tSelect csOperacoes\n\t\tReplace All SelImp With .t. For Not Erros\n\t\tGo Top\n\t\tThisForm.cntGrade.GrdOperacoes.Refresh\n\t\t \n   Case This.Value = 2 And This.btnDesmarcar.Enabled\n   \t\t* Desmarcar\n\t\tSelect csOperacoes\n\t\tReplace All SelImp With .f.\n\t\tGo Top\n\t\tThisForm.cntGrade.GrdOperacoes.Refresh\n\t\t \n   Case This.Value = 3 And This.btnDocumentos.Enabled\n   \t\t* Operações\n\t\tDo Form SigMvExp With csOperacoes.Dopes, 'C', csOperacoes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.getEmpOs",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getEmpOs, ThisForm.getDEmpOs, ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "If (This.Value = 2) && Se Clicou em Gerar Arquivo Faz a Checagem\n\tSelect SelImp, Count(1) as Selecionados ;\n\t  From csOperacoes ;\n\t Where SelImp ;\n\t Group By SelImp ;\n\t  Into Cursor csSeles\n\t  \n\tIf (csSeles.Selecionados < 1)\n\t\t=Messagebox([Nenhum Lançamento Foi Selecionado!!!], 0+48, [Processamento])\n\t\tThisForm.getDtIni.SetFocus \n\t\tReturn .f.\n\tEndIf\nEndIf \n\nDo Case\n\tCase (This.Value = 1) And This.btnLimpar.Enabled\n\t\t * Limpar Seleção\n\t\t ThisForm.LimpaSelecao()\n\t\t \n\tCase (This.Value = 2) And This... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LimpaSelecao,Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.LimpaSelecao()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LimpaSelecao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.getDEmpOs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getEmpOs.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.getDEmpOs",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getEmpOs, ThisForm.getDEmpOs, ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = (Not csOperacoes.SelImp)\n\nSelect csOperacoes\nGather Memvar Fields SelImp\nThisForm.cntGrade.GrdOperacoes.Refresh\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = (Not csOperacoes.SelImp)\n\n\tSelect csOperacoes\n\tGather Memvar Fields SelImp\n\tThisForm.cntGrade.GrdOperacoes.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column11.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column12.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cntGrade.GrdOperacoes.Column13.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.cmdSelecionar",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Selecionar()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Selecionar",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.getArqNoms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.btnNomArqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.btnNomArqs",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Local lcDir\n\nlcArq = Putfile([Nome do Arquivo], [C:\\CONCILIADOR.CSV], [CSV])\n\nThisForm.getArqNoms.Value = lcArq\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVDA.getAdquirs",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect crAdquirs\n\tSet Order To Adquirente\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject([fwBuscaInt], [crAdquirs], [Adquirente], This.Value, [Seleção], .t.)\n\t\tloBrowse.mAddColuna([Adquirente], [], [Adquirente], .t.)\n\t\tloBrowse.Show\n\tEndIf \n\tThis.Value = crAdquirs.Adquirente\nEndIf\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPVDA.cmdBtnForm.Click",
+      "queryOriginal": "\tSelect SelImp, Count(1) as Selecionados ; \t  From csOperacoes ; \t Where SelImp ; \t Group By SelImp ; \t  Into Cursor csSeles",
+      "tabelas": "csOperacoes",
+      "colunas": "SelImp,csSeles",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csOperacoes"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

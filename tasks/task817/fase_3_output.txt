@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Only the `.prg` remains, clean. FASE 3/8 is complete.
+
+**Created:** `C:\4c\projeto\app\forms\operacionais\FormSigOpVda.prg`
+
+Since SIGOPVDA is an OPERACIONAL form (flat layout, no PageFrame Lista/Dados like a CRUD cadastro), this phase delivers:
+- Class shell with exact visual properties from the SCX dump (DataSession=2, Width=1300, Height=600, BorderStyle=2, ControlBox=.F., TitleBar=0, etc.)
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` creating `SigOpVdaBO` and calling the layout orchestrator
+- `ConfigurarPageFrame()` building the gray header banner (`cnt_4c_Sombra` + `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`), matching the pattern already established in sibling forms of the same "SigOp*" family (e.g. `Formsigopvci.prg`)
+- A recursive `TornarControlesVisiveis`/`TornarVisivelRecursivo` pair that will keep working once the grid and button containers from later phases are added
+
+Grid (`cnt_4c_Grade`/`grd_4c_Dados`), filter fields, buttons, and the `Selecionar`/`Processamento`/`LimpaSelecao` logic are deliberately left for Fases 4-8, per the task's own OPERACIONAL guidance. Verified with a real VFP9 `COMPILE` ÔÇö no syntax errors, `.fxp` generated then cleaned up.

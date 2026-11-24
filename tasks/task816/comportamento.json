@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fLerFiscal", "File", "FileToStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPVCI",
+      "evento": "Init",
+      "linhas": 45,
+      "codigoOriginal": "Parameters poFormulario\nLOCAL lcPor\nThisForm.poFormulario = poFormulario \n\n=fConfigGeral()\n\nWith Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n\n=fLerFiscal()\n\nlcFile = GetEnv(\"SystemRoot\") + '\\system32\\BEMAFI32.INI'\n\nIf File(lcFile)\n\n\tlcConfig = FileToStr(lcFile)\n\tlcComs   = StrExtract(lcConfig, 'Porta', Chr(13)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral,fLerFiscal,File,FileToStr",
+        "metodosFormChamados": "Value = Ctod",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Commandgroup1",
+      "evento": "Click",
+      "linhas": 320,
+      "codigoOriginal": "LOCAL lnNoFabr, lcDir\nPRIVATE lcTp, lcIn, lcFi\n\nlnNoFabr = LeituraFab(ThisForm.poFormulario)\n\nIf crSigFiFis.Imps = 'BEMA8501'\n\n\n\tDeclare Integer Bematech_FI_DownloadMFD In \"BemaFI32.dll\" String cFile, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cTipo, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cInicio, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cFinal, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cProp\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  \n\tDeclare Integer Bematech_FI_FormatoDadosMFD In \"BemaFI32.dll\" String cFile, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cDest, ;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  String cZero, ;\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "FILE,FILETOSTR",
+        "metodosFormChamados": "Value) > Val,Value) = 0 Or Val,Value) Or Empty,ZOrder,SqlExecute",
+        "controlesReferenciados": "Optiongroup1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Release Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Optiongroup1.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Optiongroup1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If Val(This.Value) <> 0\n\tThis.Value = Transform(Val(This.Value), '@L 999999')\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Optiongroup1.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Optiongroup1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text2",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If Val(This.Value) <> 0\n\tThis.Value = Transform(Val(This.Value), '@L 999999')\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Optiongroup1.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Optiongroup1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPVCI.Text4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Optiongroup1.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Optiongroup1",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

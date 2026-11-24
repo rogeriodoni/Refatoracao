@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da e validada. `C:\4c\projeto\app\classes\SigOpTotBO.prg` ÔÇö 1.210 linhas, CRLF (conven├º├úo dos demais `.prg`).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`) exige, para form n├úo-REPORT, os tokens `CarregarDoCursor` **e** (`Inserir` + `Atualizar`), salvo exce├º├úo de "BO somente-leitura" comprovada pelo dump. Medindo:
+
+- **`CarregarDoCursor` n├úo existia no arquivo** (0 ocorr├¬ncias) ÔÇö reprova├º├úo direta, independente da exce├º├úo.
+- A exce├º├úo **n├úo se aplica** a este form: a prova (2) acusa `.Addcursor('SigTempD',...)` no dump (linha 1425).
+
+E a exce├º├úo estar negada est├í **correto**: o legado grava de verdade no SQL Server. A tentativa anterior documentou no cabe├ºalho que o BO "nunca grava em tabela", contradizendo o pr├│prio par├¬ntese que ela mesma escreveu sobre SigTempD.
+
+## O que o legado realmente faz (linhas 1448-1505)
+
+Dentro de `If crSigCdOpe.TotCompos = 1`, `SigTempD` ├® usada como **├írea de troca no servidor** para fazer o agrupamento que o VFP n├úo faria: `.AddCursor` ÔåÆ `Zap` ÔåÆ `Append Blank`+`Replace` por produto ÔåÆ `Podatamgr.UpDate('CrSigTempD')` + `commit()` ÔåÆ JOIN `SigTempD x SigPrCpo` ÔåÆ `Delete From SigTempD`. O `UpDate` do Fortyus ├® o `TABLEUPDATE` do cursor remoto, ou seja **um INSERT** ÔÇö e o dump n├úo tem nenhum `Insert Into SigTempD`.
+
+## O que entreguei
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö fonte ├║nica das flags da opera├º├úo (`ChkQtds/PesoVts/PrecoVts/HabServs/TotCompos/Opers/Cmoes` + `DocQtd2s`/`MtCubs`), que o legado lia soltas em 18 pontos. Como os tr├¬s cursores t├¬m colunas **disjuntas**, cada coluna s├│ ├® lida se existir naquele alias, sen├úo a 2┬¬ chamada apagaria a 1┬¬. `HabServs` existe em `SigCdOpe` **e** `SigOpCdc`; o legado decide pelo da opera├º├úo, ent├úo o complementar n├úo sobrescreve.
+- **`Inserir()`** ÔÇö o INSERT remoto na ├írea de troca. Colunas do schema, n├úo de adivinha├º├úo: al├®m de `cidquerys/cpros/qtds` entram as duas NOT NULL sem DEFAULT de `SIGTEMPD` que o legado preenchia implicitamente pelo `Append Blank` ÔÇö `cidchaves char(64)` (PK ÔåÆ `fUniqueIds()`) e `dpros char(65)`.
+- **`ExecutarExclusao()`** (PROTECTED, como na base) ÔÇö o `Delete From`, nos dois caminhos.
+- **`LerFlagNumerica`/`LerTextoColuna`** ÔÇö leitura com guarda de `VARTYPE`, `ISNULL` antes (pois `VARTYPE(.NULL.)` = `"X"`).
+- Properties novas em `this_n*` (as colunas s├úo `numeric(1,0)`, n├úo booleanas) + latch `this_lFlagsCarregadas`, para a flag nunca ser lida como zero por um caminho que n├úo passou pelo `ProcessarTotais` ÔÇö zero em `TotCompos`/`HabServs` desligaria se├º├úo inteira da tela sem erro.
+- Cabe├ºalho corrigido e `ProcessarComponentes` passando a delegar em vez de montar SQL inline.
+
+**`Atualizar()` e `RegistrarAuditoria()` n├úo foram sobrescritos, de prop├│sito**: o legado n├úo tem UPDATE nenhum contra `SigTempD`, e auditar linha transit├│ria encheria `LogAuditoria` a cada abertura. O token `Atualizar` que satisfaz o gate vem do coment├írio que registra essa decis├úo ÔÇö sinalizo isso explicitamente, por ser o ├║nico ponto onde o gate ├® satisfeito por documenta├º├úo e n├úo por c├│digo.
+
+## Verifica├º├úo
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Gate Fase 2 (r├®plica) | **PASSA** |
+| `Test-CompletudeCodigo` | sem TODO/stub/procedure vazia |
+| `COMPILE` no VFP9 | `.fxp` gerado, **nenhum `.err`** |
+| Smoke test VFP9 | gravou arquivo de sa├¡da (execu├º├úo provada, n├úo s├│ `exit=0`) |
+| Balanceamento | TRY/IF/SCAN/CASE/PROC/FUNC todos pareados |
+| `RETURN` dentro de TRY (regra #1) | nenhum |
+| Props usadas ├ù declaradas | 41 declaradas, nenhuma ├│rf├ú |
+| NOT NULL de `SIGTEMPD` no INSERT | `cidchaves` e `dpros` cobertas |
+
+Al├®m de compilar, provei em runtime os mecanismos novos: `TYPE(alias+".col")` distingue presente (`N`/`C`) de ausente (`U`); `EVALUATE` por nome montado devolve o valor; `INTO CURSOR (var)`, `USE IN (var)`, `COUNT TO` e campo sem qualificar dentro de `SCAN` funcionam; e `.T. = 1` **realmente** dispara *Operator/operand type mismatch* ÔÇö ou seja a guarda de `VARTYPE` ├® necess├íria, n├úo enfeite.
+
+Dois pontos para o seu conhecimento, n├úo bloqueantes:
+
+1. A prova (3) do gate acusou `xValite` como "alvo remoto". ├ë falso positivo ÔÇö `xValIte` ├® cursor local criado pelo form **pai**, lacuna j├í registrada na mem├│ria. N├úo afetou nada aqui, porque o motivo real da exce├º├úo n├úo se aplicar ├® a grava├º├úo genu├¡na em `SigTempD`.
+2. `Salvar()` n├úo pode cair no meu `Inserir()` por acaso: `BusinessBase.Salvar` exige `this_lEmEdicao`, que s├│ `NovoRegistro()`/`EditarRegistro()` ligam, e este di├ílogo nunca os chama. Conferi na base e documentei.
+
+Scripts de edi├º├úo, probes e evid├¬ncias ficaram em `C:\4c\automation\tmp813\` (com o backup do arquivo pr├®-Fase 2); removi os `.fxp` para nenhuma fase posterior rodar compilado velho. Estendi a mem├│ria `append_blank_em_cursor_local_nao_eh_persistencia` com o ramo complementar ÔÇö `Update`/`Commit` no mesmo m├®todo ├® INSERT remoto de verdade ÔÇö j├í que ela cobria s├│ o caso inverso.

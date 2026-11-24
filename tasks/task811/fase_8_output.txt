@@ -1,0 +1,49 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O que foi feito e o que foi medido.
+
+## A mudan├ºa de c├│digo: 2 linhas
+
+O gate da Fase 8 foi rodado **standalone** (sem dot-source, que dispararia migra├º├úo real) antes de escrever qualquer coisa. Ele reprovava por **um ├║nico nome**:
+
+```
+[i] ramo VISUALIZADOR - BtnCancelarClick, FormParaBO, BOParaForm nao se aplicam
+FALTANTES=CarregarLista        VEREDITO=REPROVA
+```
+
+E o gate estava **certo**: o ramo visualizador dispensa tr├¬s dos quatro nomes mas **mant├®m `CarregarLista` de prop├│sito** ÔÇö este form tem uma grade (`GradeSubN` ÔåÆ `grd_4c_Dados`) e algu├®m a popula. O funil j├í existia e estava correto desde a Fase 4; s├│ se chamava `CarregarDados`, nome local. Renomeado (n├úo duplicado ÔÇö dois nomes para o mesmo funil criariam o segundo dono que a regra #21 evita):
+
+- `PROCEDURE CarregarDados` ÔåÆ `PROCEDURE CarregarLista`
+- `THIS.CarregarDados()` ÔåÆ `THIS.CarregarLista()`
+
+`CarregarLista` n├úo ├® conven├º├úo de CRUD: ├® por onde o **harness** procura ÔÇö `TesteAutomatico.prg` chama `THIS.oForm.CarregarLista()` direto, de fora da classe. O replace usou lookbehind porque `TesteCarregarDadosReais` (m├®todo do harness) cont├®m `CarregarDados` como substring.
+
+Todo o resto do diff (109 de 111 linhas) ├® cabe├ºalho.
+
+## O que N├âO entrou, e por qu├¬
+
+`BtnBuscarClick`, `BtnSalvarClick`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` ÔÇö o SCX tem **um** bot├úo (`cmdSair`), as duas Column s├úo `ReadOnly = .T.` e n├úo h├í campo digit├ível. Cri├í-los seria inventar UI ou deixar m├®todo vazio. Os nomes dispensados ficaram no cabe├ºalho com o **miolo elidido** (`Btn...SalvarClick`): escritos por extenso, o gate os daria por presentes e a dispensa viraria no-op ÔÇö conferi que o segundo run mostra `presente=False` para todos.
+
+## Integra├º├úo
+
+- **config.prg**: nada ÔÇö carga sob demanda; `GarantirClasse` resolve pelo ├¡ndice, que **regerei**. Ele agora traz `FormSigOpTop` + depend├¬ncia de `SigOpTopBO` (e de quebra pegou o `FormSigOpTlo`/task810, que tamb├®m estava fora do ├¡ndice estagnado).
+- **menu.prg**: nada ÔÇö ├® di├ílogo filho, no legado s├│ existe via `Do Form SigOpTop With Thisform` no Click do bot├úo "Transportes" da Lista do SIGCDOPE (task483, linha 55817).
+- **Form pai**: o `BtnTransporteClick` do `FormOPE.prg` ainda ├® o aviso "(Fase B)". **N├úo mexi** ÔÇö ├® outra task, e os cinco di├ílogos irm├úos desta fam├¡lia (inclusive o Deprecia, bot├úo vizinho na mesma barra) aguardam a mesma fase. A chamada pronta est├í documentada em "CHAMADA" no topo do arquivo. Com isso, **a tela ainda n├úo ├® alcan├º├ível pelo usu├írio at├® o FormOPE sair da Fase A** ÔÇö ├® o ├║nico item em aberto.
+
+## Verifica├º├Áes (todas executadas)
+
+| | resultado |
+|---|---|
+| Gate Fase 8 | `FALTANTES=` / **VEREDITO=PASSA** |
+| Compila├º├úo VFP9 | `FORM_FXP=.T. FORM_ERR=.F.` |
+| Completude 05d | FORM = True, BO = True |
+| Probe runtime, 13 checkpoints | todos no esperado |
+
+O probe (`automation\ProbeF8SigOpTop811.prg`) prova o que importa, n├úo s├│ que a tela abre: `CarregarLista` existe (CK02), `CarregarDados` sumiu (CK03), n├úo ├® PROTECTED (CK04), e a chamada **externa** ÔÇö o caminho exato do harness ÔÇö retorna `.F.` sem estourar *"Property is not found"* (CK05); a grade segue formatada (85/60, headers, ReadOnly) e o `Destroy` reabilita o pai e fecha o cursor (CK12/CK13).
+
+Arquivo ├¡ntegro: ASCII puro, CRLF preservado (1113/1113), `.fxp` apagados. Backup pr├®-Fase 8 em `/tmp/FormSigOpTop.prg.bak811f8`.
+
+Uma ressalva de processo: o cabe├ºalho reprovou a 05d na primeira tentativa porque copiei a mensagem do gate com a palavra **"TODO"** ("com TODO campo somente-leitura") no in├¡cio de uma linha de coment├írio ÔÇö o regex de completude n├úo distingue o marcador do portugu├¬s. Corrigido e registrado em mem├│ria, junto com a li├º├úo do ramo visualizador.

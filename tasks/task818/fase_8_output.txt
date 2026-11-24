@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 complete. The form file was already passing both gates when I started, so I audited it method-by-method against the legacy dump and found **five legacy behaviors that were never migrated** ÔÇö the previous Phase 8 run had concluded "no code changes needed".
+
+## What was missing and is now implemented
+
+| Legacy | Migrated | Effect of the gap |
+|---|---|---|
+| `grdTipo.AfterRowColChange` (`Set Key To crTpOpe.Codigos`) | `GrdTiposAfterRowColChange` | Operations grid never filtered by the selected operation type ÔÇö showed all operations regardless of row |
+| `grdDados1.Column<N>.Resize` ├ù31 | `Grd1ColunaResize` (single delegate, columns 1ÔÇæ30 + 32) | Dragging a column to zero width silently lost it with no "hide column?" prompt |
+| `grdDados1.Column7.Text1.DblClick` / `.Column32.Text1.DblClick` | `Grd1Coluna7DblClick` / `Grd1Coluna32DblClick` ÔåÆ `AbrirPesquisaGlobalProduto` | Product/Equivalent cells were styled as links (bold/underline/blue) but did nothing |
+| `grdDados2`/`grdDados3.AfterRowColChange` | `Grd2/Grd3AfterRowColChange` | Image + item-observation panel froze when navigating the two totals grids |
+| `getCfgGrade.When ÔåÆ .f.` | `.ReadOnly = .T.` + `.TabStop = .F.` | The 1297px grid-layout storage field was editable; typing in it corrupts the 35-column config |
+
+The product-search handler follows the canonical pattern already used in `Formsigprite.GrdItensColumn2DblClick` (public `GrpLimparFiltrosClick()`/`BtnConsultarClick()` instead of simulating CommandGroup clicks); `SET KEY` is guarded by TRY/CATCH because the handler fires on every row change outside any caller's TRY.
+
+## Verification performed
+
+- **VFP9 smoke test passed first** (`STRTOFILE` wrote), so the results below are real executions, not exit-code assumptions.
+- **Compile**: `FormSigOpVdi.prg` + `SigOpVdiBO.prg` ÔåÆ `.fxp` produced, no `.err`.
+- **Instantiation probe** (`gb_4c_ValidandoUI`): `VARTYPE=O`, `this_cMensagemErro` empty, and `AEVENTS` confirms all four new bindings are *registered*, not merely defined ÔÇö `AFTERROWCOLCHANGEÔåÆGRDTIPOSAFTERROWCOLCHANGE`, `RESIZEÔåÆGRD1COLUNARESIZE`, `DBLCLICKÔåÆGRD1COLUNA7DBLCLICK`, `AFTERROWCOLCHANGEÔåÆGRD2AFTERROWCOLCHANGE`.
+- **Phase 8 gate standalone**: `VALIDADO=True`, `FALTANTES=` (empty). The *fluxo-├║nico* branch dispenses `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista` for this read-only query form ÔÇö so none of those were invented.
+- **`Test-CompletudeCodigo`**: no TODO/stub/empty procedure.
+- **Audits**: `VerificarLookupEmKeyPress` (ERRO=0 AVISO=0), `VerificarTableRevertSemBuffering` (0 sites), `VerificarMetodoProtegidoChamadoDeFora` and `VerificarFuncoesNaoDefinidas` (no SigOpVdi hits).
+- **Index/menu**: `indice_classes.txt` regenerated ÔÇö `Formsigopcgp.prg` is now in the form's dependency closure; `GarantirClasseNoMenu -Verificar` passes.
+
+Two notes: the SQL Server at 192.168.200.10 is unreachable from this machine, so the probe ran in `gb_4c_ValidandoUI` mode ÔÇö the new handlers' *runtime data behavior* (actual filtering, actual hide prompt) was not exercised against live data, only their registration and the form's clean construction. And I left the pre-existing `_tmp*`/`Probe*SigOpVdi818*` harnesses in `automation\` alone since they're from earlier phases, not mine; my own temp harnesses and the generated `.fxp` are cleaned up.

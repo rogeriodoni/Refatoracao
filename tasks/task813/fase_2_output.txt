@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is complete, structurally balanced, and free of the TRY/CATCH RETURN violation. 
+
+## Summary
+
+Fase 2 of `SigOpTotBO.prg` is complete. Since `SigOpTot` is a **read-only modal totals dialog** (no Confirm/Save button in the legacy SCX ÔÇö only "Retornar" ÔÇö and every grid column has `Text1.When = Return .F.`), the generic CRUD template (`Inserir`/`Atualizar`/`RegistrarAuditoria`) doesn't apply. This matches the established precedent from the sibling dialogs `SigOpTopBO.prg` and `SIGOPTORBO.prg` (companion tasks 811/812), and CLAUDE.md's explicit rule for read-only BOs.
+
+Instead, I transcribed the real legacy logic (`PROCEDURE Init` + `PROCEDURE calctotais`, lines 1278-1593 of the source dump) into:
+- `ProcessarTotais()` ÔÇö orchestrator entry point
+- `CarregarOperacao()` ÔÇö fallback load of `crSigCdOpe`
+- `PrepararRotuloTotalPeso()`, `CarregarUnidade()`
+- `ProcessarComponentes()` ÔÇö the `TotCompos=1` branch (SigTempD scratch-table transaction, done as a single `SQLEXEC` batch per the project's transaction-safety rule, not separate BEGIN/COMMIT calls)
+- `CalcularTotais()` ÔÇö literal translation of `calctotais`, including the legacy's odd sign-comparison quirk (preserved per rule #17, "transcribe the formula, never rewrite it")
+- `ObterMetrosCubicos()`, `MontarGradeProdutos()`, `MontarGradeProdutoTam()`, `MontarGradeServicos()`, `ValidarCompensacao()`, `ObterChavePrimaria()` (documents the correlation key, not a persistence key)
+
+Caught and fixed one real bug while reviewing: `ProcessarComponentes()` initially had `RETURN` statements inside its `TRY` block, which violates CLAUDE.md rule #1. Refactored to the flag-variable pattern instead. Verified the whole file afterward ÔÇö `TRY`/`ENDTRY`, `IF`/`ENDIF`, `SCAN`/`ENDSCAN`, and `PROCEDURE`/`FUNCTION` vs `ENDPROC`/`ENDFUNC` all balance, and a dedicated scan confirms no `RETURN` remains inside any `TRY`/`CATCH`.

@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is done and verified. Here's what I delivered.
+
+## What Phase 7 required vs. what this legacy form actually has
+
+The phase asks for `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **SIGOPVCI has no CRUD surface at all** ÔÇö I measured the dump: zero `frmcadastro`, zero `Grupo_Op`, zero `pcEscolha`. It has exactly **two** buttons, and their legacy `Name`s lie:
+
+| Legacy | Caption (what the user reads) | Handler |
+|---|---|---|
+| `Command1` / `CmdInserir` (320 lines) | `\<Consultar` | `BtnConsultarClick` |
+| `Command2` / `CmdExcluir` (`Release Windows`) | `Encerrar`, `Cancel=.T.` | `BtnEncerrarClick` |
+
+Inventing the four CRUD names would violate Pillar 1 or require empty methods. I ran the phase-7 gate standalone to confirm this is the recognized path ÔÇö not a shortcut:
+
+```
+[i] Fase 7: legado sem botao CRUD algum - validado pelos 3 handler(s) ...
+RESULTADO VALIDADO=True   FALTANTES=
+nHandlers=3 nBotoesLegado=2 minHandlers=2 legadoSemCrud=True
+```
+
+## Implemented (no stubs)
+
+`BtnConsultarClick` is a full port of the 320-line Click, split into methods in the legacy's own order: reentrancy wrapper ÔåÆ `BtnConsultarClickExec` ÔåÆ `ValidarFaixaConsulta` (the 4 range checks) ÔåÆ `AguardarPintura` (the literal 2s wait) ÔåÆ `ResolverFaixaMFD` ÔåÆ the four printer branches (BEMA8501/DARUMA/NSWEDA/EPSON) ÔåÆ `CarregarCupomDeArquivo` (single source for the SDFÔåÆEdit1 path) ÔåÆ `ObterDiretorioDaruma`. Plus `CarregarConfiguracaoFiscal`, the `=fLerFiscal()` prerequisite the Click branches on, which phase 3 had skipped.
+
+The `SigFiRx` Reduction-Z query went into the BO (`ResolverSequenciaPorData`), including the legacy's `'000001'`/`'999999'` literals and the `SeqFinal2+1` ÔÇö and deliberately **no** `ORDER BY` on the second query, since the legacy has none.
+
+Four missing Fortyus globals got documented wrappers per rule #27 (`lemfd`, `verifporta`, `rotstatus`, `fecharporta`); `leiturafab` already existed.
+
+## Measured, not assumed
+
+`Container.ZOrder/Draw/Refresh` all exist; `CREATE CURSOR &macro`, `APPEND FROM (expr) SDF` and `ERASE (expr)` all work; and `DECLARE ... IN "BemaFI32.dll"` raises *"Cannot load 32-bit DLL"* **at the DECLARE** ÔÇö so each branch's DECLAREs sit in TRY/CATCH behind an availability flag.
+
+Verification: all 6 files compile clean (FXP, no `.ERR`); headless probe shows the form instantiates, both handlers are PUBLIC, `AEVENTS` confirms `Buttons(1).ClickÔåÆBTNCONSULTARCLICK` / `Buttons(2).ClickÔåÆBTNENCERRARCLICK`, validation returns `.F./.F./.T.` for empty/10>5/5..10, the reentrancy flag clears on both clicks, and the SDF load yields 100 chars with the cursor closed. `ValidadorSQLSchema` passed (683 tables). Five project audits: zero findings in these files.
+
+## Flagging explicitly
+
+- **Four deliberate divergences**, each commented in place: where the legacy falls off the end of the Click in silence (unknown model, missing output file, EPSON port refusal), I report using the legacy's own *"Problemas na Leitura do Cupom !!!"*. Otherwise the button would "do nothing".
+- **The printer branches can't be exercised here** ÔÇö no fiscal-printer DLLs on this machine. Only the shared paths are proven.
+- **EPSON's date format**: I transcribed `STRTRAN(DTOC(...),"/","")` verbatim. Its width follows `SET CENTURY` (ON in this project), and the legacy then runs it through `Str(Val(...))`, dropping leading zeros. I did not "fix" it ÔÇö that would be inventing a format. Worth a decision from you if an EPSON station exists.
+- **`menu.prg` still has no `AbrirFormsigopvci`** ÔÇö integration step, outside phase 7.
+- `this_cFormulario` (the legacy `poFormulario` parameter) is never populated, since the migrated `Init` takes no arguments; harmless because both consumers are no-op wrappers.
+- The harness's dialog-redirect file came out empty even for a direct `MsgAviso` ÔÇö a pre-existing quirk of `messages.prg`'s file writer, unrelated to this change and it didn't affect any result above.

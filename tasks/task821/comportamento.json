@@ -1,0 +1,582 @@
+{
+  "resumo": {
+    "totalMetodos": 35,
+    "metodosComSQL": 18,
+    "metodosComValidacao": 25,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fGerUniqueKey", "File", "FileToStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "Lparameters pCpo, pTab, pKey\n\nLocal lcRet\n\nlcRet = pCpo\n\nIf Not Empty(pCpo) \n\tThisForm.poDataMgr.CursorQuery(pTab, [LocalBus], pKey, pCpo)\n\tIf Not Used([LocalBus])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - ] + pTab + [)])\n\t\tlcRet = Iif(Type([pCpo]) = [N], 0, [])\n\tEndIf\n\n\tIf Not Empty(lcRet)\n\t\tGo Top In LocalBus\n\t\tIf Eof([LocalBus])\n\t\t\tlcRet = Iif(Type([pCpo]) = [N], 0, [])\n\t\tEndIf\n\t\tUse In LocalBus\n\tEndIf\nEndIf\n\nReturn lcRet\n* Fim *******************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 10)\n\nThisForm.poDataMgr.CursorQuery([SigCnFnf], [XMLCfgnf], [Series], lcKey)\nIf Not Used([XMLCfgnf])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCfgnf)])\n\tReturn .f.\nElse\n\tSelect XMLCfgnf\n\tGo Top In XMLCfgnf\n\tIf Eof([XMLCfgnf])\n\t\t=MessageBox([A Serie Não Foi Encontrada... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 10)\n\nThisForm.poDataMgr.CursorQuery([SigCdCfo], [XMLCfo], [Codigos], lcKey)\nIf Not Used([XMLCfo])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLCfo)])\n\tReturn .f.\nElse\n\tSelect XMLCfo\n\tGo Top In XMLCfo\n\tIf Eof([XMLCfo])\n\t\t=MessageBox([O CFOP Não Foi Encontrado!!!], 16, [A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 77,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 12)\n\nThisForm.poDataMgr.CursorQuery([SigOpFp], [XMLFPag], [FPags], lcKey)\nIf Not Used([XMLFPag])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLFPag)])\n\tReturn .f.\nElse\n\tSelect XMLFPag\n\tGo Top In XMLFPag\n\tIf Eof([XMLFPag])\n\t\t=MessageBox([A Condição de Pagamento não foi en... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 2)\n\nThisForm.poDataMgr.CursorQuery([SigPrFti], [XMLPrFti], [Cods], lcKey)\nIf Not Used([XMLPrFti])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLPrFti)])\n\tReturn .f.\nElse\n\tSelect XMLPrFti\n\tGo Top In XMLPrFti\n\tIf Eof([XMLPrFti])\n\t\t=MessageBox([O Feitio Não Foi Encontrado!!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)\n\nThisForm.poDataMgr.CursorQuery([SigCdGpe], [XMLGOpe], [Dgopes], lcKey)\nIf Not Used([XMLGOpe])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGOpe)])\n\tReturn .f.\nElse\n\tSelect XMLGOpe\n\tGo Top In XMLGOpe\n\tIf Eof([XMLGOpe])\n\t\t=MessageBox([A Operação Não Foi Encontrada!!!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 79,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 3)\n\nThisForm.poDataMgr.CursorQuery([SigCdGrp], [XMLGru], [CGrus], lcKey)\nIf Not Used([XMLGru])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLGru)])\n\tReturn .f.\nElse\n\tSelect XMLGru\n\tGo Top In XMLGru\n\tIf Eof([XMLGru])\n\t\t=MessageBox([O Grupo Não Foi Encontrado!!!], 16, [Ate... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 270,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)\n\nThisForm.poDataMgr.CursorQuery([SigCdOpe], [XMLOpe], [Dopes], lcKey)\nIf Not Used([XMLOpe])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLOpe)])\n\tReturn .f.\nElse\n\tSelect XMLOpe\n\tGo Top In XMLOpe\n\tIf Eof([XMLOpe])\n\t\t=MessageBox([A Operação Não Foi Encontrada!!!], 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OpTrf],OpTdo]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "Local loXml, lcArq, lcKey\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\nlcKey = Padr(ThisForm.PgCopias.pgExportar.getOperacao.Value, 20)\n\nThisForm.poDataMgr.CursorQuery([SigCdOpd], [XMLopp], [dopps], lcKey)\nIf Not Used([XMLopp])\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - XMLopp)])\n\tReturn .f.\nElse\n\tSelect XMLopp\n\tGo Top In XMLopp\n\tIf Eof([XMLopp])\n\t\t=MessageBox([A Operação Não Foi Encontrada!!!], 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 38,
+      "codigoOriginal": "Local llRet, lcFrm\n\nllRet = .t.\nlcFrm = Alltrim(Upper(ThisForm.ParentForm.Name))\n\nDo Case\n\tCase (lcFrm = [SIGCDOPE])\n\t\tllRet = ThisForm.ExportaOpe()\n\n\tCase (lcFrm = [SIGCDCFO])\n\t\tllRet = ThisForm.ExportaCfo()\n\n\tCase (lcFrm = [SIGCDGPD])\n\t\tllRet = ThisForm.ExportaGru()\n\t\t\n\tCase (lcFrm = [SIGCDPAG])\n\t\tllRet = ThisForm.ExportaFPag()\t\t\n\n\tCase (lcFrm = [SIGCDGPE])\n\t\tllRet = Thisform.ExportaGope()\n\t\n\tCase (lcFrm = [SIGCNFNF])\n\t\tllRet = Thisform.ExportaCfgnf()\n\n\tCase (lcFrm = [SIGCDOPD])\n\t\tllRet = This... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ExportaOpe,ExportaCfo,ExportaGru,ExportaFPag,ExportaGope,ExportaCfgnf,ExportaOpp,ExportaFti",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 95,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 10)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 91,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 10)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,ChecaCampos,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 180,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 12)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,ChecaCampos,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 118,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 2)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,ChecaCampos,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 119,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 188,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 3)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,ChecaCampos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 699,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "CursorQuery,ChecaCampos",
+        "controlesReferenciados": "OpTrf,OpTdo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 90,
+      "codigoOriginal": "Local loXml, lcArq, lcKey, llOks\n\nloXml = CreateObject([XMLAdapter])\nlcArq = Alltrim(ThisForm.pgCopias.pgImportar.getArqXML.Value)\nlcKey = Padr(ThisForm.pgCopias.pgImportar.getOperacao.Value, 20)\n\n* Carrega Um Arquivo XML e Joga Seu Conteúdo Em Memória\nloXml.LoadXML(lcArq, .t.)\n\nIf (loXml.Tables.Count < 1)\n\t=MessageBox([O Arquivo XML Não é Válido Ou Não Possui Dados!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\n* Corre Cada Um Dos Cursores Carregados Em Memória do XML e Joga em Seus Cursores\nFor I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 38,
+      "codigoOriginal": "Local llRet, lcFrm\n\nllRet = .t.\nlcFrm = Alltrim(Upper(ThisForm.ParentForm.Name))\n\nDo Case\n\tCase (lcFrm = [SIGCDOPE])\n\t\tllRet = ThisForm.ImportaOpe()\n\n\tCase (lcFrm = [SIGCDCFO])\n\t\tllRet = ThisForm.ImportaCfo()\n\n\tCase (lcFrm = [SIGCDGPD])\n\t\tllRet = ThisForm.ImportaGru()\n\t\t\n\tCase (lcFrm = [SIGCDPAG])\n\t\tllRet = ThisForm.ImportaFPag()\t\t\n\n\tCase (lcFrm = [SIGCDGPE])\n\t\tllRet = Thisform.ImportaGope()\n\t\t\n\tCase (lcFrm = [SIGCNFNF])\n\t\tllRet = Thisform.ImportaCfgnf()\n\n\tCase (lcFrm = [SIGCDOPD])\n\t\tllRet = Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ImportaOpe,ImportaCfo,ImportaGru,ImportaFPag,ImportaGope,ImportaCfgnf,ImportaOpp,ImportaFti",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 147,
+      "codigoOriginal": "Local llOks\n\nIf ThisForm.Automatica Or ThisForm.PgCopias.pgExportar.Enabled \n\tlcArq = Alltrim(ThisForm.pgCopias.pgExportar.getArqXML.Value)\n\tIf Not ThisForm.Automatica And Empty(lcArq)\n\t\t=MessageBox([O Nome do Arquivo a Ser Gerado Não Pode Estar Em Branco!!!], 0+16, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\t=StrToFile([], lcArq, 0)\n\tIf Not ThisForm.Automatica And Not File(lcArq)\n\t\t=MessageBox([O Arquivo Não Pode Ser Criado!!!], 0+16, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\t\n\tllOks = ThisForm.Exportar()\n\t\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Automatica And Empty,Automatica And Not File,Exportar,Importar",
+        "controlesReferenciados": "OpTrf]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Procedure",
+      "linhas": 196,
+      "codigoOriginal": "Local _Prog\n\n_Prog = Padr(Padl(crSigCdOpe.NDopes, 8, [0]), 15)\n\nIf !IsEmpty(crSigCdOpe.SubMenus)\n\tlcOperacao = Iif(Upper(Alltrim(crSigCdOpe.menus)) = 'CAIXA','Menu - Financeiro - Caixa - ','Operações de Estoque - ')\n\t_Desc = lcOperacao + Proper(Allt(crSigCdOpe.SubMenus))\n\tlcSubMenus = '_' + Upper(Left(crSigCdOpe.SubMenus,14))\n\tm.lcBarraForm = Space(50)\n\n\tIf (InList(Upper(Alltrim(crSigCdOpe.menus)),'SISTEMA','CAIXA') Or Upper(Alltrim(crSigCdOpe.menus))=='ESTOQUE')\n\t\tm.lcBarraForm = ([SigMvExp WIT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,SqlExecute",
+        "controlesReferenciados": "ChkRegister('SigCdPrg'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML",
+      "evento": "Init",
+      "linhas": 101,
+      "codigoOriginal": "Lparameters pFrm, pKey, pTip, pLbl, pWid, pAut, pCon\n* Parâmetros: pFrm - Formulário Que Realizou a Chamada\t\t\t\n*\t\t\t  pKey - Chave de Procura\t\t\t\t\t\t\t\n*\t\t\t  pTip - Tipo de Processo: [E]xportar ou [I]mportar\t\n*\t\t\t  pLbl - Título do Campo de Digitação de Dados\t\t\n*\t\t\t  pWid - Quantidade Máxima de Caracteres da Chave\t\n*\t\t\t  pAut - Informa se é uma Geração Automática de Bkp.\n*\t\t\t  pCon - Conexão Quando Passada\t\t\t\t\t    \nLocal lcLbl, lnWid\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File,FileToStr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgExportar.getArqXML",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(254,253,218)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgExportar.getArqXML",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(255,255,255)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgExportar.getOperacao",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(254,253,218)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgExportar.getOperacao",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(255,255,255)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgExportar.getOperacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.getArqXML",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(254,253,218)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.getArqXML",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(255,255,255)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.getArqXML",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Local lcArq, lcNew\n\nlcArq = ThisForm.pgCopias.pgImportar.getArqXML.Value\n\nIf Not Empty(lcArq) And Not File(lcArq)\n\t=MessageBox([O Arquivo Não Foi Encontrado!!!], 0+16, [Atenção!!!])\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.btnGetArqO",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lcArq, lcNew\n\nlcArq = GetFile([XML], [Arquivo XML:], [Abrir], 0, [Selecione o Arquivo XML])\n\nIf Not Empty(lcArq)\n\tThisForm.pgCopias.pgImportar.getArqXML.Value = lcArq\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.getOperacao",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(254,253,218)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.pgCopias.pgImportar.getOperacao",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nThis.BackColor = Rgb(255,255,255)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.cmdBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Processar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPXML.cmdBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Release Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

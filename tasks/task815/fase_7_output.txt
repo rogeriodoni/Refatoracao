@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I've implemented Phase 7 ("Eventos Principais") for `FormSigoptrp.prg`, but adapted to the dialog's real structure rather than the generic CRUD template.
+
+**Why I deviated from the literal phase instructions:** SIGOPTRP is a child dialog (opened by the parent Cadastro de Opera├º├Áes form) with a grid-editing pattern ÔÇö it only has `cmdInserir`/`cmdExcluir` (grid row toolbar) and `cmdSair`/`Cancela` (Confirmar/Cancelar). There's no Alterar or Visualizar button in the legacy source, so inventing `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` would violate the project's "never invent UI/functionality" rule and the sibling-dialog convention already established in `FormSigOpTrf.prg`/`FormSigOpTop.prg` (same family, already migrated in this session's prior work).
+
+**What I added:**
+- `ConfigurarBINDEVENTs()` ÔÇö wires the 4 real button clicks (called from `InicializarForm` after `ConfigurarBotoes()`)
+- `MarcarDadosAlterados()` ÔÇö mirrors legacy `GravaDados = .t.`, syncing both Form and BO flags
+- `CmdInserirClick()` ÔÇö transcribes `Insert Into xOpe (Itras) Values (Space(10))` + focus
+- `CmdExcluirClick()` ÔÇö transcribes delete-current-row + skip/go-bottom, including the legacy quirk of marking `GravaDados` unconditionally
+- `BtnSairClick()` ÔÇö transcribes the duplicate-transportadora check (with the legacy's early-exit-without-closing on duplicate) and triggers the save
+- `PersistirItens()` / `GravarUmaTransportadora()` ÔÇö the "delete all + reinsert" batch save, using `NovoRegistro()+Salvar()` (public path, per regra #51) through the existing BO methods
+- `BtnCancelarClick()` ÔÇö plain close, no save (matches legacy `Cancela.Click`)
+
+Also updated the file header to document this Phase 7 decision for future reference. Line/ENDPROC/TRY-ENDTRY counts check out balanced (24 methods, 7 TRY/ENDTRY pairs).

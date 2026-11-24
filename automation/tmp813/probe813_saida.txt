@@ -1,0 +1,28 @@
+1) TYPE por nome montado
+   crSigCdOpe.ChkQtds  = [N]  (esperado N)
+   crSigCdOpe.Cmoes    = [C]  (esperado C)
+   crSigCdOpe.MtCubs   = [U]  (esperado U = ausente)
+   crSigOpCdd.MtCubs   = [N]  (esperado N)
+   crSigOpCdc.DocQtd2s = [C]  (esperado C)
+2) EVALUATE por nome montado
+   ChkQtds  = [6] (esperado 6)
+   Opers    = [3] (esperado 3)
+   Cmoes    = [USD] (esperado USD)
+   MtCubs   = [7] (esperado 7)
+   DocQtd2s = [PECAS] (esperado PECAS)
+3) INTO CURSOR (variavel) READWRITE
+   USED(lcAlias) = [SIM] (esperado SIM)
+4) COUNT TO / GO TOP / campo sem qualificar
+   linhas  = [2] (esperado 2)
+   ALIAS() = [CURSOR_4C_COMPOAGRUPADO]
+   Cpros   = [P001] (esperado P001)
+   Qtds    = [5] (esperado 5.00)
+5) SCAN com campo sem qualificar = [P001=5;P002=5;]
+   (esperado P001=5.00;P002=5.00;)
+6) USE IN (variavel): USED = [NAO] (esperado NAO)
+7) coluna NULL
+   ISNULL   = [SIM] (esperado SIM)
+   VARTYPE  = [X] (X quando NULL - por isso ISNULL vem ANTES no DO CASE)
+8) comparar .T. com 1: ERRO [Operator/operand type mismatch.] -> VARTYPE antes de comparar e obrigatorio
+
+PROBE CONCLUIDO

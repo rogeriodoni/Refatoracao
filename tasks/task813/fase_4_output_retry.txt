@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 4/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigOpTot.prg` (898 ÔåÆ 1020 linhas).
+
+## O que foi entregue
+
+O template gen├®rico da fase pede `ConfigurarPaginaLista` + `AlternarPagina` + 6 bot├Áes CRUD. **N├úo se aplica a este form**: o SCX legado (`layout.json`, dump SE├ç├âO 1) n├úo tem PageFrame algum nem CRUD ÔÇö ├® um di├ílogo modal de totaliza├º├úo com 6 grades e um ├║nico bot├úo de sa├¡da. Criar PageFrame/CRUD inventados violaria o PILAR 1 e s├│ produziria m├®todos vazios. Validei pelo ramo **FLAT** do gate (`OrquestradorMigracao.ps1`, `case 4`), que ├® o correto para OPERACIONAL sem PageFrame:
+
+| predicado do gate | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_` | True (6 grades, fase anterior) | True |
+| `AddObject("cmg_4c_\|cmd_4c_` | **False** ÔåÉ reprovava aqui | **True** |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **False** (chamava-se `CarregarGrades`) | **True** |
+| ramo PAGINADO (deve ser False) | False | False |
+
+Mudan├ºas (13 hunks, +135/ÔêÆ21, nenhuma fora do escopo):
+
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_OK` transcrito do dump `SIGOPTOT.OK`: grupo `Top=-2 Left=1045 85x85`, `AutoSize=.T.`, `BackStyle=0`, `SpecialEffect=1`; bot├úo interno `btnSair` ÔåÆ `Buttons(1)` com `75x75` em `5,5`, Comic Sans MS 8 bold+italic, `Cancel=.T.`, `Picture=cadastro_salvar_60.jpg` (o ├¡cone do pr├│prio dump ÔÇö "retornar" usa mesmo o ├¡cone de salvar). Criado **depois** do cabe├ºalho, para desenhar por cima da faixa (regra #11). `Command1.TabIndex=4` do dump n├úo foi transcrito: est├í fora de faixa num grupo de 1 bot├úo ÔÇö documentado no coment├írio.
+- **`CmdRetornarClick()`** PUBLIC + `BINDEVENT` ÔÇö transcreve as duas a├º├Áes do `btnSair.Click` legado (reabilita o form pai, `Release()`). `Release` e n├úo `Hide` porque o di├ílogo n├úo devolve valor nenhum ao chamador.
+- **`CarregarGrades` ÔåÆ `CarregarLista`**, agora **PUBLIC**: `TesteAutomatico.prg:363` chama `THIS.oForm.CarregarLista()` de fora da classe, e `PROTECTED` falharia em runtime (regra #3).
+- Nome `cmg_4c_OK` em vez do `obj_4c_OK` do `mapeamento.json` ÔÇö o gerador n├úo reconhece `commandgroup`. **`mapeamento.json` corrigido junto**: as 6 grades deixaram de colapsar em `grd_4c_Dados`, as Column deixaram de ser mapeadas como `Page_4c_1`, e o cabe├ºalho passou a apontar para os nomes reais.
+
+## Verifica├º├úo executada (n├úo s├│ est├ítica)
+
+- **Compila limpo**: `FORM_FXP=SIM BO_FXP=SIM ERR_FORM=NAO ERR_BO=NAO`.
+- **Instancia de verdade** (`CREATEOBJECT` em modo teste): `VARTYPE=O`, Caption `Total Itens`, 1127x600; as 6 grades com `ColumnCount` e `Top/Left` corretos e a visibilidade inicial do legado (Servi├ºos/Componentes/CalculoCol em `.F.`); `cmg_4c_OK` vis├¡vel em `-2,1045` com o bot├úo `Retornar` e o arquivo de ├¡cone **existente**.
+- **`AEVENTS` prova o bind**: `evento=[CLICK] metodo=[CMDRETORNARCLICK]`.
+- `CarregarLista()` cham├ível de fora devolve `.T.`; `protected=.F.` em `CarregarLista` e `CmdRetornarClick`.
+- `_dialogs.txt` **vazio** ÔÇö nenhum erro engolido por CATCH.
+- R├®plica do validador 05d (TODO/proc vazia/pend├¬ncia): nenhum problema.
+
+Duas notas de processo: a ferramenta `Edit`/Write grava LF, ent├úo restaurei CRLF no `.prg` e provei por contagem de bytes (`CR=LF=1020`). E perdi 4 execu├º├Áes com o vfp9 saindo em <1s sem compilar ÔÇö testei e **descartei** a hip├│tese do nome do arquivo; a pista que sobrou foi um `vfp9.exe` ├│rf├úo pendurado num *Program Error* invis├¡vel (causado por `laEv[i,2]` ser objeto). Registrei isso na mem├│ria do harness VFP9, com a hip├│tese descartada expl├¡cita.

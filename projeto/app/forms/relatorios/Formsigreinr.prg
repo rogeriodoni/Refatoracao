@@ -323,7 +323,11 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- OptionGroup TipoRelatorio (TipoRelat?rio: Top=82 -> Page1: 0)
+        *-- OptionGroup TipoRelatorio (TipoRelat?rio: Top=82 -> Page1: -3)
+        *   Top = -3 (nao 0): PGF.Top=85, entao abs = 85 + rel; o legado tem
+        *   Top=82, logo rel = -3. Com 0 a 3a linha de botoes (abs 124..141)
+        *   invadia a linha "Tipo :" (abs 140). BackStyle/BorderStyle = 0, entao
+        *   os 3px recortados no topo nao desenham nada (Erro380)
         *   8 opcoes: Resumido/Analitico/Etiqueta/Ocorrencia/ConsultaEtiqueta/RelacaoComBarra/EstoqueXLeitura/EtiquetaPorEstoque
         loc_oPagina.AddObject("optg_4c_TipoRel", "OptionGroup")
         WITH loc_oPagina.optg_4c_TipoRel
@@ -335,13 +339,13 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Height        = 62
             .Left          = 131
             .SpecialEffect = 1
-            .Top           = 0
+            .Top           = -3
             .Width         = 370
             .Visible       = .T.
 
             WITH .Buttons(1)
                 .Caption   = "Resumido"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -355,7 +359,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "Anal" + CHR(237) + "tico"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -370,7 +374,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             WITH .Buttons(3)
                 .Caption   = "Etiqueta"
                 .WordWrap        = .T.
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -385,7 +389,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             WITH .Buttons(4)
                 .Caption   = "Ocorr" + CHR(234) + "ncia"
                 .WordWrap        = .T.
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -399,7 +403,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(5)
                 .Caption   = "Consulta Etiqueta"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -413,7 +417,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(6)
                 .Caption   = "Rela" + CHR(231) + CHR(227) + "o c/Barra"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -427,7 +431,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(7)
                 .Caption   = "Estoque x Leitura"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -441,7 +445,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(8)
                 .Caption   = "Etiqueta por Estoque"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -489,7 +493,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "Produto"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -503,7 +507,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "Local"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -518,7 +522,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             WITH .Buttons(3)
                 .Caption   = "Etiqueta"
                 .WordWrap        = .T.
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -729,7 +733,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "Todos"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -743,7 +747,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "Com Diferen" + CHR(231) + "a"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -790,7 +794,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "Leitura"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -804,7 +808,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "Releitura"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -850,7 +854,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -864,7 +868,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -910,7 +914,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -924,7 +928,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -970,7 +974,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -984,7 +988,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1030,7 +1034,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1044,7 +1048,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1090,7 +1094,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1104,7 +1108,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1134,7 +1138,11 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- OptionGroup Colecao (OptCtg: Top=405 -> Page1: 320)
+        *-- OptionGroup Categoria (legado OptCtg: Top=427 -> Page1: 342)
+        *   Erro380: estava em 320 (linha do rotulo "Mostrar Colecao"), trocado
+        *   com optg_4c_Col. No legado llMostraCtg vem de OptCtg, que fica ao
+        *   lado de "Mostrar Categoria :" - com a troca o form invertia as duas
+        *   respostas em relacao ao legado.
         loc_oPagina.AddObject("optg_4c_Ctg", "OptionGroup")
         WITH loc_oPagina.optg_4c_Ctg
             .AutoSize      = .T.
@@ -1144,13 +1152,13 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Value         = 2
             .Height        = 27
             .Left          = 130
-            .Top           = 320
+            .Top           = 342
             .Width         = 121
             .Visible       = .T.
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1164,7 +1172,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1194,7 +1202,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- OptionGroup Categoria (OptCol: Top=427 -> Page1: 342)
+        *-- OptionGroup Colecao (legado OptCol: Top=405 -> Page1: 320) - ver Erro380
         loc_oPagina.AddObject("optg_4c_Col", "OptionGroup")
         WITH loc_oPagina.optg_4c_Col
             .AutoSize      = .T.
@@ -1204,13 +1212,13 @@ DEFINE CLASS Formsigreinr AS FormBase
             .Value         = 2
             .Height        = 27
             .Left          = 130
-            .Top           = 342
+            .Top           = 320
             .Width         = 121
             .Visible       = .T.
 
             WITH .Buttons(1)
                 .Caption   = "\<Sim"
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold  = .F.
                 .BackStyle = 0
@@ -1224,7 +1232,7 @@ DEFINE CLASS Formsigreinr AS FormBase
             ENDWITH
             WITH .Buttons(2)
                 .Caption   = "\<N" + CHR(227) + "o"
-                .FontName  = "Comic Sans MS"
+                .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
                 .BackStyle = 0

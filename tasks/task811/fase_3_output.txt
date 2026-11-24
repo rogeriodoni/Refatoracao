@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No `.err` file ÔÇö compilation was clean. Phase 3 is complete.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSigOpTop.prg` ÔÇö the base structure for the "Transportes da Opera├º├úo" modal child dialog (opened from the parent SigCdOpe form). Since the legacy SCX has no PageFrame (flat `form` base class, not `frmcadastro`), I followed the established sibling pattern already used by `FormSigOpSts.prg`/`FormSigOpSqn.prg`/etc. for this exact family of modal dialogs rather than the generic CRUD Page1/Page2 skeleton:
+
+- **Properties**: visual props transcribed literally from the SCX dump (500├ù350, `TitleBar=0`, `ControlBox=.F.`, `MaxButton=.F.`, `Movable=.F.`, `ClipControls=.F.`) ÔÇö deliberately did **not** invent `Closable`/`MinButton` since the dump doesn't declare them.
+- **Init**: accepts `par_oFormPai, par_cDopes, par_nDataSessionPai` (replacing the legacy's `Set DataSession to` trick ÔÇö the BO queries SQL Server directly instead of reusing the parent's cursor).
+- **InicializarForm**: creates `SigOpTopBO`, disables the parent form, builds the dynamic Caption via `BO.ObterTituloDialogo()`, positions the dialog relative to the parent's grid, and builds the gray header container (`cnt_4c_Cabecalho`).
+- **Destroy**: re-enables the parent form as a safety net for any close path.
+- Grid, Encerrar button, and data loading are deliberately deferred to Fases 4/7/8 per the phase scope.
+
+Verified with a VFP9 compile (clean, no `.err`) and an instantiation probe ÔÇö confirmed Caption formatting, parent enable/disable lifecycle, header container, and Picture all work correctly with no runtime errors.

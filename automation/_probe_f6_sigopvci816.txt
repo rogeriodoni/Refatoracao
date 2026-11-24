@@ -1,0 +1,38 @@
+OK: Formsigopvci instanciado
+ControlCount=[15]
+
+--- BINDEVENT (AEVENTS) ---
+Optiongroup1: 2 binding(s)
+   col2=[(Object)] col3=[INTERACTIVECHANGE] col4=[VALIDARCRITERIOBUSCA]
+   col2=[(Object)] col3=[CLICK] col4=[VALIDARCRITERIOBUSCA]
+Text1: 1 binding(s)
+   col2=[(Object)] col3=[LOSTFOCUS] col4=[VALIDARNUMEROINICIAL]
+Text2: 1 binding(s)
+   col2=[(Object)] col3=[LOSTFOCUS] col4=[VALIDARNUMEROFINAL]
+Text3: 0 binding(s) (legado tem SO When, nenhum LostFocus)
+
+--- Habilitacao INICIAL (Optiongroup1.Value=1) ---
+Text1.Enabled=[.T.] (esperado .T.)
+Text2.Enabled=[.T.] (esperado .T.)
+Text3.Enabled=[.F.] (esperado .F.)
+Text4.Enabled=[.F.] (esperado .F.)
+
+--- Habilitacao apos trocar para Data (Value=2) ---
+Text1.Enabled=[.F.] (esperado .F.)
+Text2.Enabled=[.F.] (esperado .F.)
+Text3.Enabled=[.T.] (esperado .T.)
+Text4.Enabled=[.T.] (esperado .T.)
+
+--- Disparando o EVENTO Optiongroup1.InteractiveChange() ---
+Text3.Enabled=[.T.] (esperado .T. - o delegate rodou pelo bind)
+apos Click() com Value=1: Text1.Enabled=[.T.] (esperado .T.) Text3.Enabled=[.F.] (esperado .F.)
+apos Text1.LostFocus() com 77: Text1.Value=[000077] (esperado 000077)
+
+--- LostFocus / normalizacao do numero ---
+Text1 '12'   -> [000012] (esperado 000012)
+Text2 '4567' -> [004567] (esperado 004567)
+Text1 ''     -> [] (esperado vazio - legado nao mexe quando Val=0)
+Text1 '0'    -> [0] (esperado 0 - legado nao mexe quando Val=0)
+
+--- Lookup ---
+legado sem lookup: nenhum AbrirLookup/AbrirBusca a criar

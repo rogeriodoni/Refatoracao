@@ -1731,6 +1731,16 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
         LOCAL loc_nTp
         loc_nTp = THIS.this_nTipoRelatorio
 
+        *-- _lTrataPeso_INV: nome compartilhado que os FRX usam no Print When
+        *-- (SigReBla/SigReBdp/SigReBld). Antes os FRX traziam
+        *-- "ThisForm.TrataPeso" do legado, que so resolve dentro de metodo de
+        *-- FORM - aqui o REPORT FORM roda no BO e estourava
+        *-- "THISFORM can only be used within a method." (Erro380)
+        PUBLIC _lTrataPeso_INV
+        _lTrataPeso_INV = THIS.this_lTrataPeso
+        *-- _cTelaOrigem: rodape do SigReBle (era "this.name" no legado) - Erro381
+        PUBLIC _cTelaOrigem
+        _cTelaOrigem = "SIGREIR1"
         llTrataPeso = THIS.this_lTrataPeso
 
         DO CASE
@@ -1843,6 +1853,12 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
             RELEASE _TipoLeitura, _TipoAnal, lnTpOrdem, _Produto, _Local, lcDescricao
             RELEASE llHorizontal, lnVenda, lnCusto, _TotalnLido, _TotalnEsto, _SaldoPs
             RELEASE llTrataPeso
+            IF TYPE("_lTrataPeso_INV") = "L"
+                RELEASE _lTrataPeso_INV
+            ENDIF
+            IF TYPE("_cTelaOrigem") = "C"
+                RELEASE _cTelaOrigem
+            ENDIF
         ENDIF
         DODEFAULT()
     ENDPROC

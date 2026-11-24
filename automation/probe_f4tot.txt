@@ -1,0 +1,16 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+(1) sem pai: Init OK | W=1127 H=600 | BO=O
+    grd_4c_TotalProdutos: ColCount=2 RecSrc=[xValIte] vis=.T. col1=[xValIte.Moeda] hdr1=[Moeda] hdr2=[Total dos Produtos]
+    grd_4c_Produto: ColCount=2 vis=.T.
+    grd_4c_ProdutoTam: vis=.T. | grd_4c_Servicos: vis=.F. | grd_4c_Componentes: vis=.F. | cnt_4c_CalculoCol: vis=.F.
+    cnt_4c_CalculoCol.grd_4c_Col: ColCount=2 hdr1=[Tipo] hdr2=[Col  (%)]
+(2) com pai: Init OK | BO=O | TemServicos=.F. TemComponentes=.F.
+    this_nDataSessionId=1 msgErro=[] flagsCarregadas=.T.
+    totais: Qtde=15(E) Peso=21(E) PesoC=21
+    grd_4c_TotalProdutos: RecSrc=[xValIte] col1W=40 col2W=135
+    grd_4c_Produto: RecSrc=[ProEesti]
+    exclusao mutua: ProdutoTam.vis=.T. RecSrc=[ProTam] | Servicos.vis=.F.
+    grd_4c_Componentes.vis=.F. | cnt_4c_CalculoCol.vis=.F.
+Z: fim

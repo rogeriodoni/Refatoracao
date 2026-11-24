@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e verificada.
+
+## O que reprovava
+
+Medindo os **tr├¬s** predicados do ramo FLAT do `case 4` do `OrquestradorMigracao.ps1` separadamente (a mensagem do gate n├úo diz qual falhou):
+
+```
+temGrade  = True     AddObject("grd_4c_Dados", "Grid")
+temBotoes = True     AddObject("cmd_4c_CmdSelecionar", ...)
+temCarga  = False    <-- nenhum CarregarLista|CarregarDados|MontaGrade
+```
+
+A tentativa anterior entregou grade + bot├Áes + formata├º├úo, mas **nenhum funil de carga** ÔÇö e o funil n├úo ├® formalidade: ├® onde mora o par `Go Top` + `Grade.Refresh` que o legado repete nos **seis** caminhos que mexem em `csOperacoes` (`Selecionar`, `LimpaSelecao`, Marca Tudo, Desmarcar, `Check1.MouseUp`, `Check1.KeyPress`). Sem ele, cada ponto das fases 7/8 teria que lembrar do par, e o que falta n├úo d├í erro ÔÇö a grade s├│ segue mostrando o conte├║do anterior.
+
+## O que mudei
+
+| mudan├ºa | motivo |
+|---|---|
+| `CarregarDados()` **PUBLIC** ÔÇö funil: cursor ÔåÆ v├¡nculo ÔåÆ `Go Top` ÔåÆ `THIS.Refresh` + `Grade.Refresh` | fecha `temCarga`. Nome `CarregarDados`, **n├úo** `CarregarLista`: o harness usa `PEMSTATUS(oForm,"CarregarLista",5)` para classificar o form como CRUD e passaria a cobrar `BtnIncluirClick`/`cursor_4c_Dados`, superf├¡cie que este OPERACIONAL n├úo tem |
+| `VincularGrade()` ÔÇö `RecordSource` + os 13 `ControlSource`, guardados por `USED()`, seguidos de `AplicarFormatoGrade` | separa o que depende de dado; `RecordSource` zera `Column.Width`/`Header1.Caption` |
+| `ConfigurarGrade` passa a chamar `VincularGrade()` em vez de `AplicarFormatoGrade()` direto | `ColumnCount` **sem** `RecordSource` auto-binda na ├írea corrente; vinculando antes, a Column1 j├í est├í no campo l├│gico `SelImp` quando o `Check1` ├® criado (sen├úo o `AddObject` estoura *Data type mismatch* dentro do TRY e a tela n├úo abre) |
+| `obj_4c_CmdBtnGrade`/`obj_4c_CmdBtnForm` ÔåÆ **`cmg_4c_`**, no `.prg` e no `mapeamento.json` | `obj_4c_` ├® o prefixo gen├®rico que o `GeradorMapeamento` emite para `CommandGroup` n├úo reconhecido; o can├┤nico ├® `cmg_4c_` |
+| `HeaderHeight` 16 ÔåÆ **19**, `Grid.ReadOnly = .F.` expl├¡cito antes dos `Column.ReadOnly` | o `Init` legado sobrescreve o dump nos dois |
+
+## Prova
+
+Smoke test primeiro (`vfp9.exe` pode compilar e sair sem executar) ÔÇö rodou. Compila├º├úo limpa: `.fxp` gerado, sem `.err`. Instancia├º├úo nos **dois** cen├írios, com `SET DATASESSION` para a sess├úo privada do form:
+
+| | medido |
+|---|---|
+| `CREATEOBJECT` | `VARTYPE=O`, zero exce├º├úo, arquivo de erro vazio |
+| bind | `ColumnCount=13`, `RecordSource=[cursor_4c_Operacoes]`, os 13 `ControlSource` corretos (inclusive a express├úo da Column7) |
+| larguras/headers **ap├│s** o bind | `16/80/170/170/22/85/70/100/100/125/35/160/58` + `Data`/`Adquirente`/ÔÇª/`C├│digo` preservados |
+| CheckBox | `CurrentControl=[CHECK1]`, `Sparse=.F.`, `ReadOnly=.F.`, `Check1` existe ÔÇö sobrevive ao rebind |
+| contrato | os 3 m├®todos com `protected=.F.` (alcan├º├íveis de fora) |
+| com 2 linhas | `CarregarDados()=.T.`, `RECCOUNT=2`, `RECNO=1` (Go Top pegou), Column7 avaliou `[1  / 3 ]`, 2┬¬ chamada idempotente |
+
+`Test-CompletudeCodigo` replicado: 0 problemas. Zero acento literal, blocos balanceados, nenhum `RETURN` dentro de TRY/CATCH. Arquivos tempor├írios de probe removidos.
+
+N├úo entrou nesta fase, por ser escopo das seguintes: os filtros (`txt_4c_DtIni`/`DtFin`/`EmpOs`/`DEmpOs`/`Adquirs`, `obj_4c_OptProcessados`, `obj_4c_GetArqNoms`, `cmd_4c_BtnNomArqs`), os `BINDEVENT` de Click/MouseDown/MouseUp/KeyPress e os m├®todos `Selecionar`/`Processamento`/`LimpaSelecao`.

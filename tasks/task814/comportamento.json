@@ -1,0 +1,241 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaInt", "fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPTRF",
+      "evento": "Init",
+      "linhas": 91,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.GravaDados = .f.\n\nWith Thisform\n\t.Caption = 'Operações Automáticas P/ ' + AllTrim(crSigCdOpe.Dopes)\nEndWith\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcOperacao = crSigCdOpe.Dopes\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector')\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTrf'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.GradeOpe",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nColIndex\nSelect xTrf\nSet Order to Dopes\nSET KEY TO crSigCdOpe.Dopes+xOpe.Dopes\nGo Top\nThisForm.GradePro.Refresh\nSelect xOpe\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.GradeOpe.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 49,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf IsEmpty(This.Value)\n\tReturn .f.\nEndif\n\nIf Not IsEmpty(This.Value) And Thisform.AntValue # This.Value\n\t\n\tThisForm.GravaDados = .t.\n\n\tIf Not Seek(This.Value, 'TmpOpe', 'Dopes')\n\t\tloBrowse = CreateObject('fwBuscaInt','TmpOpe','Dopes',This.Value,'Operações',.t.)\n\t\tloBrowse.mAddColuna('Dopes', '', 'Operação', .t.)\n\t\tloBrowse.mAddColuna('nDopes', '9999', ' Cod ',.f.)\n\t\tloBrowse.Show\t\t\n\t\tThis.Value = Iif( Lastkey() == 27, '', TmpOpe.Dopes )\n\t\tThis.Refresh\n\tEndIf\n\tlc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.GradeOpe.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.AntValue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.cmdSair",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "If ThisForm.GravaDados\n\n\tSELECT crSigOpTrf\n\tDELETE ALL\n\n\tSelect xTrf\n\tSET KEY TO \n\tSet Order To\n\tScan\n\t\tIf !IsEmpty(xTrf.Dopes) And !IsEmpty(xTrf.Dopeds) And !IsEmpty(xTrf.Cpros)\n\t\t\tScatter memvar\n\t\t\tInsert Into crSigOpTrf From memvar\n\t\t\tReplace crSigOpTrf.cIdChaves WITH fUniqueIds()\n\t\tEndIf\n\tEndScan\n\t\n\tIf (Reccount([crSigOpTrf]) = 0) \n\t\tSelect xOpe\n\t\tScan\n\t\t\tInsert Into crSigOpTrf (Dopes, DopeDs, cIdChaves) ;\n\t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Dopes, fUniqueIds())\n\t\tEndScan\n\tEndIf\n\t\n\tm.lnErr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTrf,OpTrf],OpTrf'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xOpe (Dopes) Values ( Space(20))\nSelect xOpe\nThisForm.GravaDados = .t.\nThisform.GradeOpe.Column2.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.cmdExcluir",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Select xOpe\nIf Not Eof()\n\tSELECT xTrf\n\tDELETE for Dopeds = xOpe.Dopes\n\tSELECT xOpe\n\tDELETE\n\tSKIP\n\tIF EOF()\n\t\tGO Bott\n\tEndif\nENDIF\nThisform.GradeOpe.SetFocus\nThisForm.GradePro.Refresh\nSELECT xTrf\nSET KEY TO crSigCdOpe.Dopes+xOpe.Dopes\nThisForm.GravaDados = .t.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.Command2",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Insert Into xTrf (Dopes, Dopeds) Values ( crSigCdOpe.Dopes, xOpe.Dopes)\nSelect xTrf\nThisForm.GravaDados = .t.\nThisForm.GradePro.col_cpros.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.Command1",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select xTrf\nIf Not Eof()\n\tDelete\nEndif\nThisForm.GravaDados = .t.\nThisform.GradePro.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.GradePro.col_cpros.txt_cpros",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tThisForm.GravaDados = .t.\n\n\tIf !ThisForm.podatamgr.CursorQuery('SigCdPro','crSigCdPro', 'cPros', This.Value)\n\t\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdPro','crSigCdPro','cPros',This.Value,'Cadastro de Produtos',.t.,'cPros')\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('CPros', '', 'Código', .t.)\n\t\t\txBrox.mAddColuna('DPros', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\t\tEndIf \n\tEndif\n\tThis.Value = evaluate('crSigCdPro.CPROS')\n\tThis.Parent.Paren... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "txt_dpros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPTRF.GradePro.col_dpros.txt_dpros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return( .f. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPTRF.cmdSair.Click",
+      "queryOriginal": "\t\t\tInsert Into crSigOpTrf From memvar",
+      "tabelas": "crSigOpTrf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTRF.cmdSair.Click",
+      "queryOriginal": "\t\t\tInsert Into crSigOpTrf (Dopes, DopeDs, cIdChaves) ; \t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Dopes, fUniqueIds())",
+      "tabelas": "crSigOpTrf",
+      "colunas": "Dopes,DopeDs,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTRF.cmdInserir.Click",
+      "queryOriginal": "Insert Into xOpe (Dopes) Values ( Space(20))",
+      "tabelas": "xOpe",
+      "colunas": "Dopes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPTRF.Command2.Click",
+      "queryOriginal": "Insert Into xTrf (Dopes, Dopeds) Values ( crSigCdOpe.Dopes, xOpe.Dopes)",
+      "tabelas": "xTrf",
+      "colunas": "Dopes,Dopeds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigOpTrf", "xOpe", "xTrf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

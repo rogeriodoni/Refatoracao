@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is done and verified. Here's what happened.
+
+## Why this pass existed
+
+The first Fase 8 attempt (sonnet) never touched `FormSigOpVda.prg` ÔÇö it only edited `menu.prg` and the BO. The orchestrator's NO-OP guard compares the target file's MD5 before/after, and the "fase sem trabalho no legado" exemption covers phases 4ÔÇô7 **only**, so phase 8 was forced to retry on opus.
+
+Rather than guess what the gate wanted, I ran it standalone (functions extracted by AST, `case 8` body seeded with `$formFile`/`$TaskPath`/`$BaseName`/`$FormType`). It reported `VALIDADO=True` already ÔÇö the `fluxo-unico` branch dispenses `BtnCancelarClick`/`FormParaBO`/`BOParaForm`, and the action-button verb check doesn't apply. So the gate wasn't the problem; the missing work was.
+
+## The real gaps found (comparing against the SCX dump)
+
+1. **The legacy `Init` defaults were never migrated.** The SCX ends with `getDtIni.Value = Date()`, `getDtFin.Value = Date()`, `getArqNoms.Value = [C:\CONCILIADOR.CSV]`. The migrated form had `.Value = {}` / `.Value = ""` and a Fase-6 comment saying the default "entra no funil de carga da Fase 7" ÔÇö which never delivered it. The screen opened with both dates and the file path blank, so **Selecionar refused immediately** with "A Data Inicial N├úo Pode Ficar em Branco".
+
+2. **The BO's 7 filter properties were dead.** `this_cEmps`/`this_dDataIni`/`this_cArquivo`/ÔÇª were declared in Fase 1 and never written or read by anyone; `Selecionar()` and `Processamento()` each read the controls on their own ÔÇö two copies of the same read, free to diverge.
+
+3. **`getArqNoms` was missing `When ÔåÆ Return .f.`** ÔÇö in the legacy the field takes no typing, only the "..." button writes it.
+
+## What I implemented
+
+- **`SigOpVdaBO.AplicarFiltrosPadrao()`** (PUBLIC, called from the BO's `Init`) ÔÇö the legacy defaults transcribed, with empresa/adquirente left empty on purpose (empty = all).
+- **`BOParaForm()`** and **`FormParaBO()`** (both `PROTECTED`, since `FormBase` declares them that way and VFP9 can't widen inherited scope). `FormParaBO` applies the legacy normalization, including `PADR(...,3)` on `Emps` from `selecionar`. Blank *does* overwrite here, deliberately ÔÇö blank is a meaningful value on this screen, not "unset".
+- `Selecionar()`/`Processamento()` now read **only** from the BO, each guarded so a failed transfer can't run a `WITH` against a `.NULL.` BO. `Processamento`'s body went under a flag rather than an early `RETURN` (regra #1).
+- `obj_4c_GetArqNoms.ReadOnly = .T.`
+- Regenerated `indice_classes.txt` so `GarantirClasse("FormSigOpVda")` resolves (it also picked up tasks 810ÔÇô816, which were migrated but unindexed).
+
+## Verification
+
+- `COMPILE` of both files: `FXP=.T.`, no `.err` ÔÇö and the VFP9 smoke test passed first, so execution is actually proven, not assumed.
+- Headless probe: form instantiates, `DtIni`/`DtFin` = 19/11/2026, `Arquivo` = `C:\CONCILIADOR.CSV`, `ArqReadOnly=.T.`, grid bound with 13 columns. Typing empresa `"1"` and firing Selecionar left `this_cEmps = "1  "` (len 3) in the BO ÔÇö the legacy padding. The only suppressed error was `Connection handle is invalid` from the SQL, which *is* the proof: all four validation guards now pass and execution reaches the query.
+- Fase 8 gate `VALIDADO=True`, `FALTANTES=` empty; `Test-CompletudeCodigo` OK on both files; `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora` and `VerificarPropriedadesInexistentes` all clean.
+
+One thing I deliberately did **not** do: add `BtnSalvarClick`/`BtnCancelarClick`/`CarregarLista`. The SCX has no save-record or cancel-edit button (the three `cmdBtnForm` buttons are Limpar Sele├º├úo / Gera Arquivo / Encerrar) and no Lista page ÔÇö inventing them would violate PILAR 1, and the gate dispenses them on its own. I documented that reasoning in the file header instead.

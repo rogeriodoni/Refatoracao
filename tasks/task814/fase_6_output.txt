@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 for `FormSigOpTrf` is complete. Summary of what was implemented:
+
+**`C:\4c\projeto\app\classes\textboxgridlookup.PRG`** ÔÇö added two custom TextBox subclasses (grid-cell lookups can't rely on BINDEVENT, per the project's established pattern):
+- `TextBoxOperacaoTrf_4c` ÔÇö cell for the "Operacoes" column (master grid), with `When`/`Valid`/`KeyPress`/`DblClick` delegating to the form.
+- `TextBoxProdutoOpTrf_4c` ÔÇö cell for the "Produto" column (detail grid), same delegation pattern.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigOpTrf.prg`**:
+- New state properties: `this_cValorAnteriorOperacao` (legacy `AntValue` snapshot) and reentrancy guards `this_lEmLookupOperacao`/`this_lEmLookupProduto`.
+- `AplicarFormatoGrade` now installs the two custom TextBoxes via `Column.AddObject` + `CurrentControl` + `Sparse = .F.` instead of configuring the native `Text1`.
+- New methods transcribing the legacy `Valid`/`When` logic line-by-line from the untruncated source dump (`tasks\task814\SigOpTrf_form_codigo_fonte.txt`), including the literal (not "fixed") Seek+Skip duplicate-detection dance for both grids, routed through `FormBuscaAuxiliar` against `SigCdOpe`/`SigCdPro` instead of the legacy local-cursor/`fwBuscaInt`/`fwBuscaExt` calls.
+- Factored `AplicarFiltroItensPorDestino` out of the existing `FiltrarItensPorOperacaoCorrente` so the post-edit re-filter (triggered from the product duplicate check) doesn't rely on `GO TOP`.
+
+Both the shared classes file and the form compiled cleanly in VFP9 (`COMPILE` produced `.fxp` with no `.err`). Row-click handling (`AfterRowColChange` re-filter), the 5 button clicks, and the batch save on Encerrar remain explicitly out of scope, deferred to Fase 7/8 per the file's own header.
