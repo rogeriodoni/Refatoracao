@@ -785,6 +785,8 @@ DEFINE CLASS Formmtz AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (getSaldo)
+            .Margin = 1
         ENDWITH
 
         *--------------------------------------------------------------------------

@@ -337,7 +337,7 @@ DEFINE CLASS FormFop AS FormBase
             THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH THIS.cmd_4c_Encerrar
                 .Top             = 3
-                .Left = 5
+                .Left            = 998   && legado: Encerrar solto no form (nao em cnt_4c_Saida); Left=5 era residuo do Pattern #182 pre-Erro501
                 .Width           = 75
                 .Height          = 75
                 .Caption         = "Encerrar"

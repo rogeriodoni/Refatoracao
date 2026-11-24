@@ -127,7 +127,7 @@ DEFINE CLASS FormFis AS FormBase
             .Top           = 18
             .Width         = 769
             .ForeColor     = RGB(0,0,0)
-            .Caption       = "Cadastro de Testes"
+            .Caption       = THIS.Caption   && legado Init: lblSombra.Caption = ThisForm.Caption
         ENDWITH
 
         THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblTitulo", "Label")
@@ -144,7 +144,7 @@ DEFINE CLASS FormFis AS FormBase
             .Top           = 17
             .Width         = 769
             .ForeColor     = RGB(255,255,255)
-            .Caption       = "Cadastro de Testes"
+            .Caption       = THIS.Caption   && legado Init: lblTitulo.Caption = ThisForm.Caption
         ENDWITH
     ENDPROC
 
@@ -181,7 +181,7 @@ DEFINE CLASS FormFis AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 3
-            .Left = 5
+            .Left            = 724   && legado SIGCDFIS.cancela (botao direto no form, nao em cnt_4c_Saida)
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"

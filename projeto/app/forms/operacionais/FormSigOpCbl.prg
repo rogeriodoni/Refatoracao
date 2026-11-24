@@ -331,6 +331,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text1)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label2", "Label")
@@ -360,6 +362,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text2)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Vencimento (nlndtvencs x ncldtvencs)
@@ -390,6 +394,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text3)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label4", "Label")
@@ -419,6 +425,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text4)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Data Documento (nlndtdocs x ncldtdocs)
@@ -449,6 +457,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text5)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label6", "Label")
@@ -478,6 +488,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text6)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Numero do Documento (nlnnrdocs x nclnrdocs)
@@ -508,6 +520,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text7)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label8", "Label")
@@ -537,6 +551,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text8)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Valor do Documento (nlnvldocs x nclvldocs)
@@ -567,6 +583,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text9)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label10", "Label")
@@ -596,6 +614,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text10)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Secao "Texto de Responsabilidade do Cedente"
@@ -655,6 +675,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text11)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label12", "Label")
@@ -684,6 +706,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text12)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label30", "Label")
@@ -713,6 +737,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text13)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label29", "Label")
@@ -742,6 +768,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text14)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Secao "Sacado" - Razao Social (nlnrazclis x nclrazclis)
@@ -800,6 +828,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text15)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label14", "Label")
@@ -829,6 +859,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text16)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: C.G.C./C.P.F. (nlncgcclis x nclcgcclis)
@@ -859,6 +891,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text17)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label16", "Label")
@@ -888,6 +922,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text18)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: Endereco (nlnendcobs x nclendcobs)
@@ -918,6 +954,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text19)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label18", "Label")
@@ -962,6 +1000,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text20)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: Bairro (nlnbaicobs x nclbaicobs)
@@ -992,6 +1032,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text21)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label20", "Label")
@@ -1021,6 +1063,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text22)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: Cidade (nlncidcobs x nclcidcobs)
@@ -1051,6 +1095,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text23)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label22", "Label")
@@ -1080,6 +1126,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text24)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: U.F. (nlnestcobs x nclestcobs)
@@ -1110,6 +1158,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text25)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label24", "Label")
@@ -1139,6 +1189,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text26)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Sacado: C.E.P. (nlncepcobs x nclcepcobs)
@@ -1169,6 +1221,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text27)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         THIS.AddObject("lbl_4c_Label26", "Label")
@@ -1198,6 +1252,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text28)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Secao "Impressora / Fonte"
@@ -1257,6 +1313,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text29)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
         BINDEVENT(THIS.txt_4c_Text29, "LostFocus", THIS, "Text29LostFocus")
 
@@ -1288,6 +1346,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text30)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
         BINDEVENT(THIS.txt_4c_Text30, "LostFocus", THIS, "Text30LostFocus")
 
@@ -1319,6 +1379,8 @@ DEFINE CLASS FormSigOpCbl AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .Format    = "K"
+            .Margin = 0   && transcrito do dump (Text31)
+            .ForeColor = RGB(90,90,90)
         ENDWITH
 
         *-- Secao "Folha" - Tamanho da Folha (ctamfolha, fwget no legado)

@@ -397,7 +397,7 @@ DEFINE CLASS FormSigOpBlo AS FormBase
             .Left      = 16
             .Top       = 104
             .Width     = 80
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fweditdata)
             .MaxLength = 10
             .TabIndex  = 1
             .Value     = {}
@@ -416,7 +416,7 @@ DEFINE CLASS FormSigOpBlo AS FormBase
             .Left      = 116
             .Top       = 104
             .Width     = 80
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fweditdata)
             .MaxLength = 10
             .TabIndex  = 2
             .Value     = {}
@@ -482,7 +482,7 @@ DEFINE CLASS FormSigOpBlo AS FormBase
             .Left      = 113
             .Top       = 159
             .Width     = 45
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fweditdata)
             .MaxLength = 5
             .TabIndex  = 3
             .Value     = 0
@@ -497,7 +497,7 @@ DEFINE CLASS FormSigOpBlo AS FormBase
             .Left      = 246
             .Top       = 159
             .Width     = 45
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fweditdata)
             .MaxLength = 5
             .TabIndex  = 4
             .Value     = 0
@@ -598,7 +598,7 @@ DEFINE CLASS FormSigOpBlo AS FormBase
             .Left      = 174
             .Top       = 216
             .Width     = 80
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fweditdata)
             .MaxLength = 10
             .TabIndex  = 5
             .Value     = {}

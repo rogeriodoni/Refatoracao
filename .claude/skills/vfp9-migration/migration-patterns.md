@@ -14526,3 +14526,156 @@ por cima, nao substituido.
 Sem auto-fix neste texto - ver CorretorAutomatico **#222**. Origem: Erro283
 (reincidencia, `task750`/`Formsigopind` - "Posicao do Indice" OPERACIONAL,
 2026-11-10).
+
+## 251. Menu de SUBMENU sem `ON BAR`, `ControlSource` espelhado em massa e as quatro armadilhas da gravacao por cursor (FormNfl)
+
+Origem: "Ferramentas > Configuracoes nao abre o form" (2026-11-23, commit
+79275f3f7). Cinco defeitos encadeados; nenhum aparecia na compilacao.
+
+### 251.1 Item de menu que no legado eh SUBMENU
+
+O legado guarda a arvore do menu na tabela `SIGCDPRG` (`DescricaoS =
+"Menu - Ferramentas - Configuracao - Nota Fiscal"`). O item
+"Configuracoes" era um no INTERMEDIARIO, e o `menu.prg` o gerou como
+`DEFINE BAR 1` sem `ON BAR ... ACTIVATE POPUP` nem `ON SELECTION`: rotulo
+morto, clicar nao faz nada. Pior: os forms FILHOS (`FormSigOpCbl`,
+`FormFis`, `FormNfl`) foram migrados e nunca ganharam `Abrir*` - ficaram
+inalcancaveis por meses.
+
+```foxpro
+* ERRADO
+DEFINE BAR 1 OF popFerramentas PROMPT "Configura" + CHR(231) + CHR(245) + "es"
+* CERTO
+ON BAR 1 OF popFerramentas ACTIVATE POPUP popFerrConfig
+DEFINE POPUP popFerrConfig MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF popFerrConfig PROMPT "Boleto Banc" + CHR(225) + "rio"
+ON SELECTION BAR 1 OF popFerrConfig DO AbrirFormSigOpCbl
+DEFINE BAR 3 OF popFerrConfig PROMPT "..." SKIP FOR .T.   && filho nao migrado: visivel e desabilitado
+```
+
+Consultar a arvore: `SELECT Programas, DescricaoS FROM SIGCDPRG WHERE
+DescricaoS LIKE 'Menu - Ferramentas%' AND RTRIM(Parametros) = ''`. Todo
+`DEFINE BAR` sem `ON BAR`/`ON SELECTION` correspondente eh suspeito.
+
+### 251.2 `ControlSource` trocados em massa - pares L/C e tabela errada
+
+Forms de LAYOUT DE IMPRESSAO (SigCdNfl, SigCdCfb, SigOpCbl) tem centenas de
+caixas em pares `l<campo>`/`c<campo>` (LINHA/COLUNA de impressao). No
+FormNfl o migrador:
+
+| defeito | exemplo | efeito |
+|---|---|---|
+| coluna inexistente | `crSigCnFNf.lcodpro` (real: `ccodpro`) | `Variable 'LCODPRO' is not found` no Init - **a tela nao abre** |
+| coluna existente, porem ERRADA | "Adendo" -> `ltipi` (real: `oaden`); `lnfsai` repetido em 3 abas | grava no lugar errado, **sem erro** |
+| tabela errada | `crSigCnFNf.loploc` (real: `crSigCnFN2.loploc`) | estoura ao gravar |
+| caixa que o legado NAO liga | Selo/Tipo/Metal ligados a `lnfsai`/`ltprod` | duas caixas editando a mesma coluna |
+
+Diagnostico que funcionou: (1) cada `crX.col` contra o
+`INFORMATION_SCHEMA` do banco; (2) parear cada controle da aba com o do
+dump por GEOMETRIA (`Left` +-3, `Top` ou `Top+29`), escopado a UM metodo
+`Configurar<Aba>Tab` e UMA pagina do SCX, e aceitar o par quando a coluna
+migrada estiver entre as alternativas (a tolerancia de +29 casa duas
+linhas). O legado batia 100% com o banco; os erros eram todos da migracao.
+Combo com `RowSourceType = 1` e `ControlSource` em coluna `int` grava o
+INDICE (`"0,90,270"` -> 1/2/3): transcrever a lista EXATA do dump (o
+migrado tinha `"0,90,180,270"`, deslocando 270 para 180).
+
+### 251.3 `PageFrame.Refresh` atualiza so a aba ATIVA
+
+Depois de recarregar cursores ligados por `ControlSource`, `Page2.Refresh()`
+nao alcanca as abas internas inativas: a tela continua mostrando o
+registro ANTERIOR ate o usuario clicar na aba (e o teste headless le
+`.Value` velho).
+
+```foxpro
+loc_oPag2.Refresh()
+FOR loc_nAba = 1 TO loc_oPag2.pgf_4c_Abas.PageCount
+    loc_oPag2.pgf_4c_Abas.Pages(loc_nAba).Refresh()
+ENDFOR
+```
+
+E fechar o alias antes de recarregar (guard de buffering da regra #52):
+`SQLEXEC` sobre alias com buffer sujo falha com *Table buffer ... contains
+uncommitted changes* e a tela fica com os dados do registro anterior.
+
+### 251.4 UPDATE generico pelo cursor sobrescreve a CHAVE
+
+`SalvarSigCnFNf` grava TODOS os campos de `crSigCnFNf` (`FOR FCOUNT()`).
+No INCLUIR o cursor nasce de `APPEND BLANK` e `txt_4c_Series` nao era
+ligado a ele: o INSERT gravava `series = 'ZZ9'` e o UPDATE seguinte
+regravava `''` - a configuracao sumia da Lista. Antes de um UPDATE
+generico, sincronizar no cursor os campos de chave/identificacao que a tela
+edita fora dele:
+
+```foxpro
+REPLACE emps WITH loc_oBO.this_cEmps, series WITH loc_oBO.this_cSeries IN crSigCnFNf
+```
+
+### 251.5 Formatador de grade DEPOIS das `Column.Width`
+
+Reforco da regra #35c: `FormatarGridLista` reatribui `FontName`/`FontSize`
+da GRADE, o que recalcula as larguras (medido: 80 -> 33/29). Chamar o
+formatador ANTES das `Width`, ou as larguras do `pColuna` nunca valem.
+
+### 251.6 Residuo do Pattern #182 em botao solto no form
+
+`WITH THIS.cmd_4c_Encerrar` (dialogo OPERACIONAL, botao direto no form)
+com `.Left = 5`: o canonico do CLAUDE.md #10 eh relativo a `cnt_4c_Saida`.
+O #182 foi restringido no Erro501, mas o residuo nao foi desfeito - o
+Encerrar ficava no canto esquerdo, sobre o titulo. Transcrever o `Left` do
+dump (FormFis: `cancela.Left = 724`). WARNING: CorretorAutomatico **#223**.
+Sweep 2026-11-23: 12 sites, 10 corrigidos; FormSigPdMp3 e Formsigprnfe sem
+par no dump.
+
+Testar gravando: Incluir com um valor em cada familia corrigida, conferir o
+CURSOR (prova a ligacao), Confirmar, ler o BANCO (prova a coluna), e
+Visualizar OUTRO registro antes de voltar (prova o refresh).
+
+## 252. TextBox de 18px precisa de `Margin` e `SpecialEffect = 1` do legado - senao o texto sai CORTADO
+
+Origem: erro380 (2026-11-23, `FormCfb` - "os campos texto estao cortando as
+letras"). Compila limpo, nao da erro: so a tela mostra meia linha de texto.
+
+O legado desenha as caixas pequenas com tres propriedades juntas:
+
+```
+Text1:  Height = 18   Margin = 0   SpecialEffect = 1     (borda plana)
+```
+
+O migrador copia o `Height` e descarta as outras duas. Com a borda 3D
+(`SpecialEffect = 0`, default) e a margem padrao de 2px, o texto de Tahoma 8
+nao cabe em 18px.
+
+```foxpro
+* ERRADO (FormCfb, como saiu da migracao)
+.Height    = 18
+.InputMask = "999.99"
+* CERTO - transcrito do dump
+.Height        = 18
+.InputMask     = "999.99"
+.SpecialEffect = 1
+.Margin        = 0
+.Format        = "K"
+```
+
+**Segunda forma do mesmo defeito**: o SCX NAO declara `Height` (a caixa
+herda da classe) e o migrador INVENTA 18. A altura vem da classe do
+framework - `fwget` e `fweditdata` declaram `Height = 23` (FormSigOpBlo,
+FormTbv). Conferir a classe na listagem `Objeto: / Class:` do dump e as
+propriedades dela em `docs/FRAMEWORK_class_codigo_fonte.txt`.
+
+Vao junto, e tambem se perdem: `Format` (`"K"`/`"!K"`), `ForeColor`,
+`DisabledBackColor`/`DisabledForeColor` (caixa desabilitada branca com texto
+azul-marinho no legado, cinza no migrado) e, em indicador colorido,
+`BorderStyle = 1` + `BorderColor` (Formsigopind).
+
+**Ao parear migrado x legado por posicao**: o deslocamento muda por form e
+por container (+29, +70, +151...); quando a geometria nao der par unico,
+parear pelo nome normalizado (`txt_4c__codigos` <-> `get_codigos`) exigindo a
+mesma `Width`. E analisar o WITH que TERMINA no nome da caixa: ha forms que
+criam todos os objetos em sequencia e so depois abrem os WITH (Formacu) - ler
+as linhas seguintes ao `AddObject` pega o Label vizinho e da falso positivo.
+
+WARNING: CorretorAutomatico **#224**. Sweep 2026-11-23: 65 sites em 6 forms
+(FormCfb 34, FormSigOpCbl 31, FormTbv 15, FormSigOpBlo 5, Formsigopind 4,
+Formmtz 1), todos corrigidos pelo dump; acervo em 0.

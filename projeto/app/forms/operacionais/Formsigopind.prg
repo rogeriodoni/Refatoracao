@@ -1658,7 +1658,9 @@ DEFINE CLASS Formsigopind AS FormBase
             .Height      = 12
             .ReadOnly    = .T.
             .BackColor   = RGB(0, 128, 0)
-            .BorderStyle = 0
+            .BorderStyle = 1   && legado: BorderStyle/SpecialEffect/BorderColor (indicador de 12px)
+            .SpecialEffect = 1
+            .BorderColor = RGB(0,128,0)
         ENDWITH
 
         *-- Botao2 vermelho (Cancelado): top=13
@@ -1670,7 +1672,9 @@ DEFINE CLASS Formsigopind AS FormBase
             .Height      = 12
             .ReadOnly    = .T.
             .BackColor   = RGB(255, 0, 0)
-            .BorderStyle = 0
+            .BorderStyle = 1   && legado: BorderStyle/SpecialEffect/BorderColor (indicador de 12px)
+            .SpecialEffect = 1
+            .BorderColor = RGB(255,0,0)
         ENDWITH
 
         *-- Botao3 azul (Conciliado): top=25
@@ -1682,7 +1686,9 @@ DEFINE CLASS Formsigopind AS FormBase
             .Height      = 12
             .ReadOnly    = .T.
             .BackColor   = RGB(0, 0, 255)
-            .BorderStyle = 0
+            .BorderStyle = 1   && legado: BorderStyle/SpecialEffect/BorderColor (indicador de 12px)
+            .SpecialEffect = 1
+            .BorderColor = RGB(0,0,255)
         ENDWITH
 
         *-- Text4 laranja (Prorrogado): top=37
@@ -1694,7 +1700,9 @@ DEFINE CLASS Formsigopind AS FormBase
             .Height      = 12
             .ReadOnly    = .T.
             .BackColor   = RGB(255, 128, 0)
-            .BorderStyle = 0
+            .BorderStyle = 1   && legado: BorderStyle/SpecialEffect/BorderColor (indicador de 12px)
+            .SpecialEffect = 1
+            .BorderColor = RGB(255,128,0)
         ENDWITH
 
         *----------------------------------------------------------------------

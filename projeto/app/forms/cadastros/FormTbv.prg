@@ -611,12 +611,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 174
             .Left      = 264
             .Width     = 80
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 10
             .Value     = ""
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_codigos)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -643,12 +646,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 200
             .Left      = 264
             .Width     = 220
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 30
             .Value     = ""
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_descrs)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -676,12 +682,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 226
             .Left      = 264
             .Width     = 31
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 3
             .Value     = ""
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_moerefs)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c__moerefs, "KeyPress", THIS, "MoedaRefLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c__moerefs, "DblClick", THIS, "MoedaRefLookupDblClick")
@@ -691,7 +700,7 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 226
             .Left      = 298
             .Width     = 115
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 20
             .Value     = ""
             .ReadOnly  = .T.
@@ -699,6 +708,9 @@ DEFINE CLASS FormTbv AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_moerefs_desc)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -725,13 +737,16 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 252
             .Left      = 264
             .Width     = 66
-            .Height    = 18
-            .InputMask = "999.99"
+            .Height    = 23   && legado get_descos (pgDados): Height da classe fwget
+            .InputMask = "9999.99"   && legado get_descos
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_descos)
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -758,12 +773,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 278
             .Left      = 264
             .Width     = 220
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 30
             .Value     = ""
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_obss)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -790,11 +808,13 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 304
             .Left      = 264
             .Width     = 80
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .Value     = {}
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_dtval)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -822,13 +842,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 330
             .Left      = 264
             .Width     = 31
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "999"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_nParcs)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
@@ -851,13 +873,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 330
             .Left      = 324
             .Width     = 31
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "999"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_nParc2s)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -884,13 +908,16 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 356
             .Left      = 264
             .Width     = 73
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "99.999999"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_Ajuste)
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -918,13 +945,16 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 382
             .Left      = 264
             .Width     = 45
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "99.99"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_Fator)
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oPagina.AddObject("lbl_4c_Label9", "Label")
@@ -947,12 +977,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 408
             .Left      = 264
             .Width     = 31
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .MaxLength = 3
             .Value     = ""
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (Get_MoeFat)
+            .Format = "!K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_MoeFat, "KeyPress", THIS, "MoedaFatorLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_MoeFat, "DblClick", THIS, "MoedaFatorLookupDblClick")
@@ -981,13 +1014,15 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 570
             .Left      = 527
             .Width     = 31
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "999"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Courier New"
             .FontSize  = 8
             .Visible   = .F.
+            .SpecialEffect = 1   && transcrito do dump (Get_PrazoMs)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         *----------------------------------------------------------------------
@@ -1991,13 +2026,16 @@ DEFINE CLASS FormTbv AS FormBase
             .Top       = 339
             .Left      = 910
             .Width     = 66
-            .Height    = 18
+            .Height    = 23   && legado: Height 23 (classe fwget)
             .InputMask = "9999.99"
             .Alignment = 1
             .Value     = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .SpecialEffect = 1   && transcrito do dump (get_descos)
+            .Format = "K"
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Percentual", "Label")
@@ -2212,12 +2250,14 @@ DEFINE CLASS FormTbv AS FormBase
             .Top           = 338
             .Left          = 145
             .Width         = 80
-            .Height        = 18
+            .Height        = 23   && legado: Height 23 (classe fwget)
             .MaxLength     = 10
             .ControlSource = "cursor_4c_Tdt.descfats"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
+            .SpecialEffect = 1   && transcrito do dump (getDescFats)
+            .ForeColor = RGB(0,0,0)
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_FatorPadrao", "Label")

@@ -313,7 +313,7 @@ DEFINE CLASS NflBO AS BusinessBase
             THIS.this_nCempfone     = cempfone
             THIS.this_nNvias        = nvias
             THIS.this_nNtpmargems   = ntpmargems
-            THIS.this_lVseqnota     = (vseqnota = 1)
+            THIS.this_lVseqnota     = ConverterParaLogico(vseqnota)   && bit: Logico ou Numerico (regra #13)
             THIS.this_cContsac      = ALLTRIM(contsac)
             THIS.this_nLsac         = lsac
             THIS.this_nCsac         = csac
@@ -363,11 +363,11 @@ DEFINE CLASS NflBO AS BusinessBase
             THIS.this_nLclas10      = lclas10
             THIS.this_nLclas11      = lclas11
             THIS.this_nLclas12      = lclas12
-            THIS.this_lImpc8        = (impc8 = 1)
-            THIS.this_lImpc9        = (impc9 = 1)
-            THIS.this_lImpc10       = (impc10 = 1)
-            THIS.this_lImpc11       = (impc11 = 1)
-            THIS.this_lImpc12       = (impc12 = 1)
+            THIS.this_lImpc8        = ConverterParaLogico(impc8)   && bit: Logico ou Numerico (regra #13)
+            THIS.this_lImpc9        = ConverterParaLogico(impc9)   && bit: Logico ou Numerico (regra #13)
+            THIS.this_lImpc10       = ConverterParaLogico(impc10)   && bit: Logico ou Numerico (regra #13)
+            THIS.this_lImpc11       = ConverterParaLogico(impc11)   && bit: Logico ou Numerico (regra #13)
+            THIS.this_lImpc12       = ConverterParaLogico(impc12)   && bit: Logico ou Numerico (regra #13)
             THIS.this_cImpclas8     = ALLTRIM(impclas8)
             THIS.this_cImpclas9     = ALLTRIM(impclas9)
             THIS.this_cImpclas10    = ALLTRIM(impclas10)
