@@ -36,6 +36,10 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     *-- Necessario porque VFP9 passa parametros por VALOR - sub-metodos nao propagam de volta
     this_nCnabLot = 0
 
+    *-- Guarda de reentrancia dos lookups (regra #37/#47). O FormBuscaAuxiliar eh
+    *-- MODAL: ao fechar, o foco volta ao campo e o proprio LostFocus redispara.
+    this_lEmLookup = .F.
+
     *==========================================================================
     PROCEDURE Init()
     *==========================================================================
@@ -71,7 +75,11 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro InicializarForm")
+            *-- Linha/Procedure no texto: sem isso o erro chega ao testador sem
+            *-- nenhuma pista de ONDE falhou (padrao da casa).
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, "Erro InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
@@ -87,20 +95,43 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         loc_oPgf = THIS.pgf_4c_Principal
 
         loc_oPgf.PageCount = 2
-        loc_oPgf.ErasePage = .T.
-        loc_oPgf.Top       = -24
+
+        *-- RENOMEAR as paginas eh OBRIGATORIO: o resto do form referencia
+        *-- pgf_4c_Principal.pgfiltro (63 vezes) e .pgdados (17), que sao os
+        *-- nomes do SCX legado (Page1.Name/Page2.Name). Sem isto, a 1a dessas
+        *-- referencias estoura "Property PGFILTRO is not found".
+        *-- Medido no VFP9 (2026-11-25): Page.Name eh atribuivel em runtime, e
+        *-- depois da troca o nome ANTIGO para de responder (Unknown member
+        *-- PAGE1) - por isso as linhas abaixo ja usam os nomes novos.
+        loc_oPgf.Page1.Name = "pgfiltro"
+        loc_oPgf.Page2.Name = "pgdados"
+        *-- ErasePage: o SCX legado declara (pgfprincipal.ErasePage = .T.), mas eh
+        *-- propriedade so de TEMPO DE PROJETO - o Form Designer persiste no SCX e
+        *-- ela NAO existe em PageFrame criado por AddObject. Atribuir estourava
+        *-- "Property ERASEPAGE is not found" no InicializarForm e a tela nunca
+        *-- abria (CLAUDE.md regra #33, mesma familia de ZOrderSet).
+        *-- O SCX legado usa Top = -24 SEM declarar Tabs, ou seja com Tabs = .T.:
+        *-- a faixa de abas (30px, medido) absorve o -24 e o conteudo da pagina
+        *-- cai em y = +6 no form. O migrado pos Tabs = .F. e MANTEVE o -24 -
+        *-- sem faixa de abas para absorver, tudo subia 20px e a barra do titulo
+        *-- e os botoes Processar/Encerrar ficavam cortados no topo (erro394).
+        *-- Medido no VFP9 (2026-11-25), conteudo em Page.Top 0 -> y no form:
+        *--   Tabs .T. / Top -24 (legado) = +6   |   Tabs .F. / Top -24 = -20
+        *-- Com Tabs = .F. a borda do PageFrame come 4px, entao Top = 2 recoloca
+        *-- o conteudo em +6 e Height 609 mantem o mesmo fim (611) do legado.
+        loc_oPgf.Top       = 2
         loc_oPgf.Left      = 0
         loc_oPgf.Width     = 1003
-        loc_oPgf.Height    = 635
+        loc_oPgf.Height    = 609
         loc_oPgf.TabIndex  = 1
         loc_oPgf.Tabs      = .F.
 
-        loc_oPgf.Page1.Caption = "Filtro"
-        loc_oPgf.Page1.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.pgfiltro.Caption = "Filtro"
+        loc_oPgf.pgfiltro.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
-        loc_oPgf.Page2.Caption = "Dados"
-        loc_oPgf.Page2.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-        loc_oPgf.Page2.Enabled = .F.
+        loc_oPgf.pgdados.Caption = "Dados"
+        loc_oPgf.pgdados.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.pgdados.Enabled = .F.
 
         loc_oPgf.Visible    = .T.
         loc_oPgf.ActivePage = 1
@@ -183,7 +214,7 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width         = 75
                 .FontBold      = .T.
                 .FontItalic    = .T.
-                .FontName      = "Tahoma"
+                .FontName      = "Comic Sans MS"
                 .FontSize      = 8
                 .WordWrap      = .T.
                 .Picture       = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
@@ -193,7 +224,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor     = RGB(90,90,90)
                 .BackColor     = RGB(255,255,255)
                 .Themes        = .F.
-                .Name          = "btnProcessar"
             ENDWITH
             WITH .Command2
                 .Top           = 5
@@ -202,7 +232,7 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width         = 75
                 .FontBold      = .T.
                 .FontItalic    = .T.
-                .FontName      = "Tahoma"
+                .FontName      = "Comic Sans MS"
                 .FontSize      = 8
                 .Picture       = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .Cancel        = .T.
@@ -211,7 +241,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor     = RGB(90,90,90)
                 .BackColor     = RGB(255,255,255)
                 .Themes        = .F.
-                .Name          = "btnsair"
             ENDWITH
         ENDWITH
 
@@ -530,7 +559,12 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             .TabIndex  = 19
             .BackStyle = 0
             .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
+            *-- CLAUDE.md regra #23: AutoSize = .T. eh NO-OP em Label criado por
+            *-- AddObject - a caixa fica nos 100px default e cortava a legenda
+            *-- ("Grupos Fornecedore"). Medido: o texto ocupa 110px em Tahoma 8 e
+            *-- ha 115px ate a grade (Left 372 - 257), entao 112 cabe sem invadir.
+            .AutoSize  = .F.
+            .Width     = 112
         ENDWITH
 
         *-- Grid de Grupos (grdgrupos)
@@ -546,7 +580,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             .Left             = 372
             .Panel            = 1
             .ScrollBars       = 2
-            .SplitBar         = .F.
+            *-- O dump do SCX traz "SplitBar = .F.", mas Grid.SplitBar eh DESIGN-TIME:
+            *-- read-only em runtime (medido no VFP9 2026-11-25: "Property SPLITBAR is
+            *-- read-only"). Atribuir aborta o resto do WITH dentro do TRY e as
+            *-- propriedades seguintes somem em silencio.
+            *-- O default eh .T. (medido), NAO .F. - mas com ScrollBars = 2 (so
+            *-- vertical) nao ha barra horizontal onde o splitter apareca, entao
+            *-- omitir nao muda o visual aqui.
             .TabIndex         = 11
             .Top              = 236
             .Width            = 202
@@ -596,7 +636,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor   = RGB(36,84,155)
                 .BackColor   = RGB(255,255,255)
                 .Themes      = .F.
-                .Name        = "btnmarca"
             ENDWITH
             WITH .Command2
                 .Top         = 46
@@ -611,7 +650,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor   = RGB(36,84,155)
                 .BackColor   = RGB(255,255,255)
                 .Themes      = .F.
-                .Name        = "btndesmarca"
             ENDWITH
         ENDWITH
     ENDPROC
@@ -637,7 +675,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             .Panel             = 1
             .RecordMark        = .F.
             .ScrollBars        = 2
-            .SplitBar          = .F.
+            *-- O dump do SCX traz "SplitBar = .F.", mas Grid.SplitBar eh DESIGN-TIME:
+            *-- read-only em runtime (medido no VFP9 2026-11-25: "Property SPLITBAR is
+            *-- read-only"). Atribuir aborta o resto do WITH dentro do TRY e as
+            *-- propriedades seguintes somem em silencio.
+            *-- O default eh .T. (medido), NAO .F. - mas com ScrollBars = 2 (so
+            *-- vertical) nao ha barra horizontal onde o splitter apareca, entao
+            *-- omitir nao muda o visual aqui.
             .TabIndex          = 1
             .Top               = 152
             .Width             = 981
@@ -715,7 +759,7 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width         = 75
                 .FontBold      = .T.
                 .FontItalic    = .T.
-                .FontName      = "Tahoma"
+                .FontName      = "Comic Sans MS"
                 .FontSize      = 8
                 .Picture       = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .Cancel        = .T.
@@ -724,7 +768,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor     = RGB(90,90,90)
                 .BackColor     = RGB(255,255,255)
                 .Themes        = .F.
-                .Name          = "btnsair"
             ENDWITH
         ENDWITH
 
@@ -752,14 +795,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width   = 75
                 .FontBold = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
+                .FontName = "Comic Sans MS"
                 .FontSize = 8
                 .Picture  = gc_4c_CaminhoIcones + "geral_disco2_60.jpg"
                 .Caption  = "Gerar CNAB"
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
                 .Themes   = .F.
-                .Name     = "btncnab"
             ENDWITH
             WITH .Command2
                 .Top     = 5
@@ -768,7 +810,7 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width   = 75
                 .FontBold = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
+                .FontName = "Comic Sans MS"
                 .FontSize = 8
                 .Picture  = gc_4c_CaminhoIcones + "geral_video_60.jpg"
                 .Caption  = "Relat" + CHR(243) + "rio"
@@ -776,7 +818,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
                 .Themes   = .F.
-                .Name     = "btnrelatorio"
             ENDWITH
             WITH .Command3
                 .Top     = 5
@@ -785,14 +826,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .Width   = 75
                 .FontBold = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
+                .FontName = "Comic Sans MS"
                 .FontSize = 8
                 .Picture  = gc_4c_CaminhoIcones + "geral_impressora_60.jpg"
                 .Caption  = "Boleto"
                 .Enabled  = .F.
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
-                .Name     = "btnBoleto"
             ENDWITH
         ENDWITH
 
@@ -870,7 +910,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor = RGB(36,84,155)
                 .BackColor = RGB(255,255,255)
                 .Themes   = .F.
-                .Name     = "btnmarca"
             ENDWITH
             WITH .Command2
                 .Top     = 5
@@ -885,7 +924,6 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 .ForeColor = RGB(36,84,155)
                 .BackColor = RGB(255,255,255)
                 .Themes   = .F.
-                .Name     = "btndesmarca"
             ENDWITH
         ENDWITH
     ENDPROC
@@ -948,16 +986,23 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         BINDEVENT(loc_oP1.cgp_4c_Filtro.Command2, "Click", THIS, "ClickEncerrarFiltro")
 
         *-- Validacao e lookup dos campos de filtro
-        *-- KeyPress: ENTER(13)/TAB(9) valida, F4(115) abre lookup, DblClick abre lookup
+        *-- A validacao mora no LostFocus (regra #47): o legado valida no Valid do
+        *-- campo (getCEmpc/get_cd_empresa/get_ds_car_conta -> fAcessoEmpresa/fAcessoContas).
+        *-- Ligado a KeyPress, o ENTER(13)/TAB(9) usados para SAIR do campo reabriam o
+        *-- picker a cada tentativa e o foco nunca saia (erro395).
+        *-- KeyPress fica so com o F4 = -3 (medido no VFP9; 115 eh a letra "s").
+        BINDEVENT(loc_oP1.txt_4c_CdEmpresa,  "LostFocus", THIS, "CdEmpresaLostFocus")
         BINDEVENT(loc_oP1.txt_4c_CdEmpresa,  "KeyPress", THIS, "TxtCdEmpresaKeyPress")
         BINDEVENT(loc_oP1.txt_4c_CdEmpresa,  "DblClick", THIS, "AbrirLookupEmpresa")
-        BINDEVENT(loc_oP1.txt_4c_DsEmpresa,  "KeyPress", THIS, "TxtDsEmpresaKeyPress")
+        BINDEVENT(loc_oP1.txt_4c_DsEmpresa,  "LostFocus", THIS, "DsEmpresaLostFocus")
+        BINDEVENT(loc_oP1.txt_4c_CdConta,    "LostFocus", THIS, "CdContaLostFocus")
         BINDEVENT(loc_oP1.txt_4c_CdConta,    "KeyPress", THIS, "TxtCdContaKeyPress")
         BINDEVENT(loc_oP1.txt_4c_CdConta,    "DblClick", THIS, "AbrirLookupConta")
-        BINDEVENT(loc_oP1.txt_4c_DsConta,    "KeyPress", THIS, "TxtDsContaKeyPress")
+        BINDEVENT(loc_oP1.txt_4c_DsConta,    "LostFocus", THIS, "DsContaLostFocus")
+        BINDEVENT(loc_oP1.txt_4c_CdEmpConv,  "LostFocus", THIS, "CdEmpConvLostFocus")
         BINDEVENT(loc_oP1.txt_4c_CdEmpConv,  "KeyPress", THIS, "TxtCdEmpConvKeyPress")
         BINDEVENT(loc_oP1.txt_4c_CdEmpConv,  "DblClick", THIS, "AbrirLookupEmpConv")
-        BINDEVENT(loc_oP1.txt_4c_DsEmpConv,  "KeyPress", THIS, "TxtDsEmpConvKeyPress")
+        BINDEVENT(loc_oP1.txt_4c_DsEmpConv,  "LostFocus", THIS, "DsEmpConvLostFocus")
         BINDEVENT(loc_oP1.txt_4c_Dataf,      "KeyPress", THIS, "TxtDatafKeyPress")
 
         *-- Marcar/desmarcar grupos
@@ -1004,10 +1049,32 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
 
     *==========================================================================
     * HANDLERS DE VALIDACAO DOS CAMPOS DE FILTRO
+    *
+    * Cada campo tem um par <X>LostFocus (wrapper fino com a guarda de
+    * reentrancia) + Validar<X> (o corpo). O corpo vive separado para que a
+    * flag seja SEMPRE liberada, inclusive nos RETURN antecipados (regra #47).
     *==========================================================================
 
+    PROCEDURE CdEmpresaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdEmpresa()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsEmpresaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsEmpresa()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE ValidarCdEmpresa()
-        LOCAL loc_cCod, loc_cSQL
+        LOCAL loc_cCod, loc_cSQL, loc_lAchou
         loc_cCod = ALLTRIM(THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpresa.Value)
         IF EMPTY(loc_cCod)
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpresa.Value = ""
@@ -1016,17 +1083,21 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
+        loc_lAchou = .F.
         loc_cSQL = "SELECT TOP 1 RazSocs FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cCod)
         IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpTmpV") >= 1 AND RECCOUNT("cursor_4c_EmpTmpV") > 0
             SELECT cursor_4c_EmpTmpV
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpTmpV.RazSocs)
-        ELSE
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpresa.Value = ""
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpresa.Value = ""
-            MsgAviso("Empresa inv" + CHR(225) + "lida.")
+            loc_lAchou = .T.
         ENDIF
         IF USED("cursor_4c_EmpTmpV")
             USE IN cursor_4c_EmpTmpV
+        ENDIF
+        *-- Legado (get_cd_empresa.Valid): fAcessoEmpresa abre o browse quando o
+        *-- codigo nao resolve. Regra #50: NAO avisar nem apagar o que o usuario
+        *-- digitou - o picker eh o proprio feedback e usa o digitado como prefixo.
+        IF !loc_lAchou
+            THIS.AbrirLookupEmpresa()
         ENDIF
     ENDPROC
 
@@ -1044,13 +1115,29 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             SELECT cursor_4c_EmpTmpV
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_EmpTmpV.Cemps)
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpTmpV.RazSocs)
-        ELSE
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpresa.Value = ""
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpresa.Value = ""
         ENDIF
+        *-- Regra #50: razao social sem correspondencia NAO apaga o que foi digitado.
         IF USED("cursor_4c_EmpTmpV")
             USE IN cursor_4c_EmpTmpV
         ENDIF
+    ENDPROC
+
+    PROCEDURE CdContaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdConta()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsContaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsConta()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE ValidarCdConta()
@@ -1067,6 +1154,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         loc_llRet = fAcessoContas(gc_4c_UsuarioLogado, loc_cGrupo, "C", loc_cCod, ;
                     THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdConta, ;
                     THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsConta)
+        *-- Legado (get_cd_car_conta.Valid): acesso negado AVISA e limpa - esta
+        *-- mensagem eh de AUTORIZACAO, nao de "nao encontrei", entao permanece.
         IF !loc_llRet
             MsgAviso("Conta inv" + CHR(225) + "lida, acesso negado.")
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdConta.Value = ""
@@ -1087,14 +1176,34 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         loc_llRet = fAcessoContas(gc_4c_UsuarioLogado, loc_cGrupo, "D", loc_cDs, ;
                     THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdConta, ;
                     THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsConta)
+        *-- Legado (get_ds_car_conta.Valid): MessageBox + limpa os dois campos.
         IF !loc_llRet
+            MsgAviso("Conta inv" + CHR(225) + "lida, acesso negado.")
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdConta.Value = ""
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsConta.Value = ""
         ENDIF
     ENDPROC
 
+    PROCEDURE CdEmpConvLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdEmpConv()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DsEmpConvLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsEmpConv()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE ValidarCdEmpConv()
-        LOCAL loc_cCod, loc_cSQL
+        LOCAL loc_cCod, loc_cSQL, loc_lAchou
         loc_cCod = ALLTRIM(THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpConv.Value)
         IF EMPTY(loc_cCod)
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpConv.Value = ""
@@ -1103,17 +1212,20 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
+        loc_lAchou = .F.
         loc_cSQL = "SELECT TOP 1 RazSocs FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cCod)
         IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpConvV") >= 1 AND RECCOUNT("cursor_4c_EmpConvV") > 0
             SELECT cursor_4c_EmpConvV
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpConv.Value = ALLTRIM(cursor_4c_EmpConvV.RazSocs)
-        ELSE
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpConv.Value = ""
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpConv.Value = ""
-            MsgAviso("Empresa do conv" + CHR(234) + "nio inv" + CHR(225) + "lida.")
+            loc_lAchou = .T.
         ENDIF
         IF USED("cursor_4c_EmpConvV")
             USE IN cursor_4c_EmpConvV
+        ENDIF
+        *-- Legado (getCEmpc.Valid): fAcessoEmpresa abre o browse quando nao resolve.
+        *-- Regra #50: nao avisar nem apagar o codigo digitado.
+        IF !loc_lAchou
+            THIS.AbrirLookupEmpConv()
         ENDIF
     ENDPROC
 
@@ -1131,10 +1243,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             SELECT cursor_4c_EmpConvV
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpConv.Value = ALLTRIM(cursor_4c_EmpConvV.Cemps)
             THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpConv.Value = ALLTRIM(cursor_4c_EmpConvV.RazSocs)
-        ELSE
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_CdEmpConv.Value = ""
-            THIS.pgf_4c_Principal.pgfiltro.txt_4c_DsEmpConv.Value = ""
         ENDIF
+        *-- Regra #50: razao social sem correspondencia NAO apaga o que foi digitado.
         IF USED("cursor_4c_EmpConvV")
             USE IN cursor_4c_EmpConvV
         ENDIF
@@ -1151,51 +1261,32 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     ENDPROC
 
     *==========================================================================
-    * HANDLERS KEYPRESS - Disparam validacao (ENTER/TAB) e lookup (F4)
+    * HANDLERS KEYPRESS - SO o atalho F4 abre o lookup
+    *
+    * A validacao NAO mora aqui: ela corre no LostFocus (regra #47), que eh o
+    * equivalente do Valid do legado. ENTER(13)/TAB(9) ja movem o foco e portanto
+    * disparam o LostFocus sozinhos - repetir a chamada aqui validava duas vezes
+    * e, pior, abria o picker justamente na tecla usada para SAIR do campo, de
+    * modo que o foco nunca escapava e a lista reabria sem parar (erro395).
+    *
+    * F4 = -3 (medido no VFP9 2026-11-25). O 115 que estava aqui eh a letra "s".
     *==========================================================================
 
     PROCEDURE TxtCdEmpresaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        IF par_nKeyCode = -3
             THIS.AbrirLookupEmpresa()
-        ENDIF
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarCdEmpresa()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDsEmpresaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarDsEmpresa()
         ENDIF
     ENDPROC
 
     PROCEDURE TxtCdContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        IF par_nKeyCode = -3
             THIS.AbrirLookupConta()
-        ENDIF
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarCdConta()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDsContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarDsConta()
         ENDIF
     ENDPROC
 
     PROCEDURE TxtCdEmpConvKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+        IF par_nKeyCode = -3
             THIS.AbrirLookupEmpConv()
-        ENDIF
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarCdEmpConv()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDsEmpConvKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarDsEmpConv()
         ENDIF
     ENDPROC
 
@@ -1210,12 +1301,17 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     *==========================================================================
 
     PROCEDURE AbrirLookupEmpresa()
-        LOCAL loc_oBusca, loc_oP1
+        LOCAL loc_oBusca, loc_oP1, loc_lEmLookupAnt
         loc_oP1 = THIS.pgf_4c_Principal.pgfiltro
 
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
+
+        *-- Guarda de reentrancia em save/restore (regra #47): compoe tanto quando
+        *-- este metodo eh chamado de dentro do funil de LostFocus quanto do F4/DblClick.
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
 
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdEmp", ;
@@ -1224,10 +1320,15 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             ALLTRIM(loc_oP1.txt_4c_CdEmpresa.Value), ;
             "Buscar Empresa")
 
-        loc_oBusca.mAddColuna("Cemps",   "", "C" + CHR(243) + "digo")
-        loc_oBusca.mAddColuna("RazSocs", "", "Raz" + CHR(227) + "o Social")
-        loc_oBusca.mAddColuna("Cgcs",    "", "CNPJ")
-        loc_oBusca.Show()
+        *-- Regra #37: o Init do FormBuscaAuxiliar ja resolveu o match exato. Chamar
+        *-- Show() assim mesmo faz o dialogo subir sobre a tela JA preenchida, com
+        *-- uma unica linha, e o usuario precisa dispensa-lo a cada passagem (erro395).
+        IF !loc_oBusca.this_lAchouRegistro
+            loc_oBusca.mAddColuna("Cemps",   "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("RazSocs", "", "Raz" + CHR(227) + "o Social")
+            loc_oBusca.mAddColuna("Cgcs",    "", "CNPJ")
+            loc_oBusca.Show()
+        ENDIF
 
         IF loc_oBusca.this_lSelecionou
             IF USED("cursor_4c_BuscaEmpresa")
@@ -1241,15 +1342,21 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             USE IN cursor_4c_BuscaEmpresa
         ENDIF
         loc_oBusca.Release()
+
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirLookupConta()
-        LOCAL loc_oBusca, loc_oP1
+        LOCAL loc_oBusca, loc_oP1, loc_lEmLookupAnt
         loc_oP1 = THIS.pgf_4c_Principal.pgfiltro
 
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
+
+        *-- Guarda de reentrancia em save/restore (regra #47)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
 
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdCeb", ;
@@ -1258,10 +1365,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             ALLTRIM(loc_oP1.txt_4c_CdConta.Value), ;
             "Buscar Conta Banc" + CHR(225) + "ria")
 
-        loc_oBusca.mAddColuna("GruContas", "", "C" + CHR(243) + "digo")
-        loc_oBusca.mAddColuna("bancos",    "", "Banco")
-        loc_oBusca.mAddColuna("NAgencias", "", "Ag" + CHR(234) + "ncia")
-        loc_oBusca.Show()
+        *-- Regra #37: nao reabrir o dialogo quando o match exato ja resolveu
+        IF !loc_oBusca.this_lAchouRegistro
+            loc_oBusca.mAddColuna("GruContas", "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("bancos",    "", "Banco")
+            loc_oBusca.mAddColuna("NAgencias", "", "Ag" + CHR(234) + "ncia")
+            loc_oBusca.Show()
+        ENDIF
 
         IF loc_oBusca.this_lSelecionou
             IF USED("cursor_4c_BuscaConta")
@@ -1277,15 +1387,21 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             USE IN cursor_4c_BuscaConta
         ENDIF
         loc_oBusca.Release()
+
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirLookupEmpConv()
-        LOCAL loc_oBusca, loc_oP1
+        LOCAL loc_oBusca, loc_oP1, loc_lEmLookupAnt
         loc_oP1 = THIS.pgf_4c_Principal.pgfiltro
 
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
+
+        *-- Guarda de reentrancia em save/restore (regra #47)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
 
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdEmp", ;
@@ -1294,10 +1410,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             ALLTRIM(loc_oP1.txt_4c_CdEmpConv.Value), ;
             "Buscar Empresa Conv" + CHR(234) + "nio")
 
-        loc_oBusca.mAddColuna("Cemps",   "", "C" + CHR(243) + "digo")
-        loc_oBusca.mAddColuna("RazSocs", "", "Raz" + CHR(227) + "o Social")
-        loc_oBusca.mAddColuna("Cgcs",    "", "CNPJ")
-        loc_oBusca.Show()
+        *-- Regra #37: nao reabrir o dialogo quando o match exato ja resolveu
+        IF !loc_oBusca.this_lAchouRegistro
+            loc_oBusca.mAddColuna("Cemps",   "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("RazSocs", "", "Raz" + CHR(227) + "o Social")
+            loc_oBusca.mAddColuna("Cgcs",    "", "CNPJ")
+            loc_oBusca.Show()
+        ENDIF
 
         IF loc_oBusca.this_lSelecionou
             IF USED("cursor_4c_BuscaEmpConv")
@@ -1311,6 +1430,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             USE IN cursor_4c_BuscaEmpConv
         ENDIF
         loc_oBusca.Release()
+
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -1373,23 +1494,65 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         THIS.AlternarPagina(1)
     ENDPROC
 
+    *-- Os tres botoes de acao nao tinham tratamento de erro nenhum: qualquer falha
+    *-- na geracao subia como "Program Error" CRU do VFP, sem dizer o metodo nem a
+    *-- linha, e o usuario so podia escolher Cancelar/Suspender/Ignorar (regra #9:
+    *-- CATCH nunca silencioso - aqui o problema era o oposto, nem CATCH havia).
+    *-- O CATCH abaixo identifica o ponto exato da falha (erro399/erro400).
     PROCEDURE ClickGerarCNAB()
-        THIS.GerarCNAB("A")
+        LOCAL loc_oErro
+        TRY
+            THIS.GerarCNAB("A")
+        CATCH TO loc_oErro
+            THIS.ReportarFalhaAcao(loc_oErro, "Gerar CNAB")
+        ENDTRY
     ENDPROC
 
     PROCEDURE ClickRelatorio()
-        THIS.GerarCNAB("V")
+        LOCAL loc_oErro
+        TRY
+            THIS.GerarCNAB("V")
+        CATCH TO loc_oErro
+            THIS.ReportarFalhaAcao(loc_oErro, "Relat" + CHR(243) + "rio")
+        ENDTRY
     ENDPROC
 
     PROCEDURE ClickBoleto()
-        THIS.GerarCNAB("I")
-        THIS.ImpBoleto(.T.)
+        LOCAL loc_oErro
+        TRY
+            THIS.GerarCNAB("I")
+            THIS.ImpBoleto(.T.)
+        CATCH TO loc_oErro
+            THIS.ReportarFalhaAcao(loc_oErro, "Boleto")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
-    * ImpBoleto - Imprime/exibe boletos dos registros marcados em cursor_4c_Filtro2Rel
+    * ReportarFalhaAcao - Mostra o ponto EXATO da falha em vez do Program Error
+    * cru do VFP. O objeto Exception traz Procedure/LineNo/LineContents, que eh
+    * justamente o que falta para diagnosticar erro de cursor em runtime.
+    *==========================================================================
+    PROCEDURE ReportarFalhaAcao(par_oErro, par_cAcao)
+        LOCAL loc_cTxt, loc_i, loc_cCur
+        loc_cTxt = "Falha em: " + par_cAcao + CHR(13) + ;
+                   "Erro " + TRANSFORM(par_oErro.ErrorNo) + ": " + par_oErro.Message + CHR(13) + ;
+                   "Metodo: " + TRANSFORM(par_oErro.Procedure) + CHR(13) + ;
+                   "Linha " + TRANSFORM(par_oErro.LineNo) + ": " + TRANSFORM(par_oErro.LineContents) + CHR(13) + ;
+                   CHR(13) + "Cursores abertos:" + CHR(13)
+        FOR loc_i = 1 TO 250
+            loc_cCur = ALIAS(loc_i)
+            IF !EMPTY(loc_cCur)
+                loc_cTxt = loc_cTxt + "  " + loc_cCur + " (" + TRANSFORM(RECCOUNT(loc_cCur)) + ")" + CHR(13)
+            ENDIF
+        ENDFOR
+        MostrarErro(loc_cTxt, "Falha em " + par_cAcao)
+    ENDPROC
+
+    *==========================================================================
+    * ImpBoleto - Imprime/exibe boletos dos registros marcados em crFiltro2
     * par_lImprimir: .T. = preview + impressora, .F. = apenas preview
-    * Chamado apos GerarCNAB("I") que prepara cursor_4c_Filtro2Rel e cursor_4c_CabRel
+    * Chamado apos GerarCNAB("I"), que prepara crFiltro2 e crcabecalho (aliases
+    * exigidos pelo sigrecnb.frx)
     *==========================================================================
     *-- ============================================================
     *-- PROCEDURE ExecutarReportForm (Pattern #117 / #147)
@@ -1464,20 +1627,17 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
 
         loc_lProsseguir = .T.
         TRY
-            IF !USED("cursor_4c_Filtro2Rel") OR RECCOUNT("cursor_4c_Filtro2Rel") = 0
+            *-- crFiltro2: alias exigido pelo sigrecnb.frx (ver GerarCNAB)
+            IF !USED("crFiltro2") OR RECCOUNT("crFiltro2") = 0
                 MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para impress" + CHR(227) + "o de boleto")
                 loc_lProsseguir = .F.
             ENDIF
 
             IF loc_lProsseguir
-                SELECT cursor_4c_Filtro2Rel
+                SELECT crFiltro2
                 GO TOP
 
-                IF par_lImprimir
-                    THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
-                ELSE
-                    THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
-                ENDIF
+                THIS.ExecutarReportForm("sigrecnb", "PREVIEW", "crFiltro2")
 
                 loc_lSucesso = .T.
             ENDIF
@@ -1682,6 +1842,17 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 loc_oGrd.Refresh()
             ENDIF
             THIS.pgf_4c_Principal.ActivePage = 2
+
+            *-- AjustarBotoesPorModo existia mas NUNCA era chamado (regra #40: quem
+            *-- desabilita tem de reabilitar no FUNIL de volta). Sem esta linha,
+            *-- "Relat" + CHR(243) + "rio" fica cinza para sempre - os botoes nascem
+            *-- com .Enabled = .F. e nada os reativa, entao o preview era inalcancavel.
+            *-- DIVERGENCIA CONSCIENTE do legado: no SCX btnrelatorio tambem nasce
+            *-- Enabled=.F. e nada o reabilita (medido: Enabled NAO cascateia de Page
+            *-- nem de CommandGroup para os botoes filhos), ou seja o botao era morto
+            *-- tambem no legado. Boleto continua desabilitado, como no legado
+            *-- (pgDados.commandgroup1.btnBoleto.Enabled = .F., task153:1472).
+            THIS.AjustarBotoesPorModo("DADOS")
         ENDIF
     ENDPROC
 
@@ -1855,8 +2026,11 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
                 RETURN
             ENDIF
 
-            *-- Busca dados do convenio bancario
-            IF !loc_oBO.BuscarConvenio(loc_cGruposConta + loc_cCdConta)
+            *-- Busca dados do convenio bancario.
+            *-- PADR(loc_cCdConta, 10): a 2a metade da chave posicional GruContas
+            *-- char(20) tambem precisa do padding - o valor vem do TextBox ja com
+            *-- ALLTRIM, e conta de 9 caracteres ("TRANS REC") fecharia 19 (regra #42).
+            IF !loc_oBO.BuscarConvenio(loc_cGruposConta + PADR(loc_cCdConta, 10))
                 MsgAviso("N" + CHR(227) + "o Foi Encontrado o N" + CHR(250) + "mero da Ag" + CHR(234) + "ncia e/ou o C" + CHR(243) + "digo do Conv" + CHR(234) + "nio Para" + CHR(13) + ;
                          "o Banco [" + loc_cCdConta + "]!!! Complete os Dados no Cadastro de Contas!!!")
                 RETURN
@@ -1893,7 +2067,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             *-- Modo relatorio ou boleto: busca convenio para cabecalho
             loc_cGruposConta = loc_oBO.BuscarGruposContaCli(loc_cCdConta)
             IF !EMPTY(loc_cGruposConta)
-                loc_oBO.BuscarConvenio(loc_cGruposConta + loc_cCdConta)
+                *-- PADR: chave posicional char(20) - ver GerarCNAB("A") acima (regra #42)
+                loc_oBO.BuscarConvenio(loc_cGruposConta + PADR(loc_cCdConta, 10))
             ENDIF
 
             *-- Cursor cabecalho do relatorio
@@ -1902,24 +2077,43 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             loc_cDataRel = "Per" + CHR(237) + "odo: " + DTOC(loc_dDati) + " at" + CHR(233) + " " + DTOC(loc_dDatf) + ;
                            " - Protesto em " + loc_cProt + " dias"
 
-            IF USED("cursor_4c_CabRel")
-                USE IN cursor_4c_CabRel
+            *-- Os ALIASES abaixo sao CONTRATO do sigrecnb.frx, nao nome escolhido
+            *-- pelo migrador: as expressoes do FRX sao literais "crcabecalho.Titulo"
+            *-- e "crcabecalho.Periodo", e os campos de detalhe sao NAO-QUALIFICADOS
+            *-- (titulos/dopes/numes/rclis/vencs/fpags/valos), logo sao lidos da AREA
+            *-- DE TRABALHO CORRENTE. Rebatizar para cursor_4c_* faz o REPORT FORM
+            *-- estourar "Alias CRCABECALHO is not found" (erro395). O PILAR 3 nao
+            *-- renomeia alias de FRX - lido do .frt com automation\LerAliasFRX.ps1.
+            IF USED("crcabecalho")
+                USE IN crcabecalho
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_CabRel (titulo C(100), periodo C(100), empresa C(100))
+            CREATE CURSOR crcabecalho (titulo C(100), periodo C(100), empresa C(100))
             SET NULL OFF
-            INSERT INTO cursor_4c_CabRel (titulo, periodo, empresa) ;
+            INSERT INTO crcabecalho (titulo, periodo, empresa) ;
                 VALUES ("Dados para gera" + CHR(231) + CHR(227) + "o do CNAB", ;
                         loc_cDataRel, ;
                         loc_cCdEmp + " - " + ALLTRIM(NVL(cursor_4c_Empresa.RazSocs, "")))
 
-            IF USED("cursor_4c_Filtro2Rel")
-                USE IN cursor_4c_Filtro2Rel
+            IF USED("crFiltro2")
+                USE IN crFiltro2
             ENDIF
-            SELECT *, SPACE(11) AS SeqNums FROM cursor_4c_Filtro WHERE marca INTO CURSOR cursor_4c_Filtro2Rel
+            *-- "Valors AS valos": a coluna de valor do lado de Pagamentos eh
+            *-- SigMvCcr.Valors; o FRX (escrito para Recebimentos/SigMvPar) imprime
+            *-- "valos". Mesmo dado, grafia diferente - o alias resolve sem tocar no
+            *-- nome que a geracao CNAB e a grade usam.
+            SELECT *, SPACE(11) AS SeqNums, Valors AS valos ;
+                FROM cursor_4c_Filtro WHERE marca INTO CURSOR crFiltro2
+
+            *-- Legado (SIGPGCNB:1591-1595): "Select crFiltro2 / Go Top" ANTES do
+            *-- Report Form. Os campos de detalhe nao sao qualificados, entao o
+            *-- relatorio imprime a area de trabalho corrente - explicitar eh o que
+            *-- garante que seja esta, e nao a que sobrou do passo anterior.
+            SELECT crFiltro2
+            GO TOP
 
             IF par_cTipo = "V"
-                THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
+                THIS.ExecutarReportForm("sigrecnb", "PREVIEW", "crFiltro2")
             ENDIF
         ENDIF
     ENDPROC
@@ -1956,7 +2150,13 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         IF USED("crFiltro20")
             USE IN crFiltro20
         ENDIF
-        SELECT * FROM crFiltro2 INTO CURSOR crFiltro20
+        *-- READWRITE eh obrigatorio aqui. "SELECT * FROM <cur> INTO CURSOR <novo>" sem
+        *-- transformacao nenhuma NAO copia dados: o VFP devolve um cursor read-only que
+        *-- COMPARTILHA o arquivo temporario da origem. Como crFiltro2 eh fechado e
+        *-- recriado logo abaixo, crFiltro20 fica orfao e qualquer uso dele estoura
+        *-- "'CRFILTRO20' must be created with SELECT...INTO TABLE." (erro399).
+        *-- Com READWRITE o VFP materializa um cursor independente.
+        SELECT * FROM crFiltro2 INTO CURSOR crFiltro20 READWRITE
 
         *-- Separa boletos (com barras) de transferencias (sem barras)
         IF USED("crFiltro3")
@@ -1969,12 +2169,10 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         SELECT * FROM crFiltro2 WHERE ALLTRIM(barras) = SPACE(50) OR EMPTY(ALLTRIM(barras)) INTO CURSOR crFiltroTr READWRITE
 
         *-- Classifica transferencias: DOC (outro banco) vs credito em conta (mesmo banco)
-        IF USED("crFiltro4")
-            USE IN crFiltro4
-        ENDIF
-        IF USED("crFiltro2")
-            USE IN crFiltro2
-        ENDIF
+        *-- O legado NAO fecha estes cursores antes de recriar (SIGPGCNB:5544-5545):
+        *-- "SELECT ... INTO CURSOR x" ja substitui o x existente. O "USE IN crFiltro2"
+        *-- que o migrador acrescentou aqui DESTROI a area de trabalho de onde o
+        *-- crFiltro20 acabou de ser derivado - restaurada a sequencia do legado.
         SELECT * FROM crFiltroTr WHERE Grupos + contas IN (SELECT GruContas FROM cursor_4c_BancoDif) INTO CURSOR crFiltro4 READWRITE
         SELECT * FROM crFiltroTr WHERE Grupos + contas IN (SELECT GruContas FROM cursor_4c_BancoIgual) INTO CURSOR crFiltro2 READWRITE
 
@@ -3883,7 +4081,7 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     *==========================================================================
     PROCEDURE Destroy()
         LOCAL loc_i
-        LOCAL loc_aCursores(16)
+        LOCAL loc_aCursores(15)
         loc_aCursores(1)  = "cursor_4c_Filtro"
         loc_aCursores(2)  = "cursor_4c_Grupos"
         loc_aCursores(3)  = "cursor_4c_Empresa"
@@ -3898,8 +4096,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         loc_aCursores(12) = "crFiltroTr"
         loc_aCursores(13) = "crFiltro20"
         loc_aCursores(14) = "crErro"
-        loc_aCursores(15) = "cursor_4c_CabRel"
-        loc_aCursores(16) = "cursor_4c_Filtro2Rel"
+        *-- crcabecalho: alias exigido pelo sigrecnb.frx (crFiltro2 ja no indice 7)
+        loc_aCursores(15) = "crcabecalho"
         FOR loc_i = 1 TO ALEN(loc_aCursores)
             IF USED(loc_aCursores[loc_i])
                 USE IN (loc_aCursores[loc_i])

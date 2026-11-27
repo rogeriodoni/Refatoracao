@@ -163,6 +163,84 @@ DEFINE CLASS TpeBO AS BusinessBase
     ENDPROC
 
     *====================================================================
+    * ContarEtiquetasAtivas - Total de tipos com nSituas = 1
+    * Legado: PROCEDURE mcontaetiqs (SigCdTpe.SCX)
+    *   Select Count(1) As Total From SigCdTpe Where nSituas = 1
+    * Alimenta Get_EtqAtivas da pagina Lista.
+    *====================================================================
+    PROCEDURE ContarEtiquetasAtivas()
+        LOCAL loc_cSQL, loc_nResultado, loc_nTotal
+        loc_nTotal = 0
+
+        TRY
+            loc_cSQL = "SELECT COUNT(1) AS Total FROM SigCdTpe WHERE nSituas = 1"
+
+            IF USED("cursor_4c_TotAtivas")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TotAtivas") > 1
+                    TABLEREVERT(.T., "cursor_4c_TotAtivas")
+                ENDIF
+                USE IN cursor_4c_TotAtivas
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TotAtivas")
+            IF loc_nResultado >= 0 AND USED("cursor_4c_TotAtivas")
+                SELECT cursor_4c_TotAtivas
+                loc_nTotal = NVL(cursor_4c_TotAtivas.Total, 0)
+                USE IN cursor_4c_TotAtivas
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao contar etiquetas ativas:" + CHR(13) + loException.Message, ;
+                        "TpeBO.ContarEtiquetasAtivas")
+        ENDTRY
+
+        RETURN loc_nTotal
+    ENDPROC
+
+    *====================================================================
+    * ObterMaxTipoEtiquetas - Le SigCdPam.nMaxTpEtis
+    * Legado: Init do SigCdTpe.SCX
+    *   Select nMaxTpEtis From SigCdPam
+    *   If IsEmpty(csSigCdPam.nMaxTpEtis) -> Update SigCdPam Set nMaxTpEtis = 1
+    * Alimenta Get_MaxEtqs da pagina Lista (ControlSource csSigCdPam.nMaxTpEtis).
+    *====================================================================
+    PROCEDURE ObterMaxTipoEtiquetas()
+        LOCAL loc_cSQL, loc_nResultado, loc_nMax
+        loc_nMax = 0
+
+        TRY
+            loc_cSQL = "SELECT nMaxTpEtis FROM SigCdPam"
+
+            IF USED("cursor_4c_MaxEtqs")
+                IF CURSORGETPROP("Buffering", "cursor_4c_MaxEtqs") > 1
+                    TABLEREVERT(.T., "cursor_4c_MaxEtqs")
+                ENDIF
+                USE IN cursor_4c_MaxEtqs
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MaxEtqs")
+            IF loc_nResultado >= 0 AND USED("cursor_4c_MaxEtqs")
+                SELECT cursor_4c_MaxEtqs
+                IF !EOF()
+                    loc_nMax = NVL(cursor_4c_MaxEtqs.nMaxTpEtis, 0)
+                ENDIF
+                USE IN cursor_4c_MaxEtqs
+            ENDIF
+
+            *-- Legado: parametro em branco eh normalizado para 1 no proprio banco
+            IF EMPTY(loc_nMax)
+                IF SQLEXEC(gnConnHandle, "UPDATE SigCdPam SET nMaxTpEtis = 1") >= 0
+                    loc_nMax = 1
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao ler o maximo de tipos de etiqueta:" + CHR(13) + loException.Message, ;
+                        "TpeBO.ObterMaxTipoEtiquetas")
+        ENDTRY
+
+        RETURN loc_nMax
+    ENDPROC
+
+    *====================================================================
     * Inserir - Insere novo registro na tabela SigCdTpe
     * Todas as colunas sao NOT NULL - nenhuma pode ficar de fora do INSERT
     *====================================================================

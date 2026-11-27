@@ -26,6 +26,9 @@ DEFINE CLASS FormUSA AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups (regra #47): o picker eh MODAL e
+    *-- faz o proprio LostFocus disparar de novo ao devolver o foco.
+    this_lEmLookup       = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -569,6 +572,10 @@ DEFINE CLASS FormUSA AS FormBase
         WITH loc_oBotoesAcao.cmd_4c_Confirmar
             .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            *-- DisabledPicture tem de apontar para OUTRO arquivo (copia identica em
+            *-- vbmp\disabled\): com o MESMO caminho do .Picture o VFP reusa o bitmap
+            *-- esmaecido e o botao desabilitado (modo VISUALIZAR) vira um bloco cinza.
+            .DisabledPicture = gc_4c_CaminhoIcones + "disabled\cadastro_salvar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 5
@@ -614,7 +621,14 @@ DEFINE CLASS FormUSA AS FormBase
         BINDEVENT(loc_oBotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnSalvarClick")
         BINDEVENT(loc_oBotoesAcao.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
-        *-- BINDEVENTs de lookup (F4 + DblClick) - CLAUDE.md #3 (metodos PUBLIC)
+        *-- BINDEVENTs de lookup - CLAUDE.md #3 (metodos PUBLIC)
+        *-- LostFocus eh o evento do LEGADO (Valid dos fwget); F4/DblClick sao
+        *-- atalhos adicionais para o mesmo funil (regra #47).
+        BINDEVENT(loc_oPg2.txt_4c_Usuars,  "LostFocus", THIS, "UsuarsLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_DUsuars, "LostFocus", THIS, "DUsuarsLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_Dopes,   "LostFocus", THIS, "DopesLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_Emps,    "LostFocus", THIS, "EmpsLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_DEmps,   "LostFocus", THIS, "DEmpsLostFocus")
         BINDEVENT(loc_oPg2.txt_4c_Usuars,  "KeyPress", THIS, "UsuarsLookupKeyPress")
         BINDEVENT(loc_oPg2.txt_4c_Usuars,  "DblClick", THIS, "UsuarsLookupDblClick")
         BINDEVENT(loc_oPg2.txt_4c_DUsuars, "KeyPress", THIS, "DUsuarsLookupKeyPress")
@@ -887,9 +901,9 @@ DEFINE CLASS FormUSA AS FormBase
 
             IF VARTYPE(loc_oBusca) = "O"
                 IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("Usuars", "", "Usu" + CHR(225) + "rio")
-                    loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.mAddColuna("Emps", "", "Emp")
+                    loc_oBusca.mAddColuna("Usuars", "", "Usu" + CHR(225) + "rio", 80)
+                    loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o", 150)
+                    loc_oBusca.mAddColuna("Emps", "", "Emp", 31)
                     loc_oBusca.Show()
                 ENDIF
 
@@ -1040,19 +1054,59 @@ DEFINE CLASS FormUSA AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Lookups - Usuario (SigCdUsu.Usuarios / Ncomps)
+    * LOOKUPS
+    *
+    * O legado dispara TODOS estes lookups no evento Valid dos fwget, ou seja ao
+    * SAIR do campo - por isso cada um tem um handler "<X>LostFocus" ligado por
+    * BINDEVENT a "LostFocus" (CLAUDE.md regra #47; BINDEVENT em "Valid" de
+    * TextBox nao dispara de forma confiavel). F4 e DblClick sao atalhos
+    * adicionais para o MESMO funil.
+    *
+    * Guarda de reentrancia (regra #47): o picker eh MODAL, tira o foco e faz o
+    * proprio LostFocus disparar de novo. O corpo tem RETURN antecipado, entao a
+    * flag eh liberada no WRAPPER (set no topo / clear depois de chamar o corpo),
+    * nunca dentro do corpo. Os irmaos de F4/DblClick usam save/restore para
+    * compor quando um chama o outro.
+    *
+    * Guarda this_lAchouRegistro (regra #37): o Init do FormBuscaAuxiliar ja
+    * resolve o match exato; o legado faz "If Not loLista.plachouRegistro" antes
+    * do Show(). Sem isso o dialogo abre por cima de um valor ja valido.
     *--------------------------------------------------------------------------
+
+    *--------------------------------------------------------------------------
+    * Usuario por codigo (SigCdUsu.Usuarios / Ncomps)
+    * Legado getUsuars.Valid: filtro [Not cAtivos='N'] e, no fim, habilita ou
+    * desabilita getDOPES conforme o usuario estar preenchido.
+    *--------------------------------------------------------------------------
+    PROCEDURE UsuarsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupUsuarioExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE UsuarsLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
-            THIS.AbrirLookupUsuario()
+        *-- F4 = -3 (medido no VFP9 2026-11-25; 28 eh F1 e 115 eh a letra "s")
+        IF par_nKeyCode = -3
+            THIS.UsuarsLostFocus()
         ENDIF
     ENDPROC
 
     PROCEDURE UsuarsLookupDblClick()
-        THIS.AbrirLookupUsuario()
+        THIS.UsuarsLostFocus()
     ENDPROC
 
     PROCEDURE AbrirLookupUsuario()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupUsuarioExec()
+        THIS.this_lEmLookup = loc_lAnt
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupUsuarioExec()
         LOCAL loc_oBusca, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1060,14 +1114,25 @@ DEFINE CLASS FormUSA AS FormBase
             RETURN
         ENDIF
 
+        IF EMPTY(loc_oPg2.txt_4c_Usuars.Value)
+            *-- Legado: campo vazio limpa a descricao e desabilita a Operacao
+            loc_oPg2.txt_4c_DUsuars.Value = ""
+            THIS.AjustarOperacaoPorUsuario()
+            RETURN
+        ENDIF
+
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdUsu", "cursor_4c_BuscaUsu", "Usuarios", ;
-            ALLTRIM(loc_oPg2.txt_4c_Usuars.Value), "Sele" + CHR(231) + CHR(227) + "o de Usu" + CHR(225) + "rios")
+            ALLTRIM(loc_oPg2.txt_4c_Usuars.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Usu" + CHR(225) + "rios", ;
+            .T., .F., "NOT cAtivos = " + CHR(39) + "N" + CHR(39))
 
         IF VARTYPE(loc_oBusca) = "O"
-            loc_oBusca.mAddColuna("Usuarios", "", "C" + CHR(243) + "digo")
-            loc_oBusca.mAddColuna("Ncomps", "", "Nome")
-            loc_oBusca.Show()
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.mAddColuna("Usuarios", "", "C" + CHR(243) + "digo", 80)
+                loc_oBusca.mAddColuna("Ncomps", "", "Nome", 290)
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUsu")
                 SELECT cursor_4c_BuscaUsu
@@ -1081,35 +1146,63 @@ DEFINE CLASS FormUSA AS FormBase
         IF USED("cursor_4c_BuscaUsu")
             USE IN cursor_4c_BuscaUsu
         ENDIF
+
+        THIS.AjustarOperacaoPorUsuario()
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Lookups - Usuario por Nome (busca reversa - SigCdUsu.Ncomps)
-    * txt_4c_DUsuars eh ReadOnly (display), DblClick preenche via codigo mesmo
-    * assim - Value programatico nao respeita ReadOnly.
+    * Usuario por nome (busca reversa - SigCdUsu.Ncomps)
     *--------------------------------------------------------------------------
+    PROCEDURE DUsuarsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupUsuarioPorNomeExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE DUsuarsLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
-            THIS.AbrirLookupUsuarioPorNome()
+        IF par_nKeyCode = -3
+            THIS.DUsuarsLostFocus()
         ENDIF
     ENDPROC
 
     PROCEDURE DUsuarsLookupDblClick()
-        THIS.AbrirLookupUsuarioPorNome()
+        THIS.DUsuarsLostFocus()
     ENDPROC
 
     PROCEDURE AbrirLookupUsuarioPorNome()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupUsuarioPorNomeExec()
+        THIS.this_lEmLookup = loc_lAnt
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupUsuarioPorNomeExec()
         LOCAL loc_oBusca, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        IF EMPTY(loc_oPg2.txt_4c_DUsuars.Value)
+            *-- Legado: nome vazio limpa o codigo
+            loc_oPg2.txt_4c_Usuars.Value = ""
+            THIS.AjustarOperacaoPorUsuario()
+            RETURN
+        ENDIF
+
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdUsu", "cursor_4c_BuscaUsu", "Ncomps", ;
-            ALLTRIM(loc_oPg2.txt_4c_DUsuars.Value), "Sele" + CHR(231) + CHR(227) + "o de Usu" + CHR(225) + "rios")
+            ALLTRIM(loc_oPg2.txt_4c_DUsuars.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Usu" + CHR(225) + "rios", ;
+            .T., .F., "NOT cAtivos = " + CHR(39) + "N" + CHR(39))
 
         IF VARTYPE(loc_oBusca) = "O"
-            loc_oBusca.mAddColuna("Ncomps", "", "Nome")
-            loc_oBusca.mAddColuna("Usuarios", "", "C" + CHR(243) + "digo")
-            loc_oBusca.Show()
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.mAddColuna("Ncomps", "", "Nome", 290)
+                loc_oBusca.mAddColuna("Usuarios", "", "C" + CHR(243) + "digo", 80)
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUsu")
                 SELECT cursor_4c_BuscaUsu
@@ -1123,23 +1216,41 @@ DEFINE CLASS FormUSA AS FormBase
         IF USED("cursor_4c_BuscaUsu")
             USE IN cursor_4c_BuscaUsu
         ENDIF
+
+        THIS.AjustarOperacaoPorUsuario()
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Lookups - Operacao (SigCdOpe.Dopes) - tabela single-column: Dopes eh
-    * PK e descricao ao mesmo tempo (CLAUDE.md - nao existe campo separado)
+    * Operacao (SigCdOpe.Dopes) - tabela single-column: Dopes eh PK e descricao
     *--------------------------------------------------------------------------
+    PROCEDURE DopesLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupOperacaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE DopesLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
-            THIS.AbrirLookupOperacao()
+        IF par_nKeyCode = -3
+            THIS.DopesLostFocus()
         ENDIF
     ENDPROC
 
     PROCEDURE DopesLookupDblClick()
-        THIS.AbrirLookupOperacao()
+        THIS.DopesLostFocus()
     ENDPROC
 
     PROCEDURE AbrirLookupOperacao()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupOperacaoExec()
+        THIS.this_lEmLookup = loc_lAnt
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupOperacaoExec()
         LOCAL loc_oBusca, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1147,13 +1258,20 @@ DEFINE CLASS FormUSA AS FormBase
             RETURN
         ENDIF
 
+        IF EMPTY(loc_oPg2.txt_4c_Dopes.Value)
+            RETURN
+        ENDIF
+
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdOpe", "cursor_4c_BuscaOpe", "Dopes", ;
-            ALLTRIM(loc_oPg2.txt_4c_Dopes.Value), "Sele" + CHR(231) + CHR(227) + "o de Opera" + CHR(231) + CHR(227) + "o")
+            ALLTRIM(loc_oPg2.txt_4c_Dopes.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Opera" + CHR(231) + CHR(227) + "o")
 
         IF VARTYPE(loc_oBusca) = "O"
-            loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
-            loc_oBusca.Show()
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o", 150)
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
                 SELECT cursor_4c_BuscaOpe
@@ -1169,19 +1287,36 @@ DEFINE CLASS FormUSA AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Lookups - Empresa (SigCdEmp.Cemps / Razas)
+    * Empresa por codigo (SigCdEmp.Cemps / Razas)
     *--------------------------------------------------------------------------
+    PROCEDURE EmpsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupEmpresaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE EmpsLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
-            THIS.AbrirLookupEmpresa()
+        IF par_nKeyCode = -3
+            THIS.EmpsLostFocus()
         ENDIF
     ENDPROC
 
     PROCEDURE EmpsLookupDblClick()
-        THIS.AbrirLookupEmpresa()
+        THIS.EmpsLostFocus()
     ENDPROC
 
     PROCEDURE AbrirLookupEmpresa()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupEmpresaExec()
+        THIS.this_lEmLookup = loc_lAnt
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupEmpresaExec()
         LOCAL loc_oBusca, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1189,14 +1324,23 @@ DEFINE CLASS FormUSA AS FormBase
             RETURN
         ENDIF
 
+        IF EMPTY(loc_oPg2.txt_4c_Emps.Value)
+            *-- Legado: codigo vazio limpa so a DESCRICAO (nunca o digitado)
+            loc_oPg2.txt_4c_DEmps.Value = ""
+            RETURN
+        ENDIF
+
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdEmp", "cursor_4c_BuscaEmp", "Cemps", ;
-            ALLTRIM(loc_oPg2.txt_4c_Emps.Value), "Sele" + CHR(231) + CHR(227) + "o de Empresas")
+            ALLTRIM(loc_oPg2.txt_4c_Emps.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Empresas")
 
         IF VARTYPE(loc_oBusca) = "O"
-            loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
-            loc_oBusca.mAddColuna("Razas", "", "Empresa")
-            loc_oBusca.Show()
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "d.", 31)
+                loc_oBusca.mAddColuna("Razas", "", "Empresa", 290)
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
                 SELECT cursor_4c_BuscaEmp
@@ -1213,32 +1357,56 @@ DEFINE CLASS FormUSA AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Lookups - Empresa por Nome (busca reversa - SigCdEmp.Razas)
-    * txt_4c_DEmps eh ReadOnly (display), DblClick preenche via codigo mesmo
-    * assim - Value programatico nao respeita ReadOnly.
+    * Empresa por nome (busca reversa - SigCdEmp.Razas)
     *--------------------------------------------------------------------------
+    PROCEDURE DEmpsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupEmpresaPorNomeExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
     PROCEDURE DEmpsLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
-            THIS.AbrirLookupEmpresaPorNome()
+        IF par_nKeyCode = -3
+            THIS.DEmpsLostFocus()
         ENDIF
     ENDPROC
 
     PROCEDURE DEmpsLookupDblClick()
-        THIS.AbrirLookupEmpresaPorNome()
+        THIS.DEmpsLostFocus()
     ENDPROC
 
     PROCEDURE AbrirLookupEmpresaPorNome()
+        LOCAL loc_lAnt
+        loc_lAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupEmpresaPorNomeExec()
+        THIS.this_lEmLookup = loc_lAnt
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirLookupEmpresaPorNomeExec()
         LOCAL loc_oBusca, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        IF EMPTY(loc_oPg2.txt_4c_DEmps.Value)
+            *-- Legado: nome vazio limpa o codigo
+            loc_oPg2.txt_4c_Emps.Value = ""
+            RETURN
+        ENDIF
+
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdEmp", "cursor_4c_BuscaEmp", "Razas", ;
-            ALLTRIM(loc_oPg2.txt_4c_DEmps.Value), "Sele" + CHR(231) + CHR(227) + "o de Empresas")
+            ALLTRIM(loc_oPg2.txt_4c_DEmps.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Empresas")
 
         IF VARTYPE(loc_oBusca) = "O"
-            loc_oBusca.mAddColuna("Razas", "", "Empresa")
-            loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
-            loc_oBusca.Show()
+            IF !loc_oBusca.this_lAchouRegistro
+                loc_oBusca.mAddColuna("Razas", "", "Empresa", 290)
+                loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "d.", 31)
+                loc_oBusca.Show()
+            ENDIF
 
             IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
                 SELECT cursor_4c_BuscaEmp
@@ -1251,6 +1419,21 @@ DEFINE CLASS FormUSA AS FormBase
 
         IF USED("cursor_4c_BuscaEmp")
             USE IN cursor_4c_BuscaEmp
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarOperacaoPorUsuario - transcrito do fim de getUsuars.Valid:
+    *   If Empty(getUsuars.Value) -> getDOPES.Enabled = .f.  Else .t.
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarOperacaoPorUsuario()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        IF PEMSTATUS(loc_oPg2, "txt_4c_Dopes", 5)
+            loc_oPg2.txt_4c_Dopes.Enabled = ;
+                !EMPTY(loc_oPg2.txt_4c_Usuars.Value) AND THIS.this_cModoAtual != "VISUALIZAR"
+            loc_oPg2.txt_4c_Dopes.Refresh()
         ENDIF
     ENDPROC
 

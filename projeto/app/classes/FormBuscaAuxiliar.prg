@@ -16,7 +16,9 @@
 DEFINE CLASS FormBuscaAuxiliar AS FormBase
 
     *-- Propriedades do form (baseado no fwbuscaext do framework legado)
-    Height = 375
+    *-- fwbuscaext do legado: 374 x 319. O migrado estava com 375 de altura,
+    *-- 56 a mais, o que deixava uma faixa morta embaixo da grade.
+    Height = 319
     Width = 374
     Caption = "Procura"
     AutoCenter = .T.
@@ -48,8 +50,8 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
     cCodigoSelecionado    = ""
     cDescricaoSelecionada = ""
 
-    *-- Array de colunas [nome, mascara, titulo]
-    DIMENSION this_aColunas[1, 3]
+    *-- Array de colunas [nome, mascara, titulo, largura]
+    DIMENSION this_aColunas[1, 4]
     this_nColunas = 0
 
     *--------------------------------------------------------------------------
@@ -85,6 +87,13 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
 
         *-- Se chamado sem parametros (modo setar propriedades manualmente), retornar
         IF VARTYPE(par_cTabela) != "C"
+            RETURN .T.
+        ENDIF
+
+        *-- par_cCampo tem de ser CARACTER: ele entra CRU na concatenacao do SELECT
+        *-- logo abaixo. Chamada com argumentos deslocados (regra #36) deixava-o
+        *-- em .F. e o "+" estourava Operator/operand type mismatch (erro391).
+        IF VARTYPE(par_cCampo) != "C" OR EMPTY(par_cCampo)
             RETURN .T.
         ENDIF
 
@@ -225,7 +234,8 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
             .Left = 3
             .Top = 82
             .Width = THIS.Width - 6
-            .Height = 224
+            *-- 82 + 168 = 250; botoes em 254..310; form 319 (legado)
+            .Height = 168
             .FontName = "Tahoma"
             .FontSize = 8
             .RecordSourceType = 1
@@ -244,13 +254,15 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
         ENDWITH
 
         *-- Container dos botoes (cmdGprocessa do legado)
-        *-- Top=310 posiciona ABAIXO do grid (grid bottom = 82+224 = 306) evitando
-        *-- sobreposicao. BackStyle=1 opaco previne ghost trails ao scrollar grid.
+        *-- Fica ABAIXO da grade (bottom = 82+168 = 250), sem sobrepor.
+        *-- BackStyle=1 opaco previne ghost trails ao scrollar a grade.
+        *-- Largura 149 (nao os 138 do legado): la o 1o botao era "Zoom", aqui eh
+        *-- "Selecionar", que mede 59px em Tahoma 8 bold e nao cabia em 64.
         THIS.AddObject("cnt_4c_Botoes", "Container")
         WITH THIS.cnt_4c_Botoes
-            .Top = 310
-            .Left = 232
-            .Width = 138
+            .Top = 254
+            .Left = THIS.Width - 153
+            .Width = 149
             .Height = 56
             .BackStyle = 1
             .BackColor = RGB(255, 255, 255)
@@ -264,7 +276,7 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
             .Caption = "Selecionar"
             .Left = 5
             .Top = 5
-            .Width = 64
+            .Width = 75
             .Height = 46
             .FontName = "Tahoma"
             .FontSize = 8
@@ -281,7 +293,7 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
         THIS.cnt_4c_Botoes.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH THIS.cnt_4c_Botoes.cmd_4c_Cancelar
             .Caption = "Cancelar"
-            .Left = 69
+            .Left = 80
             .Top = 5
             .Width = 64
             .Height = 46
@@ -309,19 +321,32 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
     *--------------------------------------------------------------------------
     * mAddColuna - Adiciona coluna ao grid
     *--------------------------------------------------------------------------
-    PROCEDURE mAddColuna(par_cCampo, par_cMascara, par_cTitulo)
+    * par_nLargura eh OPCIONAL: o legado declara a largura de cada coluna no
+    * mAddColuna dele (ex.: Dopes 150, Cemps 31, Razas 290). Sem ela, a largura
+    * continua sendo calculada por ConfigurarGrid. NAO passar mais de 4
+    * argumentos: VFP9 estoura "Must specify additional parameters".
+    PROCEDURE mAddColuna(par_cCampo, par_cMascara, par_cTitulo, par_nLargura)
         THIS.this_nColunas = THIS.this_nColunas + 1
 
-        DIMENSION THIS.this_aColunas[THIS.this_nColunas, 3]
+        DIMENSION THIS.this_aColunas[THIS.this_nColunas, 4]
         THIS.this_aColunas[THIS.this_nColunas, 1] = par_cCampo
         THIS.this_aColunas[THIS.this_nColunas, 2] = par_cMascara
         THIS.this_aColunas[THIS.this_nColunas, 3] = par_cTitulo
+        THIS.this_aColunas[THIS.this_nColunas, 4] = IIF(VARTYPE(par_nLargura) = "N" ;
+                                                       AND par_nLargura > 0, par_nLargura, 0)
     ENDPROC
 
     *--------------------------------------------------------------------------
     * Show - Exibe o formulario
     *--------------------------------------------------------------------------
     PROCEDURE Show(par_nStyle)
+        *-- No modo "reusar cursor ja populado" o chamador seta this_cTitulo DEPOIS
+        *-- do Init (que foi quem pintou o cabecalho), entao o dialogo saia com o
+        *-- default "Procura". Reaplicar aqui cobre os dois modos de uso.
+        IF !EMPTY(THIS.this_cTitulo)
+            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.this_cTitulo
+            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.this_cTitulo
+        ENDIF
         THIS.ConfigurarGrid()
         DODEFAULT(par_nStyle)
     ENDPROC
@@ -331,36 +356,104 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarGrid()
         LOCAL loc_nI, loc_cCampo, loc_cTitulo, loc_nLarguraTotal, loc_nLargura
+        LOCAL loc_nSoma, loc_nLarguraGrade
 
         IF !USED(THIS.this_cCursorDestino)
             RETURN
         ENDIF
 
+        *-- CLAUDE.md regra #21a: posicionar no 1o registro ANTES de ligar a grade.
+        *-- No modo "reusar cursor ja populado" o chamador costuma ter feito um LOCATE
+        *-- que FALHOU (eh por isso que esta abrindo o picker), deixando o ponteiro
+        *-- em EOF - e a grade abria rolada no ultimo registro (erro391).
+        SELECT (THIS.this_cCursorDestino)
+        GO TOP
+
         WITH THIS.grd_4c_Lista
             .RecordSource = THIS.this_cCursorDestino
             .ColumnCount = THIS.this_nColunas
 
-            * Calcula largura proporcional
-            loc_nLarguraTotal = .Width - 20
+            * Calcula largura proporcional sobre a largura MAXIMA da grade
+            loc_nLarguraGrade = THIS.Width - 6
+            .Width = loc_nLarguraGrade
+            loc_nLarguraTotal = loc_nLarguraGrade - 20
+            loc_nSoma = 0
 
             FOR loc_nI = 1 TO THIS.this_nColunas
                 loc_cCampo = THIS.this_aColunas[loc_nI, 1]
                 loc_cTitulo = THIS.this_aColunas[loc_nI, 3]
 
-                * Primeira coluna menor, demais dividem o restante
-                IF loc_nI = 1
-                    loc_nLargura = 80
-                ELSE
-                    loc_nLargura = (loc_nLarguraTotal - 80) / (THIS.this_nColunas - 1)
+                * 1o) a largura DECLARADA no mAddColuna (a do legado) manda.
+                * 2o) sem declaracao: com UMA coluna ela fica com a largura toda
+                *     (fixar em 80 cortava o texto em tabela de coluna unica, ex.
+                *     SigCdOpe.Dopes); com varias, a 1a fica com 80 e as demais
+                *     dividem o restante.
+                loc_nLargura = THIS.this_aColunas[loc_nI, 4]
+                IF loc_nLargura <= 0
+                    IF THIS.this_nColunas = 1
+                        loc_nLargura = loc_nLarguraTotal
+                    ELSE
+                        IF loc_nI = 1
+                            loc_nLargura = 80
+                        ELSE
+                            loc_nLargura = (loc_nLarguraTotal - 80) / (THIS.this_nColunas - 1)
+                        ENDIF
+                    ENDIF
                 ENDIF
 
                 .Columns(loc_nI).ControlSource = THIS.this_cCursorDestino + "." + loc_cCampo
                 .Columns(loc_nI).Header1.Caption = loc_cTitulo
                 .Columns(loc_nI).Width = loc_nLargura
+                *-- Alignment nasce 3 (Automatic) e deixava o texto colado na borda
+                *-- direita; coluna de picker eh sempre texto -> alinhar a ESQUERDA.
+                .Columns(loc_nI).Alignment = 0
+                .Columns(loc_nI).Text1.Alignment = 0
+                loc_nSoma = loc_nSoma + loc_nLargura
             ENDFOR
+
+            *-- Com larguras DECLARADAS a soma costuma ser menor que a grade, e
+            *-- sobrava uma area quadriculada vazia a direita parecendo coluna que
+            *-- faltou. O legado redimensiona a GridProc para o conteudo (a classe
+            *-- declara Width = 40, ajustado em runtime) - fazer o mesmo.
+            IF loc_nSoma + 20 < loc_nLarguraGrade
+                .Width = loc_nSoma + 20
+            ENDIF
+            loc_nLarguraGrade = .Width
 
             .Refresh()
         ENDWITH
+
+        THIS.AjustarLarguraAoConteudo(loc_nLarguraGrade)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarLarguraAoConteudo - encolhe o dialogo quando as colunas declaradas
+    * ocupam menos que a largura padrao (374 do fwbuscaext legado). Nunca ALARGA,
+    * e respeita um piso MEDIDO: o titulo e a barra de botoes tem de caber.
+    * Picker que nao declara largura de coluna preenche os 374 e nao muda nada.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AjustarLarguraAoConteudo(par_nLarguraGrade)
+        LOCAL loc_nIdeal, loc_nPisoTitulo, loc_nPisoBotoes, loc_nPiso, loc_nNova
+
+        loc_nIdeal = par_nLarguraGrade + 6
+
+        *-- piso 1: o titulo do cabecalho (Tahoma 18 bold, Left 10)
+        loc_nPisoTitulo = TXTWIDTH(THIS.this_cTitulo, "Tahoma", 18, "B") * ;
+                          FONTMETRIC(6, "Tahoma", 18, "B") + 20
+
+        *-- piso 2: a barra de botoes (Width do container + folga das duas bordas)
+        loc_nPisoBotoes = THIS.cnt_4c_Botoes.Width + 8
+
+        loc_nPiso = MAX(loc_nPisoTitulo, loc_nPisoBotoes)
+        loc_nNova = MAX(loc_nIdeal, loc_nPiso)
+
+        IF loc_nNova < THIS.Width
+            THIS.Width = loc_nNova
+            THIS.cnt_4c_Cabecalho.Width = loc_nNova
+            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Width = loc_nNova
+            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Width = loc_nNova
+            THIS.cnt_4c_Botoes.Left = loc_nNova - THIS.cnt_4c_Botoes.Width - 4
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------

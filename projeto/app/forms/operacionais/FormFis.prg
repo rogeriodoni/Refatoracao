@@ -151,7 +151,9 @@ DEFINE CLASS FormFis AS FormBase
     *==========================================================================
     * ConfigurarBotoes
     * Botoes Confirmar e Encerrar standalone (Ok e cancela do legado)
-    * Standalone com Picture requer Themes=.T. + DisabledPicture
+    * Themes = .F. (classe legado fwbtng) - medido no VFP9 2026-11-25: com Themes = .T.
+    * o VFP IGNORA o BackColor e pinta o gradiente cinza do tema do Windows; o icone
+    * renderiza igual nas duas formas enquanto Enabled = .T.
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarBotoes()
         THIS.AddObject("cmd_4c_Confirmar", "CommandButton")
@@ -163,7 +165,7 @@ DEFINE CLASS FormFis AS FormBase
             .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-            .Themes          = .T.
+            .Themes          = .F.   && legado fwbtng: Themes = .F. (com .T. o VFP ignora BackColor e pinta o gradiente do tema)
             .FontName        = "Tahoma"
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -187,7 +189,7 @@ DEFINE CLASS FormFis AS FormBase
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .Themes          = .T.
+            .Themes          = .F.   && legado fwbtng: Themes = .F. (com .T. o VFP ignora BackColor e pinta o gradiente do tema)
             .FontName        = "Tahoma"
             .FontBold        = .T.
             .FontItalic      = .T.

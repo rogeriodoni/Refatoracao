@@ -258,7 +258,13 @@ DEFINE CLASS FormPzo AS FormBase
             .HeaderHeight      = 20
             .RowHeight         = 16
             .ScrollBars        = 2
-            .SplitBar          = .F.
+            *-- O dump do SCX traz "SplitBar = .F.", mas Grid.SplitBar eh DESIGN-TIME:
+            *-- read-only em runtime (medido no VFP9 2026-11-25: "Property SPLITBAR is
+            *-- read-only"). Atribuir aborta o resto do WITH dentro do TRY e as
+            *-- propriedades seguintes somem em silencio.
+            *-- O default eh .T. (medido), NAO .F. - mas com ScrollBars = 2 (so
+            *-- vertical) nao ha barra horizontal onde o splitter apareca, entao
+            *-- omitir nao muda o visual aqui.
             .GridLineColor     = RGB(238, 238, 238)
             .Themes            = .F.
             .Visible           = .T.

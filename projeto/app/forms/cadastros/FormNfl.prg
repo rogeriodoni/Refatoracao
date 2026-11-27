@@ -286,65 +286,125 @@ DEFINE CLASS FormNfl AS FormBase
             ENDWITH
         ENDWITH
 
-        *-- Container CRUD (Left=542 canonico)
+        *-- Container CRUD (Left=542 / Width=390 canonicos)
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
             .Top         = 29   && legado Grupo_op Top=-1 (+29 de compensacao)
             .Left        = 542
-            .Width       = 375
+            .Width       = 390
             .Height      = 85
             .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
             .AddObject("cmd_4c_Incluir", "CommandButton")
             WITH .cmd_4c_Incluir
-                .Top     = 5
-                .Left = 5
-                .Width   = 70
-                .Height  = 70
-                .Caption = "Incluir"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
-                .Visible = .T.
+                .Caption         = "Incluir"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 5
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
             .AddObject("cmd_4c_Visualizar", "CommandButton")
             WITH .cmd_4c_Visualizar
-                .Top     = 5
-                .Left = 80
-                .Width   = 70
-                .Height  = 70
-                .Caption = "Visualizar"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
-                .Visible = .T.
+                .Caption         = "Visualizar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 80
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
             .AddObject("cmd_4c_Alterar", "CommandButton")
             WITH .cmd_4c_Alterar
-                .Top     = 5
-                .Left = 155
-                .Width   = 70
-                .Height  = 70
-                .Caption = "Alterar"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
-                .Visible = .T.
+                .Caption         = "Alterar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 155
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
             .AddObject("cmd_4c_Excluir", "CommandButton")
             WITH .cmd_4c_Excluir
-                .Top     = 5
-                .Left = 230
-                .Width   = 70
-                .Height  = 70
-                .Caption = "Excluir"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
-                .Visible = .T.
+                .Caption         = "Excluir"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 230
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
             .AddObject("cmd_4c_Buscar", "CommandButton")
             WITH .cmd_4c_Buscar
-                .Top     = 5
-                .Left = 305
-                .Width   = 70
-                .Height  = 70
-                .Caption = "Buscar"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
-                .Visible = .T.
+                .Caption         = "Buscar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 305
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
         ENDWITH
 
@@ -352,15 +412,29 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("cmd_4c_Copia", "CommandButton")
         WITH loc_oPagina.cmd_4c_Copia
             *-- legado Pagina.Lista.Copia: Top=4 (+29), Left=471, 75x75, geral_subnivel_60.jpg, "Copiar"
-            .Top     = 33
-            .Left    = 471
-            .Width   = 75
-            .Height  = 75
-            .Caption = "Copiar"
-            .ToolTipText = "Copiar"
-            .Picture = gc_4c_CaminhoIcones + "geral_subnivel_60.jpg"
+            *-- classe legado fwbtnp: Tahoma bold italic 8, ForeColor 90,90,90, BackColor branco, Themes .F.
+            *-- PicturePosition: o SCX diz 1 (icone a esquerda), mas medido no VFP9 em 75x75
+            *-- o PP=1 CORTA a legenda ("Copiar" vira "Copia"); 13 eh o canonico dos 206 forms CRUD
+            .Caption         = "Copiar"
+            .ToolTipText     = "Copiar"
+            .Picture         = gc_4c_CaminhoIcones + "geral_subnivel_60.jpg"
             .PicturePosition = 13
-            .Visible = .T.
+            .Top             = 33
+            .Left            = 471
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
         *-- Container Saida (canonico Left=917, Width=90)
@@ -375,62 +449,105 @@ DEFINE CLASS FormNfl AS FormBase
             .Visible     = .T.
             .AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH .cmd_4c_Encerrar
-                .Top     = 5
-                .Left = 5
-                .Width   = 75
-                .Height  = 75
-                .Caption = "Encerrar"
-                .Picture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .Visible = .T.
+                .Caption         = "Encerrar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 5
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
         ENDWITH
 
         *-- Botoes XML especificos (Top=82+29=111 compensado)
         loc_oPagina.AddObject("cmd_4c_BtnExpXML", "CommandButton")
         WITH loc_oPagina.cmd_4c_BtnExpXML
-            .Top     = 111
-            .Left    = 682
-            .Width   = 120
-            .Height  = 45
-            .Caption = "Exporta XML"
-            .FontSize = 7
-            .Picture = gc_4c_CaminhoIcones + "exportar_48.png"
+            *-- classe legado fwbtnp + overrides do SCX (FontSize 7, WordWrap .F., PicturePosition 1)
+            .Caption         = "Exporta XML"
+            .Picture         = gc_4c_CaminhoIcones + "exportar_48.png"
             .PicturePosition = 1
-            .ToolTipText = "Exporta Configura" + CHR(231) + CHR(227) + "o Para Um Arquivo XML"
-            .Visible = .T.
+            .ToolTipText     = "Exporta Configura" + CHR(231) + CHR(227) + "o Para Um Arquivo XML"
+            .Top             = 111
+            .Left            = 682
+            .Width           = 120
+            .Height          = 45
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 7
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .F.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
         loc_oPagina.AddObject("cmd_4c_BtnImpXML", "CommandButton")
         WITH loc_oPagina.cmd_4c_BtnImpXML
-            .Top     = 111
-            .Left    = 804
-            .Width   = 120
-            .Height  = 45
-            .Caption = "Importa XML"
-            .FontSize = 7
-            .Picture = gc_4c_CaminhoIcones + "importar_48.png"
+            *-- classe legado fwbtnp + overrides do SCX (FontSize 7, WordWrap .F., PicturePosition 1)
+            .Caption         = "Importa XML"
+            .Picture         = gc_4c_CaminhoIcones + "importar_48.png"
             .PicturePosition = 1
-            .ToolTipText = "Importa Configura" + CHR(231) + CHR(227) + "o De Um Arquivo XML"
-            .Visible = .T.
+            .ToolTipText     = "Importa Configura" + CHR(231) + CHR(227) + "o De Um Arquivo XML"
+            .Top             = 111
+            .Left            = 804
+            .Width           = 120
+            .Height          = 45
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 7
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .F.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
         *-- Grid Lista (Top=135+29=164 compensado; Width=971 original)
+        *-- Cores/marcas da classe legado frmcadastro.Pagina.Lista.Grade (= canonico FormCor):
+        *-- sem GridLineColor o VFP desenha as linhas em PRETO (medido 2026-11-25)
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         WITH loc_oPagina.grd_4c_Lista
-            .Top          = 164
-            .Left         = 12
-            .Width        = 971
-            .Height       = 511
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .RowHeight    = 16
-            .ColumnCount  = 2
-            .RecordSource = ""
-            .ReadOnly     = .T.
-            .GridLines    = 2
-            .RecordMark   = .F.
-            .DeleteMark   = .F.
-            .Visible      = .T.
+            .Top                = 164
+            .Left               = 12
+            .Width              = 971
+            .Height             = 511
+            .FontName           = "Tahoma"
+            .FontSize           = 8
+            .RowHeight          = 16
+            .ColumnCount        = 2
+            .RecordSource       = ""
+            .ReadOnly           = .T.
+            .ForeColor          = RGB(90, 90, 90)
+            .BackColor          = RGB(255, 255, 255)
+            .GridLineColor      = RGB(238, 238, 238)
+            .HighlightBackColor = RGB(255, 255, 255)
+            .HighlightForeColor = RGB(15, 41, 104)
+            .HighlightStyle     = 2
+            .ScrollBars         = 2
+            .GridLines          = 3
+            .RecordMark         = .F.
+            .DeleteMark         = .F.
+            .Visible            = .T.
             *-- colunas/larguras definitivas em VincularGradeLista (pColuna do legado)
             .Column1.Header1.Caption = "Series"
             .Column2.Header1.Caption = "Emps"
@@ -739,31 +856,47 @@ DEFINE CLASS FormNfl AS FormBase
             .Visible     = .T.
             .AddObject("cmd_4c_Confirmar", "CommandButton")
             WITH .cmd_4c_Confirmar
-                .Top        = 5
-                .Left       = 5
-                .Width      = 75
-                .Height     = 75
-                .Caption    = "Confirmar"
-                .Picture    = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-                .FontBold   = .T.
-                .FontItalic = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .Visible    = .T.
+                .Caption         = "Confirmar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 5
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
             .AddObject("cmd_4c_Cancelar", "CommandButton")
             WITH .cmd_4c_Cancelar
-                .Top        = 5
-                .Left       = 81
-                .Width      = 75
-                .Height     = 75
-                .Caption    = "Encerrar"
-                .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .FontBold   = .T.
-                .FontItalic = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .Visible    = .T.
+                .Caption         = "Encerrar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = 81
+                .Width           = 75
+                .Height          = 75
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
             ENDWITH
         ENDWITH
 

@@ -22,7 +22,7 @@ DEFINE CLASS SIGBLCTABO AS BusinessBase
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            this_cMensagemErro = loc_oErro.Message
+            THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
         RETURN loc_lSucesso
     ENDPROC

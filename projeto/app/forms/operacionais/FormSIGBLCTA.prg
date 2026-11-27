@@ -48,12 +48,12 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             THIS.ConfigurarOpcoes()
             THIS.ConfigurarCntAguarde()
             THIS.ConfigurarBotoes()
-            THIS.TornarControlesVisiveis()
+            THIS.TornarControlesVisiveis(THIS)
             THIS.ConfigurarBINDEVENTs()
             THIS.InicializarValores()
             loc_lSucesso = .T.
         CATCH TO loc_oErro
-            this_cMensagemErro = loc_oErro.Message
+            THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro("Erro ao inicializar form: " + loc_oErro.Message)
         ENDTRY
         RETURN loc_lSucesso
@@ -77,7 +77,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             WITH .lbl_4c_LblSombra
                 .FontBold      = .T.
                 .FontName      = "Tahoma"
-                .FontSize      = 18
+                .FontSize      = 12
                 .FontUnderline = .F.
                 .WordWrap      = .T.
                 .Alignment     = 0
@@ -86,7 +86,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
                 .Height        = 40
                 .Left          = 10
                 .Top           = 0
-                .Width         = THIS.Width
+                .Width         = 337
                 .ForeColor     = RGB(0,0,0)
                 .Visible       = .T.
             ENDWITH
@@ -94,7 +94,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             WITH .lbl_4c_LblTitulo
                 .FontBold   = .T.
                 .FontName   = "Tahoma"
-                .FontSize   = 18
+                .FontSize   = 12
                 .WordWrap   = .T.
                 .Alignment  = 0
                 .BackStyle  = 0
@@ -102,7 +102,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
                 .Height     = 46
                 .Left       = 10
                 .Top        = 3
-                .Width      = THIS.Width
+                .Width      = 337
                 .ForeColor  = RGB(255,255,255)
                 .Visible    = .T.
             ENDWITH
@@ -400,47 +400,81 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
         *-- Botao Processa
         THIS.AddObject("cmd_4c_Processa", "CommandButton")
         WITH THIS.cmd_4c_Processa
-            .Top      = 3
-            .Left     = 347
-            .Height   = 75
-            .Width    = 75
-            .Picture  = gc_4c_CaminhoFramework + "imagens\geral_processar_60.jpg"
-            .Caption  = "\<Processar"
-            .Themes           = .T.
-            .Visible  = .T.
+            .Caption         = "\<Processar"
+            .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "disabled\geral_processar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 3
+            .Left            = 347
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
         *-- Botao Cancela
         THIS.AddObject("cmd_4c_Cancela", "CommandButton")
         WITH THIS.cmd_4c_Cancela
-            .Top      = 3
-            .Left     = 423
-            .Height   = 75
-            .Width    = 75
-            .Picture  = gc_4c_CaminhoFramework + "imagens\cadastro_sair_60.jpg"
-            .Cancel   = .T.
-            .Caption  = "Encerrar"
-            .Themes           = .T.
-            .Visible  = .T.
+            .Caption         = "Encerrar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "disabled\cadastro_sair_60.jpg"
+            .PicturePosition = 13
+            .Top             = 3
+            .Left            = 423
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Cancel          = .T.
+            .Visible         = .T.
         ENDWITH
     ENDPROC
 
     *============================================================
-    PROCEDURE TornarControlesVisiveis
+    * par_oContainer eh OBRIGATORIO na recursao: antes o metodo nao declarava
+    * parametro NENHUM e mesmo assim chamava a si proprio com um argumento, o
+    * que estoura "No PARAMETER statement is found." Ausente, varre o proprio form.
+    PROCEDURE TornarControlesVisiveis(par_oContainer)
     *============================================================
-        LOCAL loc_i, loc_oCtrl, loc_cNome
-        FOR loc_i = 1 TO THIS.ControlCount
-            loc_oCtrl = THIS.Controls(loc_i)
+        LOCAL loc_i, loc_oCtrl, loc_cNome, loc_oAlvo
+        loc_oAlvo = IIF(VARTYPE(par_oContainer) = "O", par_oContainer, THIS)
+
+        FOR loc_i = 1 TO loc_oAlvo.ControlCount
+            loc_oCtrl = loc_oAlvo.Controls(loc_i)
+            IF VARTYPE(loc_oCtrl) != "O"
+                LOOP
+            ENDIF
             loc_cNome = LOWER(loc_oCtrl.Name)
             *-- Nao tornar visivel containers com Visible=.F. gerenciados individualmente
             IF INLIST(loc_cNome, "cnt_4c_aguarde", "cnt_4c_sombra")
-                *-- Container preserva estado inicial, mas recursar para sub-controles Visible=.T.
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oControl)
+                *-- Container preserva estado inicial, mas recursa para os filhos
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oCtrl)
                 ENDIF
                 LOOP
             ENDIF
-            loc_oCtrl.Visible = .T.
+            IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                loc_oCtrl.Visible = .T.
+            ENDIF
         NEXT
     ENDPROC
 
@@ -475,7 +509,10 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
 
     PROCEDURE TxtSituasLostFocus
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+        *-- 13=Enter 9=Tab -3=F4. O 115 que estava aqui NAO eh F4: medido no
+        *-- VFP9 (2026-11-25) 115 eh a letra "s" minuscula, entao digitar um "s"
+        *-- no campo disparava a validacao/lookup no meio da digitacao.
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != -3
             RETURN
         ENDIF
         LOCAL loc_cValorAtual, loc_cQuery, loc_oLookup
@@ -506,11 +543,21 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             THIS.txt_4c_Situas.Value            = ALLTRIM(cursor_4c_ListaSituas.Codigos)
             THIS.this_cUltimoSituasValidado     = ALLTRIM(cursor_4c_ListaSituas.Codigos)
         ELSE
-            *-- Abrir FormBuscaAuxiliar
-            loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", "cursor_4c_ListaSituas", "Codigos", ;
-                "Situa" + CHR(231) + CHR(245) + "es")
-            loc_oLookup.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-            loc_oLookup.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+            *-- Abrir FormBuscaAuxiliar sobre o cursor JA populado acima.
+            *-- CLAUDE.md regra #36: o 1o argumento do Init eh o HANDLE da conexao.
+            *-- A chamada antiga passava o CURSOR ali, deslocando todos os demais:
+            *-- par_cCampo ficava sem valor (.F. logico) e a concatenacao do SELECT
+            *-- estourava "Operator/operand type mismatch" dentro do FormBuscaAuxiliar.
+            *-- Para REUSAR cursor ja populado o padrao eh CREATEOBJECT SEM argumento
+            *-- + this_cCursorDestino/this_cTitulo (igual FormCEP.AbrirLookupCidades).
+            loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oLookup) != "O"
+                RETURN
+            ENDIF
+            loc_oLookup.this_cCursorDestino = "cursor_4c_ListaSituas"
+            loc_oLookup.this_cTitulo        = "Situa" + CHR(231) + CHR(245) + "es"
+            loc_oLookup.mAddColuna("Codigos", "", "C" + CHR(243) + "digo", 60)
+            loc_oLookup.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o", 260)
             loc_oLookup.Show()
             IF loc_oLookup.this_lSelecionou
                 THIS.txt_4c_Situas.Value        = ALLTRIM(cursor_4c_ListaSituas.Codigos)
@@ -686,11 +733,16 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
 
             IF loc_lProsseguir
                 *-- Exibir relatorio preview
-                loc_lcRelPath = gc_4c_CaminhoFramework + "SigBlCta"
-                REPORT FORM &loc_lcRelPath PREVIEW
+                *-- Helper canonico: FRX em gc_4c_CaminhoReports, com teste FILE()
+                IF !THIS.ExecutarReportForm("SigBlCta", "PREVIEW")
+                    loc_lProsseguir = .F.
+                ENDIF
 
                 *-- Confirmar atualizacao de situacoes
-                IF MsgConfirma("Deseja Atualizar as Situa" + CHR(231) + CHR(245) + "es das Contas?") <> 6
+                *-- CLAUDE.md regra #7: MsgConfirma devolve LOGICO (.T./.F.), nunca 6.
+                *-- Comparar com 6 estoura Operator/operand type mismatch bem no meio
+                *-- do processamento, depois do preview do relatorio.
+                IF !MsgConfirma("Deseja Atualizar as Situa" + CHR(231) + CHR(245) + "es das Contas?")
                     loc_lProsseguir = .F.
                 ENDIF
             ENDIF
@@ -738,7 +790,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
                         SELECT cursor_4c_Erros
                         GO TOP
                         REPLACE Titulo WITH "Erros do Processamento" IN cursor_4c_Cabecalho
-                        REPORT FORM &loc_lcRelPath PREVIEW
+                        THIS.ExecutarReportForm("SigBlCta", "PREVIEW")
                     ELSE
                         MsgInfo("A Grava" + CHR(231) + CHR(227) + "o Dos Dados Foi Realizada " + ;
                             "Com Sucesso!!!")
@@ -783,6 +835,68 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
     PROCEDURE Destroy
     *============================================================
         DODEFAULT()
+    ENDPROC
+
+
+    *============================================================
+    * ExecutarReportForm - helper canonico de REPORT FORM
+    *
+    * Antes o form fazia:
+    *     loc_lcRelPath = gc_4c_CaminhoFramework + "SigBlCta"
+    *     REPORT FORM &loc_lcRelPath PREVIEW
+    * Dois problemas:
+    *   1) apontava para a pasta do Framework legado, nao para
+    *      gc_4c_CaminhoReports, que eh onde moram os 210 FRX do projeto;
+    *   2) a forma MACRO (&var.) nao tem como testar FILE() antes, entao o
+    *      FRX ausente virava um "File does not exist" seco, sem dizer QUAL
+    *      arquivo faltava (erro392).
+    * Helper canonico: FULLPATH + IF FILE + mensagem nomeando o FRX +
+    * isolamento de POINT/SEPARATOR/REPORTBEHAVIOR.
+    *
+    * par_cRelatorioBase - nome base do FRX, SEM extensao
+    * par_cModo          - "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *============================================================
+    PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo)
+        LOCAL loc_cFRX, loc_cPonto, loc_cSeparador, loc_lResultado
+        loc_lResultado = .F.
+
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + ALLTRIM(par_cRelatorioBase) + ".frx")
+
+        IF !FILE(loc_cFRX)
+            MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + ;
+                CHR(13) + loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado.", ;
+                "Relat" + CHR(243) + "rio")
+            RETURN .F.
+        ENDIF
+
+        loc_cPonto     = SET("POINT")
+        loc_cSeparador = SET("SEPARATOR")
+
+        TRY
+            SET POINT TO "."
+            SET SEPARATOR TO ","
+            SET REPORTBEHAVIOR 80
+
+            DO CASE
+            CASE UPPER(ALLTRIM(par_cModo)) == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) NOCONSOLE TO PRINTER PROMPT
+            CASE UPPER(ALLTRIM(par_cModo)) == "PRINTER"
+                REPORT FORM (loc_cFRX) NOCONSOLE TO PRINTER
+            OTHERWISE
+                REPORT FORM (loc_cFRX) NOCONSOLE PREVIEW
+            ENDCASE
+
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "ExecutarReportForm")
+        ENDTRY
+
+        SET POINT TO loc_cPonto
+        SET SEPARATOR TO loc_cSeparador
+        SET REPORTBEHAVIOR 90
+
+        RETURN loc_lResultado
     ENDPROC
 
 ENDDEFINE

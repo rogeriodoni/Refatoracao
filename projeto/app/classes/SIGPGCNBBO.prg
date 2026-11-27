@@ -238,7 +238,8 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
                     USE IN cursor_4c_Grupos
                 ENDIF
                 SET NULL ON
-                CREATE CURSOR cursor_4c_Grupos (codigos C(9) NULL, descrs C(40) NULL, marca L NULL)
+                *-- codigos: SigCdGcr.codigos eh char(10) - estava C(9) e cortava 1 caractere
+                CREATE CURSOR cursor_4c_Grupos (codigos C(10) NULL, descrs C(40) NULL, marca L NULL)
                 SET NULL OFF
                 SELECT cursor_4c_Grupos
                 APPEND FROM DBF("cursor_4c_GruposTemp")
@@ -273,7 +274,7 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
     PROCEDURE BuscarOperacoes(par_cCodEmp, par_cCodConta, par_dDatai, par_dDataf, ;
                                par_lNaoProc, par_nPeriodo, par_cGrupos)
         LOCAL loc_lSucesso, loc_cSQL, loc_cCampoPeriodo, loc_cNaoProc, loc_oErro
-        LOCAL loc_dDatai, loc_dDataf, loc_lFalso
+        LOCAL loc_dDatai, loc_dDataf, loc_lFalso, loc_cColsPix
         loc_lSucesso = .F.
         TRY
             loc_dDatai = par_dDatai
@@ -296,14 +297,52 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
                 USE IN cursor_4c_FiltroTemp
             ENDIF
 
+            *-- PIX (tipochv/chvpix): o dump do legado seleciona as duas colunas
+            *-- (task153:1437) mas elas NAO existem neste banco - nem em SigCdCli,
+            *-- nem em NENHUMA tabela - e tambem nao constam do docs/schema.sql
+            *-- canonico (682 tabelas, 0 ocorrencias). O SCX veio de uma versao do
+            *-- sistema mais nova que o banco. Sem este teste o SQL Server recusa a
+            *-- consulta INTEIRA com "Nome de coluna 'tipochv' invalido" e a tela
+            *-- nao traz lancamento nenhum (erro396).
+            *-- Onde as colunas existirem sao usadas; onde nao existirem entram
+            *-- VAZIAS, deixando o ramo PIX inerte - exatamente o que o legado faz
+            *-- quando tipochv esta em branco ("where tipochv != '  '", task153:5552).
+            *-- Acrescentar as colunas ao banco violaria o PILAR 2.
+            loc_cColsPix = "CAST('' AS char(2)) AS tipochv, CAST('' AS char(50)) AS chvpix"
+            IF SQLEXEC(gnConnHandle, ;
+                       "SELECT COL_LENGTH('SigCdCli','tipochv') AS temtipo, " + ;
+                       "COL_LENGTH('SigCdCli','chvpix') AS tempix", "cursor_4c_PixTmp") >= 1
+                SELECT cursor_4c_PixTmp
+                IF !EOF("cursor_4c_PixTmp") AND !ISNULL(cursor_4c_PixTmp.temtipo) ;
+                        AND !ISNULL(cursor_4c_PixTmp.tempix)
+                    loc_cColsPix = "b.tipochv, b.chvpix"
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_PixTmp")
+                USE IN cursor_4c_PixTmp
+            ENDIF
+
+            *-- a.numes e b.fpags NAO estao no SELECT do legado, mas o FRX sigrecnb
+            *-- imprime os dois ("Numero" e "Forma Pagto"). As duas colunas existem
+            *-- nas tabelas que esta consulta JA junta (SigMvCcr.numes numeric(6,0),
+            *-- SigCdCli.fpags char(12)) - no legado o relatorio estourava
+            *-- "Variable NUMES is not found" por simples omissao do SELECT (erro395).
+            *--
+            *-- COLLATE DATABASE_DEFAULT em a.Hists: SigMvCcr.hists eh uma das 656
+            *-- colunas do banco com Latin1_General_CI_AS enquanto Titulos/Nfs usam
+            *-- SQL_Latin1_General_CP1_CI_AS (ver automation\collations_db.tsv). Sem
+            *-- isso o SQL Server RECUSA a consulta INTEIRA com "conflito de
+            *-- ordenacao" e a tela nao traz lancamento nenhum. Collation explicita
+            *-- vence a implicita, por isso basta no lado divergente.
             loc_cSQL = "SELECT ?loc_lFalso AS marca, a.emps, a.datas, a.vencs, a.Valors, " + ;
-                       "a.moedas, a.Hists + a.Titulos + a.Nfs AS histo, b.rclis, b.iclis, " + ;
-                       "a.Grupos, a.contas, a.Nopers, a.Tipos, " + ;
+                       "a.moedas, a.Hists COLLATE DATABASE_DEFAULT + a.Titulos + a.Nfs AS histo, " + ;
+                       "b.rclis, b.iclis, " + ;
+                       "a.Grupos, a.contas, a.Nopers, a.numes, b.fpags, a.Tipos, " + ;
                        "a.Contapgs, a.Dopes, a.ValPags, a.GruConMoes, a.Opers, " + ;
                        "a.cotacaos, a.cotusus, a.GrupEms, " + ;
                        "a.ContEms, a.GrupAges, a.ContAges, a.EmpDopNcs, a.Pagos, a.Titulos, a.Nfs, " + ;
                        "b.razaos, b.cpfs, b.endes, b.nums, b.bairs, b.cidas, b.ceps, b.estas, " + ;
-                       "b.compls, b.tipochv, b.chvpix " + ;
+                       "b.compls, " + loc_cColsPix + " " + ;
                        "FROM SigMvCcr a, SigCdCli b " + ;
                        "WHERE a.pagos = 1 " + ;
                        "AND a.ContaPgs != 2 " + ;
@@ -331,17 +370,32 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
                         USE IN cursor_4c_Filtro
                     ENDIF
                 ENDIF
+                *-- Larguras conferidas contra docs/schema.sql / INFORMATION_SCHEMA:
+                *--   rclis  SigCdCli char(50) - estava C(40), cortava o nome do cliente
+                *--   Dopes  SigMvCcr char(20) - estava C(6), "PEDIDO RESUMO" virava "PEDIDO"
+                *--   Nfs    SigMvCcr char(10) - estava C(9)
+                *-- As tres sao colunas que o relatorio sigrecnb imprime; no legado o
+                *-- cursor vinha direto do SQLEXEC e ja nascia com a largura real.
+                *--
+                *--   Grupos SigMvCcr char(10) - estava C(6), e aqui NAO eh so truncagem
+                *-- de exibicao ("FORNECEDOR" virava "FORNEC"): "Grupos + contas" eh a
+                *-- chave POSICIONAL comparada contra SigCdCeb.GruContas char(20) em
+                *-- BuscarBoleto (regra #42). Com C(6) a chave fecha 16 caracteres, nunca
+                *-- casa, ZERO titulos sao classificados - o CNAB sai vazio e todos caem
+                *-- no aviso "Nao entraram no CNAB". Medido no VFP9 (erro399):
+                *-- C(6) -> 0 classificados / 2 em crErro;  C(10) -> 2 / 0.
                 SET NULL ON
                 CREATE CURSOR cursor_4c_Filtro (marca L NULL, emps C(3) NULL, ;
                     datas D NULL, vencs D NULL, Valors N(14,2) NULL, moedas C(6) NULL, ;
-                    histo C(60) NULL, rclis C(40) NULL, iclis C(10) NULL, ;
-                    Grupos C(6) NULL, contas C(10) NULL, Nopers N(10,0) NULL, ;
-                    Tipos C(6) NULL, Contapgs N(1,0) NULL, Dopes C(6) NULL, ;
+                    histo C(80) NULL, rclis C(50) NULL, iclis C(10) NULL, ;
+                    Grupos C(10) NULL, contas C(10) NULL, Nopers N(10,0) NULL, ;
+                    numes N(6,0) NULL, fpags C(12) NULL, ;
+                    Tipos C(6) NULL, Contapgs N(1,0) NULL, Dopes C(20) NULL, ;
                     ValPags N(14,2) NULL, GruConMoes C(6) NULL, Opers C(6) NULL, ;
                     cotacaos N(14,6) NULL, cotusus C(10) NULL, GrupEms C(6) NULL, ;
                     ContEms C(10) NULL, GrupAges C(6) NULL, ContAges C(10) NULL, ;
                     EmpDopNcs C(9) NULL, Pagos N(1,0) NULL, Titulos C(10) NULL, ;
-                    Nfs C(9) NULL, razaos C(40) NULL, cpfs C(20) NULL, ;
+                    Nfs C(10) NULL, razaos C(40) NULL, cpfs C(20) NULL, ;
                     endes C(40) NULL, nums C(6) NULL, bairs C(20) NULL, ;
                     cidas C(20) NULL, ceps C(9) NULL, estas C(2) NULL, ;
                     compls C(15) NULL, tipochv C(2) NULL, chvpix C(50) NULL)
@@ -421,7 +475,10 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
         LOCAL loc_cGruContas
         loc_lSucesso = .F.
         TRY
-            loc_cGruContas = ALLTRIM(par_cGruContas)
+            *-- PADR(.,20) e NAO ALLTRIM: GruContas eh char(20) POSICIONAL
+            *-- (grupos 10 + contas 10) - o padding do MEIO faz parte da chave
+            *-- e o trim a destroi (regra #42).
+            loc_cGruContas = PADR(par_cGruContas, 20)
             IF USED("cursor_4c_ConvenioTemp")
                 USE IN cursor_4c_ConvenioTemp
             ENDIF
@@ -595,7 +652,14 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
                 SELECT cursor_4c_CliGrupoTemp
                 GO TOP
                 IF !EOF("cursor_4c_CliGrupoTemp")
-                    loc_cGrupos = NVL(ALLTRIM(cursor_4c_CliGrupoTemp.Grupos), "")
+                    *-- PADR(.,10) e NAO ALLTRIM: o retorno vira a 1a metade da chave
+                    *-- POSICIONAL SigCdCeb.GruContas char(20) = grupos char(10) +
+                    *-- contas char(10) (regra #42). Com ALLTRIM a chave sai com 15
+                    *-- caracteres ("21101F000000029"), nao casa com nenhum convenio e
+                    *-- o SELECT devolve ZERO linhas em silencio - medido: 0 achados
+                    *-- com ALLTRIM contra 1 sem, nos 3 convenios. O legado concatena
+                    *-- o campo char(10) CRU (crBancos.Grupos), sem trim.
+                    loc_cGrupos = PADR(NVL(cursor_4c_CliGrupoTemp.Grupos, ""), 10)
                 ENDIF
             ENDIF
             IF USED("cursor_4c_CliGrupoTemp")

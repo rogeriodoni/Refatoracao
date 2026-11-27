@@ -368,14 +368,89 @@ DEFINE CLASS FormTpe AS FormBase
         *-- Legado: pColuna(ntipos,Tipo,50) + pColuna(cetiquetas,Descricao,280) +
         *--         pColuna(nsituas,Situacao,50) + pColuna(cordems,Ordem,50)
         *-- Posicao canonica (framework_frmcadastro_layout.md): Top=117, Left=26, Width=890
+        *-- Contadores da pagina Lista (SCX legado: Label1/Get_EtqAtivas/Label2/
+        *-- Get_MaxEtqs, Top 100..104 -> +29 de compensacao do PageFrame).
+        *-- Get_EtqAtivas  = Count(1) de SigCdTpe com nSituas = 1  (mcontaetiqs)
+        *-- Get_MaxEtqs    = SigCdPam.nMaxTpEtis                   (Init do SCX)
+        *-- Os dois sao Enabled = .F. com fundo azul claro 162,214,242 no legado.
+        loc_oPagina.AddObject("lbl_4c_LblEtqAtivas", "Label")
+        WITH loc_oPagina.lbl_4c_LblEtqAtivas
+            .Caption   = "Quantidade de Etiquetas Ativas : "
+            .Left      = 42
+            .Top       = 133
+            .Width     = 188
+            .Height    = 15
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .FontName  = "Tahoma"
+            .FontBold  = .T.
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPagina.AddObject("txt_4c_EtqAtivas", "TextBox")
+        WITH loc_oPagina.txt_4c_EtqAtivas
+            .Left              = 233
+            .Top               = 129
+            .Width             = 77
+            .Height            = 23
+            .Enabled           = .F.
+            .ReadOnly          = .T.
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ForeColor         = RGB(90, 90, 90)
+            .BackColor         = RGB(162, 214, 242)
+            .DisabledBackColor = RGB(162, 214, 242)
+            .DisabledForeColor = RGB(90, 90, 90)
+            .Value             = 0
+            .Visible           = .T.
+        ENDWITH
+
+        loc_oPagina.AddObject("lbl_4c_LblMaxEtqs", "Label")
+        WITH loc_oPagina.lbl_4c_LblMaxEtqs
+            .Caption   = "M" + CHR(225) + "ximo de Tipos de Etiquetas : "
+            .Left      = 369
+            .Top       = 133
+            .Width     = 179
+            .Height    = 15
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .FontName  = "Tahoma"
+            .FontBold  = .T.
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPagina.AddObject("txt_4c_MaxEtqs", "TextBox")
+        WITH loc_oPagina.txt_4c_MaxEtqs
+            .Left              = 551
+            .Top               = 129
+            .Width             = 77
+            .Height            = 23
+            .Enabled           = .F.
+            .ReadOnly          = .T.
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ForeColor         = RGB(90, 90, 90)
+            .BackColor         = RGB(162, 214, 242)
+            .DisabledBackColor = RGB(162, 214, 242)
+            .DisabledForeColor = RGB(90, 90, 90)
+            .Value             = 0
+            .Visible           = .T.
+        ENDWITH
+
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         *-- ColumnCount FORA do WITH (Problema 36: dentro do WITH nao cria colunas imediatamente)
         loc_oPagina.grd_4c_Lista.ColumnCount = 4
         WITH loc_oPagina.grd_4c_Lista
-            .Top                = 117
+            *-- SCX legado: Grade.Top = 132 / Height = 434 (+29 de compensacao no Top).
+            *-- O Top 117 canonico nao deixava espaco para a linha de contadores.
+            .Top                = 161
             .Left               = 26
             .Width              = 890
-            .Height             = 498
+            .Height             = 434
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -730,6 +805,10 @@ DEFINE CLASS FormTpe AS FormBase
         WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar
             .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            *-- DisabledPicture TEM de apontar para OUTRO arquivo (copia byte-identica em
+            *-- vbmp\disabled\): medido no VFP9 2026-11-25 - com o MESMO caminho
+            *-- do .Picture o VFP reusa o bitmap esmaecido e o botao desabilitado fica um bloco cinza.
+            .DisabledPicture = gc_4c_CaminhoIcones + "disabled\cadastro_salvar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 5
@@ -1243,6 +1322,10 @@ DEFINE CLASS FormTpe AS FormBase
 
                     THIS.FormatarGridLista(loc_oGrid)
 
+                    *-- Contadores do legado (mcontaetiqs + Init do SCX): recalculados
+                    *-- a cada carga da lista, porque Incluir/Excluir mudam o total.
+                    THIS.AtualizarContadores()
+
                     loc_lResultado = .T.
                 ENDIF
             ENDIF
@@ -1278,6 +1361,33 @@ DEFINE CLASS FormTpe AS FormBase
         ENDIF
 
         RETURN loc_lResultado
+    ENDPROC
+
+    *===========================================================================
+    * AtualizarContadores - Preenche Get_EtqAtivas / Get_MaxEtqs da pagina Lista
+    * Legado (SigCdTpe.SCX):
+    *   Init        -> Select nMaxTpEtis From SigCdPam  -> Get_MaxEtqs
+    *                  (ControlSource csSigCdPam.nMaxTpEtis)
+    *   mcontaetiqs -> Select Count(1) From SigCdTpe Where nSituas = 1
+    *                  -> Get_EtqAtivas
+    * PUBLIC: chamado tambem de fora apos Incluir/Excluir mudarem o total.
+    *===========================================================================
+    PROCEDURE AtualizarContadores()
+        LOCAL loc_oPagina
+
+        TRY
+            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+            IF PEMSTATUS(loc_oPagina, "txt_4c_EtqAtivas", 5)
+                loc_oPagina.txt_4c_EtqAtivas.Value = THIS.this_oBusinessObject.ContarEtiquetasAtivas()
+            ENDIF
+
+            IF PEMSTATUS(loc_oPagina, "txt_4c_MaxEtqs", 5)
+                loc_oPagina.txt_4c_MaxEtqs.Value = THIS.this_oBusinessObject.ObterMaxTipoEtiquetas()
+            ENDIF
+        CATCH TO loException
+            MsgErro(loException.Message, "FormTpe.AtualizarContadores")
+        ENDTRY
     ENDPROC
 
     *===========================================================================

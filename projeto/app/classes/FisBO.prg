@@ -40,13 +40,13 @@ DEFINE CLASS FisBO AS BusinessBase
         LOCAL loc_lSucesso
 
         TRY
-            this_cTabela     = ""
-            this_cCampoChave = ""
+            THIS.this_cTabela     = ""
+            THIS.this_cCampoChave = ""
 
             *-- Paths dos arquivos de configuracao fiscal
-            this_cArqFiscal = SYS(5) + SYS(2003) + "\SetFiscal.Ini"
-            this_cArqBema   = GETENV("SystemRoot") + "\system32\BEMAFI32.INI"
-            this_cArqDaruma = SYS(5) + SYS(2003) + "\DarumaFramework.xml"
+            THIS.this_cArqFiscal = SYS(5) + SYS(2003) + "\SetFiscal.Ini"
+            THIS.this_cArqBema   = GETENV("SystemRoot") + "\system32\BEMAFI32.INI"
+            THIS.this_cArqDaruma = SYS(5) + SYS(2003) + "\DarumaFramework.xml"
 
             loc_lSucesso = DODEFAULT()
 
@@ -119,11 +119,13 @@ DEFINE CLASS FisBO AS BusinessBase
                 REPLACE CrSigFiFis.Settings WITH "9600,n,8,1"
             ENDIF
 
-            IF ALLTRIM(CrSigFiFis.Imps) = ""
+            *-- legado: If (crSigFiFis.Imps = Space(20)) - EMPTY() eh equivalente e imune a SET EXACT
+            IF EMPTY(CrSigFiFis.Imps)
                 REPLACE CrSigFiFis.Imps WITH "Em Branco   "
             ENDIF
 
-            IF ALLTRIM(CrSigFiFis.Hands) = ""
+            *-- legado: If (crSigFiFis.Hands = Space(20)) - EMPTY() eh equivalente e imune a SET EXACT
+            IF EMPTY(CrSigFiFis.Hands)
                 REPLACE CrSigFiFis.Hands WITH "Em Branco   "
             ENDIF
 
